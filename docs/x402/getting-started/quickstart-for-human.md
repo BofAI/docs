@@ -14,7 +14,6 @@ Before you begin, ensure you have:
 - Python 3.10+ and pip, or Node.js 18+ and npm
 - A service that requires payment via x402-tron
 
-
 ---
 
 ### Configuration Reference
@@ -51,7 +50,7 @@ pip install -e .
 Or install directly from a release tag:
 
 ```bash
-pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402"
+pip install "git+https://github.com/bankofai/x402-tron.git@v0.2.1#subdirectory=python/x402"
 ```
 
 Install the required dependency:
@@ -128,7 +127,6 @@ asyncio.run(main())
 
   </TabItem>
   <TabItem value="typescript" label="TypeScript">
-
 
 ```typescript
 import { TronWeb } from 'tronweb'

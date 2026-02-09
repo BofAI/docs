@@ -11,7 +11,6 @@ import TabItem from '@theme/TabItem';
 - **运行环境**：Python 3.10+ (含 pip) 或 Node.js 18+ (含 npm)。
 - **目标服务**：一个支持 x402-tron 协议的支付服务端点。
 
-
 ## 配置参考
 
 以下是您所需的关键配置项：
@@ -44,7 +43,7 @@ pip install -e .
 或者直接从 Release 标签安装：
 
 ```bash
-pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402"
+pip install "git+https://github.com/bankofai/x402-tron.git@v0.2.1#subdirectory=python/x402"
 ```
 
 安装所需的依赖：
@@ -55,6 +54,7 @@ pip install eth_account
 ```
 
 安装 x402-tron TypeScript 包：
+
 ```bash
 npm install @bankofai/x402-tron tronweb
 ```
