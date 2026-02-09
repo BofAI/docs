@@ -3,7 +3,7 @@ const katex = require('rehype-katex')
 require('dotenv').config()
 
 module.exports = {
-  title: 'bankofai-docs | Developer Guide',
+  title: 'BANK OF AI | Developer Guide',
   tagline: 'HTTP 402 Payment Protocol for TRON',
   url: 'https://docs.x402-tron.org/',
   baseUrl: '/',
@@ -34,9 +34,9 @@ module.exports = {
       additionalLanguages: ['solidity', 'python', 'bash'],
     },
     navbar: {
-      title: 'bankofai-docs',
+      title: 'BANK OF AI',
       logo: {
-        alt: 'bankofai-docs',
+        alt: 'BANK OF AI',
         src: 'img/logo.png',
         href: '/',
       },
