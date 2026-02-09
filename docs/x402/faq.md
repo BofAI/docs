@@ -117,7 +117,7 @@ Yes. Programmatic TRON wallets (via TronWeb or the x402-tron signer classes) let
 
 #### How do I run x402-tron locally?
 
-1. Clone the [x402-tron-demo repository](https://github.com/open-aibank/x402-tron-demo)
+1. Clone the [x402-tron-demo repository](https://github.com/bankofai/x402-tron-demo)
 2. Install dependencies (`pip install -r requirements.txt` for Python)
 3. Configure `.env` file with your TRON private keys (see `.env.example`)
 4. Start the facilitator: `python facilitator/main.py`
@@ -162,5 +162,5 @@ print(f"Current allowance: {allowance}")
 
 ### Still have questions?
 
-• Open a GitHub Issue in the [x402-tron repo](https://github.com/open-aibank/x402-tron)
-• Check the [x402-tron-demo](https://github.com/open-aibank/x402-tron-demo) for working examples
+• Open a GitHub Issue in the [x402-tron repo](https://github.com/bankofai/x402-tron)
+• Check the [x402-tron-demo](https://github.com/bankofai/x402-tron-demo) for working examples

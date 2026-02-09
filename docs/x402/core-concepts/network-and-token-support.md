@@ -91,7 +91,7 @@ You can run your own facilitator to verify and settle payments on TRON. The faci
 2. A wallet with TRX for gas/energy fees
 3. The x402-tron facilitator code
 
-See the [Facilitator](/core-concepts/facilitator) documentation for more details.
+See the [Facilitator](./facilitator.md) documentation for more details.
 
 ### Quick Reference
 
@@ -104,7 +104,7 @@ See the [Facilitator](/core-concepts/facilitator) documentation for more details
 
 ### Adding Custom Tokens
 
-Custom TRC-20 tokens can be supported by registering them in the TokenRegistry. See the [Quickstart for Sellers](/getting-started/quickstart-for-sellers) for implementation details.
+Custom TRC-20 tokens can be supported by registering them in the TokenRegistry. See the [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md) for implementation details.
 
 ### Summary
 
@@ -114,4 +114,3 @@ x402-tron's network support is designed specifically for TRON blockchain with na
 - USDT is the primary supported token with pre-configured addresses
 - TIP-712 provides secure, trust-minimizing payment authorization
 - Custom TRC-20 tokens can be added via TokenRegistry
-

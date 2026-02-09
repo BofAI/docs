@@ -1,12 +1,19 @@
+---
+title: '欢迎使用 x402-tron'
+slug: /
+description: >-
+  本指南将帮助您了解 x402-tron——TRON 区块链上的开放支付标准，并帮助您开始构建或集成 x402-tron 服务。
+---
+
 # 欢迎使用 x402-tron
 
 x402-tron 是 x402 开放支付标准在 TRON 网络上的实现，旨在支持服务方直接通过 HTTP 协议对 API 接口及内容资源进行收费。该方案基于 HTTP `402 Payment Required` 状态码构建，允许客户端以编程方式完成支付，从而免去了对账户体系、会话或身份凭证管理的依赖。
 
 借助 x402-tron，任何 Web 服务均可建立“先付费后响应”的机制，充分利用 TRON 区块链在速度、隐私及效率方面的优势。
 
-**有意参与文档共建？** 欢迎在 [GitHub 仓库](https://github.com/open-aibank/x402-tron-docs)提交 PR！我们唯一的原则是保持文档的中立性：除必要的资源链接外，请避免包含任何品牌推广内容。
+**有意参与文档共建？** 欢迎在 [GitHub 仓库](https://github.com/bankofai/x402-tron-docs)提交 PR！我们唯一的原则是保持文档的中立性：除必要的资源链接外，请避免包含任何品牌推广内容。
 
-**寻找实战代码？** 请访问 [x402-tron-demo 仓库](https://github.com/open-aibank/x402-tron-demo) 获取完整且可直接运行的示例项目。
+**寻找实战代码？** 请访问 [x402-tron-demo 仓库](https://github.com/bankofai/x402-tron-demo) 获取完整且可直接运行的示例项目。
 
 ## 为什么要使用 x402-tron？
 
@@ -46,9 +53,9 @@ x402-tron 支持广泛的应用场景，包括：
 
 如需深入了解，请参考：
 
-- [客户端 / 服务端](core-concepts/client-server)
-- [Facilitator](core-concepts/facilitator)
-- [HTTP 402](core-concepts/http-402)
+- [客户端 / 服务端](./core-concepts/client-server.md)
+- [Facilitator](./core-concepts/facilitator.md)
+- [HTTP 402](./core-concepts/http-402.md)
 
 我们的目标是：在 TRON 区块链上打造一个低门槛、无许可且开发者友好的程序化商业层。
 
@@ -64,6 +71,6 @@ x402-tron 目前支持以下 TRON 网络环境：
 
 准备好开始构建了吗？请从这里入手：
 
-- [卖方快速入门](getting-started/quickstart-for-sellers)
-- [Agent 快速入门](getting-started/quickstart-for-agent)
-- [探索核心概念](core-concepts/http-402)
+- [卖方快速入门](./getting-started/quickstart-for-sellers.md)
+- [Agent 快速入门](./getting-started/quickstart-for-agent.md)
+- [探索核心概念](./core-concepts/http-402.md)

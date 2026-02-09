@@ -117,7 +117,7 @@ x402-tron 目前支持 `exact` 方案，其核心机制允许：
 
 #### 如何在本地运行 x402-tron？
 
-1.  **克隆仓库：** 下载 [x402-tron-demo 仓库](https://github.com/open-aibank/x402-tron-demo) 到本地。
+1.  **克隆仓库：** 下载 [x402-tron-demo 仓库](https://github.com/bankofai/x402-tron-demo) 到本地。
 2.  **安装依赖：** 安装项目依赖项（Python 环境请执行 `pip install -r requirements.txt`）。
 3.  **配置环境：** 参考 `.env.example` 示例，在 `.env` 文件中配置您的 TRON 私钥。
 4.  **启动 Facilitator：** 运行 `python facilitator/main.py`。
@@ -166,5 +166,5 @@ print(f"Current allowance: {allowance}")
 
 ### 仍有疑问？
 
-• 在 [x402-tron 仓库](https://github.com/open-aibank/x402-tron) 中提交 GitHub Issue 反馈问题
-• 参考 [x402-tron-demo](https://github.com/open-aibank/x402-tron-demo) 获取完整可运行的示例代码
+• 在 [x402-tron 仓库](https://github.com/bankofai/x402-tron) 中提交 GitHub Issue 反馈问题
+• 参考 [x402-tron-demo](https://github.com/bankofai/x402-tron-demo) 获取完整可运行的示例代码

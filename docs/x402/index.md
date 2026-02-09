@@ -10,9 +10,9 @@ x402-tron is the TRON implementation of the x402 open payment standard that enab
 
 With x402-tron, any web service can require payment before serving a response, using TRON blockchain payments for speed, privacy, and efficiency.
 
-**Want to contribute to our docs?** [The GitHub repo is open to PRs!](https://github.com/open-aibank/x402-tron-docs) Our only ask is that you keep these docs as a neutral resource, with no branded content other than linking out to other resources where appropriate.
+**Want to contribute to our docs?** [The GitHub repo is open to PRs!](https://github.com/bankofai/x402-tron-docs) Our only ask is that you keep these docs as a neutral resource, with no branded content other than linking out to other resources where appropriate.
 
-**Looking for working examples?** Check out the [x402-tron-demo repository](https://github.com/open-aibank/x402-tron-demo) for complete, runnable examples.
+**Looking for working examples?** Check out the [x402-tron-demo repository](https://github.com/bankofai/x402-tron-demo) for complete, runnable examples.
 
 ### Why Use x402-tron?
 
@@ -52,9 +52,9 @@ At a high level, the flow is simple:
 
 For more detail, see:
 
-- [Client / Server](core-concepts/client-server)
-- [Facilitator](core-concepts/facilitator)
-- [HTTP 402](core-concepts/http-402)
+- [Client / Server](./core-concepts/client-server.md)
+- [Facilitator](./core-concepts/facilitator.md)
+- [HTTP 402](./core-concepts/http-402.md)
 
 The goal is to make programmatic commerce accessible, permissionless, and developer-friendly on TRON blockchain.
 
@@ -70,6 +70,6 @@ x402-tron supports the following TRON networks:
 
 Ready to build? Start here:
 
-- [Quickstart for Sellers](getting-started/quickstart-for-sellers)
-- [Quickstart for Agent](getting-started/quickstart-for-agent)
-- [Explore Core Concepts](core-concepts/http-402)
+- [Quickstart for Sellers](./getting-started/quickstart-for-sellers.md)
+- [Quickstart for Agent](./getting-started/quickstart-for-agent.md)
+- [Explore Core Concepts](./core-concepts/http-402.md)

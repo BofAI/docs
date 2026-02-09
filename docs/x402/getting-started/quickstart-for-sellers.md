@@ -26,7 +26,7 @@ Before you begin, ensure you have:
 - A **TRON wallet address** to receive payments (e.g., from [TronLink](https://www.tronlink.org/))
 - Basic knowledge of Python web development (we'll use FastAPI)
 
-**Pre-configured Examples:** We have ready-to-run examples: [server example](https://github.com/open-aibank/x402-tron-demo/tree/main/server) and [facilitator example](https://github.com/open-aibank/x402-tron-demo/tree/main/facilitator). You can clone and run them directly!
+**Pre-configured Examples:** We have ready-to-run examples: [server example](https://github.com/bankofai/x402-tron-demo/tree/main/server) and [facilitator example](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator). You can clone and run them directly!
 
 ---
 
@@ -34,13 +34,14 @@ Before you begin, ensure you have:
 
 Here are the key configuration items you'll need:
 
-| Item | Description | How to Get |
-|------|-------------|------------|
-| **TRON Wallet Address** | Your address to receive payments (starts with `T`) | Create via [TronLink](https://www.tronlink.org/) wallet |
-| **Test TRX** | Gas fees for testnet transactions | [Nile Faucet](https://nileex.io/join/getJoinPage) |
-| **Test USDT** | Test tokens for payment testing | [Nile USDT Faucet](https://nileex.io/join/getJoinPage) or ask in community |
+| Item                    | Description                                        | How to Get                                                                 |
+| ----------------------- | -------------------------------------------------- | -------------------------------------------------------------------------- |
+| **TRON Wallet Address** | Your address to receive payments (starts with `T`) | Create via [TronLink](https://www.tronlink.org/) wallet                    |
+| **Test TRX**            | Gas fees for testnet transactions                  | [Nile Faucet](https://nileex.io/join/getJoinPage)                          |
+| **Test USDT**           | Test tokens for payment testing                    | [Nile USDT Faucet](https://nileex.io/join/getJoinPage) or ask in community |
 
 **Testnet vs Mainnet:**
+
 - **Testnet (Nile)**: Free test tokens, no real money. Use `tron:nile` as network.
 - **Mainnet**: Real USDT payments. Requires TronGrid API Key. Use `tron:mainnet` as network.
 
@@ -53,14 +54,14 @@ The x402-tron SDK provides everything you need to add payment protection to your
 **Option A: Install from GitHub (Recommended)**
 
 ```bash
-pip install "git+https://github.com/open-aibank/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"
+pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"
 ```
 
 **Option B: Install from source (for development)**
 
 ```bash
 # Clone the repository
-git clone https://github.com/open-aibank/x402-tron.git
+git clone https://github.com/bankofai/x402-tron.git
 cd x402-tron/python/x402
 
 # Install with FastAPI support
@@ -98,13 +99,13 @@ FACILITATOR_URL = "http://localhost:8001"
 
 # Initialize x402 server
 server = X402Server()
-server.add_facilitator(FacilitatorClient(base_url=FACILITATOR_URL))
+server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 
 # This endpoint requires payment to access
 @app.get("/protected")
 @x402_protected(
     server=server,
-    price="0.0001 USDT",      # Price per request
+    prices=["0.0001 USDT"],    # Price per request (supports multiple tokens)
     network="tron:nile",       # Use testnet for testing
     pay_to=PAY_TO_ADDRESS,     # Your wallet address
 )
@@ -122,11 +123,11 @@ if __name__ == "__main__":
 
 **Key Configuration Options:**
 
-| Parameter | Description | Example |
-|-----------|-------------|---------|
-| `price` | Payment amount per request | `"0.0001 USDT"` |
-| `network` | TRON network identifier | `"tron:nile"` (testnet) |
-| `pay_to` | Your TRON wallet address | `"TYour...Address"` |
+| Parameter | Description                | Example                 |
+| --------- | -------------------------- | ----------------------- |
+| `prices` | Payment amount per request (list) | `["0.0001 USDT"]` |
+| `network` | TRON network identifier    | `"tron:nile"` (testnet) |
+| `pay_to`  | Your TRON wallet address   | `"TYour...Address"`     |
 
 **How It Works:** When a request is made without payment, your server automatically returns HTTP 402 (Payment Required) with payment instructions. The client SDK handles the rest!
 
@@ -137,6 +138,7 @@ if __name__ == "__main__":
 The facilitator is a service that verifies and settles payments on-chain. You need to run it before starting your server.
 
 **Options:**
+
 - **Run Your Own Facilitator** (recommended for testing)
 - **Use Official Facilitator** - _Coming Soon_
 
@@ -146,7 +148,7 @@ Open a **new terminal window** and run:
 
 ```bash
 # Clone the demo repository
-git clone https://github.com/open-aibank/x402-tron-demo.git
+git clone https://github.com/bankofai/x402-tron-demo.git
 cd x402-tron-demo
 
 # Install dependencies
@@ -175,6 +177,7 @@ TRON_GRID_API_KEY=your_trongrid_api_key_here
 ```
 
 **Facilitator Endpoints:** Once running, the facilitator provides these endpoints on `http://localhost:8001`:
+
 - `GET /supported` - Supported capabilities
 - `POST /verify` - Verify payment payload
 - `POST /settle` - Settle payment on-chain
@@ -209,22 +212,24 @@ Expected: HTTP 402 response with payment instructions in the `PAYMENT-REQUIRED` 
 **Test 2: Complete payment flow**
 
 To test the full payment flow, you need a client that can sign payments. See:
-- [Quickstart for Human](/getting-started/quickstart-for-human) - For browser-based payments
-- [Quickstart for Agent](/getting-started/quickstart-for-agent) - For AI agent payments
+
+- [Quickstart for Human](./quickstart-for-human.md) - For browser-based payments
+- [Quickstart for Agent](./quickstart-for-agent.md) - For AI agent payments
 
 ---
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| `Connection refused` to facilitator | Make sure the facilitator is running on port 8001 |
-| `ModuleNotFoundError: x402_tron` | Run `pip install "git+https://github.com/open-aibank/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"` |
-| Invalid wallet address error | Ensure your TRON address starts with `T` and is 34 characters |
+| Problem                             | Solution                                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `Connection refused` to facilitator | Make sure the facilitator is running on port 8001                                                             |
+| `ModuleNotFoundError: x402_tron`    | Run `pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"` |
+| Invalid wallet address error        | Ensure your TRON address starts with `T` and is 34 characters                                                 |
 
 **Need Help?** Check out the complete examples:
-- [Server Example](https://github.com/open-aibank/x402-tron-demo/tree/main/server)
-- [Facilitator Example](https://github.com/open-aibank/x402-tron-demo/tree/main/facilitator)
+
+- [Server Example](https://github.com/bankofai/x402-tron-demo/tree/main/server)
+- [Facilitator Example](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator)
 
 ---
 
@@ -239,7 +244,7 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
 ```python
 @x402_protected(
     server=server,
-    price="0.0001 USDT",
+    prices=["0.0001 USDT"],
     network="tron:mainnet",  # Change from "tron:nile" to "tron:mainnet"
     pay_to=PAY_TO_ADDRESS,
 )
@@ -261,6 +266,7 @@ Make sure your receiving wallet address is a real mainnet address where you want
 ### 4. Test with Real Payments
 
 Before going live:
+
 1. Test with small amounts first
 2. Verify payments are arriving in your wallet
 3. Monitor the facilitator for any issues
@@ -273,31 +279,31 @@ Before going live:
 
 x402-tron uses simple network identifiers:
 
-| Network | Identifier |
-|---------|------------|
-| TRON Mainnet | `tron:mainnet` |
-| TRON Nile Testnet | `tron:nile` |
-| TRON Shasta Testnet | `tron:shasta` |
+| Network             | Identifier     |
+| ------------------- | -------------- |
+| TRON Mainnet        | `tron:mainnet` |
+| TRON Nile Testnet   | `tron:nile`    |
+| TRON Shasta Testnet | `tron:shasta`  |
 
-See [Network Support](/core-concepts/network-and-token-support) for the full list.
+See [Network Support](../core-concepts/network-and-token-support.md) for the full list.
 
 ---
 
 ### Next Steps
 
-* Check out the [demo examples](https://github.com/open-aibank/x402-tron-demo/tree/main/server) for more complex payment flows
-* Explore [Core Concepts](/core-concepts/http-402) to understand how x402-tron works
-* Get started as a [human buyer](/getting-started/quickstart-for-human) or set up an [AI agent](/getting-started/quickstart-for-agent)
+- Check out the [demo examples](https://github.com/bankofai/x402-tron-demo/tree/main/server) for more complex payment flows
+- Explore [Core Concepts](../core-concepts/http-402.md) to understand how x402-tron works
+- Get started as a [human buyer](./quickstart-for-human.md) or set up an [AI agent](./quickstart-for-agent.md)
 
 ### Summary
 
 Congratulations! You've completed the seller quickstart. Here's what you accomplished:
 
-| Step | What You Did |
-|------|-------------|
-| **Step 1** | Installed the x402-tron SDK |
+| Step       | What You Did                                      |
+| ---------- | ------------------------------------------------- |
+| **Step 1** | Installed the x402-tron SDK                       |
 | **Step 2** | Created a server with payment-protected endpoints |
-| **Step 3** | Started a facilitator for payment verification |
-| **Step 4** | Tested your integration |
+| **Step 3** | Started a facilitator for payment verification    |
+| **Step 4** | Tested your integration                           |
 
 Your API is now ready to accept TRON-based payments through x402-tron! 🎉

@@ -2,54 +2,56 @@
 const sidebars = {
   docsSidebar: [
     {
-      type: 'doc',
-      id: 'index',
-      label: 'Introduction',
-    },
-    {
       type: 'category',
-      label: 'Getting Started',
+      label: 'x402 Payment Protocol',
+      collapsed: false,
       items: [
-        'getting-started/quickstart-for-sellers',
+        {
+          type: 'doc',
+          id: 'x402/index',
+          label: 'Introduction',
+        },
         {
           type: 'category',
-          label: 'Quickstart for Buyers',
-          collapsed: false,
+          label: 'Getting Started',
           items: [
+            'x402/getting-started/quickstart-for-sellers',
             {
-              type: 'doc',
-              id: 'getting-started/quickstart-for-human',
-              label: 'Human',
-            },
-            {
-              type: 'doc',
-              id: 'getting-started/quickstart-for-agent',
-              label: 'Agent',
+              type: 'category',
+              label: 'Quickstart for Buyers',
+              collapsed: false,
+              items: ['x402/getting-started/quickstart-for-human', 'x402/getting-started/quickstart-for-agent'],
             },
           ],
+        },
+        {
+          type: 'category',
+          label: 'Core Concepts',
+          items: [
+            'x402/core-concepts/http-402',
+            'x402/core-concepts/client-server',
+            'x402/core-concepts/facilitator',
+            'x402/core-concepts/wallet',
+            'x402/core-concepts/network-and-token-support',
+          ],
+        },
+        {
+          type: 'doc',
+          id: 'x402/sdk-features',
+          label: 'SDK Features',
+        },
+        {
+          type: 'doc',
+          id: 'x402/faq',
+          label: 'FAQ',
         },
       ],
     },
     {
       type: 'category',
-      label: 'Core Concepts',
-      items: [
-        'core-concepts/http-402',
-        'core-concepts/client-server',
-        'core-concepts/facilitator',
-        'core-concepts/wallet',
-        'core-concepts/network-and-token-support',
-      ],
-    },
-    {
-      type: 'doc',
-      id: 'sdk-features',
-      label: 'SDK Features',
-    },
-    {
-      type: 'doc',
-      id: 'faq',
-      label: 'FAQ',
+      label: 'TRC-8004 Protocol',
+      collapsed: false,
+      items: ['TRC-8004/general', 'TRC-8004/identity', 'TRC-8004/reputation', 'TRC-8004/validation'],
     },
   ],
 }
