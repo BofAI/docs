@@ -11,7 +11,6 @@ import TabItem from '@theme/TabItem';
 - **运行环境**：Python 3.10+ (含 pip) 或 Node.js 18+ (含 npm)。
 - **目标服务**：一个支持 x402-tron 协议的支付服务端点。
 
-**预配置示例：** 我们提供了可直接运行的 [演示仓库中的客户端示例](https://github.com/bankofai/x402-tron-demo/tree/main/client/terminal)。
 
 ## 配置参考
 

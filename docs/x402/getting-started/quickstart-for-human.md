@@ -14,7 +14,6 @@ Before you begin, ensure you have:
 - Python 3.10+ and pip, or Node.js 18+ and npm
 - A service that requires payment via x402-tron
 
-**Pre-configured Examples:** We have ready-to-run [client examples in the demo repo](https://github.com/bankofai/x402-tron-demo/tree/main/client/terminal).
 
 ---
 
