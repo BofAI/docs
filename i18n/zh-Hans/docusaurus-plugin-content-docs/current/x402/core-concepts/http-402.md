@@ -80,7 +80,7 @@ x402-tron 定义了一组标准化 HTTP 标头用于支付通信：
 | `asset`             | TRC-20 代币合约地址                               |
 | `payTo`             | 卖家的 TRON 钱包地址                              |
 | `maxTimeoutSeconds` | 支付有效期的最大时长                              |
-| `extra.fee`         | 促进者（Facilitator）费用信息                     |
+| `extra.fee`         | Facilitator 费用信息                     |
 
 ## 支付签名结构
 
@@ -119,4 +119,4 @@ HTTP 402 是 x402-tron 协议的基石，它赋能服务端直接在 HTTP 响应
 接下来，请深入探索：
 
 - [客户端 / 服务器](./client-server.md) — 了解客户端和服务器的角色与职责
-- [促进者](./facilitator.md) — 了解服务器如何验证并结算支付
+- [Facilitator](./facilitator.md) — 了解服务器如何验证并结算支付

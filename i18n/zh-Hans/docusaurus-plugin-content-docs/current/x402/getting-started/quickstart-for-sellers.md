@@ -11,7 +11,7 @@ import TabItem from '@theme/TabItem';
 
 1. **安装 x402-tron SDK** — 安装 Python SDK
 2. **开发服务器** — 为您的 API 端点添加支付保护
-3. **启动促进者 (Facilitator)** — 运行支付验证服务
+3. **启动 Facilitator** — 运行支付验证服务
 
 ### 先决条件
 
@@ -21,7 +21,7 @@ import TabItem from '@theme/TabItem';
 - 一个用于接收款项的 **TRON 钱包地址**（例如，来自 [TronLink](https://www.tronlink.org/)）
 - Python Web 开发的基础知识（本教程将使用 FastAPI）
 
-**预配置示例：** 我们提供了开箱即用的示例代码：[服务器示例](https://github.com/bankofai/x402-tron-demo/tree/main/server) 和 [促进者示例](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator)。您可以克隆仓库并直接运行它们！
+**预配置示例：** 我们提供了开箱即用的示例代码：[服务器示例](https://github.com/bankofai/x402-tron-demo/tree/main/server) 和 [Facilitator 示例](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator)。您可以克隆仓库并直接运行它们！
 
 ### 配置参考
 
@@ -114,16 +114,16 @@ if __name__ == "__main__":
 
 **工作原理：** 当收到未附带支付的请求时，您的服务器会自动返回 HTTP 402 (Payment Required) 状态码及支付说明。剩余的流程将由客户端 SDK 自动处理！
 
-## 第三步：启动促进者 (Facilitator)
+## 第三步：启动 Facilitator
 
-促进者 (Facilitator) 是一项用于在链上验证并结算支付的服务。在启动您的 API 服务器之前，您需要先运行该服务。
+Facilitator 是一项用于在链上验证并结算支付的服务。在启动您的 API 服务器之前，您需要先运行该服务。
 
 **选项：**
 
-- **运行您自己的促进者**（推荐用于测试）
-- **使用官方促进者** — _即将推出_
+- **运行您自己的 Facilitator**（推荐用于测试）
+- **使用官方 Facilitator** — _即将推出_
 
-### 运行您自己的促进者
+### 运行您自己的 Facilitator
 
 打开一个 **新的终端窗口** 并运行以下命令：
 
@@ -149,15 +149,15 @@ TRON_PRIVATE_KEY=your_facilitator_private_key_here
 TRON_GRID_API_KEY=your_trongrid_api_key_here
 ```
 
-**促进者钱包：** 促进者需要一个持有 TRX 的钱包来支付能量和带宽费用。对于测试网，请从 [Nile 水龙头](https://nileex.io/join/getJoinPage) 获取免费 TRX。
+**Facilitator 钱包：** Facilitator 需要一个持有 TRX 的钱包来支付能量和带宽费用。对于测试网，请从 [Nile 水龙头](https://nileex.io/join/getJoinPage) 获取免费 TRX。
 
-**启动促进者：**
+**启动 Facilitator ：**
 
 ```bash
 ./start.sh facilitator
 ```
 
-**促进者端点：** 运行后，促进者在 `http://localhost:8001` 提供以下端点：
+**Facilitator 端点：** 运行后，Facilitator 在 `http://localhost:8001` 提供以下端点：
 
 - `GET /supported` - 支持的功能
 - `POST /verify` - 验证支付载荷
@@ -170,7 +170,7 @@ TRON_GRID_API_KEY=your_trongrid_api_key_here
 
 ### 4.1 启动您的服务器
 
-在**新的终端窗口**中（保持促进者运行）：
+在**新的终端窗口**中（保持 Facilitator 运行）：
 
 ```bash
 python server.py
@@ -199,14 +199,14 @@ curl http://localhost:8000/protected
 
 | 问题                              | 解决方案                                                                                                       |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| 连接促进者时 `Connection refused` | 确保促进者运行在端口 8001 上                                                                                   |
+| 连接 Facilitator 时 `Connection refused` | 确保 Facilitator 运行在端口 8001 上                                                                                   |
 | `ModuleNotFoundError: x402_tron`  | 运行 `pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"` |
 | 无效钱包地址错误                  | 确保您的 TRON 地址以 `T` 开头且长度为 34 个字符                                                                |
 
 **需要帮助？** 查看完整示例：
 
 - [服务器示例](https://github.com/bankofai/x402-tron-demo/tree/main/server)
-- [促进者示例](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator)
+- [Facilitator 示例](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator)
 
 ## 在主网运行
 
@@ -225,14 +225,14 @@ curl http://localhost:8000/protected
 )
 ```
 
-### 2. 更新您的促进者 (Facilitator)
+### 2. 更新您的 Facilitator
 
-如果您在主网上运行自己的促进者服务，请执行以下操作：
+如果您在主网上运行自己的 Facilitator 服务，请执行以下操作：
 
 1.  **申请 TronGrid API Key**：前往 [TronGrid](https://www.trongrid.io/) 注册并创建 API Key。为了确保主网 RPC 访问的稳定性，这一步是必需的。
 2.  **更新环境变量**：配置主网凭证（包括 `TRON_GRID_API_KEY`）。
-3.  **准备 Gas 费**：确保促进者钱包中持有足够的 TRX，用于支付能量（Energy）和带宽（Bandwidth）费用。
-4.  **切换网络配置**：将促进者的网络配置更新为 `mainnet`。
+3.  **准备 Gas 费**：确保 Facilitator 钱包中持有足够的 TRX，用于支付能量（Energy）和带宽（Bandwidth）费用。
+4.  **切换网络配置**：将 Facilitator 的网络配置更新为 `mainnet`。
 
 ### 3. 更新您的收款钱包
 
@@ -244,7 +244,7 @@ curl http://localhost:8000/protected
 
 1.  先尝试**极小额**支付进行测试。
 2.  验证资金是否成功到达您的钱包。
-3.  监控促进者服务，观察是否有任何异常报错。
+3.  监控 Facilitator 服务，观察是否有任何异常报错。
 
 **警告：** 主网交易涉及真实资金。请务必先在测试网（Testnet）进行充分的测试，切换到主网后也请务必从小额开始验证。
 
@@ -274,7 +274,7 @@ x402-tron 使用简明的网络标识符：
 | ---------- | ------------------------------ |
 | **第一步** | 安装了 x402-tron SDK           |
 | **第二步** | 创建了受支付保护的服务器端点   |
-| **第三步** | 启动了用于验证支付的促进者服务 |
+| **第三步** | 启动了用于验证支付的 Facilitator 服务 |
 | **第四步** | 完成了集成测试                 |
 
 恭喜 🎉！您的 API 现已准备就绪，可以通过 x402-tron 接收基于 TRON 网络的支付了！
