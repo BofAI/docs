@@ -99,13 +99,13 @@ FACILITATOR_URL = "http://localhost:8001"
 
 # Initialize x402 server
 server = X402Server()
-server.add_facilitator(FacilitatorClient(base_url=FACILITATOR_URL))
+server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 
 # This endpoint requires payment to access
 @app.get("/protected")
 @x402_protected(
     server=server,
-    price="0.0001 USDT",      # Price per request
+    prices=["0.0001 USDT"],    # Price per request (supports multiple tokens)
     network="tron:nile",       # Use testnet for testing
     pay_to=PAY_TO_ADDRESS,     # Your wallet address
 )
@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
 | Parameter | Description                | Example                 |
 | --------- | -------------------------- | ----------------------- |
-| `price`   | Payment amount per request | `"0.0001 USDT"`         |
+| `prices` | Payment amount per request (list) | `["0.0001 USDT"]` |
 | `network` | TRON network identifier    | `"tron:nile"` (testnet) |
 | `pay_to`  | Your TRON wallet address   | `"TYour...Address"`     |
 
@@ -244,7 +244,7 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
 ```python
 @x402_protected(
     server=server,
-    price="0.0001 USDT",
+    prices=["0.0001 USDT"],
     network="tron:mainnet",  # Change from "tron:nile" to "tron:mainnet"
     pay_to=PAY_TO_ADDRESS,
 )

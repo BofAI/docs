@@ -85,13 +85,13 @@ FACILITATOR_URL = "http://localhost:8001"
 
 # Initialize x402 server
 server = X402Server()
-server.add_facilitator(FacilitatorClient(base_url=FACILITATOR_URL))
+server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 
 # This endpoint requires payment to access
 @app.get("/protected")
 @x402_protected(
     server=server,
-    price="0.0001 USDT",      # Price per request
+    prices=["0.0001 USDT"],    # Price per request (supports multiple tokens)
     network="tron:nile",       # Use testnet for testing
     pay_to=PAY_TO_ADDRESS,     # Your wallet address
 )
@@ -108,7 +108,7 @@ if __name__ == "__main__":
 
 | 参数      | 描述                   | 示例                   |
 | --------- | ---------------------- | ---------------------- |
-| `price`   | 单次请求的支付金额     | `"0.0001 USDT"`        |
+| `prices` | 单次请求的支付金额（列表） | `["0.0001 USDT"]` |
 | `network` | TRON 网络标识符        | `"tron:nile"` (测试网) |
 | `pay_to`  | 您的 TRON 钱包收款地址 | `"TYour...Address"`    |
 
@@ -219,7 +219,7 @@ curl http://localhost:8000/protected
 ```python
 @x402_protected(
     server=server,
-    price="0.0001 USDT",
+    prices=["0.0001 USDT"],
     network="tron:mainnet",  # Change from "tron:nile" to "tron:mainnet"
     pay_to=PAY_TO_ADDRESS,
 )

@@ -55,6 +55,11 @@ pip install eth_account
 
 ```
 
+安装 x402-tron TypeScript 包：
+```bash
+npm install @bankofai/x402-tron tronweb
+```
+
 ## 2. 配置环境变量
 
 将您的钱包私钥设置为环境变量：
