@@ -53,4 +53,4 @@ Instruct your agent to access `https://x402-tron-demo.bankofai.io/protected-nile
 
 - [OpenClaw Extension](https://github.com/bankofai/openclaw-extension)
 - [x402-payment-tron on ClawHub](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment)
-- [x402-tron Demo](https://github.com/open-bankofai/x402-tron-demo)
+- [x402-tron Demo](https://github.com/bankofai/x402-tron-demo) 
