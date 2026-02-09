@@ -19,7 +19,7 @@ An agent has one or more endpoints, at your discretion. Suggested endpoints incl
 But the list can be extended with new endpoints.
 
 ## Where is the registration file stored?
-Wherever you prefer. agentUri can point to a normal JSON file hosted on your server and served via HTTPS, to a file on decentralized infrastructure (IPFS), or—as recently requested by the community—can directly include the file as a base64-encoded binary string stored on-chain.
+Wherever you prefer. agentUri can point to a normal JSON file hosted on your server and served via HTTPS, to a file on decentralized infrastructure (IPFS), or can directly include the file as a base64-encoded binary string stored on-chain.
 
 
 ## How is endpoint ownership verified?
