@@ -22,11 +22,11 @@ Before you begin, ensure you have:
 
 Here are the key configuration items you'll need:
 
-| Item | Description | How to Get |
-|------|-------------|------------|
-| **TRON Private Key** | Your wallet's private key for signing payments | Export from [TronLink](https://www.tronlink.org/) wallet |
-| **Test TRX** | Gas fees for testnet transactions | [Nile Faucet](https://nileex.io/join/getJoinPage) |
-| **Test USDT** | Test tokens for making payments | [Nile USDT Faucet](https://nileex.io/join/getJoinPage) or ask in community |
+| Item                 | Description                                    | How to Get                                                                 |
+| -------------------- | ---------------------------------------------- | -------------------------------------------------------------------------- |
+| **TRON Private Key** | Your wallet's private key for signing payments | Export from [TronLink](https://www.tronlink.org/) wallet                   |
+| **Test TRX**         | Gas fees for testnet transactions              | [Nile Faucet](https://nileex.io/join/getJoinPage)                          |
+| **Test USDT**        | Test tokens for making payments                | [Nile USDT Faucet](https://nileex.io/join/getJoinPage) or ask in community |
 
 **Security:** Never share your private key! Store it securely in environment variables, not in code.
 
@@ -129,7 +129,7 @@ asyncio.run(main())
 
   </TabItem>
   <TabItem value="typescript" label="TypeScript">
-  
+
 
 ```typescript
 import { TronWeb } from 'tronweb'
@@ -201,7 +201,7 @@ from x402_tron.exceptions import (
 
 try:
     response = await client.get(SERVER_URL)
-    
+
     print(f"Status: {response.status_code}")
     print("Headers:", response.headers)
 
@@ -261,8 +261,8 @@ try {
 
 **Next Steps:**
 
-- Explore [Core Concepts](/core-concepts/http-402) to understand the protocol
-- Check out [Network Support](/core-concepts/network-and-token-support) for token details
+- Explore [Core Concepts](../core-concepts/http-402.md) to understand the protocol
+- Check out [Network Support](../core-concepts/network-and-token-support.md) for token details
 
 **References:**
 

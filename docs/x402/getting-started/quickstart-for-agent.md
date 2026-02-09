@@ -46,8 +46,8 @@ Instruct your agent to access `https://x402-tron-demo.aibank.io/protected-nile`.
 
 ## Next Steps
 
-- [Set up a paid API](/getting-started/quickstart-for-sellers) for agents to consume
-- [Learn about HTTP 402](/core-concepts/http-402) payment protocol
+- [Set up a paid API](./quickstart-for-sellers.md) for agents to consume
+- [Learn about HTTP 402](../core-concepts/http-402.md) payment protocol
 
 ## References
 

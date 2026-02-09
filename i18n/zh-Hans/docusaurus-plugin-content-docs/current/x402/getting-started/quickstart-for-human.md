@@ -234,8 +234,8 @@ try {
 
 ## 下一步
 
-- 浏览 [核心概念](/core-concepts/http-402) 以了解协议
-- 查看 [网络支持](/core-concepts/network-and-token-support) 以获取支持的代币详情
+- 浏览 [核心概念](../core-concepts/http-402.md) 以了解协议
+- 查看 [网络支持](../core-concepts/network-and-token-support.md) 以获取支持的代币详情
 
 ## 参考资料
 

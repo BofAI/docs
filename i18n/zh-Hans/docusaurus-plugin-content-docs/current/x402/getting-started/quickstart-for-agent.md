@@ -1,6 +1,6 @@
 # AI 代理快速入门
 
-x402-tron 专为 Agentic Web 设计。AI Agent 可以使用 `x402-payment-tron` 技能自主协商并支付资源费用。
+x402-tron 专为 Agentic Web 设计。AI Agent 可以使用 `tron_x402_payment` 技能自主协商并支付资源费用。
 
 该技能使 Agent 能够：
 
@@ -19,11 +19,11 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 
 ## 安装
 
-将 [x402-payment-tron](https://clawhub.ai/Hades-Ye/x402-payment-tron) 技能添加到您的智能体 (Agent) 工具库中：
+将 [tron_x402_payment](https://clawhub.ai/Hades-Ye/x402-payment-tron) 技能添加到您的智能体 (Agent) 工具库中：
 
 | 工具平台     | 安装方法                                   |
 | ------------ | ------------------------------------------ |
-| **OpenClaw** | `npx clawhub install x402-payment-tron`    |
+| **OpenClaw** | `npx clawhub install tron-x402-payment`    |
 | **opencode** | 将技能文件复制到 `.opencode/skill/` 目录中 |
 
 ## 快速体验
@@ -39,11 +39,11 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 
 ## 下一步
 
-- [搭建付费 API](/getting-started/quickstart-for-sellers) 供智能体调用
-- [了解 HTTP 402](/core-concepts/http-402) 支付协议
+- [搭建付费 API](./quickstart-for-sellers.md) 供智能体调用
+- [了解 HTTP 402](../core-concepts/http-402.md) 支付协议
 
 ## 参考资料
 
 - [OpenClaw 扩展库](https://github.com/open-aibank/openclaw-extension)
-- [ClawHub 上的 x402-payment-tron](https://clawhub.ai/Hades-Ye/x402-payment-tron)
+- [ClawHub 上的 tron-x402-payment](https://clawhub.ai/wzc1206/tron-x402-payment)
 - [x402-tron 演示项目](https://github.com/open-aibank/x402-tron-demo)
