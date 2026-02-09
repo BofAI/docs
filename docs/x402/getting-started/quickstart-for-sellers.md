@@ -26,7 +26,7 @@ Before you begin, ensure you have:
 - A **TRON wallet address** to receive payments (e.g., from [TronLink](https://www.tronlink.org/))
 - Basic knowledge of Python web development (we'll use FastAPI)
 
-**Pre-configured Examples:** We have ready-to-run examples: [server example](https://github.com/open-aibank/x402-tron-demo/tree/main/server) and [facilitator example](https://github.com/open-aibank/x402-tron-demo/tree/main/facilitator). You can clone and run them directly!
+**Pre-configured Examples:** We have ready-to-run examples: [server example](https://github.com/bankofai/x402-tron-demo/tree/main/server) and [facilitator example](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator). You can clone and run them directly!
 
 ---
 
@@ -54,14 +54,14 @@ The x402-tron SDK provides everything you need to add payment protection to your
 **Option A: Install from GitHub (Recommended)**
 
 ```bash
-pip install "git+https://github.com/open-aibank/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"
+pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"
 ```
 
 **Option B: Install from source (for development)**
 
 ```bash
 # Clone the repository
-git clone https://github.com/open-aibank/x402-tron.git
+git clone https://github.com/bankofai/x402-tron.git
 cd x402-tron/python/x402
 
 # Install with FastAPI support
@@ -148,7 +148,7 @@ Open a **new terminal window** and run:
 
 ```bash
 # Clone the demo repository
-git clone https://github.com/open-aibank/x402-tron-demo.git
+git clone https://github.com/bankofai/x402-tron-demo.git
 cd x402-tron-demo
 
 # Install dependencies
@@ -223,13 +223,13 @@ To test the full payment flow, you need a client that can sign payments. See:
 | Problem                             | Solution                                                                                                      |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | `Connection refused` to facilitator | Make sure the facilitator is running on port 8001                                                             |
-| `ModuleNotFoundError: x402_tron`    | Run `pip install "git+https://github.com/open-aibank/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"` |
+| `ModuleNotFoundError: x402_tron`    | Run `pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"` |
 | Invalid wallet address error        | Ensure your TRON address starts with `T` and is 34 characters                                                 |
 
 **Need Help?** Check out the complete examples:
 
-- [Server Example](https://github.com/open-aibank/x402-tron-demo/tree/main/server)
-- [Facilitator Example](https://github.com/open-aibank/x402-tron-demo/tree/main/facilitator)
+- [Server Example](https://github.com/bankofai/x402-tron-demo/tree/main/server)
+- [Facilitator Example](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator)
 
 ---
 
@@ -291,7 +291,7 @@ See [Network Support](../core-concepts/network-and-token-support.md) for the ful
 
 ### Next Steps
 
-- Check out the [demo examples](https://github.com/open-aibank/x402-tron-demo/tree/main/server) for more complex payment flows
+- Check out the [demo examples](https://github.com/bankofai/x402-tron-demo/tree/main/server) for more complex payment flows
 - Explore [Core Concepts](../core-concepts/http-402.md) to understand how x402-tron works
 - Get started as a [human buyer](./quickstart-for-human.md) or set up an [AI agent](./quickstart-for-agent.md)
 

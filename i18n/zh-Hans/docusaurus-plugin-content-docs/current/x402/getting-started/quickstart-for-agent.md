@@ -19,7 +19,7 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 
 ## 安装
 
-将 [tron_x402_payment](https://clawhub.ai/Hades-Ye/x402-payment-tron) 技能添加到您的智能体 (Agent) 工具库中：
+将 [tron_x402_payment](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment) 技能添加到您的智能体 (Agent) 工具库中：
 
 | 工具平台     | 安装方法                                   |
 | ------------ | ------------------------------------------ |
@@ -28,7 +28,7 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 
 ## 快速体验
 
-指示您的 Agent 访问 `https://x402-tron-demo.aibank.io/protected-nile`。Agent 将自动识别支付请求，完成签名授权，并获取受保护的资源。
+指示您的 Agent 访问 `https://x402-tron-demo.bankofai.io/protected-nile`。Agent 将自动识别支付请求，完成签名授权，并获取受保护的资源。
 
 ## 安全最佳实践
 
@@ -44,6 +44,6 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 
 ## 参考资料
 
-- [OpenClaw 扩展库](https://github.com/open-aibank/openclaw-extension)
-- [ClawHub 上的 tron-x402-payment](https://clawhub.ai/wzc1206/tron-x402-payment)
-- [x402-tron 演示项目](https://github.com/open-aibank/x402-tron-demo)
+- [OpenClaw 扩展库](https://github.com/bankofai/openclaw-extension)
+- [ClawHub 上的 tron-x402-payment](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment)
+- [x402-tron 演示项目](https://github.com/bankofai/x402-tron-demo)

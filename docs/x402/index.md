@@ -10,9 +10,9 @@ x402-tron is the TRON implementation of the x402 open payment standard that enab
 
 With x402-tron, any web service can require payment before serving a response, using TRON blockchain payments for speed, privacy, and efficiency.
 
-**Want to contribute to our docs?** [The GitHub repo is open to PRs!](https://github.com/open-aibank/x402-tron-docs) Our only ask is that you keep these docs as a neutral resource, with no branded content other than linking out to other resources where appropriate.
+**Want to contribute to our docs?** [The GitHub repo is open to PRs!](https://github.com/bankofai/x402-tron-docs) Our only ask is that you keep these docs as a neutral resource, with no branded content other than linking out to other resources where appropriate.
 
-**Looking for working examples?** Check out the [x402-tron-demo repository](https://github.com/open-aibank/x402-tron-demo) for complete, runnable examples.
+**Looking for working examples?** Check out the [x402-tron-demo repository](https://github.com/bankofai/x402-tron-demo) for complete, runnable examples.
 
 ### Why Use x402-tron?
 

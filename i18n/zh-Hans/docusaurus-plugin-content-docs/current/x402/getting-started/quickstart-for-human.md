@@ -11,7 +11,7 @@ import TabItem from '@theme/TabItem';
 - **运行环境**：Python 3.10+ (含 pip) 或 Node.js 18+ (含 npm)。
 - **目标服务**：一个支持 x402-tron 协议的支付服务端点。
 
-**预配置示例：** 我们提供了可直接运行的 [演示仓库中的客户端示例](https://github.com/open-aibank/x402-tron-demo/tree/main/client/terminal)。
+**预配置示例：** 我们提供了可直接运行的 [演示仓库中的客户端示例](https://github.com/bankofai/x402-tron-demo/tree/main/client/terminal)。
 
 ## 配置参考
 
@@ -35,7 +35,7 @@ x402-tron Python 包暂未发布至 PyPI。请从 GitHub 源码安装：
 
 ```bash
 # Clone the repository
-git clone https://github.com/open-aibank/x402-tron.git
+git clone https://github.com/bankofai/x402-tron.git
 cd x402-tron/python/x402
 
 # Install
@@ -45,7 +45,7 @@ pip install -e .
 或者直接从 Release 标签安装：
 
 ```bash
-pip install "git+https://github.com/open-aibank/x402-tron.git@v0.1.6#subdirectory=python/x402"
+pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402"
 ```
 
 安装所需的依赖：
@@ -82,7 +82,7 @@ from x402_tron.signers.client import TronClientSigner
 
 # ========== Configuration ==========
 # The x402-tron server URL you want to access
-SERVER_URL = "https://x402-tron-demo.aibank.io/protected-nile"  # Replace with your target server
+SERVER_URL = "https://x402-tron-demo.bankofai.io/protected-nile"  # Replace with your target server
 # ====================================
 
 
@@ -114,13 +114,13 @@ asyncio.run(main())
 
 ```typescript
 import { TronWeb } from 'tronweb'
-import { X402Client, X402FetchClient, ExactTronClientMechanism, TronClientSigner } from '@open-aibank/x402-tron'
+import { X402Client, X402FetchClient, ExactTronClientMechanism, TronClientSigner } from '@bankofai/x402-tron'
 
 const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
 
 // ========== Configuration ==========
 // The x402-tron server URL you want to access
-const SERVER_URL = 'https://x402-tron-demo.aibank.io/protected-nile' // Replace with your target server
+const SERVER_URL = 'https://x402-tron-demo.bankofai.io/protected-nile' // Replace with your target server
 // ====================================
 
 async function main(): Promise<void> {
@@ -244,6 +244,5 @@ try {
 
 ## 参考资料
 
-- [npm package](https://www.npmjs.com/package/@open-aibank/x402-tron) - x402-tron JavaScript SDK
-- [PyPI package](https://pypi.org/project/x402-tron/) - x402-tron Python SDK
-- [示例代码仓库](https://github.com/open-aibank/x402-tron-demo) - 完整的集成演示
+- [npm package](https://www.npmjs.com/package/@bankofai/x402-tron) - x402-tron JavaScript SDK
+- [示例代码仓库](https://github.com/bankofai/x402-tron-demo) - 完整的集成演示

@@ -14,7 +14,7 @@ Before you begin, ensure you have:
 - Python 3.10+ and pip, or Node.js 18+ and npm
 - A service that requires payment via x402-tron
 
-**Pre-configured Examples:** We have ready-to-run [client examples in the demo repo](https://github.com/open-aibank/x402-tron-demo/tree/main/client/terminal).
+**Pre-configured Examples:** We have ready-to-run [client examples in the demo repo](https://github.com/bankofai/x402-tron-demo/tree/main/client/terminal).
 
 ---
 
@@ -42,7 +42,7 @@ The x402-tron Python package is not yet published to PyPI. Install from GitHub s
 
 ```bash
 # Clone the repository
-git clone https://github.com/open-aibank/x402-tron.git
+git clone https://github.com/bankofai/x402-tron.git
 cd x402-tron/python/x402
 
 # Install
@@ -52,7 +52,7 @@ pip install -e .
 Or install directly from a release tag:
 
 ```bash
-pip install "git+https://github.com/open-aibank/x402-tron.git@v0.1.6#subdirectory=python/x402"
+pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402"
 ```
 
 Install the required dependency:
@@ -66,7 +66,7 @@ pip install eth_account
 Install the x402-tron TypeScript package:
 
 ```bash
-npm install @open-aibank/x402-tron tronweb
+npm install @bankofai/x402-tron tronweb
 ```
 
   </TabItem>
@@ -97,7 +97,7 @@ from x402_tron.signers.client import TronClientSigner
 
 # ========== Configuration ==========
 # The x402-tron server URL you want to access
-SERVER_URL = "https://x402-tron-demo.aibank.io/protected-nile"  # Replace with your target server
+SERVER_URL = "https://x402-tron-demo.bankofai.io/protected-nile"  # Replace with your target server
 # ====================================
 
 
@@ -133,13 +133,13 @@ asyncio.run(main())
 
 ```typescript
 import { TronWeb } from 'tronweb'
-import { X402Client, X402FetchClient, ExactTronClientMechanism, TronClientSigner } from '@open-aibank/x402-tron'
+import { X402Client, X402FetchClient, ExactTronClientMechanism, TronClientSigner } from '@bankofai/x402-tron'
 
 const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
 
 // ========== Configuration ==========
 // The x402-tron server URL you want to access
-const SERVER_URL = 'https://x402-tron-demo.aibank.io/protected-nile' // Replace with your target server
+const SERVER_URL = 'https://x402-tron-demo.bankofai.io/protected-nile' // Replace with your target server
 // ====================================
 
 async function main(): Promise<void> {
@@ -266,6 +266,5 @@ try {
 
 **References:**
 
-- [x402-tron on npm](https://www.npmjs.com/package/@open-aibank/x402-tron)
-- [x402-tron on PyPI](https://pypi.org/project/x402-tron/)
-- [Example code](https://github.com/open-aibank/x402-tron-demo)
+- [x402-tron on npm](https://www.npmjs.com/package/@bankofai/x402-tron)
+- [Example code](https://github.com/bankofai/x402-tron-demo)
