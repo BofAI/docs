@@ -16,8 +16,12 @@ const sidebars = {
           label: 'Getting Started',
           items: [
             'x402/getting-started/quickstart-for-sellers',
-            'x402/getting-started/quickstart-for-human',
-            'x402/getting-started/quickstart-for-agent',
+            {
+              type: 'category',
+              label: 'Quickstart for Buyers',
+              collapsed: false,
+              items: ['x402/getting-started/quickstart-for-human', 'x402/getting-started/quickstart-for-agent'],
+            },
           ],
         },
         {

@@ -16,8 +16,12 @@ const sidebars = {
           label: '快速入门',
           items: [
             'x402/getting-started/quickstart-for-sellers',
-            'x402/getting-started/quickstart-for-human',
-            'x402/getting-started/quickstart-for-agent',
+            {
+              type: 'category',
+              label: '买家快速入门',
+              collapsed: false,
+              items: ['x402/getting-started/quickstart-for-human', 'x402/getting-started/quickstart-for-agent'],
+            },
           ],
         },
         {
@@ -47,12 +51,7 @@ const sidebars = {
       type: 'category',
       label: 'TRC-8004 Protocol',
       collapsed: false,
-      items: [
-        'TRC-8004/general',
-        'TRC-8004/identity',
-        'TRC-8004/reputation',
-        'TRC-8004/validation',
-      ],
+      items: ['TRC-8004/general', 'TRC-8004/identity', 'TRC-8004/reputation', 'TRC-8004/validation'],
     },
   ],
 }

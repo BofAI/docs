@@ -15,6 +15,10 @@
     "message": "快速入门",
     "description": "The label for category Getting Started in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.category.Quickstart for Buyers": {
+    "message": "买家快速入门",
+    "description": "The label for category Quickstart for Buyers in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.category.Core Concepts": {
     "message": "核心概念",
     "description": "The label for category Core Concepts in sidebar docsSidebar"

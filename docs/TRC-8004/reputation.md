@@ -1,3 +1,3 @@
-# TRC-8004 Reputation
+# Reputation
 
 Reputation system in TRC-8004.

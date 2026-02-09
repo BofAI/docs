@@ -1,3 +1,3 @@
-# TRC-8004 General
+# General
 
 Overview of the TRC-8004 protocol.
