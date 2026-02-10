@@ -3,7 +3,7 @@
 ### 前置要求
 
 1. ✅ 已安装 AI 智能体（OpenClaw）
-2. ✅ 已安装 **OpenClaw 扩展**（用于 TRON 功能）
+2. ✅ 已安装 **OpenClaw 扩展**
    * 下载：[bankofai/openclaw-extension](https://github.com/bankofai/openclaw-extension)
    * 按照该仓库中的说明设置 MCP 服务器
 

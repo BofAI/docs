@@ -1,8 +1,11 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 注册 (HTTP)
 
 使用指向注册文件的直接 HTTP/HTTPS URL 将您的代理（agent）在链上注册。
 
-## 概览 (Overview)
+## 概览 
 
 HTTP 注册在以下情况下非常有用：
 
@@ -10,11 +13,13 @@ HTTP 注册在以下情况下非常有用：
 *   您希望完全控制文件的提供方式。
 *   相比 IPFS，您更倾向于传统的托管方式。
 
-## 分步流程 (Step-by-Step Process)
+## 分步流程
 
-### 1. 配置您的代理 (Configure Your Agent)
+### 1. 配置您的代理 
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 创建并配置您的代理
 agent = sdk.createAgent(
@@ -29,7 +34,9 @@ agent.setENS("myagent.eth")
 agent.setTrust(reputation=True)
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 创建并配置您的代理
 const agent = sdk.createAgent({
@@ -44,12 +51,20 @@ agent.setENS({ name: "myagent.eth" });
 agent.setTrust({ reputation: true });
 ```
 
+</TabItem>
+</Tabs>
 
-### 2. 生成注册文件内容 (Generate Registration File Content)
+
+
+
+
+### 2. 生成注册文件内容 
 
 从 SDK 获取 JSON 内容：
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 获取注册文件对象
 registration_file = agent.registrationFile()
@@ -61,7 +76,9 @@ registration_data = registration_file.to_dict()
 json_content = str(registration_file)  # 带有缩进的 JSON
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 获取注册文件内容
 const registrationData = agent.registrationFile().toDict();
@@ -70,12 +87,20 @@ const registrationData = agent.registrationFile().toDict();
 const jsonContent = JSON.stringify(registrationData, null, 2);
 ```
 
+</TabItem>
+</Tabs>
 
-### 3. 托管注册文件 (Host the Registration File)
+
+
+
+
+### 3. 托管注册文件 
 
 将 JSON 内容保存到您的 Web 服务器：
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 保存到文件
 with open("my-agent.json", "w") as f:
@@ -87,7 +112,9 @@ with open("my-agent.json", "w") as f:
 # https://yourusername.github.io/agents/my-agent.json
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 保存到文件（Node.js 示例）
 import * as fs from 'fs';
@@ -95,6 +122,14 @@ fs.writeFileSync('my-agent.json', jsonContent);
 
 // 上传到您的 Web 服务器
 ```
+
+</TabItem>
+</Tabs>
+
+
+
+
+
 
 
 ## 可选：端点域名验证 (.well-known)
@@ -120,9 +155,11 @@ fs.writeFileSync('my-agent.json', jsonContent);
 *   这是可选的，主要供第三方验证者/聚合器使用。
 *   如果您的 `agentURI` 托管在同一个域名下，通常不需要进行此额外检查。
 
-### 4. 在链上注册 (Register On-Chain)
+### 4. 在链上注册 
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 使用您的 HTTP URL 进行注册
 tx = agent.registerHTTP("https://yourdomain.com/agents/my-agent.json")
@@ -132,7 +169,9 @@ print(f"代理已注册，ID: {registration_file.agentId}")
 print(f"代理 URI: {registration_file.agentURI}")  # https://yourdomain.com/...
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 使用您的 HTTP URL 进行注册
 const tx = await agent.registerHTTP("https://yourdomain.com/agents/my-agent.json");
@@ -142,11 +181,16 @@ console.log(`代理已注册，ID: ${registrationFile.agentId}`);
 console.log(`代理 URI: ${registrationFile.agentURI}`); // https://yourdomain.com/...
 ```
 
+</TabItem>
+</Tabs>
 
-## 完整示例 (Complete Example)
 
-::: tabs
-@tab Python
+
+## 完整示例
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 from agent0_sdk import SDK
 
@@ -182,7 +226,9 @@ tx.wait_confirmed(timeout=180)
 print(f"✅ 代理已注册，ID: {agent.agentId}")
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 import { SDK } from '@ag0/sdk';
 
@@ -216,12 +262,23 @@ await tx.waitConfirmed();
 console.log(`✅ 代理已注册，ID: ${agent.agentId}`);
 ```
 
+</TabItem>
+</Tabs>
 
-## 更新注册 (Update Registration)
+
+
+
+
+
+
+
+## 更新注册 
 
 更新代理：
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 1. 加载现有代理
 agent = sdk.loadAgent("11155111:123")
@@ -241,7 +298,9 @@ with open("my-agent-updated.json", "w") as f:
 agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json")
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 1. 加载现有代理
 const agent = await sdk.loadAgent("11155111:123");
@@ -260,8 +319,14 @@ const jsonContent = JSON.stringify(registrationData, null, 2);
 await agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json");
 ```
 
+</TabItem>
+</Tabs>
 
-## 注册文件格式 (Registration File Format)
+
+
+
+
+## 注册文件格式 
 
 SDK 会生成符合 ERC-8004 标准的注册文件：
 

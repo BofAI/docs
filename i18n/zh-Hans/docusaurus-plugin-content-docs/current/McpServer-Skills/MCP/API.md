@@ -1,3 +1,6 @@
+mport Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # API 参考
 
 ### 工具
@@ -30,8 +33,8 @@
 
 | 工具名称 | 描述 | 关键参数 |
 | :-- | :-- | :-- |
-| `get_balance` | 获取地址的 TRX 余额。 | `address`, `network` |
-| `get_token_balance` | 获取地址的 TRC20 代币余额。 | `address`, `tokenAddress`, `network` |
+| `get_balance` | 获取地址的余额。 | `address`, `network` |
+| `get_token_balance` | 获取地址的 TRC20/BEP-20 代币余额。 | `address`, `tokenAddress`, `network` |
 
 #### 转账（写入）
 
@@ -39,6 +42,7 @@
 | :-- | :-- | :-- |
 | `transfer_trx` | 将 TRX 转移到另一个地址。 | `toAddress`, `amount`, `network` |
 | `transfer_trc20` | 将 TRC20 代币转移到另一个地址。 | `toAddress`, `tokenAddress`, `amount`, `network` |
+
 
 #### 智能合约（写入）
 

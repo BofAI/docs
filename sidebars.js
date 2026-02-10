@@ -49,7 +49,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'ERC-8004 协议',
+      label: 'ERC-8004 Protocol',
       collapsed: false,
       items: [
         {
@@ -57,47 +57,33 @@ const sidebars = {
           id: 'ERC-8004/general',
           label: '简介',
         },
-
-         {
-          type: 'category',
-          label: '核心概念',
-          collapsed: false,
-          items: [
-            'ERC-8004/identity',
-            'ERC-8004/reputation',
-            'ERC-8004/validation',
-            
-          ],
+        {
+          type: 'doc',
+          id: 'ERC-8004/contract',
+          label: '合约',
+        },
+        {
+          type: 'doc',
+          id: 'ERC-8004/QuickStart',
+          label: '快速开始',
+        },
+        {
+          type: 'doc',
+          id: 'ERC-8004/SupportedNetworks',
+          label: '支持的网络',
         },
 
-         {
-          type: 'category',
-          label: 'SDK 实现',
-          items: [
-            {
-              type: 'doc',
-              id: 'ERC-8004/AgentT/Intro',
-              label: '简介',
-            },
-             {
-              type: 'doc',
-              id: 'ERC-8004/AgentT/SupportedNetworks',
-              label: '支持的网络',
-            },
-             {
-              type: 'doc',
-              id: 'ERC-8004/AgentT/QuickStart',
-              label: '快速开始',
-            },
+    
+         
             {
               type: 'category',
               label: '使用指南',
               collapsed: false,
-              items: ['ERC-8004/AgentT/Usage/Install', 'ERC-8004/AgentT/Usage/ConfigureAgents', 'ERC-8004/AgentT/Usage/RegistrationHTTP'],
+              items: ['ERC-8004/Usage/Install', 'ERC-8004/Usage/ConfigureAgents', 'ERC-8004/Usage/RegistrationHTTP'],
             },
           ],
-        },
-      ],
+        
+    
     },
      {
       type: 'category',
@@ -119,7 +105,7 @@ const sidebars = {
               type: 'category',
               label: 'SKILLS',
               collapsed: true,
-              items: ['McpServer-Skills/SKILLS/Intro', 'McpServer-Skills/SKILLS/UseSkills'],
+              items: ['McpServer-Skills/SKILLS/Intro', 'McpServer-Skills/SKILLS/SkillsList','McpServer-Skills/SKILLS/UseSkills','McpServer-Skills/SKILLS/Faq'],
             },
           ],
             

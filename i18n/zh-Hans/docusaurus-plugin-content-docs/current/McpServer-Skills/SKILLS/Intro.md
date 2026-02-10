@@ -15,7 +15,7 @@ AI 智能体读取 SunSwap 技能
   ↓
 AI 智能体遵循 SKILL.md 中的指令
   ↓
-调用 mcp-server-tron 工具
+调用 mcp-server 工具
   ↓
 完成 DEX 交易
 ```
@@ -26,10 +26,10 @@ AI 智能体遵循 SKILL.md 中的指令
 
 当前可用的技能：
 
-* **sunswap/** - SunSwap DEX 交易技能，用于 TRON 代币兑换
-* **tron-8004/** - TRC-8004 可信智能体 - AI 智能体的链上身份和信誉系统
-* **x402_tron_payment/** - 在 TRON 网络上启用智能体支付功能（x402 协议）
-* **x402_tron_payment_demo/** - x402 支付协议演示
+* **sunswap/** - SunSwap DEX 交易技能，用于代币兑换
+* **ERC-8004/** - ERC-8004 可信智能体 - AI 智能体的链上身份和信誉系统
+* **x402_payment/** - 在区块链网络上启用智能体支付功能（x402 协议）
+* **x402_payment_demo/** - x402 支付协议演示
 
 ### 2. 使用技能
 
@@ -48,7 +48,7 @@ AI 智能体将会：
 ## 仓库结构
 
 ```
-skills-tron/
+skills/
 ├── README.md              # 本文件 - 概述
 ├── LICENSE                # MIT 许可证
 ├── CONTRIBUTING.md        # 贡献指南
@@ -59,21 +59,17 @@ skills-tron/
 │   ├── examples/          # 使用示例
 │   ├── resources/         # 配置文件（合约地址、代币列表等）
 │   └── scripts/           # 辅助脚本
-├── tron-8004/             # TRC-8004 可信智能体技能
+├── ERC-8004/              # ERC-8004 可信智能体技能
 │   ├── README.md          # 技能描述
 │   ├── SKILL.md           # 主指令文件
 │   ├── lib/               # 合约 ABI 和配置
 │   ├── scripts/           # Node.js 脚本用于智能体操作
 │   ├── templates/         # 注册模板
 │   └── examples/          # 使用示例
-└── x402_tron_payment/     # x402 支付协议技能
+└── x402_payment/     # x402 支付协议技能
     ├── SKILL.md           # 主指令文件
     └── dist/              # 编译后的工具脚本
 ```
 
-## 可用技能
 
-* **SunSwap 技能**：DEX 交易（TRON 代币兑换）
-* **TRC-8004 可信智能体**：AI 智能体的链上身份、信誉和验证
-* **x402-tron-payment**：AI 智能体的 TRC20 支付（USDT/USDD）
 

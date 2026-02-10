@@ -1,3 +1,6 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # 配置代理 
 
 了解如何使用所有可用字段和选项来创建、配置和管理代理。
@@ -7,7 +10,9 @@
 在内存中创建一个新代理（尚未注册）：
 
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 from agent0_sdk import SDK
 
@@ -28,7 +33,9 @@ agent = sdk.createAgent(
 )
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 import { SDK } from '@ag0/sdk';
 
@@ -49,11 +56,19 @@ const agent = sdk.createAgent({
 });
 ```
 
-## 核心字段 (Core Fields)
+</TabItem>
+</Tabs>
 
-### 名称与描述 (Name and Description)
 
-**Python**
+
+## 核心字段 
+
+### 名称与描述 
+
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 更新基本信息
 agent.updateInfo(
@@ -63,7 +78,9 @@ agent.updateInfo(
 )
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 更新基本信息
 agent.updateInfo({
@@ -73,52 +90,87 @@ agent.updateInfo({
 });
 ```
 
+</TabItem>
+</Tabs>
 
-### 活跃状态 (Active Status)
 
-**Python**
+
+
+
+### 活跃状态
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 设置代理为 活跃/非活跃 状态
 agent.setActive(True)   # 活跃（在搜索中可见）
 agent.setActive(False)  # 非活跃（隐藏但不删除）
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 设置代理为 活跃/非活跃 状态
 agent.setActive(true);   // 活跃
 agent.setActive(false);  // 非活跃
 ```
 
-### x402 支付支持 (x402 Payment Support)
+</TabItem>
+</Tabs>
 
-**Python**
+
+
+
+### x402 支付支持 
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 启用/禁用 x402 支付支持
 agent.setX402Support(True)
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 启用/禁用 x402 支付支持
 agent.setX402Support(true);
 ```
 
-## 端点配置 (Endpoint Configuration)
+</TabItem>
+</Tabs>
+
+
+
+
+
+## 端点配置 
 
 ### MCP (Model Context Protocol) 端点
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 设置 MCP 端点
 agent.setMCP(endpoint="https://mcp.example.com/")
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 设置 MCP 端点
 agent.setMCP({ endpoint: "https://mcp.example.com/" });
 ```
+
+</TabItem>
+</Tabs>
+
+
 
 当你设置 MCP 端点时，SDK 会自动：
 *   从端点获取工具、提示词（prompts）和资源。
@@ -126,17 +178,26 @@ agent.setMCP({ endpoint: "https://mcp.example.com/" });
 
 ### A2A (Agent-to-Agent) 端点
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 设置 A2A 端点
 agent.setA2A(agentcard="https://a2a.example.com/agent-card.json")
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 设置 A2A 端点
 agent.setA2A({ agentcard: "https://a2a.example.com/agent-card.json" });
 ```
+
+</TabItem>
+</Tabs>
+
+
 
 
 SDK 会自动：
@@ -145,26 +206,36 @@ SDK 会自动：
 
 ### ENS
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 设置 ENS 名称
 agent.setENS(name="myagent.eth")
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 设置 ENS 名称
 agent.setENS({ name: "myagent.eth" });
 ```
+
+</TabItem>
+</Tabs>
+
 
 
 这会将 ENS 名称存储在：
 *   注册文件中。
 *   作为链上元数据。
 
-### 移除端点 (Removing Endpoints)
+### 移除端点 
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 移除特定类型的端点
 agent.removeEndpoint(type=EndpointType.MCP)
@@ -176,7 +247,9 @@ agent.removeEndpoint(value="https://old-endpoint.com")
 agent.removeEndpoints()
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 移除特定类型的端点
 agent.removeEndpoint({ type: EndpointType.MCP });
@@ -188,7 +261,13 @@ agent.removeEndpoint({ value: "https://old-endpoint.com" });
 agent.removeEndpoints();
 ```
 
-## 钱包配置 (Wallet Configuration)
+</TabItem>
+</Tabs>
+
+
+
+
+## 钱包配置 
 
 ### 默认行为（默认将钱包设置为所有者）
 
@@ -206,7 +285,10 @@ agent.removeEndpoints();
 *   **面向开发者的 SDK API**：`agent.setWallet(...)`。
 *   **谁必须签名**：**新钱包**必须通过签署 EIP-712 类型数据 (EOA) 签名来授权此更改。
 
-**Python**
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 你必须先注册代理，然后如果你想使用一个与所有者不同的专用钱包，再调用 setWallet()。
 tx = agent.registerIPFS()
@@ -223,7 +305,9 @@ agent.setWallet(
 
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 你必须先注册代理，然后调用 setWallet()。
 const tx = await agent.registerIPFS();
@@ -238,10 +322,16 @@ await agent.setWallet({
 
 ```
 
+</TabItem>
+</Tabs>
+
+
+
+
 
 钱包地址作为**保留**的 `agentWallet` 属性存储在链上，并需要签名验证 (ERC-8004)。
 
-### 取消验证的代理钱包 (Unsetting the verified agent wallet)
+### 取消验证的代理钱包 
 
 如果你之前设置了专用的验证 `agentWallet` 并想将其移除（在链上恢复为“未设置”状态），请使用：
 
@@ -267,13 +357,15 @@ await agent.setWallet({
 
 
 
-## OASF 技能与领域 (OASF Skills and Domains)
+## OASF 技能与领域 
 
 代理可以使用开放代理架构框架 (Open Agentic Schema Framework, OASF) 分类法来宣传其能力。这为技能和领域提供了标准化的分类，从而提高了可发现性和互操作性。
 
-### 添加技能 (Adding Skills)
+### 添加技能 
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 添加技能而不进行验证（允许任何字符串）
 agent.addSkill("custom_skill/my_skill", validate_oasf=False)
@@ -282,7 +374,9 @@ agent.addSkill("custom_skill/my_skill", validate_oasf=False)
 agent.addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=True)
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 添加技能而不进行验证
 agent.addSkill({ skill: "custom_skill/my_skill", validateOasf: false });
@@ -291,10 +385,17 @@ agent.addSkill({ skill: "custom_skill/my_skill", validateOasf: false });
 agent.addSkill({ skill: "advanced_reasoning_planning/strategic_planning", validateOasf: true });
 ```
 
+</TabItem>
+</Tabs>
 
-### 添加领域 (Adding Domains)
 
-**Python**
+
+
+
+### 添加领域 
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 添加领域而不进行验证
 agent.addDomain("custom_domain/my_domain", validate_oasf=False)
@@ -303,7 +404,9 @@ agent.addDomain("custom_domain/my_domain", validate_oasf=False)
 agent.addDomain("finance_and_business/investment_services", validate_oasf=True)
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 添加领域而不进行验证
 agent.addDomain({ domain: "custom_domain/my_domain", validateOasf: false });
@@ -312,10 +415,20 @@ agent.addDomain({ domain: "custom_domain/my_domain", validateOasf: false });
 agent.addDomain({ domain: "finance_and_business/investment_services", validateOasf: true });
 ```
 
+</TabItem>
+</Tabs>
 
-### 移除技能与领域 (Removing Skills and Domains)
 
-**Python**
+
+
+
+
+
+### 移除技能与领域 
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 移除技能
 agent.removeSkill("advanced_reasoning_planning/strategic_planning")
@@ -324,7 +437,9 @@ agent.removeSkill("advanced_reasoning_planning/strategic_planning")
 agent.removeDomain("finance_and_business/investment_services")
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 移除技能
 agent.removeSkill({ skill: "advanced_reasoning_planning/strategic_planning" });
@@ -333,27 +448,44 @@ agent.removeSkill({ skill: "advanced_reasoning_planning/strategic_planning" });
 agent.removeDomain({ domain: "finance_and_business/investment_services" });
 ```
 
+</TabItem>
+</Tabs>
 
-### 方法链 (Method Chaining)
+
+
+
+
+
+### 方法链 
 
 所有 OASF 方法都支持链式调用：
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=True)\
      .addDomain("technology/data_science", validate_oasf=True)\
      .addSkill("natural_language_processing/summarization", validate_oasf=True)
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 agent.addSkill({ skill: "data_engineering/data_transformation_pipeline", validateOasf: true })
      .addDomain({ domain: "technology/data_science", validateOasf: true })
      .addSkill({ skill: "natural_language_processing/summarization", validateOasf: true });
 ```
 
+</TabItem>
+</Tabs>
 
-### 注册文件中的 OASF (OASF in Registration File)
+
+
+
+
+### 注册文件中的 OASF 
 
 OASF 技能和领域存储在注册文件的 `endpoints` 数组中：
 
@@ -376,13 +508,15 @@ OASF 技能和领域存储在注册文件的 `endpoints` 数组中：
 }
 ```
 
-## 信任模型 (Trust Models)
+## 信任模型 
 
 信任模型允许代理声明它们如何处理安全和隐私。
 
-### 设置信任模型 (Set Trust Models)
+### 设置信任模型 
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 设置信任模型
 agent.setTrustModels([
@@ -394,7 +528,9 @@ agent.setTrustModels([
 ])
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 设置信任模型
 agent.setTrustModels([
@@ -406,65 +542,100 @@ agent.setTrustModels([
 ]);
 ```
 
+</TabItem>
+</Tabs>
 
-## 链上元数据管理 (On-chain Metadata Management)
+
+
+
+
+## 链上元数据管理 
 
 某些属性可以直接作为链上元数据进行管理。
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 更新链上元数据
 agent.updateOnChainMetadata()
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 更新链上元数据
 await agent.updateOnChainMetadata();
 ```
 
+</TabItem>
+</Tabs>
 
-## 加载现有代理 (Loading an Existing Agent)
+
+
+
+## 加载现有代理
 
 如果你已经有一个注册的代理，可以通过其 ID 加载它：
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 # 通过 ID 加载代理
 agent = sdk.getAgent(agent_id="0x123...")
 ```
 
-**TypeScript**
+
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 // 通过 ID 加载代理
 const agent = await sdk.getAgent("0x123...");
 ```
-:::
 
-## 直接属性访问 (Direct Property Access)
+</TabItem>
+</Tabs>
+
+
+
+## 直接属性访问 
 
 你可以直接访问代理对象的属性：
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 print(agent.name)
 print(agent.description)
 print(agent.active)
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 console.log(agent.name);
 console.log(agent.description);
 console.log(agent.active);
 ```
 
+</TabItem>
+</Tabs>
 
-## 完整配置示例 (Complete Configuration Example)
+
+
+
+## 完整配置示例 
 
 这是一个配置具有多种设置的代理的完整示例：
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 agent = sdk.createAgent(
     name="高级 AI 助手",
@@ -483,7 +654,9 @@ tx = agent.registerIPFS()
 tx.wait_confirmed()
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 const agent = sdk.createAgent({
     name: "高级 AI 助手",
@@ -501,4 +674,10 @@ agent.setMCP({ endpoint: "https://mcp.example.com/" })
 const tx = await agent.registerIPFS();
 await tx.waitConfirmed();
 ```
+
+
+</TabItem>
+</Tabs>
+
+
 

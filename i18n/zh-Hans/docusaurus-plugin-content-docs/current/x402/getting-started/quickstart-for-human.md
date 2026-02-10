@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 在开始集成前，请确保您的环境满足以下要求：
 
-- **TRON 钱包**：持有一定量 USDT (TRC-20) 余额的钱包账户。
+- **TRON 钱包**：持有一定量 USDT 余额的钱包账户。
 - **运行环境**：Python 3.10+ (含 pip) 或 Node.js 18+ (含 npm)。
 - **目标服务**：一个支持 x402 协议的支付服务端点。
 
@@ -17,15 +17,35 @@ import TabItem from '@theme/TabItem';
 
 | 项目          | 描述                             | 获取方式                                                            |
 | ------------- | -------------------------------- | ------------------------------------------------------------------- |
-| **TRON 私钥** | 用于对支付进行签名的钱包私钥     | 从 [TronLink](https://www.tronlink.org/) 钱包导出                   |
+| **私钥** | 用于对支付进行签名的钱包私钥     | 从钱包导出                   |
 | **测试 TRX**  | 用于支付测试网交易的手续费 (Gas) | [Nile 水龙头](https://nileex.io/join/getJoinPage)                   |
-| **测试 USDT** | 用于进行支付的测试代币           | [Nile USDT 水龙头](https://nileex.io/join/getJoinPage) 或在社区索取 |
+| **测试 USDT** | 用于进行支付的测试代币           | [Nile USDT 水龙头](https://nileex.io/join/getJoinPage)或在社区索取 |
+| **测试 BNB**  | 用于支付测试网交易的手续费 (Gas) | [Chapel 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
+| **测试 USDT** | 用于进行支付的测试代币           | [Chapel USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
+
+
+
+
+
 
 **安全提示：** 切勿分享您的私钥！请将其安全地存储在环境变量中，切勿直接写入代码。
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
 
 ```bash
 export TRON_PRIVATE_KEY=your_private_key_here
 ```
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+```json
+
+```
+
+</TabItem>
+</Tabs>
 
 ## 1. 安装 x402 SDK
 
@@ -33,8 +53,8 @@ x402 Python 包暂未发布至 PyPI。请从 GitHub 源码安装：
 
 ```bash
 # Clone the repository
-git clone https://github.com/bankofai/x402-tron.git
-cd x402-tron/python/x402
+git clone https://github.com/bankofai/x402.git
+cd x402/python/x402
 
 # Install
 pip install -e .
@@ -43,7 +63,7 @@ pip install -e .
 或者直接从 Release 标签安装：
 
 ```bash
-pip install "git+https://github.com/bankofai/x402-tron.git@v0.2.1#subdirectory=python/x402"
+pip install "git+https://github.com/bankofai/x402.git@v0.2.1#subdirectory=python/x402"
 ```
 
 安装所需的依赖：
@@ -56,18 +76,37 @@ pip install eth_account
 安装 x402 TypeScript 包：
 
 ```bash
-npm install @bankofai/x402-tron tronweb
+npm install @bankofai/x402 tronweb
 ```
 
 ## 2. 配置环境变量
 
 将您的钱包私钥设置为环境变量：
 
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
 ```bash
 export TRON_PRIVATE_KEY=your_private_key_here
 ```
 
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+```json
+
+```
+</TabItem>
+</Tabs>
+
+
 ## 3. 自动发起付费请求
+
+<Tabs groupId="chain">
+  <TabItem value="tron" label="TRON">
+    <Tabs groupId="language">
+      <TabItem value="python" label="Python">
+
 
 ```python
 import asyncio
@@ -110,6 +149,9 @@ async def main():
 
 asyncio.run(main())
 ```
+
+  </TabItem>
+  <TabItem value="ts" label="TypeScript">
 
 ```typescript
 import { TronWeb } from 'tronweb'
@@ -161,12 +203,35 @@ async function main(): Promise<void> {
 main().catch(console.error)
 ```
 
+</TabItem>
+</Tabs>
+</TabItem>
+<TabItem value="bsc" label="BSC">
+<Tabs groupId="language">
+  <TabItem value="python" label="Python">
+
+
+  </TabItem>
+  <TabItem value="ts" label="TypeScript">
+
+
+
+  </TabItem>
+
+</Tabs>
+</TabItem> 
+</Tabs>
+
 ## 4. 错误处理
 
 SDK 在支付过程中可能会抛出错误。处理方法如下：
 
-<Tabs>
-  <TabItem value="python" label="Python">
+
+<Tabs groupId="chain">
+  <TabItem value="tron" label="TRON">
+    <Tabs groupId="language">
+      <TabItem value="python" label="Python">
+
 
 ```python
 from x402_tron.exceptions import (
@@ -200,7 +265,8 @@ except X402Error as e:
 ```
 
   </TabItem>
-  <TabItem value="typescript" label="TypeScript">
+  <TabItem value="ts" label="TypeScript">
+
 
 ```typescript
 try {
@@ -223,16 +289,45 @@ try {
 }
 ```
 
-  </TabItem>
+</TabItem>
 </Tabs>
+</TabItem>
+<TabItem value="bsc" label="BSC">
+<Tabs groupId="language">
+  <TabItem value="python" label="Python">
+
+```python
+
+```
+
+  </TabItem>
+  <TabItem value="ts" label="TypeScript">
+
+```typescript
+
+```
+
+  </TabItem>
+  
+</Tabs>
+</TabItem> 
+</Tabs>
+
+
+
+
+
+
+
+ 
 
 ## 总结
 
 通过本指南，您已经完成了以下集成步骤：
 
-- **安装依赖**：集成 `x402` SDK 及 `tronweb` 库。
-- **配置身份**：使用 TRON 私钥初始化钱包签名器 (Wallet Signer)。
-- **初始化客户端**：实例化 `X402Client` 并注册 TRON 支付处理机制。
+- **安装依赖**：集成 `x402` SDK ， `tronweb` 库（TRON），`Ethers.js`库（BSC）。
+- **配置身份**：使用私钥初始化钱包签名器 (Wallet Signer)。
+- **初始化客户端**：实例化 `X402Client` 并注册支付处理机制。
 - **发起请求**：通过封装后的 HTTP 客户端访问付费 API 接口。
 - **自动化流程**：SDK 将自动处理支付全生命周期，包括必要的代币授权 (Approve)。
 

@@ -13,23 +13,23 @@ OpenClaw 扩展插件是由 **BankofAI** 开发的一套工具，旨在赋予 AI
 
 ## 核心组件
 
-此扩展插件提供了用于 TRON 区块链交互的工具：
+此扩展插件提供了用于区块链交互的工具：
 
 ### MCP 服务器
 
-**mcp-server-tron**：一个模型上下文协议 (MCP) 服务器，它使 AI 代理能够直接访问 TRON 区块链。
+**mcp-server**：一个模型上下文协议 (MCP) 服务器，它使 AI 代理能够直接访问区块链。
 
 *   **功能**：余额查询、转账、智能合约交互、资源估算、代币互换。
 
 ### Skills
 
-安装程序会自动从 [skills-tron](https://github.com/bankofai/skills-tron) 仓库获取技能：
+安装程序会自动从 [skills](https://github.com/bankofai/skills-tron) 仓库获取技能：
 
-1.  **sunswap** - 用于 TRON 代币互换的 SunSwap DEX 交易技能。
+1.  **sunswap** - 用于代币互换的 SunSwap DEX 交易技能。
     *   多版本池路由 (V1/V2/V3/PSM)。
     *   带滑点保护的价格报价。
     *   代币授权管理。
-2.  **x402_tron_payment** - 在 TRON 网络上启用代理支付 (x402 协议)。
+2.  **x402_payment** - 在网络上启用代理支付 (x402 协议)。
     *   代理 API 的按请求付费模型。
     *   任务执行前的支付验证。
-3.  **x402_tron_payment_demo** - x402 支付协议的演示。
+3.  **x402_payment_demo** - x402 支付协议的演示。
