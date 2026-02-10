@@ -1,7 +1,8 @@
 # 快速开始
 
-此示例涵盖了初始化 SDK、定义智能体属性、发布 MCP/A2A 能力、将其注册至区块链以及最后通过 ID 重新检索的过程。
-## Python
+此示例涵盖了初始化 SDK、定义 Agents 属性、发布 MCP/A2A 能力、将其注册至区块链以及最后通过 ID 重新检索的过程。
+
+**Python**
 ```
 from agent0_sdk import SDK
 import os
@@ -26,7 +27,7 @@ agent = sdk.createAgent(
 # Configure endpoints
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent-card.json")
-agent.setENS("myagent.tron")
+agent.setENS("myagent.eth")
 
 # Configure trust models
 agent.setTrust(reputation=True, cryptoEconomic=True)
@@ -62,7 +63,8 @@ retrieved = sdk.getAgent(agent.agentId)
 print(f"✅ Retrieved: {retrieved.name}")
 ```
 
-## TypeScript
+**TypeScript**
+
 ```
 import { SDK } from 'agent0-sdk';
 
@@ -87,7 +89,7 @@ async function main() {
   // Configure endpoints (async in TypeScript)
   await agent.setMCP('https://mcp.example.com/');
   await agent.setA2A('https://a2a.example.com/agent-card.json');
-  agent.setENS('myagent.tron');
+  agent.setENS('myagent.eth');
 
   // Configure trust models
   agent.setTrust(true, true); // reputation=true, cryptoEconomic=true

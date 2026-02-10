@@ -14,7 +14,7 @@ HTTP 注册在以下情况下非常有用：
 
 ### 1. 配置您的代理 (Configure Your Agent)
 
-#### Python
+**Python**
 ```python
 # 创建并配置您的代理
 agent = sdk.createAgent(
@@ -25,11 +25,11 @@ agent = sdk.createAgent(
 
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent.json")
-agent.setENS("myagent.tron")
+agent.setENS("myagent.eth")
 agent.setTrust(reputation=True)
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 创建并配置您的代理
 const agent = sdk.createAgent({
@@ -40,7 +40,7 @@ const agent = sdk.createAgent({
 
 agent.setMCP({ endpoint: "https://mcp.example.com/" });
 agent.setA2A({ agentcard: "https://a2a.example.com/agent.json" });
-agent.setENS({ name: "myagent.tron" });
+agent.setENS({ name: "myagent.eth" });
 agent.setTrust({ reputation: true });
 ```
 
@@ -49,7 +49,7 @@ agent.setTrust({ reputation: true });
 
 从 SDK 获取 JSON 内容：
 
-#### Python
+**Python**
 ```python
 # 获取注册文件对象
 registration_file = agent.registrationFile()
@@ -61,7 +61,7 @@ registration_data = registration_file.to_dict()
 json_content = str(registration_file)  # 带有缩进的 JSON
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 获取注册文件内容
 const registrationData = agent.registrationFile().toDict();
@@ -75,7 +75,7 @@ const jsonContent = JSON.stringify(registrationData, null, 2);
 
 将 JSON 内容保存到您的 Web 服务器：
 
-#### Python
+**Python**
 ```python
 # 保存到文件
 with open("my-agent.json", "w") as f:
@@ -87,7 +87,7 @@ with open("my-agent.json", "w") as f:
 # https://yourusername.github.io/agents/my-agent.json
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 保存到文件（Node.js 示例）
 import * as fs from 'fs';
@@ -122,7 +122,7 @@ fs.writeFileSync('my-agent.json', jsonContent);
 
 ### 4. 在链上注册 (Register On-Chain)
 
-#### Python
+**Python**
 ```python
 # 使用您的 HTTP URL 进行注册
 tx = agent.registerHTTP("https://yourdomain.com/agents/my-agent.json")
@@ -132,7 +132,7 @@ print(f"代理已注册，ID: {registration_file.agentId}")
 print(f"代理 URI: {registration_file.agentURI}")  # https://yourdomain.com/...
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 使用您的 HTTP URL 进行注册
 const tx = await agent.registerHTTP("https://yourdomain.com/agents/my-agent.json");
@@ -182,7 +182,7 @@ tx.wait_confirmed(timeout=180)
 print(f"✅ 代理已注册，ID: {agent.agentId}")
 ```
 
-@tab TypeScript
+**TypeScript**
 ```typescript
 import { SDK } from '@ag0/sdk';
 
@@ -215,13 +215,13 @@ await tx.waitConfirmed();
 
 console.log(`✅ 代理已注册，ID: ${agent.agentId}`);
 ```
-:::
+
 
 ## 更新注册 (Update Registration)
 
 更新代理：
 
-### Python
+**Python**
 ```python
 # 1. 加载现有代理
 agent = sdk.loadAgent("11155111:123")
@@ -241,7 +241,7 @@ with open("my-agent-updated.json", "w") as f:
 agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json")
 ```
 
-### TypeScript
+**TypeScript**
 ```typescript
 // 1. 加载现有代理
 const agent = await sdk.loadAgent("11155111:123");
@@ -267,7 +267,7 @@ SDK 会生成符合 ERC-8004 标准的注册文件：
 
 ```json
 {
-  "type": "https://tips.tron.org/TIPS/tip-8004#registration-v1",
+  "type": "https://eips.eth.org/EIPS/eip-8004#registration-v1",
   "name": "我的 AI 代理",
   "description": "代理描述",
   "image": "https://example.com/image.png",

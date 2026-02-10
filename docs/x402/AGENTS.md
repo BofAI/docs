@@ -1,108 +1,117 @@
-# Documentation Agent Instructions
+# x402 文档维护指引
 
-## Package Identity
+## 1. 项目定位与核心
 
-- Docusaurus documentation source for x402-tron
-- MDX/Markdown files with `sidebars.js` as navigation configuration
+- 本仓库包含 x402 项目基于 Docusaurus 构建的文档源代码。
+- 主要由 MDX / Markdown 文件构成，并通过 `sidebars.js` 进行侧边栏导航配置。
 
-## Directory Structure
+## 2. 目录结构说明
 
-- `docs/core-concepts/` — Protocol explanations (HTTP 402, client-server, facilitator, wallet, network support)
-- `docs/getting-started/` — Quickstart guides for buyers and sellers (MD files with tabs)
-- `docs/index.md` — Welcome/landing page
-- `docs/faq.md` — Frequently asked questions
-- `sidebars.js` — Docusaurus sidebar navigation configuration
-- `docusaurus.config.js` — Main Docusaurus configuration
-- `docs/sdk-features.md` - Feature list of Python and TypeScript SDKs
+- `docs/core-concepts/` — 协议详解（含 HTTP 402、客户端-服务器模型、Facilitator、钱包管理及网络支持）。
+- `docs/getting-started/` — 面向买方与卖方的上手指南（使用 Tabs 展示多语言代码）。
+- `docs/index.md` — 欢迎页 / 落地页 (Landing Page)。
+- `docs/faq.md` — 常见问题解答。
+- `sidebars.js` — Docusaurus 侧边栏配置文件。
+- `docusaurus.config.js` — Docusaurus 主配置文件。
+- `docs/sdk-features.md` — Python 与 TypeScript SDK 的功能特性对比表。
 
-## Code-to-Doc Mapping
+## 3. 代码与文档的同步机制
 
-- Changes to `typescript/packages/` affect TypeScript SDK references
-- Changes to `python/x402/` affect Python SDK references
-- Changes to facilitator endpoints affect quickstart guides
-- Changes to mechanisms affect core-concepts docs
+文档维护需遵循以下依赖关系，确保代码变更即时反映在文档中：
 
-## Style Guidelines
+- `typescript/packages/` 目录下的变更 $\rightarrow$ 需同步更新 TypeScript 相关文档。
+- `python/x402/` 目录下的变更 $\rightarrow$ 需同步更新 Python 相关文档。
+- 端点逻辑的变更 $\rightarrow$ 需更新“快速入门”指南。
+- 底层机制的变更 $\rightarrow$ 需更新 `core-concepts` 文档。
 
-- Use Python for primary code examples (it's the most complete SDK)
-- Include TypeScript examples where available
-- Include error handling in all API examples
-- Write for developers with 2-5 years experience
-- Use Docusaurus MDX components (`<Tabs>`, `<TabItem>`) for multi-language code examples
-- Import Tabs at top of files using them: `import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem';`
-- Show both success and error response examples for API endpoints
-- Use real-world parameter values in examples (not foo/bar placeholders)
+## 4. 风格与规范 
+- 以 **Python** 作为主要代码示例（鉴于其 SDK 功能最为完备）。
+- 在功能支持的情况下，务必补充 **TypeScript** 示例。
+- 所有 API 调用示例必须包含完整的错误处理逻辑。
+- 内容撰写面向具有 **2–5 年经验** 的开发者。
+- 必须使用 Docusaurus MDX 组件（`<Tabs>`、`<TabItem>`）来展示多语言代码。
+- 凡使用 Tabs 的文件，必须在文件顶部显式引入：
+  ```js
+  import Tabs from '@theme/Tabs';
+  import TabItem from '@theme/TabItem';
+  ```
+- 所有 API 端点必须同时提供 **成功** 与 **失败** 的响应示例。
+- 示例代码必须使用符合真实业务场景的参数值（严禁使用 `foo`/`bar` 等无意义占位符）。
 
-## Conventions
 
-- DO: Add new pages to `sidebars.js` navigation
-- DO: Include code examples from real SDK files
-- DO: Use `<Tabs>` and `<TabItem>` for multi-language code examples
-- DO: Add frontmatter (title, description) to all pages
-- DON'T: Add pages without updating `sidebars.js`
-- **Git: Create PRs for review; NEVER commit directly to main**
+## 5. 开发约定 
 
-## TRON-Specific Content
+- **必须**：新增页面时，**必须**同步更新 `sidebars.js` 导航配置。
+- **必须**：代码示例必须引用真实的 SDK 源文件，而非伪代码。
+- **必须**：使用 `<Tabs>` / `<TabItem>` 组件来展示多语言代码对比。
+- **必须**：所有页面必须包含完整的 Frontmatter 元数据（`title` 和 `description`）。
+- **禁止**：严禁添加了新页面文件却遗漏更新 `sidebars.js`（会导致死链或无法导航）。
+- **Git 规范**：所有变更必须通过 Pull Request (PR) 提交并经过评审；**严禁**直接推送到 `main` 分支。
 
-- Network identifiers use format `tron:<network>` (mainnet, nile, shasta)
-- Use TIP-712 (not EIP-712) for TRON signing references
-- Token addresses are base58-encoded (start with 'T')
-- Reference TronGrid endpoints for node access
-- Example token: USDT at `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` (Nile)
+## 6. TRON 平台规范 
 
-## Touch Points / Key Files
+- **网络标识**：必须遵循 `tron:<network>` 格式（支持 `mainnet`, `nile`, `shasta`）。
+- **签名标准**：TRON 签名必须引用 **TIP-712** 标准（请勿混淆为 EIP-712）。
+- **地址格式**：Token 地址必须使用 Base58 编码格式（即以 `T` 开头的地址）。
+- **节点接入**：节点访问需指向 TronGrid 端点。
+- **测试示例**：Nile 测试网 USDT 地址为 `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf`。
 
-- `docs/index.md` — Landing page
-- `docs/faq.md` — Frequently asked questions
-- `sidebars.js` — Navigation configuration (MUST update when adding pages)
-- `docusaurus.config.js` — Main site configuration
-- `docs/core-concepts/*.md` — Conceptual documentation
-- `docs/getting-started/*.md` — Quickstart guides (MDX for tab components)
-- `docs/sdk-features.md` — Update when SDK capabilities change
+## 7. 关键文件与触点 
 
-## File Extensions
+- `docs/index.md` — **着陆页 (Landing Page)**
+- `docs/faq.md` — **常见问题 (FAQ)**
+- `sidebars.js` — **导航配置**（新增页面时**必须**更新此文件）
+- `docusaurus.config.js` — **站点主配置**
+- `docs/core-concepts/*.md` — **概念性文档**
+- `docs/getting-started/*.md` — **快速上手指南**（使用 Tabs 的 MDX 文件）
+- `docs/sdk-features.md` — **功能矩阵**（SDK 能力发生变更时需同步更新）
 
-- Use `.md` for all pages (Docusaurus parses MDX in standard `.md` files)
-- Avoid using `.mdx` extension for better editor compatibility
 
-## Common Gotchas
+## 8. 文件扩展名
 
-- `sidebars.js` controls Docusaurus navigation; pages not listed won't appear in sidebar
-- Links between pages should omit file extensions
-- TRON addresses are case-sensitive and base58-encoded
-- Files with tabs must import Tabs components before using them
+- 所有文档源文件统一使用 `.md` 扩展名（Docusaurus 支持解析 `.md` 文件中的 MDX 语法）。
+- 为确保最佳的编辑器兼容性，请**避免**使用 `.mdx` 扩展名。
 
-## Pre-PR Checks
+## 9. 常见误区 
 
-- All links work (no broken references)
-- New pages added to `sidebars.js` navigation
-- Code examples compile and run
-- Frontmatter present on all pages (title, description)
-- MDX syntax is valid
-- Run `yarn build` to verify no build errors
+- `sidebars.js` 决定了 Docusaurus 的侧边栏结构；未在此文件中配置的页面**将不会显示**在侧边栏中。
+- 页面间的内部链接引用应当**省略文件扩展名**（例如使用 `[Link](./page)` 而非 `[Link](./page.md)`）。
+- TRON 地址采用 Base58 编码，**严格区分大小写**。
+- 凡使用 `<Tabs>` 组件的文件，**必须**在文件顶部显式引入该组件。
 
-## SDK Feature Parity Document
+## 10.提交前检查清单 
 
-When SDK code changes involve:
+- 确保所有链接有效（无死链）。
+- 确认新页面已加入 `sidebars.js` 导航配置。
+- 代码示例可成功编译并运行。
+- 所有页面均包含完整的 Frontmatter（`title`, `description`）。
+- MDX 语法合法且无误。
+- 本地执行 `yarn build` 并通过，确认无构建错误。
 
-- New mechanisms in `*/mechanisms/`
-- New signers in `*/signers/`
-- New client/server features
+## 11.SDK 功能同步 
 
-Update `sdk-features.md` to reflect the current state. Check both SDKs (python/, typescript/) when updating.
+当 SDK 代码发生以下变更时，**必须**同步更新 `docs/sdk-features.md` 以反映最新状态：
 
-## Development Commands
+- `*/mechanisms/` 目录中新增了机制。
+- `*/signers/` 目录中新增了签名器。
+- 客户端 (Client) 或服务端 (Server) 新增了功能特性。
+
+**注意**：更新文档时，需同时交叉检查 **Python** 与 **TypeScript** 两个 SDK 的实现进度。
+
+
+## 12.开发常用命令 
 
 ```bash
-# Install dependencies
+# 安装项目依赖
 yarn install
 
-# Start development server
+# 启动本地开发服务器
 yarn start
 
-# Build for production
+# 构建生产版本
 yarn build
 
-# Serve production build locally
+# 本地服务生产构建
 yarn serve
 ```
+

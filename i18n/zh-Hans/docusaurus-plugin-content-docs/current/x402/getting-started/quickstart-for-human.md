@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 - **TRON 钱包**：持有一定量 USDT (TRC-20) 余额的钱包账户。
 - **运行环境**：Python 3.10+ (含 pip) 或 Node.js 18+ (含 npm)。
-- **目标服务**：一个支持 x402-tron 协议的支付服务端点。
+- **目标服务**：一个支持 x402 协议的支付服务端点。
 
 ## 配置参考
 
@@ -27,9 +27,9 @@ import TabItem from '@theme/TabItem';
 export TRON_PRIVATE_KEY=your_private_key_here
 ```
 
-## 1. 安装 x402-tron SDK
+## 1. 安装 x402 SDK
 
-x402-tron Python 包暂未发布至 PyPI。请从 GitHub 源码安装：
+x402 Python 包暂未发布至 PyPI。请从 GitHub 源码安装：
 
 ```bash
 # Clone the repository
@@ -53,7 +53,7 @@ pip install eth_account
 
 ```
 
-安装 x402-tron TypeScript 包：
+安装 x402 TypeScript 包：
 
 ```bash
 npm install @bankofai/x402-tron tronweb
@@ -230,7 +230,7 @@ try {
 
 通过本指南，您已经完成了以下集成步骤：
 
-- **安装依赖**：集成 `x402-tron` SDK 及 `tronweb` 库。
+- **安装依赖**：集成 `x402` SDK 及 `tronweb` 库。
 - **配置身份**：使用 TRON 私钥初始化钱包签名器 (Wallet Signer)。
 - **初始化客户端**：实例化 `X402Client` 并注册 TRON 支付处理机制。
 - **发起请求**：通过封装后的 HTTP 客户端访问付费 API 接口。
@@ -243,5 +243,5 @@ try {
 
 ## 参考资料
 
-- [npm package](https://www.npmjs.com/package/@bankofai/x402-tron) - x402-tron JavaScript SDK
+- [npm package](https://www.npmjs.com/package/@bankofai/x402-tron) - x402 JavaScript SDK
 - [示例代码仓库](https://github.com/bankofai/x402-tron-demo) - 完整的集成演示

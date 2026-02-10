@@ -27,7 +27,7 @@ agent = sdk.createAgent(
 # Configure endpoints
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent-card.json")
-agent.setENS("myagent.tron")
+agent.setENS("myagent.eth")
 
 # Configure trust models
 agent.setTrust(reputation=True, cryptoEconomic=True)
@@ -89,7 +89,7 @@ async function main() {
   // Configure endpoints (async in TypeScript)
   await agent.setMCP('https://mcp.example.com/');
   await agent.setA2A('https://a2a.example.com/agent-card.json');
-  agent.setENS('myagent.tron');
+  agent.setENS('myagent.eth');
 
   // Configure trust models
   agent.setTrust(true, true); // reputation=true, cryptoEconomic=true

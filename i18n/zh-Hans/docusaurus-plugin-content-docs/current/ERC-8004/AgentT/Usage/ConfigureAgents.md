@@ -148,13 +148,13 @@ SDK 会自动：
 **Python**
 ```python
 # 设置 ENS 名称
-agent.setENS(name="myagent.tron")
+agent.setENS(name="myagent.eth")
 ```
 
 **TypeScript**
 ```typescript
 // 设置 ENS 名称
-agent.setENS({ name: "myagent.tron" });
+agent.setENS({ name: "myagent.eth" });
 ```
 
 
@@ -192,7 +192,7 @@ agent.removeEndpoints();
 
 ### 默认行为（默认将钱包设置为所有者）
 
-根据 TRC-8004 协议，`agentWallet` **最初被设置为代理所有者的地址**。
+根据 ERC-8004 协议，`agentWallet` **最初被设置为代理所有者的地址**。
 
 *   **如果你不调用 `setWallet()`**：代理钱包默认保持为**所有者钱包**。
 *   **何时需要设置专用代理钱包**：仅当你希望代理使用与所有者**不同**的钱包时（例如：职责分离、热钱包与冷钱包所有者分离、使用不同链的钱包）。
@@ -200,11 +200,11 @@ agent.removeEndpoints();
 
 ### 设置专用代理钱包（签名验证）
 
-`agentWallet` 是一个**保留的链上**属性。根据 TRC-8004，设置该属性需要经过签名验证。
+`agentWallet` 是一个**保留的链上**属性。根据 ERC-8004，设置该属性需要经过签名验证。
 
 *   **谁发送交易**：SDK 签名者（通常是代理**所有者**或授权的**操作员**）提交链上交易。
 *   **面向开发者的 SDK API**：`agent.setWallet(...)`。
-*   **谁必须签名**：**新钱包**必须通过签署 TIP-712 类型数据 (EOA) 签名来授权此更改。
+*   **谁必须签名**：**新钱包**必须通过签署 EIP-712 类型数据 (EOA) 签名来授权此更改。
 
 **Python**
 ```python
@@ -213,7 +213,7 @@ tx = agent.registerIPFS()
 tx.wait_confirmed(timeout=180)
 
 # --- EOA 流程 ---
-# *新钱包* 必须签署 TIP-712 类型数据。
+# *新钱包* 必须签署 EIP-712 类型数据。
 # 如果新钱包与 SDK 签名者不是同一个地址，请提供 `new_wallet_signer`。
 agent.setWallet(
     new_wallet="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
@@ -239,7 +239,7 @@ await agent.setWallet({
 ```
 
 
-钱包地址作为**保留**的 `agentWallet` 属性存储在链上，并需要签名验证 (TRC-8004)。
+钱包地址作为**保留**的 `agentWallet` 属性存储在链上，并需要签名验证 (ERC-8004)。
 
 ### 取消验证的代理钱包 (Unsetting the verified agent wallet)
 
@@ -252,17 +252,17 @@ await agent.setWallet({
 
 ### “我到底要签署什么？” (EOA)
 
-两个 SDK 都会在内部构建 TIP-712 类型数据。从概念上讲，**新钱包**签署的消息包含：
+两个 SDK 都会在内部构建 EIP-712 类型数据。从概念上讲，**新钱包**签署的消息包含：
 
 *   **agentId**: 代理的 tokenId
 *   **newWallet**: 你正在设置的钱包地址
 *   **owner**: 当前代理所有者（从注册表中读取）
 *   **deadline**: 合约强制执行的短有效期窗口
-*   **domain**: 身份注册表 (Identity Registry) 的 TIP-712 域（chainId + verifyingContract，以及名称/版本）
+*   **domain**: 身份注册表 (Identity Registry) 的 EIP-712 域（chainId + verifyingContract，以及名称/版本）
 
 #### EOA
 
-*   **EOA 签名 (Python)**：除非 SDK 签名者就是新钱包，否则传入 `new_wallet_signer=...`（私钥 / tron-account 账户）。
+*   **EOA 签名 (Python)**：除非 SDK 签名者就是新钱包，否则传入 `new_wallet_signer=...`（私钥 / eth-account 账户）。
 *   **EOA 签名 (TypeScript)**：除非 SDK 签名者就是新钱包，否则传入 `newWalletPrivateKey`。
 
 
@@ -472,7 +472,7 @@ agent = sdk.createAgent(
 )
 
 agent.setMCP(endpoint="https://mcp.example.com/")\
-     .setENS(name="advanced-agent.tron")\
+     .setENS(name="advanced-agent.eth")\
      .addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=True)\
      .addDomain("technology/data_science", validate_oasf=True)\
      .setActive(True)\
@@ -491,7 +491,7 @@ const agent = sdk.createAgent({
 });
 
 agent.setMCP({ endpoint: "https://mcp.example.com/" })
-     .setENS({ name: "advanced-agent.tron" })
+     .setENS({ name: "advanced-agent.eth" })
      .addSkill({ skill: "advanced_reasoning_planning/strategic_planning", validateOasf: true })
      .addDomain({ domain: "technology/data_science", validateOasf: true })
      .setActive(true)

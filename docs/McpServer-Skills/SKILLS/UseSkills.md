@@ -1,4 +1,4 @@
-# 如何使用技能
+# 如何使用 SKILLS
 
 ### 前置要求
 
@@ -9,9 +9,9 @@
 
 ## 面向开发者
 
-### 创建新技能
+### 创建新 SKILL
 
-查看 [AGENTS.md](AGENTS.md) 了解如何创建新技能。
+查看 [AGENTS.md](https://github.com/bankofai/skills/blob/main/) 了解如何创建新技能。
 
 **快速模板**：
 
@@ -42,9 +42,9 @@ tags:
 EOF
 ```
 
-### 技能规范
+### SKILL 规范
 
-每个技能必须包含：
+每个 SKILL 必须包含：
 
 * ✅ **SKILL.md** - 主指令文件（带有 YAML 前置元数据）
 * ✅ **README.md** - 快速描述
@@ -52,4 +52,4 @@ EOF
 * ⚠️ **resources/** - 配置文件（可选）
 * ⚠️ **scripts/** - 辅助脚本（可选）
 
-详见 [AGENTS.md](AGENTS.md)。
+详见 [AGENTS.md](https://github.com/bankofai/skills/blob/main/)

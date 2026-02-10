@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 作为卖家，只需 **3 步** 即可开始接收支付：
 
-1. **安装 x402-tron SDK** — 安装 Python SDK
+1. **安装 x402 SDK** — 安装 Python SDK
 2. **开发服务器** — 为您的 API 端点添加支付保护
 3. **启动 Facilitator** — 运行支付验证服务
 
@@ -38,9 +38,9 @@ import TabItem from '@theme/TabItem';
 - **测试网 (Nile)**：使用免费的测试代币，不涉及真实资金。网络标识符请使用 `tron:nile`。
 - **主网**：涉及真实的 USDT 支付。需要 TronGrid API Key。网络标识符请使用 `tron:mainnet`。
 
-## 第一步：安装 x402-tron SDK
+## 第一步：安装 x402 SDK
 
-x402-tron SDK 提供了为 API 添加支付保护所需的一切功能。
+x402 SDK 提供了为 API 添加支付保护所需的一切功能。
 
 **选项 A：从 GitHub 安装（推荐）**
 
@@ -263,7 +263,7 @@ x402-tron 使用简明的网络标识符：
 ### 下一步
 
 - 查看 [演示示例](https://github.com/bankofai/x402-tron-demo/tree/main/server)，了解更复杂的支付流程。
-- 深入了解 [核心概念](../core-concepts/http-402.md)，掌握 x402-tron 的运作机制。
+- 深入了解 [核心概念](../core-concepts/http-402.md)，掌握 x402 的运作机制。
 - 作为 [用户买家](./quickstart-for-human.md) 开始体验，或配置一个 [AI Agent](./quickstart-for-agent.md)。
 
 ### 总结
@@ -272,9 +272,9 @@ x402-tron 使用简明的网络标识符：
 
 | 步骤       | 完成事项                       |
 | ---------- | ------------------------------ |
-| **第一步** | 安装了 x402-tron SDK           |
+| **第一步** | 安装了 x402 SDK           |
 | **第二步** | 创建了受支付保护的服务器端点   |
 | **第三步** | 启动了用于验证支付的 Facilitator 服务 |
 | **第四步** | 完成了集成测试                 |
 
-恭喜 🎉！您的 API 现已准备就绪，可以通过 x402-tron 接收基于 TRON 网络的支付了！
+恭喜 🎉！您的 API 现已准备就绪，可以通过 x402 接收基于 TRON 网络的支付了！

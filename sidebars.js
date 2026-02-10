@@ -49,12 +49,12 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'TRC-8004 Protocol',
+      label: 'ERC-8004 协议',
       collapsed: false,
       items: [
         {
           type: 'doc',
-          id: 'TRC-8004/general',
+          id: 'ERC-8004/general',
           label: '简介',
         },
 
@@ -63,9 +63,9 @@ const sidebars = {
           label: '核心概念',
           collapsed: false,
           items: [
-            'TRC-8004/identity',
-            'TRC-8004/reputation',
-            'TRC-8004/validation',
+            'ERC-8004/identity',
+            'ERC-8004/reputation',
+            'ERC-8004/validation',
             
           ],
         },
@@ -76,24 +76,24 @@ const sidebars = {
           items: [
             {
               type: 'doc',
-              id: 'TRC-8004/AgentT/Intro',
+              id: 'ERC-8004/AgentT/Intro',
               label: '简介',
             },
              {
               type: 'doc',
-              id: 'TRC-8004/AgentT/SupportedNetworks',
+              id: 'ERC-8004/AgentT/SupportedNetworks',
               label: '支持的网络',
             },
              {
               type: 'doc',
-              id: 'TRC-8004/AgentT/QuickStart',
+              id: 'ERC-8004/AgentT/QuickStart',
               label: '快速开始',
             },
             {
               type: 'category',
               label: '使用指南',
               collapsed: false,
-              items: ['TRC-8004/AgentT/Usage/Install', 'TRC-8004/AgentT/Usage/ConfigureAgents', 'TRC-8004/AgentT/Usage/RegistrationHTTP'],
+              items: ['ERC-8004/AgentT/Usage/Install', 'ERC-8004/AgentT/Usage/ConfigureAgents', 'ERC-8004/AgentT/Usage/RegistrationHTTP'],
             },
           ],
         },

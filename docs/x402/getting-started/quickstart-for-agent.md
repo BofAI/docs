@@ -1,56 +1,49 @@
----
-title: 'Quickstart for Agent'
-description: 'Enable AI agents to make autonomous payments on TRON blockchain using the x402-payment-tron skill.'
----
+# AI 代理快速入门
 
-x402-tron is designed for the Agentic Web. AI agents can autonomously negotiate and pay for resources using the `x402-payment-tron` skill.
+x402 专为 Agentic Web 设计。AI Agent 可以使用 `tron_x402_payment` 技能自主协商并支付资源费用。
 
-This skill enables agents to:
+该技能使 Agent 能够：
 
-- Detect `402 Payment Required` responses
-- Sign TIP-712 payment authorizations automatically
-- Manage wallet balances and handle the payment flow
+- 检测 `402 Payment Required` 响应
+- 自动签署 TIP-712 支付授权
+- 管理钱包余额并处理支付流程
 
----
+## 配置
 
-## Configuration
-
-Configure your agent's wallet credentials via environment variables:
+通过环境变量配置您的 Agent 钱包凭据：
 
 ```bash
 export TRON_PRIVATE_KEY="your_private_key_here"
 export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RPC rate limits
 ```
 
-## Installation
+## 安装
 
-Add the [x402-payment-tron](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment) skill to your agentic tools:
+将 [tron_x402_payment](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment) 技能添加到您的智能体 (Agent) 工具库中：
 
-| Tool         | Installation                                   |
-| ------------ | ---------------------------------------------- |
-| **OpenClaw** | `npx clawhub install x402-payment-tron`        |
-| **opencode** | Copy the skill to `.opencode/skill/` directory |
+| 工具平台     | 安装方法                                   |
+| ------------ | ------------------------------------------ |
+| **OpenClaw** | `npx clawhub install tron-x402-payment`    |
+| **opencode** | 将技能文件复制到 `.opencode/skill/` 目录中 |
 
-## Try It Out
+## 快速体验
 
-Instruct your agent to access `https://x402-tron-demo.bankofai.io/protected-nile`. The agent will automatically detect the payment requirement, sign the authorization, and retrieve the protected resource.
+指示您的 Agent 访问 `https://x402-tron-demo.bankofai.io/protected-nile`。Agent 将自动识别支付请求，完成签名授权，并获取受保护的资源。
 
-## Security Best Practices
+## 安全最佳实践
 
-- **Limit wallet balance** — Only fund the agent wallet with what it needs for operations
-- **Test on Nile first** — Validate your integration on testnet before mainnet deployment
-- **Monitor transactions** — Track agent spending on [TronScan](https://tronscan.org)
-- **Secure credentials** — Store private keys using secure environment management
+- **控制资金余额** — 仅向 Agent 钱包充值日常运营所需的金额
+- **优先在 Nile 测试** — 在部署到主网之前，务必先在测试网验证集成
+- **监控交易记录** — 通过 [TronScan](https://tronscan.org) 随时追踪 Agent 的支出情况
+- **妥善保管凭证** — 使用安全的环境变量管理私钥，切勿明文存储
 
----
+## 下一步
 
-## Next Steps
+- [搭建付费 API](./quickstart-for-sellers.md) 供智能体调用
+- [了解 HTTP 402](../core-concepts/http-402.md) 支付协议
 
-- [Set up a paid API](./quickstart-for-sellers.md) for agents to consume
-- [Learn about HTTP 402](../core-concepts/http-402.md) payment protocol
+## 参考资料
 
-## References
-
-- [OpenClaw Extension](https://github.com/bankofai/openclaw-extension)
-- [x402-payment-tron on ClawHub](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment)
-- [x402-tron Demo](https://github.com/bankofai/x402-tron-demo) 
+- [OpenClaw 扩展库](https://github.com/bankofai/openclaw-extension)
+- [ClawHub 上的 tron-x402-payment](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment)
+- [x402-tron 演示项目](https://github.com/bankofai/x402-tron-demo)

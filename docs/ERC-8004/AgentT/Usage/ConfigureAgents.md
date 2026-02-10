@@ -2,12 +2,12 @@
 
 了解如何使用所有可用字段和选项来创建、配置和管理代理。
 
-## 创建代理 (Creating an Agent)
+## 创建代理 
 
 在内存中创建一个新代理（尚未注册）：
 
 
-### Python
+**Python**
 ```python
 from agent0_sdk import SDK
 
@@ -28,7 +28,7 @@ agent = sdk.createAgent(
 )
 ```
 
-### TypeScript
+**TypeScript**
 ```typescript
 import { SDK } from '@ag0/sdk';
 
@@ -53,7 +53,7 @@ const agent = sdk.createAgent({
 
 ### 名称与描述 (Name and Description)
 
-#### Python
+**Python**
 ```python
 # 更新基本信息
 agent.updateInfo(
@@ -63,7 +63,7 @@ agent.updateInfo(
 )
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 更新基本信息
 agent.updateInfo({
@@ -76,14 +76,14 @@ agent.updateInfo({
 
 ### 活跃状态 (Active Status)
 
-#### Python
+**Python**
 ```python
 # 设置代理为 活跃/非活跃 状态
 agent.setActive(True)   # 活跃（在搜索中可见）
 agent.setActive(False)  # 非活跃（隐藏但不删除）
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 设置代理为 活跃/非活跃 状态
 agent.setActive(true);   // 活跃
@@ -92,13 +92,13 @@ agent.setActive(false);  // 非活跃
 
 ### x402 支付支持 (x402 Payment Support)
 
-#### Python
+**Python**
 ```python
 # 启用/禁用 x402 支付支持
 agent.setX402Support(True)
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 启用/禁用 x402 支付支持
 agent.setX402Support(true);
@@ -108,13 +108,13 @@ agent.setX402Support(true);
 
 ### MCP (Model Context Protocol) 端点
 
-#### Python
+**Python**
 ```python
 # 设置 MCP 端点
 agent.setMCP(endpoint="https://mcp.example.com/")
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 设置 MCP 端点
 agent.setMCP({ endpoint: "https://mcp.example.com/" });
@@ -126,13 +126,13 @@ agent.setMCP({ endpoint: "https://mcp.example.com/" });
 
 ### A2A (Agent-to-Agent) 端点
 
-#### Python
+**Python**
 ```python
 # 设置 A2A 端点
 agent.setA2A(agentcard="https://a2a.example.com/agent-card.json")
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 设置 A2A 端点
 agent.setA2A({ agentcard: "https://a2a.example.com/agent-card.json" });
@@ -145,16 +145,16 @@ SDK 会自动：
 
 ### ENS
 
-#### Python
+**Python**
 ```python
 # 设置 ENS 名称
-agent.setENS(name="myagent.tron")
+agent.setENS(name="myagent.eth")
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 设置 ENS 名称
-agent.setENS({ name: "myagent.tron" });
+agent.setENS({ name: "myagent.eth" });
 ```
 
 
@@ -164,7 +164,7 @@ agent.setENS({ name: "myagent.tron" });
 
 ### 移除端点 (Removing Endpoints)
 
-#### Python
+**Python**
 ```python
 # 移除特定类型的端点
 agent.removeEndpoint(type=EndpointType.MCP)
@@ -176,7 +176,7 @@ agent.removeEndpoint(value="https://old-endpoint.com")
 agent.removeEndpoints()
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 移除特定类型的端点
 agent.removeEndpoint({ type: EndpointType.MCP });
@@ -192,7 +192,7 @@ agent.removeEndpoints();
 
 ### 默认行为（默认将钱包设置为所有者）
 
-根据 TRC-8004 协议，`agentWallet` **最初被设置为代理所有者的地址**。
+根据 ERC-8004 协议，`agentWallet` **最初被设置为代理所有者的地址**。
 
 *   **如果你不调用 `setWallet()`**：代理钱包默认保持为**所有者钱包**。
 *   **何时需要设置专用代理钱包**：仅当你希望代理使用与所有者**不同**的钱包时（例如：职责分离、热钱包与冷钱包所有者分离、使用不同链的钱包）。
@@ -200,20 +200,20 @@ agent.removeEndpoints();
 
 ### 设置专用代理钱包（签名验证）
 
-`agentWallet` 是一个**保留的链上**属性。根据 TRC-8004，设置该属性需要经过签名验证。
+`agentWallet` 是一个**保留的链上**属性。根据 ERC-8004，设置该属性需要经过签名验证。
 
 *   **谁发送交易**：SDK 签名者（通常是代理**所有者**或授权的**操作员**）提交链上交易。
 *   **面向开发者的 SDK API**：`agent.setWallet(...)`。
-*   **谁必须签名**：**新钱包**必须通过签署 TIP-712 类型数据 (EOA) 签名来授权此更改。
+*   **谁必须签名**：**新钱包**必须通过签署 EIP-712 类型数据 (EOA) 签名来授权此更改。
 
-#### Python
+**Python**
 ```python
 # 你必须先注册代理，然后如果你想使用一个与所有者不同的专用钱包，再调用 setWallet()。
 tx = agent.registerIPFS()
 tx.wait_confirmed(timeout=180)
 
 # --- EOA 流程 ---
-# *新钱包* 必须签署 TIP-712 类型数据。
+# *新钱包* 必须签署 EIP-712 类型数据。
 # 如果新钱包与 SDK 签名者不是同一个地址，请提供 `new_wallet_signer`。
 agent.setWallet(
     new_wallet="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
@@ -223,7 +223,7 @@ agent.setWallet(
 
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 你必须先注册代理，然后调用 setWallet()。
 const tx = await agent.registerIPFS();
@@ -239,7 +239,7 @@ await agent.setWallet({
 ```
 
 
-钱包地址作为**保留**的 `agentWallet` 属性存储在链上，并需要签名验证 (TRC-8004)。
+钱包地址作为**保留**的 `agentWallet` 属性存储在链上，并需要签名验证 (ERC-8004)。
 
 ### 取消验证的代理钱包 (Unsetting the verified agent wallet)
 
@@ -252,17 +252,17 @@ await agent.setWallet({
 
 ### “我到底要签署什么？” (EOA)
 
-两个 SDK 都会在内部构建 TIP-712 类型数据。从概念上讲，**新钱包**签署的消息包含：
+两个 SDK 都会在内部构建 EIP-712 类型数据。从概念上讲，**新钱包**签署的消息包含：
 
 *   **agentId**: 代理的 tokenId
 *   **newWallet**: 你正在设置的钱包地址
 *   **owner**: 当前代理所有者（从注册表中读取）
 *   **deadline**: 合约强制执行的短有效期窗口
-*   **domain**: 身份注册表 (Identity Registry) 的 TIP-712 域（chainId + verifyingContract，以及名称/版本）
+*   **domain**: 身份注册表 (Identity Registry) 的 EIP-712 域（chainId + verifyingContract，以及名称/版本）
 
 #### EOA
 
-*   **EOA 签名 (Python)**：除非 SDK 签名者就是新钱包，否则传入 `new_wallet_signer=...`（私钥 / tron-account 账户）。
+*   **EOA 签名 (Python)**：除非 SDK 签名者就是新钱包，否则传入 `new_wallet_signer=...`（私钥 / eth-account 账户）。
 *   **EOA 签名 (TypeScript)**：除非 SDK 签名者就是新钱包，否则传入 `newWalletPrivateKey`。
 
 
@@ -273,7 +273,7 @@ await agent.setWallet({
 
 ### 添加技能 (Adding Skills)
 
-####  Python
+**Python**
 ```python
 # 添加技能而不进行验证（允许任何字符串）
 agent.addSkill("custom_skill/my_skill", validate_oasf=False)
@@ -282,7 +282,7 @@ agent.addSkill("custom_skill/my_skill", validate_oasf=False)
 agent.addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=True)
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 添加技能而不进行验证
 agent.addSkill({ skill: "custom_skill/my_skill", validateOasf: false });
@@ -294,7 +294,7 @@ agent.addSkill({ skill: "advanced_reasoning_planning/strategic_planning", valida
 
 ### 添加领域 (Adding Domains)
 
-#### Python
+**Python**
 ```python
 # 添加领域而不进行验证
 agent.addDomain("custom_domain/my_domain", validate_oasf=False)
@@ -303,7 +303,7 @@ agent.addDomain("custom_domain/my_domain", validate_oasf=False)
 agent.addDomain("finance_and_business/investment_services", validate_oasf=True)
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 添加领域而不进行验证
 agent.addDomain({ domain: "custom_domain/my_domain", validateOasf: false });
@@ -315,7 +315,7 @@ agent.addDomain({ domain: "finance_and_business/investment_services", validateOa
 
 ### 移除技能与领域 (Removing Skills and Domains)
 
-#### Python
+**Python**
 ```python
 # 移除技能
 agent.removeSkill("advanced_reasoning_planning/strategic_planning")
@@ -324,7 +324,7 @@ agent.removeSkill("advanced_reasoning_planning/strategic_planning")
 agent.removeDomain("finance_and_business/investment_services")
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 移除技能
 agent.removeSkill({ skill: "advanced_reasoning_planning/strategic_planning" });
@@ -338,14 +338,14 @@ agent.removeDomain({ domain: "finance_and_business/investment_services" });
 
 所有 OASF 方法都支持链式调用：
 
-#### Python
+**Python**
 ```python
 agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=True)\
      .addDomain("technology/data_science", validate_oasf=True)\
      .addSkill("natural_language_processing/summarization", validate_oasf=True)
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 agent.addSkill({ skill: "data_engineering/data_transformation_pipeline", validateOasf: true })
      .addDomain({ domain: "technology/data_science", validateOasf: true })
@@ -382,7 +382,7 @@ OASF 技能和领域存储在注册文件的 `endpoints` 数组中：
 
 ### 设置信任模型 (Set Trust Models)
 
-#### Python
+**Python**
 ```python
 # 设置信任模型
 agent.setTrustModels([
@@ -394,7 +394,7 @@ agent.setTrustModels([
 ])
 ```
 
-#### TypeScript
+**TypeScript**
 ```typescript
 // 设置信任模型
 agent.setTrustModels([
@@ -411,13 +411,13 @@ agent.setTrustModels([
 
 某些属性可以直接作为链上元数据进行管理。
 
-### Python
+**Python**
 ```python
 # 更新链上元数据
 agent.updateOnChainMetadata()
 ```
 
-### TypeScript
+**TypeScript**
 ```typescript
 // 更新链上元数据
 await agent.updateOnChainMetadata();
@@ -428,13 +428,13 @@ await agent.updateOnChainMetadata();
 
 如果你已经有一个注册的代理，可以通过其 ID 加载它：
 
-### Python
+**Python**
 ```python
 # 通过 ID 加载代理
 agent = sdk.getAgent(agent_id="0x123...")
 ```
 
-### TypeScript
+**TypeScript**
 ```typescript
 // 通过 ID 加载代理
 const agent = await sdk.getAgent("0x123...");
@@ -445,14 +445,14 @@ const agent = await sdk.getAgent("0x123...");
 
 你可以直接访问代理对象的属性：
 
-### Python
+**Python**
 ```python
 print(agent.name)
 print(agent.description)
 print(agent.active)
 ```
 
-### TypeScript
+**TypeScript**
 ```typescript
 console.log(agent.name);
 console.log(agent.description);
@@ -464,7 +464,7 @@ console.log(agent.active);
 
 这是一个配置具有多种设置的代理的完整示例：
 
-###  Python
+**Python**
 ```python
 agent = sdk.createAgent(
     name="高级 AI 助手",
@@ -472,7 +472,7 @@ agent = sdk.createAgent(
 )
 
 agent.setMCP(endpoint="https://mcp.example.com/")\
-     .setENS(name="advanced-agent.tron")\
+     .setENS(name="advanced-agent.eth")\
      .addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=True)\
      .addDomain("technology/data_science", validate_oasf=True)\
      .setActive(True)\
@@ -483,7 +483,7 @@ tx = agent.registerIPFS()
 tx.wait_confirmed()
 ```
 
-### TypeScript
+**TypeScript**
 ```typescript
 const agent = sdk.createAgent({
     name: "高级 AI 助手",
@@ -491,7 +491,7 @@ const agent = sdk.createAgent({
 });
 
 agent.setMCP({ endpoint: "https://mcp.example.com/" })
-     .setENS({ name: "advanced-agent.tron" })
+     .setENS({ name: "advanced-agent.eth" })
      .addSkill({ skill: "advanced_reasoning_planning/strategic_planning", validateOasf: true })
      .addDomain({ domain: "technology/data_science", validateOasf: true })
      .setActive(true)

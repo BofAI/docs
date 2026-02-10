@@ -25,7 +25,7 @@ agent = sdk.createAgent(
 
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent.json")
-agent.setENS("myagent.tron")
+agent.setENS("myagent.eth")
 agent.setTrust(reputation=True)
 ```
 
@@ -40,7 +40,7 @@ const agent = sdk.createAgent({
 
 agent.setMCP({ endpoint: "https://mcp.example.com/" });
 agent.setA2A({ agentcard: "https://a2a.example.com/agent.json" });
-agent.setENS({ name: "myagent.tron" });
+agent.setENS({ name: "myagent.eth" });
 agent.setTrust({ reputation: true });
 ```
 
@@ -267,7 +267,7 @@ SDK 会生成符合 ERC-8004 标准的注册文件：
 
 ```json
 {
-  "type": "https://tips.tron.org/TIPS/tip-8004#registration-v1",
+  "type": "https://eips.eth.org/EIPS/eip-8004#registration-v1",
   "name": "我的 AI 代理",
   "description": "代理描述",
   "image": "https://example.com/image.png",

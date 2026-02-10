@@ -9,3 +9,5 @@
 | :--- | :--- |
 | **TRON Mainnet** | `https:` |
 | **BNB Chain** | `https:` |
+
+* 未来 SDK 将支持更多的网络。

@@ -1,6 +1,6 @@
 # SDK 功能特性
 
-本页面记录了 x402-tron 各语言 SDK（Python, TypeScript）的功能实现进度与支持状态。
+本页面记录了 x402 各语言 SDK（Python, TypeScript）的功能实现进度与支持状态。
 
 ## 核心 
 
