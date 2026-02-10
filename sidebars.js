@@ -51,8 +51,87 @@ const sidebars = {
       type: 'category',
       label: 'TRC-8004 Protocol',
       collapsed: false,
-      items: ['TRC-8004/general', 'TRC-8004/identity', 'TRC-8004/reputation', 'TRC-8004/validation'],
+      items: [
+        {
+          type: 'doc',
+          id: 'TRC-8004/general',
+          label: '简介',
+        },
+
+         {
+          type: 'category',
+          label: '核心概念',
+          collapsed: false,
+          items: [
+            'TRC-8004/identity',
+            'TRC-8004/reputation',
+            'TRC-8004/validation',
+            
+          ],
+        },
+
+         {
+          type: 'category',
+          label: 'SDK 实现',
+          items: [
+            {
+              type: 'doc',
+              id: 'TRC-8004/AgentT/Intro',
+              label: '简介',
+            },
+             {
+              type: 'doc',
+              id: 'TRC-8004/AgentT/SupportedNetworks',
+              label: '支持的网络',
+            },
+             {
+              type: 'doc',
+              id: 'TRC-8004/AgentT/QuickStart',
+              label: '快速开始',
+            },
+            {
+              type: 'category',
+              label: '使用指南',
+              collapsed: false,
+              items: ['TRC-8004/AgentT/Usage/Install', 'TRC-8004/AgentT/Usage/ConfigureAgents', 'TRC-8004/AgentT/Usage/RegistrationHTTP'],
+            },
+          ],
+        },
+      ],
     },
+     {
+      type: 'category',
+      label: ' MCP & SKILLS',
+      collapsed: false,
+      items: [
+            {
+              type: 'doc',
+              id: 'McpServer-Skills/Intro',
+              label: '简介',
+            },
+            {
+              type: 'category',
+              label: 'MCP',
+              collapsed: true,
+              items: ['McpServer-Skills/MCP/Intro', 'McpServer-Skills/MCP/Features', 'McpServer-Skills/MCP/Installation','McpServer-Skills/MCP/Configuration','McpServer-Skills/MCP/API'],
+            },
+             {
+              type: 'category',
+              label: 'SKILLS',
+              collapsed: true,
+              items: ['McpServer-Skills/SKILLS/Intro', 'McpServer-Skills/SKILLS/UseSkills'],
+            },
+          ],
+            
+    },
+    {
+      type: 'category',
+      label: 'Openclaw 扩展插件',
+      collapsed: false,
+      items: ['Openclaw-extension/Overview', 'Openclaw-extension/Setup-use'],
+            
+    },
+
   ],
 }
 
