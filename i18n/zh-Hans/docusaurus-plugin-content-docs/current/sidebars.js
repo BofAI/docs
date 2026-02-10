@@ -49,7 +49,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'ERC-8004 Protocol',
+      label: 'ERC-8004 协议',
       collapsed: false,
       items: [
         {
