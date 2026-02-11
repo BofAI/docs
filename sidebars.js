@@ -60,17 +60,17 @@ const sidebars = {
         {
           type: 'doc',
           id: '8004/contract',
-          label: 'Contract',
+          
         },
         {
           type: 'doc',
           id: '8004/QuickStart',
-          label: 'QuickStart',
+          
         },
         {
           type: 'doc',
           id: '8004/SupportedNetworks',
-          label: 'SupportedNetworks',
+          
         },
 
     

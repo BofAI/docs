@@ -49,7 +49,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: '8004 协议',
+      label: '8004 Protocol',
       collapsed: false,
       items: [
         {
@@ -74,7 +74,7 @@ const sidebars = {
         },        
         {
           type: 'category',
-          label: '使用指南',
+          label: 'Usage',
           collapsed: false,
           items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
         },
