@@ -51,13 +51,7 @@ module.exports = {
         },
         {
           label: 'GitHub',
-          href: 'https://github.com/open-aibank/x402-tron',
-          position: 'right',
-          className: 'persistent',
-        },
-        {
-          label: 'Demo',
-          href: 'https://github.com/open-aibank/x402-tron-demo',
+          href: 'https://github.com/bankofai',
           position: 'right',
           className: 'persistent',
         },
