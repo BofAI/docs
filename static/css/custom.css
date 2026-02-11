@@ -204,6 +204,7 @@ h4 {
 
 .navbar {
   align-items: center;
+  padding-left: 28px !important;
 }
 
 html[data-theme='dark'] .navbar {
