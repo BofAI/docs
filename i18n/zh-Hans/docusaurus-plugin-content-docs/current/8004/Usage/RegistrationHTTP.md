@@ -45,9 +45,8 @@ const agent = sdk.createAgent({
     image: "https://example.com/image.png"
 });
 
-agent.setMCP({ endpoint: "https://mcp.example.com/" });
-agent.setA2A({ agentcard: "https://a2a.example.com/agent.json" });
-agent.setENS({ name: "myagent.eth" });
+agent.setMCP("https://mcp.example.com/");
+agent.setA2A("https://a2a.example.com/agent.json");
 agent.setTrust({ reputation: true });
 ```
 
@@ -81,7 +80,7 @@ json_content = str(registration_file)  # 带有缩进的 JSON
 
 ```typescript
 // 获取注册文件内容
-const registrationData = agent.registrationFile().toDict();
+const registrationData = agent.toJSON();
 
 // 或者获取 JSON 字符串
 const jsonContent = JSON.stringify(registrationData, null, 2);
@@ -145,7 +144,7 @@ fs.writeFileSync('my-agent.json', jsonContent);
   "registrations": [
     {
       "agentId": 123,
-      "agentRegistry": "eip155:11155111:0x8004A818BFB912233c491871b3d84c89A494BD9e"
+      "agentRegistry": "eip155:97:0x8004A818BFB912233c491871b3d84c89A494BD9e"
     }
   ]
 }
@@ -162,7 +161,7 @@ fs.writeFileSync('my-agent.json', jsonContent);
 
 ```python
 # 使用您的 HTTP URL 进行注册
-tx = agent.registerHTTP("https://yourdomain.com/agents/my-agent.json")
+tx = agent.register("https://yourdomain.com/agents/my-agent.json")
 registration_file = tx.wait_confirmed(timeout=180).result
 
 print(f"代理已注册，ID: {registration_file.agentId}")
@@ -174,7 +173,7 @@ print(f"代理 URI: {registration_file.agentURI}")  # https://yourdomain.com/...
 
 ```typescript
 // 使用您的 HTTP URL 进行注册
-const tx = await agent.registerHTTP("https://yourdomain.com/agents/my-agent.json");
+const tx = await agent.register("https://yourdomain.com/agents/my-agent.json");
 const registrationFile = (await tx.waitConfirmed()).result;
 
 console.log(`代理已注册，ID: ${registrationFile.agentId}`);
@@ -192,12 +191,12 @@ console.log(`代理 URI: ${registrationFile.agentURI}`); // https://yourdomain.c
 <TabItem value="python" label="python">
 
 ```python
-from agent0_sdk import SDK
+from bankofai.sdk_8004.core.sdk import SDK
 
 # 初始化 SDK
 sdk = SDK(
-    chainId=11155111,
-    rpcUrl="https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
+    network="eip155:97",
+    rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
     signer=private_key
 )
 
@@ -220,7 +219,7 @@ with open("my-agent.json", "w") as f:
 # 上传至：https://yourdomain.com/agents/my-agent.json
 
 # 4. 在链上注册
-tx = agent.registerHTTP("https://yourdomain.com/agents/my-agent.json")
+tx = agent.register("https://yourdomain.com/agents/my-agent.json")
 tx.wait_confirmed(timeout=180)
 
 print(f"✅ 代理已注册，ID: {agent.agentId}")
@@ -230,12 +229,12 @@ print(f"✅ 代理已注册，ID: {agent.agentId}")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-import { SDK } from '@ag0/sdk';
+import { SDK } from '@bankofai/8004-sdk';
 
 // 初始化 SDK
 const sdk = new SDK({
-    chainId: 11155111,
-    rpcUrl: "https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
+    network: "eip155:97",
+    rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
     signer: private_key
 });
 
@@ -245,18 +244,18 @@ const agent = sdk.createAgent({
     description: "一个有用的 AI 助手",
     image: "https://example.com/agent.png"
 });
-agent.setMCP({ endpoint: "https://mcp.example.com/" });
-agent.setA2A({ agentcard: "https://a2a.example.com/agent.json" });
+agent.setMCP("https://mcp.example.com/");
+agent.setA2A("https://a2a.example.com/agent.json");
 
 // 2. 生成注册文件
-const registrationData = agent.registrationFile().toDict();
+const registrationData = agent.toJSON();
 const jsonContent = JSON.stringify(registrationData, null, 2);
 
 // 3. 保存并上传到您的服务器
 // 上传至：https://yourdomain.com/agents/my-agent.json
 
 // 4. 在链上注册
-const tx = await agent.registerHTTP("https://yourdomain.com/agents/my-agent.json");
+const tx = await agent.register("https://yourdomain.com/agents/my-agent.json");
 await tx.waitConfirmed();
 
 console.log(`✅ 代理已注册，ID: ${agent.agentId}`);
@@ -281,7 +280,7 @@ console.log(`✅ 代理已注册，ID: ${agent.agentId}`);
 
 ```python
 # 1. 加载现有代理
-agent = sdk.loadAgent("11155111:123")
+agent = sdk.loadAgent("97:123")
 
 # 2. 修改配置
 agent.updateInfo(description="更新后的描述")
@@ -302,21 +301,28 @@ agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 1. 加载现有代理
-const agent = await sdk.loadAgent("11155111:123");
+// 1. 查询现有 agent（索引摘要）
+const agentSummary = await sdk.getAgent("97:123");
+console.log(agentSummary);
 
-// 2. 修改配置
-agent.updateInfo({ description: "更新后的描述" });
-agent.setMCP({ endpoint: "https://new-mcp.example.com" });
+// 2. 基于你要更新的内容，重新构建本地 agent 对象
+const agent = sdk.createAgent({
+  name: "我的 AI 代理",
+  description: "更新后的描述",
+  image: "https://example.com/agent.png",
+});
+agent.setMCP("https://new-mcp.example.com");
+agent.setA2A("https://a2a.example.com/agent.json");
 
 // 3. 生成新的注册文件
-const registrationData = agent.registrationFile().toDict();
+const registrationData = agent.toJSON();
 const jsonContent = JSON.stringify(registrationData, null, 2);
 
 // 4. 将更新后的文件上传到您的服务器
 
-// 5. 在链上更新 URI（仅当 URI 发生更改时）
-await agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json");
+// 5. 使用新 URI 重新发起注册交易
+const tx = await agent.register("https://yourdomain.com/agents/my-agent-updated.json");
+await tx.waitConfirmed();
 ```
 
 </TabItem>
@@ -355,7 +361,7 @@ SDK 会生成符合 8004 标准的注册文件：
   "registrations": [
     {
       "agentId": 123,
-      "agentRegistry": "eip155:11155111:0x8004a6090Cd10A7288092483047B097295Fb8847"
+      "agentRegistry": "eip155:97:0x8004A818BFB912233c491871b3d84c89A494BD9e"
     }
   ],
   "supportedTrust": ["reputation"],
@@ -364,4 +370,3 @@ SDK 会生成符合 8004 标准的注册文件：
   "updatedAt": 1234567890
 }
 ```
-

@@ -14,12 +14,12 @@ import TabItem from '@theme/TabItem';
 <TabItem value="python" label="python">
 
 ```python
-from agent0_sdk import SDK
+from bankofai.sdk_8004.core.sdk import SDK
 
 # 初始化 SDK
 sdk = SDK(
-    chainId=11155111,
-    rpcUrl="https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
+    network="eip155:97",
+    rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
     signer=your_private_key,
     ipfs="pinata",
     pinataJwt=your_pinata_jwt
@@ -37,15 +37,13 @@ agent = sdk.createAgent(
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-import { SDK } from '@ag0/sdk';
+import { SDK } from '@bankofai/8004-sdk';
 
 // 初始化 SDK
 const sdk = new SDK({
-    chainId: 11155111,
-    rpcUrl: "https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
-    signer: your_private_key,
-    ipfs: "pinata",
-    pinataJwt: your_pinata_jwt
+    network: "eip155:97",
+    rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
+    signer: your_private_key
 });
 
 // 创建代理
@@ -164,7 +162,7 @@ agent.setMCP(endpoint="https://mcp.example.com/")
 
 ```typescript
 // 设置 MCP 端点
-agent.setMCP({ endpoint: "https://mcp.example.com/" });
+agent.setMCP("https://mcp.example.com/");
 ```
 
 </TabItem>
@@ -191,7 +189,7 @@ agent.setA2A(agentcard="https://a2a.example.com/agent-card.json")
 
 ```typescript
 // 设置 A2A 端点
-agent.setA2A({ agentcard: "https://a2a.example.com/agent-card.json" });
+agent.setA2A("https://a2a.example.com/agent-card.json");
 ```
 
 </TabItem>
@@ -218,8 +216,9 @@ agent.setENS(name="myagent.eth")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 设置 ENS 名称
-agent.setENS({ name: "myagent.eth" });
+// 当前 TypeScript SDK 未提供 setENS() 高层方法
+// 可通过 setMetadata 记录 ENS，或在 Python SDK 中调用 setENS()
+agent.setMetadata({ ens: "myagent.eth" });
 ```
 
 </TabItem>
@@ -251,14 +250,10 @@ agent.removeEndpoints()
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 移除特定类型的端点
-agent.removeEndpoint({ type: EndpointType.MCP });
-
-// 按值移除
-agent.removeEndpoint({ value: "https://old-endpoint.com" });
-
-// 移除所有端点
-agent.removeEndpoints();
+// 当前 TypeScript SDK 未提供 removeEndpoint()/removeEndpoints() 高层方法
+// 常见做法：直接覆盖已有端点
+agent.setMCP("https://new-mcp.example.com/");
+agent.setA2A("https://new-a2a.example.com/agent-card.json");
 ```
 
 </TabItem>
@@ -291,7 +286,7 @@ agent.removeEndpoints();
 
 ```python
 # 你必须先注册代理，然后如果你想使用一个与所有者不同的专用钱包，再调用 setWallet()。
-tx = agent.registerIPFS()
+tx = agent.register("https://example.com/agent-card.json")
 tx.wait_confirmed(timeout=180)
 
 # --- EOA 流程 ---
@@ -299,7 +294,7 @@ tx.wait_confirmed(timeout=180)
 # 如果新钱包与 SDK 签名者不是同一个地址，请提供 `new_wallet_signer`。
 agent.setWallet(
     new_wallet="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    chainId=11155111,
+    chainId=97,
     new_wallet_signer=NEW_WALLET_PRIVATE_KEY,  # 0x742d... 的私钥
 )
 
@@ -310,15 +305,14 @@ agent.setWallet(
 
 ```typescript
 // 你必须先注册代理，然后调用 setWallet()。
-const tx = await agent.registerIPFS();
+const tx = await agent.register("https://example.com/agent-card.json");
 await tx.waitConfirmed();
 
 // --- EOA 流程 ---
-await agent.setWallet({
-    newWallet: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    chainId: 11155111,
-    newWalletPrivateKey: NEW_WALLET_PRIVATE_KEY
-});
+await agent.setWallet(
+  "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+  { newWalletSigner: NEW_WALLET_PRIVATE_KEY }
+);
 
 ```
 
@@ -379,10 +373,10 @@ agent.addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=T
 
 ```typescript
 // 添加技能而不进行验证
-agent.addSkill({ skill: "custom_skill/my_skill", validateOasf: false });
+agent.addSkill("custom_skill/my_skill");
 
 // 添加带有验证的技能
-agent.addSkill({ skill: "advanced_reasoning_planning/strategic_planning", validateOasf: true });
+agent.addSkill("advanced_reasoning_planning/strategic_planning");
 ```
 
 </TabItem>
@@ -409,10 +403,10 @@ agent.addDomain("finance_and_business/investment_services", validate_oasf=True)
 
 ```typescript
 // 添加领域而不进行验证
-agent.addDomain({ domain: "custom_domain/my_domain", validateOasf: false });
+agent.addDomain("custom_domain/my_domain");
 
 // 添加带有验证的领域
-agent.addDomain({ domain: "finance_and_business/investment_services", validateOasf: true });
+agent.addDomain("finance_and_business/investment_services");
 ```
 
 </TabItem>
@@ -441,11 +435,14 @@ agent.removeDomain("finance_and_business/investment_services")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 移除技能
-agent.removeSkill({ skill: "advanced_reasoning_planning/strategic_planning" });
-
-// 移除领域
-agent.removeDomain({ domain: "finance_and_business/investment_services" });
+// 当前 TypeScript SDK 未提供 removeSkill()/removeDomain() 高层方法
+// 可重新构建 agent 并仅添加你希望保留的 skills/domains
+const rebuilt = sdk.createAgent({
+  name: "我的 AI 代理",
+  description: "重新构建后的配置",
+});
+rebuilt.addSkill("data_engineering/data_transformation_pipeline");
+rebuilt.addDomain("technology/data_science");
 ```
 
 </TabItem>
@@ -473,9 +470,9 @@ agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=Tr
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-agent.addSkill({ skill: "data_engineering/data_transformation_pipeline", validateOasf: true })
-     .addDomain({ domain: "technology/data_science", validateOasf: true })
-     .addSkill({ skill: "natural_language_processing/summarization", validateOasf: true });
+agent.addSkill("data_engineering/data_transformation_pipeline")
+     .addDomain("technology/data_science")
+     .addSkill("natural_language_processing/summarization");
 ```
 
 </TabItem>
@@ -519,13 +516,7 @@ OASF 技能和领域存储在注册文件的 `endpoints` 数组中：
 
 ```python
 # 设置信任模型
-agent.setTrustModels([
-    {
-        "name": "TEE",
-        "endpoint": "https://tee.example.com",
-        "version": "1.0.0"
-    }
-])
+agent.setTrust(reputation=True, cryptoEconomic=True, teeAttestation=True)
 ```
 
 </TabItem>
@@ -533,13 +524,7 @@ agent.setTrustModels([
 
 ```typescript
 // 设置信任模型
-agent.setTrustModels([
-    {
-        "name": "TEE",
-        "endpoint": "https://tee.example.com",
-        "version": "1.0.0"
-    }
-]);
+agent.setTrust({ reputation: true, cryptoEconomic: true, teeAttestation: true });
 ```
 
 </TabItem>
@@ -558,7 +543,10 @@ agent.setTrustModels([
 
 ```python
 # 更新链上元数据
-agent.updateOnChainMetadata()
+agent.setMetadata({"version": "1.1.0", "tier": "pro"})
+# 若已注册并要更新 URI，可调用：
+# tx = agent.updateRegistration(agentURI="https://example.com/agent-card-updated.json")
+# tx.wait_confirmed(timeout=180)
 ```
 
 </TabItem>
@@ -566,7 +554,9 @@ agent.updateOnChainMetadata()
 
 ```typescript
 // 更新链上元数据
-await agent.updateOnChainMetadata();
+agent.setMetadata({ version: "1.1.0", tier: "pro" });
+const tx = await agent.register("https://example.com/agent-card-updated.json");
+await tx.waitConfirmed();
 ```
 
 </TabItem>
@@ -584,7 +574,7 @@ await agent.updateOnChainMetadata();
 
 ```python
 # 通过 ID 加载代理
-agent = sdk.getAgent(agent_id="0x123...")
+agent = sdk.loadAgent("97:123")
 ```
 
 
@@ -592,8 +582,8 @@ agent = sdk.getAgent(agent_id="0x123...")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 通过 ID 加载代理
-const agent = await sdk.getAgent("0x123...");
+// 通过 ID 查询代理摘要
+const agentSummary = await sdk.getAgent("97:123");
 ```
 
 </TabItem>
@@ -618,9 +608,9 @@ print(agent.active)
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-console.log(agent.name);
-console.log(agent.description);
-console.log(agent.active);
+console.log(agentSummary?.name);
+console.log(agentSummary?.description);
+console.log(agentSummary?.active);
 ```
 
 </TabItem>
@@ -650,7 +640,7 @@ agent.setMCP(endpoint="https://mcp.example.com/")\
      .setX402Support(True)
 
 # 注册代理
-tx = agent.registerIPFS()
+tx = agent.register("https://example.com/agent-card.json")
 tx.wait_confirmed()
 ```
 
@@ -663,21 +653,18 @@ const agent = sdk.createAgent({
     description: "一个功能齐全的代理示例"
 });
 
-agent.setMCP({ endpoint: "https://mcp.example.com/" })
-     .setENS({ name: "advanced-agent.eth" })
-     .addSkill({ skill: "advanced_reasoning_planning/strategic_planning", validateOasf: true })
-     .addDomain({ domain: "technology/data_science", validateOasf: true })
+agent.setMCP("https://mcp.example.com/")
+     .setMetadata({ ens: "advanced-agent.eth" })
+     .addSkill("advanced_reasoning_planning/strategic_planning")
+     .addDomain("technology/data_science")
      .setActive(true)
      .setX402Support(true);
 
 // 注册代理
-const tx = await agent.registerIPFS();
+const tx = await agent.register("https://example.com/agent-card.json");
 await tx.waitConfirmed();
 ```
 
 
 </TabItem>
 </Tabs>
-
-
-

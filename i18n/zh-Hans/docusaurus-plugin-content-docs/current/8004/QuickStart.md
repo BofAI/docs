@@ -2,7 +2,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 # 快速开始
-Agent0 是 **8004 标准的参考实现**，专为 Agentic Economy 打造。作为一套 SDK，它利用区块链与去中心化存储赋予 Agents 注册身份、发布能力及建立信誉系统的功能，从而实现了无需依赖中介的无许可发现机制。
+BankOfAI `bankofai.sdk_8004` 是 **8004 标准的参考实现**，专为 Agentic Economy 打造。作为一套 SDK，它利用区块链与去中心化存储赋予 Agents 注册身份、发布能力及建立信誉系统的功能，从而实现了无需依赖中介的无许可发现机制。
 
 此示例涵盖了初始化 SDK、定义 Agents 属性、发布 MCP/A2A 能力、将其注册至区块链以及最后通过 ID 重新检索的过程。
 
@@ -11,13 +11,13 @@ Agent0 是 **8004 标准的参考实现**，专为 Agentic Economy 打造。作�
 <TabItem value="python" label="python">
 
 ```python
-from agent0_sdk import SDK
+from bankofai.sdk_8004.core.sdk import SDK
 import os
 
 # Initialize SDK
 # Subgraph automatically uses default URL - no configuration needed!
 sdk = SDK(
-    chainId=11155111,  
+    network="eip155:97",
     rpcUrl=os.getenv("RPC_URL"),
     signer=os.getenv("PRIVATE_KEY"),
     ipfs="pinata",
@@ -53,13 +53,13 @@ agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=Tr
 agent.setActive(True)
 agent.setX402Support(False)
 
-# Register on-chain with IPFS
-reg_tx = agent.registerIPFS()
+# Register on-chain
+reg_tx = agent.register("https://example.com/agent-card.json")
 reg = reg_tx.wait_confirmed(timeout=180).result
 
 # Optional: set a dedicated agent wallet on-chain (signature-verified;
 # By default, agentWallet starts as the owner wallet; only set this if you want a different one.
-# agent.setWallet("0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", chainId=11155111)
+# agent.setWallet("0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", chainId=97)
 
 print(f"✅ Agent registered!")
 print(f"   ID: {reg.agentId}")
@@ -75,33 +75,30 @@ print(f"✅ Retrieved: {retrieved.name}")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-import { SDK } from 'agent0-sdk';
+import { SDK } from '@bankofai/8004-sdk';
 
 async function main() {
   // Initialize SDK
   // Subgraph automatically uses default URL - no configuration needed!
   const sdk = new SDK({
-    chainId: 11155111, 
-    rpcUrl: process.env.RPC_URL || '',
-    privateKey: process.env.PRIVATE_KEY, // Optional: private key for signing transactions
-    ipfs: 'pinata', // or 'filecoinPin' or 'node'
-    pinataJwt: process.env.PINATA_JWT, // Required if ipfs='pinata'
+    network: "eip155:97",
+    rpcUrl: process.env.RPC_URL || "",
+    signer: process.env.PRIVATE_KEY,
   });
 
   // Create agent
-  const agent = sdk.createAgent(
-    'My AI Agent',
-    'An intelligent assistant for various tasks',
-    'https://example.com/agent.png'
-  );
+  const agent = sdk.createAgent({
+    name: "My AI Agent",
+    description: "An intelligent assistant for various tasks",
+    image: "https://example.com/agent.png",
+  });
 
-  // Configure endpoints (async in TypeScript)
-  await agent.setMCP('https://mcp.example.com/');
-  await agent.setA2A('https://a2a.example.com/agent-card.json');
-  agent.setENS('myagent.eth');
+  // Configure endpoints
+  agent.setMCP("https://mcp.example.com/");
+  agent.setA2A("https://a2a.example.com/agent-card.json");
 
   // Configure trust models
-  agent.setTrust(true, true); // reputation=true, cryptoEconomic=true
+  agent.setTrust({ reputation: true, cryptoEconomic: true });
 
   // Add metadata
   agent.setMetadata({
@@ -111,15 +108,15 @@ async function main() {
 
 // Add OASF skills and domains
 agent
-  .addSkill('data_engineering/data_transformation_pipeline', true)
-  .addDomain('technology/data_science', true);
+  .addSkill("data_engineering/data_transformation_pipeline")
+  .addDomain("technology/data_science");
 
 // Set status
 agent.setActive(true);
 agent.setX402Support(false);
 
-// Register on-chain with IPFS (async in TypeScript)
-const tx = await agent.registerIPFS();
+// Register on-chain
+const tx = await agent.register("https://example.com/agent-card.json");
 const { result: registrationFile } = await tx.waitConfirmed();
 
 // Optional: set a dedicated agent wallet on-chain (signature-verified;
@@ -140,6 +137,3 @@ main().catch(console.error);
 
 </TabItem>
 </Tabs>
-
-
-
