@@ -3,12 +3,12 @@ import TabItem from '@theme/TabItem';
 
 # AI 代理快速入门
 
-x402 专为 Agentic Web 设计。AI Agent 可以使用 `tron_x402_payment` 技能自主协商并支付资源费用。
+x402 专为 Agentic Web 设计。AI Agent 可以使用 `x402_payment` 技能自主协商并支付资源费用。
 
 该技能使 Agent 能够：
 
 - 检测 `402 Payment Required` 响应
-- 自动签署 TIP-712 支付授权
+- 自动签署 TIP-712/EIP-712 支付授权
 - 管理钱包余额并处理支付流程
 
 ## 配置

@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 在开始集成前，请确保您的环境满足以下要求：
 
-- **TRON 钱包**：持有一定量 USDT 余额的钱包账户。
+- **钱包**：持有一定量 USDT 余额的钱包账户。
 - **运行环境**：Python 3.10+ (含 pip) 或 Node.js 18+ (含 npm)。
 - **目标服务**：一个支持 x402 协议的支付服务端点。
 

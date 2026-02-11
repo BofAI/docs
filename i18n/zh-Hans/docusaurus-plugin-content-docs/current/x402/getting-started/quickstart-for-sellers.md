@@ -33,7 +33,7 @@ import TabItem from '@theme/TabItem';
 | **测试 TRX**      | 用于支付测试网交易的 Gas 费         | [Nile 水龙头](https://nileex.io/join/getJoinPage)                   |
 | **测试 USDT**     | 用于支付流程测试的测试代币          | [Nile USDT 水龙头](https://nileex.io/join/getJoinPage) 或在社区索取 |
 | **BSC 钱包地址** | 您用于接收支付的地址 | 通过钱包创建                 |
-| **测试 BNB**  | 用于支付测试网交易的手续费 (Gas) | [Chapel 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
+| **测试 BNB**  | 用于支付测试网交易的 Gas 费  | [Chapel 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
 | **测试 USDT** | 用于进行支付的测试代币           | [Chapel USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
 
 **测试网 vs 主网：**

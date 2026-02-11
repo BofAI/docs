@@ -100,7 +100,7 @@ x402 中的 `exact` 方案工作原理如下：
 
 ### 部署私有 Facilitator
 
-您可以选择部署私有的 Facilitator 节点，以完全掌控 TRON 网络上的支付验证与结算流程。
+您可以选择部署私有的 Facilitator 节点，以完全掌控区块链网络上的支付验证与结算流程。
 
 Facilitator 作为协议的中间件，承担以下核心职责：
 
@@ -127,7 +127,7 @@ Facilitator 作为协议的中间件，承担以下核心职责：
 
 ### 添加自定义代币
 
-可通过在 `TokenRegistry`（代币注册表）中注册来支持自定义 TRC-20 代币。有关实施细节，请参阅 [卖家快速入门](../getting-started/quickstart-for-sellers.md)。
+可通过在 `TokenRegistry`（代币注册表）中注册来支持自定义 TRC-20/BEP-20 代币。有关实施细节，请参阅 [卖家快速入门](../getting-started/quickstart-for-sellers.md)。
 
 ### 总结
 
