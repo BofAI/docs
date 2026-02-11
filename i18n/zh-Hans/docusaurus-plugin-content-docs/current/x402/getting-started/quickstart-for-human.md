@@ -119,7 +119,7 @@ from bankofai.x402.signers.client import TronClientSigner
 
 # ========== Configuration ==========
 # The x402-tron server URL you want to access
-SERVER_URL = "https://x402-tron-demo.bankofai.io/protected-nile"  # Replace with your target server
+SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"  # Replace with your target server
 # ====================================
 
 
@@ -159,7 +159,7 @@ const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
 
 // ========== Configuration ==========
 // The x402-tron server URL you want to access
-const SERVER_URL = 'https://x402-tron-demo.bankofai.io/protected-nile' // Replace with your target server
+const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile' // Replace with your target server
 // ====================================
 
 async function main(): Promise<void> {
@@ -216,7 +216,7 @@ from bankofai.x402.signers.client import EvmClientSigner
 
 
 # ========== Configuration ==========
-SERVER_URL = "https://x402-tron-demo.bankofai.io/protected-bsc-testnet"  # Replace with your target server
+SERVER_URL = "https://x402-demo.bankofai.io/protected-bsc-testnet"  # Replace with your target server
 # ====================================
 
 
@@ -256,7 +256,7 @@ import {
 const BSC_PRIVATE_KEY = process.env.BSC_PRIVATE_KEY!
 
 // ========== Configuration ==========
-const SERVER_URL = 'https://x402-tron-demo.bankofai.io/protected-bsc-testnet' // Replace with your target server
+const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet' // Replace with your target server
 // ====================================
 
 async function main(): Promise<void> {

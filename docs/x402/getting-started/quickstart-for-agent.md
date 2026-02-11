@@ -49,7 +49,7 @@ Add the [x402_payment](https://github.com/bankofai/skills/tree/main/x402_payment
 
 ## Quick Test
 
-Instruct your Agent to access:`https://x402-tron-demo.bankofai.io/protected-nile`。
+Instruct your Agent to access:`https://x402-demo.bankofai.io/protected-nile`。
 The Agent will automatically detect the payment requirement, sign the authorization payload, complete settlement, and retrieve the protected resource.
 
 ---
