@@ -8,6 +8,6 @@
 | 网络名称 | 默认接口地址 (SDK Default) |
 | :--- | :--- |
 | **TRON Mainnet** | `https:` |
-| **BNB Chain** | `https:` |
+| **BSC Chain** | `https:` |
 
 * 未来 SDK 将支持更多的网络。
