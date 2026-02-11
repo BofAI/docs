@@ -10,10 +10,10 @@ Before you begin, please ensure that you have installed OpenClaw, downloaded the
 
 Currently available skills:
 
-* **sunswap/** - SunSwap DEX trading skill for token swaps
-* **8004/** - 8004 Trusted Agent – On-chain identity and reputation system for AI agents
-* **x402_payment/** - Enables agent payment functionality on blockchain networks (x402 protocol)
-* **x402_payment_demo/** - x402 payment protocol demonstration
+- **sunswap/** - SunSwap DEX trading skill for token swaps
+- **8004/** - 8004 Trusted Agent – On-chain identity and reputation system for AI agents
+- **x402_payment/** - Enables agent payment functionality on blockchain networks (x402 protocol)
+- **x402_payment_demo/** - x402 payment protocol demonstration
 
 ### 2. Using a Skill
 
@@ -23,10 +23,8 @@ Tell your AI agent:
 Please read skills/sunswap/SKILL.md and help me check how much TRX I can get for 100 USDT
 ```
 
-
 The AI agent will:
 
-1. Read SKILL.md  
-2. Call the appropriate tools according to the instructions  
-3. Return the result  
-
+1. Read SKILL.md
+2. Call the appropriate tools according to the instructions
+3. Return the result

@@ -38,7 +38,7 @@ export BSC_PRIVATE_KEY="your_private_key_here"
 
 | 工具平台     | 安装方法                                   |
 | ------------ | ------------------------------------------ |
-| **OpenClaw** | `npx clawhub install x402-payment`    |
+| **OpenClaw** | `npx clawhub install x402-payment`         |
 | **opencode** | 将技能文件复制到 `.opencode/skill/` 目录中 |
 
 ## 快速体验

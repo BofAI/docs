@@ -2,8 +2,8 @@
 
 ## Prerequisites
 
-* [Node.js](https://nodejs.org/) version 20.0.0 or higher.
-* Optional: A [TronGrid API key](https://www.trongrid.io/) to avoid rate limits on mainnet.
+- [Node.js](https://nodejs.org/) version 20.0.0 or higher.
+- Optional: A [TronGrid API key](https://www.trongrid.io/) to avoid rate limits on mainnet.
 
 ## Run Installation
 

@@ -8,8 +8,8 @@
 
 **A**:
 
-* **Skill** = Instruction document (teaches the AI how to do something)  
-* **MCP Server** = Tool service (provides actual capabilities)
+- **Skill** = Instruction document (teaches the AI how to do something)
+- **MCP Server** = Tool service (provides actual capabilities)
 
 Skills tell the AI how to use the MCP server tools.
 
@@ -22,10 +22,12 @@ dependencies:
   - mcp-server-tron
 ```
 
-### Q: What if the AI agent cannot find a skill?  
+### Q: What if the AI agent cannot find a skill?
+
 **A**: Explicitly tell it:
 
 Please read skills/sunswap/SKILL.md
 
-### Q: Can I modify a skill?  
+### Q: Can I modify a skill?
+
 **A**: ✅ Yes! Simply edit SKILL.md, and the AI agent will read the latest version.

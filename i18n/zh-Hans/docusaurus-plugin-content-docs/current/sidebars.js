@@ -71,14 +71,14 @@ const sidebars = {
           type: 'doc',
           id: '8004/SupportedNetworks',
           label: '支持的网络',
-        },        
+        },
         {
           type: 'category',
           label: 'Usage',
           collapsed: false,
           items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
         },
-      ],   
+      ],
     },
 
     {
@@ -86,49 +86,61 @@ const sidebars = {
       label: 'MCP Server & SKILLS',
       collapsed: false,
       items: [
-            {
-              type: 'doc',
-              id: 'McpServer-Skills/Intro',
-              label: '简介',
-            },
+        {
+          type: 'doc',
+          id: 'McpServer-Skills/Intro',
+          label: '简介',
+        },
+        {
+          type: 'category',
+          label: 'MCP Server',
+          collapsed: true,
+          items: [
             {
               type: 'category',
-              label: 'MCP Server',
+              label: 'TRON MCP Server',
               collapsed: true,
               items: [
-              {
-                type: 'category',
-                label: 'TRON MCP Server',
-                collapsed: true,
-                items: ['McpServer-Skills/MCP/TRONMCPServer/Intro', 'McpServer-Skills/MCP/TRONMCPServer/Features','McpServer-Skills/MCP/TRONMCPServer/Installation','McpServer-Skills/MCP/TRONMCPServer/Configuration','McpServer-Skills/MCP/TRONMCPServer/API'],
-               },
-                {
-                  type: 'category',
-                  label: 'BSC MCP Server',
-                  collapsed: true,
-                  items: ['McpServer-Skills/MCP/BSCMCPServer/Intro', 'McpServer-Skills/MCP/BSCMCPServer/Features', 'McpServer-Skills/MCP/BSCMCPServer/Installation'],
-                },
-                
+                'McpServer-Skills/MCP/TRONMCPServer/Intro',
+                'McpServer-Skills/MCP/TRONMCPServer/Features',
+                'McpServer-Skills/MCP/TRONMCPServer/Installation',
+                'McpServer-Skills/MCP/TRONMCPServer/Configuration',
+                'McpServer-Skills/MCP/TRONMCPServer/API',
               ],
             },
-             {
+            {
               type: 'category',
-              label: 'SKILLS',
+              label: 'BSC MCP Server',
               collapsed: true,
-              items: ['McpServer-Skills/SKILLS/Intro', 'McpServer-Skills/SKILLS/SkillsList','McpServer-Skills/SKILLS/UseSkills','McpServer-Skills/SKILLS/CreateSKILL','McpServer-Skills/SKILLS/Faq'],
+              items: [
+                'McpServer-Skills/MCP/BSCMCPServer/Intro',
+                'McpServer-Skills/MCP/BSCMCPServer/Features',
+                'McpServer-Skills/MCP/BSCMCPServer/Installation',
+              ],
             },
           ],
-            
+        },
+        {
+          type: 'category',
+          label: 'SKILLS',
+          collapsed: true,
+          items: [
+            'McpServer-Skills/SKILLS/Intro',
+            'McpServer-Skills/SKILLS/SkillsList',
+            'McpServer-Skills/SKILLS/UseSkills',
+            'McpServer-Skills/SKILLS/CreateSKILL',
+            'McpServer-Skills/SKILLS/Faq',
+          ],
+        },
+      ],
     },
     {
       type: 'category',
       label: 'Openclaw 扩展插件',
       collapsed: false,
       items: ['Openclaw-extension/Overview', 'Openclaw-extension/Setup-use'],
-            
     },
- 
-  ]
+  ],
 }
 
 module.exports = sidebars
