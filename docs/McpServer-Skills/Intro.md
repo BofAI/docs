@@ -6,7 +6,7 @@ Bank of AI provides a complete solution, from infrastructure to business logic, 
 
 **Application Logic Layer**: The skills library serves as the AI agent's "brain and operation manual." It offers a series of reusable capability modules. Through structured instruction documents (SKILL.md), it teaches AI how to combine and call the underlying tools provided by MCP to complete complex business processes.
 
-**DeFi Interaction**: Automated token swaps are achieved through the SunSwap skill library, with future plans to support JustLend, Pancake, and Lista.
+**DeFi Interaction**: Automated token swaps are achieved through the SunSwap skill library, with future plans to support JustLend, PancakeSwap, and Lista.
 
 **Identity and Reputation**: On-chain identity registration and reputation accumulation are managed using the 8004 standard.
 
