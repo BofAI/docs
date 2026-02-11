@@ -18,7 +18,7 @@ x402 is an open blockchain payment protocol based on the HTTP `402 Payment Requi
 
 - **Payment-as-Response**: Enables a “pay-before-response” mechanism without complex account registration or session management.  
 - **Multi-Chain Support**: Currently supports **TRON** (Mainnet/Shasta/Nile) and **BSC** (Mainnet/Testnet).  
-- **AI-Friendly**: Supports TIP-712/EIP-712 signed payloads, allowing agents to complete settlements automatically.  
+- **AI-Friendly**: Supports signed payloads, allowing agents to complete settlements automatically.  
 - **Use Cases**: Pay-per-request APIs, paywalls, and automated settlement between agents.
 
 ---

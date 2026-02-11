@@ -11,7 +11,7 @@ In the x402 protocol, we reactivate this status code to:
 
 - **Inform** the client (buyer or agent) that access is restricted and payment is required.
 - **Convey** detailed payment requirements, including amount, token type, and destination address.
-- **Provide** the necessary metadata for constructing a programmatic payment (used to build the TIP-712/EIP-712 payload to be signed).
+- **Provide** the necessary metadata for constructing a programmatic payment (used to build the payload to be signed).
 
 ## Why Use HTTP 402?
 
@@ -100,7 +100,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 
 ## Payment Signature Structure
 
-The client responds via the `PAYMENT-SIGNATURE` header with a TIP-712/EIP-712 signed payload:
+The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 
 <Tabs>
 <TabItem value="TRON" label="TRON">

@@ -42,8 +42,8 @@ This page tracks the implementation progress and feature support status of the x
 
 | Mechanism | Python | TypeScript |
 |-------------|--------|------------|
-| exact/tron (TIP-712) | ✅ | ✅ |
-| exact/bsc (EIP-712) | ✅ | ✅ |
+| exact/tron | ✅ | ✅ |
+| exact/bsc | ✅ | ✅ |
 
 ---
 
@@ -65,8 +65,8 @@ This page tracks the implementation progress and feature support status of the x
 | Automatic 402 handling | ✅ | ✅ |
 | Automatic token approval | ✅ | ✅ |
 | Allowance check | ✅ | ✅ |
-| TIP-712 signing | ✅ | ✅ |
-| EIP-712 signing | ✅ | ✅ |
+| Signing (TRON) | ✅ | ✅ |
+| Signing (EVM) | ✅ | ✅ |
 
 ---
 

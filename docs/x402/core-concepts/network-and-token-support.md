@@ -32,7 +32,7 @@ For BSC, x402 uses the EIP-155 chain ID format:
 ## Overview
 
 x402 is purpose-built for blockchain ecosystems, enabling native on-chain payment verification and settlement.  
-The protocol strictly follows the **TIP-712/EIP-712** standard to ensure secure and tamper-resistant structured message signing.
+The protocol uses secure signing mechanisms to ensure tamper-resistant message authorization.
 
 ### Supported Networks
 
@@ -66,9 +66,9 @@ By default, **USDT** and **USDD** are used as primary settlement currencies.
 
 ---
 
-## Secure Signing with TIP-712 / EIP-712
+## Secure Signing
 
-x402 strictly uses **TIP-712/EIP-712** for all structured payment-related signatures.
+x402 uses typed data signing for all payment-related signatures.
 
 ### Key Benefits
 
@@ -111,7 +111,7 @@ The `exact` scheme allows charging a specified amount and is suitable for:
 ### How `exact` Works
 
 1. **Authorize**  
-   The client signs a TIP-712/EIP-712 message authorizing a **maximum amount**.
+   The client signs a message authorizing a **maximum amount**.
 
 2. **Execute**  
    The server performs the requested task and calculates the **actual cost**.
@@ -127,7 +127,7 @@ You may deploy your own Facilitator node to gain full control over payment verif
 
 ### Core Responsibilities
 
-1. **Verify** – Validate TIP-712/EIP-712 signatures and payload integrity  
+1. **Verify** – Validate signatures and payload integrity  
 2. **Submit** – Construct and broadcast the `transferFrom` transaction  
 3. **Monitor** – Track on-chain confirmations to ensure final settlement  
 
@@ -147,7 +147,7 @@ You may deploy your own Facilitator node to gain full control over payment verif
 | :------------- | :---------------------- |
 | **Networks**   | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97` |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20 |
-| **Signing Mechanism** | TIP-712 / EIP-712 structured data signing |
+| **Signing Mechanism** | Typed data signing |
 | **Payment Scheme** | `exact` |
 
 ---
@@ -161,11 +161,11 @@ For implementation details, see [Seller Quick Start](../getting-started/quicksta
 
 ## Summary
 
-x402 is deeply tailored for blockchain-native architectures, providing seamless TRC-20/BEP-20 integration and TIP-712/EIP-712 signature support.
+x402 is deeply tailored for blockchain-native architectures, providing seamless TRC-20/BEP-20 integration and secure signature support.
 
 ### Key Takeaways
 
 - **Development Environment**: Use testnets for development and debugging.  
 - **Default Settlement Asset**: **USDT** is the primary default token with preconfigured SDK support.  
-- **Security Model**: TIP-712/EIP-712 ensures secure, trust-minimized payment authorization.  
+- **Security Model**: Typed data signing ensures secure, trust-minimized payment authorization.  
 - **Extensibility**: Expand support for any custom TRC-20/BEP-20 token via the `TokenRegistry`.  

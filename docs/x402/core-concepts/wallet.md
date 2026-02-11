@@ -13,7 +13,7 @@ Wallet addresses are used to send, receive, and verify payments. They function a
 Buyers use their wallet as the primary interaction anchor, responsible for:
 
 - **Asset Custody**: Securely storing USDT or other TRC-20/BEP-20 tokens.
-- **Signature Authorization**: Cryptographically signing TIP-712/EIP-712 payment payloads using their private key.
+- **Signature Authorization**: Cryptographically signing payment payloads using their private key.
 - **Programmatic Payments**: Authorizing on-chain fund transfers via code (especially suitable for autonomous AI agents).
 - **Allowance Management**: Managing token allowances granted to the Facilitator contract.
 
@@ -48,9 +48,9 @@ BSC uses **hexadecimal (0x-prefixed)** addresses, fully compatible with Ethereum
 
 ---
 
-## TIP-712 / EIP-712 Structured Signatures
+## Payment Signatures
 
-x402 uses the **TIP-712/EIP-712** standard for structured data signing.
+x402 uses typed data signing for secure payment authorization.
 
 ### Core Advantages
 
@@ -68,8 +68,8 @@ x402 uses the **TIP-712/EIP-712** standard for structured data signing.
 ### Signature Flow
 
 1. The client receives the payment requirement from the server.
-2. The client constructs a compliant TIP-712/EIP-712 TypedData structure.
-3. The client signs the structured data using their private key.
+2. The client constructs a compliant TypedData structure.
+3. The client signs the data using their private key.
 4. The generated signature is sent in the `PAYMENT-SIGNATURE` request header.
 
 ---
@@ -124,7 +124,7 @@ The x402 client SDK automatically handles this process.
 ## Summary
 
 - **Core Foundation**: Wallets enable programmatic, permissionless payments in x402.
-- **Buyer Action**: Buyers generate TIP-712/EIP-712 signatures to authorize and pay for services.
+- **Buyer Action**: Buyers generate signatures to authorize and pay for services.
 - **Seller Reception**: Sellers receive funds directly via wallet addresses.
 - **Identity Layer**: Wallet addresses serve as the unique identity within protocol interactions.
 - **Automation Support**: The SDK automatically manages token approval logic, simplifying development.

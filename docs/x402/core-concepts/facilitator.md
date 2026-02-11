@@ -9,7 +9,7 @@ The Facilitator is an **optional but highly recommended** service designed to si
 
 A Facilitator is a middleware service primarily responsible for:
 
-- **Payload Verification**: Validating the payment payload (TIP-712/EIP-712 signature) submitted by the client.
+- **Payload Verification**: Validating the payment payload submitted by the client.
 - **Settlement Execution**: Submitting transactions to the blockchain on behalf of the server to complete settlement.
 - **Token Transfer**: Executing token transfers by calling the `permitTransferFrom` method of the `PaymentPermit` contract.
 
@@ -17,7 +17,7 @@ By introducing a Facilitator, servers no longer need to maintain direct connecti
 
 ## Responsibilities of the Facilitator
 
-- **Payment Verification**: Ensures that the TIP-712/EIP-712 signed payload strictly complies with the server’s declared payment requirements.
+- **Payment Verification**: Ensures that the signed payload strictly complies with the server's declared payment requirements.
 - **Payment Settlement**: Submits validated transactions to the blockchain and monitors their confirmation status.
 - **Fee Management**: Supports configurable service fees (optional) for facilitating payments.
 - **Result Feedback**: Returns verification and settlement results to the server, enabling it to decide whether to deliver the requested resource.

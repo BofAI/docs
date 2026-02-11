@@ -57,7 +57,7 @@ At a high level, the workflow is straightforward:
 
 1. **Request Initiated:** The buyer requests a protected resource from the server.
 2. **Payment Required:** If payment is required, the server returns a `402 Payment Required` response along with payment instructions.
-3. **Payment Submitted:** The buyer generates and submits a signed payment payload (TIP-712/EIP-712).
+3. **Payment Submitted:** The buyer generates and submits a signed payment payload.
 4. **Verification & Settlement:** The server calls the x402 Facilitator’s `/verify` and `/settle` endpoints to validate and settle the payment.
 5. **Resource Delivered:** Once verification succeeds, the server delivers the requested resource.
 

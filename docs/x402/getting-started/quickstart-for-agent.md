@@ -8,7 +8,7 @@ x402 is purpose-built for the Agentic Web. AI agents can autonomously negotiate 
 This skill enables agents to:
 
 - Detect `402 Payment Required` responses
-- Automatically sign TIP-712 (TRON) or EIP-712 (BSC) payment authorizations
+- Automatically sign payment authorizations
 - Manage wallet balances and execute settlement flows programmatically
 
 ---

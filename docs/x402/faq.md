@@ -46,7 +46,7 @@ An officially hosted Facilitator service is **coming soon**, allowing you to use
 
 #### How do you prevent a malicious Facilitator from stealing funds or forging settlements?
 
-All payment payloads are signed by the buyer using **TIP-712 / EIP-712**, and settlement is executed **directly on-chain**. Any attempt to tamper with transaction data will fail signature verification.
+All payment payloads are **signed by the buyer**, and settlement is executed **directly on-chain**. Any attempt to tamper with transaction data will fail signature verification.
 
 A Facilitator can only:
 
@@ -130,12 +130,12 @@ The flow mirrors a human user:
 
 1. Send initial request.  
 2. Parse `PAYMENT-REQUIRED` header in the response.  
-3. Sign the TIP-712 / EIP-712 payload using the x402 client SDK.  
+3. Sign the payment payload using the x402 client SDK.  
 4. Retry request with `PAYMENT-SIGNATURE` header attached.  
 
 #### Does an agent need a wallet?
 
-**Yes.** A programmatic wallet (via x402 signer classes) enables signing TIP-712 / EIP-712 payloads without exposing mnemonic phrases.
+**Yes.** A programmatic wallet (via x402 signer classes) enables signing payment payloads without exposing mnemonic phrases.
 
 ---
 
@@ -170,7 +170,7 @@ The flow mirrors a human user:
 
 Common causes:
 
-1. Invalid TIP-712 / EIP-712 signature (incorrect domain or payload).  
+1. Invalid signature (incorrect domain or payload).  
 2. Insufficient payment amount.  
 3. Insufficient token allowance granted to Facilitator.  
 4. Insufficient wallet balance.  
