@@ -1,56 +1,79 @@
----
-title: 'Quickstart for Agent'
-description: 'Enable AI agents to make autonomous payments on TRON blockchain using the x402-payment-tron skill.'
----
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-x402-tron is designed for the Agentic Web. AI agents can autonomously negotiate and pay for resources using the `x402-payment-tron` skill.
+# Quickstart for AI Agents
+
+x402 is purpose-built for the Agentic Web. AI agents can autonomously negotiate and pay for protected resources using the `x402_payment` skill.
 
 This skill enables agents to:
 
 - Detect `402 Payment Required` responses
-- Sign TIP-712 payment authorizations automatically
-- Manage wallet balances and handle the payment flow
+- Automatically sign payment authorizations
+- Manage wallet balances and execute settlement flows programmatically
 
 ---
 
 ## Configuration
 
-Configure your agent's wallet credentials via environment variables:
+Configure your agent wallet credentials using environment variables.
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
 
 ```bash
 export TRON_PRIVATE_KEY="your_private_key_here"
 export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RPC rate limits
 ```
 
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+```bash
+export BSC_PRIVATE_KEY="your_private_key_here"
+```
+
+</TabItem>
+</Tabs>
+
+
 ## Installation
 
-Add the [x402-payment-tron](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment) skill to your agentic tools:
+Add the [x402_tron_payment](https://github.com/bankofai/skills/tree/main/x402_tron_payment) skill to your Agent toolchain:
 
-| Tool         | Installation                                   |
-| ------------ | ---------------------------------------------- |
-| **OpenClaw** | `npx clawhub install x402-payment-tron`        |
-| **opencode** | Copy the skill to `.opencode/skill/` directory |
+| Platform     | Installation Method |
+|--------------|--------------------|
+| **OpenClaw** | `npx clawhub install x402-payment` |
+| **opencode** | Copy the skill files into the `.opencode/skill/` directory |
 
-## Try It Out
+---
 
-Instruct your agent to access `https://x402-tron-demo.bankofai.io/protected-nile`. The agent will automatically detect the payment requirement, sign the authorization, and retrieve the protected resource.
+## Quick Test
+
+Instruct your Agent to access:`https://x402-demo.bankofai.io/protected-nile`。
+The Agent will automatically detect the payment requirement, sign the authorization payload, complete settlement, and retrieve the protected resource.
+
+---
 
 ## Security Best Practices
 
-- **Limit wallet balance** — Only fund the agent wallet with what it needs for operations
-- **Test on Nile first** — Validate your integration on testnet before mainnet deployment
-- **Monitor transactions** — Track agent spending on [TronScan](https://tronscan.org)
-- **Secure credentials** — Store private keys using secure environment management
+- **Limit wallet balance** — Fund the Agent wallet only with the amount required for daily operations.
+- **Test on Nile first** — Always validate your integration on testnet before deploying to mainnet.
+- **Monitor transactions** — Track Agent spending via [TronScan](https://tronscan.org) or [BscScan](https://bscscan.com).
+- **Protect credentials** — Store private keys securely using environment variables or a secret manager. Never hardcode them.
 
 ---
 
 ## Next Steps
 
-- [Set up a paid API](./quickstart-for-sellers.md) for agents to consume
-- [Learn about HTTP 402](../core-concepts/http-402.md) payment protocol
+- [Build a Paid API](./quickstart-for-sellers.md) for Agents to consume  
+- [Understand HTTP 402](../core-concepts/http-402.md) payment protocol  
+
+---
 
 ## References
 
-- [OpenClaw Extension](https://github.com/bankofai/openclaw-extension)
-- [x402-payment-tron on ClawHub](https://github.com/bankofai/skills-tron/tree/main/x402_tron_payment)
-- [x402-tron Demo](https://github.com/bankofai/x402-tron-demo) 
+- [OpenClaw Extension Repository](https://github.com/bankofai/openclaw-extension)
+- [x402-payment on ClawHub](https://github.com/bankofai/skills/tree/main/x402_tron_payment)
+- [x402 Demo Project](https://github.com/bankofai/x402-demo)
+
+

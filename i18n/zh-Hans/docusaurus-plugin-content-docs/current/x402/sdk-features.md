@@ -1,6 +1,6 @@
 # SDK 功能特性
 
-本页面记录了 x402-tron 各语言 SDK（Python, TypeScript）的功能实现进度与支持状态。
+本页面记录了 x402 各语言 SDK（Python, TypeScript）的功能实现进度与支持状态。
 
 ## 核心 
 
@@ -24,19 +24,27 @@
 | tron:mainnet | ✅ | ✅ |
 | tron:nile | ✅ | ✅ |
 | tron:shasta | ✅ | ✅ |
+| bsc:mainnet | ✅ | ✅ |
+| bsc:testnet | ✅ | ✅ |
+
 
 ## 机制 
 
 | 机制 | Python | TypeScript |
 |-----------|--------|------------|
-| exact/tron (TIP-712) | ✅ | ✅ |
+| exact_permit/tron | ✅ | ✅ |
+| exact_permit/bsc | ✅ | ✅ |
+| exact/tron | ✅ | ✅ |
+| exact/bsc | ✅ | ✅ |
 
 ## 签名器 
 
 | 签名器 | Python | TypeScript |
 |--------|--------|------------|
 | TronClientSigner | ✅ | ✅ |
+| EvmClientSigner | ✅ | ✅ |
 | TronFacilitatorSigner | ✅ | ⏳ |
+| EvmFacilitatorSigner | ✅ | ⏳ |
 
 ## 客户端功能 
 
@@ -45,7 +53,8 @@
 | 自动处理 402 | ✅ | ✅ |
 | 自动代币批准 | ✅ | ✅ |
 | 额度检查 | ✅ | ✅ |
-| TIP-712 签名 | ✅ | ✅ |
+| 签名 (TRON) | ✅ | ✅ |
+| 签名 (EVM) | ✅ | ✅ |
 
 ## 服务端功能 
 
@@ -73,6 +82,8 @@
 |-------|--------|------------|
 | USDT (TRC-20) | ✅ | ✅ |
 | 自定义 TRC-20 | ✅ | ✅ |
+| USDT (BEP-20) | ✅ | ✅ |
+| 自定义 BEP-20 | ✅ | ✅ |
 
 ## 图例 
 

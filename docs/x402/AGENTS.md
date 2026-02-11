@@ -1,106 +1,154 @@
-# Documentation Agent Instructions
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-## Package Identity
+# x402 Documentation Maintenance Guidelines
 
-- Docusaurus documentation source for x402-tron
-- MDX/Markdown files with `sidebars.js` as navigation configuration
+## 1. Project Positioning & Core Structure
 
-## Directory Structure
+- This repository contains the documentation source code for the x402 project, built with Docusaurus.
+- Documentation is primarily written in MDX / Markdown and organized via `sidebars.js`.
 
-- `docs/core-concepts/` — Protocol explanations (HTTP 402, client-server, facilitator, wallet, network support)
-- `docs/getting-started/` — Quickstart guides for buyers and sellers (MD files with tabs)
-- `docs/index.md` — Welcome/landing page
-- `docs/faq.md` — Frequently asked questions
-- `sidebars.js` — Docusaurus sidebar navigation configuration
-- `docusaurus.config.js` — Main Docusaurus configuration
-- `docs/sdk-features.md` - Feature list of Python and TypeScript SDKs
+---
 
-## Code-to-Doc Mapping
+## 2. Directory Structure
 
-- Changes to `typescript/packages/` affect TypeScript SDK references
-- Changes to `python/x402/` affect Python SDK references
-- Changes to facilitator endpoints affect quickstart guides
-- Changes to mechanisms affect core-concepts docs
+- `docs/core-concepts/` — Protocol deep dives (HTTP 402, client-server model, Facilitator, wallet management, network support).
+- `docs/getting-started/` — Step-by-step guides for buyers and sellers (uses `<Tabs>` for multi-language examples).
+- `docs/index.md` — Landing page.
+- `docs/faq.md` — Frequently Asked Questions.
+- `sidebars.js` — Docusaurus sidebar configuration.
+- `docusaurus.config.js` — Main Docusaurus configuration file.
+- `docs/sdk-features.md` — Feature comparison matrix for Python and TypeScript SDKs.
 
-## Style Guidelines
+---
 
-- Use Python for primary code examples (it's the most complete SDK)
-- Include TypeScript examples where available
-- Include error handling in all API examples
-- Write for developers with 2-5 years experience
-- Use Docusaurus MDX components (`<Tabs>`, `<TabItem>`) for multi-language code examples
-- Import Tabs at top of files using them: `import Tabs from '@theme/Tabs'; import TabItem from '@theme/TabItem';`
-- Show both success and error response examples for API endpoints
-- Use real-world parameter values in examples (not foo/bar placeholders)
+## 3. Code–Documentation Synchronization Rules
 
-## Conventions
+Documentation must reflect code changes immediately. Follow these dependency mappings:
 
-- DO: Add new pages to `sidebars.js` navigation
-- DO: Include code examples from real SDK files
-- DO: Use `<Tabs>` and `<TabItem>` for multi-language code examples
-- DO: Add frontmatter (title, description) to all pages
-- DON'T: Add pages without updating `sidebars.js`
-- **Git: Create PRs for review; NEVER commit directly to main**
+- Changes in `typescript/packages/` → Update TypeScript documentation.
+- Changes in `python/x402/` → Update Python documentation.
+- Endpoint logic changes → Update “Getting Started” guides.
+- Core mechanism changes → Update `core-concepts` documentation.
 
-## TRON-Specific Content
+---
 
-- Network identifiers use format `tron:<network>` (mainnet, nile, shasta)
-- Use TIP-712 (not EIP-712) for TRON signing references
-- Token addresses are base58-encoded (start with 'T')
-- Reference TronGrid endpoints for node access
-- Example token: USDT at `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` (Nile)
+## 4. Style & Writing Standards
 
-## Touch Points / Key Files
+- Use **Python** as the primary example language (most feature-complete SDK).
+- Provide **TypeScript** examples whenever supported.
+- All API examples **must include complete error handling**.
+- Target audience: developers with **2–5 years of experience**.
+- Use Docusaurus MDX components (`<Tabs>`, `<TabItem>`) for multi-language examples.
+- Any file using Tabs **must explicitly import**:
 
-- `docs/index.md` — Landing page
-- `docs/faq.md` — Frequently asked questions
-- `sidebars.js` — Navigation configuration (MUST update when adding pages)
-- `docusaurus.config.js` — Main site configuration
-- `docs/core-concepts/*.md` — Conceptual documentation
-- `docs/getting-started/*.md` — Quickstart guides (MDX for tab components)
-- `docs/sdk-features.md` — Update when SDK capabilities change
+  ```js
+  import Tabs from '@theme/Tabs';
+  import TabItem from '@theme/TabItem';
+  ```
 
-## File Extensions
+ - All API endpoints must provide both **success** and **error** response examples.
+- Example code must use realistic, production-style parameter values (strictly no meaningless placeholders such as `foo` / `bar`).
 
-- Use `.md` for all pages (Docusaurus parses MDX in standard `.md` files)
-- Avoid using `.mdx` extension for better editor compatibility
+---
 
-## Common Gotchas
+## 5. Development Conventions
 
-- `sidebars.js` controls Docusaurus navigation; pages not listed won't appear in sidebar
-- Links between pages should omit file extensions
-- TRON addresses are case-sensitive and base58-encoded
-- Files with tabs must import Tabs components before using them
+- **Required**: When adding a new page, you **must** update the `sidebars.js` navigation configuration.
+- **Required**: Code examples must reference actual SDK source files, not pseudocode.
+- **Required**: Use `<Tabs>` / `<TabItem>` components to present multi-language comparisons.
+- **Required**: All pages must include complete Frontmatter metadata (`title` and `description`).
+- **Prohibited**: Adding new page files without updating `sidebars.js` (this will result in dead links or inaccessible pages).
+- **Git Policy**: All changes must be submitted via Pull Request (PR) and reviewed; direct pushes to the `main` branch are **strictly prohibited**.
 
-## Pre-PR Checks
+---
 
-- All links work (no broken references)
-- New pages added to `sidebars.js` navigation
-- Code examples compile and run
-- Frontmatter present on all pages (title, description)
-- MDX syntax is valid
-- Run `yarn build` to verify no build errors
+## 6. Platform Standards
 
-## SDK Feature Parity Document
+<Tabs>
+  <TabItem value="TRON" label="TRON">
 
-When SDK code changes involve:
+- **Network Identifier**: Must follow the `tron:<network>` format (supports `mainnet`, `nile`, `shasta`).
+- **Signature Standard**: TRON signatures must reference the **TIP-712** standard (do not confuse with EIP-712).
+- **Address Format**: Token addresses must use Base58 encoding (must start with `T`).
+- **Node Access**: Must connect to TronGrid endpoints.
+- **Test Example**: Nile testnet USDT address — `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf`.
 
-- New mechanisms in `*/mechanisms/`
-- New signers in `*/signers/`
-- New client/server features
+</TabItem>
+<TabItem value="BSC" label="BSC">
 
-Update `sdk-features.md` to reflect the current state. Check both SDKs (python/, typescript/) when updating.
+- **Network Identifier**: Must follow the `eip155:<chainId>` format.
+- **Signature Standard**: BSC signatures are fully compatible with Ethereum **EIP-712** (no special adaptation required; use standard EVM signing libraries).
+- **Address Format**: Token addresses must use hexadecimal (Hex) format (must start with `0x`).
+- **Node Access**: Must connect to EVM-compatible JSON-RPC endpoints.
+- **Test Example**: BSC Testnet mock USDT address — `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd`.
 
-## Development Commands
+</TabItem>
+</Tabs>
+
+---
+
+## 7. Key Files & Integration Points
+
+- `docs/index.md` — **Landing Page**
+- `docs/faq.md` — **FAQ**
+- `sidebars.js` — **Navigation Configuration** (must be updated when adding new pages)
+- `docusaurus.config.js` — **Main Site Configuration**
+- `docs/core-concepts/*.md` — **Conceptual Documentation**
+- `docs/getting-started/*.md` — **Quickstart Guides** (MDX files using Tabs)
+- `docs/sdk-features.md` — **Feature Matrix** (must be updated when SDK capabilities change)
+
+---
+
+## 8. File Extensions
+
+- All documentation source files must use the `.md` extension (Docusaurus supports MDX syntax within `.md` files).
+- To ensure maximum editor compatibility, **avoid** using the `.mdx` extension.
+
+---
+
+## 9. Common Pitfalls
+
+- `sidebars.js` determines the Docusaurus sidebar structure. Pages not registered in this file **will not appear** in the sidebar.
+- Internal page links must **omit file extensions** (e.g., use `[Link](./page)` instead of `[Link](./page.md)`).
+- TRON Base58 addresses are **case-sensitive**.
+- Any file using `<Tabs>` must explicitly import the component at the top of the file.
+
+---
+
+## 10. Pre-Submission Checklist
+
+- Ensure all links are valid (no broken links).
+- Confirm that any new page is added to `sidebars.js`.
+- Verify that code examples compile and execute successfully.
+- Ensure all pages contain complete Frontmatter (`title`, `description`).
+- Validate MDX syntax correctness.
+- Run `yarn build` locally and confirm there are no build errors.
+
+---
+
+## 11. SDK Feature Synchronization
+
+When SDK code changes in any of the following areas, you **must** update `docs/sdk-features.md` accordingly:
+
+- New mechanisms added under the `*/mechanisms/` directory.
+- New signers added under the `*/signers/` directory.
+- New features introduced in the Client or Server components.
+
+> **Note**: Always cross-check implementation progress between the **Python** and **TypeScript** SDKs when updating documentation.
+
+---
+
+## 12. Common Development Commands
 
 ```bash
-# Install dependencies
+# Install project dependencies
 yarn install
 
-# Start development server
+# Start local development server
 yarn start
 
-# Build for production
+# Build production version
 yarn build
 
 # Serve production build locally

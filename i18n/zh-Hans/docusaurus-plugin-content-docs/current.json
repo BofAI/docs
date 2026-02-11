@@ -7,9 +7,13 @@
     "message": "x402支付协议",
     "description": "The label for category x402 Payment Protocol in sidebar docsSidebar"
   },
-  "sidebar.docsSidebar.category.TRC-8004 Protocol": {
-    "message": "TRC-8004协议",
-    "description": "The label for category TRC-8004 Protocol in sidebar docsSidebar"
+  "sidebar.docsSidebar.category.8004 Protocol": {
+    "message": "8004协议",
+    "description": "The label for category 8004 Protocol in sidebar docsSidebar"
+  },
+    "sidebar.docsSidebar.category.Usage": {
+    "message": "使用指南",
+    "description": "The label for category Usage in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.Getting Started": {
     "message": "快速入门",
@@ -23,6 +27,7 @@
     "message": "核心概念",
     "description": "The label for category Core Concepts in sidebar docsSidebar"
   },
+ 
   "sidebar.docsSidebar.doc.Introduction": {
     "message": "简介",
     "description": "The label for the doc item Introduction in sidebar docsSidebar"

@@ -1,166 +1,185 @@
----
-title: "FAQ"
----
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# FAQ
 
 ### General
 
-#### What _is_ x402-tron in a single sentence?
+#### What is x402 in one sentence?
 
-x402-tron is a TRON implementation of the x402 open payment protocol that turns the dormant HTTP `402 Payment Required` status code into a fully-featured, on-chain payment layer for APIs, websites, and autonomous agents on TRON blockchain.
+x402 revives the long-unused HTTP `402 Payment Required` status code and transforms it into a fully functional on-chain payment layer designed for APIs, websites, and autonomous AI agents. It is currently supported on TRON and BSC, with plans to expand to additional blockchain networks in the future.
 
-#### Is x402-tron a commercial product?
+#### Is x402 a commercial product?
 
-_No._ x402-tron is an open-source implementation of the x402 protocol for TRON blockchain, released under the MIT license. You don't need any commercial products to use it.
+**No.** x402 is an open-source blockchain implementation of the x402 protocol, released under the MIT license. You are free to use it without purchasing any commercial product.
 
-#### Why not use traditional payment rails or API keys?
+#### Why replace traditional payment channels or API keys?
 
-Traditional rails require credit-card networks, user accounts, and multi-step UI flows. x402-tron removes those dependencies, enabling programmatic, HTTP-native payments (perfect for AI agents) while leveraging TRON's fast and low-cost transactions.
+Traditional payment systems rely on credit card networks, user accounts, and complex UI flows. x402 removes these dependencies and leverages the speed and low cost of blockchain networks to enable programmatic, HTTP-native payments—particularly well-suited for AI agents.
 
-#### Is x402-tron only for crypto-native projects?
+#### Is x402 only for crypto-native projects?
 
-No. Any web API or content provider—crypto or web2—can integrate x402-tron if it wants a lower-cost, friction-free payment path using TRON blockchain.
+Not at all. Any Web API or content provider—whether Web3-native or traditional Web2—can integrate x402 to enable low-cost, frictionless blockchain-based payments.
+
+---
 
 ### Language & Framework Support
 
 #### What languages and frameworks are supported?
 
-x402-tron provides SDKs for:
+x402 currently provides the following SDKs:
 
-* **Python**: With FastAPI and Flask integration
-* **TypeScript**: With fetch client support
+- **Python**: Integrated with FastAPI and Flask  
+- **TypeScript**: Supports standard `fetch` clients  
 
-Both languages support client, server, and facilitator implementations.
+Both SDKs fully implement Client, Server, and Facilitator functionality.
 
-### Facilitators
+---
 
-#### Who runs facilitators?
+### Facilitator
 
-You typically run your own facilitator. x402-tron is designed to be self-hosted. The facilitator included in the repository is ready to run.
+#### Who runs the Facilitator?
 
-An official hosted facilitator service is also **coming soon**, which will allow you to use x402-tron without deploying your own facilitator infrastructure.
+Typically, you run your own Facilitator service. x402 is designed for self-hosting, and the built-in Facilitator in the repository is production-ready.
 
-#### What stops a malicious facilitator from stealing funds or lying about settlement?
+An officially hosted Facilitator service is **coming soon**, allowing you to use x402 without deploying infrastructure yourself.
 
-Every payment payload is **signed by the buyer using TIP-712** and settles **directly on TRON blockchain**. A facilitator that tampers with the transaction will fail signature checks. The facilitator can only transfer:
-* The exact amount authorized by the buyer
-* To the exact recipient specified in the signed payload
+#### How do you prevent a malicious Facilitator from stealing funds or forging settlements?
 
-### Pricing & Schemes
+All payment payloads are **signed by the buyer**, and settlement is executed **directly on-chain**. Any attempt to tamper with transaction data will fail signature verification.
 
-#### How should I price my endpoint?
+A Facilitator can only:
 
-Common patterns include:
+- Transfer the exact amount authorized by the buyer  
+- Send funds to the specific recipient address defined in the signed payload  
 
-* **Flat per-call** (e.g., `1 USDT` per request)
-* **Tiered** (`/basic` vs `/pro` endpoints with different prices)
-* **Exact scheme**: Pay the exact amount specified for the service
+---
 
-#### What payment schemes does x402-tron support?
+### Pricing Strategies & Plans
 
-Currently x402-tron supports the `exact` scheme, which allows:
-* Client authorizes up to a maximum amount
-* Server settles the actual amount used (up to the maximum)
-* Useful for metered billing, LLM token usage, etc.
+#### How should I price an endpoint?
+
+Common pricing models include:
+
+- **Flat rate per call**: e.g., `1 USDT` per request  
+- **Tiered pricing**: Different prices for endpoints like `/basic` and `/pro`  
+- **`exact_permit` / `exact` scheme**: Pay the exact amount determined by the service  
+
+#### What payment schemes does x402 support?
+
+x402 supports `exact_permit` and `exact` payment schemes. Both allow the client to authorize a **maximum payment amount**, and the server to settle the **actual cost incurred** (up to the authorized limit). This is ideal for **metered billing**, **LLM token usage**, and similar use cases.
+
+---
 
 ### Assets, Networks & Fees
 
-#### Which assets and networks are supported?
+#### What assets and networks are supported?
 
-| Network | Token | Status |
-|---------|-------|--------|
+| Network                     | Token         | Status      |
+| --------------------------- | ------------- | ----------- |
 | TRON Mainnet (`tron:mainnet`) | USDT (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:nile`) | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:shasta`) | USDT (TRC-20) | **Testnet** |
+| TRON Nile (`tron:nile`)       | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:shasta`)   | USDT (TRC-20) | **Testnet** |
 | TRON Mainnet (`tron:mainnet`) | USDD (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:nile`) | USDD (TRC-20) | **Testnet** |
+| TRON Nile (`tron:nile`)       | USDD (TRC-20) | **Testnet** |
+| BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
+| BSC Testnet (`eip155:97`)     | USDT (BEP-20) | **Testnet** |
 
-Custom TRC-20 tokens can be added via the TokenRegistry.
+Custom TRC-20 and BEP-20 tokens can also be added via the TokenRegistry.
 
-#### What are the fees?
+#### What fees are involved?
 
-* **TRON network fees**: TRX for energy/bandwidth (paid by facilitator)
-* **Facilitator fees**: Configurable per facilitator (can be zero)
+- **Network Fees**:
+  - TRON: TRX for Energy and Bandwidth (paid by the Facilitator)
+  - BSC: BNB for gas (paid by the Facilitator)
+- **Facilitator Service Fee**: Configurable by each Facilitator (can be set to zero)
+
+---
 
 ### Security
 
-#### Do I have to expose my private key to my backend?
+#### Do I need to expose my private key to the backend?
 
-No. The recommended pattern is:
+**No.** Recommended security model:
 
-1. **Buyers (clients/agents)** sign locally in their runtime (browser, serverless, agent VM).
-2. **Sellers** never hold the buyer's key; they only verify signatures.
-3. **Facilitators** use their own keys for transaction submission only.
+1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).  
+2. **Seller** verifies signatures without accessing private keys.  
+3. **Facilitator** uses its own key to submit transactions on-chain.  
 
-#### How do refunds work?
+#### How does refunds work?
 
-The `exact` scheme is a _push payment_—irreversible once executed. Refund options:
+The `exact_permit` / `exact` scheme uses a **push payment** model—once executed on-chain, it is irreversible.
 
-1. **Business-logic refunds:** Seller sends a new USDT transfer back to the buyer.
-2. **Partial settlement:** Server only settles the amount actually used (exact scheme).
+Refund options:
 
-### Usage by AI Agents
+1. **Business-layer refund**: Seller manually sends a new USDT transfer back to the buyer.  
+2. **Preventative settlement**: Server settles only the actual usage amount under the payment scheme.  
 
-#### How does an agent know what to pay?
+---
 
-Agents follow the same flow as humans:
+### AI Agent Integration
 
-1. Make a request.
-2. Parse the `PAYMENT-REQUIRED` header.
-3. Sign a TIP-712 payment payload via the x402-tron client SDKs.
-4. Retry with the `PAYMENT-SIGNATURE` header.
+#### How does an agent know how much to pay?
 
-#### Do agents need wallets?
+The flow mirrors a human user:
 
-Yes. Programmatic TRON wallets (via TronWeb or the x402-tron signer classes) let agents sign TIP-712 payloads without exposing seed phrases.
+1. Send initial request.  
+2. Parse `PAYMENT-REQUIRED` header in the response.  
+3. Sign the payment payload using the x402 client SDK.  
+4. Retry request with `PAYMENT-SIGNATURE` header attached.  
 
-### Development
+#### Does an agent need a wallet?
 
-#### How do I run x402-tron locally?
+**Yes.** A programmatic wallet (via x402 signer classes) enables signing payment payloads without exposing mnemonic phrases.
 
-1. Clone the [x402-tron-demo repository](https://github.com/bankofai/x402-tron-demo)
-2. Install dependencies (`pip install -r requirements.txt` for Python)
-3. Configure `.env` file with your TRON private keys (see `.env.example`)
-4. Start the facilitator: `python facilitator/main.py`
-5. Start the server: `python server/main.py`
-6. Run the client: `python client/main.py`
+---
 
-#### What testnet should I use?
+### Development Guide
 
-**TRON Nile** is recommended for testing. It's stable and has good faucet support.
+#### How do I run x402 locally?
 
-* Nile Faucet: https://nileex.io/join/getJoinPage
-* Nile Explorer: https://nile.tronscan.org
+1. **Clone the repository:** Download the [x402-demo repository](https://github.com/bankofai/x402-demo).  
+2. **Install dependencies:** Run `pip install -r requirements.txt`.  
+3. **Configure environment:** Copy `.env.example` to `.env` and configure your private keys.  
+4. **Start Facilitator:** `python facilitator/main.py`  
+5. **Start Server:** `python server/main.py`  
+6. **Run Client:** `python client/main.py`  
+
+#### Which testnet is recommended?
+
+**TRON Nile** is recommended for TRON testing:
+
+- Faucet: https://nileex.io/join/getJoinPage  
+- Explorer: https://nile.tronscan.org  
+
+**BSC Testnet** is recommended for BSC testing:
+
+- Faucet: https://www.bnbchain.org/en/testnet-faucet  
+- Explorer: https://testnet.bscscan.com  
+
+---
 
 ### Troubleshooting
 
-#### I keep getting `402 Payment Required`, even after attaching `PAYMENT-SIGNATURE`. Why?
+#### Why do I still receive `402 Payment Required` even after sending `PAYMENT-SIGNATURE`?
 
-1. TIP-712 signature is invalid (wrong domain or payload fields).
-2. Payment amount is less than the required amount.
-3. Token allowance is insufficient for the facilitator.
-4. Client address has insufficient USDT balance.
+Common causes:
 
-Check the `error` field in the server's JSON response for details.
+1. Invalid signature (incorrect domain or payload).  
+2. Insufficient payment amount.  
+3. Insufficient token allowance granted to Facilitator.  
+4. Insufficient wallet balance.  
 
-#### My test works on Nile but fails on mainnet—what changed?
+Check the `error` field in the server’s JSON response for detailed diagnostics.
 
-* Ensure you set `network: "tron:mainnet"` instead of `"tron:nile"`.
-* Confirm your wallet has _mainnet_ USDT.
-* Ensure the facilitator wallet has TRX for energy costs.
-* Token contract addresses differ between networks.
+#### It works on Nile but fails on Mainnet — why?
 
-#### How do I check token allowance?
+- Network configuration not updated  
+- Using testnet tokens instead of real mainnet tokens  
+- Facilitator lacks sufficient gas tokens  
+- Token contract address differs between networks  
 
-```python
-allowance = await signer.check_allowance(
-    token_address="TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
-    required_amount=1000000,
-    network="tron:nile"
-)
-print(f"Current allowance: {allowance}")
-```
+### Still Have Questions?
 
-### Still have questions?
-
-• Open a GitHub Issue in the [x402-tron repo](https://github.com/bankofai/x402-tron)
-• Check the [x402-tron-demo](https://github.com/bankofai/x402-tron-demo) for working examples
+• Submit a GitHub Issue in the [x402 repository](https://github.com/bankofai/x402)  
+• Refer to [x402-demo](https://github.com/bankofai/x402-demo) for a complete, runnable example  

@@ -49,10 +49,89 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'TRC-8004 Protocol',
+      label: '8004 Protocol',
       collapsed: false,
-      items: ['TRC-8004/general', 'TRC-8004/identity', 'TRC-8004/reputation', 'TRC-8004/validation'],
+      items: [
+        {
+          type: 'doc',
+          id: '8004/general',
+          label: 'Introduction',
+        },
+        {
+          type: 'doc',
+          id: '8004/contract',
+          
+        },
+        {
+          type: 'doc',
+          id: '8004/QuickStart',
+          
+        },
+        {
+          type: 'doc',
+          id: '8004/SupportedNetworks',
+          
+        },
+
+    
+         
+            {
+              type: 'category',
+              label: 'Usage',
+              collapsed: false,
+              items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
+            },
+          ],
+        
+    
     },
+     {
+      type: 'category',
+      label: ' MCP & SKILLS',
+      collapsed: false,
+      items: [
+            {
+              type: 'doc',
+              id: 'McpServer-Skills/Intro',
+              label: 'Introduction',
+            },
+              {
+              type: 'category',
+              label: 'MCP',
+              collapsed: true,
+              items: [
+              {
+                type: 'category',
+                label: 'TRON MCP Server',
+                collapsed: true,
+                items: ['McpServer-Skills/MCP/TRONMCPServer/Intro', 'McpServer-Skills/MCP/TRONMCPServer/Features','McpServer-Skills/MCP/TRONMCPServer/Installation','McpServer-Skills/MCP/TRONMCPServer/Configuration',,'McpServer-Skills/MCP/TRONMCPServer/API'],
+               },
+                {
+                  type: 'category',
+                  label: 'BSCMCPServer',
+                  collapsed: true,
+                  items: ['McpServer-Skills/MCP/BSCMCPServer/Intro', 'McpServer-Skills/MCP/BSCMCPServer/Features', 'McpServer-Skills/MCP/BSCMCPServer/Installation'],
+                },
+                
+              ],
+            },
+             {
+              type: 'category',
+              label: 'SKILLS',
+              collapsed: true,
+              items: ['McpServer-Skills/SKILLS/Intro', 'McpServer-Skills/SKILLS/SkillsList','McpServer-Skills/SKILLS/UseSkills','McpServer-Skills/SKILLS/Faq'],
+            },
+          ],
+            
+    },
+    {
+      type: 'category',
+      label: 'Openclaw Extension',
+      collapsed: false,
+      items: ['Openclaw-extension/Overview', 'Openclaw-extension/Setup-use'],
+            
+    },
+
   ],
 }
 

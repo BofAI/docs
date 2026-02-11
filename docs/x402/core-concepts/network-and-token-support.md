@@ -1,116 +1,192 @@
----
-title: 'Networks & Token Support'
-description: 'This page explains which blockchain networks and tokens are supported by x402-tron, and how to extend support to additional networks.'
----
+# Network & Token Support
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 ## TRON Network Identifiers
 
-x402-tron uses a simple network identifier format: `tron:<network_name>` where network_name is one of `mainnet`, `shasta`, or `nile`.
+x402 adopts a standardized network identifier format: `tron:<network_name>`.  
+The `<network_name>` can be `mainnet`, `shasta`, or `nile`.
 
-### Network Identifier Reference
+### Identifier Reference
 
-| Network Name | x402-tron ID   | Description         |
-| ------------ | -------------- | ------------------- |
-| TRON Mainnet | `tron:mainnet` | TRON mainnet        |
-| TRON Shasta  | `tron:shasta`  | TRON Shasta testnet |
-| TRON Nile    | `tron:nile`    | TRON Nile testnet   |
+| Network Name | x402 ID        | Description                     |
+| :----------- | :------------- | :------------------------------ |
+| **TRON Mainnet** | `tron:mainnet` | TRON Mainnet (Production)      |
+| **TRON Shasta**  | `tron:shasta`  | TRON Shasta Testnet            |
+| **TRON Nile**    | `tron:nile`    | TRON Nile Testnet              |
+
+---
+
+## BSC Network Identifiers
+
+For BSC, x402 uses the EIP-155 chain ID format:
+
+| Network Name     | x402 ID       | Description                    |
+| :--------------- | :------------ | :----------------------------- |
+| **BSC Mainnet**  | `eip155:56`   | BSC Mainnet (Production)      |
+| **BSC Testnet**  | `eip155:97`   | BSC Testnet (Chapel)          |
+
+---
 
 ## Overview
 
-x402-tron is specifically designed for the TRON blockchain, with payment verification and settlement implemented natively for TRON networks. The protocol leverages TRON's TIP-712 for secure message signing.
+x402 is purpose-built for blockchain ecosystems, enabling native on-chain payment verification and settlement.  
+The protocol uses secure signing mechanisms to ensure tamper-resistant message authorization.
 
 ### Supported Networks
 
-| Network      | Status      | Notes                                   |
-| ------------ | ----------- | --------------------------------------- |
-| TRON Mainnet | **Mainnet** | Production network                      |
-| TRON Nile    | **Testnet** | Recommended for development and testing |
-| TRON Shasta  | **Testnet** | Alternative testnet for testing         |
+| Network Environment | Status     | Notes |
+| :------------------ | :--------- | :---- |
+| **TRON Mainnet**    | **Mainnet** | **Production network** for real-value assets |
+| **TRON Nile**       | **Testnet** | **Recommended testnet** for development and debugging |
+| **TRON Shasta**     | **Testnet** | Long-running alternative testnet |
+| **BSC Mainnet**     | **Mainnet** | **Production network** for real-value assets |
+| **BSC Testnet**     | **Testnet** | **Recommended testnet** for BSC development |
 
-### Token Support
+---
 
-x402-tron supports TRC-20 tokens on TRON networks. The primary supported tokens are USDT and USDD.
+## Supported Tokens
 
-#### Supported Tokens
+x402 fully supports **TRC-20 and BEP-20** standard tokens.  
+By default, **USDT** and **USDD** are used as primary settlement currencies.
 
-| Token | Network      | Contract Address                   |
-| ----- | ------------ | ---------------------------------- |
-| USDT  | tron:mainnet | TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t |
-| USDT  | tron:nile    | TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf |
-| USDD  | tron:mainnet | TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz |
-| USDD  | tron:nile    | TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK |
+### Supported Token List
 
-**Note**: Custom TRC-20 tokens can be supported by registering them in the TokenRegistry.
+| Symbol | Network        | Contract Address |
+| :------ | :------------- | :--------------- |
+| **USDT** | `tron:mainnet` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
+| **USDT** | `tron:nile`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
+| **USDD** | `tron:mainnet` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
+| **USDD** | `tron:nile`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
+| **USDT** | `eip155:56`    | `0x55d398326f99059fF775485246999027B3197955` |
+| **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 
-#### TIP-712 for Secure Signing
+> **Extensibility**: The protocol is highly extensible. By registering tokens in the `TokenRegistry`, you can easily support any custom TRC-20 or BEP-20 token.
 
-x402-tron uses TIP-712 (TRON's implementation of EIP-712) for structured data signing. This enables:
+---
 
-- **Secure authorization**: Buyers sign transfer authorizations off-chain
-- **Trust-minimizing**: Facilitators cannot move funds outside client intentions
-- **Verifiable**: All signatures can be verified on-chain
+## Secure Signing
 
-### Token Configuration
+x402 uses typed data signing for all payment-related signatures.
 
-When configuring payment requirements, you specify:
+### Key Benefits
 
-1. **Network**: The TRON network identifier (e.g., `tron:nile`)
-2. **Asset**: The TRC-20 token contract address
-3. **Amount**: The payment amount in the token's smallest unit (e.g., 1 USDT = 1000000 with 6 decimals)
+- **Off-chain Authorization**  
+  Buyers sign transfer intent locally (off-chain) without locking funds in advance.
 
-### Payment Schemes
+- **Trust-Minimized**  
+  Signatures include strict constraints (amount, recipient, expiration), preventing the Facilitator from moving funds beyond the explicitly authorized scope.
 
-#### Exact Scheme
+- **On-chain Verifiability**  
+  All signatures can be cryptographically verified at the smart contract level, ensuring immutability and integrity.
 
-The `exact` scheme allows payments of a specified amount, useful for:
+---
 
-- Pay-per-use APIs (LLM token generation, data processing)
-- Metered resources (compute time, bandwidth)
-- Dynamic pricing based on actual usage
+## Token Configuration Parameters
 
-The exact scheme in x402-tron works by:
+When configuring an `HTTP 402` payment request on the server side, you must explicitly define:
 
-1. Client signs an authorization allowing up to a maximum amount
-2. Server performs work and determines actual cost
-3. Facilitator settles the actual amount (up to the authorized maximum)
+1. **Network** – The unique network identifier (e.g., `tron:nile`)  
+2. **Asset** – The TRC-20/BEP-20 token **contract address**  
+3. **Amount** – The integer value in the token’s **smallest unit (raw amount)**  
 
-### Running Your Own Facilitator
+> **Precision Example**  
+> USDT on TRON uses **6 decimals**.  
+> To charge **1.0 USDT**, you must configure the amount as:  
+> `1000000`
 
-You can run your own facilitator to verify and settle payments on TRON. The facilitator:
+---
 
-1. Verifies payment payloads (TIP-712 signatures)
-2. Submits transactions to TRON blockchain
-3. Monitors transaction confirmation
+## Payment Scheme
 
-**Prerequisites**
+x402 supports two payment schemes: `exact_permit` and `exact`.
 
-1. Access to a TRON node (e.g., TronGrid)
-2. A wallet with TRX for gas/energy fees
-3. The x402-tron facilitator code
+### `exact_permit` Scheme
 
-See the [Facilitator](./facilitator.md) documentation for more details.
+The `exact_permit` scheme transfers tokens via the `PaymentPermit` contract, suitable for:
 
-### Quick Reference
+- **Pay-per-use APIs** (e.g., LLM token generation, image generation services)  
+- **Metered resources** (cloud compute time, storage usage, bandwidth consumption)  
+- **Dynamic pricing services** based on actual usage  
 
-| Component | TRON Support                                     |
-| --------- | ------------------------------------------------ |
-| Networks  | `tron:mainnet`, `tron:shasta`, `tron:nile`       |
-| Tokens    | TRC-20 tokens (USDT & USDD supported by default) |
-| Signing   | TIP-712 structured data signing                  |
-| Schemes   | `exact`                                          |
+### `exact` Scheme
 
-### Adding Custom Tokens
+The `exact` scheme is for tokens that natively support EIP-3009 (`transferWithAuthorization`). It does not require the `PaymentPermit` contract.
 
-Custom TRC-20 tokens can be supported by registering them in the TokenRegistry. See the [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md) for implementation details.
+### How Payment Schemes Work
 
-### Summary
+1. **Authorize**  
+   The client signs a message authorizing a **maximum amount**.
 
-x402-tron's network support is designed specifically for TRON blockchain with native TRC-20 token support and TIP-712 signing. Key takeaways:
+2. **Execute**  
+   The server performs the requested task and calculates the **actual cost**.
 
-- TRON Nile testnet is recommended for development
-- USDT is the primary supported token with pre-configured addresses
-- TIP-712 provides secure, trust-minimizing payment authorization
-- Custom TRC-20 tokens can be added via TokenRegistry
+3. **Settle**  
+   The Facilitator submits the on-chain transaction based on the actual cost.
+
+---
+
+## Deploying a Private Facilitator
+
+You may deploy your own Facilitator node to gain full control over payment verification and settlement.
+
+### Core Responsibilities
+
+1. **Verify** – Validate signatures and payload integrity  
+2. **Submit** – Construct and broadcast the `transferFrom` transaction  
+3. **Monitor** – Track on-chain confirmations to ensure final settlement  
+
+### Deployment Requirements
+
+- **Node Access** – Reliable full-node RPC access (e.g., TronGrid or self-hosted node)  
+- **Gas Funding** – A wallet with sufficient **TRX/BNB** to cover transaction gas fees  
+- **Service Deployment** – Clone and configure the x402 Facilitator service  
+
+> For detailed configuration and API references, see the [Facilitator](./facilitator.md) documentation.
+
+---
+
+## Quick Reference
+
+| Core Component | TRON/BSC Implementation |
+| :------------- | :---------------------- |
+| **Networks**   | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97` |
+| **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20 |
+| **Signing Mechanism** | Typed data signing |
+| **Payment Scheme** | `exact_permit`, `exact` |
+
+---
+
+## Adding Custom Tokens
+
+You can support custom TRC-20/BEP-20 tokens by registering them in the `TokenRegistry`:
+
+```python
+from bankofai.x402.tokens import TokenRegistry, TokenInfo
+
+TokenRegistry.register_token(
+    "tron:nile",
+    TokenInfo(
+        address="<YOUR_TOKEN_CONTRACT_ADDRESS>",
+        decimals=6,
+        name="My Token",
+        symbol="MYT",
+    ),
+)
+```
+
+Once registered, you can use the custom token symbol in `prices` (e.g., `"0.01 MYT"`).
+
+---
+
+## Summary
+
+x402 is deeply tailored for blockchain-native architectures, providing seamless TRC-20/BEP-20 integration and secure signature support.
+
+### Key Takeaways
+
+- **Development Environment**: Use testnets for development and debugging.  
+- **Default Settlement Asset**: **USDT** is the primary default token with preconfigured SDK support.  
+- **Security Model**: Typed data signing ensures secure, trust-minimized payment authorization.  
+- **Extensibility**: Expand support for any custom TRC-20/BEP-20 token via the `TokenRegistry`.  

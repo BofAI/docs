@@ -1,85 +1,139 @@
+# Wallet
+
+In the x402 protocol, a wallet is more than just a container for funds — it serves as the **core identity** for both buyers (clients) and sellers (servers) in a decentralized network.
+
+Wallet addresses are used to send, receive, and verify payments. They function as the unique credential for protocol interactions, eliminating the need for traditional account-password systems.
+
 ---
-title: 'Wallet'
-description: 'This page explains the role of the **wallet** in the x402-tron protocol.'
+
+## Role of the Wallet
+
+### For Buyers
+
+Buyers use their wallet as the primary interaction anchor, responsible for:
+
+- **Asset Custody**: Securely storing USDT or other TRC-20/BEP-20 tokens.
+- **Signature Authorization**: Cryptographically signing payment payloads using their private key.
+- **Programmatic Payments**: Authorizing on-chain fund transfers via code (especially suitable for autonomous AI agents).
+- **Allowance Management**: Managing token allowances granted to the Facilitator contract.
+
+> **Stateless Authentication**: With wallet-based identity, buyers can initiate transactions without account registration, API keys, or login sessions.
+
 ---
 
-In x402-tron, a TRON wallet is both a payment mechanism and a form of unique identity for buyers and sellers. Wallet addresses are used to send, receive, and verify payments, while also serving as identifiers within the protocol.
+### For Sellers
 
-### Role of the Wallet
+Sellers use wallets as payment receiving endpoints:
 
-#### For Buyers
+- **Receiving Funds**: Acting as the final settlement address for USDT/TRC-20/BEP-20 payments.
+- **Configuration Target**: Explicitly defining the receiving wallet address in server configuration.
 
-Buyers use TRON wallets to:
+The seller’s wallet address is included directly in the `HTTP 402` Payment Requirements, ensuring transparent fund routing.
 
-- Store USDT/TRC-20 tokens
-- Sign TIP-712 payment payloads
-- Authorize onchain payments programmatically
-- Manage token allowances for facilitators
+---
 
-Wallets enable buyers, including AI agents, to transact without account creation or credential management.
+## TRON Address Format
 
-#### For Sellers
+TRON uses **Base58**-encoded addresses that always start with the letter `T`.
 
-Sellers use TRON wallets to:
+- Example: `TXxx...xxxX` (Base58, starting with `T`)
 
-- Receive USDT/TRC-20 payments
-- Define their payment destination within server configurations
+---
 
-A seller's TRON wallet address is included in the payment requirements provided to buyers.
+## BSC Address Format
 
-### TRON Wallet Addresses
+BSC uses **hexadecimal (0x-prefixed)** addresses, fully compatible with Ethereum.
 
-TRON uses base58-encoded addresses that start with 'T'. For example:
+- Example: `0x55d3...97955` (Hex, starting with `0x`)
 
-- Example: `TXxx...xxxX` (Base58 encoded, starts with `T`)
+---
 
-### TIP-712 Signing
+## Payment Signatures
 
-x402-tron uses TIP-712 (TRON's implementation of EIP-712) for structured data signing. This provides:
+x402 uses typed data signing for secure payment authorization.
 
-- **Human-readable signing**: Users can see what they're authorizing
-- **Domain separation**: Signatures are bound to specific contracts/domains
-- **Replay protection**: Signatures include nonces and expiration
+### Core Advantages
 
-The signing flow:
+- **What You See Is What You Sign (Human-readable)**  
+  Users can clearly review authorization details before signing, rather than approving opaque hash data.
 
-1. Client receives payment requirements from server
-2. Client constructs a TIP-712 typed data structure
-3. Client signs the data with their private key
-4. Signature is included in the `PAYMENT-SIGNATURE` header
+- **Domain Separation**  
+  Signatures are strictly bound to a specific contract and domain, preventing cross-application or cross-network misuse.
 
-### Token Allowances
+- **Replay Protection**  
+  Embedded `nonce` values and expiration timestamps prevent malicious replay attacks.
 
-For the `exact` payment scheme, clients must approve the PaymentPermit contract to transfer tokens from their wallet for payment settlement. This is done via the standard TRC-20 `approve` function.
+---
 
-The x402-tron client SDK handles this automatically.
+### Signature Flow
 
-### Network-Specific Endpoints
+1. The client receives the payment requirement from the server.
+2. The client constructs a compliant TypedData structure.
+3. The client signs the data using their private key.
+4. The generated signature is sent in the `PAYMENT-SIGNATURE` request header.
 
-TRON full nodes / API endpoints for each network:
+---
 
-| Network          | Endpoint                         |
-| ---------------- | -------------------------------- |
-| Mainnet          | `https://api.trongrid.io`        |
-| Nile (Testnet)   | `https://nile.trongrid.io`       |
-| Shasta (Testnet) | `https://api.shasta.trongrid.io` |
+## Token Approval
 
-### Security Best Practices
+For the `exact_permit` payment scheme, the client must authorize the `PaymentPermit` contract to transfer tokens from their wallet for settlement.  
 
-- **Never expose private keys**: Use environment variables for key storage
-- **Use testnet for development**: Test on Nile or Shasta before mainnet
-- **Limit allowances**: Only approve the amount needed for payments
-- **Monitor transactions**: Track payments and allowances on TronScan
+This is completed via the standard TRC-20/BEP-20 `approve` function.
 
-### Summary
+The x402 client SDK automatically handles this process.
 
-- TRON wallets enable programmatic, permissionless payments in x402-tron.
-- Buyers use wallets to pay for services via TIP-712 signed authorizations.
-- Sellers use wallets to receive payments.
-- Wallet addresses also act as unique identifiers within the protocol.
-- The SDK handles token allowances automatically.
+---
 
-Next, explore:
+## Network RPC Endpoints
 
-- [Network and Token Support](./network-and-token-support.md) — supported networks and tokens
-- [SDK Features](../sdk-features.md) — explore the full capabilities of x402-tron SDKs
+### TRON RPC Endpoints
+
+| Network | RPC Endpoint |
+| :------- | :------------ |
+| **Mainnet** | `https://api.trongrid.io` |
+| **Nile (Testnet)** | `https://nile.trongrid.io` |
+| **Shasta (Testnet)** | `https://api.shasta.trongrid.io` |
+
+---
+
+### BSC RPC Endpoints
+
+| Network | RPC Endpoint |
+| :------- | :------------ |
+| **Mainnet** | `https://bsc-dataseed.binance.org` |
+| **Testnet** | `https://data-seed-prebsc-1-s1.binance.org:8545` |
+
+---
+
+## Security Best Practices
+
+- **Never Expose Private Keys**  
+  Do not hardcode private keys in source code. Store them securely using environment variables.
+
+- **Use Testnets First**  
+  Always complete development and validation on testnet before deploying to mainnet.
+
+- **Approve Minimum Required Amounts**  
+  Follow the principle of least privilege by approving only the necessary token amount.
+
+- **Monitor Transactions in Real Time**  
+  Use TronScan/BscScan to track payment status and allowance records for enhanced security.
+
+---
+
+## Summary
+
+- **Core Foundation**: Wallets enable programmatic, permissionless payments in x402.
+- **Buyer Action**: Buyers generate signatures to authorize and pay for services.
+- **Seller Reception**: Sellers receive funds directly via wallet addresses.
+- **Identity Layer**: Wallet addresses serve as the unique identity within protocol interactions.
+- **Automation Support**: The SDK automatically manages token approval logic, simplifying development.
+
+---
+
+## Next Steps
+
+Continue exploring:
+
+- [Network and Token Support](./network-and-token-support.md) — View supported networks and token lists  
+- [SDK Features](../sdk-features.md) — Explore the full capabilities of the x402 SDK  

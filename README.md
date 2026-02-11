@@ -1,55 +1,97 @@
-# x402-tron Documentation
+# 🚀 Bank of AI  
 
-Documentation for [x402-tron](https://github.com/open-aibank/x402-tron) - TRON implementation of the x402 open payment standard.
+**Building a Decentralized Financial Sovereignty and Commercial Interconnection Layer for AI Agents**
 
-## Prerequisites
+[![Standard](https://img.shields.io/badge/Protocol-bankofai-blue.svg)](https://github.com/bankofai)
 
-- Node.js >= 18.x
-- Yarn >= 1.22
-- Docker (for containerized deployment)
+Bank of AI is designed to empower AI Agents with **financial sovereignty, identity authentication, skill extensibility, and automated payment capabilities**. Through standardized protocols, we enable AI to autonomously earn income, pay for resources, and build credit on the blockchain—just like humans.
 
-## Quick Start
+Currently supports **TRON** and **BSC**, with more blockchain networks coming in the future.
 
-```bash
-# Install dependencies
-yarn install
+---
 
-# Start development server
-yarn start
-```
+## 🏛️ Core Components
 
-## Deployment
+### 1. 💳 x402 Protocol: A Programmatic Payment Standard
 
-### Docker Deployment
+x402 is an open blockchain payment protocol based on the HTTP `402 Payment Required` status code. It removes payment friction in M2M (machine-to-machine) interactions for AI agents.
 
-#### Build Docker Image
+- **Payment-as-Response**: Enables a “pay-before-response” mechanism without complex account registration or session management.  
+- **Multi-Chain Support**: Currently supports **TRON** (Mainnet/Shasta/Nile) and **BSC** (Mainnet/Testnet).  
+- **AI-Friendly**: Supports signed payloads, allowing agents to complete settlements automatically.  
+- **Use Cases**: Pay-per-request APIs, paywalls, and automated settlement between agents.
 
-```bash
-# Using the provided script
-./start_docker.sh
+---
 
-# Or manually
-docker build --build-arg APP_ENV=prod -t x402-tron-docs .
-```
+### 2. 🆔 8004 Protocol: Identity & Reputation Framework
 
-#### Run Docker Container
+The 8004 Protocol uses the blockchain as a decentralized public registry, forming the foundation of trust for AI agents.
 
-```bash
-# Run on port 8080
-docker run --name x402-tron-docs-container -p 8080:80 x402-tron-docs
+- **Identity Registry**: Mints identity as TRC-721/ERC-721 NFTs, mapping on-chain `agentId` to metadata with transferable and secure ownership.  
+- **Reputation System**: Provides a neutral public storage standard for multi-dimensional feedback, with ranking determined at the application layer.  
+- **Consensus Validation**: Integrates **TEE proofs**, **crypto-economic staking**, and **zkML** to enable verifiable agent behavior.
 
-# Run in detached mode
-docker run -d --name x402-tron-docs-container -p 8080:80 x402-tron-docs
+---
 
-# With custom port
-docker run -d --name x402-tron-docs-container -p 3000:80 x402-tron-docs
-```
+### 3. 🛠️ MCP Server & Skills: The “Hands and Brain” of Agents
 
-### GitHub Pages Deployment
+Built on the Model Context Protocol (MCP) architecture, providing full on-chain execution capabilities for agents.
 
-Push to `main` branch will automatically deploy to GitHub Pages via GitHub Actions.
+- **Infrastructure Layer (MCP Server)**: The agent’s **“hands and eyes.”** Provides a unified interface to read blocks, manage wallets, execute transfers, and interact with any contract.  
+- **Application Logic Layer (Skills)**: The agent’s **“brain.”** Uses structured instructions (`SKILL.md`) to guide AI in orchestrating underlying tools.  
+  - **SunSwap Skill**: Enables automated DEX swaps.  
+  - **x402_payment**: Allows agents to detect payment requirements and execute payments automatically.
 
-## Links
+---
 
-- [x402-tron GitHub](https://github.com/open-aibank/x402-tron)
-- [x402-tron Demo](https://github.com/open-aibank/x402-tron-demo)
+### 4. 🧩 OpenClaw Extension: Financial Assistant for AI Agents
+
+OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, aiming to become the “central bank” of the agent economy.
+
+- **Wallet Ownership**: Enables agents to truly control and manage on-chain assets.  
+- **Autonomous Spending**: Agents can independently pay for computation, storage, and data resources.  
+- **Seamless Integration**: Built-in MCP server and automatic skill installer for plug-and-play setup.
+
+---
+
+## 📊 Why Choose Bank of AI?
+
+| Feature | Traditional AI Agents | **Bank of AI–Empowered Agents** |
+| :--- | :--- | :--- |
+| **Payment System** | Credit card / centralized API keys | **x402 native on-chain instant settlement** |
+| **Identity System** | Centralized email/phone registration | **ERC-8004 on-chain identity (NFT)** |
+| **Financial Capability** | Limited, requires human pre-authorization | **Autonomous DeFi interaction (Swap/Lending)** |
+| **Interaction Model** | Primarily human–machine | **A2A (Agent-to-Agent) direct settlement** |
+| **Trust Mechanism** | Vendor-backed (black box) | **Public reputation & cryptographic verification (transparent)** |
+
+---
+
+## 🚦 Quick Start
+
+### 🚀 For Sellers  
+*Want to monetize your API, content, or services?*
+
+1. **Integrate x402**: Deploy server-side logic to detect payment requirements and return a `402` status code with payment instructions.  
+2. **Register Identity**: Mint your on-chain identity following the `ERC-8004` specification.  
+3. **Publish Skills**: Write a `SKILL.md` for your service so other AI agents can understand how to interact with it.
+
+---
+
+### 🤖 For Agents/Buyers  
+*Want your agent to have autonomous payment and on-chain interaction capabilities?*
+
+1. **Install OpenClaw**: Configure your environment and connect to the [mcp-server](https://github.com/bankofai/mcp-server).  
+2. **Sync Skills**: Load `sunswap` or `x402_payment` from the [skills](https://github.com/bankofai/skills) repository.  
+3. **Start Transacting**: Your agent can now automatically process payment requests from sellers and execute settlements.
+
+---
+
+## 🏗️ Developer Resources
+
+- **Documentation Center**: [docs.bankofai.io](https://github.com/bankofai/x402-docs)  
+- **Live Demo**: [x402-demo Repository](https://github.com/bankofai/x402-demo)  
+- **Technical Support**: Submit issues or join discussions on GitHub.
+
+---
+
+**Bank of AI** — *Empowering AI Agents with Financial Sovereignty.*

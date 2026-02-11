@@ -1,76 +1,84 @@
+# Client and Server
+
+Understanding these roles in depth is essential when designing, building, or integrating x402-based programmable payment services on-chain.
+
+> **Note**
+>
+> - **Client**: The technical component that initiates an HTTP request. In real-world business scenarios, this typically represents the **buyer** of a resource.
+> - **Server**: The technical component that responds to requests. In real-world business scenarios, this typically represents the **seller** of a resource.
+
 ---
-title: 'Client / Server'
-description: 'This page explains the roles and responsibilities of the **client** and **server** in the x402-tron protocol.'
+
+## Client Role
+
+The client is the entity that initiates requests to access paid resources.
+
+Clients can take many forms, including:
+
+- User-facing applications  
+- Autonomous agents  
+- Backend services acting on behalf of users or systems  
+
+### Core Responsibilities
+
+- **Initiate Requests**: Send the initial HTTP request to the resource server.  
+- **Handle Payment Requirements**: Parse the `402 Payment Required` response and extract payment details.  
+- **Manage Token Approvals**: Approve the `PaymentPermit` contract to transfer tokens from the client’s wallet for settlement.  
+- **Prepare Payment Payload**: Construct and sign a payment payload according to server requirements.  
+- **Retry with Payment**: Attach the `PAYMENT-SIGNATURE` header and resend the request.  
+
+The client **does not** need to maintain any account system, login credentials, or session tokens beyond its wallet. All interactions are **stateless** and fully based on standard HTTP protocols.
+
 ---
 
-Understanding these roles is essential to designing, building, or integrating services that use x402-tron for programmatic payments on TRON blockchain.
+## Server Role
 
-**Note**
+The server is the provider that requires payment before granting access to its resources.
 
-Client refers to the technical component making an HTTP request. In practice, this is often the _buyer_ of the resource.
+Servers may include:
 
-Server refers to the technical component responding to the request. In practice, this is typically the _seller_ of the resource.
+- API services  
+- Digital content providers  
+- Any HTTP-accessible resource seeking monetization  
 
-### Client Role
+### Core Responsibilities
 
-The client is the entity that initiates a request to access a paid resource.
+- **Define Payment Requirements**: Respond with HTTP `402 Payment Required` when a request lacks valid payment credentials, detailing payment requirements in the response body.  
+- **Validate Payment Payload**: Call the Facilitator service to verify the incoming signed payload.  
+- **Settle Transactions**: Upon successful validation, submit the transaction via the Facilitator to complete on-chain settlement.  
+- **Deliver Resources**: After confirming payment, return the requested resource to the client.  
 
-Clients can include:
+The server **does not** need to manage client identity or maintain session state. Validation and settlement are handled independently for each request through the Facilitator.
 
-- Human-operated applications
-- Autonomous agents
-- Programmatic services acting on behalf of users or systems
+---
 
-#### Responsibilities
+## Communication Flow
 
-- **Initiate requests:** Send an HTTP request to the resource server.
-- **Handle payment requirements:** Read the `402 Payment Required` response and extract payment details.
-- **Manage token allowances:** Approve the PaymentPermit contract to transfer tokens from the client's wallet for payment settlement.
-- **Prepare payment payload:** Use the provided payment requirements to construct a TIP-712 signed payment payload.
-- **Resubmit request with payment:** Retry the request with the `PAYMENT-SIGNATURE` header containing the signed payment payload.
+In the x402 protocol, a typical interaction between client and server proceeds as follows:
 
-Clients do not need to manage accounts, credentials, or session tokens beyond their TRON wallet. All interactions are stateless and occur over standard HTTP requests.
+1. **Client Initiates Request**: Sends a request for a paid resource to the server.  
+2. **Server Requires Payment**: Responds with `402 Payment Required`, including payment details in the `PAYMENT-REQUIRED` header (Base64-encoded).  
+3. **Client Submits Payment**: Generates a signature and resends the request with the signed payload in the `PAYMENT-SIGNATURE` header (Base64-encoded).  
+4. **Server Validates Payment**: Calls the Facilitator service to verify the received payment payload.  
+5. **Server Executes Settlement**: Submits the transaction to the blockchain via the Facilitator.  
+6. **Server Delivers Resource**: Returns the requested resource and includes settlement confirmation (with transaction hash) in the `PAYMENT-RESPONSE` header.  
 
-### Server Role
+---
 
-The server is the resource provider enforcing payment for access to its services.
+## Summary
 
-Servers can include:
+Within the x402 protocol architecture:
 
-- API services
-- Content providers
-- Any HTTP-accessible resource requiring monetization
+- **Client**: Initiates resource requests and provides a signed payment payload.  
+- **Server**: Enforces payment policy, verifies transaction validity, and delivers resources upon successful payment confirmation.  
 
-#### Responsibilities
+This interaction model is fully based on native HTTP, maintains a **stateless** architecture, and is compatible with both user-facing applications and autonomous agents.
 
-- **Define payment requirements:** Respond to unauthenticated requests with an HTTP `402 Payment Required`, including all necessary payment details in the response body.
-- **Verify payment payloads:** Validate incoming TIP-712 signed payment payloads using a facilitator service.
-- **Settle transactions:** Upon successful verification, submit the payment for settlement via the facilitator.
-- **Provide the resource:** Once payment is confirmed, return the requested resource to the client.
+---
 
-Servers do not need to manage client identities or maintain session state. Verification and settlement are handled per request through the facilitator.
+## Next Steps
 
-### Communication Flow
+Continue exploring:
 
-The typical flow between a client and a server in the x402-tron protocol is as follows:
-
-1. **Client initiates request** to the server for a paid resource.
-2. **Server responds with `402 Payment Required`**, including the payment requirements in the `PAYMENT-REQUIRED` header (Base64-encoded).
-3. **Client prepares and submits a payment payload** based on the provided requirements, signing with TIP-712 and including it in the `PAYMENT-SIGNATURE` header (Base64-encoded).
-4. **Server verifies the payment payload** through the facilitator service.
-5. **Server settles the payment** via the facilitator which submits the transaction to TRON blockchain.
-6. **Server responds with the requested resource**, including a `PAYMENT-RESPONSE` header (Base64-encoded) with settlement confirmation including the TRON transaction hash.
-
-### Summary
-
-In the x402-tron protocol:
-
-- The **client** requests resources and supplies the TIP-712 signed payment payload.
-- The **server** enforces payment requirements, verifies transactions, and provides the resource upon successful payment.
-
-This interaction is stateless, HTTP-native, and compatible with both human applications and automated agents.
-
-Next, explore:
-
-- [Facilitator](./facilitator.md) — how servers verify and settle payments
-- [Wallet](./wallet.md) — how to manage TRON wallets for payments
+- [Facilitator](./facilitator.md) — Learn how servers validate and settle payments  
+- [Wallet](./wallet.md) — Learn how to manage wallets used for payments  

@@ -1,92 +1,95 @@
----
-title: 'Facilitator'
-description: 'This page explains the role of the **facilitator** in the x402-tron protocol.'
----
+# Facilitator
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-The facilitator is an optional but recommended service that simplifies the process of verifying and settling payments between clients (buyers) and servers (sellers) on TRON blockchain.
+The Facilitator is an **optional but highly recommended** service designed to simplify payment verification and settlement between clients (buyers) and servers (sellers) on blockchain networks.
 
-### What is a Facilitator?
+## What is a Facilitator?
 
-The facilitator is a service that:
+A Facilitator is a middleware service primarily responsible for:
 
-- Verifies payment payloads (TIP-712 signatures) submitted by clients.
-- Settles payments on the TRON blockchain on behalf of servers.
-- Executes token transfers by calling the `permitTransferFrom` method of the PaymentPermit contract.
+- **Payload Verification**: Validating the payment payload submitted by the client.
+- **Settlement Execution**: Submitting transactions to the blockchain on behalf of the server to complete settlement.
+- **Token Transfer**: Executing token transfers by calling the `permitTransferFrom` method of the `PaymentPermit` contract.
 
-By using a facilitator, servers do not need to maintain direct TRON blockchain connectivity or implement payment verification logic themselves. This reduces operational complexity and ensures accurate, real-time validation of transactions.
+By introducing a Facilitator, servers no longer need to maintain direct connections to blockchain nodes or implement complex signature verification logic themselves. This reduces operational complexity while ensuring accurate and real-time transaction validation.
 
-### Facilitator Responsibilities
+## Responsibilities of the Facilitator
 
-- **Verify payments:** Confirm that the client's TIP-712 signed payment payload meets the server's declared payment requirements.
-- **Settle payments:** Submit validated payments to the TRON blockchain and monitor for confirmation.
-- **Fee management:** Optionally charge a fee for facilitating payments.
-- **Provide responses:** Return verification and settlement results to the server, allowing the server to decide whether to fulfill the client's request.
+- **Payment Verification**: Ensures that the signed payload strictly complies with the server's declared payment requirements.
+- **Payment Settlement**: Submits validated transactions to the blockchain and monitors their confirmation status.
+- **Fee Management**: Supports configurable service fees (optional) for facilitating payments.
+- **Result Feedback**: Returns verification and settlement results to the server, enabling it to decide whether to deliver the requested resource.
 
-The facilitator does not hold funds or act as a custodian - it performs verification and execution of onchain transactions based on signed payloads provided by clients.
+> **Note**: The Facilitator **does not custody funds** and does not act as an escrow. It only executes verification and on-chain operations according to the client’s signed authorization.
 
-### Why Use a Facilitator?
+## Why Use a Facilitator?
 
-Using a facilitator provides:
+Integrating a Facilitator provides significant advantages:
 
-- **Reduced operational complexity:** Servers do not need to interact directly with TRON nodes.
-- **Protocol consistency:** Standardized verification and settlement flows across services.
-- **Faster integration:** Services can start accepting payments with minimal TRON-specific development.
-- **Energy/Bandwidth management:** Facilitator handles TRX costs for transaction execution.
+- **Reduced Operational Overhead**: Servers do not need to directly manage blockchain nodes or RPC infrastructure.
+- **Protocol Standardization**: Ensures consistent payment verification and settlement processes across services.
+- **Fast Integration**: Servers can begin accepting payments with minimal blockchain development effort.
+- **Resource Fee Management**: The Facilitator covers transaction execution costs such as TRX (Energy and Bandwidth) / BNB, reducing the operational burden on the server.
 
-While it is possible to implement verification and settlement locally, using a facilitator accelerates adoption and ensures correct protocol behavior.
+Although developers may implement verification and settlement logic locally, using a Facilitator significantly accelerates development and ensures protocol-compliant implementation.
 
 ### Facilitator Options
 
-To use x402-tron, you need access to a facilitator service. You have two options:
+To use x402, you need access to a Facilitator service. There are currently two options:
 
-1. **Run Your Own Facilitator (Self-Hosted):** You can deploy and manage your own facilitator instance. This gives you full control over fees and energy management.
-2. **Use Official Facilitator (Coming Soon):** We are working on a hosted, official facilitator service that you can use without managing infrastructure. Stay tuned for updates!
+1. **Run Your Own Facilitator (Self-Hosted):**  
+   Deploy and manage your own Facilitator instance for full control over fee policies and energy management strategies.
 
-### Facilitator Endpoints
+2. **Use the Official Facilitator (Coming Soon):**  
+   An officially hosted Facilitator service is under development. This option will allow you to use the service without maintaining infrastructure. Stay tuned for updates!
 
-A facilitator exposes the following API endpoints:
+### Facilitator API Endpoints
 
-| Endpoint     | Method | Description                 |
-| ------------ | ------ | --------------------------- |
-| `/supported` | GET    | Supported capabilities      |
-| `/fee/quote` | POST   | Get fee quote for a payment |
-| `/verify`    | POST   | Verify a payment payload    |
-| `/settle`    | POST   | Settle payment on-chain     |
+The Facilitator provides the following API endpoints:
 
-For implementation details, see [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md).
+| Endpoint      | Method | Description                         |
+| :------------ | :----- | :---------------------------------- |
+| `/`           | GET    | Retrieve basic service information  |
+| `/supported`  | GET    | Query supported feature configuration |
+| `/fee/quote`  | POST   | Get estimated fee quote             |
+| `/verify`     | POST   | Verify payment payload validity     |
+| `/settle`     | POST   | Execute on-chain settlement         |
 
-### Fee Structure
+For implementation details, please refer to the [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md).
 
-Facilitators can charge fees for their services:
+## Fee Structure
 
-- **Base fee**: Fixed fee per transaction (e.g., 1 USDT)
-- **Percentage fee**: Percentage of transaction amount
-- **No fee**: Some facilitators operate without fees
+The Facilitator supports flexible service fee configurations:
 
-The fee is specified in the `/fee/quote` response and included in the payment requirements sent to clients.
+- **Base Fee**: A fixed service fee per transaction (e.g., `1 USDT`).
+- **Percentage Fee**: A percentage-based fee calculated from the transaction amount.
+- **No Fee Mode**: Supports zero-fee operation.
 
-### Trust Model
+Detailed fee information is returned via the `/fee/quote` endpoint and included in the Payment Requirements sent from the server to the client.
 
-The x402-tron protocol is designed to be trust-minimizing:
+## Trust Model
 
-- **Client signs the authorization**: The facilitator can only transfer up to the authorized amount.
-- **Payment goes directly to seller**: Funds are transferred from client to seller (and optionally fee to facilitator).
-- **On-chain verification**: All transactions are verifiable on TRON blockchain.
+The x402 protocol is designed around **minimal trust assumptions**:
 
-A malicious facilitator cannot:
+- **Signature-Based Authorization**: The Facilitator can only transfer funds within the scope explicitly authorized by the client’s signature.
+- **Direct Fund Flow**: Funds move directly from the client to the seller (and partially to the Facilitator if fees apply), without passing through a pooled account.
+- **On-Chain Transparency**: All transactions are publicly verifiable on-chain.
 
-- Transfer more than the client authorized
-- Transfer to a different recipient than specified
-- Modify the signed payment terms
+Even a **malicious Facilitator** cannot:
 
-### Summary
+- Transfer funds beyond the client’s authorized limit.
+- Redirect funds to an address not specified in the signed payload.
+- Modify any signed payment terms.
 
-The facilitator acts as an independent verification and settlement layer within the x402-tron protocol on TRON blockchain. It helps servers confirm payments and submit transactions without requiring direct TRON infrastructure.
+## Summary
 
-Next, explore:
+Within the x402 protocol architecture, the **Facilitator** serves as an independent on-chain verification and settlement layer. It enables servers to securely confirm payments and complete blockchain settlements without deploying a full blockchain infrastructure.
 
-- [Wallet](./wallet.md) — how to manage TRON wallets for payments
-- [Network and Token Support](./network-and-token-support.md) — supported networks and tokens
+## Next Steps
+
+We recommend exploring:
+
+- [Wallet](./wallet.md) — Learn how to manage wallets used for payments  
+- [Network and Token Support](./network-and-token-support.md) — Learn about supported networks and tokens  

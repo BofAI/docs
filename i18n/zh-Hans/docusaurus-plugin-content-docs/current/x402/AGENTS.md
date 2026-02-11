@@ -1,8 +1,11 @@
-# x402-tron 文档维护指引
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# x402 文档维护指引
 
 ## 1. 项目定位与核心
 
-- 本仓库包含 x402-tron 项目基于 Docusaurus 构建的文档源代码。
+- 本仓库包含 x402 项目基于 Docusaurus 构建的文档源代码。
 - 主要由 MDX / Markdown 文件构成，并通过 `sidebars.js` 进行侧边栏导航配置。
 
 ## 2. 目录结构说明
@@ -48,13 +51,31 @@
 - **禁止**：严禁添加了新页面文件却遗漏更新 `sidebars.js`（会导致死链或无法导航）。
 - **Git 规范**：所有变更必须通过 Pull Request (PR) 提交并经过评审；**严禁**直接推送到 `main` 分支。
 
-## 6. TRON 平台规范 
+## 6. 平台规范 
+
+
+
+<Tabs>
+  <TabItem value="TRON" label="TRON">
 
 - **网络标识**：必须遵循 `tron:<network>` 格式（支持 `mainnet`, `nile`, `shasta`）。
 - **签名标准**：TRON 签名必须引用 **TIP-712** 标准（请勿混淆为 EIP-712）。
 - **地址格式**：Token 地址必须使用 Base58 编码格式（即以 `T` 开头的地址）。
 - **节点接入**：节点访问需指向 TronGrid 端点。
 - **测试示例**：Nile 测试网 USDT 地址为 `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf`。
+
+</TabItem>
+    <TabItem value="BSC" label="BSC">
+
+- **网络标识**：必须遵循 `eip<id>:<id>` 格式。
+- **签名标准**：BSC 签名完全兼容以太坊 **EIP-712** 标准（无需特殊适配，直接使用通用 EVM 签名库）。
+- **地址格式**：Token 地址必须使用十六进制（Hex）编码格式（即以 `0x` 开头的地址）。
+- **节点接入**：节点访问需指向兼容 EVM 的 JSON-RPC 端点。
+- **测试示例**：BSC Testnet 模拟 USDT 地址为 `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd`。
+
+</TabItem>
+</Tabs>
+
 
 ## 7. 关键文件与触点 
 
