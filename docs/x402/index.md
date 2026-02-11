@@ -12,7 +12,7 @@ x402 is an open blockchain payment standard built on the HTTP `402 Payment Requi
 x402 currently supports the TRON and BSC networks, with plans to expand to a broader multi-chain ecosystem in the future.
 
 **Interested in contributing to the documentation?**  
-Feel free to submit a PR to the [GitHub repository](https://github.com/bankofai/x402-docs). Our only principle is to maintain neutrality — aside from essential resource links, please avoid promotional or branded content.
+Feel free to submit a PR to the [GitHub repository](https://github.com/bankofai/docs). Our only principle is to maintain neutrality — aside from essential resource links, please avoid promotional or branded content.
 
 **Looking for runnable examples?**  
 Visit the [x402-demo repository](https://github.com/bankofai/x402-demo) for a complete, production-ready sample project.
@@ -89,4 +89,4 @@ Ready to build? Start here:
 
 - [Quickstart for Sellers](./getting-started/quickstart-for-sellers)
 - [Quickstart for Agents](./getting-started/quickstart-for-agent)
-- [Explore Core Concepts](./core-concepts/http-402)
+- [Http 402](./core-concepts/http-402)

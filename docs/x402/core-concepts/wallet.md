@@ -135,5 +135,5 @@ The x402 client SDK automatically handles this process.
 
 Continue exploring:
 
-- [Network & Token Support](./network-and-token-support.md) — View supported networks and token lists  
+- [Network and Token Support](./network-and-token-support.md) — View supported networks and token lists  
 - [SDK Features](../sdk-features.md) — Explore the full capabilities of the x402 SDK  
