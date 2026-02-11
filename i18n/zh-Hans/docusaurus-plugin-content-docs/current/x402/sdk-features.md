@@ -40,7 +40,9 @@
 | 签名器 | Python | TypeScript |
 |--------|--------|------------|
 | TronClientSigner | ✅ | ✅ |
+| EvmClientSigner | ✅ | ✅ |
 | TronFacilitatorSigner | ✅ | ⏳ |
+| EvmFacilitatorSigner | ✅ | ⏳ |
 
 ## 客户端功能 
 
