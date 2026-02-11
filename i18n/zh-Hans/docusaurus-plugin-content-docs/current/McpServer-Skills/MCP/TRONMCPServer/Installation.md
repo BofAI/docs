@@ -8,8 +8,8 @@
 
 ```shell
 # 克隆仓库
-git clone https://github.com/bankofai/mcp-server-tron.git
-cd mcp-server-tron
+git clone https://github.com/bankofai/mcp-server.git
+cd mcp-server
 
 # 安装依赖
 npm install

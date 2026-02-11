@@ -100,7 +100,21 @@ const sidebars = {
               type: 'category',
               label: 'MCP',
               collapsed: true,
-              items: ['McpServer-Skills/MCP/Intro', 'McpServer-Skills/MCP/Features', 'McpServer-Skills/MCP/Installation','McpServer-Skills/MCP/Configuration','McpServer-Skills/MCP/API'],
+              items: [
+              {
+                type: 'category',
+                label: 'TRON MCP Server',
+                collapsed: true,
+                items: ['McpServer-Skills/MCP/TRONMCPServer/Intro', 'McpServer-Skills/MCP/TRONMCPServer/Features','McpServer-Skills/MCP/TRONMCPServer/Installation','McpServer-Skills/MCP/TRONMCPServer/Configuration',,'McpServer-Skills/MCP/TRONMCPServer/API'],
+               },
+                {
+                  type: 'category',
+                  label: 'BSCMCPServer',
+                  collapsed: true,
+                  items: ['McpServer-Skills/MCP/BSCMCPServer/Intro', 'McpServer-Skills/MCP/BSCMCPServer/Features', 'McpServer-Skills/MCP/BSCMCPServer/Installation'],
+                },
+                
+              ],
             },
              {
               type: 'category',

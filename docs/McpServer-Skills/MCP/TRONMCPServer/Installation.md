@@ -2,7 +2,7 @@
 ## 先决条件
 
 *   [Node.js](https://nodejs.org/) 20.0.0 或更高版本。
-*   可选：在 TRON 链上，[TronGrid API 密钥](https://www.trongrid.io/) 以避免主网上的速率限制。
+*   可选：[TronGrid API 密钥](https://www.trongrid.io/) 以避免主网上的速率限制。
 
 ## 执行安装
 

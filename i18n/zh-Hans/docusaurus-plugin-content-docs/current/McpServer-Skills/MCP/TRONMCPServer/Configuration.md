@@ -1,9 +1,5 @@
 # 配置
 
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 ### 环境变量
 
 **重要安全提示**：为了您的安全，**切勿**将您的私钥或助记词直接保存在 MCP 配置文件（如 `claude_desktop_config.json` 或 `mcp.json`）中。相反，请将它们设置为您操作系统或 shell 配置中的环境变量。
@@ -12,9 +8,6 @@ import TabItem from '@theme/TabItem';
 
 #### 网络配置
 
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
 *   `TRONGRID_API_KEY`：(可选) 您的 TronGrid API 密钥。
     *   **原因**：TRON 主网 RPC 具有严格的速率限制。使用 [TronGrid](https://www.trongrid.io/) 的 API 密钥可确保可靠的性能和更高的吞吐量。
     *   **用法**：
@@ -22,24 +15,9 @@ import TabItem from '@theme/TabItem';
         ```shell
         export TRONGRID_API_KEY="<YOUR_TRONGRID_API_KEY_HERE>"
         ```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```json
-
-```
-</TabItem>
-</Tabs>
-
-
-
         
 
 #### 钱包配置（使用环境变量）
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
 
 **选项 1：私钥**
 
@@ -55,19 +33,6 @@ export TRON_PRIVATE_KEY="<YOUR_PRIVATE_KEY_HERE>"
 export TRON_MNEMONIC="<WORD1> <WORD2> ... <WORD12>"
 export TRON_ACCOUNT_INDEX="0" # 可选，默认值：0
 ```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```json
-
-```
-</TabItem>
-</Tabs>
-
-
-
-
 
 ### 服务器配置
 
@@ -117,9 +82,6 @@ npx vitest tests/core/services/services.test.ts # 服务集成
 
 选择以下方法之一将其添加到您的 `mcpServers` 对象中。
 
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
 **选项 A：快速开始（推荐）** 直接从 npm 运行最新版本。
 
 ```json
@@ -153,17 +115,5 @@ npx vitest tests/core/services/services.test.ts # 服务集成
   }
 }
 ```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```json
-
-```
-</TabItem>
-</Tabs>
-
-
-
 
 **重要提示**：如果您已在系统环境中设置了这些变量，我们建议省略 `env` 部分。如果您的 MCP 客户端不继承系统变量，请使用占位符或确保配置文件未共享或提交到版本控制。
