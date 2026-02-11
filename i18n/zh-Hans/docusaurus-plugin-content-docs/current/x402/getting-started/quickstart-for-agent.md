@@ -34,7 +34,7 @@ export BSC_PRIVATE_KEY="your_private_key_here"
 
 ## 安装
 
-将 [x402_payment](https://github.com/bankofai/skills/tree/main/x402_tron_payment) 技能添加到您的智能体 (Agent) 工具库中：
+将 [x402-payment](https://github.com/bankofai/skills/tree/main/x402-payment) 技能添加到您的智能体 (Agent) 工具库中：
 
 | 工具平台     | 安装方法                                   |
 | ------------ | ------------------------------------------ |
@@ -60,5 +60,5 @@ export BSC_PRIVATE_KEY="your_private_key_here"
 ## 参考资料
 
 - [OpenClaw 扩展库](https://github.com/bankofai/openclaw-extension)
-- [ClawHub 上的 x402-payment](https://github.com/bankofai/skills/tree/main/x402_tron_payment)
+- [ClawHub 上的 x402-payment](https://github.com/bankofai/skills/tree/main/x402-payment)
 - [x402 演示项目](https://github.com/bankofai/x402-demo)
