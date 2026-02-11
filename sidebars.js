@@ -49,35 +49,35 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'ERC-8004 协议',
+      label: 'ERC-8004 Protocol',
       collapsed: false,
       items: [
         {
           type: 'doc',
           id: 'ERC-8004/general',
-          label: '简介',
+          label: 'Introduction',
         },
         {
           type: 'doc',
           id: 'ERC-8004/contract',
-          label: '合约',
+          label: 'Contract',
         },
         {
           type: 'doc',
           id: 'ERC-8004/QuickStart',
-          label: '快速开始',
+          label: 'QuickStart',
         },
         {
           type: 'doc',
           id: 'ERC-8004/SupportedNetworks',
-          label: '支持的网络',
+          label: 'SupportedNetworks',
         },
 
     
          
             {
               type: 'category',
-              label: '使用指南',
+              label: 'Usage',
               collapsed: false,
               items: ['ERC-8004/Usage/Install', 'ERC-8004/Usage/ConfigureAgents', 'ERC-8004/Usage/RegistrationHTTP'],
             },
@@ -93,7 +93,7 @@ const sidebars = {
             {
               type: 'doc',
               id: 'McpServer-Skills/Intro',
-              label: '简介',
+              label: 'Introduction',
             },
               {
               type: 'category',
@@ -126,7 +126,7 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Openclaw 扩展插件',
+      label: 'Openclaw Extension',
       collapsed: false,
       items: ['Openclaw-extension/Overview', 'Openclaw-extension/Setup-use'],
             

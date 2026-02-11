@@ -1,74 +1,84 @@
-# 客户端与服务器
+# Client and Server
 
-深入理解这些角色，对于在 TRON 区块链上设计、构建或集成基于 x402 的程序化支付服务至关重要。
+Understanding these roles in depth is essential when designing, building, or integrating x402-based programmable payment services on-chain.
 
-> **注意**
+> **Note**
 >
-> - **客户端 (Client)**：指发起 HTTP 请求的技术组件。在实际业务场景中，通常对应资源的**买方**。
-> - **服务端 (Server)**：指响应请求的技术组件。在实际业务场景中，通常对应资源的**卖方**。
+> - **Client**: The technical component that initiates an HTTP request. In real-world business scenarios, this typically represents the **buyer** of a resource.
+> - **Server**: The technical component that responds to requests. In real-world business scenarios, this typically represents the **seller** of a resource.
 
-## 客户端角色 (Client Role)
+---
 
-客户端是发起请求以访问付费资源的实体。
+## Client Role
 
-客户端的形式多种多样，包括：
+The client is the entity that initiates requests to access paid resources.
 
-- 面向用户的应用程序
-- 自主代理 (Autonomous Agents)
-- 代表用户或系统执行操作的后台服务
+Clients can take many forms, including:
 
-### 核心职责
+- User-facing applications  
+- Autonomous agents  
+- Backend services acting on behalf of users or systems  
 
-- **发起请求**：向资源服务器发送初始 HTTP 请求。
-- **处理支付要求**：解析 `402 Payment Required` 响应，并提取支付详情。
-- **管理代币授权**：授权 `PaymentPermit` 合约，使其能从客户端钱包划转代币用于结算。
-- **准备支付载荷**：根据服务端的要求，构建并签署 TIP-712 支付载荷。
-- **携带支付重试**：在请求头中附加 `PAYMENT-SIGNATURE` 并重新发送请求。
+### Core Responsibilities
 
-客户端**无需**维护 TRON 钱包之外的任何账户体系、登录凭据或会话 Token。所有的交互均为**无状态**的，且完全基于标准 HTTP 协议进行。
+- **Initiate Requests**: Send the initial HTTP request to the resource server.  
+- **Handle Payment Requirements**: Parse the `402 Payment Required` response and extract payment details.  
+- **Manage Token Approvals**: Approve the `PaymentPermit` contract to transfer tokens from the client’s wallet for settlement.  
+- **Prepare Payment Payload**: Construct and sign a TIP-712/EIP-712 payment payload according to server requirements.  
+- **Retry with Payment**: Attach the `PAYMENT-SIGNATURE` header and resend the request.  
 
-## 服务端角色 (Server Role)
+The client **does not** need to maintain any account system, login credentials, or session tokens beyond its wallet. All interactions are **stateless** and fully based on standard HTTP protocols.
 
-服务端是要求付费才能访问其资源的提供者。
+---
 
-服务端的形态多种多样，包括：
+## Server Role
 
-- API 服务
-- 数字内容提供商
-- 任何可通过 HTTP 访问且寻求变现的资源
+The server is the provider that requires payment before granting access to its resources.
 
-### 核心职责
+Servers may include:
 
-- **定义支付要求**：对未附带有效支付凭证的请求响应 HTTP `402 Payment Required`，并在响应体中详细说明支付要求。
-- **验证支付载荷**：调用 Facilitator 服务对传入的 TIP-712 签名载荷进行验证。
-- **结算交易**：验证通过后，通过 Facilitator 提交交易以完成资金结算。
-- **交付资源**：支付确认无误后，向客户端返回所请求的资源。
+- API services  
+- Digital content providers  
+- Any HTTP-accessible resource seeking monetization  
 
-服务端**无需**管理客户端身份或维护会话状态。验证与结算过程由 Facilitator 针对每个请求独立处理。
+### Core Responsibilities
 
-## 通信流程
+- **Define Payment Requirements**: Respond with HTTP `402 Payment Required` when a request lacks valid payment credentials, detailing payment requirements in the response body.  
+- **Validate Payment Payload**: Call the Facilitator service to verify the incoming TIP-712/EIP-712 signed payload.  
+- **Settle Transactions**: Upon successful validation, submit the transaction via the Facilitator to complete on-chain settlement.  
+- **Deliver Resources**: After confirming payment, return the requested resource to the client.  
 
-在 x402 协议中，客户端与服务端之间的典型交互流程如下：
+The server **does not** need to manage client identity or maintain session state. Validation and settlement are handled independently for each request through the Facilitator.
 
-1.  **客户端发起请求**：向服务端发送针对付费资源的请求。
-2.  **服务端要求付费**：响应 `402 Payment Required` 状态码，并在 `PAYMENT-REQUIRED` 标头中包含支付要求（Base64 编码）。
-3.  **客户端提交支付**：根据要求生成 TIP-712 签名，并将签名载荷放入 `PAYMENT-SIGNATURE` 标头（Base64 编码）中重新发送请求。
-4.  **服务端验证支付**：调用 Facilitator 服务对接收到的支付载荷进行验证。
-5.  **服务端执行结算**：通过 Facilitator 将交易提交至 TRON 区块链完成结算。
-6.  **服务端交付资源**：返回请求的资源，并在 `PAYMENT-RESPONSE` 标头中包含结算确认信息（Base64 编码，内含 TRON 交易哈希）。
+---
 
-## 总结
+## Communication Flow
 
-在 x402 协议体系中：
+In the x402 protocol, a typical interaction between client and server proceeds as follows:
 
-- **客户端 (Client)**：发起资源请求，并负责提供经过 TIP-712 签名的支付载荷。
-- **服务端 (Server)**：执行支付策略，验证交易有效性，并在确认支付成功后交付资源。
+1. **Client Initiates Request**: Sends a request for a paid resource to the server.  
+2. **Server Requires Payment**: Responds with `402 Payment Required`, including payment details in the `PAYMENT-REQUIRED` header (Base64-encoded).  
+3. **Client Submits Payment**: Generates a TIP-712/EIP-712 signature and resends the request with the signed payload in the `PAYMENT-SIGNATURE` header (Base64-encoded).  
+4. **Server Validates Payment**: Calls the Facilitator service to verify the received payment payload.  
+5. **Server Executes Settlement**: Submits the transaction to the blockchain via the Facilitator.  
+6. **Server Delivers Resource**: Returns the requested resource and includes settlement confirmation (with transaction hash) in the `PAYMENT-RESPONSE` header.  
 
-这种交互模式完全基于原生 HTTP 协议，具备**无状态 (Stateless)** 特性，既兼容面向用户的应用程序，也能完美支持自动化/自主代理 (Autonomous Agents)。
+---
 
-## 下一步
+## Summary
 
-接下来，请深入探索：
+Within the x402 protocol architecture:
 
-- [Facilitator](./facilitator.md) — 了解服务器如何验证并结算支付
-- [钱包(Wallet)](./wallet.md) — 了解如何管理用于支付的 TRON 钱包
+- **Client**: Initiates resource requests and provides a TIP-712/EIP-712 signed payment payload.  
+- **Server**: Enforces payment policy, verifies transaction validity, and delivers resources upon successful payment confirmation.  
+
+This interaction model is fully based on native HTTP, maintains a **stateless** architecture, and is compatible with both user-facing applications and autonomous agents.
+
+---
+
+## Next Steps
+
+Continue exploring:
+
+- [Facilitator](./facilitator.md) — Learn how servers validate and settle payments  
+- [Wallet](./wallet.md) — Learn how to manage wallets used for payments  

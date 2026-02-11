@@ -1,21 +1,29 @@
-# 简介
+# Introduction
 
-## 什么是 ERC-8004？
-ERC-8004 是一个开放协议。它允许你注册自己的 Agents 和 API，使其具备可见性和可移植性；允许你发现他人的 Agents 和 API；还能让你根据过往客户的反馈以及第三方的验证结果，来决定选用哪一个。
+## What is ERC-8004?
 
-简而言之：**它是一个 Agents 发现与建立信任的协议。**
+ERC-8004 is an open protocol. It allows you to register your own Agents and APIs, making them visible and portable; it enables you to discover other Agents and APIs; and it helps you decide which one to use based on past customer feedback and third-party validation results.
 
-## 工作原理
-ERC-8004 利用区块链作为任何人都可以读写的共享公共注册表，包含：
-- Agents 身份（身份注册表 / Identity Registry）
-- 关于其他 Agents 和服务的反馈（信誉注册表 / Reputation Registry）
-- 验证其他 Agents 和服务行为的加密证明（验证注册表 / Validation Registry）。
+In short: **it is a protocol for Agent discovery and trust establishment.**
 
+## How It Works
 
-## 核心概念
-- 身份认证
-  ERC-8004 建立了一套无许可的身份认证体系，允许任何 Agent 或服务通过铸造兼容 ERC-721 标准的 NFT 完成注册，其核心是将链上身份 (agentId) 映射至存储于任意位置（HTTPS、IPFS 或链上）的元数据文件 (agent-registration.json)。该文件定义了 Agent 的基本信息、支付钱包及多样化的通信端点（如 Web、MCP、DID 等），并支持通过域名自动匹配或 .well-known 路径验证端点所有权。作为 NFT 资产，Agent 身份具备完全的可转移性，且在所有权转移时会自动重置支付地址，从而确保新所有者对服务收入的安全控制。
-- 信誉系统
-  ERC-8004 定义了一个中立的公共信誉存储标准，通过结构化的签名数据支持对 Agent 进行多维度反馈，并将具体的信誉算法、排名聚合及反垃圾过滤逻辑完全交由生态应用层自主构建。
-- 共识验证  
-  验证注册表通过智能合约集成TEE证明、加密经济质押及zkML等多种技术手段，实现了对Agent行为的可委托加密验证。
+ERC-8004 leverages blockchain as a shared public registry that anyone can read from and write to, including:
+
+- Agent identities (Identity Registry)
+- Feedback about other Agents and services (Reputation Registry)
+- Cryptographic proofs validating the behavior of other Agents and services (Validation Registry)
+
+## Core Concepts
+
+- **Identity Authentication**
+  
+  ERC-8004 establishes a permissionless identity framework that allows any Agent or service to register by minting an NFT compatible with the ERC-721 standard. At its core, it maps an on-chain identity (agentId) to a metadata file (agent-registration.json) stored anywhere (HTTPS, IPFS, or on-chain). This file defines the Agent’s basic information, payment wallet, and various communication endpoints (such as Web, MCP, DID, etc.), and supports endpoint ownership verification via automatic domain matching or the `.well-known` path. As an NFT asset, the Agent identity is fully transferable. Upon ownership transfer, the payment address is automatically reset, ensuring secure control of service revenue by the new owner.
+  
+- **Reputation System**
+  
+  ERC-8004 defines a neutral public reputation storage standard that supports multidimensional feedback on Agents through structured signed data, while leaving the specific reputation algorithms, ranking aggregation, and anti-spam filtering logic entirely to the application layer of the ecosystem.
+  
+- **Consensus Validation**
+  
+  The Validation Registry integrates multiple technical approaches through smart contracts—such as TEE proofs, crypto-economic staking, and zkML—to enable delegated cryptographic verification of Agent behavior.

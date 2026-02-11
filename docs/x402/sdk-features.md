@@ -1,81 +1,110 @@
-# SDK 功能特性
+---
+title: 'SDK Feature Matrix'
+description: 'Implementation status and feature support comparison between the Python and TypeScript SDKs for x402.'
+---
 
-本页面记录了 x402 各语言 SDK（Python, TypeScript）的功能实现进度与支持状态。
+# SDK Feature Matrix
 
-## 核心 
+This page tracks the implementation progress and feature support status of the x402 SDKs across supported languages (Python and TypeScript).
 
-| 组件 | Python | TypeScript |
-|-----------|--------|------------|
-| 服务端 (Server) | ✅ | ⏳ |
-| 客户端 (Client) | ✅ | ✅ |
+---
+
+## Core Components
+
+| Component | Python | TypeScript |
+|------------|--------|------------|
+| Server | ✅ | ⏳ |
+| Client | ✅ | ✅ |
 | Facilitator | ✅ | ⏳ |
 
-### HTTP 框架集成
+### HTTP Framework Integration
 
-| 角色 | Python | TypeScript |
+| Role | Python | TypeScript |
 |------|--------|------------|
-| 服务端 | FastAPI, Flask | - |
-| 客户端 | httpx | fetch |
+| Server | FastAPI, Flask | - |
+| Client | httpx | fetch |
 
-## 网络 
+---
 
-| 网络 | Python | TypeScript |
-|---------|--------|------------|
+## Networks
+
+| Network | Python | TypeScript |
+|-----------|--------|------------|
 | tron:mainnet | ✅ | ✅ |
 | tron:nile | ✅ | ✅ |
 | tron:shasta | ✅ | ✅ |
+| eip155:56 (BSC Mainnet) | ✅ | ✅ |
+| eip155:97 (BSC Testnet) | ✅ | ✅ |
 
-## 机制 
+---
 
-| 机制 | Python | TypeScript |
-|-----------|--------|------------|
+## Payment Mechanisms
+
+| Mechanism | Python | TypeScript |
+|-------------|--------|------------|
 | exact/tron (TIP-712) | ✅ | ✅ |
+| exact/bsc (EIP-712) | ✅ | ✅ |
 
-## 签名器 
+---
 
-| 签名器 | Python | TypeScript |
-|--------|--------|------------|
+## Signers
+
+| Signer | Python | TypeScript |
+|----------|--------|------------|
 | TronClientSigner | ✅ | ✅ |
 | TronFacilitatorSigner | ✅ | ⏳ |
 
-## 客户端功能 
+---
 
-| 功能 | Python | TypeScript |
-|---------|--------|------------|
-| 自动处理 402 | ✅ | ✅ |
-| 自动代币批准 | ✅ | ✅ |
-| 额度检查 | ✅ | ✅ |
-| TIP-712 签名 | ✅ | ✅ |
+## Client Features
 
-## 服务端功能 
+| Feature | Python | TypeScript |
+|------------|--------|------------|
+| Automatic 402 handling | ✅ | ✅ |
+| Automatic token approval | ✅ | ✅ |
+| Allowance check | ✅ | ✅ |
+| TIP-712 signing | ✅ | ✅ |
+| EIP-712 signing | ✅ | ✅ |
 
-| 功能 | Python | TypeScript |
-|---------|--------|------------|
-| @x402_protected 装饰器 | ✅ | ⏳ |
-| 支付验证 | ✅ | ⏳ |
-| 支付结算 | ✅ | ⏳ |
-| 费用支持 | ✅ | ⏳ |
+---
 
-## Facilitator 功能 
+## Server Features
 
-| 功能 | Python | TypeScript |
-|---------|--------|------------|
-| /verify 端点 | ✅ | ⏳ |
-| /settle 端点 | ✅ | ⏳ |
-| /fee/quote 端点 | ✅ | ⏳ |
-| /supported 端点 | ✅ | ⏳ |
-| 提交交易 | ✅ | ⏳ |
-| 确认交易 | ✅ | ⏳ |
+| Feature | Python | TypeScript |
+|------------|--------|------------|
+| `@x402_protected` decorator | ✅ | ⏳ |
+| Payment verification | ✅ | ⏳ |
+| Payment settlement | ✅ | ⏳ |
+| Fee support | ✅ | ⏳ |
 
-## 支持代币 
+---
 
-| 代币 | Python | TypeScript |
-|-------|--------|------------|
+## Facilitator Features
+
+| Feature | Python | TypeScript |
+|------------|--------|------------|
+| `/verify` endpoint | ✅ | ⏳ |
+| `/settle` endpoint | ✅ | ⏳ |
+| `/fee/quote` endpoint | ✅ | ⏳ |
+| `/supported` endpoint | ✅ | ⏳ |
+| Submit transaction | ✅ | ⏳ |
+| Confirm transaction | ✅ | ⏳ |
+
+---
+
+## Supported Tokens
+
+| Token | Python | TypeScript |
+|--------|--------|------------|
 | USDT (TRC-20) | ✅ | ✅ |
-| 自定义 TRC-20 | ✅ | ✅ |
+| Custom TRC-20 | ✅ | ✅ |
+| USDT (BEP-20) | ✅ | ✅ |
+| Custom BEP-20 | ✅ | ✅ |
 
-## 图例 
+---
 
-- ✅ = 已实现
-- ⏳ = 计划中 / 开发中
-- ❌ = 无计划
+## Legend
+
+- ✅ = Implemented  
+- ⏳ = Planned / In Progress  
+- ❌ = Not Planned  

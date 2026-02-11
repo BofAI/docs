@@ -1,16 +1,17 @@
-# 安装
-## 先决条件
+# Installation
 
-*   [Node.js](https://nodejs.org/) 20.0.0 或更高版本。
-*   可选：[TronGrid API 密钥](https://www.trongrid.io/) 以避免主网上的速率限制。
+## Prerequisites
 
-## 执行安装
+* [Node.js](https://nodejs.org/) version 20.0.0 or higher.
+* Optional: A [TronGrid API key](https://www.trongrid.io/) to avoid rate limits on mainnet.
+
+## Run Installation
 
 ```shell
-# 克隆仓库
+# Clone the repository
 git clone https://github.com/bankofai/mcp-server.git
 cd mcp-server
 
-# 安装依赖
+# Install dependencies
 npm install
 ```

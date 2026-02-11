@@ -1,30 +1,17 @@
-# 简介
-在人工智能代理（AI Agent）日益发展的今天，如何有效地连接AI模型与外部系统、扩展其能力成为了关键。Model Context Protocol (MCP) Server 和 Skills 是两种重要的机制，它们共同赋能AI代理，使其能够执行更复杂、更专业的任务。MCP Server 通过标准化协议连接AI模型与外部世界，提供强大的执行能力和丰富的外部资源；而 Skills 则通过模块化的方式为AI代理注入专业知识和工作流程。两者的结合使得AI代理能够超越其预训练模型的限制，执行更广泛、更复杂、更智能的任务，从而在各个领域发挥更大的价值。
+# Introduction
 
-## 定义
-**Model Context Protocol (MCP)** 是一个开放标准，旨在连接AI应用程序（如大型语言模型LLMs）与外部系统。它为AI模型提供了一个标准化的接口，使其能够安全、双向地与各种数据存储库、工具、API和服务进行交互。MCP 的核心思想是为AI模型提供上下文，使其能够理解并利用外部世界的丰富信息和功能。
+Bank of AI provides a complete solution, from infrastructure to business logic, for building autonomous AI Agents based on blockchain networks through a dual-layer architecture of MCP (Model Context Protocol) and Skills (Skill Library).
 
-**Skills (技能)** 是模块化、自包含的软件包，通过提供专业知识、工作流程和工具来扩展 Manus 等AI代理的能力。它们可以被视为特定领域或任务的“入门指南”，将通用型AI代理转变为具备特定程序知识的专业代理。
+**Infrastructure Layer**: The mcp-server acts as the AI agent's "hands and eyes." The MCP server seamlessly integrates blockchain capabilities into AI using standardized protocols. It provides a unified interaction interface for agents, enabling them to autonomously read block data, manage wallets (supporting Hex/Base58 formats), execute transfers, and interact with any smart contract for both reading and writing, comprehensively covering mainnet and testnet.
 
-MCP Server 和 Skills 在扩展AI代理能力方面都发挥着作用，但它们侧重点不同，并且可以相互协作。
+**Application Logic Layer**: The skills library serves as the AI agent's "brain and operation manual." It offers a series of reusable capability modules. Through structured instruction documents (SKILL.md), it teaches AI how to combine and call the underlying tools provided by MCP to complete complex business processes.
 
-##  比较
+**DeFi Interaction**: Automated token swaps are achieved through the SunSwap skill library, with future plans to support JustLend, Pancake, and Lista.
 
-| 特性         | Model Context Protocol (MCP) Server                               | Skills                                                  |
-| :----------- | :---------------------------------------------------------------- | :------------------------------------------------------------ |
-| **本质**     | 连接AI模型与外部系统（工具、API、资源）的开放标准和外部服务     | 模块化、自包含的软件包，提供专业知识、工作流程和工具        |
-| **定位**     | 提供执行能力和外部交互接口                                        | 提供工作流程知识和领域专业知识                                |
-| **部署**     | 通常作为独立的服务部署和运行                                      | 作为AI代理的内部扩展，通过 `SKILL.md` 和捆绑资源提供指导    |
-| **交互方式** | AI模型通过标准协议（MCP Client）与 MCP Server 进行请求-响应式通信 | AI代理通过读取 `SKILL.md` 和加载捆绑资源来获取操作指导和执行逻辑 |
-| **主要优势** | 标准化、可扩展、支持多种外部系统集成、安全性高                  | 灵活、上下文高效、易于定义和更新特定任务的指导、自然语言可控 |
-| **典型用例** | 数据库访问、文件系统操作、第三方API调用、OAuth认证              | 特定领域的复杂工作流程、代码生成、文档格式化、数据分析步骤    |
+**Identity and Reputation**: On-chain identity registration and reputation accumulation are managed using the ERC-8004 standard.
 
-## 协作
+**Economic Payments**: The x402 protocol is integrated to empower agents with automated payment collection and disbursement capabilities.
 
-MCP Server 和 Skills 并非相互替代，而是互补的。技能可以定义如何执行任务的工作流程，而 MCP Server 则提供执行这些任务所需的实际能力。例如，一个技能可以包含一个详细的工作流程，指导AI代理如何分析数据并生成报告，而这个工作流程中可能需要通过 MCP Server 调用一个数据库工具来获取数据，或者调用一个图表生成API来创建可视化图表。
+## Summary
 
-简而言之，**技能提供了“做什么”和“怎么做”的知识，而 MCP Server 提供了“通过什么”来做的执行能力。** 它们共同构建了一个强大而灵活的AI代理生态系统。
-
-
-
-
+Developers only need to deploy the MCP server and load the corresponding Skills to evolve AI agents from "chatbots" into Web3 economic entities with asset management capabilities and on-chain interaction abilities.

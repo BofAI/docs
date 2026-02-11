@@ -1,88 +1,87 @@
-# 配置
+# Configuration
 
-### 环境变量
+### Environment Variables
 
-**重要安全提示**：为了您的安全，**切勿**将您的私钥或助记词直接保存在 MCP 配置文件（如 `claude_desktop_config.json` 或 `mcp.json`）中。相反，请将它们设置为您操作系统或 shell 配置中的环境变量。
+**Important Security Note**: For your security, **NEVER** save your private keys or mnemonic phrases directly in MCP configuration files (e.g., `claude_desktop_config.json` or `mcp.json`). Instead, set them as environment variables in your operating system or shell configuration.
 
-要启用写入操作（转账、合约调用）并确保可靠的 API 访问，您应该配置以下变量。
+To enable write operations (transfers, contract calls) and ensure reliable API access, you should configure the following variables.
 
-#### 网络配置
+#### Network Configuration
 
-*   `TRONGRID_API_KEY`：(可选) 您的 TronGrid API 密钥。
-    *   **原因**：TRON 主网 RPC 具有严格的速率限制。使用 [TronGrid](https://www.trongrid.io/) 的 API 密钥可确保可靠的性能和更高的吞吐量。
-    *   **用法**：
-        
+*   `TRONGRID_API_KEY`: (Optional) Your TronGrid API key.
+    *   **Reason**: TRON mainnet RPC has strict rate limits. Using an API key from [TronGrid](https://www.trongrid.io/) ensures reliable performance and higher throughput.
+    *   **Usage**:
+
         ```shell
         export TRONGRID_API_KEY="<YOUR_TRONGRID_API_KEY_HERE>"
         ```
-        
 
-#### 钱包配置（使用环境变量）
+#### Wallet Configuration (using Environment Variables)
 
-**选项 1：私钥**
+**Option 1: Private Key**
 
 ```shell
-# 推荐：将其添加到您的 ~/.zshrc 或 ~/.bashrc
+# Recommended: Add this to your ~/.zshrc or ~/.bashrc
 export TRON_PRIVATE_KEY="<YOUR_PRIVATE_KEY_HERE>"
 ```
 
-**选项 2：助记词**
+**Option 2: Mnemonic Phrase**
 
 ```shell
-# 推荐：将其添加到您的 ~/.zshrc 或 ~/.bashrc
+# Recommended: Add this to your ~/.zshrc or ~/.bashrc
 export TRON_MNEMONIC="<WORD1> <WORD2> ... <WORD12>"
-export TRON_ACCOUNT_INDEX="0" # 可选，默认值：0
+export TRON_ACCOUNT_INDEX="0" # Optional, default: 0
 ```
 
-### 服务器配置
+### Server Configuration
 
-服务器默认以 HTTP 模式在端口 **3001** 上运行。
+The server runs in HTTP mode on port **3001** by default.
 
-## 使用
+## Usage
 
-### 本地运行
+### Local Run
 
 ```shell
-# 以 stdio 模式启动（适用于 Claude Desktop/Cursor 等 MCP 客户端）
+# Start in stdio mode (for MCP clients like Claude Desktop/Cursor)
 npm start
 
-# 以 HTTP 模式启动（Server-Sent Events）
+# Start in HTTP mode (Server-Sent Events)
 npm run start:http
 ```
 
-### 测试
+### Testing
 
-项目包含一个全面的测试套件，包括单元测试和集成测试（使用 Nile 网络）。
+The project includes a comprehensive test suite, including unit and integration tests (using Nile network).
 
 ```shell
-# 运行所有测试
+# Run all tests
 npm test
 
-# 运行特定的测试套件
-npx vitest tests/core/tools.test.ts          # 工具的单元测试
-npx vitest tests/core/services/multicall.test.ts # Multicall 集成
-npx vitest tests/core/services/services.test.ts # 服务集成
+# Run specific test suites
+npx vitest tests/core/tools.test.ts          # Unit tests for tools
+npx vitest tests/core/services/multicall.test.ts # Multicall integration
+npx vitest tests/core/services/services.test.ts # Service integration
 ```
 
-### 客户端配置
+### Client Configuration
 
-要将此服务器与 Claude Desktop、Cursor 或 Google Antigravity 等 MCP 客户端一起使用，您需要将其添加到您的配置文件中。
+To use this server with MCP clients like Claude Desktop, Cursor, or Google Antigravity, you need to add it to your configuration file.
 
-#### 1. 找到您的配置文件
+#### 1. Locate Your Configuration File
 
-| 应用程序 | 操作系统 | 配置路径 |
+| Application | OS | Configuration Path |
 | :-- | :-- | :-- |
 | **Claude Desktop** | macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
 | | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
-| **Cursor** | 所有 | 项目根目录：`.cursor/mcp.json` |
-| **Google Antigravity** | 所有 | `~/.config/antigravity/mcp.json` |
-| **Opencode** | 所有 | `~/.config/opencode/mcp.json` |
+| **Cursor** | All | Project root: `.cursor/mcp.json` |
+| **Google Antigravity** | All | `~/.config/antigravity/mcp.json` |
+| **Opencode** | All | `~/.config/opencode/mcp.json` |
 
-#### 2. 添加服务器定义
+#### 2. Add Server Definition
 
-选择以下方法之一将其添加到您的 `mcpServers` 对象中。
+Choose one of the following methods to add it to your `mcpServers` object.
 
-**选项 A：快速开始（推荐）** 直接从 npm 运行最新版本。
+**Option A: Quick Start (Recommended)** Run the latest version directly from npm.
 
 ```json
 {
@@ -99,7 +98,7 @@ npx vitest tests/core/services/services.test.ts # 服务集成
 }
 ```
 
-**选项 B：本地开发** 适用于从克隆仓库运行的开发者。
+**Option B: Local Development** For developers running from a cloned repository.
 
 ```json
 {
@@ -116,4 +115,4 @@ npx vitest tests/core/services/services.test.ts # 服务集成
 }
 ```
 
-**重要提示**：如果您已在系统环境中设置了这些变量，我们建议省略 `env` 部分。如果您的 MCP 客户端不继承系统变量，请使用占位符或确保配置文件未共享或提交到版本控制。
+**Important**: If you have already set these variables in your system environment, we recommend omitting the `env` section. If your MCP client does not inherit system variables, use placeholders or ensure the configuration file is not shared or committed to version control.

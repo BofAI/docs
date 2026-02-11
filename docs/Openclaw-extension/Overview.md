@@ -1,35 +1,35 @@
-# 简介
+# Introduction
 
-OpenClaw 扩展插件是由 **BankofAI** 开发的一套工具，旨在赋予 AI 代理金融主权。它使代理能够持有钱包、执行交易，并通过 **x402 协议** (HTTP 402 Payment Required) 实现服务货币化。
+The OpenClaw extension is a suite of tools developed by **BankofAI** designed to empower AI agents with financial sovereignty. It enables agents to hold wallets, execute transactions, and monetize services via the **x402 Protocol** (HTTP 402 Payment Required).
 
-## 愿景
+## Vision
 
-为代理经济构建“中央银行”，确保每个 AI 代理都能：
+To build a "central bank" for the agent economy, ensuring every AI agent can:
 
-*   **赚取收益**：通过标准协议接受任务和服务的付款。
-*   **自主消费**：自主支付资源（计算、数据、存储）费用。
-*   **连接交互**：促进代理到代理 (A2A) 的直接金融活动和结算。
-*   **无缝交易**：与 DeFi 和智能合约无缝交互。
+*   **Earn Revenue**: Accept payments for tasks and services through standard protocols.
+*   **Autonomous Consumption**: Independently pay for resources (compute, data, storage).
+*   **Connect and Interact**: Facilitate direct financial activities and settlements between agents (A2A).
+*   **Seamless Transactions**: Interact seamlessly with DeFi and smart contracts.
 
-## 核心组件
+## Core Components
 
-此扩展插件提供了用于 TRON 区块链交互的工具：
+This extension provides tools for blockchain interaction:
 
-### MCP 服务器
+### MCP Server
 
-**mcp-server-tron**：一个模型上下文协议 (MCP) 服务器，它使 AI 代理能够直接访问 TRON 区块链。
+**mcp-server**: A Model Context Protocol (MCP) server that provides AI agents with direct access to the blockchain.
 
-*   **功能**：余额查询、转账、智能合约交互、资源估算、代币互换。
+*   **Functions**: Balance queries, transfers, smart contract interactions, resource estimation, token swaps.
 
 ### Skills
 
-安装程序会自动从 [skills-tron](https://github.com/bankofai/skills-tron) 仓库获取技能：
+The installer automatically fetches skills from the [skills](https://github.com/bankofai/skills-tron) repository:
 
-1.  **sunswap** - 用于 TRON 代币互换的 SunSwap DEX 交易技能。
-    *   多版本池路由 (V1/V2/V3/PSM)。
-    *   带滑点保护的价格报价。
-    *   代币授权管理。
-2.  **x402_tron_payment** - 在 TRON 网络上启用代理支付 (x402 协议)。
-    *   代理 API 的按请求付费模型。
-    *   任务执行前的支付验证。
-3.  **x402_tron_payment_demo** - x402 支付协议的演示。
+1.  **sunswap** - SunSwap DEX trading skill for token swaps.
+    *   Multi-version pool routing (V1/V2/V3/PSM).
+    *   Price quotes with slippage protection.
+    *   Token authorization management.
+2.  **x402_payment** - Enables agent payments (x402 protocol) on the network.
+    *   Pay-per-request model for agent APIs.
+    *   Payment verification before task execution.
+3.  **x402_payment_demo** - A demonstration of the x402 payment protocol.

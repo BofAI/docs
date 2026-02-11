@@ -1,76 +1,92 @@
 ---
-title: '欢迎使用 x402'
+title: 'Welcome to x402'
 slug: /
 description: >-
-  本指南将帮助您了解 x402——TRON 和 BSC 区块链上的开放支付标准，并帮助您开始构建或集成 x402 服务。
+  This guide introduces the x402 open payment standard on blockchain and helps you start building or integrating x402-powered services.
 ---
 
-# 欢迎使用 x402
+# Welcome to x402
 
-x402 开放支付标准在 TRON/BSC 网络上的实现，旨在支持服务方直接通过 HTTP 协议对 API 接口及内容资源进行收费。该方案基于 HTTP `402 Payment Required` 状态码构建，允许客户端以编程方式完成支付，从而免去了对账户体系、会话或身份凭证管理的依赖。
+x402 is an open blockchain payment standard built on the HTTP `402 Payment Required` status code. It enables web services to charge for APIs or content through a “pay-before-response” mechanism — without relying on traditional account systems or session management.  
 
-借助 x402，任何 Web 服务均可建立“先付费后响应”的机制，充分利用 TRON 区块链在速度、隐私及效率方面的优势。
+x402 currently supports the TRON and BSC networks, with plans to expand to a broader multi-chain ecosystem in the future.
 
-**有意参与文档共建？** 欢迎在 [GitHub 仓库](https://github.com/bankofai/x402-tron-docs)提交 PR！我们唯一的原则是保持文档的中立性：除必要的资源链接外，请避免包含任何品牌推广内容。
+**Interested in contributing to the documentation?**  
+Feel free to submit a PR to the [GitHub repository](https://github.com/bankofai/x402-docs). Our only principle is to maintain neutrality — aside from essential resource links, please avoid promotional or branded content.
 
-**寻找实战代码？** 请访问 [x402-tron-demo 仓库](https://github.com/bankofai/x402-tron-demo) 获取完整且可直接运行的示例项目。
+**Looking for runnable examples?**  
+Visit the [x402-demo repository](https://github.com/bankofai/x402-demo) for a complete, production-ready sample project.
 
-## 为什么要使用 x402？
+---
 
-x402 旨在解决现有支付体系的核心痛点：
+## Why Use x402?
 
-- 传统信用卡及法币支付渠道存在的**高昂手续费与繁琐流程**
-- **难以适配机器对机器（M2M）支付**，例如 AI 代理之间的自动交易
-- **缺乏对微支付的有效支持**，导致基于使用量的服务难以变现
-- 充分发挥 TRON 区块链**极速且低成本的交易优势**
+x402 addresses the core pain points of existing payment systems:
 
-## x402 适用于谁？
+- **High fees and complex workflows** in traditional credit card and fiat payment channels  
+- **Poor support for machine-to-machine (M2M) payments**, such as autonomous AI agent transactions  
+- **Lack of efficient micro-payment infrastructure**, making usage-based monetization difficult  
+- Leveraging blockchain’s **fast and low-cost transaction capabilities**
 
-- **卖方 (Sellers)：** 希望实现 API 或内容变现的服务提供商。通过 x402，只需极简配置，即可接收来自客户端的直接、程序化支付。
-- **买方 (Buyers)：** 寻求无需注册账户或人工介入即可访问付费服务的开发者及 AI 代理。
+---
 
-买卖双方直接通过 HTTP 请求进行交互，而支付环节则由协议在 TRON 区块链上透明、自动地完成。
+## Who Is x402 For?
 
-## 你可以构建什么？
+- **Sellers:** Service providers who want to monetize APIs or content. With minimal configuration, x402 enables direct, programmatic payments from clients.
+- **Buyers:** Developers and AI agents who want to access paid services without registration flows or manual intervention.
 
-x402 支持广泛的应用场景，包括：
+Buyers and sellers interact directly through HTTP requests, while payments are executed transparently and automatically on-chain by the protocol.
 
-- **按请求计费的 API 服务**
-- **可自主支付 API 费用的 AI 代理**
-- **数字内容付费墙**
-- **基于微交易变现的微服务与工具**
-- **聚合并不转售 API 能力的代理服务**
+---
 
-## 工作原理
+## What Can You Build?
 
-宏观流程非常直观：
+x402 supports a wide range of use cases:
 
-1. **发起请求**：买方向服务端请求受保护的资源。
-2. **支付要求**：若该资源需要付费，服务端返回 `402 Payment Required` 状态码及支付指引。
-3. **提交支付**：买方生成并提交支付载荷（基于 TIP-712 签名）。
-4. **验证结算**：服务端调用 x402 Facilitator 的 `/verify` 和 `/settle` 接口，完成支付的验证与结算。
-5. **交付资源**：支付验证通过后，服务端交付请求的资源。
+- **Pay-per-request APIs**
+- **AI agents capable of autonomously paying for APIs**
+- **Digital content paywalls**
+- **Microservices monetized via microtransactions**
+- **API aggregation services that do not resell underlying capabilities**
 
-如需深入了解，请参考：
+---
 
-- [客户端 / 服务端](./core-concepts/client-server.md)
-- [Facilitator](./core-concepts/facilitator.md)
-- [HTTP 402](./core-concepts/http-402.md)
+## How It Works
 
-我们的目标是：在 TRON 区块链上打造一个低门槛、无许可且开发者友好的程序化商业层。
+At a high level, the workflow is straightforward:
 
-## 网络支持
+1. **Request Initiated:** The buyer requests a protected resource from the server.
+2. **Payment Required:** If payment is required, the server returns a `402 Payment Required` response along with payment instructions.
+3. **Payment Submitted:** The buyer generates and submits a signed payment payload (TIP-712/EIP-712).
+4. **Verification & Settlement:** The server calls the x402 Facilitator’s `/verify` and `/settle` endpoints to validate and settle the payment.
+5. **Resource Delivered:** Once verification succeeds, the server delivers the requested resource.
 
-x402 目前支持以下 TRON 网络环境：
+To explore further:
 
-- **TRON 主网** (`tron:mainnet`)
-- **TRON Shasta 测试网** (`tron:shasta`)
-- **TRON Nile 测试网** (`tron:nile`)
+- [Client / Server](./core-concepts/client-server)
+- [Facilitator](./core-concepts/facilitator)
+- [HTTP 402](./core-concepts/http-402)
 
-## 快速开始
+Our goal is to build a low-barrier, permissionless, developer-friendly programmable commerce layer on blockchain.
 
-准备好开始构建了吗？请从这里入手：
+---
 
-- [卖方快速入门](./getting-started/quickstart-for-sellers.md)
-- [Agent 快速入门](./getting-started/quickstart-for-agent.md)
-- [探索核心概念](./core-concepts/http-402.md)
+## Network Support
+
+x402 currently supports the following networks:
+
+- **TRON Mainnet** (`tron:mainnet`)
+- **TRON Shasta Testnet** (`tron:shasta`)
+- **TRON Nile Testnet** (`tron:nile`)
+- **BSC Mainnet** (`eip155:56`)
+- **BSC Testnet** (`eip155:97`)
+
+---
+
+## Quick Start
+
+Ready to build? Start here:
+
+- [Quickstart for Sellers](./getting-started/quickstart-for-sellers)
+- [Quickstart for Agents](./getting-started/quickstart-for-agent)
+- [Explore Core Concepts](./core-concepts/http-402)

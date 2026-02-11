@@ -1,14 +1,14 @@
-# 快速开始
-Agent0 是 **ERC-8004 标准的参考实现**，专为 Agentic Economy 打造。作为一套 SDK，它利用区块链与去中心化存储赋予 Agents 注册身份、发布能力及建立信誉系统的功能，从而实现了无需依赖中介的无许可发现机制。
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-此示例涵盖了初始化 SDK、定义 Agents 属性、发布 MCP/A2A 能力、将其注册至区块链以及最后通过 ID 重新检索的过程。
+# Quick Start
 
+Agent0 is the **reference implementation of the ERC-8004 standard**, purpose-built for the Agentic Economy. As an SDK, it leverages blockchain and decentralized storage to enable Agents to register identities, publish capabilities, and build reputation systems—thereby enabling permissionless discovery without relying on intermediaries.
 
-<Tabs groupId="chain">
-  <TabItem value="tron" label="TRON">
-    <Tabs groupId="language">
-      <TabItem value="python" label="Python">
+This example covers initializing the SDK, defining Agent attributes, publishing MCP/A2A capabilities, registering on-chain, and finally retrieving the Agent by ID.
 
+<Tabs>
+<TabItem value="python" label="python">
 
 ```python
 from agent0_sdk import SDK
@@ -71,10 +71,10 @@ print(f"✅ Retrieved: {retrieved.name}")
 
 ```
 
-  </TabItem>
-  <TabItem value="ts" label="TypeScript">
+</TabItem> 
+<TabItem value="TypeScript" label="TypeScript">
 
-```typescript
+```
 import { SDK } from 'agent0-sdk';
 
 async function main() {
@@ -140,25 +140,3 @@ main().catch(console.error);
 
 </TabItem>
 </Tabs>
-</TabItem>
-<TabItem value="bsc" label="BSC">
-<Tabs groupId="language">
-  <TabItem value="python" label="Python">
-
-
-  </TabItem>
-  <TabItem value="ts" label="TypeScript">
-
-
-
-  </TabItem>
-  
-</Tabs>
-</TabItem> 
-</Tabs>
-
-
-
-
-
-

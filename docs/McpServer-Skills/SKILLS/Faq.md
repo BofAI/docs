@@ -1,35 +1,31 @@
-# 常见问题
+# FAQ
 
-### 问：技能需要单独安装吗？
+### Q: Do skills need to be installed separately?
 
-**答**：❌ 不需要。技能只是 AI 智能体直接读取的文档。
+**A**: ❌ No. Skills are simply documents that the AI agent reads directly.
 
-### 问：技能和 MCP 服务器有什么区别？
+### Q: What is the difference between a Skill and the MCP server?
 
-**答**：
+**A**:
 
-* **技能（Skill）** = 指令文档（教 AI 如何做某事）
-* **MCP 服务器** = 工具服务（提供实际能力）
+* **Skill** = Instruction document (teaches the AI how to do something)  
+* **MCP Server** = Tool service (provides actual capabilities)
 
-技能告诉 AI 如何使用 MCP 服务器工具。
+Skills tell the AI how to use the MCP server tools.
 
-### 问：如何知道技能需要哪些依赖？
+### Q: How do I know what dependencies a skill requires?
 
-**答**：查看 SKILL.md 中的 YAML 前置元数据：
+**A**: Check the YAML frontmatter metadata in SKILL.md:
 
 ```yaml
 dependencies:
   - mcp-server
 ```
 
-### 问：如果 AI 智能体找不到技能怎么办？
+### Q: What if the AI agent cannot find a skill?  
+**A**: Explicitly tell it:
 
-**答**：明确告诉它：
+Please read skills/sunswap/SKILL.md
 
-```
-请阅读 skills/sunswap/SKILL.md
-```
-
-### 问：我可以修改技能吗？
-
-**答**：✅ 可以！直接编辑 SKILL.md，AI 智能体会读取最新版本。
+### Q: Can I modify a skill?  
+**A**: ✅ Yes! Simply edit SKILL.md, and the AI agent will read the latest version.

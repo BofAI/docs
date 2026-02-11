@@ -1,88 +1,139 @@
-# 钱包
+# Wallet
 
-在 x402 协议中，TRON 钱包不仅是资金的容器，更是买方（客户端）和卖方（服务端）在去中心化网络中的**核心身份标识**。
+In the x402 protocol, a wallet is more than just a container for funds — it serves as the **core identity** for both buyers (clients) and sellers (servers) in a decentralized network.
 
-钱包地址用于发送、接收和验证支付，同时作为协议交互的唯一凭证，消除了对传统账户密码体系的依赖。
+Wallet addresses are used to send, receive, and verify payments. They function as the unique credential for protocol interactions, eliminating the need for traditional account-password systems.
 
-## 钱包的角色
+---
 
-### 对于买方
+## Role of the Wallet
 
-买方利用 TRON 钱包作为交互锚点，主要负责：
+### For Buyers
 
-- **资产托管**：安全存储 USDT 或其他 TRC-20 代币。
-- **签名授权**：使用私钥对 TIP-712 支付载荷进行加密签名 (Sign)。
-- **程序化支付**：以代码形式授权链上资金转移（特别适用于自主 AI 代理）。
-- **额度管理**：管理对 Facilitator 合约的代币授权 (Allowance)。
+Buyers use their wallet as the primary interaction anchor, responsible for:
 
-> **无状态认证**：钱包机制使得买方无需注册账户、无需管理 API Key 或登录 Session 即可直接发起交易。
+- **Asset Custody**: Securely storing USDT or other TRC-20/BEP-20 tokens.
+- **Signature Authorization**: Cryptographically signing TIP-712/EIP-712 payment payloads using their private key.
+- **Programmatic Payments**: Authorizing on-chain fund transfers via code (especially suitable for autonomous AI agents).
+- **Allowance Management**: Managing token allowances granted to the Facilitator contract.
 
-### 对于卖方
+> **Stateless Authentication**: With wallet-based identity, buyers can initiate transactions without account registration, API keys, or login sessions.
 
-卖方使用 TRON 钱包作为收款终端：
+---
 
-- **接收资金**：作为 USDT/TRC-20 支付的最终结算目的地。
-- **配置目标**：在服务端配置中明确定义收款地址。
+### For Sellers
 
-卖方的钱包地址会直接包含在 `HTTP 402` 响应的支付要求 (Payment Requirements) 中，确保资金流向透明。
+Sellers use wallets as payment receiving endpoints:
 
-## TRON 地址格式
+- **Receiving Funds**: Acting as the final settlement address for USDT/TRC-20/BEP-20 payments.
+- **Configuration Target**: Explicitly defining the receiving wallet address in server configuration.
 
-TRON 网络使用 **Base58** 编码格式的地址，且固定以字符 `T` 开头。
+The seller’s wallet address is included directly in the `HTTP 402` Payment Requirements, ensuring transparent fund routing.
 
-- 示例：`TXxx...xxxX`（Base58 编码，以 `T` 开头）
+---
 
-## TIP-712 结构化签名
+## TRON Address Format
 
-x402 协议采用 **TIP-712** 标准（即 TRON 网络对 EIP-712 的实现）来执行结构化数据签名。
+TRON uses **Base58**-encoded addresses that always start with the letter `T`.
 
-引入该标准带来了以下核心优势：
+- Example: `TXxx...xxxX` (Base58, starting with `T`)
 
-- **所见即所签 (Human-readable)**：用户在签名时能够清晰地查看具体的授权详情，而非一串不可读的密文。
-- **域隔离 (Domain separation)**：签名被严格绑定至特定的合约与域，防止跨应用或跨网络混用。
-- **防重放机制 (Replay protection)**：签名数据中内嵌了随机数 (nonce) 和过期时间，有效防止恶意重复提交。
+---
 
-**签名交互流程：**
+## BSC Address Format
 
-1. 客户端接收服务端返回的支付要求。
-2. 客户端构建符合规范的 TIP-712 类型化数据结构 (TypedData)。
-3. 客户端使用私钥对该结构化数据进行签名。
-4. 将生成的签名封装在 `PAYMENT-SIGNATURE` 请求头中发送。
+BSC uses **hexadecimal (0x-prefixed)** addresses, fully compatible with Ethereum.
 
-## 代币授权
+- Example: `0x55d3...97955` (Hex, starting with `0x`)
 
-对于 `exact` 支付方案，客户端必须授权 `PaymentPermit` 合约从其钱包中划转代币以进行支付结算。这是通过标准的 TRC-20 `approve` 函数完成的。
+---
 
-x402 客户端 SDK 会自动处理此操作。
+## TIP-712 / EIP-712 Structured Signatures
 
-## 网络节点端点
+x402 uses the **TIP-712/EIP-712** standard for structured data signing.
 
-各 TRON 网络环境的全节点 / API 访问端点如下：
+### Core Advantages
 
-| 网络环境 (Network)  | RPC 端点 (Endpoint)              |
-| :------------------ | :------------------------------- |
-| **Mainnet** (主网)  | `https://api.trongrid.io`        |
-| **Nile** (测试网)   | `https://nile.trongrid.io`       |
-| **Shasta** (测试网) | `https://api.shasta.trongrid.io` |
+- **What You See Is What You Sign (Human-readable)**  
+  Users can clearly review authorization details before signing, rather than approving opaque hash data.
 
-## 安全最佳实践
+- **Domain Separation**  
+  Signatures are strictly bound to a specific contract and domain, preventing cross-application or cross-network misuse.
 
-- **严禁暴露私钥**：切勿将私钥硬编码在代码中，务必通过环境变量进行安全存储。
-- **优先使用测试网**：在部署至主网前，请务必在 Nile 或 Shasta 测试网完成开发与验证。
-- **按需授权额度**：遵循最小权限原则，仅批准当前支付所需的代币金额。
-- **实时监控交易**：利用 TronScan 追踪支付状态及额度授权记录，确保资金安全。
+- **Replay Protection**  
+  Embedded `nonce` values and expiration timestamps prevent malicious replay attacks.
 
-## 总结
+---
 
-- **核心基础**：TRON 钱包是 x402 协议实现程序化、无许可支付的基础设施。
-- **买方操作**：买方通过钱包生成 TIP-712 签名，授权并支付服务费用。
-- **卖方接收**：卖方利用钱包地址作为接收资金的终端。
-- **身份标识**：钱包地址同时充当协议交互中的唯一身份 ID。
-- **自动化支持**：SDK 内置了代币授权额度的自动处理逻辑，简化了开发流程。
+### Signature Flow
 
-## 下一步
+1. The client receives the payment requirement from the server.
+2. The client constructs a compliant TIP-712/EIP-712 TypedData structure.
+3. The client signs the structured data using their private key.
+4. The generated signature is sent in the `PAYMENT-SIGNATURE` request header.
 
-接下来，请深入探索：
+---
 
-- [网络与代币支持](./network-and-token-support.md) — 查看支持的 TRON 网络环境及代币列表
-- [SDK 功能](../sdk-features.md) — 探索 x402 SDK 的完整功能
+## Token Approval
+
+For the `exact` payment scheme, the client must authorize the `PaymentPermit` contract to transfer tokens from their wallet for settlement.  
+
+This is completed via the standard TRC-20/BEP-20 `approve` function.
+
+The x402 client SDK automatically handles this process.
+
+---
+
+## Network RPC Endpoints
+
+### TRON RPC Endpoints
+
+| Network | RPC Endpoint |
+| :------- | :------------ |
+| **Mainnet** | `https://api.trongrid.io` |
+| **Nile (Testnet)** | `https://nile.trongrid.io` |
+| **Shasta (Testnet)** | `https://api.shasta.trongrid.io` |
+
+---
+
+### BSC RPC Endpoints
+
+| Network | RPC Endpoint |
+| :------- | :------------ |
+| **Mainnet** | `https://bsc-dataseed.binance.org` |
+| **Testnet** | `https://data-seed-prebsc-1-s1.binance.org:8545` |
+
+---
+
+## Security Best Practices
+
+- **Never Expose Private Keys**  
+  Do not hardcode private keys in source code. Store them securely using environment variables.
+
+- **Use Testnets First**  
+  Always complete development and validation on testnet before deploying to mainnet.
+
+- **Approve Minimum Required Amounts**  
+  Follow the principle of least privilege by approving only the necessary token amount.
+
+- **Monitor Transactions in Real Time**  
+  Use TronScan/BscScan to track payment status and allowance records for enhanced security.
+
+---
+
+## Summary
+
+- **Core Foundation**: Wallets enable programmatic, permissionless payments in x402.
+- **Buyer Action**: Buyers generate TIP-712/EIP-712 signatures to authorize and pay for services.
+- **Seller Reception**: Sellers receive funds directly via wallet addresses.
+- **Identity Layer**: Wallet addresses serve as the unique identity within protocol interactions.
+- **Automation Support**: The SDK automatically manages token approval logic, simplifying development.
+
+---
+
+## Next Steps
+
+Continue exploring:
+
+- [Network & Token Support](./network-and-token-support.md) — View supported networks and token lists  
+- [SDK Features](../sdk-features.md) — Explore the full capabilities of the x402 SDK  

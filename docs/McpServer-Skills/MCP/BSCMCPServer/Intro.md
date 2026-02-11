@@ -1,4 +1,5 @@
-# 简介 
-BSC MCP 是一个模型上下文协议 (Model Context Protocol) 的实现，它通过 AI 驱动的接口实现了与区块链网络的无缝交互。它为区块链开发、智能合约交互以及网络管理提供了一套全面的工具和资源。
+# Introduction
 
+BSC MCP is an implementation of the Model Context Protocol (MCP) that enables seamless interaction with blockchain networks through an AI-driven interface. It provides a comprehensive set of tools and resources for blockchain development, smart contract interaction, and network management.
 
+For more information, please refer to: https://www.npmjs.com/package/@bnb-chain/mcp

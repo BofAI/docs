@@ -1,40 +1,40 @@
-# 功能
+# Features
 
-### 区块链数据访问
+### Blockchain Data Access
 
-*   **TRON 网络支持**：主网、Nile、Shasta。
-*   **链信息**：区块号、链 ID、RPC 端点。
-*   **区块数据**：按编号或哈希访问。
-*   **交易详情**：详细信息，包括资源使用（能量/带宽）。
-*   **资源成本**：查询当前链参数以获取能量和带宽价格。
+* **TRON Network Support**: Mainnet, Nile, Shasta.
+* **Chain Information**: Block number, chain ID, RPC endpoint.
+* **Block Data**: Access by number or hash.
+* **Transaction Details**: Full details, including resource usage (Energy/Bandwidth).
+* **Resource Costs**: Query current chain parameters for energy and bandwidth pricing.
 
-### 代币服务
+### Token Services
 
-*   **原生 TRX**：检查余额和转账。
-*   **TRC20 代币**：
-    *   检查余额。
-    *   转移代币。
-    *   获取代币元数据（名称、符号、小数位数）。
+* **Native TRX**: Check balance and transfer.
+* **TRC20 Tokens**:
+  * Check balance.
+  * Transfer tokens.
+  * Retrieve token metadata (name, symbol, decimals).
 
-### 地址服务
+### Address Services
 
-*   **格式转换**：在 Hex (`41...` 或 `0x...`) 和 Base58 (`T...`) 格式之间转换。
-*   **验证**：验证地址在 TRON 上是否有效。
+* **Format Conversion**: Convert between Hex (`41...` or `0x...`) and Base58 (`T...`) formats.
+* **Validation**: Verify whether an address is valid on TRON.
 
-### 智能合约交互
+### Smart Contract Interaction
 
-*   **读取合约**：调用 `view` 和 `pure` 函数。
-*   **写入合约**：执行改变状态的函数。
-*   **ABI 获取**：自动从区块链获取已验证合约的 ABI。
+* **Read Contracts**: Call `view` and `pure` functions.
+* **Write Contracts**: Execute state-changing functions.
+* **ABI Retrieval**: Automatically fetch ABI for verified contracts from the blockchain.
 
-### 钱包与安全
+### Wallet & Security
 
-*   **灵活钱包**：通过 `TRON_PRIVATE_KEY` 或 `TRON_MNEMONIC` 配置。
-*   **HD 钱包**：支持 BIP-44 派生路径 `m/44'/195'/0'/0/{index}`。
-*   **签名**：签署任意消息。
+* **Flexible Wallet Configuration**: Configure via `TRON_PRIVATE_KEY` or `TRON_MNEMONIC`.
+* **HD Wallet Support**: BIP-44 derivation path `m/44'/195'/0'/0/{index}`.
+* **Signing**: Sign arbitrary messages.
 
-## 支持的网络
+## Supported Networks
 
-*   **主网**：`mainnet` (默认)
-*   **Nile 测试网**：`nile`
-*   **Shasta 测试网**：`shasta`
+* **Mainnet**: `mainnet` (default)
+* **Nile Testnet**: `nile`
+* **Shasta Testnet**: `shasta`

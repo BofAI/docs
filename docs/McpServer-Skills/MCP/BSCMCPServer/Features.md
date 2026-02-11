@@ -1,20 +1,21 @@
-# 功能 
-该项目被划分为以下几个核心功能：
+# Features
 
-**区块**：查询和管理区块链区块
+The project is divided into the following core functional modules:
 
-**合约**：与智能合约进行交互
+**Blocks**: Query and manage blockchain blocks  
 
-**网络**：网络信息与管理
+**Contracts**: Interact with smart contracts  
 
-**NFT**：NFT (ERC721/ERC1155) 操作
+**Network**: Network information and management  
 
-**代币**：代币 (ERC20) 操作
+**NFT**: NFT (ERC721/ERC1155) operations  
 
-**交易**：交易管理
+**Tokens**: Token (ERC20) operations  
 
-**钱包**：钱包操作与管理
+**Transactions**: Transaction management  
 
-**公共组件**：共享工具程序和类型
+**Wallet**: Wallet operations and management  
 
-**Greenfield**：支持 Greenfield 网络上的文件管理操作，包括文件的上传、下载，以及文件和存储桶 (buckets) 的管理
+**Common Components**: Shared utilities and types  
+
+**Greenfield**: Support for file management operations on the Greenfield network, including file uploads, downloads, and the management of files and storage buckets  

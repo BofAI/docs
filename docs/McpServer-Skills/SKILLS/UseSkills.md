@@ -1,29 +1,30 @@
-# 如何使用 SKILLS
+# How to Use SKILLS
 
-### 前置要求
+### Prerequisites
 
-1. ✅ 已安装 AI 智能体（OpenClaw）
-2. ✅ 已安装 **OpenClaw 扩展**
-   * 下载：[bankofai/openclaw-extension](https://github.com/bankofai/openclaw-extension)
-   * 按照该仓库中的说明设置 MCP 服务器
+1. ✅ AI Agent (OpenClaw) installed  
+2. ✅ **OpenClaw Extension** installed  
+   * Download: [bankofai/openclaw-extension](https://github.com/bankofai/openclaw-extension)  
+   * Follow the instructions in that repository to set up the MCP server  
 
-## 面向开发者
 
-### 创建新 SKILL
+## For Developers
 
-查看 [AGENTS.md](https://github.com/bankofai/skills/blob/main/) 了解如何创建新技能。
+### Create a New SKILL
 
-**快速模板**：
+See [AGENTS.md](https://github.com/bankofai/skills/blob/main/) to learn how to create a new skill.
+
+**Quick Template**:
 
 ```shell
-# 1. 创建目录
+# 1. Create directory structure
 mkdir -p my-skill/{examples,resources,scripts}
 
-# 2. 创建 SKILL.md
+# 2. Create SKILL.md
 cat > my-skill/SKILL.md << 'EOF'
 ---
 name: My Skill
-description: 这个技能的功能
+description: What this skill does
 version: 1.0.0
 dependencies:
   - required-tool
@@ -33,23 +34,23 @@ tags:
 
 # My Skill
 
-## 概述
-[描述]
+## Overview
+[Description]
 
-## 使用说明
-1. 步骤 1
-2. 步骤 2
+## Usage Instructions
+1. Step 1
+2. Step 2
 EOF
 ```
 
-### SKILL 规范
+### SKILL Specification
 
-每个 SKILL 必须包含：
+Each SKILL must include:
 
-* ✅ **SKILL.md** - 主指令文件（带有 YAML 前置元数据）
-* ✅ **README.md** - 快速描述
-* ⚠️ **examples/** - 使用示例（推荐）
-* ⚠️ **resources/** - 配置文件（可选）
-* ⚠️ **scripts/** - 辅助脚本（可选）
+* ✅ **SKILL.md** - Main instruction file (with YAML frontmatter metadata)
+* ✅ **README.md** - Quick description
+* ⚠️ **examples/** - Usage examples (recommended)
+* ⚠️ **resources/** - Configuration files (optional)
+* ⚠️ **scripts/** - Helper scripts (optional)
 
-详见 [AGENTS.md](https://github.com/bankofai/skills/blob/main/)
+For more details, see [AGENTS.md](https://github.com/bankofai/skills/blob/main/)

@@ -1,41 +1,40 @@
-# 安装
+# Installation
 
-### 前置要求
+### Prerequisites
 
-* **bun** v1.2.10 或更高版本
-* **Node.js** v17 或更高版本
+* **bun** v1.2.10 or higher  
+* **Node.js** v17 or higher  
 
-### 快速开始
+### Quick Start
 
-1.  **克隆仓库：**
+1. **Clone the repository:**
     ```bash
-    git clone [https://github.com/bnb-chain/bnbchain-mcp.git](https://github.com/bnb-chain/bnbchain-mcp.git)
+    git clone https://github.com/bnb-chain/bnbchain-mcp.git
     cd bnbchain-mcp
     ```
 
-2.  **设置环境变量：**
+2. **Set up environment variables:**
     ```bash
     cp .env.example .env
     ```
 
-3.  **编辑 `.env` 文件并配置你的信息：**
-    * `PRIVATE_KEY`：你的钱包私钥（执行交易操作时必填）
-    * `LOG_LEVEL`：设置日志级别（`DEBUG`, `INFO`, `WARN`, `ERROR`）
-    * `PORT`：服务器端口号（默认：`3001`）
+3. **Edit the `.env` file and configure your information:**
+    * `PRIVATE_KEY`: Your wallet private key (required for executing transactions)
+    * `LOG_LEVEL`: Set the log level (`DEBUG`, `INFO`, `WARN`, `ERROR`)
+    * `PORT`: Server port number (default: `3001`)
 
-4.  **安装依赖并启动开发服务器：**
+4. **Install dependencies and start the development server:**
     ```bash
-    # 安装项目依赖
+    # Install project dependencies
     bun install
     
-    # 启动开发服务器
+    # Start the development server
     bun dev:sse
     ```
 
+### Test with an MCP Client
 
-### 使用 MCP 客户端测试
-
-使用以下模板在你的 MCP 客户端中配置本地服务器：
+Use the following template to configure the local server in your MCP client:
 
 ```json
 {
@@ -43,16 +42,17 @@
     "bnbchain-mcp": {
       "url": "http://localhost:3001/sse",
       "env": {
-        "PRIVATE_KEY": "你的私钥填在这里"
+        "PRIVATE_KEY": "your_private_key_here"
       }
     }
   }
 }
 ```
 
-### 使用 Web UI 测试
-使用 @modelcontextprotocol/inspector 进行测试。运行以下命令启动测试 UI：
+### Test with the Web UI
 
-```Bash
+Use @modelcontextprotocol/inspector for testing. Run the following command to launch the test UI:
+
+```bash
 bun run test
 ```

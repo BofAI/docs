@@ -1,9 +1,10 @@
-# SKILLS 列表
+# SKILLS List
 
   
-| Skill                    | 功能        |     
-| ----------------------------- | ------------- | 
-| **SunSwap 技能**   | DEX 交易（代币兑换）| 
-| **ERC-8004 可信智能体**      | AI 智能体的链上身份、信誉和验证 | 
-| **x402-payment** | AI 智能体的代币支付（USDT/USDD） | 
-| **x402_payment_demo** | x402 支付协议的演示 | 
+| Skill                     | Function |
+|---------------------------|----------|
+| **SunSwap Skill**         | SunSwap DEX trading (token swaps) |
+| **ERC-8004 Trusted Agent**| On-chain identity, reputation, and verification for AI agents |
+| **x402-payment**          | Token payments for AI agents (USDT/USDD) |
+| **x402_payment_demo**     | Demonstration of the x402 payment protocol |
+

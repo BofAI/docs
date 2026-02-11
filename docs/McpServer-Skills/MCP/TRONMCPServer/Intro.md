@@ -1,30 +1,25 @@
-# 简介
+# Introduction
 
-一个全面的模型上下文协议 (MCP) 服务器，为 TRON 网络提供区块链服务。该服务器使 AI 代理能够通过工具和 AI 引导的提示，以统一的界面与 TRON 区块链进行交互，支持 TRX、TRC20 代币和智能合约。
+A comprehensive Model Context Protocol (MCP) server that provides blockchain services for the TRON network. This server enables AI agents to interact with the TRON blockchain through tools and AI-guided prompts via a unified interface, supporting TRX, TRC20 tokens, and smart contracts.
 
+The MCP TRON server leverages the Model Context Protocol to deliver blockchain services to AI agents. It uses `tronweb` to fully support the TRON ecosystem.
 
+## Key Features
 
-MCP TRON 服务器利用模型上下文协议为 AI 代理提供区块链服务。它使用 `tronweb` 完全支持 TRON 生态系统。
+* **Blockchain Data**: Read blocks, transactions, and chain parameters (energy/bandwidth costs).
+* **Smart Contracts**: Interact with any TRON smart contract (read/write).
+* **Tokens**: Transfer TRX and TRC20 tokens; check balances.
+* **Address Management**: Convert between Hex (0x...) and Base58 (T...) formats.
+* **Wallet Integration**: Supports private key and mnemonic (BIP-39) wallets.
+* **Multi-Network**: Seamless support for Mainnet, Nile, and Shasta.
 
-## 主要功能
+## Security Considerations
 
-*   **区块链数据**：读取区块、交易和链参数（能量/带宽成本）。
-*   **智能合约**：与任何 TRON 智能合约交互（读取/写入）。
-*   **代币**：转移 TRX 和 TRC20 代币；检查余额。
-*   **地址管理**：在 Hex (0x...) 和 Base58 (T...) 格式之间转换。
-*   **钱包集成**：支持私钥和助记词 (BIP-39) 钱包。
-*   **多网络**：无缝支持主网、Nile 和 Shasta。
-   
+* **Private Key Management**: Private keys and mnemonics should always be managed securely via environment variables. Never hardcode them or store them in insecure files.
+* **Testnet First**: Always thoroughly test on Nile or Shasta testnets before deploying any operations to mainnet.
+* **Principle of Least Privilege**: Wallets configured for AI agents should only contain the minimum funds required to perform their tasks.
+* **Code Audit**: It is recommended to conduct a security audit of the server code before using it in a production environment.
 
+## License
 
-## 安全注意事项
-
-*   **私钥管理**：私钥和助记词应始终通过环境变量安全管理，切勿硬编码或存储在不安全的文件中。
-*   **测试网优先**：在主网部署任何操作之前，务必在 Nile 或 Shasta 测试网上进行充分测试。
-*   **最小权限原则**：为 AI 代理配置的钱包应仅包含执行其任务所需的最小资金。
-*   **代码审计**：在生产环境中使用前，建议对服务器代码进行安全审计。
-
-## 许可证
-
-该项目根据 MIT 许可证发布。
-
+This project is released under the MIT License.

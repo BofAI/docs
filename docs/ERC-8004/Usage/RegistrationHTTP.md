@@ -1,25 +1,30 @@
-# 注册 (HTTP)
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-使用指向注册文件的直接 HTTP/HTTPS URL 将您的代理（agent）在链上注册。
+# Registration (HTTP)
 
-## 概览 (Overview)
+Register your agent on-chain using a direct HTTP/HTTPS URL pointing to the registration file.
 
-HTTP 注册在以下情况下非常有用：
+## Overview
 
-*   您自行托管注册文件。
-*   您希望完全控制文件的提供方式。
-*   相比 IPFS，您更倾向于传统的托管方式。
+HTTP registration is very useful when:
 
-## 分步流程 (Step-by-Step Process)
+*   You self-host the registration file.
+*   You want full control over how the file is served.
+*   You prefer traditional hosting over IPFS.
 
-### 1. 配置您的代理 (Configure Your Agent)
+## Step-by-Step Process
 
-**Python**
+### 1. Configure Your Agent
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
-# 创建并配置您的代理
+# Create and configure your agent
 agent = sdk.createAgent(
-    name="我的 AI 代理",
-    description="代理描述",
+    name="My AI Agent",
+    description="Agent description",
     image="https://example.com/image.png"
 )
 
@@ -29,12 +34,14 @@ agent.setENS("myagent.eth")
 agent.setTrust(reputation=True)
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
-// 创建并配置您的代理
+// Create and configure your agent
 const agent = sdk.createAgent({
-    name: "我的 AI 代理",
-    description: "代理描述",
+    name: "My AI Agent",
+    description: "Agent description",
     image: "https://example.com/image.png"
 });
 
@@ -44,66 +51,87 @@ agent.setENS({ name: "myagent.eth" });
 agent.setTrust({ reputation: true });
 ```
 
+</TabItem>
+</Tabs>
 
-### 2. 生成注册文件内容 (Generate Registration File Content)
 
-从 SDK 获取 JSON 内容：
 
-**Python**
+### 2. Generate Registration File Content
+
+Get the JSON content from the SDK:
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
-# 获取注册文件对象
+# Get the registration file object
 registration_file = agent.registrationFile()
 
-# 转换为字典（JSON 就绪）
+# Convert to dictionary (JSON ready)
 registration_data = registration_file.to_dict()
 
-# 或者获取格式化后的 JSON 字符串
-json_content = str(registration_file)  # 带有缩进的 JSON
+# Or get the formatted JSON string
+json_content = str(registration_file)  # JSON with indentation
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
-// 获取注册文件内容
+// Get registration file content
 const registrationData = agent.registrationFile().toDict();
 
-// 或者获取 JSON 字符串
+// Or get the JSON string
 const jsonContent = JSON.stringify(registrationData, null, 2);
 ```
 
+</TabItem>
+</Tabs>
 
-### 3. 托管注册文件 (Host the Registration File)
 
-将 JSON 内容保存到您的 Web 服务器：
 
-**Python**
+### 3. Host the Registration File
+
+Save the JSON content to your web server:
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
-# 保存到文件
+# Save to file
 with open("my-agent.json", "w") as f:
     f.write(json_content)
 
-# 上传到您的 Web 服务器
-# 示例 URL：
+# Upload to your web server
+# Example URLs:
 # https://yourdomain.com/agents/my-agent.json
 # https://yourusername.github.io/agents/my-agent.json
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
-// 保存到文件（Node.js 示例）
+// Save to file (Node.js example)
 import * as fs from 'fs';
 fs.writeFileSync('my-agent.json', jsonContent);
 
-// 上传到您的 Web 服务器
+// Upload to your web server
 ```
 
+</TabItem>
+</Tabs>
 
-## 可选：端点域名验证 (.well-known)
 
-如果您希望验证者将 HTTPS 端点域名视为“已验证”，请发布：
+
+
+## Optional: Endpoint Domain Verification (.well-known)
+
+If you want validators to consider the HTTPS endpoint domain as "verified", publish:
 
 *   `https://{endpoint-domain}/.well-known/agent-registration.json`
 
-该文件应包含一个与您的链上身份匹配的 `registrations` 条目：
+This file should contain a `registrations` entry that matches your on-chain identity:
 
 ```json
 {
@@ -116,160 +144,185 @@ fs.writeFileSync('my-agent.json', jsonContent);
 }
 ```
 
-注意：
-*   这是可选的，主要供第三方验证者/聚合器使用。
-*   如果您的 `agentURI` 托管在同一个域名下，通常不需要进行此额外检查。
+Note:
+*   This is optional and primarily for third-party validators/aggregators.
+*   This extra check is usually not needed if your `agentURI` is hosted under the same domain.
 
-### 4. 在链上注册 (Register On-Chain)
+### 4. Register On-Chain
 
-**Python**
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
-# 使用您的 HTTP URL 进行注册
+# Register using your HTTP URL
 tx = agent.registerHTTP("https://yourdomain.com/agents/my-agent.json")
 registration_file = tx.wait_confirmed(timeout=180).result
 
-print(f"代理已注册，ID: {registration_file.agentId}")
-print(f"代理 URI: {registration_file.agentURI}")  # https://yourdomain.com/...
+print(f"Agent registered, ID: {registration_file.agentId}")
+print(f"Agent URI: {registration_file.agentURI}")  # https://yourdomain.com/...
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
-// 使用您的 HTTP URL 进行注册
+// Register using your HTTP URL
 const tx = await agent.registerHTTP("https://yourdomain.com/agents/my-agent.json");
 const registrationFile = (await tx.waitConfirmed()).result;
 
-console.log(`代理已注册，ID: ${registrationFile.agentId}`);
-console.log(`代理 URI: ${registrationFile.agentURI}`); // https://yourdomain.com/...
+console.log(`Agent registered, ID: ${registrationFile.agentId}`);
+console.log(`Agent URI: ${registrationFile.agentURI}`); // https://yourdomain.com/...
 ```
 
+</TabItem>
+</Tabs>
 
-## 完整示例 (Complete Example)
 
-::: tabs
-@tab Python
+
+## Full Example
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
 from agent0_sdk import SDK
 
-# 初始化 SDK
+# Initialize SDK
 sdk = SDK(
     chainId=11155111,
     rpcUrl="https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
     signer=private_key
 )
 
-# 1. 配置代理
+# 1. Configure agent
 agent = sdk.createAgent(
-    name="我的 AI 代理",
-    description="一个有用的 AI 助手",
+    name="My AI Agent",
+    description="A useful AI assistant",
     image="https://example.com/agent.png"
 )
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent.json")
 
-# 2. 生成注册文件
+# 2. Generate registration file
 registration_data = agent.registrationFile().to_dict()
 json_content = str(agent.registrationFile())
 
-# 3. 保存并上传到您的服务器
+# 3. Save and upload to your server
 with open("my-agent.json", "w") as f:
     f.write(json_content)
-# 上传至：https://yourdomain.com/agents/my-agent.json
+# Upload to: https://yourdomain.com/agents/my-agent.json
 
-# 4. 在链上注册
+# 4. Register on-chain
 tx = agent.registerHTTP("https://yourdomain.com/agents/my-agent.json")
 tx.wait_confirmed(timeout=180)
 
-print(f"✅ 代理已注册，ID: {agent.agentId}")
+print(f"✅ Agent registered, ID: {agent.agentId}")
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
 import { SDK } from '@ag0/sdk';
 
-// 初始化 SDK
+// Initialize SDK
 const sdk = new SDK({
     chainId: 11155111,
     rpcUrl: "https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
     signer: private_key
 });
 
-// 1. 配置代理
+// 1. Configure agent
 const agent = sdk.createAgent({
-    name: "我的 AI 代理",
-    description: "一个有用的 AI 助手",
+    name: "My AI Agent",
+    description: "A useful AI assistant",
     image: "https://example.com/agent.png"
 });
 agent.setMCP({ endpoint: "https://mcp.example.com/" });
 agent.setA2A({ agentcard: "https://a2a.example.com/agent.json" });
 
-// 2. 生成注册文件
+// 2. Generate registration file
 const registrationData = agent.registrationFile().toDict();
 const jsonContent = JSON.stringify(registrationData, null, 2);
 
-// 3. 保存并上传到您的服务器
-// 上传至：https://yourdomain.com/agents/my-agent.json
+// 3. Save and upload to your server
+// Upload to: https://yourdomain.com/agents/my-agent.json
 
-// 4. 在链上注册
+// 4. Register on-chain
 const tx = await agent.registerHTTP("https://yourdomain.com/agents/my-agent.json");
 await tx.waitConfirmed();
 
-console.log(`✅ 代理已注册，ID: ${agent.agentId}`);
+console.log(`✅ Agent registered, ID: ${agent.agentId}`);
 ```
 
+</TabItem>
+</Tabs>
 
-## 更新注册 (Update Registration)
 
-更新代理：
 
-**Python**
+
+## Update Registration
+
+Update agent:
+
+<Tabs>
+<TabItem value="python" label="python">
+
 ```python
-# 1. 加载现有代理
+# 1. Load existing agent
 agent = sdk.loadAgent("11155111:123")
 
-# 2. 修改配置
-agent.updateInfo(description="更新后的描述")
+# 2. Modify configuration
+agent.updateInfo(description="Updated description")
 agent.setMCP("https://new-mcp.example.com")
 
-# 3. 生成新的注册文件
+# 3. Generate new registration file
 json_content = str(agent.registrationFile())
 
-# 4. 将更新后的文件上传到您的服务器
+# 4. Upload the updated file to your server
 with open("my-agent-updated.json", "w") as f:
     f.write(json_content)
 
-# 5. 在链上更新 URI（仅当 URI 发生更改时）
+# 5. Update URI on-chain (only if URI has changed)
 agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json")
 ```
 
-**TypeScript**
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
 ```typescript
-// 1. 加载现有代理
+// 1. Load existing agent
 const agent = await sdk.loadAgent("11155111:123");
 
-// 2. 修改配置
-agent.updateInfo({ description: "更新后的描述" });
+// 2. Modify configuration
+agent.updateInfo({ description: "Updated description" });
 agent.setMCP({ endpoint: "https://new-mcp.example.com" });
 
-// 3. 生成新的注册文件
+// 3. Generate new registration file
 const registrationData = agent.registrationFile().toDict();
 const jsonContent = JSON.stringify(registrationData, null, 2);
 
-// 4. 将更新后的文件上传到您的服务器
+// 4. Upload the updated file to your server
 
-// 5. 在链上更新 URI（仅当 URI 发生更改时）
+// 5. Update URI on-chain (only if URI has changed)
 await agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json");
 ```
 
+</TabItem>
+</Tabs>
 
-## 注册文件格式 (Registration File Format)
 
-SDK 会生成符合 ERC-8004 标准的注册文件：
+
+
+## Registration File Format
+
+The SDK generates an ERC-8004 compliant registration file:
 
 ```json
 {
   "type": "https://eips.eth.org/EIPS/eip-8004#registration-v1",
-  "name": "我的 AI 代理",
-  "description": "代理描述",
+  "name": "My AI Agent",
+  "description": "Agent description",
   "image": "https://example.com/image.png",
   "services": [
     {
@@ -299,4 +352,3 @@ SDK 会生成符合 ERC-8004 标准的注册文件：
   "updatedAt": 1234567890
 }
 ```
-
