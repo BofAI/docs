@@ -14,18 +14,18 @@ Create a new agent in memory (not yet registered):
 <TabItem value="python" label="python">
 
 ```python
-from agent0_sdk import SDK
+from bankofai.sdk_8004.core.sdk import SDK
 
-# Initialize SDK
+# Initialize the SDK
 sdk = SDK(
-    chainId=11155111,
-    rpcUrl="https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
+    network="eip155:97",
+    rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
     signer=your_private_key,
     ipfs="pinata",
     pinataJwt=your_pinata_jwt
 )
 
-# Create agent
+# Create an Agent
 agent = sdk.createAgent(
     name="My AI Agent",
     description="An intelligent assistant capable of handling various tasks. Skills include: data analysis, code generation, natural language processing. Pricing: $0.10 per request, with a free tier available.",
@@ -37,18 +37,16 @@ agent = sdk.createAgent(
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-import { SDK } from '@ag0/sdk';
+import { SDK } from '@bankofai/8004-sdk';
 
-// Initialize SDK
+// Initialize the SDK
 const sdk = new SDK({
-    chainId: 11155111,
-    rpcUrl: "https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
-    signer: your_private_key,
-    ipfs: "pinata",
-    pinataJwt: your_pinata_jwt
+    network: "eip155:97",
+    rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
+    signer: your_private_key
 });
 
-// Create agent
+// Create an Agent
 const agent = sdk.createAgent({
     name: "My AI Agent",
     description: "An intelligent assistant capable of handling various tasks. Skills include: data analysis, code generation, natural language processing. Pricing: $0.10 per request, with a free tier available.",
@@ -103,7 +101,7 @@ agent.updateInfo({
 <TabItem value="python" label="python">
 
 ```python
-# Set agent to active/inactive status
+# Set agent to Active/Inactive status
 agent.setActive(True)   # Active (visible in search)
 agent.setActive(False)  # Inactive (hidden but not deleted)
 ```
@@ -112,7 +110,7 @@ agent.setActive(False)  # Inactive (hidden but not deleted)
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Set agent to active/inactive status
+// Set agent to Active/Inactive status
 agent.setActive(true);   // Active
 agent.setActive(false);  // Inactive
 ```
@@ -128,7 +126,7 @@ agent.setActive(false);  // Inactive
 <TabItem value="python" label="python">
 
 ```python
-# Enable/disable x402 payment support
+# Enable/Disable x402 payment support
 agent.setX402Support(True)
 ```
 
@@ -136,7 +134,7 @@ agent.setX402Support(True)
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Enable/disable x402 payment support
+// Enable/Disable x402 payment support
 agent.setX402Support(true);
 ```
 
@@ -164,7 +162,7 @@ agent.setMCP(endpoint="https://mcp.example.com/")
 
 ```typescript
 // Set MCP endpoint
-agent.setMCP({ endpoint: "https://mcp.example.com/" });
+agent.setMCP("https://mcp.example.com/");
 ```
 
 </TabItem>
@@ -172,9 +170,9 @@ agent.setMCP({ endpoint: "https://mcp.example.com/" });
 
 
 
-When you set an MCP endpoint, the SDK automatically:
-*   Fetches tools, prompts, and resources from the endpoint.
-*   Populates the agent's capabilities.
+When you set the MCP endpoint, the SDK will automatically:
+*   Fetch tools, prompts, and resources from the endpoint.
+*   Populate the agent's capabilities.
 
 ### A2A (Agent-to-Agent) Endpoint
 
@@ -191,7 +189,7 @@ agent.setA2A(agentcard="https://a2a.example.com/agent-card.json")
 
 ```typescript
 // Set A2A endpoint
-agent.setA2A({ agentcard: "https://a2a.example.com/agent-card.json" });
+agent.setA2A("https://a2a.example.com/agent-card.json");
 ```
 
 </TabItem>
@@ -200,9 +198,9 @@ agent.setA2A({ agentcard: "https://a2a.example.com/agent-card.json" });
 
 
 
-The SDK automatically:
-*   Fetches skills from the A2A agent card.
-*   Indexes these capabilities for search.
+The SDK will automatically:
+*   Fetch skills from the A2A agent card.
+*   Index these capabilities for search.
 
 ### ENS
 
@@ -218,8 +216,8 @@ agent.setENS(name="myagent.eth")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Set ENS name
-agent.setENS({ name: "myagent.eth" });
+// TypeScript SDK supports the high-level setENS() method
+agent.setENS("myagent.eth");
 ```
 
 </TabItem>
@@ -228,7 +226,7 @@ agent.setENS({ name: "myagent.eth" });
 
 
 This stores the ENS name in:
-*   The registry file.
+*   The registration file.
 *   As on-chain metadata.
 
 ### Remove Endpoints
@@ -251,13 +249,9 @@ agent.removeEndpoints()
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Remove a specific type of endpoint
-agent.removeEndpoint({ type: EndpointType.MCP });
-
-// Remove by value
+// The TypeScript SDK supports the high-level removeEndpoint() / removeEndpoints() methods.
+agent.removeEndpoint({ type: "MCP" });
 agent.removeEndpoint({ value: "https://old-endpoint.com" });
-
-// Remove all endpoints
 agent.removeEndpoints();
 ```
 
@@ -269,19 +263,19 @@ agent.removeEndpoints();
 
 ## Wallet Configuration
 
-### Default Behavior (Wallet set to owner by default)
+### Default Behavior (Wallet set to Owner by default)
 
-According to the 8004 protocol, `agentWallet` is **initially set to the agent owner's address**.
+According to the 8004 protocol, the `agentWallet` is **initially set to the agent owner's address**.
 
-*   **If you do not call `setWallet()`**: The agent wallet remains the **owner's wallet** by default.
-*   **When a dedicated agent wallet is needed**: Only if you want the agent to use a wallet **different** from the owner (e.g., separation of duties, hot wallet vs. cold wallet owner separation, using wallets on different chains).
-*   **After transfer**: `agentWallet` will be reset to the **zero address**, and the new owner must re-authenticate by calling `setWallet()`.
+*   **If you do not call `setWallet()`**: The agent wallet defaults to the **owner's wallet**.
+*   **When a dedicated agent wallet is needed**: Only if you want the agent to use a **different** wallet than the owner (e.g., separation of duties, hot/cold wallet owner separation, using wallets from different chains).
+*   **After transfer**: `agentWallet` will be reset to the **zero address**, and the new owner must re-verify by calling `setWallet()`.
 
 ### Set a Dedicated Agent Wallet (Signature Verification)
 
-`agentWallet` is a **reserved on-chain** property. Setting this property requires signature verification according to 8004.
+`agentWallet` is a **reserved on-chain** property. According to 8004, setting this property requires signature verification.
 
-*   **Who sends the transaction**: The SDK signer (usually the agent **owner** or an authorized **operator**) submits the on-chain transaction.
+*   **Who sends the transaction**: The SDK signer (typically the agent **owner** or an authorized **operator**) submits the on-chain transaction.
 *   **Developer-facing SDK API**: `agent.setWallet(...)`.
 *   **Who must sign**: The **new wallet** must authorize this change by signing EIP-712 typed data (EOA) signature.
 
@@ -290,8 +284,8 @@ According to the 8004 protocol, `agentWallet` is **initially set to the agent ow
 <TabItem value="python" label="python">
 
 ```python
-# You must register the agent first, then call setWallet() if you want to use a dedicated wallet different from the owner's.
-tx = agent.registerIPFS()
+# You must register the agent first, then call setWallet() if you want to use a dedicated wallet different from the owner.
+tx = agent.register("https://example.com/agent-card.json")
 tx.wait_confirmed(timeout=180)
 
 # --- EOA Flow ---
@@ -299,7 +293,7 @@ tx.wait_confirmed(timeout=180)
 # If the new wallet is not the same address as the SDK signer, provide `new_wallet_signer`.
 agent.setWallet(
     new_wallet="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    chainId=11155111,
+    chainId=97,
     new_wallet_signer=NEW_WALLET_PRIVATE_KEY,  # Private key of 0x742d...
 )
 
@@ -310,15 +304,14 @@ agent.setWallet(
 
 ```typescript
 // You must register the agent first, then call setWallet().
-const tx = await agent.registerIPFS();
+const tx = await agent.register("https://example.com/agent-card.json");
 await tx.waitConfirmed();
 
 // --- EOA Flow ---
-await agent.setWallet({
-    newWallet: "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    chainId: 11155111,
-    newWalletPrivateKey: NEW_WALLET_PRIVATE_KEY
-});
+await agent.setWallet(
+  "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
+  { newWalletSigner: NEW_WALLET_PRIVATE_KEY }
+);
 
 ```
 
@@ -328,18 +321,19 @@ await agent.setWallet({
 
 
 
+
 The wallet address is stored as a **reserved** `agentWallet` property on-chain and requires signature verification (8004).
 
 ### Unset Verified Agent Wallet
 
-If you previously set a dedicated verified `agentWallet` and want to remove it (restore it to an "unset" state on-chain), use:
+If you previously set a dedicated, verified `agentWallet` and wish to remove it (revert to an "unset" state on-chain), use:
 
 *   **Python**: `agent.unsetWallet()`
 *   **TypeScript**: `await agent.unsetWallet()`
 
-This clears the agent's `agentWallet` byte data on-chain.
+This clears the agent's `agentWallet` bytes data on-chain.
 
-### "What am I signing?" (EOA)
+### "What exactly am I signing?" (EOA)
 
 Both SDKs internally construct EIP-712 typed data. Conceptually, the message signed by the **new wallet** contains:
 
@@ -347,7 +341,7 @@ Both SDKs internally construct EIP-712 typed data. Conceptually, the message sig
 *   **newWallet**: The wallet address you are setting
 *   **owner**: The current agent owner (read from the registry)
 *   **deadline**: A short validity window enforced by the contract
-*   **domain**: The EIP-712 domain of the Identity Registry (chainId + verifyingContract, and name/version)
+*   **domain**: The EIP-712 domain of the Identity Registry (chainId + verifyingContract, along with name/version)
 
 #### EOA
 
@@ -358,7 +352,7 @@ Both SDKs internally construct EIP-712 typed data. Conceptually, the message sig
 
 ## OASF Skills and Domains
 
-Agents can advertise their capabilities using the Open Agentic Schema Framework (OASF) taxonomy. This provides a standardized classification for skills and domains, improving discoverability and interoperability.
+Agents can advertise their capabilities using the Open Agentic Schema Framework (OASF) taxonomy. This provides a standardized classification for skills and domains, enhancing discoverability and interoperability.
 
 ### Add Skills
 
@@ -378,10 +372,10 @@ agent.addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=T
 
 ```typescript
 // Add a skill without validation
-agent.addSkill({ skill: "custom_skill/my_skill", validateOasf: false });
+agent.addSkill("custom_skill/my_skill");
 
 // Add a skill with validation
-agent.addSkill({ skill: "advanced_reasoning_planning/strategic_planning", validateOasf: true });
+agent.addSkill("advanced_reasoning_planning/strategic_planning");
 ```
 
 </TabItem>
@@ -408,10 +402,10 @@ agent.addDomain("finance_and_business/investment_services", validate_oasf=True)
 
 ```typescript
 // Add a domain without validation
-agent.addDomain({ domain: "custom_domain/my_domain", validateOasf: false });
+agent.addDomain("custom_domain/my_domain");
 
 // Add a domain with validation
-agent.addDomain({ domain: "finance_and_business/investment_services", validateOasf: true });
+agent.addDomain("finance_and_business/investment_services");
 ```
 
 </TabItem>
@@ -440,11 +434,9 @@ agent.removeDomain("finance_and_business/investment_services")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Remove a skill
-agent.removeSkill({ skill: "advanced_reasoning_planning/strategic_planning" });
-
-// Remove a domain
-agent.removeDomain({ domain: "finance_and_business/investment_services" });
+// The TypeScript SDK supports the high-level removeSkill() / removeDomain() methods.
+agent.removeSkill("advanced_reasoning_planning/strategic_planning");
+agent.removeDomain("finance_and_business/investment_services");
 ```
 
 </TabItem>
@@ -472,9 +464,9 @@ agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=Tr
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-agent.addSkill({ skill: "data_engineering/data_transformation_pipeline", validateOasf: true })
-     .addDomain({ domain: "technology/data_science", validateOasf: true })
-     .addSkill({ skill: "natural_language_processing/summarization", validateOasf: true });
+agent.addSkill("data_engineering/data_transformation_pipeline")
+     .addDomain("technology/data_science")
+     .addSkill("natural_language_processing/summarization");
 ```
 
 </TabItem>
@@ -484,9 +476,9 @@ agent.addSkill({ skill: "data_engineering/data_transformation_pipeline", validat
 
 
 
-### OASF in the Registry File
+### OASF in Registration File
 
-OASF skills and domains are stored in the `endpoints` array of the registry file:
+OASF skills and domains are stored in the `endpoints` array of the registration file:
 
 ```json
 {
@@ -497,8 +489,10 @@ OASF skills and domains are stored in the `endpoints` array of the registry file
       "version": "v0.8.0",
       "skills": [
         "advanced_reasoning_planning/strategic_planning",
+        "data_engineering/data_transformation_pipeline"
       ],
       "domains": [
+        "finance_and_business/investment_services",
         "technology/data_science"
       ]
     }
@@ -506,38 +500,26 @@ OASF skills and domains are stored in the `endpoints` array of the registry file
 }
 ```
 
-## Trust Models
+## Trust Model
 
 Trust models allow agents to declare how they handle security and privacy.
 
-### Set Trust Models
+### Set Trust Model
 
 <Tabs>
 <TabItem value="python" label="python">
 
 ```python
-# Set trust models
-agent.setTrustModels([
-    {
-        "name": "TEE",
-        "endpoint": "https://tee.example.com",
-        "version": "1.0.0"
-    }
-])
+# Set trust model
+agent.setTrust(reputation=True, cryptoEconomic=True, teeAttestation=True)
 ```
 
 </TabItem>
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Set trust models
-agent.setTrustModels([
-    {
-        "name": "TEE",
-        "endpoint": "https://tee.example.com",
-        "version": "1.0.0"
-    }
-]);
+// Set trust model
+agent.setTrust({ reputation: true, cryptoEconomic: true, teeAttestation: true });
 ```
 
 </TabItem>
@@ -547,7 +529,7 @@ agent.setTrustModels([
 
 
 
-## On-Chain Metadata Management
+## On-chain Metadata Management
 
 Certain properties can be managed directly as on-chain metadata.
 
@@ -556,7 +538,10 @@ Certain properties can be managed directly as on-chain metadata.
 
 ```python
 # Update on-chain metadata
-agent.updateOnChainMetadata()
+agent.setMetadata({"version": "1.1.0", "tier": "pro"})
+# If already registered and updating URI, you can call:
+# tx = agent.updateRegistration(agentURI="https://example.com/agent-card-updated.json")
+# tx.wait_confirmed(timeout=180)
 ```
 
 </TabItem>
@@ -564,7 +549,9 @@ agent.updateOnChainMetadata()
 
 ```typescript
 // Update on-chain metadata
-await agent.updateOnChainMetadata();
+agent.setMetadata({ version: "1.1.0", tier: "pro" });
+const tx = await agent.register("https://example.com/agent-card-updated.json");
+await tx.waitConfirmed();
 ```
 
 </TabItem>
@@ -582,7 +569,7 @@ If you already have a registered agent, you can load it by its ID:
 
 ```python
 # Load agent by ID
-agent = sdk.getAgent(agent_id="0x123...")
+agent = sdk.loadAgent("97:123")
 ```
 
 
@@ -590,8 +577,8 @@ agent = sdk.getAgent(agent_id="0x123...")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Load agent by ID
-const agent = await sdk.getAgent("0x123...");
+// Query agent summary by ID
+const agentSummary = await sdk.getAgent("97:123");
 ```
 
 </TabItem>
@@ -601,7 +588,7 @@ const agent = await sdk.getAgent("0x123...");
 
 ## Direct Property Access
 
-You can directly access properties of the agent object:
+You can directly access the properties of the agent object:
 
 <Tabs>
 <TabItem value="python" label="python">
@@ -616,9 +603,9 @@ print(agent.active)
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-console.log(agent.name);
-console.log(agent.description);
-console.log(agent.active);
+console.log(agentSummary?.name);
+console.log(agentSummary?.description);
+console.log(agentSummary?.active);
 ```
 
 </TabItem>
@@ -648,7 +635,7 @@ agent.setMCP(endpoint="https://mcp.example.com/")\
      .setX402Support(True)
 
 # Register agent
-tx = agent.registerIPFS()
+tx = agent.register("https://example.com/agent-card.json")
 tx.wait_confirmed()
 ```
 
@@ -661,21 +648,19 @@ const agent = sdk.createAgent({
     description: "A fully featured agent example"
 });
 
-agent.setMCP({ endpoint: "https://mcp.example.com/" })
-     .setENS({ name: "advanced-agent.eth" })
-     .addSkill({ skill: "advanced_reasoning_planning/strategic_planning", validateOasf: true })
-     .addDomain({ domain: "technology/data_science", validateOasf: true })
+agent.setMCP("https://mcp.example.com/")
+     .setMetadata({ ens: "advanced-agent.eth" })
+     .addSkill("advanced_reasoning_planning/strategic_planning")
+     .addDomain("technology/data_science")
      .setActive(true)
      .setX402Support(true);
 
 // Register agent
-const tx = await agent.registerIPFS();
+const tx = await agent.register("https://example.com/agent-card.json");
 await tx.waitConfirmed();
 ```
 
 
 </TabItem>
 </Tabs>
-
-
 

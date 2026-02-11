@@ -1,14 +1,14 @@
 # Introduction
 
-## What is 8004?
+## What is 8004 Protocol?
 
-8004 is an open protocol. It allows you to register your own Agents and APIs, making them visible and portable; it enables you to discover other Agents and APIs; and it helps you decide which one to use based on past customer feedback and third-party validation results.
+In the Web3 environment, an Agent’s identity and reputation are its most critical digital assets, and the 8004 Protocol serves as the guardian and distributor of these assets.On the TRON network, the 8004 Protocol is deeply built upon the native TRC-8004 standard; on the BSC network, it reuses the ERC-8004 standard implementation. This multi-chain isomorphic design ensures consistency of Agent identities and reputations across major blockchain networks.It allows you to register your own Agents and APIs, granting them visibility and portability; to discover other Agents and APIs; and to decide which ones to use based on past customer feedback and third-party verification results.
 
 In short: **it is a protocol for Agent discovery and trust establishment.**
 
 ## How It Works
 
-8004 leverages blockchain as a shared public registry that anyone can read from and write to, including:
+8004 Protocol leverages blockchain as a shared public registry that anyone can read from and write to, including:
 
 - Agent identities (Identity Registry)
 - Feedback about other Agents and services (Reputation Registry)
@@ -18,7 +18,7 @@ In short: **it is a protocol for Agent discovery and trust establishment.**
 
 - **Identity Authentication**
   
-  8004 establishes a permissionless identity framework that allows any Agent or service to register by minting an NFT compatible with the TRC-721/ERC-721 standard. At its core, it maps an on-chain identity (agentId) to a metadata file (agent-registration.json) stored anywhere (HTTPS, IPFS, or on-chain). This file defines the Agent’s basic information, payment wallet, and various communication endpoints (such as Web, MCP, DID, etc.), and supports endpoint ownership verification via automatic domain matching or the `.well-known` path. As an NFT asset, the Agent identity is fully transferable. Upon ownership transfer, the payment address is automatically reset, ensuring secure control of service revenue by the new owner.
+  8004 Protocol establishes a permissionless identity framework that allows any Agent or service to register by minting an NFT compatible with the TRC-721/ERC-721 standard. At its core, it maps an on-chain identity (agentId) to a metadata file (agent-registration.json) stored anywhere (HTTPS, IPFS, or on-chain). This file defines the Agent’s basic information, payment wallet, and various communication endpoints (such as Web, MCP, DID, etc.), and supports endpoint ownership verification via automatic domain matching or the `.well-known` path. As an NFT asset, the Agent identity is fully transferable. Upon ownership transfer, the payment address is automatically reset, ensuring secure control of service revenue by the new owner.
   
 - **Reputation System**
   

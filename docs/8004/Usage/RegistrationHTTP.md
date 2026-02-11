@@ -7,7 +7,7 @@ Register your agent on-chain using a direct HTTP/HTTPS URL pointing to the regis
 
 ## Overview
 
-HTTP registration is very useful when:
+HTTP registration is useful when:
 
 *   You self-host the registration file.
 *   You want full control over how the file is served.
@@ -45,14 +45,15 @@ const agent = sdk.createAgent({
     image: "https://example.com/image.png"
 });
 
-agent.setMCP({ endpoint: "https://mcp.example.com/" });
-agent.setA2A({ agentcard: "https://a2a.example.com/agent.json" });
-agent.setENS({ name: "myagent.eth" });
+agent.setMCP("https://mcp.example.com/");
+agent.setA2A("https://a2a.example.com/agent.json");
 agent.setTrust({ reputation: true });
 ```
 
 </TabItem>
 </Tabs>
+
+
 
 
 
@@ -79,7 +80,7 @@ json_content = str(registration_file)  # JSON with indentation
 
 ```typescript
 // Get registration file content
-const registrationData = agent.registrationFile().toDict();
+const registrationData = agent.toJSON();
 
 // Or get the JSON string
 const jsonContent = JSON.stringify(registrationData, null, 2);
@@ -87,6 +88,8 @@ const jsonContent = JSON.stringify(registrationData, null, 2);
 
 </TabItem>
 </Tabs>
+
+
 
 
 
@@ -125,20 +128,23 @@ fs.writeFileSync('my-agent.json', jsonContent);
 
 
 
+
+
+
 ## Optional: Endpoint Domain Verification (.well-known)
 
-If you want validators to consider the HTTPS endpoint domain as "verified", publish:
+If you want validators to consider HTTPS endpoint domains as "verified", publish:
 
 *   `https://{endpoint-domain}/.well-known/agent-registration.json`
 
-This file should contain a `registrations` entry that matches your on-chain identity:
+This file should contain a `registrations` entry matching your on-chain identity:
 
 ```json
 {
   "registrations": [
     {
       "agentId": 123,
-      "agentRegistry": "eip155:11155111:0x8004A818BFB912233c491871b3d84c89A494BD9e"
+      "agentRegistry": "eip155:97:0x8004A818BFB912233c491871b3d84c89A494BD9e"
     }
   ]
 }
@@ -146,7 +152,7 @@ This file should contain a `registrations` entry that matches your on-chain iden
 
 Note:
 *   This is optional and primarily for third-party validators/aggregators.
-*   This extra check is usually not needed if your `agentURI` is hosted under the same domain.
+*   If your `agentURI` is hosted under the same domain, this extra check is usually not necessary.
 
 ### 4. Register On-Chain
 
@@ -155,7 +161,7 @@ Note:
 
 ```python
 # Register using your HTTP URL
-tx = agent.registerHTTP("https://yourdomain.com/agents/my-agent.json")
+tx = agent.register("https://yourdomain.com/agents/my-agent.json")
 registration_file = tx.wait_confirmed(timeout=180).result
 
 print(f"Agent registered, ID: {registration_file.agentId}")
@@ -167,7 +173,7 @@ print(f"Agent URI: {registration_file.agentURI}")  # https://yourdomain.com/...
 
 ```typescript
 // Register using your HTTP URL
-const tx = await agent.registerHTTP("https://yourdomain.com/agents/my-agent.json");
+const tx = await agent.register("https://yourdomain.com/agents/my-agent.json");
 const registrationFile = (await tx.waitConfirmed()).result;
 
 console.log(`Agent registered, ID: ${registrationFile.agentId}`);
@@ -185,16 +191,16 @@ console.log(`Agent URI: ${registrationFile.agentURI}`); // https://yourdomain.co
 <TabItem value="python" label="python">
 
 ```python
-from agent0_sdk import SDK
+from bankofai.sdk_8004.core.sdk import SDK
 
-# Initialize SDK
+# Initialize the SDK
 sdk = SDK(
-    chainId=11155111,
-    rpcUrl="https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
+    network="eip155:97",
+    rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
     signer=private_key
 )
 
-# 1. Configure agent
+# 1. Configure Agent
 agent = sdk.createAgent(
     name="My AI Agent",
     description="A useful AI assistant",
@@ -203,17 +209,17 @@ agent = sdk.createAgent(
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent.json")
 
-# 2. Generate registration file
+# 2. Generate Registration File
 registration_data = agent.registrationFile().to_dict()
 json_content = str(agent.registrationFile())
 
-# 3. Save and upload to your server
+# 3. Save and Upload to Your Server
 with open("my-agent.json", "w") as f:
     f.write(json_content)
 # Upload to: https://yourdomain.com/agents/my-agent.json
 
-# 4. Register on-chain
-tx = agent.registerHTTP("https://yourdomain.com/agents/my-agent.json")
+# 4. Register On-Chain
+tx = agent.register("https://yourdomain.com/agents/my-agent.json")
 tx.wait_confirmed(timeout=180)
 
 print(f"✅ Agent registered, ID: {agent.agentId}")
@@ -223,33 +229,33 @@ print(f"✅ Agent registered, ID: {agent.agentId}")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-import { SDK } from '@ag0/sdk';
+import { SDK } from '@bankofai/8004-sdk';
 
-// Initialize SDK
+// Initialize the SDK
 const sdk = new SDK({
-    chainId: 11155111,
-    rpcUrl: "https://sepolia.infura.io/v3/YOUR_PROJECT_ID",
+    network: "eip155:97",
+    rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
     signer: private_key
 });
 
-// 1. Configure agent
+// 1. Configure Agent
 const agent = sdk.createAgent({
     name: "My AI Agent",
     description: "A useful AI assistant",
     image: "https://example.com/agent.png"
 });
-agent.setMCP({ endpoint: "https://mcp.example.com/" });
-agent.setA2A({ agentcard: "https://a2a.example.com/agent.json" });
+agent.setMCP("https://mcp.example.com/");
+agent.setA2A("https://a2a.example.com/agent.json");
 
-// 2. Generate registration file
-const registrationData = agent.registrationFile().toDict();
+// 2. Generate Registration File
+const registrationData = agent.toJSON();
 const jsonContent = JSON.stringify(registrationData, null, 2);
 
-// 3. Save and upload to your server
+// 3. Save and Upload to Your Server
 // Upload to: https://yourdomain.com/agents/my-agent.json
 
-// 4. Register on-chain
-const tx = await agent.registerHTTP("https://yourdomain.com/agents/my-agent.json");
+// 4. Register On-Chain
+const tx = await agent.register("https://yourdomain.com/agents/my-agent.json");
 await tx.waitConfirmed();
 
 console.log(`✅ Agent registered, ID: ${agent.agentId}`);
@@ -261,16 +267,21 @@ console.log(`✅ Agent registered, ID: ${agent.agentId}`);
 
 
 
+
+
+
+
+
 ## Update Registration
 
-Update agent:
+Update an agent:
 
 <Tabs>
 <TabItem value="python" label="python">
 
 ```python
 # 1. Load existing agent
-agent = sdk.loadAgent("11155111:123")
+agent = sdk.loadAgent("97:123")
 
 # 2. Modify configuration
 agent.updateInfo(description="Updated description")
@@ -291,21 +302,28 @@ agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 1. Load existing agent
-const agent = await sdk.loadAgent("11155111:123");
+// 1. Query existing agent (indexed summary)
+const agentSummary = await sdk.getAgent("97:123");
+console.log(agentSummary);
 
-// 2. Modify configuration
-agent.updateInfo({ description: "Updated description" });
-agent.setMCP({ endpoint: "https://new-mcp.example.com" });
+// 2. Rebuild local agent object based on what you want to update
+const agent = sdk.createAgent({
+  name: "My AI Agent",
+  description: "Updated description",
+  image: "https://example.com/agent.png",
+});
+agent.setMCP("https://new-mcp.example.com");
+agent.setA2A("https://a2a.example.com/agent.json");
 
 // 3. Generate new registration file
-const registrationData = agent.registrationFile().toDict();
+const registrationData = agent.toJSON();
 const jsonContent = JSON.stringify(registrationData, null, 2);
 
 // 4. Upload the updated file to your server
 
-// 5. Update URI on-chain (only if URI has changed)
-await agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json");
+// 5. Re-initiate registration transaction with the new URI
+const tx = await agent.register("https://yourdomain.com/agents/my-agent-updated.json");
+await tx.waitConfirmed();
 ```
 
 </TabItem>
@@ -314,9 +332,10 @@ await agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json");
 
 
 
+
 ## Registration File Format
 
-The SDK generates an 8004 compliant registration file:
+The SDK generates a registration file compliant with the 8004 standard:
 
 ```json
 {
@@ -343,7 +362,7 @@ The SDK generates an 8004 compliant registration file:
   "registrations": [
     {
       "agentId": 123,
-      "agentRegistry": "eip155:11155111:0x8004a6090Cd10A7288092483047B097295Fb8847"
+      "agentRegistry": "eip155:97:0x8004A818BFB912233c491871b3d84c89A494BD9e"
     }
   ],
   "supportedTrust": ["reputation"],
