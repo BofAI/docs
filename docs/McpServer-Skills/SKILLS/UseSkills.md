@@ -1,56 +1,32 @@
 # How to Use SKILLS
 
-### Prerequisites
+Skills can be integrated into various AI Agents, such as OpenClaw, ClawdCode, and OpenCode. This guide uses OpenClaw as an example to demonstrate how to use Skills.
 
-1. ✅ AI Agent (OpenClaw) installed  
-2. ✅ **OpenClaw Extension** installed  
-   * Download: [bankofai/openclaw-extension](https://github.com/bankofai/openclaw-extension)  
-   * Follow the instructions in that repository to set up the MCP server  
+Before you begin, please ensure that you have installed OpenClaw, downloaded the [OpenClaw Extension](https://github.com/bankofai/openclaw-extension), and completed the basic configuration of the MCP Server according to its documentation.
 
+## Quick Start
 
-## For Developers
+### 1. Browse Available Skills
 
-### Create a New SKILL
+Currently available skills:
 
-See [AGENTS.md](https://github.com/bankofai/skills/blob/main/) to learn how to create a new skill.
+* **sunswap/** - SunSwap DEX trading skill for token swaps
+* **8004/** - 8004 Trusted Agent – On-chain identity and reputation system for AI agents
+* **x402_payment/** - Enables agent payment functionality on blockchain networks (x402 protocol)
+* **x402_payment_demo/** - x402 payment protocol demonstration
 
-**Quick Template**:
+### 2. Using a Skill
 
-```shell
-# 1. Create directory structure
-mkdir -p my-skill/{examples,resources,scripts}
+Tell your AI agent:
 
-# 2. Create SKILL.md
-cat > my-skill/SKILL.md << 'EOF'
----
-name: My Skill
-description: What this skill does
-version: 1.0.0
-dependencies:
-  - required-tool
-tags:
-  - category
----
-
-# My Skill
-
-## Overview
-[Description]
-
-## Usage Instructions
-1. Step 1
-2. Step 2
-EOF
+```
+Please read skills/sunswap/SKILL.md and help me check how much TRX I can get for 100 USDT
 ```
 
-### SKILL Specification
 
-Each SKILL must include:
+The AI agent will:
 
-* ✅ **SKILL.md** - Main instruction file (with YAML frontmatter metadata)
-* ✅ **README.md** - Quick description
-* ⚠️ **examples/** - Usage examples (recommended)
-* ⚠️ **resources/** - Configuration files (optional)
-* ⚠️ **scripts/** - Helper scripts (optional)
+1. Read SKILL.md  
+2. Call the appropriate tools according to the instructions  
+3. Return the result  
 
-For more details, see [AGENTS.md](https://github.com/bankofai/skills/blob/main/)

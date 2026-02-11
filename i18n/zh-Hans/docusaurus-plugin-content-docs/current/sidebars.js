@@ -83,7 +83,7 @@ const sidebars = {
 
     {
       type: 'category',
-      label: ' MCP & SKILLS',
+      label: 'MCP Server & SKILLS',
       collapsed: false,
       items: [
             {
@@ -93,18 +93,18 @@ const sidebars = {
             },
             {
               type: 'category',
-              label: 'MCP',
+              label: 'MCP Server',
               collapsed: true,
               items: [
               {
                 type: 'category',
                 label: 'TRON MCP Server',
                 collapsed: true,
-                items: ['McpServer-Skills/MCP/TRONMCPServer/Intro', 'McpServer-Skills/MCP/TRONMCPServer/Features','McpServer-Skills/MCP/TRONMCPServer/Installation','McpServer-Skills/MCP/TRONMCPServer/Configuration',,'McpServer-Skills/MCP/TRONMCPServer/API'],
+                items: ['McpServer-Skills/MCP/TRONMCPServer/Intro', 'McpServer-Skills/MCP/TRONMCPServer/Features','McpServer-Skills/MCP/TRONMCPServer/Installation','McpServer-Skills/MCP/TRONMCPServer/Configuration','McpServer-Skills/MCP/TRONMCPServer/API'],
                },
                 {
                   type: 'category',
-                  label: 'BSCMCPServer',
+                  label: 'BSC MCP Server',
                   collapsed: true,
                   items: ['McpServer-Skills/MCP/BSCMCPServer/Intro', 'McpServer-Skills/MCP/BSCMCPServer/Features', 'McpServer-Skills/MCP/BSCMCPServer/Installation'],
                 },
@@ -115,7 +115,7 @@ const sidebars = {
               type: 'category',
               label: 'SKILLS',
               collapsed: true,
-              items: ['McpServer-Skills/SKILLS/Intro', 'McpServer-Skills/SKILLS/SkillsList','McpServer-Skills/SKILLS/UseSkills','McpServer-Skills/SKILLS/Faq'],
+              items: ['McpServer-Skills/SKILLS/Intro', 'McpServer-Skills/SKILLS/SkillsList','McpServer-Skills/SKILLS/UseSkills','McpServer-Skills/SKILLS/CreateSKILL','McpServer-Skills/SKILLS/Faq'],
             },
           ],
             

@@ -19,7 +19,7 @@
 
 ```yaml
 dependencies:
-  - mcp-server
+  - mcp-server-tron
 ```
 
 ### 问：如果 AI 智能体找不到技能怎么办？

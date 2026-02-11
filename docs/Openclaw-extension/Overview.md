@@ -1,6 +1,6 @@
 # Introduction
 
-The OpenClaw extension is a suite of tools developed by **BankofAI** designed to empower AI agents with financial sovereignty. It enables agents to hold wallets, execute transactions, and monetize services via the **x402 Protocol** (HTTP 402 Payment Required).
+The OpenClaw extension is a suite of tools developed by **BANK OF AI** designed to empower AI agents with financial sovereignty. It enables agents to hold wallets, execute transactions, and monetize services via the **x402 Protocol** (HTTP 402 Payment Required).
 
 ## Vision
 
@@ -17,7 +17,7 @@ This extension provides tools for blockchain interaction:
 
 ### MCP Server
 
-**mcp-server**: A Model Context Protocol (MCP) server that provides AI agents with direct access to the blockchain.
+**mcp-server-tron**: A Model Context Protocol (MCP) server that provides AI agents with direct access to the blockchain.
 
 *   **Functions**: Balance queries, transfers, smart contract interactions, resource estimation, token swaps.
 

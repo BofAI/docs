@@ -9,8 +9,8 @@
 
 ```shell
 # Clone the repository
-git clone https://github.com/bankofai/mcp-server.git
-cd mcp-server
+git clone https://github.com/bankofai/mcp-server-tron.git
+cd mcp-server-tron
 
 # Install dependencies
 npm install

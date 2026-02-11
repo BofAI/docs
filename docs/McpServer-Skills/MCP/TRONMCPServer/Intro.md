@@ -2,7 +2,7 @@
 
 A comprehensive Model Context Protocol (MCP) server that provides blockchain services for the TRON network. This server enables AI agents to interact with the TRON blockchain through tools and AI-guided prompts via a unified interface, supporting TRX, TRC20 tokens, and smart contracts.
 
-The MCP TRON server leverages the Model Context Protocol to deliver blockchain services to AI agents. It uses `tronweb` to fully support the TRON ecosystem.
+The TRON MCP server leverages the Model Context Protocol to deliver blockchain services to AI agents. It uses `tronweb` to fully support the TRON ecosystem.
 
 ## Key Features
 

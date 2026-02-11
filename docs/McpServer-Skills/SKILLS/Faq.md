@@ -19,7 +19,7 @@ Skills tell the AI how to use the MCP server tools.
 
 ```yaml
 dependencies:
-  - mcp-server
+  - mcp-server-tron
 ```
 
 ### Q: What if the AI agent cannot find a skill?  
