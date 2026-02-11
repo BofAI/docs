@@ -41,7 +41,7 @@ module.exports = {
         srcDark: 'img/logo_dark.png', // 深色模式
         href: '/',
         height: 30,
-        width: 154,
+        width: 185,
       },
       items: [
         // 多语言选项
