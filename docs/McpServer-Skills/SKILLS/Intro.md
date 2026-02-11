@@ -27,7 +27,7 @@ Completes the DEX transaction
 Currently available skills:
 
 * **sunswap/** - SunSwap DEX trading skill for token swaps
-* **ERC-8004/** - ERC-8004 Trusted Agent – On-chain identity and reputation system for AI agents
+* **8004/** - 8004 Trusted Agent – On-chain identity and reputation system for AI agents
 * **x402_payment/** - Enables agent payment functionality on blockchain networks (x402 protocol)
 * **x402_payment_demo/** - x402 payment protocol demonstration
 
@@ -60,7 +60,7 @@ skills/
 │ ├── examples/ # Usage examples
 │ ├── resources/ # Configuration files (contract addresses, token lists, etc.)
 │ └── scripts/ # Helper scripts
-├── ERC-8004/ # ERC-8004 Trusted Agent skill
+├── 8004/ # 8004 Trusted Agent skill
 │ ├── README.md # Skill description
 │ ├── SKILL.md # Main instruction file
 │ ├── lib/ # Contract ABIs and configuration

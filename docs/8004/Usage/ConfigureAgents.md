@@ -271,7 +271,7 @@ agent.removeEndpoints();
 
 ### Default Behavior (Wallet set to owner by default)
 
-According to the ERC-8004 protocol, `agentWallet` is **initially set to the agent owner's address**.
+According to the 8004 protocol, `agentWallet` is **initially set to the agent owner's address**.
 
 *   **If you do not call `setWallet()`**: The agent wallet remains the **owner's wallet** by default.
 *   **When a dedicated agent wallet is needed**: Only if you want the agent to use a wallet **different** from the owner (e.g., separation of duties, hot wallet vs. cold wallet owner separation, using wallets on different chains).
@@ -279,7 +279,7 @@ According to the ERC-8004 protocol, `agentWallet` is **initially set to the agen
 
 ### Set a Dedicated Agent Wallet (Signature Verification)
 
-`agentWallet` is a **reserved on-chain** property. Setting this property requires signature verification according to ERC-8004.
+`agentWallet` is a **reserved on-chain** property. Setting this property requires signature verification according to 8004.
 
 *   **Who sends the transaction**: The SDK signer (usually the agent **owner** or an authorized **operator**) submits the on-chain transaction.
 *   **Developer-facing SDK API**: `agent.setWallet(...)`.
@@ -328,7 +328,7 @@ await agent.setWallet({
 
 
 
-The wallet address is stored as a **reserved** `agentWallet` property on-chain and requires signature verification (ERC-8004).
+The wallet address is stored as a **reserved** `agentWallet` property on-chain and requires signature verification (8004).
 
 ### Unset Verified Agent Wallet
 

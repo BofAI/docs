@@ -8,7 +8,7 @@ Bank of AI provides a complete solution, from infrastructure to business logic, 
 
 **DeFi Interaction**: Automated token swaps are achieved through the SunSwap skill library, with future plans to support JustLend, Pancake, and Lista.
 
-**Identity and Reputation**: On-chain identity registration and reputation accumulation are managed using the ERC-8004 standard.
+**Identity and Reputation**: On-chain identity registration and reputation accumulation are managed using the 8004 standard.
 
 **Economic Payments**: The x402 protocol is integrated to empower agents with automated payment collection and disbursement capabilities.
 

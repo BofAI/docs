@@ -316,7 +316,7 @@ await agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json");
 
 ## Registration File Format
 
-The SDK generates an ERC-8004 compliant registration file:
+The SDK generates an 8004 compliant registration file:
 
 ```json
 {

@@ -328,7 +328,7 @@ await agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json");
 
 ## 注册文件格式 
 
-SDK 会生成符合 ERC-8004 标准的注册文件：
+SDK 会生成符合 8004 标准的注册文件：
 
 ```json
 {

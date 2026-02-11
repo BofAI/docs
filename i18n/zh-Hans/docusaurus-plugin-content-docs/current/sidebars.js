@@ -49,27 +49,27 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'ERC-8004 协议',
+      label: '8004 协议',
       collapsed: false,
       items: [
         {
           type: 'doc',
-          id: 'ERC-8004/general',
+          id: '8004/general',
           label: '简介',
         },
         {
           type: 'doc',
-          id: 'ERC-8004/contract',
+          id: '8004/contract',
           label: '合约',
         },
         {
           type: 'doc',
-          id: 'ERC-8004/QuickStart',
+          id: '8004/QuickStart',
           label: '快速开始',
         },
         {
           type: 'doc',
-          id: 'ERC-8004/SupportedNetworks',
+          id: '8004/SupportedNetworks',
           label: '支持的网络',
         },
 
@@ -79,7 +79,7 @@ const sidebars = {
               type: 'category',
               label: '使用指南',
               collapsed: false,
-              items: ['ERC-8004/Usage/Install', 'ERC-8004/Usage/ConfigureAgents', 'ERC-8004/Usage/RegistrationHTTP'],
+              items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
             },
           ],
         

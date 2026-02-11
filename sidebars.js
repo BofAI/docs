@@ -49,27 +49,27 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'ERC-8004 Protocol',
+      label: '8004 Protocol',
       collapsed: false,
       items: [
         {
           type: 'doc',
-          id: 'ERC-8004/general',
+          id: '8004/general',
           label: 'Introduction',
         },
         {
           type: 'doc',
-          id: 'ERC-8004/contract',
+          id: '8004/contract',
           label: 'Contract',
         },
         {
           type: 'doc',
-          id: 'ERC-8004/QuickStart',
+          id: '8004/QuickStart',
           label: 'QuickStart',
         },
         {
           type: 'doc',
-          id: 'ERC-8004/SupportedNetworks',
+          id: '8004/SupportedNetworks',
           label: 'SupportedNetworks',
         },
 
@@ -79,7 +79,7 @@ const sidebars = {
               type: 'category',
               label: 'Usage',
               collapsed: false,
-              items: ['ERC-8004/Usage/Install', 'ERC-8004/Usage/ConfigureAgents', 'ERC-8004/Usage/RegistrationHTTP'],
+              items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
             },
           ],
         

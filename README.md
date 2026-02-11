@@ -1,83 +1,97 @@
-# 🚀 Bank of AI 
+# 🚀 Bank of AI  
 
-**为 AI Agent 构建去中心化金融主权与商业互联层**
+**Building a Decentralized Financial Sovereignty and Commercial Interconnection Layer for AI Agents**
 
 [![Standard](https://img.shields.io/badge/Protocol-bankofai-blue.svg)](https://github.com/bankofai)
 
+Bank of AI is designed to empower AI Agents with **financial sovereignty, identity authentication, skill extensibility, and automated payment capabilities**. Through standardized protocols, we enable AI to autonomously earn income, pay for resources, and build credit on the blockchain—just like humans.
 
-Bank of AI 旨在赋予 AI 智能体（AI Agents）**金融主权、身份认证、技能扩展及自动化支付能力**。通过标准化协议，我们让 AI 能够像人类一样在区块链上自主赚取收入、支付资源并建立信用。
+Currently supports **TRON** and **BSC**, with more blockchain networks coming in the future.
 
-当前仅支持 TRON 和 BSC 链，未来将支持更多区块链网络。
+---
 
+## 🏛️ Core Components
 
-## 🏛️ 核心组件 (Core Components)
+### 1. 💳 x402 Protocol: A Programmatic Payment Standard
 
-### 1. 💳 x402 协议：程序化支付标准
-x402 是一种基于 HTTP `402 Payment Required` 状态码的区块链开放支付协议。它解决了 AI 代理在 M2M（机器对机器）交互中的支付门槛。
+x402 is an open blockchain payment protocol based on the HTTP `402 Payment Required` status code. It removes payment friction in M2M (machine-to-machine) interactions for AI agents.
 
-* **支付即响应**：实现“先付费后响应”机制，无需繁琐的账户注册或会话维护。
-* **多链覆盖**：目前已支持 **TRON** (Mainnet/Shasta/Nile) 和 **BSC** (Mainnet/Testnet)。
-* **AI 友好**：支持基于 TIP-712/EIP-712 的签名负载，允许 Agent 自动完成结算。
-* **适用场景**：按请求计费的 API、付费墙、Agent 间自动结算。
+- **Payment-as-Response**: Enables a “pay-before-response” mechanism without complex account registration or session management.  
+- **Multi-Chain Support**: Currently supports **TRON** (Mainnet/Shasta/Nile) and **BSC** (Mainnet/Testnet).  
+- **AI-Friendly**: Supports TIP-712/EIP-712 signed payloads, allowing agents to complete settlements automatically.  
+- **Use Cases**: Pay-per-request APIs, paywalls, and automated settlement between agents.
 
-### 2. 🆔 ERC-8004：身份与信誉协议
-ERC-8004 利用区块链作为去中心化的公共注册表，是 AI 代理建立信任的基石。
+---
 
-* **身份注册表 (Identity)**：通过 ERC-721 NFT 铸造身份，将链上 `agentId` 映射至元数据，确保所有权可转移且安全。
-* **信誉系统 (Reputation)**：提供中立的公共存储标准，记录多维度反馈，交由应用层进行算法排名。
-* **共识验证 (Validation)**：集成 **TEE 证明**、**加密经济质押**及 **zkML**，实现对 Agent 行为的可验证性。
+### 2. 🆔 8004 Protocol: Identity & Reputation Framework
 
-### 3. 🛠️ MCP Server & Skills：智能体的“手与脑”
-通过模型上下文协议 (MCP) 架构，为 Agent 提供完整的链上业务执行能力。
+The 8004 Protocol uses the blockchain as a decentralized public registry, forming the foundation of trust for AI agents.
 
-* **基础设施层 (MCP Server)**：智能体的 **“手和眼”**。提供统一的标准化界面，使其能够读取区块、管理钱包、执行转账及与任意合约交互。
-* **应用逻辑层 (Skills)**：智能体的 **“大脑”**。通过结构化指令 (`SKILL.md`) 指引 AI 组合调用底层工具。
-    * **SunSwap Skill**：实现 DEX 自动兑换功能。
-    * **x402_payment**：赋予 Agent 自动识别支付要求并执行付款的逻辑。
+- **Identity Registry**: Mints identity as TRC-721/ERC-721 NFTs, mapping on-chain `agentId` to metadata with transferable and secure ownership.  
+- **Reputation System**: Provides a neutral public storage standard for multi-dimensional feedback, with ranking determined at the application layer.  
+- **Consensus Validation**: Integrates **TEE proofs**, **crypto-economic staking**, and **zkML** to enable verifiable agent behavior.
 
-### 4. 🧩 OpenClaw Extension：AI 代理金融助手
-OpenClaw 是 Bank of AI 专门为 AI 代理开发的金融扩展插件，致力于成为代理经济的“中央银行”。
+---
 
-* **持有钱包**：让 Agent 真正拥有链上资产的管理权。
-* **自主消费**：代理可自主支付所需的计算、存储及数据资源费用。
-* **无缝集成**：内置 MCP 服务器与技能自动安装程序，开箱即用。
+### 3. 🛠️ MCP Server & Skills: The “Hands and Brain” of Agents
 
+Built on the Model Context Protocol (MCP) architecture, providing full on-chain execution capabilities for agents.
 
+- **Infrastructure Layer (MCP Server)**: The agent’s **“hands and eyes.”** Provides a unified interface to read blocks, manage wallets, execute transfers, and interact with any contract.  
+- **Application Logic Layer (Skills)**: The agent’s **“brain.”** Uses structured instructions (`SKILL.md`) to guide AI in orchestrating underlying tools.  
+  - **SunSwap Skill**: Enables automated DEX swaps.  
+  - **x402_payment**: Allows agents to detect payment requirements and execute payments automatically.
 
-## 📊 为什么选择 Bank of AI？
+---
 
-| 特性 | 传统 AI 代理 | **赋能后的 Bank of AI Agent** |
+### 4. 🧩 OpenClaw Extension: Financial Assistant for AI Agents
+
+OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, aiming to become the “central bank” of the agent economy.
+
+- **Wallet Ownership**: Enables agents to truly control and manage on-chain assets.  
+- **Autonomous Spending**: Agents can independently pay for computation, storage, and data resources.  
+- **Seamless Integration**: Built-in MCP server and automatic skill installer for plug-and-play setup.
+
+---
+
+## 📊 Why Choose Bank of AI?
+
+| Feature | Traditional AI Agents | **Bank of AI–Empowered Agents** |
 | :--- | :--- | :--- |
-| **支付体系** | 绑定信用卡/中心化 API Key | **x402 原生链上即时结算** |
-| **身份体系** | 中心化邮箱/手机号注册 | **ERC-8004 链上身份 (NFT)** |
-| **金融能力** | 受限，需人类预授权 | **自主 DeFi 交互 (Swap/Lending)** |
-| **交互模式** | 人机交互为主 | **A2A (Agent-to-Agent) 直接结算** |
-| **信任机制** | 厂商背书 (黑盒) | **公开信誉与加密验证 (透明)** |
+| **Payment System** | Credit card / centralized API keys | **x402 native on-chain instant settlement** |
+| **Identity System** | Centralized email/phone registration | **ERC-8004 on-chain identity (NFT)** |
+| **Financial Capability** | Limited, requires human pre-authorization | **Autonomous DeFi interaction (Swap/Lending)** |
+| **Interaction Model** | Primarily human–machine | **A2A (Agent-to-Agent) direct settlement** |
+| **Trust Mechanism** | Vendor-backed (black box) | **Public reputation & cryptographic verification (transparent)** |
 
 ---
 
-## 🚦 快速开始 (Quick Start)
+## 🚦 Quick Start
 
-### 🚀 对于卖家 (Sellers)
-*想要变现你的 API、内容或服务？*
-1. **集成 x402**：在服务端部署逻辑，识别付费需求并返回 `402` 状态码及支付指引。
-2. **注册身份**：参考 `ERC-8004` 规范完成链上身份铸造。
-3. **发布 Skills**：为你的服务编写 `SKILL.md`，让其他 AI 能够理解如何调用你。
+### 🚀 For Sellers  
+*Want to monetize your API, content, or services?*
 
-### 🤖 对于买家/代理 (Agents/Buyers)
-*想要让你的 Agent 具备自主支付与链上交互能力？*
-1. **安装 OpenClaw**：配置环境并连接到 [mcp-server](https://github.com/bankofai/mcp-server)。
-2. **同步技能**：从 [skills](https://github.com/bankofai/skills) 仓库加载 `sunswap` 或 `x402_payment`。
-3. **开始交易**：Agent 现在可以自动处理来自卖家的支付请求并执行结算。
+1. **Integrate x402**: Deploy server-side logic to detect payment requirements and return a `402` status code with payment instructions.  
+2. **Register Identity**: Mint your on-chain identity following the `ERC-8004` specification.  
+3. **Publish Skills**: Write a `SKILL.md` for your service so other AI agents can understand how to interact with it.
 
 ---
 
-## 🏗️ 开发者资源
+### 🤖 For Agents/Buyers  
+*Want your agent to have autonomous payment and on-chain interaction capabilities?*
 
-* **文档中心**：[docs.bankofai.io](https://github.com/bankofai/x402-docs)
-* **实战演示**：[x402-demo 仓库](https://github.com/bankofai/x402-demo)
-* **技术支持**：欢迎在 GitHub 提交 Issue 或参与讨论。
+1. **Install OpenClaw**: Configure your environment and connect to the [mcp-server](https://github.com/bankofai/mcp-server).  
+2. **Sync Skills**: Load `sunswap` or `x402_payment` from the [skills](https://github.com/bankofai/skills) repository.  
+3. **Start Transacting**: Your agent can now automatically process payment requests from sellers and execute settlements.
 
 ---
 
-**Bank of AI** - *Empowering AI Agents with Financial Sovereignty.*
+## 🏗️ Developer Resources
+
+- **Documentation Center**: [docs.bankofai.io](https://github.com/bankofai/x402-docs)  
+- **Live Demo**: [x402-demo Repository](https://github.com/bankofai/x402-demo)  
+- **Technical Support**: Submit issues or join discussions on GitHub.
+
+---
+
+**Bank of AI** — *Empowering AI Agents with Financial Sovereignty.*
