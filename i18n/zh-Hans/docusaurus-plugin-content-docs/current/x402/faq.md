@@ -55,15 +55,11 @@ x402 目前提供以下 SDK：
 
 - **单次调用固定费率**：例如，每次请求收取 `1 USDT`。
 - **分层定价**：为不同级别的端点（如 `/basic` 与 `/pro`）设定差异化价格。
-- **`exact`方案**：支付服务指定的准确金额
+- **`exact_permit` / `exact` 方案**：支付服务指定的准确金额
 
 #### x402 支持哪些支付方案？
 
-x402 目前支持 `exact` 方案，其核心机制允许：
-
-- 客户端授权一个**最高支付金额**。
-- 服务端结算**实际产生的费用**（不超过授权上限）。
-- 此方案非常适用于**按量计费 (Metered Billing)**、**LLM Token 消耗**等场景。
+x402 支持 `exact_permit` 和 `exact` 两种支付方案。两种方案均允许客户端授权一个**最高支付金额**，服务端结算**实际产生的费用**（不超过授权上限）。此方案非常适用于**按量计费 (Metered Billing)**、**LLM Token 消耗**等场景。
 
 ### 资产、网络及费用
 
@@ -100,10 +96,10 @@ x402 目前支持 `exact` 方案，其核心机制允许：
 
 #### 退款机制如何运作？
 
-`exact` 方案属于**推送支付 (Push Payment)**——交易一旦上链执行即不可逆转。处理退款通常有以下两种方式：
+`exact_permit` / `exact` 方案属于**推送支付 (Push Payment)**——交易一旦上链执行即不可逆转。处理退款通常有以下两种方式：
 
 1.  **业务层退款：** 由卖方主动发起一笔新的 USDT 转账，将资金返还给买方。
-2.  **按实结算（预防性）：** 利用 `exact` 方案特性，服务端仅结算实际产生的费用，而非全额扣款（从而避免需要退款的情况）。
+2.  **按实结算（预防性）：** 利用支付方案特性，服务端仅结算实际产生的费用，而非全额扣款（从而避免需要退款的情况）。
 
 ### AI 代理集成
 
@@ -162,31 +158,6 @@ BSC 上推荐使用 **BSC Testnet** 进行测试。该网络是 BSC 主网的镜
 - **资产类型错误**：确认您的钱包持有的是**主网真实 USDT**，而非测试币。
 - **手续费不足**：确保 Facilitator 钱包拥有足够的代币用于支付链上的 gas 费用。
 - **合约地址变更**：不同网络（Nile vs Mainnet）的代币合约地址是不同的，请检查是否已更新。
-
-#### 如何检查代币授权额度？
-
-可以使用 SDK 提供的辅助方法进行检查：
-
-<Tabs>
-  <TabItem value="TRON" label="TRON">
-
-```python
-allowance = await signer.check_allowance(
-    token_address="TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
-    required_amount=1000000,
-    network="tron:nile"
-)
-print(f"Current allowance: {allowance}")
-```
-</TabItem>
-    <TabItem value="BSC" label="BSC">
-
-```python
-
-```
-
-</TabItem>
-</Tabs>
 
 ### 仍有疑问？
 

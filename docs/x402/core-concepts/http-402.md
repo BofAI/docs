@@ -52,7 +52,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
   },
   "accepts": [
     {
-      "scheme": "exact",
+      "scheme": "exact_permit",
       "network": "tron:nile",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
@@ -64,11 +64,23 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
         "fee": {
           "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-          "feeAmount": "100"
+          "feeAmount": "100",
+          "caller": "<FACILITATOR_CALLER_ADDRESS>"
         }
       }
     }
-  ]
+  ],
+  "extensions": {
+    "paymentPermitContext": {
+      "meta": {
+        "kind": "PAYMENT_ONLY",
+        "paymentId": "0xb08d71cabc27d5552e36a7f60084e130",
+        "nonce": "11984290373079535093514815017206530944",
+        "validAfter": 1770816589,
+        "validBefore": 1770820189
+      }
+    }
+  }
 }
 ```
 
@@ -76,7 +88,46 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 <TabItem value="BSC" label="BSC">
 
 ```json
-
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "http://example.com/protected",
+    "description": null,
+    "mimeType": null
+  },
+  "accepts": [
+    {
+      "scheme": "exact_permit",
+      "network": "eip155:97",
+      "amount": "100000000000000",
+      "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+      "payTo": "<SELLER_BSC_ADDRESS>",
+      "maxTimeoutSeconds": 3600,
+      "extra": {
+        "name": "Tether USD",
+        "version": "1",
+        "fee": {
+          "facilitatorId": "<FACILITATOR_URL>",
+          "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
+          "feeAmount": "100000000000000",
+          "caller": "<FACILITATOR_CALLER_ADDRESS>"
+        }
+      }
+    }
+  ],
+  "extensions": {
+    "paymentPermitContext": {
+      "meta": {
+        "kind": "PAYMENT_ONLY",
+        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
+        "nonce": "94261896388554187915350651456800860604",
+        "validAfter": 1770817158,
+        "validBefore": 1770820758
+      }
+    }
+  }
+}
 ```
 </TabItem>
 </Tabs>
@@ -90,13 +141,14 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 | `error`             | Human-readable error message                                                |
 | `resource`          | Information about the requested resource                                    |
 | `accepts`           | Array of accepted payment options                                           |
-| `scheme`            | Payment scheme (`exact` indicates a fixed amount)                           |
+| `scheme`            | Payment scheme (`exact_permit` or `exact`)                                  |
 | `network`           | Network identifier (`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`)  |
 | `amount`            | Payment amount in the smallest unit (e.g., 100 = 0.0001 USDT)              |
 | `asset`             | TRC-20/BEP-20 token contract address                                        |
-| `payTo`             | Seller’s wallet address                                                     |
+| `payTo`             | Seller's wallet address                                                     |
 | `maxTimeoutSeconds` | Maximum validity duration of the payment                                    |
-| `extra.fee`         | Facilitator fee information                                                 |
+| `extra.fee`         | Facilitator fee information (includes `facilitatorId`, `feeTo`, `feeAmount`, `caller`) |
+| `extensions`        | Additional context for the payment scheme (e.g., `paymentPermitContext` with nonce, validity window) |
 
 ## Payment Signature Structure
 
@@ -108,17 +160,29 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact",
+  "scheme": "exact_permit",
   "network": "tron:nile",
   "payload": {
     "signature": "0x...",
-    "authorization": {
-      "from": "<CLIENT_TRON_ADDRESS>",
-      "to": "<SELLER_TRON_ADDRESS>",
-      "value": "100",
-      "validAfter": 1770364361,
-      "validBefore": 1770367961,
-      "nonce": "238244758379819673006209461499601971084"
+    "permit": {
+      "meta": {
+        "kind": 0,
+        "paymentId": "0x65f9d4ca3fb5f6dd14930055aa5ccbc4",
+        "nonce": "241054476753796864345738420545497456919",
+        "validAfter": 1770817311,
+        "validBefore": 1770820911
+      },
+      "buyer": "<CLIENT_TRON_ADDRESS>",
+      "caller": "<FACILITATOR_CALLER_ADDRESS>",
+      "payment": {
+        "payToken": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
+        "payAmount": 100,
+        "payTo": "<SELLER_TRON_ADDRESS>"
+      },
+      "fee": {
+        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
+        "feeAmount": 100
+      }
     }
   }
 }
@@ -128,7 +192,34 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 <TabItem value="BSC" label="BSC">
 
 ```json
-
+{
+  "x402Version": 2,
+  "scheme": "exact_permit",
+  "network": "eip155:97",
+  "payload": {
+    "signature": "0x...",
+    "permit": {
+      "meta": {
+        "kind": 0,
+        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
+        "nonce": "94261896388554187915350651456800860604",
+        "validAfter": 1770817158,
+        "validBefore": 1770820758
+      },
+      "buyer": "<CLIENT_BSC_ADDRESS>",
+      "caller": "<FACILITATOR_CALLER_ADDRESS>",
+      "payment": {
+        "payToken": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+        "payAmount": 100000000000000,
+        "payTo": "<SELLER_BSC_ADDRESS>"
+      },
+      "fee": {
+        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
+        "feeAmount": 100000000000000
+      }
+    }
+  }
+}
 ```
 </TabItem>
 </Tabs>

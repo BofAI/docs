@@ -42,6 +42,8 @@ This page tracks the implementation progress and feature support status of the x
 
 | Mechanism | Python | TypeScript |
 |-------------|--------|------------|
+| exact_permit/tron | ✅ | ✅ |
+| exact_permit/bsc | ✅ | ✅ |
 | exact/tron | ✅ | ✅ |
 | exact/bsc | ✅ | ✅ |
 

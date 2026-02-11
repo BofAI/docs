@@ -84,15 +84,21 @@ x402 采用类型化数据签名来处理所有支付相关的签名授权。
 
 ### 支付方案
 
-#### Exact 方案
+x402 支持两种支付方案：`exact_permit` 和 `exact`。
 
-`exact` 方案允许支付指定金额，适用于：
+#### `exact_permit` 方案
+
+`exact_permit` 方案通过 `PaymentPermit` 合约进行代币转账，适用于：
 
 - **按次/按量付费 API**：例如 LLM 的 Token 生成费、图像生成服务。
 - **计量资源**：云计算实例的运行时间、数据存储量、网络带宽消耗。
 - **动态定价服务**：基于实际使用量的后付费模式。
 
-x402 中的 `exact` 方案工作原理如下：
+#### `exact` 方案
+
+`exact` 方案适用于原生支持 EIP-3009（`transferWithAuthorization`）的代币，无需 `PaymentPermit` 合约。
+
+#### 工作原理
 
 1.  **预授权 (Authorize)**：客户端签署消息，授权支付**最大金额** (Max Amount)。
 2.  **执行服务 (Execute)**：服务端执行请求任务，并计算**实际成本** (Actual Cost)。
@@ -123,11 +129,27 @@ Facilitator 作为协议的中间件，承担以下核心职责：
 | **网络环境** | `tron:mainnet`, `tron:shasta`, `tron:nile`,`eip155:56`, `eip155:97`|
 | **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）,BEP-20 代币 |
 | **签名机制** | 类型化数据签名                     |
-| **支付方案** | `exact`                                    |
+| **支付方案** | `exact_permit`, `exact`                    |
 
 ### 添加自定义代币
 
-可通过在 `TokenRegistry`（代币注册表）中注册来支持自定义 TRC-20/BEP-20 代币。有关实施细节，请参阅 [卖家快速入门](../getting-started/quickstart-for-sellers.md)。
+可通过在 `TokenRegistry`（代币注册表）中注册来支持自定义 TRC-20/BEP-20 代币：
+
+```python
+from bankofai.x402.tokens import TokenRegistry, TokenInfo
+
+TokenRegistry.register_token(
+    "tron:nile",
+    TokenInfo(
+        address="<YOUR_TOKEN_CONTRACT_ADDRESS>",
+        decimals=6,
+        name="My Token",
+        symbol="MYT",
+    ),
+)
+```
+
+注册完成后，即可在 `prices` 中使用自定义代币符号（例如 `"0.01 MYT"`）。
 
 ### 总结
 

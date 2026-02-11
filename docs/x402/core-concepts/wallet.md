@@ -76,7 +76,7 @@ x402 uses typed data signing for secure payment authorization.
 
 ## Token Approval
 
-For the `exact` payment scheme, the client must authorize the `PaymentPermit` contract to transfer tokens from their wallet for settlement.  
+For the `exact_permit` payment scheme, the client must authorize the `PaymentPermit` contract to transfer tokens from their wallet for settlement.  
 
 This is completed via the standard TRC-20/BEP-20 `approve` function.
 

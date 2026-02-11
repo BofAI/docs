@@ -100,6 +100,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 @x402_protected(
     server=server,
     prices=["0.0001 USDT"],              # Price per request (supports multiple tokens)
+    schemes=["exact_permit"],             # Payment scheme
     network=NetworkConfig.TRON_NILE,     # Use testnet for testing
     pay_to=PAY_TO_ADDRESS,               # Your wallet address
 )
@@ -166,8 +167,9 @@ if __name__ == "__main__":
 | 参数      | 描述                       | 示例                              |
 | --------- | -------------------------- | --------------------------------- |
 | `prices`  | 单次请求的支付金额（列表） | `["0.0001 USDT"]`                |
+| `schemes` | 每个价格对应的支付方案（列表）：`exact_permit` 或 `exact` | `["exact_permit"]` |
 | `network` | 网络标识符                 | `tron:nile`/`eip155:97`（测试网） |
-| `pay_to`  | 您的钱包收款地址           | `TYour...Address` 或 `0x...`     |
+| `pay_to`  | 您的钱包收款地址           | `T...` 或 `0x...`     |
 
 **工作原理：** 当收到未附带支付的请求时，您的服务器会自动返回 HTTP 402 (Payment Required) 状态码及支付说明。剩余的流程将由客户端 SDK 自动处理！
 
@@ -294,6 +296,7 @@ curl http://localhost:8000/protected
 @x402_protected(
     server=server,
     prices=["0.0001 USDT"],
+    schemes=["exact_permit"],
     network=NetworkConfig.TRON_MAINNET,  # Change from TRON_NILE to TRON_MAINNET
     pay_to=PAY_TO_ADDRESS,
 )
@@ -306,9 +309,9 @@ curl http://localhost:8000/protected
 @x402_protected(
     server=server,
     prices=["0.0001 USDT"],
+    schemes=["exact_permit"],
     network=NetworkConfig.BSC_MAINNET,  # Change from BSC_TESTNET to BSC_MAINNET
     pay_to=PAY_TO_ADDRESS,
-    schemes=["exact_permit"],
 )
 ```
 
@@ -324,13 +327,13 @@ curl http://localhost:8000/protected
 1.  **申请 TronGrid API Key**：前往 [TronGrid](https://www.trongrid.io/) 注册并创建 API Key。为了确保主网 RPC 访问的稳定性，这一步是必需的。
 2.  **更新环境变量**：配置主网凭证（包括 `TRON_GRID_API_KEY`）。
 3.  **准备 Gas 费**：确保 Facilitator 钱包中持有足够的 TRX，用于支付能量（Energy）和带宽（Bandwidth）费用。
-4.  **切换网络配置**：将 Facilitator 的网络配置更新为 `mainnet`。
+4.  **切换网络配置**：将 Facilitator 的网络配置更新为 `NetworkConfig.TRON_MAINNET`。
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
 1.  **准备 Gas 费**：确保 Facilitator 钱包中持有足够的 BNB，用于支付 gas 费用。
-2.  **切换网络配置**：将 Facilitator 的网络配置更新为 `eip155:56`。
+2.  **切换网络配置**：将 Facilitator 的网络配置更新为 `NetworkConfig.BSC_MAINNET`。
 
 </TabItem>
 </Tabs>
@@ -348,20 +351,6 @@ curl http://localhost:8000/protected
 3.  监控 Facilitator 服务，观察是否有任何异常报错。
 
 **警告：** 主网交易涉及真实资金。请务必先在测试网（Testnet）进行充分的测试，切换到主网后也请务必从小额开始验证。
-
-## 网络标识符
-
-x402 使用简明的网络标识符：
-
-| 网络名称            | 标识符         |
-| ------------------- | -------------- |
-| TRON Mainnet 主网  | `tron:mainnet` |
-| TRON Nile 测试网   | `tron:nile`    |
-| TRON Shasta 测试网 | `tron:shasta`  |
-| BSC Mainnet 主网   | `eip155:56`    |
-| BSC Chapel 测试网  | `eip155:97`    |
-
-完整列表请参阅 [网络支持](../core-concepts/network-and-token-support.md)。
 
 ### 下一步
 

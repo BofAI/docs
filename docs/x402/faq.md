@@ -63,16 +63,11 @@ Common pricing models include:
 
 - **Flat rate per call**: e.g., `1 USDT` per request  
 - **Tiered pricing**: Different prices for endpoints like `/basic` and `/pro`  
-- **`exact` scheme**: Pay the exact amount determined by the service  
+- **`exact_permit` / `exact` scheme**: Pay the exact amount determined by the service  
 
 #### What payment schemes does x402 support?
 
-x402 currently supports the `exact` scheme, which allows:
-
-- The client to authorize a **maximum payment amount**  
-- The server to settle the **actual cost incurred** (up to the authorized limit)  
-
-This is ideal for **metered billing**, **LLM token usage**, and similar use cases.
+x402 supports `exact_permit` and `exact` payment schemes. Both allow the client to authorize a **maximum payment amount**, and the server to settle the **actual cost incurred** (up to the authorized limit). This is ideal for **metered billing**, **LLM token usage**, and similar use cases.
 
 ---
 
@@ -113,12 +108,12 @@ Custom TRC-20 and BEP-20 tokens can also be added via the TokenRegistry.
 
 #### How does refunds work?
 
-The `exact` scheme uses a **push payment** model—once executed on-chain, it is irreversible.
+The `exact_permit` / `exact` scheme uses a **push payment** model—once executed on-chain, it is irreversible.
 
 Refund options:
 
 1. **Business-layer refund**: Seller manually sends a new USDT transfer back to the buyer.  
-2. **Preventative settlement**: Server settles only the actual usage amount under the `exact` scheme.  
+2. **Preventative settlement**: Server settles only the actual usage amount under the payment scheme.  
 
 ---
 
@@ -183,30 +178,6 @@ Check the `error` field in the server’s JSON response for detailed diagnostics
 - Using testnet tokens instead of real mainnet tokens  
 - Facilitator lacks sufficient gas tokens  
 - Token contract address differs between networks  
-
-#### How can I check token allowance?
-
-<Tabs>
-  <TabItem value="TRON" label="TRON">
-
-```python
-allowance = await signer.check_allowance(
-    token_address="TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
-    required_amount=1000000,
-    network="tron:nile"
-)
-print(f"Current allowance: {allowance}")
-```
-
-</TabItem>
-    <TabItem value="BSC" label="BSC">
-
-```python
-
-```
-
-</TabItem>
-</Tabs>
 
 ### Still Have Questions?
 

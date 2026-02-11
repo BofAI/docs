@@ -100,6 +100,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 @x402_protected(
     server=server,
     prices=["0.0001 USDT"],              # Price per request (supports multiple tokens)
+    schemes=["exact_permit"],             # Payment scheme
     network=NetworkConfig.TRON_NILE,     # Use testnet for testing
     pay_to=PAY_TO_ADDRESS,               # Your wallet address
 )
@@ -166,8 +167,9 @@ if __name__ == "__main__":
 | Parameter | Description                 | Example                       |
 | --------- | --------------------------- | ----------------------------- |
 | `prices`  | Payment amount per request (list) | `["0.0001 USDT"]`             |
+| `schemes` | Payment scheme per price (list): `exact_permit` or `exact` | `["exact_permit"]` |
 | `network` | Network identifier          | `tron:nile`/`eip155:97` (testnet) |
-| `pay_to`  | Your wallet receiving address | `TYour...Address` or `0x...`  |
+| `pay_to`  | Your wallet receiving address | `T...` or `0x...`  |
 
 **How it Works:** When an unpaid request is received, your server automatically returns an HTTP 402 (Payment Required) status code with payment instructions. The rest of the process is handled automatically by the client SDK!
 
@@ -294,6 +296,7 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
 @x402_protected(
     server=server,
     prices=["0.0001 USDT"],
+    schemes=["exact_permit"],
     network=NetworkConfig.TRON_MAINNET,  # Change from TRON_NILE to TRON_MAINNET
     pay_to=PAY_TO_ADDRESS,
 )
@@ -306,9 +309,9 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
 @x402_protected(
     server=server,
     prices=["0.0001 USDT"],
+    schemes=["exact_permit"],
     network=NetworkConfig.BSC_MAINNET,  # Change from BSC_TESTNET to BSC_MAINNET
     pay_to=PAY_TO_ADDRESS,
-    schemes=["exact_permit"],
 )
 ```
 
@@ -324,13 +327,13 @@ If you are running your own Facilitator service on the TRON mainnet, do the foll
 1.  **Apply for a TronGrid API Key**: Go to [TronGrid](https://www.trongrid.io/) to register and create an API Key. This step is necessary to ensure the stability of mainnet RPC access.
 2.  **Update Environment Variables**: Configure mainnet credentials (including `TRON_GRID_API_KEY`).
 3.  **Prepare Gas Fees**: Ensure the Facilitator wallet holds enough TRX to pay for Energy and Bandwidth fees.
-4.  **Switch Network Configuration**: Update the Facilitator's network configuration to `mainnet`.
+4.  **Switch Network Configuration**: Update the Facilitator's network configuration to `NetworkConfig.TRON_MAINNET`.
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
 1.  **Prepare Gas Fees**: Ensure the Facilitator wallet holds enough BNB to pay for gas fees.
-2.  **Switch Network Configuration**: Update the Facilitator's network configuration to `eip155:56`.
+2.  **Switch Network Configuration**: Update the Facilitator's network configuration to `NetworkConfig.BSC_MAINNET`.
 
 </TabItem>
 </Tabs>
@@ -348,20 +351,6 @@ Before going live, follow these steps:
 3.  Monitor the Facilitator service for any abnormal errors.
 
 **Warning:** Mainnet transactions involve real funds. Be sure to thoroughly test on the testnet first, and when switching to mainnet, always start with small amounts for verification.
-
-## Network Identifiers
-
-x402 uses concise network identifiers:
-
-| Network Name        | Identifier     |
-| ------------------- | -------------- |
-| TRON Mainnet        | `tron:mainnet` |
-| TRON Nile Testnet   | `tron:nile`    |
-| TRON Shasta Testnet | `tron:shasta`  |
-| BSC Mainnet         | `eip155:56`    |
-| BSC Chapel Testnet  | `eip155:97`    |
-
-For a complete list, please refer to [Network Support](../core-concepts/network-and-token-support.md).
 
 ### Next Steps
 

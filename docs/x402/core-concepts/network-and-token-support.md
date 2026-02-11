@@ -100,15 +100,21 @@ When configuring an `HTTP 402` payment request on the server side, you must expl
 
 ## Payment Scheme
 
-### `exact` Scheme
+x402 supports two payment schemes: `exact_permit` and `exact`.
 
-The `exact` scheme allows charging a specified amount and is suitable for:
+### `exact_permit` Scheme
+
+The `exact_permit` scheme transfers tokens via the `PaymentPermit` contract, suitable for:
 
 - **Pay-per-use APIs** (e.g., LLM token generation, image generation services)  
 - **Metered resources** (cloud compute time, storage usage, bandwidth consumption)  
 - **Dynamic pricing services** based on actual usage  
 
-### How `exact` Works
+### `exact` Scheme
+
+The `exact` scheme is for tokens that natively support EIP-3009 (`transferWithAuthorization`). It does not require the `PaymentPermit` contract.
+
+### How Payment Schemes Work
 
 1. **Authorize**  
    The client signs a message authorizing a **maximum amount**.
@@ -148,14 +154,29 @@ You may deploy your own Facilitator node to gain full control over payment verif
 | **Networks**   | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97` |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20 |
 | **Signing Mechanism** | Typed data signing |
-| **Payment Scheme** | `exact` |
+| **Payment Scheme** | `exact_permit`, `exact` |
 
 ---
 
 ## Adding Custom Tokens
 
-You can support custom TRC-20/BEP-20 tokens by registering them in the `TokenRegistry`.  
-For implementation details, see [Seller Quick Start](../getting-started/quickstart-for-sellers.md).
+You can support custom TRC-20/BEP-20 tokens by registering them in the `TokenRegistry`:
+
+```python
+from bankofai.x402.tokens import TokenRegistry, TokenInfo
+
+TokenRegistry.register_token(
+    "tron:nile",
+    TokenInfo(
+        address="<YOUR_TOKEN_CONTRACT_ADDRESS>",
+        decimals=6,
+        name="My Token",
+        symbol="MYT",
+    ),
+)
+```
+
+Once registered, you can use the custom token symbol in `prices` (e.g., `"0.01 MYT"`).
 
 ---
 

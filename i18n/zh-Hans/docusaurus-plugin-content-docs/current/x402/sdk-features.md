@@ -32,6 +32,8 @@
 
 | 机制 | Python | TypeScript |
 |-----------|--------|------------|
+| exact_permit/tron | ✅ | ✅ |
+| exact_permit/bsc | ✅ | ✅ |
 | exact/tron | ✅ | ✅ |
 | exact/bsc | ✅ | ✅ |
 

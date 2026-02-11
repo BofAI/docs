@@ -52,7 +52,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   },
   "accepts": [
     {
-      "scheme": "exact",
+      "scheme": "exact_permit",
       "network": "tron:nile",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
@@ -64,11 +64,23 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
         "fee": {
           "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-          "feeAmount": "100"
+          "feeAmount": "100",
+          "caller": "<FACILITATOR_CALLER_ADDRESS>"
         }
       }
     }
-  ]
+  ],
+  "extensions": {
+    "paymentPermitContext": {
+      "meta": {
+        "kind": "PAYMENT_ONLY",
+        "paymentId": "0xb08d71cabc27d5552e36a7f60084e130",
+        "nonce": "11984290373079535093514815017206530944",
+        "validAfter": 1770816589,
+        "validBefore": 1770820189
+      }
+    }
+  }
 }
 ```
 
@@ -76,7 +88,46 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 <TabItem value="BSC" label="BSC">
 
 ```json
-
+{
+  "x402Version": 2,
+  "error": "Payment required",
+  "resource": {
+    "url": "http://example.com/protected",
+    "description": null,
+    "mimeType": null
+  },
+  "accepts": [
+    {
+      "scheme": "exact_permit",
+      "network": "eip155:97",
+      "amount": "100000000000000",
+      "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+      "payTo": "<SELLER_BSC_ADDRESS>",
+      "maxTimeoutSeconds": 3600,
+      "extra": {
+        "name": "Tether USD",
+        "version": "1",
+        "fee": {
+          "facilitatorId": "<FACILITATOR_URL>",
+          "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
+          "feeAmount": "100000000000000",
+          "caller": "<FACILITATOR_CALLER_ADDRESS>"
+        }
+      }
+    }
+  ],
+  "extensions": {
+    "paymentPermitContext": {
+      "meta": {
+        "kind": "PAYMENT_ONLY",
+        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
+        "nonce": "94261896388554187915350651456800860604",
+        "validAfter": 1770817158,
+        "validBefore": 1770820758
+      }
+    }
+  }
+}
 ```
 </TabItem>
 </Tabs>
@@ -89,13 +140,14 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `error`             | 人类可读的错误提示                                |
 | `resource`          | 关于请求资源的信息                                |
 | `accepts`           | 接受的支付选项数组                                |
-| `scheme`            | 支付方案（`exact` 表示固定金额）                  |
-| `network`           | 网络标识符（`tron:nile`, `tron:mainnet`,`eip155:56`,`eip155:97`）    |
+| `scheme`            | 支付方案（`exact_permit` 或 `exact`）                     |
+| `network`           | 网络标识符（`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`） |
 | `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
 | `asset`             | TRC-20/BEP-20 代币合约地址                               |
 | `payTo`             | 卖家的钱包地址                              |
 | `maxTimeoutSeconds` | 支付有效期的最大时长                              |
-| `extra.fee`         | Facilitator 费用信息                     |
+| `extra.fee`         | Facilitator 费用信息（包含 `facilitatorId`、`feeTo`、`feeAmount`、`caller`） |
+| `extensions`        | 支付方案的附加上下文（如 `paymentPermitContext`，包含 nonce、有效期窗口等） |
 
 ## 支付签名结构
 
@@ -107,17 +159,29 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact",
+  "scheme": "exact_permit",
   "network": "tron:nile",
   "payload": {
     "signature": "0x...",
-    "authorization": {
-      "from": "<CLIENT_TRON_ADDRESS>",
-      "to": "<SELLER_TRON_ADDRESS>",
-      "value": "100",
-      "validAfter": 1770364361,
-      "validBefore": 1770367961,
-      "nonce": "238244758379819673006209461499601971084"
+    "permit": {
+      "meta": {
+        "kind": 0,
+        "paymentId": "0x65f9d4ca3fb5f6dd14930055aa5ccbc4",
+        "nonce": "241054476753796864345738420545497456919",
+        "validAfter": 1770817311,
+        "validBefore": 1770820911
+      },
+      "buyer": "<CLIENT_TRON_ADDRESS>",
+      "caller": "<FACILITATOR_CALLER_ADDRESS>",
+      "payment": {
+        "payToken": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
+        "payAmount": 100,
+        "payTo": "<SELLER_TRON_ADDRESS>"
+      },
+      "fee": {
+        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
+        "feeAmount": 100
+      }
     }
   }
 }
@@ -127,7 +191,34 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 <TabItem value="BSC" label="BSC">
 
 ```json
-
+{
+  "x402Version": 2,
+  "scheme": "exact_permit",
+  "network": "eip155:97",
+  "payload": {
+    "signature": "0x...",
+    "permit": {
+      "meta": {
+        "kind": 0,
+        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
+        "nonce": "94261896388554187915350651456800860604",
+        "validAfter": 1770817158,
+        "validBefore": 1770820758
+      },
+      "buyer": "<CLIENT_BSC_ADDRESS>",
+      "caller": "<FACILITATOR_CALLER_ADDRESS>",
+      "payment": {
+        "payToken": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+        "payAmount": 100000000000000,
+        "payTo": "<SELLER_BSC_ADDRESS>"
+      },
+      "fee": {
+        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
+        "feeAmount": 100000000000000
+      }
+    }
+  }
+}
 ```
 </TabItem>
 </Tabs>
