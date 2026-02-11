@@ -71,19 +71,14 @@ const sidebars = {
           type: 'doc',
           id: '8004/SupportedNetworks',
           label: '支持的网络',
+        },        
+        {
+          type: 'category',
+          label: '使用指南',
+          collapsed: false,
+          items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
         },
-
-    
-         
-            {
-              type: 'category',
-              label: '使用指南',
-              collapsed: false,
-              items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
-            },
-          ],
-        
-    
+      ],   
     },
 
     {
