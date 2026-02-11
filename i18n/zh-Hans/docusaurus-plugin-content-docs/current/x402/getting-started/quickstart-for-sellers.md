@@ -21,7 +21,7 @@ import TabItem from '@theme/TabItem';
 - 一个用于接收款项的 **钱包地址**
 - Python Web 开发的基础知识（本教程将使用 FastAPI）
 
-**预配置示例：** 我们提供了开箱即用的示例代码：[服务器示例](https://github.com/bankofai/x402-tron-demo/tree/main/server) 和 [Facilitator 示例](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator)。您可以克隆仓库并直接运行它们！
+**预配置示例：** 我们提供了开箱即用的示例代码：[服务器示例](https://github.com/bankofai/x402-demo/tree/main/server) 和 [Facilitator 示例](https://github.com/bankofai/x402-demo/tree/main/facilitator)。您可以克隆仓库并直接运行它们！
 
 ### 配置参考
 
@@ -33,13 +33,13 @@ import TabItem from '@theme/TabItem';
 | **测试 TRX**      | 用于支付测试网交易的 Gas 费         | [Nile 水龙头](https://nileex.io/join/getJoinPage)                   |
 | **测试 USDT**     | 用于支付流程测试的测试代币          | [Nile USDT 水龙头](https://nileex.io/join/getJoinPage) 或在社区索取 |
 | **BSC 钱包地址** | 您用于接收支付的地址 | 通过钱包创建                 |
-| **测试 BNB**  | 用于支付测试网交易的 Gas 费  | [Chapel 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
-| **测试 USDT** | 用于进行支付的测试代币           | [Chapel USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
+| **测试 BNB**  | 用于支付测试网交易的 Gas 费  | [Testnet 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
+| **测试 USDT** | 用于进行支付的测试代币           | [Testnet USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
 
 **测试网 vs 主网：**
 
-- **测试网**：使用免费的测试代币，不涉及真实资金。网络标识符请使用 `tron:nile`或者`bsc:chapel`。
-- **主网**：涉及真实的 USDT 支付。网络标识符请使用 `tron:mainnet`或者`bsc:mainnet`。
+- **测试网**：使用免费的测试代币，不涉及真实资金。网络标识符请使用 `tron:nile`或者`eip155:97`。
+- **主网**：涉及真实的 USDT 支付。网络标识符请使用 `tron:mainnet`或者`eip155:56`。
 
 ## 第一步：安装 x402 SDK
 
@@ -126,8 +126,8 @@ if __name__ == "__main__":
 | 参数      | 描述                   | 示例                   |
 | --------- | ---------------------- | ---------------------- |
 | `prices` | 单次请求的支付金额（列表） | `["0.0001 USDT"]` |
-| `network` | 网络标识符        | `"tron:nile"`/ `"bsc:chapel"`(测试网) |
-| `pay_to`  | 您的 TRON 钱包收款地址 | `"TYour...Address"`    |
+| `network` | 网络标识符        | `tron:nile`/ ``eip155:97``(测试网) |
+| `pay_to`  | 您的钱包收款地址 | `TYour...Address`or `0x...`    |
 
 **工作原理：** 当收到未附带支付的请求时，您的服务器会自动返回 HTTP 402 (Payment Required) 状态码及支付说明。剩余的流程将由客户端 SDK 自动处理！
 
@@ -231,13 +231,13 @@ curl http://localhost:8000/protected
 | 问题                              | 解决方案                                                                                                       |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | 连接 Facilitator 时 `Connection refused` | 确保 Facilitator 运行在端口 8001 上                                                                                   |
-| `ModuleNotFoundError: x402`  | 运行 `pip install "git+https://github.com/bankofai/x402-tron.git@v0.1.6#subdirectory=python/x402[fastapi]"` |
-| 无效钱包地址错误                  | 确保您的 TRON 地址以 `T` 开头且长度为 34 个字符                                                                |
+| `ModuleNotFoundError: x402`  | 运行 `pip install "git+https://github.com/bankofai/x402.git@v0.1.6#subdirectory=python/x402[fastapi]"` |
+| 无效钱包地址错误                  | 确保您的地址正确 |
 
 **需要帮助？** 查看完整示例：
 
-- [服务器示例](https://github.com/bankofai/x402-tron-demo/tree/main/server)
-- [Facilitator 示例](https://github.com/bankofai/x402-tron-demo/tree/main/facilitator)
+- [服务器示例](https://github.com/bankofai/x402-demo/tree/main/server)
+- [Facilitator 示例](https://github.com/bankofai/x402-demo/tree/main/facilitator)
 
 ## 在主网运行
 
@@ -269,7 +269,7 @@ curl http://localhost:8000/protected
 
 ### 2. 更新您的 Facilitator
 
-如果您在主网上运行自己的 Facilitator 服务，请执行以下操作：
+如果您在 TRON 主网上运行自己的 Facilitator 服务，请执行以下操作：
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
@@ -311,14 +311,14 @@ x402 使用简明的网络标识符：
 | TRON Mainnet 主网 | `tron:mainnet` |
 | TRON Nile 测试网    | `tron:nile`    |
 | TRON Shasta 测试网  | `tron:shasta`  |
-| BSC Mainnet 主网       | `bsc:mainnet` | 
-| BSC Chapel 测试网         | `bsc:chapel`  | 
+| BSC Mainnet 主网       | `eip155:56` | 
+| BSC Chapel 测试网         | `eip155:97`  | 
 
 完整列表请参阅 [网络支持](../core-concepts/network-and-token-support.md)。
 
 ### 下一步
 
-- 查看 [演示示例](https://github.com/bankofai/x402-tron-demo/tree/main/server)，了解更复杂的支付流程。
+- 查看 [演示示例](https://github.com/bankofai/x402-demo/tree/main/server)，了解更复杂的支付流程。
 - 深入了解 [核心概念](../core-concepts/http-402.md)，掌握 x402 的运作机制。
 - 作为 [用户买家](./quickstart-for-human.md) 开始体验，或配置一个 [AI Agent](./quickstart-for-agent.md)。
 

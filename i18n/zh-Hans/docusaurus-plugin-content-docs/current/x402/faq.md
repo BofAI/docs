@@ -76,8 +76,8 @@ x402 目前支持 `exact` 方案，其核心机制允许：
 | TRON Shasta (`tron:shasta`)   | USDT (TRC-20) | **Testnet** |
 | TRON Mainnet (`tron:mainnet`) | USDD (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:nile`)       | USDD (TRC-20) | **Testnet** |
-| BSC 主网 (`bsc:mainnet`) | USDT (BEP-20) | **Mainnet** |
-| BSC Chapel (`bsc:chapel`)      | USDT (BEP-20) | **Testnet** |
+| BSC 主网 (`eip155:56`) | USDT (BEP-20) | **Mainnet** |
+| BSC testnet (`eip155:97`)      | USDT (BEP-20) | **Testnet** |
 
 此外，支持通过 TokenRegistry 添加自定义的 TRC-20/BEP-20 代币。
 
@@ -138,10 +138,10 @@ TRON 上推荐使用 **TRON Nile** 进行测试。该网络运行稳定，且测
 - **Nile 水龙头 (Faucet):** https://nileex.io/join/getJoinPage
 - **Nile 区块浏览器:** https://nile.tronscan.org
 
-BSC 上推荐使用 **BSC Chapel** 进行测试。该网络是 BSC 主网的镜像环境，完全兼容 EVM，且拥有成熟的浏览器和工具链支持。
+BSC 上推荐使用 **BSC Testnet** 进行测试。该网络是 BSC 主网的镜像环境，完全兼容 EVM，且拥有成熟的浏览器和工具链支持。
 
-- **Chapel 水龙头 (Faucet):** https://www.bnbchain.org/en/testnet-faucet
-- **Chapel 区块浏览器:** https://testnet.bscscan.com
+- **BSC Testnet 水龙头 (Faucet):** https://www.bnbchain.org/en/testnet-faucet
+- **BSC Testnet 区块浏览器:** https://testnet.bscscan.com
 
 ### 故障排查
 
@@ -190,5 +190,5 @@ print(f"Current allowance: {allowance}")
 
 ### 仍有疑问？
 
-• 在 [x402 仓库](https://github.com/bankofai/x402-tron) 中提交 GitHub Issue 反馈问题
+• 在 [x402 仓库](https://github.com/bankofai/x402) 中提交 GitHub Issue 反馈问题
 • 参考 [x402-demo](https://github.com/bankofai/x402-demo) 获取完整可运行的示例代码

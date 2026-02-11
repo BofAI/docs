@@ -25,7 +25,8 @@
 | tron:nile | ✅ | ✅ |
 | tron:shasta | ✅ | ✅ |
 | bsc:mainnet | ✅ | ✅ |
-| bsc:chapel | ✅ | ✅ |
+| bsc:testnet | ✅ | ✅ |
+
 
 ## 机制 
 

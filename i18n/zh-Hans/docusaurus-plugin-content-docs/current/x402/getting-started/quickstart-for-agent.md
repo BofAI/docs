@@ -33,7 +33,7 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 
 ## 安装
 
-将 [x402_payment](https://github.com/bankofai/skills-tron/tree/main/x402_payment) 技能添加到您的智能体 (Agent) 工具库中：
+将 [x402_payment](https://github.com/bankofai/skills/tree/main/x402_payment) 技能添加到您的智能体 (Agent) 工具库中：
 
 | 工具平台     | 安装方法                                   |
 | ------------ | ------------------------------------------ |
@@ -59,5 +59,5 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 ## 参考资料
 
 - [OpenClaw 扩展库](https://github.com/bankofai/openclaw-extension)
-- [ClawHub 上的 x402-payment](https://github.com/bankofai/skills-tron/tree/main/x402_payment)
+- [ClawHub 上的 x402-payment](https://github.com/bankofai/skills/tree/main/x402_payment)
 - [x402 演示项目](https://github.com/bankofai/x402-demo)

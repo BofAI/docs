@@ -76,7 +76,7 @@ x402 客户端 SDK 会自动处理此操作。
 | 网络环境 (Network)  | RPC 端点 (Endpoint)              |
 | :------------------ | :------------------------------- |
 | **Mainnet** (主网)  | `https://bsc-dataseed.binance.org`        |
-| **Chapel** (测试网)   | `https://data-seed-prebsc-1-s1.binance.org:8545`       |
+| **Testnet** (测试网)   | `https://data-seed-prebsc-1-s1.binance.org:8545`       |
 
 
 
@@ -99,5 +99,5 @@ x402 客户端 SDK 会自动处理此操作。
 
 接下来，请深入探索：
 
-- [网络与代币支持](./network-and-token-support.md) — 查看支持的 TRON 网络环境及代币列表
+- [网络与代币支持](./network-and-token-support.md) — 查看支持的网络环境及代币列表
 - [SDK 功能](../sdk-features.md) — 探索 x402 SDK 的完整功能

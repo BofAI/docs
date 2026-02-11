@@ -64,8 +64,9 @@ x402 目前支持以下网络环境：
 - **TRON 主网** (`tron:mainnet`)
 - **TRON Shasta 测试网** (`tron:shasta`)
 - **TRON Nile 测试网** (`tron:nile`)
-- **BSC 主网** (`bsc:mainnet`)
-- **BSC Chapel 测试网** (`bsc:chapel`)
+- **BSC 主网** （`eip155:56`）
+- **BSC 测试网** （`eip155:97`)
+
 
 ## 快速开始
 

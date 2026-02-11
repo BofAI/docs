@@ -90,16 +90,16 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `resource`          | 关于请求资源的信息                                |
 | `accepts`           | 接受的支付选项数组                                |
 | `scheme`            | 支付方案（`exact` 表示固定金额）                  |
-| `network`           | TRON 网络标识符（`tron:nile`, `tron:mainnet`）    |
+| `network`           | 网络标识符（`tron:nile`, `tron:mainnet`,`eip155:56`,`eip155:97`）    |
 | `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
-| `asset`             | TRC-20 代币合约地址                               |
-| `payTo`             | 卖家的 TRON 钱包地址                              |
+| `asset`             | TRC-20/BEP-20 代币合约地址                               |
+| `payTo`             | 卖家的钱包地址                              |
 | `maxTimeoutSeconds` | 支付有效期的最大时长                              |
 | `extra.fee`         | Facilitator 费用信息                     |
 
 ## 支付签名结构
 
-客户端在 `PAYMENT-SIGNATURE` 标头中以 TIP-712 签名载荷进行响应：
+客户端在 `PAYMENT-SIGNATURE` 标头中以 TIP-712/EIP-712 签名载荷进行响应：
 
 <Tabs>
 <TabItem value="TRON" label="TRON">

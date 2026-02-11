@@ -67,7 +67,7 @@ import TabItem from '@theme/TabItem';
 </TabItem>
     <TabItem value="BSC" label="BSC">
 
-- **网络标识**：必须遵循 `bsc:<network>` 格式（支持 `mainnet`, `Chapel`）。
+- **网络标识**：必须遵循 `eip<id>:<id>` 格式。
 - **签名标准**：BSC 签名完全兼容以太坊 **EIP-712** 标准（无需特殊适配，直接使用通用 EVM 签名库）。
 - **地址格式**：Token 地址必须使用十六进制（Hex）编码格式（即以 `0x` 开头的地址）。
 - **节点接入**：节点访问需指向兼容 EVM 的 JSON-RPC 端点。

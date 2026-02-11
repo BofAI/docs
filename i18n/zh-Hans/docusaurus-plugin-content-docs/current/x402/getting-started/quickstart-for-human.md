@@ -20,8 +20,8 @@ import TabItem from '@theme/TabItem';
 | **私钥** | 用于对支付进行签名的钱包私钥     | 从钱包导出                   |
 | **测试 TRX**  | 用于支付测试网交易的手续费 (Gas) | [Nile 水龙头](https://nileex.io/join/getJoinPage)                   |
 | **测试 USDT** | 用于进行支付的测试代币           | [Nile USDT 水龙头](https://nileex.io/join/getJoinPage)或在社区索取 |
-| **测试 BNB**  | 用于支付测试网交易的手续费 (Gas) | [Chapel 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
-| **测试 USDT** | 用于进行支付的测试代币           | [Chapel USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
+| **测试 BNB**  | 用于支付测试网交易的手续费 (Gas) | [Testnet 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
+| **测试 USDT** | 用于进行支付的测试代币           | [Testnet USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
 
 
 
@@ -234,7 +234,7 @@ SDK 在支付过程中可能会抛出错误。处理方法如下：
 
 
 ```python
-from x402_tron.exceptions import (
+from x402.exceptions import (
     X402Error,
     InsufficientAllowanceError,
     SignatureCreationError,
@@ -325,7 +325,7 @@ try {
 
 通过本指南，您已经完成了以下集成步骤：
 
-- **安装依赖**：集成 `x402` SDK ， `tronweb` 库（TRON），`Ethers.js`库（BSC）。
+- **安装依赖**：集成 `x402` SDK ， `tronweb` 库（TRON），`ethers.js`库（BSC）。
 - **配置身份**：使用私钥初始化钱包签名器 (Wallet Signer)。
 - **初始化客户端**：实例化 `X402Client` 并注册支付处理机制。
 - **发起请求**：通过封装后的 HTTP 客户端访问付费 API 接口。
@@ -338,5 +338,5 @@ try {
 
 ## 参考资料
 
-- [npm package](https://www.npmjs.com/package/@bankofai/x402-tron) - x402 JavaScript SDK
-- [示例代码仓库](https://github.com/bankofai/x402-tron-demo) - 完整的集成演示
+- [npm package](https://www.npmjs.com/package/@bankofai/x402) - x402 JavaScript SDK
+- [示例代码仓库](https://github.com/bankofai/x402-demo) - 完整的集成演示
