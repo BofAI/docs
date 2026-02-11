@@ -23,15 +23,15 @@ Configure your agent wallet credentials using environment variables.
 ```bash
 export TRON_PRIVATE_KEY="your_private_key_here"
 export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RPC rate limits
-export X402_NETWORK="tron:nile"  # Use tron:mainnet for production
 ```
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-```json
-
+```bash
+export BSC_PRIVATE_KEY="your_private_key_here"
 ```
+
 </TabItem>
 </Tabs>
 
@@ -49,7 +49,7 @@ Add the [x402_payment](https://github.com/bankofai/skills/tree/main/x402_payment
 
 ## Quick Test
 
-Instruct your Agent to access:`https://x402-demo.bankofai.io/protected-nile`。
+Instruct your Agent to access:`https://x402-tron-demo.bankofai.io/protected-nile`。
 The Agent will automatically detect the payment requirement, sign the authorization payload, complete settlement, and retrieve the protected resource.
 
 ---

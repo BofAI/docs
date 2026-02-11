@@ -52,7 +52,9 @@ This page tracks the implementation progress and feature support status of the x
 | Signer | Python | TypeScript |
 |----------|--------|------------|
 | TronClientSigner | ✅ | ✅ |
+| EvmClientSigner | ✅ | ✅ |
 | TronFacilitatorSigner | ✅ | ⏳ |
+| EvmFacilitatorSigner | ✅ | ⏳ |
 
 ---
 

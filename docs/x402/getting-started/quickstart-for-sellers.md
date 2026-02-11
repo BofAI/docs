@@ -48,7 +48,7 @@ The x402 SDK provides everything you need to add payment protection to your API.
 **Option A: Install from GitHub (Recommended)**
 
 ```bash
-pip install "git+https://github.com/bankofai/x402.git@v0.1.6#subdirectory=python/x402[fastapi]"
+pip install "git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402[fastapi]"
 ```
 
 **Option B: Install from Source (for Development)**
@@ -76,9 +76,10 @@ Create a new file named `server.py`:
 
 ```python
 from fastapi import FastAPI
-from x402_tron.server import X402Server
-from x402_tron.fastapi import x402_protected
-from x402_tron.facilitator import FacilitatorClient
+from bankofai.x402.server import X402Server
+from bankofai.x402.fastapi import x402_protected
+from bankofai.x402.facilitator import FacilitatorClient
+from bankofai.x402.config import NetworkConfig
 
 app = FastAPI()
 
@@ -98,9 +99,9 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 @app.get("/protected")
 @x402_protected(
     server=server,
-    prices=["0.0001 USDT"],    # Price per request (supports multiple tokens)
-    network="tron:nile",       # Use testnet for testing
-    pay_to=PAY_TO_ADDRESS,     # Your wallet address
+    prices=["0.0001 USDT"],              # Price per request (supports multiple tokens)
+    network=NetworkConfig.TRON_NILE,     # Use testnet for testing
+    pay_to=PAY_TO_ADDRESS,               # Your wallet address
 )
 async def protected_endpoint():
     return {"data": "This is premium content!"}
@@ -114,8 +115,47 @@ if __name__ == "__main__":
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-```json
+```python
+from fastapi import FastAPI
+from bankofai.x402.server import X402Server
+from bankofai.x402.fastapi import x402_protected
+from bankofai.x402.facilitator import FacilitatorClient
+from bankofai.x402.config import NetworkConfig
+from bankofai.x402.mechanisms.evm.exact_permit import ExactPermitEvmServerMechanism
+from bankofai.x402.mechanisms.evm.exact import ExactEvmServerMechanism
 
+app = FastAPI()
+
+# ========== Configuration ==========
+# Replace with YOUR BSC wallet address (this is where you receive payments)
+PAY_TO_ADDRESS = "0xYourBscWalletAddressHere"
+
+# Facilitator URL (we'll start this in Step 3)
+FACILITATOR_URL = "http://localhost:8001"
+# ====================================
+
+# Initialize x402 server and register BSC mechanisms
+server = X402Server()
+server.register(NetworkConfig.BSC_TESTNET, ExactPermitEvmServerMechanism())
+server.register(NetworkConfig.BSC_TESTNET, ExactEvmServerMechanism())
+server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
+
+# This endpoint requires payment to access
+@app.get("/protected")
+@x402_protected(
+    server=server,
+    prices=["0.0001 USDT"],              # Price per request
+    network=NetworkConfig.BSC_TESTNET,   # BSC Testnet
+    pay_to=PAY_TO_ADDRESS,               # Your wallet address
+    schemes=["exact_permit"],
+)
+async def protected_endpoint():
+    return {"data": "This is premium content!"}
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
 ```
 
 </TabItem>
@@ -172,14 +212,15 @@ TRON_GRID_API_KEY=your_trongrid_api_key_here
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-```json
-
+```bash
+# Facilitator wallet private key (for settling payments on-chain)
+BSC_PRIVATE_KEY=your_facilitator_private_key_here
 ```
 
 </TabItem>
 </Tabs>
 
-**Facilitator Wallet:** The Facilitator requires a wallet holding TRX to pay for Energy and Bandwidth fees. For testnet, get free TRX from [Nile Faucet](https://nileex.io/join/getJoinPage).
+**Facilitator Wallet:** The Facilitator requires a wallet holding native gas tokens (TRX for TRON, BNB for BSC) to pay for transaction fees. For testnet, get free tokens from the respective faucets.
 
 
 **Start Facilitator:**
@@ -231,7 +272,7 @@ To test the full payment process, you need a client capable of signing payments.
 | Issue                                   | Solution                                                                                                                               |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `Connection refused` when connecting to Facilitator | Ensure the Facilitator is running on port 8001                                                                                         |
-| `ModuleNotFoundError: x402`             | Run `pip install "git+https://github.com/bankofai/x402.git@v0.1.6#subdirectory=python/x402[fastapi]"`                                  |
+| `ModuleNotFoundError: x402`             | Run `pip install "git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402[fastapi]"`                                  |
 | Invalid wallet address error            | Ensure your address is correct                                                                                                         |
 
 **Need help?** Check out the full examples:
@@ -253,7 +294,7 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
 @x402_protected(
     server=server,
     prices=["0.0001 USDT"],
-    network="tron:mainnet",  # Change from "tron:nile" to "tron:mainnet"
+    network=NetworkConfig.TRON_MAINNET,  # Change from TRON_NILE to TRON_MAINNET
     pay_to=PAY_TO_ADDRESS,
 )
 ```
@@ -261,8 +302,14 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-```json
-
+```python
+@x402_protected(
+    server=server,
+    prices=["0.0001 USDT"],
+    network=NetworkConfig.BSC_MAINNET,  # Change from BSC_TESTNET to BSC_MAINNET
+    pay_to=PAY_TO_ADDRESS,
+    schemes=["exact_permit"],
+)
 ```
 
 </TabItem>
@@ -282,9 +329,8 @@ If you are running your own Facilitator service on the TRON mainnet, do the foll
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-```json
-
-```
+1.  **Prepare Gas Fees**: Ensure the Facilitator wallet holds enough BNB to pay for gas fees.
+2.  **Switch Network Configuration**: Update the Facilitator's network configuration to `eip155:56`.
 
 </TabItem>
 </Tabs>

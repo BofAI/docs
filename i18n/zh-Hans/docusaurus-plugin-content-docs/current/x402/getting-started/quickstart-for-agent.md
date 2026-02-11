@@ -25,9 +25,10 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-```json
-
+```bash
+export BSC_PRIVATE_KEY="your_private_key_here"
 ```
+
 </TabItem>
 </Tabs>
 
@@ -42,7 +43,7 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RP
 
 ## 快速体验
 
-指示您的 Agent 访问 `https://x402-demo.bankofai.io/protected-nile`。Agent 将自动识别支付请求，完成签名授权，并获取受保护的资源。
+指示您的 Agent 访问 `https://x402-tron-demo.bankofai.io/protected-nile`。Agent 将自动识别支付请求，完成签名授权，并获取受保护的资源。
 
 ## 安全最佳实践
 
