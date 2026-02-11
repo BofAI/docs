@@ -22,23 +22,25 @@ module.exports = {
   },
   onBrokenLinks: 'warn',
   onBrokenMarkdownLinks: 'ignore',
-  favicon: 'img/logo.png',
+  favicon: 'img/favicon.ico',
   organizationName: 'open-aibank',
   projectName: 'x402-tron',
   scripts: [{ src: '/hideErrorBanner.js', async: false }],
   themeConfig: {
-    image: 'img/twitter_card_bg.jpg',
+    image: 'img/logo.png',
     prism: {
       theme: require('prism-react-renderer/themes/github'),
       darkTheme: require('prism-react-renderer/themes/dracula'),
       additionalLanguages: ['solidity', 'python', 'bash'],
     },
     navbar: {
-      title: 'BANK OF AI',
+      title: '',
       logo: {
         alt: 'BANK OF AI',
-        src: 'img/logo.png',
+        src: 'img/logo.png', // 浅色模式
+        srcDark: 'img/logo_dark.png', // 深色模式
         href: '/',
+        height: 30,
       },
       items: [
         // 多语言选项
