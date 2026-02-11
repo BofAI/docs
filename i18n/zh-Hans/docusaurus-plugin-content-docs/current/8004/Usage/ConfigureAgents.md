@@ -216,9 +216,8 @@ agent.setENS(name="myagent.eth")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 当前 TypeScript SDK 未提供 setENS() 高层方法
-// 可通过 setMetadata 记录 ENS，或在 Python SDK 中调用 setENS()
-agent.setMetadata({ ens: "myagent.eth" });
+// TypeScript SDK 支持 setENS() 高层方法
+agent.setENS("myagent.eth");
 ```
 
 </TabItem>
@@ -250,10 +249,10 @@ agent.removeEndpoints()
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 当前 TypeScript SDK 未提供 removeEndpoint()/removeEndpoints() 高层方法
-// 常见做法：直接覆盖已有端点
-agent.setMCP("https://new-mcp.example.com/");
-agent.setA2A("https://new-a2a.example.com/agent-card.json");
+// TypeScript SDK 支持 removeEndpoint()/removeEndpoints() 高层方法
+agent.removeEndpoint({ type: "MCP" });
+agent.removeEndpoint({ value: "https://old-endpoint.com" });
+agent.removeEndpoints();
 ```
 
 </TabItem>
@@ -435,14 +434,9 @@ agent.removeDomain("finance_and_business/investment_services")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 当前 TypeScript SDK 未提供 removeSkill()/removeDomain() 高层方法
-// 可重新构建 agent 并仅添加你希望保留的 skills/domains
-const rebuilt = sdk.createAgent({
-  name: "我的 AI 代理",
-  description: "重新构建后的配置",
-});
-rebuilt.addSkill("data_engineering/data_transformation_pipeline");
-rebuilt.addDomain("technology/data_science");
+// TypeScript SDK 支持 removeSkill()/removeDomain() 高层方法
+agent.removeSkill("advanced_reasoning_planning/strategic_planning");
+agent.removeDomain("finance_and_business/investment_services");
 ```
 
 </TabItem>
