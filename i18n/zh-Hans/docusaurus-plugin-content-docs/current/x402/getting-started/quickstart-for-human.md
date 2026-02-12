@@ -58,8 +58,17 @@ pip install eth_account web3
 安装 x402 TypeScript 包：
 
 ```bash
-npm install @bankofai/x402 tronweb
+npm install @bankofai/x402 tronweb dotenv
 ```
+
+> **注意：** `@bankofai/x402` 包是 ESM 模块。如果在使用 `npx tsx` 运行时遇到 `ERR_PACKAGE_PATH_NOT_EXPORTED` 错误，请在您的 `package.json` 中添加 `"type": "module"`：
+>
+> ```json
+> {
+>   "type": "module"
+> }
+> ```
+
 
 ## 2. 配置环境变量
 
@@ -132,6 +141,7 @@ asyncio.run(main())
   <TabItem value="ts" label="TypeScript">
 
 ```typescript
+import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
   ExactPermitTronClientMechanism, TronClientSigner,
@@ -179,6 +189,8 @@ async function main(): Promise<void> {
 
 main().catch(console.error)
 ```
+
+
 
   </TabItem>
 </Tabs>
@@ -230,6 +242,7 @@ asyncio.run(main())
   <TabItem value="ts" label="TypeScript">
 
 ```typescript
+import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
   ExactPermitEvmClientMechanism, ExactEvmClientMechanism,
