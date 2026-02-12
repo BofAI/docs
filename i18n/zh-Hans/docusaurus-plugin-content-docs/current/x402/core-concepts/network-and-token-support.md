@@ -10,7 +10,7 @@ x402 采用标准化的网络标识符格式：`tron:<network_name>`。
 
 ### 标识符参考表
 
-| 网络名称 (Network Name) | x402 ID   | 描述 (Description)   |
+| 网络名称 (Network Name) | 网络 (Network)      | 描述 (Description)   |
 | :---------------------- | :------------- | :------------------- |
 | **TRON Mainnet**        | `tron:mainnet` | TRON 主网 (生产环境) |
 | **TRON Shasta**         | `tron:shasta`  | TRON Shasta 测试网   |
@@ -24,7 +24,7 @@ x402 采用标准化的网络标识符格式：`bsc:<network_name>`。
 
 ### 标识符参考表
 
-| 网络名称 (Network Name) | x402 ID   | 描述 (Description)   |
+| 网络名称 (Network Name) | 网络 (Network)      | 描述 (Description)   |
 | :---------------------- | :------------- | :------------------- |
 | **BSC Mainnet**        | `eip155:56` | BSC 主网 (生产环境) |
 | **BSC Testnet**         | `eip155:97`  | BSC 测试网   |

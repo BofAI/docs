@@ -10,7 +10,7 @@ The `<network_name>` can be `mainnet`, `shasta`, or `nile`.
 
 ### Identifier Reference
 
-| Network Name | x402 ID        | Description                     |
+| Network Name | Network        | Description                     |
 | :----------- | :------------- | :------------------------------ |
 | **TRON Mainnet** | `tron:mainnet` | TRON Mainnet (Production)      |
 | **TRON Shasta**  | `tron:shasta`  | TRON Shasta Testnet            |
@@ -22,7 +22,7 @@ The `<network_name>` can be `mainnet`, `shasta`, or `nile`.
 
 For BSC, x402 uses the EIP-155 chain ID format:
 
-| Network Name     | x402 ID       | Description                    |
+| Network Name     | Network       | Description                    |
 | :--------------- | :------------ | :----------------------------- |
 | **BSC Mainnet**  | `eip155:56`   | BSC Mainnet (Production)      |
 | **BSC Testnet**  | `eip155:97`   | BSC Testnet (Chapel)          |
