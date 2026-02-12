@@ -180,7 +180,7 @@ The Facilitator is a service used to verify and settle payments on-chain. You ne
 **Options:**
 
 -   **Run your own Facilitator** (recommended for testing)
--   **Use the official Facilitator** — _Coming Soon_
+-   **Use the [official Facilitator](https://github.com/bankofai/x402-facilitator)**
 
 ### Run Your Own Facilitator
 
