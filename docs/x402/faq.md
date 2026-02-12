@@ -42,7 +42,7 @@ Both SDKs fully implement Client, Server, and Facilitator functionality.
 
 Typically, you run your own Facilitator service. x402 is designed for self-hosting, and the built-in Facilitator in the repository is production-ready.
 
-An officially hosted Facilitator service is **coming soon**, allowing you to use x402 without deploying infrastructure yourself.
+An [officially hosted Facilitator](https://github.com/bankofai/x402-facilitator) service is also available, allowing you to use x402 without deploying infrastructure yourself.
 
 #### How do you prevent a malicious Facilitator from stealing funds or forging settlements?
 

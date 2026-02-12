@@ -27,22 +27,6 @@ Here are the key configuration items you will need:
 
 
 **Security Tip:** Never share your private key! Store it securely in environment variables, never directly in code.
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```bash
-export TRON_PRIVATE_KEY=your_private_key_here
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-export BSC_PRIVATE_KEY=your_private_key_here
-```
-
-</TabItem>
-</Tabs>
 
 ## 1. Install x402 SDK
 
@@ -76,8 +60,17 @@ pip install eth_account web3
 <TabItem value="ts" label="TypeScript">
 
 ```bash
-npm install @bankofai/x402 tronweb
+npm install @bankofai/x402 tronweb dotenv
 ```
+
+> **Note:** The `@bankofai/x402` package is an ESM module. If you encounter `ERR_PACKAGE_PATH_NOT_EXPORTED` when running with `npx tsx`, add `"type": "module"` to your `package.json`:
+>
+> ```json
+> {
+>   "type": "module"
+> }
+> ```
+
 
 </TabItem>
 </Tabs>
@@ -153,6 +146,7 @@ asyncio.run(main())
   <TabItem value="ts" label="TypeScript">
 
 ```typescript
+import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
   ExactPermitTronClientMechanism, TronClientSigner,
@@ -199,6 +193,7 @@ async function main(): Promise<void> {
 
 main().catch(console.error)
 ```
+
 
   </TabItem>
 </Tabs>
@@ -250,6 +245,7 @@ asyncio.run(main())
   <TabItem value="ts" label="TypeScript">
 
 ```typescript
+import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
   ExactPermitEvmClientMechanism, ExactEvmClientMechanism,

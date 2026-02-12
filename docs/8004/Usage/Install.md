@@ -13,11 +13,13 @@
 
 
 ### Installation Steps
-#### 1. Install using pip
-Execute in a terminal window:
+#### 1. Install via GitHub (Currently Recommended)
+Run the following command in your terminal:
 ```bash
-pip install bankofai-8004-sdk
+pip install "git+https://github.com/bankofai/8004-sdk.git#subdirectory=python"
 ```
+> The Python package has not yet been published to PyPI.
+
 #### 2. Install from source
 Execute in a terminal window:
 ```bash

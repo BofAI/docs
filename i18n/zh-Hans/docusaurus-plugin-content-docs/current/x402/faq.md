@@ -38,7 +38,7 @@ x402 目前提供以下 SDK：
 
 通常情况下，您需要运行自己的 Facilitator 服务。x402 专为自托管而设计，代码仓库中内置的 Facilitator 程序已准备就绪，可直接运行。
 
-官方托管的 Facilitator 服务也 **即将推出**，届时您无需自行部署基础设施即可使用 x402。
+[官方托管的 Facilitator](https://github.com/bankofai/x402-facilitator) 服务也已上线，您无需自行部署基础设施即可使用 x402。
 
 #### 如何防止恶意 Facilitator 窃取资金或伪造结算？
 

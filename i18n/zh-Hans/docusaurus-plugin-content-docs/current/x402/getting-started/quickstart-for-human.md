@@ -29,23 +29,6 @@ import TabItem from '@theme/TabItem';
 
 
 **安全提示：** 切勿分享您的私钥！请将其安全地存储在环境变量中，切勿直接写入代码。
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-
-```bash
-export TRON_PRIVATE_KEY=your_private_key_here
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-export BSC_PRIVATE_KEY=your_private_key_here
-```
-
-</TabItem>
-</Tabs>
 
 ## 1. 安装 x402 SDK
 
@@ -75,8 +58,17 @@ pip install eth_account web3
 安装 x402 TypeScript 包：
 
 ```bash
-npm install @bankofai/x402 tronweb
+npm install @bankofai/x402 tronweb dotenv
 ```
+
+> **注意：** `@bankofai/x402` 包是 ESM 模块。如果在使用 `npx tsx` 运行时遇到 `ERR_PACKAGE_PATH_NOT_EXPORTED` 错误，请在您的 `package.json` 中添加 `"type": "module"`：
+>
+> ```json
+> {
+>   "type": "module"
+> }
+> ```
+
 
 ## 2. 配置环境变量
 
@@ -149,6 +141,7 @@ asyncio.run(main())
   <TabItem value="ts" label="TypeScript">
 
 ```typescript
+import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
   ExactPermitTronClientMechanism, TronClientSigner,
@@ -196,6 +189,8 @@ async function main(): Promise<void> {
 
 main().catch(console.error)
 ```
+
+
 
   </TabItem>
 </Tabs>
@@ -247,6 +242,7 @@ asyncio.run(main())
   <TabItem value="ts" label="TypeScript">
 
 ```typescript
+import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
   ExactPermitEvmClientMechanism, ExactEvmClientMechanism,
