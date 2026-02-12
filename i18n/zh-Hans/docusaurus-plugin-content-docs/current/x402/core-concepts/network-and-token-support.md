@@ -20,7 +20,7 @@ x402 采用标准化的网络标识符格式：`tron:<network_name>`。
 ## BSC 网络标识符
 
 x402 采用标准化的网络标识符格式：`bsc:<network_name>`。
-其中 `<network_name>` 对应为 `mainnet`或 `Chapel`。
+其中 `<network_name>` 对应为 `eip155:56` 或 `eip155:97`。
 
 ### 标识符参考表
 
