@@ -4,7 +4,9 @@ import TabItem from '@theme/TabItem';
 # 快速开始
 `bankofai.sdk_8004` 是 **8004 标准的参考实现**，专为 Agentic Economy 打造。作为一套 SDK，它利用区块链与去中心化存储赋予 Agents 注册身份、发布能力及建立信誉系统的功能，从而实现了无需依赖中介的无许可发现机制。
 
-此示例涵盖了初始化 SDK、定义 Agents 属性、发布 MCP/A2A 能力、将其注册至区块链以及最后通过 ID 重新检索的过程。
+此示例涵盖了初始化 SDK、定义 Agents 属性、发布 MCP/A2A 能力并将其注册至区块链的过程。
+
+> 说明：当前未集成 subgraph 组件时，`searchAgents` / `getAgent`（索引查询）暂不支持；但可通过 `loadAgent(agentId)` 按 ID 直接从链上加载。
 
 ## TRON / BSC 切换说明
 
@@ -122,9 +124,9 @@ print(f"✅ Agent registered!")
 print(f"   ID: {reg.agentId}")
 print(f"   URI: {reg.agentURI}")
 
-# Retrieve agent
-retrieved = sdk.getAgent(agent.agentId)
-print(f"✅ Retrieved: {retrieved.name}")
+# Load agent by ID directly from chain (works without subgraph)
+loaded = sdk.loadAgent(reg.agentId)
+print(f"✅ Loaded by ID: {loaded.registration_file.name}")
 
 ```
 
@@ -189,9 +191,9 @@ const { result: registrationFile } = await tx.waitConfirmed();
   console.log(`   ID: ${registrationFile.agentId}`);
   console.log(`   URI: ${registrationFile.agentURI}`);
 
-  // Retrieve agent (async in TypeScript)
-  const retrieved = await sdk.getAgent(registrationFile.agentId!);
-  console.log(`✅ Retrieved: ${retrieved.name}`);
+  // Load agent by ID directly from chain (works without subgraph)
+  const loaded = await sdk.loadAgent(registrationFile.agentId!);
+  console.log(`✅ Loaded by ID: ${loaded.registrationFile.name}`);
 }
 
 main().catch(console.error);
