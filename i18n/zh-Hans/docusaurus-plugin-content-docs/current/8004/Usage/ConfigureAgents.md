@@ -235,6 +235,8 @@ agent.setENS("myagent.eth");
 <TabItem value="python" label="python">
 
 ```python
+from bankofai.sdk_8004.core.models import EndpointType
+
 # 移除特定类型的端点
 agent.removeEndpoint(type=EndpointType.MCP)
 
@@ -346,7 +348,7 @@ await agent.setWallet(
 #### EOA
 
 *   **EOA 签名 (Python)**：除非 SDK 签名者就是新钱包，否则传入 `new_wallet_signer=...`（私钥 / eth-account 账户）。
-*   **EOA 签名 (TypeScript)**：除非 SDK 签名者就是新钱包，否则传入 `newWalletPrivateKey`。
+*   **EOA 签名 (TypeScript)**：除非 SDK 签名者就是新钱包，否则传入 `newWalletSigner`。
 
 
 

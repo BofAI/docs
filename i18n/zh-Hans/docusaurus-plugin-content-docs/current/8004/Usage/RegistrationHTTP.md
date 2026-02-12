@@ -294,25 +294,20 @@ with open("my-agent-updated.json", "w") as f:
     f.write(json_content)
 
 # 5. 在链上更新 URI（仅当 URI 发生更改时）
-agent.setAgentUri("https://yourdomain.com/agents/my-agent-updated.json")
+tx = agent.updateRegistration("https://yourdomain.com/agents/my-agent-updated.json")
+tx.wait_confirmed(timeout=180)
 ```
 
 </TabItem>
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 1. 查询现有 agent（索引摘要）
-const agentSummary = await sdk.getAgent("97:123");
-console.log(agentSummary);
+// 1. 加载已有 agent
+const agent = await sdk.loadAgent("97:123");
 
-// 2. 基于你要更新的内容，重新构建本地 agent 对象
-const agent = sdk.createAgent({
-  name: "我的 AI 代理",
-  description: "更新后的描述",
-  image: "https://example.com/agent.png",
-});
+// 2. 修改配置
+agent.updateInfo({ description: "更新后的描述" });
 agent.setMCP("https://new-mcp.example.com");
-agent.setA2A("https://a2a.example.com/agent.json");
 
 // 3. 生成新的注册文件
 const registrationData = agent.toJSON();
@@ -320,8 +315,8 @@ const jsonContent = JSON.stringify(registrationData, null, 2);
 
 // 4. 将更新后的文件上传到您的服务器
 
-// 5. 使用新 URI 重新发起注册交易
-const tx = await agent.register("https://yourdomain.com/agents/my-agent-updated.json");
+// 5. 在链上更新 URI（仅当 URI 发生更改时）
+const tx = await agent.updateRegistration("https://yourdomain.com/agents/my-agent-updated.json");
 await tx.waitConfirmed();
 ```
 
@@ -338,11 +333,11 @@ SDK 会生成符合 8004 标准的注册文件：
 
 ```json
 {
-  "type": "https://eips.eth.org/EIPS/eip-8004#registration-v1",
+  "type": "https://eips.ethereum.org/EIPS/eip-8004#registration-v1",
   "name": "我的 AI 代理",
   "description": "代理描述",
   "image": "https://example.com/image.png",
-  "services": [
+  "endpoints": [
     {
       "name": "MCP",
       "endpoint": "https://mcp.example.com/",
@@ -366,7 +361,11 @@ SDK 会生成符合 8004 标准的注册文件：
   ],
   "supportedTrust": ["reputation"],
   "active": true,
-  "x402Support": false,
+  "x402support": false,
   "updatedAt": 1234567890
 }
 ```
+
+说明：
+* Python 生成的注册 JSON 使用 `x402Support`。
+* TypeScript 当前生成的注册 JSON 使用 `x402support`。
