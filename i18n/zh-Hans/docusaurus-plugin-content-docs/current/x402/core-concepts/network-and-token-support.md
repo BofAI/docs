@@ -93,7 +93,7 @@ x402 支持两种支付方案：`exact_permit` 和 `exact`。
 
 #### `exact` 方案
 
-`exact` 方案适用于原生支持 EIP-3009（`transferWithAuthorization`）的代币，无需 `PaymentPermit` 合约。
+`exact` 方案适用于原生支持 `transferWithAuthorization` 的代币，无需 `PaymentPermit` 合约。
 
 #### 工作原理
 
@@ -123,7 +123,7 @@ Facilitator 作为协议的中间件，承担以下核心职责：
 
 | 核心组件     | TRON/BSC 实现详情                              |
 | :----------- | :----------------------------------------- |
-| **网络环境** | `tron:mainnet`, `tron:shasta`, `tron:nile`,`eip155:56`, `eip155:97`|
+| **网络环境** | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97`|
 | **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）,BEP-20 代币 |
 | **签名机制** | 类型化数据签名                     |
 | **支付方案** | `exact_permit`, `exact`                    |

@@ -112,7 +112,7 @@ The `exact_permit` scheme transfers tokens via the `PaymentPermit` contract, sui
 
 ### `exact` Scheme
 
-The `exact` scheme is for tokens that natively support EIP-3009 (`transferWithAuthorization`). It does not require the `PaymentPermit` contract.
+The `exact` scheme is for tokens that natively support `transferWithAuthorization`. It does not require the `PaymentPermit` contract.
 
 ### How Payment Schemes Work
 
