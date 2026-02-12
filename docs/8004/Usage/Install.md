@@ -4,12 +4,13 @@
 
 ### Prerequisites
 
-*   **Python**: 3.8 or higher
+*   **Python**: 3.11 or higher
 *   **pip**: Package manager
 *   **Private Key**: For signing transactions (not required for read-only mode)
 *   **RPC Node**: Accessible Ethereum RPC endpoint (e.g., Alchemy, Infura)
 *   **IPFS Provider (Optional)**: Pinata, Filecoin account, or local IPFS node
-*   **Subgraph**: Automatically configures default URL (supports custom Subgraph endpoints via overrides)
+*   **Subgraph (Optional)**: Use this when your deployment provides a subgraph endpoint
+
 
 ### Installation Steps
 #### 1. Install using pip
@@ -41,10 +42,11 @@ pip install -e .
 ### Prerequisites
 *   **Node.js**: 20 or higher
 *   **npm or yarn**: Package manager
-*   **Write Operation Configuration**: Requires server-side private key (`privateKey`) or browser wallet (`walletProvider`, EIP-1193) to be configured
+*   **Write Operation Configuration**: Write operations require configuring a `signer` (private key string)
 *   **RPC Node**: Accessible Ethereum RPC endpoint (e.g., Alchemy, Infura)
 *   **IPFS Provider (Optional)**: Pinata, Filecoin account, or local IPFS node
-*   **Subgraph**: Automatically configures default URL (supports custom Subgraph endpoints via overrides)
+*   **Subgraph (Optional)**: You may provide `subgraphUrl` or `subgraphOverrides` as needed.
+
 
 
 
@@ -78,5 +80,5 @@ npm run build
 
 For enhanced functionality:
 
-*   **Subgraph**: Automatically configured with a default URL for fast search queries (can be overridden via `subgraphOverrides` parameter to point to a custom endpoint).
+*   **Subgraph**: Optional configuration; when your deployment provides an endpoint, you may specify it via `subgraphUrl` or `subgraphOverrides`
 *   **IPFS Providers**: Supports using Pinata JWT or Filecoin private key for decentralized file storage.

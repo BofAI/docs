@@ -11,16 +11,19 @@ This example covers the entire process of initializing the SDK, defining agent a
 
 ```python
 from bankofai.sdk_8004.core.sdk import SDK
-import os
+
+# Quick Start: Local Environment Variables  (Please replace with your actual values) 
+RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545"
+PRIVATE_KEY = "0xYOUR_PRIVATE_KEY"
+PINATA_JWT = "YOUR_PINATA_JWT"
 
 # Initialize the SDK
-# Subgraph automatically uses the default URL - no configuration needed!
 sdk = SDK(
     network="eip155:97",
-    rpcUrl=os.getenv("RPC_URL"),
-    signer=os.getenv("PRIVATE_KEY"),
+    rpcUrl=RPC_URL,
+    signer=PRIVATE_KEY,
     ipfs="pinata",
-    pinataJwt=os.getenv("PINATA_JWT")
+    pinataJwt=PINATA_JWT
 )
 
 # Create an Agent
@@ -46,7 +49,7 @@ agent.setMetadata({
 
 # Add OASF Skills and Domains
 agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=True)\
-     .addDomain("technology/data_science", validate_oasf=True)
+     .addDomain("technology/data_science/data_science", validate_oasf=True)
 
 # Set Status
 agent.setActive(True)
@@ -77,12 +80,15 @@ print(f"✅ Retrieved: {retrieved.name}")
 import { SDK } from '@bankofai/8004-sdk';
 
 async function main() {
+  // Quick Start: Local Environment Variables  (Please replace with your actual values) 
+  const RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545";
+  const PRIVATE_KEY = "0xYOUR_PRIVATE_KEY";
+  
   // Initialize the SDK
-  // Subgraph automatically uses the default URL - no configuration needed!
   const sdk = new SDK({
     network: "eip155:97",
-    rpcUrl: process.env.RPC_URL || "",
-    signer: process.env.PRIVATE_KEY,
+    rpcUrl: RPC_URL,
+    signer: PRIVATE_KEY,
   });
 
   // Create an Agent
