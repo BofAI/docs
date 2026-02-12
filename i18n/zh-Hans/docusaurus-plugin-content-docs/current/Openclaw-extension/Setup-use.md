@@ -33,7 +33,7 @@ cd openclaw-extension
 
 *   **MCP 服务器配置** - `~/.mcporter/mcporter.json`
 *   **技能** - 安装到您选择的位置
-*   **可用技能**：sunswap, x402_payment, x402_payment_demo
+*   **可用技能**：sunswap, x402-payment, x402-payment-demo
 
 **注意**：此安装程序使用 `mcporter` (OpenClaw 的官方 MCP 管理器) 进行配置。请务必先安装 OpenClaw。
 

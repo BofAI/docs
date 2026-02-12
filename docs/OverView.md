@@ -4,11 +4,11 @@
 
 [![Standard](https://img.shields.io/badge/Protocol-bankofai-blue.svg)](https://github.com/bankofai)
 
-Bank of AI is designed to empower AI Agents with **financial sovereignty, identity authentication, skill extensibility, and automated payment capabilities**. Through standardized protocols, we enable AI to autonomously earn income, pay for resources, and build credit on the blockchain—just like humans.
+BANK OF AI is designed to empower AI Agents with **financial sovereignty, identity authentication, skill extensibility, and automated payment capabilities**. Through standardized protocols, we enable AI to autonomously earn income, pay for resources, and build credit on the blockchain—just like humans.
 
 Currently supports **TRON** and **BSC**, with more blockchain networks coming in the future.
 
----
+
 
 ## 🏛️ Core Components
 
@@ -21,7 +21,7 @@ x402 is an open blockchain payment protocol based on the HTTP `402 Payment Requi
 - **AI-Friendly**: Supports signed payloads, allowing agents to complete settlements automatically.  
 - **Use Cases**: Pay-per-request APIs, paywalls, and automated settlement between agents.
 
----
+
 
 ### 2. 🆔 8004 Protocol: Identity & Reputation Framework
 
@@ -31,7 +31,7 @@ The 8004 Protocol uses the blockchain as a decentralized public registry, formin
 - **Reputation System**: Provides a neutral public storage standard for multi-dimensional feedback, with ranking determined at the application layer.  
 - **Consensus Validation**: Integrates **TEE proofs**, **crypto-economic staking**, and **zkML** to enable verifiable agent behavior.
 
----
+
 
 ### 3. 🛠️ MCP Server & Skills: The “Hands and Brain” of Agents
 
@@ -42,21 +42,21 @@ Built on the Model Context Protocol (MCP) architecture, providing full on-chain 
   - **sunswap**: Enables automated DEX swaps.  
   - **x402-payment**: Allows agents to detect payment requirements and execute payments automatically.
 
----
+
 
 ### 4. 🧩 OpenClaw Extension: Financial Assistant for AI Agents
 
-OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, aiming to become the “central bank” of the agent economy.
+OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, aiming to become the “AI central bank” of the agent economy.
 
 - **Wallet Ownership**: Enables agents to truly control and manage on-chain assets.  
 - **Autonomous Spending**: Agents can independently pay for computation, storage, and data resources.  
 - **Seamless Integration**: Built-in MCP server and automatic skill installer for plug-and-play setup.
 
----
 
-## 📊 Why Choose Bank of AI?
 
-| Feature | Traditional AI Agents | **Bank of AI–Empowered Agents** |
+## 📊 Why Choose BANK OF AI?
+
+| Feature | Traditional AI Agents | **BANK OF AI–Empowered Agents** |
 | :--- | :--- | :--- |
 | **Payment System** | Credit card / centralized API keys | **x402 native on-chain instant settlement** |
 | **Identity System** | Centralized email/phone registration | **8004 on-chain identity (NFT)** |
@@ -64,7 +64,7 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 | **Interaction Model** | Primarily human–machine | **A2A (Agent-to-Agent) direct settlement** |
 | **Trust Mechanism** | Vendor-backed (black box) | **Public reputation & cryptographic verification (transparent)** |
 
----
+
 
 ## 🚦 Quick Start
 
@@ -75,7 +75,7 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 2. **Register Identity**: Mint your on-chain identity following the `8004` specification.  
 3. **Publish Skills**: Write a `SKILL.md` for your service so other AI agents can understand how to interact with it.
 
----
+
 
 ### 🤖 For Agents/Buyers  
 *Want your agent to have autonomous payment and on-chain interaction capabilities?*
@@ -84,7 +84,7 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 2. **Sync Skills**: Load `sunswap` or `x402-payment` from the [skills](https://github.com/bankofai/skills) repository.  
 3. **Start Transacting**: Your agent can now automatically process payment requests from sellers and execute settlements.
 
----
+
 
 ## 🏗️ Developer Resources
 
@@ -92,6 +92,6 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 - **Live Demo**: [x402-demo Repository](https://github.com/bankofai/x402-demo)  
 - **Technical Support**: Submit issues or join discussions on GitHub.
 
----
 
-**Bank of AI** — *Empowering AI Agents with Financial Sovereignty.*
+
+**BANK OF AI** — *Empowering AI Agents with Financial Sovereignty.*

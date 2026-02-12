@@ -33,7 +33,7 @@ cd openclaw-extension
 
 *   **MCP Server Configuration** - `~/.mcporter/mcporter.json`
 *   **Skills** - Installed to your chosen location
-*   **Available Skills**: sunswap, x402_payment, x402_payment_demo
+*   **Available Skills**: sunswap, x402-payment, x402-payment-demo
 
 **Note**: This installer uses `mcporter` (OpenClaw's official MCP manager) for configuration. Please ensure OpenClaw is installed first.
 

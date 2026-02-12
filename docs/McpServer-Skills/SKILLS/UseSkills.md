@@ -12,8 +12,8 @@ Currently available skills:
 
 - **sunswap/** - SunSwap DEX trading skill for token swaps
 - **8004/** - 8004 Trusted Agent – On-chain identity and reputation system for AI agents
-- **x402_payment/** - Enables agent payment functionality on blockchain networks (x402 protocol)
-- **x402_payment_demo/** - x402 payment protocol demonstration
+- **x402-payment/** - Enables agent payment functionality on blockchain networks (x402 protocol)
+- **x402-payment-demo/** - x402 payment protocol demonstration
 
 ### 2. Using a Skill
 

@@ -2,6 +2,11 @@
 const sidebars = {
   docsSidebar: [
     {
+          type: 'doc',
+          id: 'OverView',
+          label: 'OverView',
+    },
+    {
       type: 'category',
       label: 'x402 Payment Protocol',
       collapsed: false,

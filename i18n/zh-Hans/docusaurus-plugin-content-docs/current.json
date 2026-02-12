@@ -39,5 +39,9 @@
   "sidebar.docsSidebar.doc.FAQ": {
     "message": "常见问题",
     "description": "The label for the doc item FAQ in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.OverView": {
+    "message": "简介",
+    "description": "The label for the doc item OverView in sidebar docsSidebar"
   }
 }

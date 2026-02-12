@@ -3,7 +3,7 @@
   
 | Skill                    | 功能        |     
 | ----------------------------- | ------------- | 
-| **SunSwap 技能**   | SunSwap DEX 交易（代币兑换）| 
+| **sunswap**   | SunSwap DEX 交易（代币兑换）| 
 | **8004 可信智能体**      | AI 智能体的链上身份、信誉和验证 | 
 | **x402-payment** | AI 智能体的代币支付（USDT/USDD） | 
-| **x402_payment_demo** | x402 支付协议的演示 | 
+| **x402-payment-demo** | x402 支付协议的演示 | 

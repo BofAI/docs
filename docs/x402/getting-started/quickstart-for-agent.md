@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Quickstart for AI Agents
 
-x402 is purpose-built for the Agentic Web. AI agents can autonomously negotiate and pay for protected resources using the `x402_payment` skill.
+x402 is purpose-built for the Agentic Web. AI agents can autonomously negotiate and pay for protected resources using the `x402-payment` skill.
 
 This skill enables agents to:
 
