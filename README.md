@@ -4,7 +4,7 @@
 
 [![Standard](https://img.shields.io/badge/Protocol-bankofai-blue.svg)](https://github.com/bankofai)
 
-Bank of AI is designed to empower AI Agents with **financial sovereignty, identity authentication, skill extensibility, and automated payment capabilities**. Through standardized protocols, we enable AI to autonomously earn income, pay for resources, and build credit on the blockchain—just like humans.
+BANK OF AI is designed to empower AI Agents with **financial sovereignty, identity authentication, skill extensibility, and automated payment capabilities**. Through standardized protocols, we enable AI to autonomously earn income, pay for resources, and build credit on the blockchain—just like humans.
 
 Currently supports **TRON** and **BSC**, with more blockchain networks coming in the future.
 
@@ -46,7 +46,7 @@ Built on the Model Context Protocol (MCP) architecture, providing full on-chain 
 
 ### 4. 🧩 OpenClaw Extension: Financial Assistant for AI Agents
 
-OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, aiming to become the “central bank” of the agent economy.
+OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, aiming to become the “central bank” of the agent economy.
 
 - **Wallet Ownership**: Enables agents to truly control and manage on-chain assets.  
 - **Autonomous Spending**: Agents can independently pay for computation, storage, and data resources.  
@@ -54,9 +54,9 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 
 ---
 
-## 📊 Why Choose Bank of AI?
+## 📊 Why Choose BANK OF AI?
 
-| Feature | Traditional AI Agents | **Bank of AI–Empowered Agents** |
+| Feature | Traditional AI Agents | **BANK OF AI–Empowered Agents** |
 | :--- | :--- | :--- |
 | **Payment System** | Credit card / centralized API keys | **x402 native on-chain instant settlement** |
 | **Identity System** | Centralized email/phone registration | **8004 on-chain identity (NFT)** |
@@ -94,4 +94,4 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 
 ---
 
-**Bank of AI** — *Empowering AI Agents with Financial Sovereignty.*
+**BANK OF AI** — *Empowering AI Agents with Financial Sovereignty.*
