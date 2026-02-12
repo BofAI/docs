@@ -33,7 +33,7 @@ cd openclaw-extension
 
 *   **MCP Server Configuration** - `~/.mcporter/mcporter.json`
 *   **Skills** - Installed to your chosen location
-*   **Available Skills**: sunswap, x402_payment, x402_payment_demo
+*   **Available Skills**: sunswap, x402-payment, x402-payment-demo
 
 **Note**: This installer uses `mcporter` (OpenClaw's official MCP manager) for configuration. Please ensure OpenClaw is installed first.
 
@@ -57,8 +57,12 @@ The installer provides two methods for storing credentials:
 *   Add to your shell profile (`~/.zshrc`, `~/.bashrc`, etc.):
 
     ```shell
-    export PRIVATE_KEY="your_private_key_here"
-    export API_KEY="your_api_key_here"
+    # For TRON
+    export TRON_PRIVATE_KEY="your_private_key_here"
+    export TRONGRID_API_KEY="your_api_key_here"
+
+    # For BSC/EVM chains
+    export PRIVATE_KEY="0x_your_private_key_here"
     ```
 
 *   Restart your shell or run `source ~/.zshrc` after adding.

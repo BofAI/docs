@@ -48,7 +48,7 @@ x402 SDK 提供了为 API 添加支付保护所需的一切功能。
 **选项 A：从 GitHub 安装（推荐）**
 
 ```bash
-pip install "git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402[fastapi]"
+pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
 **选项 B：从源码安装（用于开发）**
@@ -274,7 +274,7 @@ curl http://localhost:8000/protected
 | 问题                              | 解决方案                                                                                                       |
 | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
 | 连接 Facilitator 时 `Connection refused` | 确保 Facilitator 运行在端口 8001 上                                                                                   |
-| `ModuleNotFoundError: x402`              | 运行 `pip install "git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402[fastapi]"`                     |
+| `ModuleNotFoundError: x402`              | 运行 `pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"`                     |
 | 无效钱包地址错误                  | 确保您的地址正确 |
 
 **需要帮助？** 查看完整示例：

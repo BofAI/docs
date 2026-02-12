@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Quickstart for AI Agents
 
-x402 is purpose-built for the Agentic Web. AI agents can autonomously negotiate and pay for protected resources using the `x402_payment` skill.
+x402 is purpose-built for the Agentic Web. AI agents can autonomously negotiate and pay for protected resources using the `x402-payment` skill.
 
 This skill enables agents to:
 
@@ -48,7 +48,7 @@ Add the [x402-payment](https://github.com/bankofai/skills/tree/main/x402-payment
 
 ## Quick Test
 
-Instruct your Agent to access:`https://x402-demo.bankofai.io/protected-nile`。
+Instruct your Agent to access: `https://x402-demo.bankofai.io/protected-nile`.
 The Agent will automatically detect the payment requirement, sign the authorization payload, complete settlement, and retrieve the protected resource.
 
 ---

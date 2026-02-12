@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # AI 代理快速入门
 
-x402 专为 Agentic Web 设计。AI Agent 可以使用 `x402_payment` 技能自主协商并支付资源费用。
+x402 专为 Agentic Web 设计。AI Agent 可以使用 `x402-payment` 技能自主协商并支付资源费用。
 
 该技能使 Agent 能够：
 

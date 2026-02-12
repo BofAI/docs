@@ -63,7 +63,7 @@ pip install -e .
 Or install directly from a Release tag:
 
 ```bash
-pip install "git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
 Install required dependencies:

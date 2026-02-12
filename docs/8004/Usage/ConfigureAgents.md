@@ -235,6 +235,8 @@ This stores the ENS name in:
 <TabItem value="python" label="python">
 
 ```python
+from bankofai.sdk_8004.core.models import EndpointType
+
 # Remove a specific type of endpoint
 agent.removeEndpoint(type=EndpointType.MCP)
 
@@ -346,7 +348,7 @@ Both SDKs internally construct EIP-712 typed data. Conceptually, the message sig
 #### EOA
 
 *   **EOA Signature (Python)**: Pass `new_wallet_signer=...` (private key / eth-account account) unless the SDK signer is the new wallet.
-*   **EOA Signature (TypeScript)**: Pass `newWalletPrivateKey` unless the SDK signer is the new wallet.
+*   **EOA Signature (TypeScript)**: Pass `newWalletSigner` unless the SDK signer is the new wallet.
 
 
 
@@ -663,4 +665,3 @@ await tx.waitConfirmed();
 
 </TabItem>
 </Tabs>
-

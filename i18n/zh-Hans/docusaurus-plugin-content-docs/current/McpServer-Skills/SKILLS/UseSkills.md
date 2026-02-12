@@ -11,8 +11,8 @@ Skills 支持集成至 OpenClaw、ClawdCode、OpenCode 等多种 AI Agents。本
 
 - **sunswap/** - SunSwap DEX 交易技能，用于代币兑换
 - **8004/** - 8004 可信智能体 - AI 智能体的链上身份和信誉系统
-- **x402_payment/** - 在区块链网络上启用智能体支付功能（x402 协议）
-- **x402_payment_demo/** - x402 支付协议演示
+- **x402-payment/** - 在区块链网络上启用智能体支付功能（x402 协议）
+- **x402-payment-demo/** - x402 支付协议演示
 
 ### 2. 使用技能
 

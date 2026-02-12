@@ -1,4 +1,4 @@
-# 🚀 Bank of AI  
+# 🚀 BANK OF AI  
 
 **Building a Decentralized Financial Sovereignty and Commercial Interconnection Layer for AI Agents**
 
@@ -12,12 +12,12 @@ Currently supports **TRON** and **BSC**, with more blockchain networks coming in
 
 ## 🏛️ Core Components
 
-### 1. 💳 x402 Protocol: A Programmatic Payment Standard
+### 1. 💳 x402 Payment Protocol: A Programmatic Payment Standard
 
 x402 is an open blockchain payment protocol based on the HTTP `402 Payment Required` status code. It removes payment friction in M2M (machine-to-machine) interactions for AI agents.
 
 - **Payment-as-Response**: Enables a “pay-before-response” mechanism without complex account registration or session management.  
-- **Multi-Chain Support**: Currently supports **TRON** (Mainnet/Shasta/Nile) and **BSC** (Mainnet/Testnet).  
+- **Multi-Chain Support**: Currently supports **TRON** (Mainnet/Shasta/Nile) and **BSC** (Mainnet/Testnet); More blockchain networks will be supported in the future.  
 - **AI-Friendly**: Supports signed payloads, allowing agents to complete settlements automatically.  
 - **Use Cases**: Pay-per-request APIs, paywalls, and automated settlement between agents.
 
@@ -27,7 +27,7 @@ x402 is an open blockchain payment protocol based on the HTTP `402 Payment Requi
 
 The 8004 Protocol uses the blockchain as a decentralized public registry, forming the foundation of trust for AI agents.
 
-- **Identity Registry**: Mints identity as TRC-721/ERC-721 NFTs, mapping on-chain `agentId` to metadata with transferable and secure ownership.  
+- **Identity Registry**: Mints identity as NFTs, mapping on-chain `agentId` to metadata with transferable and secure ownership.  
 - **Reputation System**: Provides a neutral public storage standard for multi-dimensional feedback, with ranking determined at the application layer.  
 - **Consensus Validation**: Integrates **TEE proofs**, **crypto-economic staking**, and **zkML** to enable verifiable agent behavior.
 
@@ -39,8 +39,8 @@ Built on the Model Context Protocol (MCP) architecture, providing full on-chain 
 
 - **Infrastructure Layer (MCP Server)**: The agent’s **“hands and eyes.”** Provides a unified interface to read blocks, manage wallets, execute transfers, and interact with any contract.  
 - **Application Logic Layer (Skills)**: The agent’s **“brain.”** Uses structured instructions (`SKILL.md`) to guide AI in orchestrating underlying tools.  
-  - **SunSwap Skill**: Enables automated DEX swaps.  
-  - **x402_payment**: Allows agents to detect payment requirements and execute payments automatically.
+  - **sunswap**: Enables automated DEX swaps.  
+  - **x402-payment**: Allows agents to detect payment requirements and execute payments automatically.
 
 ---
 
@@ -59,7 +59,7 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 | Feature | Traditional AI Agents | **Bank of AI–Empowered Agents** |
 | :--- | :--- | :--- |
 | **Payment System** | Credit card / centralized API keys | **x402 native on-chain instant settlement** |
-| **Identity System** | Centralized email/phone registration | **ERC-8004 on-chain identity (NFT)** |
+| **Identity System** | Centralized email/phone registration | **8004 on-chain identity (NFT)** |
 | **Financial Capability** | Limited, requires human pre-authorization | **Autonomous DeFi interaction (Swap/Lending)** |
 | **Interaction Model** | Primarily human–machine | **A2A (Agent-to-Agent) direct settlement** |
 | **Trust Mechanism** | Vendor-backed (black box) | **Public reputation & cryptographic verification (transparent)** |
@@ -72,7 +72,7 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 *Want to monetize your API, content, or services?*
 
 1. **Integrate x402**: Deploy server-side logic to detect payment requirements and return a `402` status code with payment instructions.  
-2. **Register Identity**: Mint your on-chain identity following the `ERC-8004` specification.  
+2. **Register Identity**: Mint your on-chain identity following the `8004` specification.  
 3. **Publish Skills**: Write a `SKILL.md` for your service so other AI agents can understand how to interact with it.
 
 ---
@@ -80,15 +80,15 @@ OpenClaw is a financial extension plugin developed by Bank of AI for AI agents, 
 ### 🤖 For Agents/Buyers  
 *Want your agent to have autonomous payment and on-chain interaction capabilities?*
 
-1. **Install OpenClaw**: Configure your environment and connect to the [mcp-server](https://github.com/bankofai/mcp-server).  
-2. **Sync Skills**: Load `sunswap` or `x402_payment` from the [skills](https://github.com/bankofai/skills) repository.  
+1. **Install OpenClaw**: Configure your environment and connect to the [mcp-server-tron](https://github.com/bankofai/mcp-server-tron).  
+2. **Sync Skills**: Load `sunswap` or `x402-payment` from the [skills](https://github.com/bankofai/skills) repository.  
 3. **Start Transacting**: Your agent can now automatically process payment requests from sellers and execute settlements.
 
 ---
 
 ## 🏗️ Developer Resources
 
-- **Documentation Center**: [docs.bankofai.io](https://github.com/bankofai/x402-docs)  
+- **Documentation Center**: [docs.bankofai.io](https://github.com/bankofai/docs)  
 - **Live Demo**: [x402-demo Repository](https://github.com/bankofai/x402-demo)  
 - **Technical Support**: Submit issues or join discussions on GitHub.
 

@@ -33,7 +33,7 @@ cd openclaw-extension
 
 *   **MCP 服务器配置** - `~/.mcporter/mcporter.json`
 *   **技能** - 安装到您选择的位置
-*   **可用技能**：sunswap, x402_payment, x402_payment_demo
+*   **可用技能**：sunswap, x402-payment, x402-payment-demo
 
 **注意**：此安装程序使用 `mcporter` (OpenClaw 的官方 MCP 管理器) 进行配置。请务必先安装 OpenClaw。
 
@@ -57,9 +57,15 @@ cd openclaw-extension
 *   添加到您的 shell 配置文件 (`~/.zshrc`, `~/.bashrc` 等)：
     
     ```shell
-    export PRIVATE_KEY="your_private_key_here"
-    export API_KEY="your_api_key_here"
+    # For TRON
+    export TRON_PRIVATE_KEY="your_private_key_here"
+    export TRONGRID_API_KEY="your_api_key_here"
+
+    # For BSC/EVM chains
+    export PRIVATE_KEY="0x_your_private_key_here"
     ```
+
+
     
 *   添加后重启 shell 或运行 `source ~/.zshrc`。
 
