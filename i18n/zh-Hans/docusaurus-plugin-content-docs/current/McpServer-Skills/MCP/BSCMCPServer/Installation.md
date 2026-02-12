@@ -9,7 +9,7 @@
 
 1.  **克隆仓库：**
     ```bash
-    git clone [https://github.com/bnb-chain/bnbchain-mcp.git](https://github.com/bnb-chain/bnbchain-mcp.git)
+    git clone https://github.com/bnb-chain/bnbchain-mcp.git
     cd bnbchain-mcp
     ```
 
