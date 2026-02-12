@@ -40,8 +40,8 @@ module.exports = {
         src: 'img/logo.png', // 浅色模式
         srcDark: 'img/logo_dark.png', // 深色模式
         href: '/',
-        height: 30,
-        width: 185,
+        height: 36,
+        width: 154,
       },
       items: [
         // 多语言选项
