@@ -35,14 +35,13 @@ export BSC_PRIVATE_KEY="your_private_key_here"
 </TabItem>
 </Tabs>
 
-
 ## Installation
 
-Add the [x402_tron_payment](https://github.com/bankofai/skills/tree/main/x402_tron_payment) skill to your Agent toolchain:
+Add the [x402-payment](https://github.com/bankofai/skills/tree/main/x402-payment) skill to your Agent toolchain:
 
-| Platform     | Installation Method |
-|--------------|--------------------|
-| **OpenClaw** | `npx clawhub install x402-payment` |
+| Platform     | Installation Method                                        |
+| ------------ | ---------------------------------------------------------- |
+| **OpenClaw** | `npx clawhub install x402-payment`                         |
 | **opencode** | Copy the skill files into the `.opencode/skill/` directory |
 
 ---
@@ -65,15 +64,13 @@ The Agent will automatically detect the payment requirement, sign the authorizat
 
 ## Next Steps
 
-- [Build a Paid API](./quickstart-for-sellers.md) for Agents to consume  
-- [Understand HTTP 402](../core-concepts/http-402.md) payment protocol  
+- [Build a Paid API](./quickstart-for-sellers.md) for Agents to consume
+- [Understand HTTP 402](../core-concepts/http-402.md) payment protocol
 
 ---
 
 ## References
 
 - [OpenClaw Extension Repository](https://github.com/bankofai/openclaw-extension)
-- [x402-payment on ClawHub](https://github.com/bankofai/skills/tree/main/x402_tron_payment)
+- [x402-payment on ClawHub](https://github.com/bankofai/skills/tree/main/x402-payment)
 - [x402 Demo Project](https://github.com/bankofai/x402-demo)
-
-

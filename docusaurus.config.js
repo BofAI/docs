@@ -41,6 +41,7 @@ module.exports = {
         srcDark: 'img/logo_dark.png', // 深色模式
         href: '/',
         height: 30,
+        width: 185,
       },
       items: [
         // 多语言选项
@@ -50,13 +51,7 @@ module.exports = {
         },
         {
           label: 'GitHub',
-          href: 'https://github.com/open-aibank/x402-tron',
-          position: 'right',
-          className: 'persistent',
-        },
-        {
-          label: 'Demo',
-          href: 'https://github.com/open-aibank/x402-tron-demo',
+          href: 'https://github.com/bankofai',
           position: 'right',
           className: 'persistent',
         },

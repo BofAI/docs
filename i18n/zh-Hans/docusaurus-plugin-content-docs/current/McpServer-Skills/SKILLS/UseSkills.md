@@ -1,55 +1,29 @@
-# 如何使用 SKILLS
+# 使用 SKILLS
 
-### 前置要求
+Skills 支持集成至 OpenClaw、ClawdCode、OpenCode 等多种 AI Agents。本文以 OpenClaw 为例说明如何使用 skills。
+在开始前，请确保您已完成 OpenClaw 的安装，并下载 [OpenClaw 扩展](https://github.com/bankofai/openclaw-extension)，按其文档完成了 MCP Server 的基础配置。
 
-1. ✅ 已安装 AI 智能体（OpenClaw）
-2. ✅ 已安装 **OpenClaw 扩展**
-   * 下载：[bankofai/openclaw-extension](https://github.com/bankofai/openclaw-extension)
-   * 按照该仓库中的说明设置 MCP 服务器
+## 快速开始
 
-## 面向开发者
+### 1. 浏览可用技能
 
-### 创建新 SKILL
+当前可用的技能：
 
-查看 [AGENTS.md](https://github.com/bankofai/skills/blob/main/) 了解如何创建新技能。
+- **sunswap/** - SunSwap DEX 交易技能，用于代币兑换
+- **8004/** - 8004 可信智能体 - AI 智能体的链上身份和信誉系统
+- **x402_payment/** - 在区块链网络上启用智能体支付功能（x402 协议）
+- **x402_payment_demo/** - x402 支付协议演示
 
-**快速模板**：
+### 2. 使用技能
 
-```shell
-# 1. 创建目录
-mkdir -p my-skill/{examples,resources,scripts}
+告诉你的 AI 智能体：
 
-# 2. 创建 SKILL.md
-cat > my-skill/SKILL.md << 'EOF'
----
-name: My Skill
-description: 这个技能的功能
-version: 1.0.0
-dependencies:
-  - required-tool
-tags:
-  - category
----
-
-# My Skill
-
-## 概述
-[描述]
-
-## 使用说明
-1. 步骤 1
-2. 步骤 2
-EOF
+```
+请阅读 skills/sunswap/SKILL.md 并帮我查看 100 USDT 可以兑换多少 TRX
 ```
 
-### SKILL 规范
+AI 智能体将会：
 
-每个 SKILL 必须包含：
-
-* ✅ **SKILL.md** - 主指令文件（带有 YAML 前置元数据）
-* ✅ **README.md** - 快速描述
-* ⚠️ **examples/** - 使用示例（推荐）
-* ⚠️ **resources/** - 配置文件（可选）
-* ⚠️ **scripts/** - 辅助脚本（可选）
-
-详见 [AGENTS.md](https://github.com/bankofai/skills/blob/main/)
+1. 读取 SKILL.md
+2. 按照指令调用相应的工具
+3. 返回结果
