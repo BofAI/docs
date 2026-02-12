@@ -12,11 +12,12 @@
 * **Subgraph（可选）**: 当你的部署提供 subgraph 端点时使用
 
 ### 安装步骤
-#### 1. 使用 pip 安装 
+#### 1. 通过 GitHub 安装（当前推荐） 
 在终端窗口执行：
 ```bash
-pip install bankofai-8004-sdk
+pip install "git+https://github.com/bankofai/8004-sdk.git#subdirectory=python"
 ```
+> 当前 Python 包尚未发布到 PyPI。
 #### 2. 源码安装 
 在终端窗口执行：
 ```bash
