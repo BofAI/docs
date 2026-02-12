@@ -63,7 +63,7 @@ pip install -e .
 或者直接从 Release 标签安装：
 
 ```bash
-pip install "git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
 安装所需的依赖：
@@ -118,7 +118,7 @@ from bankofai.x402.signers.client import TronClientSigner
 
 
 # ========== Configuration ==========
-# The x402-tron server URL you want to access
+# The x402 server URL you want to access
 SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"  # Replace with your target server
 # ====================================
 
@@ -158,7 +158,7 @@ import {
 const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
 
 // ========== Configuration ==========
-// The x402-tron server URL you want to access
+// The x402 server URL you want to access
 const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile' // Replace with your target server
 // ====================================
 

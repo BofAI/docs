@@ -48,7 +48,7 @@ The x402 SDK provides everything you need to add payment protection to your API.
 **Option A: Install from GitHub (Recommended)**
 
 ```bash
-pip install "git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402[fastapi]"
+pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
 **Option B: Install from Source (for Development)**
@@ -274,7 +274,7 @@ To test the full payment process, you need a client capable of signing payments.
 | Issue                                   | Solution                                                                                                                               |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `Connection refused` when connecting to Facilitator | Ensure the Facilitator is running on port 8001                                                                                         |
-| `ModuleNotFoundError: x402`             | Run `pip install "git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402[fastapi]"`                                  |
+| `ModuleNotFoundError: x402`             | Run `pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"`                                  |
 | Invalid wallet address error            | Ensure your address is correct                                                                                                         |
 
 **Need help?** Check out the full examples:
