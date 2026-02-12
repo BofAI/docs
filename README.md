@@ -88,7 +88,7 @@ OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, 
 
 ## 🏗️ Developer Resources
 
-- **Documentation Center**: [docs.bankofai.io](https://github.com/bankofai/docs)  
+- **Documentation Center**: [docs.bankofai.io](https://docs.bankofai.io)  
 - **Live Demo**: [x402-demo Repository](https://github.com/bankofai/x402-demo)  
 - **Technical Support**: Submit issues or join discussions on GitHub.
 
