@@ -200,27 +200,16 @@ cp .env.sample .env
 
 **配置 `.env` 文件：**
 
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
 ```bash
 # Facilitator wallet private key (for settling payments on-chain)
 TRON_PRIVATE_KEY=your_facilitator_private_key_here
 
 # TronGrid API Key (required for mainnet, optional for testnet)
 TRON_GRID_API_KEY=your_trongrid_api_key_here
-```
 
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-# Facilitator wallet private key (for settling payments on-chain)
+# BSC Facilitator wallet private key (for settling payments on-chain)
 BSC_PRIVATE_KEY=your_facilitator_private_key_here
 ```
-
-</TabItem>
-</Tabs>
 
 **Facilitator 钱包：** Facilitator 需要一个持有原生 Gas 代币（TRON 为 TRX，BSC 为 BNB）的钱包来支付交易费用。对于测试网，请从相应的水龙头获取免费代币。
 

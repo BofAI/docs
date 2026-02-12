@@ -27,22 +27,6 @@ Here are the key configuration items you will need:
 
 
 **Security Tip:** Never share your private key! Store it securely in environment variables, never directly in code.
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```bash
-export TRON_PRIVATE_KEY=your_private_key_here
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-export BSC_PRIVATE_KEY=your_private_key_here
-```
-
-</TabItem>
-</Tabs>
 
 ## 1. Install x402 SDK
 

@@ -29,23 +29,6 @@ import TabItem from '@theme/TabItem';
 
 
 **安全提示：** 切勿分享您的私钥！请将其安全地存储在环境变量中，切勿直接写入代码。
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-
-```bash
-export TRON_PRIVATE_KEY=your_private_key_here
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-export BSC_PRIVATE_KEY=your_private_key_here
-```
-
-</TabItem>
-</Tabs>
 
 ## 1. 安装 x402 SDK
 

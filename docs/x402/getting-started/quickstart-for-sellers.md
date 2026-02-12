@@ -200,27 +200,16 @@ cp .env.sample .env
 
 **Configure `.env` file:**
 
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
 ```bash
 # Facilitator wallet private key (for settling payments on-chain)
 TRON_PRIVATE_KEY=your_facilitator_private_key_here
 
 # TronGrid API Key (required for mainnet, optional for testnet)
 TRON_GRID_API_KEY=your_trongrid_api_key_here
-```
 
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-# Facilitator wallet private key (for settling payments on-chain)
+# BSC Facilitator wallet private key (for settling payments on-chain)
 BSC_PRIVATE_KEY=your_facilitator_private_key_here
 ```
-
-</TabItem>
-</Tabs>
 
 **Facilitator Wallet:** The Facilitator requires a wallet holding native gas tokens (TRX for TRON, BNB for BSC) to pay for transaction fees. For testnet, get free tokens from the respective faucets.
 
