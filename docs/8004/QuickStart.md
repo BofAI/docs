@@ -4,7 +4,63 @@ import TabItem from '@theme/TabItem';
 # Quick Start
 `bankofai.sdk_8004` is the **reference implementation of the 8004 standard**, designed for the Agentic Economy. As a Software Development Kit (SDK), it leverages blockchain and decentralized storage to enable Agents to register identities, publish capabilities, and establish reputation systems, thereby achieving permissionless discovery without relying on intermediaries.
 
-This example covers the entire process of initializing the SDK, defining agent attributes, publishing MCP/A2A capabilities, registering them on the blockchain, and finally retrieving them by ID.
+This example covers the full flow for SDK initialization, agent definition, MCP/A2A capability publishing, and on-chain registration.
+
+> Note: without subgraph integration, index-based queries (`searchAgents` / `getAgent`) are unavailable; direct ID loading via `loadAgent(agentId)` still works from chain data.
+>
+> Endpoint note: `setMCP()` and `setA2A()` define callable HTTP/HTTPS endpoints. `setENS()` is optional metadata and does not replace MCP/A2A URLs.
+
+## TRON / BSC Switch Guide
+
+- This page uses TRON Nile testnet as the default: `network="nile"` and `rpcUrl="https://nile.trongrid.io"`.
+- To switch to BSC, replace: `network`, `rpcUrl`, and `signer` (EVM private key).
+- Recommended TRON parameters: `chainId=1`, `feeLimit=120000000`.
+
+Python (TRON) initialization:
+
+```python
+sdk = SDK(
+    chainId=1,
+    network="nile",  # or tron:nile; for mainnet use mainnet / tron:mainnet
+    rpcUrl="https://nile.trongrid.io",
+    signer="YOUR_TRON_PRIVATE_KEY",
+    feeLimit=120000000,
+)
+```
+
+TypeScript (TRON) initialization:
+
+```typescript
+const sdk = new SDK({
+  chainId: 1,
+  network: "nile", // or tron:nile; for mainnet use mainnet / tron:mainnet
+  rpcUrl: "https://nile.trongrid.io",
+  signer: "YOUR_TRON_PRIVATE_KEY",
+  feeLimit: 120000000,
+});
+```
+
+Python (BSC) initialization:
+
+```python
+sdk = SDK(
+    chainId=97,
+    network="eip155:97",  # BSC testnet; use eip155:56 for mainnet
+    rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
+    signer="0xYOUR_EVM_PRIVATE_KEY",
+)
+```
+
+TypeScript (BSC) initialization:
+
+```typescript
+const sdk = new SDK({
+  chainId: 97,
+  network: "eip155:97", // BSC testnet; use eip155:56 for mainnet
+  rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
+  signer: "0xYOUR_EVM_PRIVATE_KEY",
+});
+```
 
 <Tabs>
 <TabItem value="python" label="python">
@@ -13,15 +69,17 @@ This example covers the entire process of initializing the SDK, defining agent a
 from bankofai.sdk_8004.core.sdk import SDK
 
 # Quick Start: Local Environment Variables  (Please replace with your actual values) 
-RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545"
-PRIVATE_KEY = "0xYOUR_PRIVATE_KEY"
+RPC_URL = "https://nile.trongrid.io"
+PRIVATE_KEY = "YOUR_TRON_PRIVATE_KEY"
 PINATA_JWT = "YOUR_PINATA_JWT"
 
 # Initialize the SDK
 sdk = SDK(
-    network="eip155:97",
+    chainId=1,
+    network="nile",
     rpcUrl=RPC_URL,
     signer=PRIVATE_KEY,
+    feeLimit=120000000,
     ipfs="pinata",
     pinataJwt=PINATA_JWT
 )
@@ -36,6 +94,7 @@ agent = sdk.createAgent(
 # Configure Endpoints
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent-card.json")
+# Optional: ENS is a name hint, not the callable endpoint
 agent.setENS("myagent.eth")
 
 # Configure Trust Model
@@ -61,15 +120,15 @@ reg = reg_tx.wait_confirmed(timeout=180).result
 
 # Optional: Set a dedicated agent wallet on-chain (requires signature verification);
 # By default, the agent wallet is the owner's wallet; only set if you want to use a different wallet.
-# agent.setWallet("0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", chainId=97)
+# agent.setWallet("TYourTronWalletAddress", chainId=1)
 
 print(f"✅ Agent registered!")
 print(f"   ID: {reg.agentId}")
 print(f"   URI: {reg.agentURI}")
 
-# Retrieve Agent
-retrieved = sdk.getAgent(agent.agentId)
-print(f"✅ Retrieved: {retrieved.name}")
+# Load agent by ID directly from chain (works without subgraph)
+loaded = sdk.loadAgent(reg.agentId)
+print(f"✅ Loaded by ID: {loaded.registration_file.name}")
 
 ```
 
@@ -81,14 +140,16 @@ import { SDK } from '@bankofai/8004-sdk';
 
 async function main() {
   // Quick Start: Local Environment Variables  (Please replace with your actual values) 
-  const RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545";
-  const PRIVATE_KEY = "0xYOUR_PRIVATE_KEY";
+  const RPC_URL = "https://nile.trongrid.io";
+  const PRIVATE_KEY = "YOUR_TRON_PRIVATE_KEY";
   
   // Initialize the SDK
   const sdk = new SDK({
-    network: "eip155:97",
+    chainId: 1,
+    network: "nile",
     rpcUrl: RPC_URL,
     signer: PRIVATE_KEY,
+    feeLimit: 120000000,
   });
 
   // Create an Agent
@@ -126,15 +187,15 @@ const { result: registrationFile } = await tx.waitConfirmed();
 
 // Optional: Set a dedicated agent wallet on-chain (requires signature verification);
 // By default, the agent wallet is the owner's wallet; only set if you want to use a different wallet.
-// await agent.setWallet("0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb");
+// await agent.setWallet("TYourTronWalletAddress");
 
   console.log("✅ Agent registered!");
   console.log(`   ID: ${registrationFile.agentId}`);
   console.log(`   URI: ${registrationFile.agentURI}`);
 
-  // Retrieve Agent (asynchronous operation in TypeScript)
-  const retrieved = await sdk.getAgent(registrationFile.agentId!);
-  console.log(`✅ Retrieved: ${retrieved.name}`);
+  // Load agent by ID directly from chain (works without subgraph)
+  const loaded = await sdk.loadAgent(registrationFile.agentId!);
+  console.log(`✅ Loaded by ID: ${loaded.registrationFile.name}`);
 }
 
 main().catch(console.error);
