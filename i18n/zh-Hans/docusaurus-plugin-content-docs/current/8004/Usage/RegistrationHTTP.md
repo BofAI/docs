@@ -17,6 +17,10 @@ HTTP 注册在以下情况下非常有用：
 
 ### 1. 配置您的代理 
 
+说明：
+* `setMCP()` / `setA2A()` 是客户端实际调用的 HTTP/HTTPS 服务端点。
+* `setENS()` 是可选的命名标识信息，不会替代 MCP/A2A 端点 URL。
+
 <Tabs>
 <TabItem value="python" label="python">
 
@@ -178,6 +182,31 @@ const registrationFile = (await tx.waitConfirmed()).result;
 
 console.log(`代理已注册，ID: ${registrationFile.agentId}`);
 console.log(`代理 URI: ${registrationFile.agentURI}`); // https://yourdomain.com/...
+```
+
+</TabItem>
+</Tabs>
+
+### 5. 按 Agent ID 加载（无 subgraph 也可用）
+
+`getAgent()` 和 `searchAgents()` 依赖索引/subgraph。若未配置 subgraph，请使用 `loadAgent(agentId)` 直接按 ID 从链上加载。
+
+<Tabs>
+<TabItem value="python" label="python">
+
+```python
+# 直接按 ID 从链上加载
+loaded = sdk.loadAgent(registration_file.agentId)
+print(f"已加载名称: {loaded.registration_file.name}")
+```
+
+</TabItem>
+<TabItem value="TypeScript" label="TypeScript">
+
+```typescript
+// 直接按 ID 从链上加载
+const loaded = await sdk.loadAgent(registrationFile.agentId!);
+console.log(`已加载名称: ${loaded.registrationFile.name}`);
 ```
 
 </TabItem>

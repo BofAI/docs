@@ -7,6 +7,8 @@ import TabItem from '@theme/TabItem';
 This example covers the full flow for SDK initialization, agent definition, MCP/A2A capability publishing, and on-chain registration.
 
 > Note: without subgraph integration, index-based queries (`searchAgents` / `getAgent`) are unavailable; direct ID loading via `loadAgent(agentId)` still works from chain data.
+>
+> Endpoint note: `setMCP()` and `setA2A()` define callable HTTP/HTTPS endpoints. `setENS()` is optional metadata and does not replace MCP/A2A URLs.
 
 ## TRON / BSC Switch Guide
 
@@ -92,6 +94,7 @@ agent = sdk.createAgent(
 # Configure Endpoints
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent-card.json")
+# Optional: ENS is a name hint, not the callable endpoint
 agent.setENS("myagent.eth")
 
 # Configure Trust Model

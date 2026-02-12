@@ -7,6 +7,8 @@ import TabItem from '@theme/TabItem';
 此示例涵盖了初始化 SDK、定义 Agents 属性、发布 MCP/A2A 能力并将其注册至区块链的过程。
 
 > 说明：当前未集成 subgraph 组件时，`searchAgents` / `getAgent`（索引查询）暂不支持；但可通过 `loadAgent(agentId)` 按 ID 直接从链上加载。
+>
+> 端点说明：`setMCP()` 和 `setA2A()` 配置的是可调用的 HTTP/HTTPS 接口；`setENS()` 仅是可选标识信息，不会替代 MCP/A2A URL。
 
 ## TRON / BSC 切换说明
 
@@ -93,6 +95,7 @@ agent = sdk.createAgent(
 # Configure endpoints
 agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent-card.json")
+# 可选：ENS 仅用于标识，不是可调用接口
 agent.setENS("myagent.eth")
 
 # Configure trust models
