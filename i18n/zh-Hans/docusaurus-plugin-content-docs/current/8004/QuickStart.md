@@ -6,6 +6,58 @@ import TabItem from '@theme/TabItem';
 
 此示例涵盖了初始化 SDK、定义 Agents 属性、发布 MCP/A2A 能力、将其注册至区块链以及最后通过 ID 重新检索的过程。
 
+## TRON / BSC 切换说明
+
+- 本页默认示例使用 TRON Nile 测试网：`network="nile"`，`rpcUrl="https://nile.trongrid.io"`。
+- 切换到 BSC 时，请替换：`network`、`rpcUrl`、`signer`（EVM 私钥）。
+- TRON 推荐参数：`chainId=1`、`feeLimit=120000000`。
+
+Python（TRON）初始化示例：
+
+```python
+sdk = SDK(
+    chainId=1,
+    network="nile",  # 或 tron:nile；主网可用 mainnet / tron:mainnet
+    rpcUrl="https://nile.trongrid.io",
+    signer="YOUR_TRON_PRIVATE_KEY",
+    feeLimit=120000000,
+)
+```
+
+TypeScript（TRON）初始化示例：
+
+```typescript
+const sdk = new SDK({
+  chainId: 1,
+  network: "nile", // 或 tron:nile；主网可用 mainnet / tron:mainnet
+  rpcUrl: "https://nile.trongrid.io",
+  signer: "YOUR_TRON_PRIVATE_KEY",
+  feeLimit: 120000000,
+});
+```
+
+Python（BSC）初始化示例：
+
+```python
+sdk = SDK(
+    chainId=97,
+    network="eip155:97",  # BSC 测试网；主网用 eip155:56
+    rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
+    signer="0xYOUR_EVM_PRIVATE_KEY",
+)
+```
+
+TypeScript（BSC）初始化示例：
+
+```typescript
+const sdk = new SDK({
+  chainId: 97,
+  network: "eip155:97", // BSC 测试网；主网用 eip155:56
+  rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
+  signer: "0xYOUR_EVM_PRIVATE_KEY",
+});
+```
+
 
 <Tabs>
 <TabItem value="python" label="python">
@@ -14,15 +66,17 @@ import TabItem from '@theme/TabItem';
 from bankofai.sdk_8004.core.sdk import SDK
 
 # 快速开始本地变量（请替换成你的真实值）
-RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545"
-PRIVATE_KEY = "0xYOUR_PRIVATE_KEY"
+RPC_URL = "https://nile.trongrid.io"
+PRIVATE_KEY = "YOUR_TRON_PRIVATE_KEY"
 PINATA_JWT = "YOUR_PINATA_JWT"
 
 # Initialize SDK
 sdk = SDK(
-    network="eip155:97",
+    chainId=1,
+    network="nile",
     rpcUrl=RPC_URL,
     signer=PRIVATE_KEY,
+    feeLimit=120000000,
     ipfs="pinata",
     pinataJwt=PINATA_JWT
 )
@@ -62,7 +116,7 @@ reg = reg_tx.wait_confirmed(timeout=180).result
 
 # Optional: set a dedicated agent wallet on-chain (signature-verified;
 # By default, agentWallet starts as the owner wallet; only set this if you want a different one.
-# agent.setWallet("0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb", chainId=97)
+# agent.setWallet("TYourTronWalletAddress", chainId=1)
 
 print(f"✅ Agent registered!")
 print(f"   ID: {reg.agentId}")
@@ -82,14 +136,16 @@ import { SDK } from '@bankofai/8004-sdk';
 
 async function main() {
   // 快速开始本地变量（请替换成你的真实值）
-  const RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545";
-  const PRIVATE_KEY = "0xYOUR_PRIVATE_KEY";
-
+  const RPC_URL = "https://nile.trongrid.io";
+  const PRIVATE_KEY = "YOUR_TRON_PRIVATE_KEY";
+  
   // Initialize SDK
   const sdk = new SDK({
-    network: "eip155:97",
+    chainId: 1,
+    network: "nile",
     rpcUrl: RPC_URL,
     signer: PRIVATE_KEY,
+    feeLimit: 120000000,
   });
 
   // Create agent
@@ -127,7 +183,7 @@ const { result: registrationFile } = await tx.waitConfirmed();
 
 // Optional: set a dedicated agent wallet on-chain (signature-verified;
 // By default, agentWallet starts as the owner wallet; only set this if you want a different one.
-// await agent.setWallet('0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb');
+// await agent.setWallet('TYourTronWalletAddress');
 
   console.log('✅ Agent registered!');
   console.log(`   ID: ${registrationFile.agentId}`);
