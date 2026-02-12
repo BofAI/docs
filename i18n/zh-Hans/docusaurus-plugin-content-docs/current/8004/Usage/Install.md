@@ -18,7 +18,6 @@
 pip install "git+https://github.com/bankofai/8004-sdk.git#subdirectory=python"
 ```
 > 当前 Python 包尚未发布到 PyPI。
-
 #### 2. 源码安装 
 在终端窗口执行：
 ```bash
