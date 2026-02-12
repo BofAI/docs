@@ -60,8 +60,17 @@ pip install eth_account web3
 <TabItem value="ts" label="TypeScript">
 
 ```bash
-npm install @bankofai/x402 tronweb
+npm install @bankofai/x402 tronweb dotenv
 ```
+
+> **Note:** The `@bankofai/x402` package is an ESM module. If you encounter `ERR_PACKAGE_PATH_NOT_EXPORTED` when running with `npx tsx`, add `"type": "module"` to your `package.json`:
+>
+> ```json
+> {
+>   "type": "module"
+> }
+> ```
+
 
 </TabItem>
 </Tabs>
@@ -137,6 +146,7 @@ asyncio.run(main())
   <TabItem value="ts" label="TypeScript">
 
 ```typescript
+import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
   ExactPermitTronClientMechanism, TronClientSigner,
@@ -183,6 +193,7 @@ async function main(): Promise<void> {
 
 main().catch(console.error)
 ```
+
 
   </TabItem>
 </Tabs>
@@ -234,6 +245,7 @@ asyncio.run(main())
   <TabItem value="ts" label="TypeScript">
 
 ```typescript
+import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
   ExactPermitEvmClientMechanism, ExactEvmClientMechanism,
