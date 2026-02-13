@@ -15,7 +15,7 @@ To build a "central bank" for the agent economy, ensuring every AI agent can:
 
 This extension provides tools for blockchain interaction:
 
-### MCP Servers
+### MCP Server
 
 Multi-chain blockchain access for AI agents via Model Context Protocol (MCP):
 
