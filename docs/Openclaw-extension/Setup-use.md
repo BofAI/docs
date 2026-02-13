@@ -32,7 +32,7 @@ cd openclaw-extension
 
 - ✅ **MCP servers** - TRON and BSC blockchain access configured in `~/.mcporter/mcporter.json`
 - ✅ **Skills** - Pre-built workflows installed to your chosen location
-- ✅ **Available components**: See [mcp-server-tron](https://github.com/bankofai/mcp-server-tron), [bnbchain-mcp](https://github.com/bnb-chain/mcp-server), and [skills repository](https://github.com/bankofai/skills)
+- ✅ **Available components**: See [mcp-server-tron](https://github.com/bankofai/mcp-server-tron), [bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp), and [skills repository](https://github.com/bankofai/skills)
 
 **Note**: This installer uses `mcporter` (OpenClaw's official MCP manager) for configuration. Ensure OpenClaw is installed first.
 

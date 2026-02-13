@@ -15,7 +15,7 @@ To build a "central bank" for the agent economy, ensuring every AI agent can:
 
 This extension provides tools for blockchain interaction:
 
-### MCP Server
+### MCP Servers
 
 Multi-chain blockchain access for AI agents via Model Context Protocol (MCP):
 
@@ -24,7 +24,7 @@ Multi-chain blockchain access for AI agents via Model Context Protocol (MCP):
   - Resource estimation (Energy/Bandwidth)
   - Multi-network support (Mainnet, Nile, Shasta)
 
-- **[bnbchain-mcp](https://github.com/bnb-chain/mcp-server)** - BNB Chain official MCP server
+- **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** - BNB Chain official MCP server
   - Multi-chain support: BSC, opBNB, Ethereum, Greenfield
   - Wallet operations, smart contracts, token transfers
   - Cross-chain capabilities
@@ -33,6 +33,12 @@ Multi-chain blockchain access for AI agents via Model Context Protocol (MCP):
 
 Pre-built workflows and tools from the **[skills repository](https://github.com/bankofai/skills)**:
 
-For the complete list of available skills and their documentation, see the [skills repository](https://github.com/bankofai/skills).
+**Available Skills:**
+- **sunswap** - SunSwap DEX trading skill for TRON token swaps
+- **8004-skill** - 8004 Trustless Agents (on-chain identity, reputation, and validation for AI agents on TRON & BSC)
+- **x402-payment** - Enables agent payments on TRON network (x402 protocol)
+- **x402-payment-demo** - Demo of x402 payment protocol
+
+For complete documentation and usage instructions, see the [skills repository](https://github.com/bankofai/skills).
 
 The installer will let you select which skills to install during setup.
