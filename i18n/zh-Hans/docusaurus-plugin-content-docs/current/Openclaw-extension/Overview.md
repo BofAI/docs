@@ -1,35 +1,44 @@
 # 简介
 
-OpenClaw 扩展插件是由 **BANK OF AI** 开发的一套工具，旨在赋予 AI 代理金融主权。它使代理能够持有钱包、执行交易，并通过 **x402 协议** (HTTP 402 Payment Required) 实现服务货币化。
+OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402 协议**（HTTP 402 Payment Required）赋能 AI 代理实现财务主权。它使代理能够持有钱包、执行交易并将其服务货币化。
 
 ## 愿景
 
 为代理经济构建“中央银行”，确保每个 AI 代理都能：
+- **赚取收益**: 通过标准协议接受任务和服务的付款。
+- **自主消费**: 自主支付资源（计算、数据、存储）费用。
+- **连接交互**: 促进代理间（A2A）的直接金融活动和结算。
+- **无缝交易**: 无缝地与 DeFi 和智能合约交互。
 
-- **赚取收益**：通过标准协议接受任务和服务的付款。
-- **自主消费**：自主支付资源（计算、数据、存储）费用。
-- **连接交互**：促进代理到代理 (A2A) 的直接金融活动和结算。
-- **无缝交易**：与 DeFi 和智能合约无缝交互。
+## 📦 核心组件
 
-## 核心组件
-
-此扩展插件提供了用于区块链交互的工具：
+此扩展提供两个主要组件：
 
 ### MCP Server
 
-**mcp-server-tron**：一个模型上下文协议 (MCP) 服务器，它使 AI 代理能够直接访问区块链。
+通过模型上下文协议（MCP）为 AI 代理提供多链区块链访问：
 
-- **功能**：余额查询、转账、智能合约交互、资源估算、代币互换。
+- **[mcp-server-tron](https://github.com/bankofai/mcp-server-tron)** - TRON 区块链交互
+  - 余额查询、转账、智能合约调用
+  - 资源估算（能量/带宽）
+  - 多网络支持（主网、Nile、Shasta）
+
+- **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** - BNB Chain 官方 MCP Server
+  - 多链支持：BSC、opBNB、以太坊、Greenfield
+  - 钱包操作、智能合约、代币转账
+  - 跨链能力
+
 
 ### Skills
 
-安装程序会自动从 [skills](https://github.com/bankofai/skills-tron) 仓库获取技能：
+来自 **[Skills 仓库](https://github.com/bankofai/skills)** 的预构建工作流和工具：
 
-1.  **sunswap** - 用于代币互换的 SunSwap DEX 交易技能。
-    - 多版本池路由 (V1/V2/V3/PSM)。
-    - 带滑点保护的价格报价。
-    - 代币授权管理。
-2.  **x402-payment** - 在网络上启用代理支付 (x402 协议)。
-    - 代理 API 的按请求付费模型。
-    - 任务执行前的支付验证。
-3.  **x402-payment-demo** - x402 支付协议的演示。
+**可用 Skills ：**
+- **sunswap** - 用于 TRON 代币兑换的 SunSwap DEX 交易 Skill
+- **8004-skill** - 8004 无信任代理（TRON 和 BSC 上 AI 代理的链上身份、声誉和验证）
+- **x402-payment** - 在 TRON 网络上启用代理支付（x402 协议）
+- **x402-payment-demo** - x402 支付协议演示
+
+有关完整的文档和使用说明，请参阅 [Skills 仓库](https://github.com/bankofai/skills)。
+
+安装程序将允许您在设置过程中选择要安装的 Skill 。
