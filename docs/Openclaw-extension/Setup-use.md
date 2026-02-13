@@ -1,79 +1,74 @@
 # Installation and Usage
 OpenClaw Extension provides a CLI installer to help you quickly set up your environment.
 
-## Installation
+## 🛠 Installation
 
 ### Prerequisites
+- **OpenClaw** (Your personal, open-source AI assistant) - [Install from here](https://github.com/openclaw)
+- **Node.js** (v18+)
+- **Python 3** (for configuration helpers)
+- **Git** (for cloning skills repository)
+- **TRON Wallet** (Private Key & API Key for TRON network interaction)
 
-*   **OpenClaw** (Your personal open-source AI assistant) - [Install from here](https://docs.openclaw.ai/install)
-*   **Node.js** (v18+)
-*   **Python 3** (for configuring auxiliary tools)
-*   **Git** (for cloning skill repositories)
-*   **Wallet** (private keys and API keys for blockchain network interaction)
-
-**Note**: This installer uses OpenClaw's configuration system. Please ensure OpenClaw is installed before running this installer.
+**Note**: This installer uses OpenClaw's configuration system. Make sure OpenClaw is installed before running this installer.
 
 ### Quick Start
 
-**One-click installation:**
+**One-command installation:**
 
-```shell
+```bash
 curl -fsSL https://raw.githubusercontent.com/bankofai/openclaw-extension/refs/heads/main/install.sh | bash
 ```
 
-Or install from source:
+Or from source:
 
-```shell
+```bash
 git clone https://github.com/bankofai/openclaw-extension.git
 cd openclaw-extension
 ./install.sh
 ```
 
-### Installed Content
+### What Gets Installed
 
-*   **MCP Server Configuration** - `~/.mcporter/mcporter.json`
-*   **Skills** - Installed to your chosen location
-*   **Available Skills**: sunswap, x402-payment, x402-payment-demo
+- ✅ **MCP servers** - TRON and BSC blockchain access configured in `~/.mcporter/mcporter.json`
+- ✅ **Skills** - Pre-built workflows installed to your chosen location
+- ✅ **Available components**: See [mcp-server-tron](https://github.com/bankofai/mcp-server-tron), [bnbchain-mcp](https://github.com/bnb-chain/mcp-server), and [skills repository](https://github.com/bankofai/skills)
 
-**Note**: This installer uses `mcporter` (OpenClaw's official MCP manager) for configuration. Please ensure OpenClaw is installed first.
+**Note**: This installer uses `mcporter` (OpenClaw's official MCP manager) for configuration. Ensure OpenClaw is installed first.
 
-## Security
+## 🔐 Security
 
 ### Credential Storage Options
 
-The installer provides two methods for storing credentials:
+The installer offers two methods for storing blockchain credentials:
 
-**Option 1: Configuration File Storage**
-
-*   Keys are stored in `~/.mcporter/mcporter.json`.
-*   Convenient but insecure (stored in plain text).
-*   **Important**: Protect the file with `chmod 600 ~/.mcporter/mcporter.json`.
-*   Never share or commit this file to version control.
+**Option 1: Config File Storage**
+- Keys stored in `~/.mcporter/mcporter.json`
+- Convenient but less secure (plaintext)
+- **Important**: Secure the file with `chmod 600 ~/.mcporter/mcporter.json`
+- Never share or commit this file to version control
 
 **Option 2: Environment Variables (Recommended)**
-
-*   Keys are read from the shell environment.
-*   More secure, not stored in configuration files.
-*   Add to your shell profile (`~/.zshrc`, `~/.bashrc`, etc.):
-
-    ```shell
-    # For TRON
-    export TRON_PRIVATE_KEY="your_private_key_here"
-    export TRONGRID_API_KEY="your_api_key_here"
-
-    # For BSC/EVM chains
-    export PRIVATE_KEY="0x_your_private_key_here"
-    ```
-
-*   Restart your shell or run `source ~/.zshrc` after adding.
+- Keys read from shell environment
+- More secure, not stored in config files
+- Add to your shell profile (`~/.zshrc`, `~/.bashrc`, etc.):
+  ```bash
+  # For TRON
+  export TRON_PRIVATE_KEY="your_private_key_here"
+  export TRONGRID_API_KEY="your_api_key_here"
+  
+  # For BSC/EVM chains
+  export PRIVATE_KEY="0x_your_private_key_here"
+  ```
+- Restart your shell or run `source ~/.zshrc` after adding
 
 ### Best Practices
 
-*   Use a dedicated agent wallet with limited funds.
-*   Never use your main personal wallet.
-*   Test on testnet before using on mainnet.
-*   Do not allow AI agents to scan files containing private keys.
+- Use dedicated agent wallets with limited funds
+- Never use your main personal wallet
+- Test on testnets (Nile for TRON, BSC Testnet for BSC) before using mainnet
+- Do not allow AI agents to scan files containing private keys
 
-## Use at Your Own Risk
+## Use at your own risk
 
-Allowing AI agents to directly handle private keys involves significant security risks. We recommend using only small amounts of cryptocurrency and proceeding with caution. Despite built-in security measures, there is no guarantee against loss of your assets. This extension is currently experimental and has not been rigorously tested. It provides no warranties or assumes any liability. Always verify your setup on a testnet before interacting with the mainnet.
+Allowing AI agents to handle private keys directly involves substantial security risks. We advise using only small amounts of cryptocurrency and exercising caution. Despite the built-in safeguards, there is no guarantee that your assets are immune to loss. This extension is currently in an experimental stage and has not been subjected to rigorous testing. It is provided without any warranty or assumption of liability. Always validate your setup on testnets (Nile for TRON, BSC Testnet for BSC) before interacting with mainnets.

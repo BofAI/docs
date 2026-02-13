@@ -15,21 +15,26 @@ OpenClaw 扩展插件是由 **BANK OF AI** 开发的一套工具，旨在赋予 
 
 此扩展插件提供了用于区块链交互的工具：
 
-### MCP Server
+### MCP 服务器
 
-**mcp-server-tron**：一个模型上下文协议 (MCP) 服务器，它使 AI 代理能够直接访问区块链。
+通过模型上下文协议（MCP）为 AI 代理提供多链区块链访问：
 
-- **功能**：余额查询、转账、智能合约交互、资源估算、代币互换。
+- **[mcp-server-tron](https://github.com/bankofai/mcp-server-tron)** - TRON 区块链交互
+  - 余额查询、转账、智能合约调用
+  - 资源估算（能量/带宽）
+  - 多网络支持（主网、Nile、Shasta）
+
+- **[bnbchain-mcp](https://github.com/bnb-chain/mcp-server)** - BNB Chain 官方 MCP 服务器
+  - 多链支持：BSC、opBNB、以太坊、Greenfield
+  - 钱包操作、智能合约、代币转账
+  - 跨链能力
+
 
 ### Skills
 
-安装程序会自动从 [skills](https://github.com/bankofai/skills-tron) 仓库获取技能：
 
-1.  **sunswap** - 用于代币互换的 SunSwap DEX 交易技能。
-    - 多版本池路由 (V1/V2/V3/PSM)。
-    - 带滑点保护的价格报价。
-    - 代币授权管理。
-2.  **x402-payment** - 在网络上启用代理支付 (x402 协议)。
-    - 代理 API 的按请求付费模型。
-    - 任务执行前的支付验证。
-3.  **x402-payment-demo** - x402 支付协议的演示。
+来自 **[技能仓库](https://github.com/bankofai/skills)** 的预构建工作流和工具：
+
+有关可用技能及其文档的完整列表，请参阅 [技能仓库](https://github.com/bankofai/skills)。
+
+安装程序将允许您在设置过程中选择要安装的技能。
