@@ -30,7 +30,7 @@ cd openclaw-extension
 
 ### 安装内容
 
-- ✅ **MCP 服务器** - TRON 和 BSC 区块链访问已配置在 `~/.mcporter/mcporter.json` 中
+- ✅ **MCP Server** - TRON 和 BSC 区块链访问已配置在 `~/.mcporter/mcporter.json` 中
 - ✅ **SKills** - 预构建的工作流已安装到您选择的位置
 - ✅ **可用组件**：请参阅 [mcp-server-tron](https://github.com/bankofai/mcp-server-tron)、[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp) 和 [Skills 仓库](https://github.com/bankofai/skills)
 
