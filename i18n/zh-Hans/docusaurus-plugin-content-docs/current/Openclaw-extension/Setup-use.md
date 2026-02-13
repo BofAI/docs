@@ -7,7 +7,7 @@ OpenClaw 扩展插件提供了一个 CLI 安装程序，可帮助您快速设置
 - **OpenClaw**（您的个人开源 AI 助手）- [从此处安装](https://github.com/openclaw)
 - **Node.js** (v18+)
 - **Python 3**（用于配置助手）
-- **Git**（用于克隆技能仓库）
+- **Git**（用于克隆Skills仓库）
 - **TRON 钱包**（用于 TRON 网络交互的私钥和 API 密钥）
 
 **注意**：此安装程序使用 OpenClaw 的配置系统。请确保在运行此安装程序之前已安装 OpenClaw。
@@ -31,8 +31,8 @@ cd openclaw-extension
 ### 安装内容
 
 - ✅ **MCP 服务器** - TRON 和 BSC 区块链访问已配置在 `~/.mcporter/mcporter.json` 中
-- ✅ **技能** - 预构建的工作流已安装到您选择的位置
-- ✅ **可用组件**：请参阅 [mcp-server-tron](https://github.com/bankofai/mcp-server-tron)、[bnbchain-mcp](https://github.com/bnb-chain/mcp-server) 和 [技能仓库](https://github.com/bankofai/skills)
+- ✅ **Skills** - 预构建的工作流已安装到您选择的位置
+- ✅ **可用组件**：请参阅 [mcp-server-tron](https://github.com/bankofai/mcp-server-tron)、[bnbchain-mcp](https://github.com/bnb-chain/mcp-server) 和 [Skills仓库](https://github.com/bankofai/skills)
 
 **注意**：此安装程序使用 `mcporter`（OpenClaw 的官方 MCP 管理器）进行配置。请确保首先安装 OpenClaw。
 
