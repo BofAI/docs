@@ -1,6 +1,6 @@
 # 简介
 
-OpenClaw 扩展是由 **BankofAI** 开发的一套工具，旨在通过 **x402 协议**（HTTP 402 Payment Required）赋能 AI 代理实现财务主权。它使代理能够持有钱包、执行交易并将其服务货币化。
+OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402 协议**（HTTP 402 Payment Required）赋能 AI 代理实现财务主权。它使代理能够持有钱包、执行交易并将其服务货币化。
 
 ## 愿景
 
