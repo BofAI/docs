@@ -1,6 +1,6 @@
 # 创建 SKILLS
 
-查看 [AGENTS.md](https://github.com/bankofai/skills/blob/main/) 了解如何创建新技能。
+查看 [AGENTS.md](https://github.com/BofAI/skills/blob/main/) 了解如何创建新技能。
 
 ## 快速模板
 
@@ -41,4 +41,4 @@ EOF
 * ⚠️ **resources/** - 配置文件（可选）
 * ⚠️ **scripts/** - 辅助脚本（可选）
 
-详见 [AGENTS.md](https://github.com/bankofai/skills/blob/main/)
+详见 [AGENTS.md](https://github.com/BofAI/skills/blob/main/)

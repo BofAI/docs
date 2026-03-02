@@ -42,7 +42,7 @@ Both SDKs fully implement Client, Server, and Facilitator functionality.
 
 Typically, you run your own Facilitator service. x402 is designed for self-hosting, and the built-in Facilitator in the repository is production-ready.
 
-An [officially hosted Facilitator](https://github.com/bankofai/x402-facilitator) service is also available, allowing you to use x402 without deploying infrastructure yourself.
+An [officially hosted Facilitator](https://github.com/BofAI/x402-facilitator) service is also available, allowing you to use x402 without deploying infrastructure yourself.
 
 #### How do you prevent a malicious Facilitator from stealing funds or forging settlements?
 
@@ -138,7 +138,7 @@ The flow mirrors a human user:
 
 #### How do I run x402 locally?
 
-1. **Clone the repository:** Download the [x402-demo repository](https://github.com/bankofai/x402-demo).  
+1. **Clone the repository:** Download the [x402-demo repository](https://github.com/BofAI/x402-demo).  
 2. **Install dependencies:** Run `pip install -r requirements.txt`.  
 3. **Configure environment:** Copy `.env.example` to `.env` and configure your private keys.  
 4. **Start Facilitator:** `python facilitator/main.py`  
@@ -181,5 +181,5 @@ Check the `error` field in the server’s JSON response for detailed diagnostics
 
 ### Still Have Questions?
 
-• Submit a GitHub Issue in the [x402 repository](https://github.com/bankofai/x402)  
-• Refer to [x402-demo](https://github.com/bankofai/x402-demo) for a complete, runnable example  
+• Submit a GitHub Issue in the [x402 repository](https://github.com/BofAI/x402)  
+• Refer to [x402-demo](https://github.com/BofAI/x402-demo) for a complete, runnable example  

@@ -36,7 +36,7 @@ x402 Python 包暂未发布至 PyPI。请从 GitHub 源码安装：
 
 ```bash
 # Clone the repository
-git clone https://github.com/bankofai/x402.git
+git clone https://github.com/BofAI/x402.git
 cd x402/python/x402
 
 # Install
@@ -46,7 +46,7 @@ pip install -e .
 或者直接从 Release 标签安装：
 
 ```bash
-pip install "bankofai-x402[tron] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
 安装所需的依赖：
@@ -458,4 +458,4 @@ try {
 ## 参考资料
 
 - [npm package](https://www.npmjs.com/package/@bankofai/x402) - x402 JavaScript SDK
-- [示例代码仓库](https://github.com/bankofai/x402-demo) - 完整的集成演示
+- [示例代码仓库](https://github.com/BofAI/x402-demo) - 完整的集成演示

@@ -40,7 +40,7 @@ Facilitator 是一种中间件服务，主要负责：
 要使用 x402，您需要接入 Facilitator 服务。目前有两种方案可供选择：
 
 1. **运行您自己的 Facilitator（自托管）：** 您可以部署并管理自己的 Facilitator 实例。这种方式让您能够完全掌控费用和能量（Energy）管理策略。
-2. **使用[官方 Facilitator](https://github.com/bankofai/x402-facilitator)：** 官方托管的 Facilitator 服务已上线，您无需自行维护基础设施即可直接使用。
+2. **使用[官方 Facilitator](https://github.com/BofAI/x402-facilitator)：** 官方托管的 Facilitator 服务已上线，您无需自行维护基础设施即可直接使用。
 
 ### Facilitator API 端点
 

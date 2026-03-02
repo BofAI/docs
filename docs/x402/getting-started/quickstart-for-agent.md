@@ -37,7 +37,7 @@ export BSC_PRIVATE_KEY="your_private_key_here"
 
 ## Installation
 
-Add the [x402-payment](https://github.com/bankofai/skills/tree/main/x402-payment) skill to your Agent toolchain:
+Add the [x402-payment](https://github.com/BofAI/skills/tree/main/x402-payment) skill to your Agent toolchain:
 
 | Platform     | Installation Method                                        |
 | ------------ | ---------------------------------------------------------- |
@@ -71,6 +71,6 @@ The Agent will automatically detect the payment requirement, sign the authorizat
 
 ## References
 
-- [OpenClaw Extension Repository](https://github.com/bankofai/openclaw-extension)
-- [x402-payment on ClawHub](https://github.com/bankofai/skills/tree/main/x402-payment)
-- [x402 Demo Project](https://github.com/bankofai/x402-demo)
+- [OpenClaw Extension Repository](https://github.com/BofAI/openclaw-extension)
+- [x402-payment on ClawHub](https://github.com/BofAI/skills/tree/main/x402-payment)
+- [x402 Demo Project](https://github.com/BofAI/x402-demo)

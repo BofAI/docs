@@ -18,7 +18,7 @@ OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402
 
 通过模型上下文协议（MCP）为 AI 代理提供多链区块链访问：
 
-- **[mcp-server-tron](https://github.com/bankofai/mcp-server-tron)** - TRON 区块链交互
+- **[mcp-server-tron](https://github.com/BofAI/mcp-server-tron)** - TRON 区块链交互
   - 余额查询、转账、智能合约调用
   - 资源估算（能量/带宽）
   - 多网络支持（主网、Nile、Shasta）
@@ -31,7 +31,7 @@ OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402
 
 ### Skills
 
-来自 **[Skills 仓库](https://github.com/bankofai/skills)** 的预构建工作流和工具：
+来自 **[Skills 仓库](https://github.com/BofAI/skills)** 的预构建工作流和工具：
 
 **可用 Skills ：**
 - **sunswap** - 用于 TRON 代币兑换的 SunSwap DEX 交易 Skill
@@ -39,6 +39,6 @@ OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402
 - **x402-payment** - 在 TRON 网络上启用代理支付（x402 协议）
 - **x402-payment-demo** - x402 支付协议演示
 
-有关完整的文档和使用说明，请参阅 [Skills 仓库](https://github.com/bankofai/skills)。
+有关完整的文档和使用说明，请参阅 [Skills 仓库](https://github.com/BofAI/skills)。
 
 安装程序将允许您在设置过程中选择要安装的 Skill 。
