@@ -9,9 +9,9 @@ description: >-
 
 x402 是一种基于 HTTP `402 Payment Required` 状态码的区块链开放支付标准。它允许 Web 服务通过“先付费后响应”的机制直接对 API 或内容进行收费，无需依赖传统的账户或会话体系。目前，x402 已在 TRON 和 BSC 网络上支持，并计划在未来扩展至多链生态，实现广泛的区块链网络覆盖。
 
-**有意参与文档共建？** 欢迎在 [GitHub 仓库](https://github.com/bankofai/docs)提交 PR！我们唯一的原则是保持文档的中立性：除必要的资源链接外，请避免包含任何品牌推广内容。
+**有意参与文档共建？** 欢迎在 [GitHub 仓库](https://github.com/BofAI/docs)提交 PR！我们唯一的原则是保持文档的中立性：除必要的资源链接外，请避免包含任何品牌推广内容。
 
-**寻找实战代码？** 请访问 [x402-demo 仓库](https://github.com/bankofai/x402-demo) 获取完整且可直接运行的示例项目。
+**寻找实战代码？** 请访问 [x402-demo 仓库](https://github.com/BofAI/x402-demo) 获取完整且可直接运行的示例项目。
 
 ## 为什么要使用 x402？
 

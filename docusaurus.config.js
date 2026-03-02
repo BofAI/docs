@@ -51,7 +51,7 @@ module.exports = {
         },
         {
           label: 'GitHub',
-          href: 'https://github.com/bankofai',
+          href: 'https://github.com/BofAI',
           position: 'right',
           className: 'persistent',
         },

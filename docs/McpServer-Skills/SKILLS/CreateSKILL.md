@@ -1,6 +1,6 @@
 # Create a New SKILL
 
-See [AGENTS.md](https://github.com/bankofai/skills/blob/main/) to learn how to create a new skill.
+See [AGENTS.md](https://github.com/BofAI/skills/blob/main/) to learn how to create a new skill.
 
 ## Quick Template
 
@@ -41,4 +41,4 @@ Each SKILL must include:
 * ⚠️ **resources/** - Configuration files (optional)
 * ⚠️ **scripts/** - Helper scripts (optional)
 
-For more details, see [AGENTS.md](https://github.com/bankofai/skills/blob/main/)
+For more details, see [AGENTS.md](https://github.com/BofAI/skills/blob/main/)

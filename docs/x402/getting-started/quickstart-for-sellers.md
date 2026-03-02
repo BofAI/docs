@@ -21,7 +21,7 @@ Before you begin, please ensure you have:
 -   A **wallet address** to receive funds
 -   Basic knowledge of Python Web Development (this tutorial will use FastAPI)
 
-**Pre-configured Examples:** We provide out-of-the-box example code: [Server Example](https://github.com/bankofai/x402-demo/tree/main/server) and [Facilitator Example](https://github.com/bankofai/x402-demo/tree/main/facilitator). You can clone the repository and run them directly!
+**Pre-configured Examples:** We provide out-of-the-box example code: [Server Example](https://github.com/BofAI/x402-demo/tree/main/server) and [Facilitator Example](https://github.com/BofAI/x402-demo/tree/main/facilitator). You can clone the repository and run them directly!
 
 ### Configuration Reference
 
@@ -48,14 +48,14 @@ The x402 SDK provides everything you need to add payment protection to your API.
 **Option A: Install from GitHub (Recommended)**
 
 ```bash
-pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
 **Option B: Install from Source (for Development)**
 
 ```bash
 # Clone the repository
-git clone https://github.com/bankofai/x402.git
+git clone https://github.com/BofAI/x402.git
 cd x402/python/x402
 
 # Install with FastAPI support
@@ -180,7 +180,7 @@ The Facilitator is a service used to verify and settle payments on-chain. You ne
 **Options:**
 
 -   **Run your own Facilitator** (recommended for testing)
--   **Use the [official Facilitator](https://github.com/bankofai/x402-facilitator)**
+-   **Use the [official Facilitator](https://github.com/BofAI/x402-facilitator)**
 
 ### Run Your Own Facilitator
 
@@ -188,7 +188,7 @@ Open a **new terminal window** and run the following commands:
 
 ```bash
 # Clone the demo repository
-git clone https://github.com/bankofai/x402-demo.git
+git clone https://github.com/BofAI/x402-demo.git
 cd x402-demo
 
 # Install dependencies
@@ -263,13 +263,13 @@ To test the full payment process, you need a client capable of signing payments.
 | Issue                                   | Solution                                                                                                                               |
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `Connection refused` when connecting to Facilitator | Ensure the Facilitator is running on port 8001                                                                                         |
-| `ModuleNotFoundError: x402`             | Run `pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"`                                  |
+| `ModuleNotFoundError: x402`             | Run `pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"`                                  |
 | Invalid wallet address error            | Ensure your address is correct                                                                                                         |
 
 **Need help?** Check out the full examples:
 
--   [Server Example](https://github.com/bankofai/x402-demo/tree/main/server)
--   [Facilitator Example](https://github.com/bankofai/x402-demo/tree/main/facilitator)
+-   [Server Example](https://github.com/BofAI/x402-demo/tree/main/server)
+-   [Facilitator Example](https://github.com/BofAI/x402-demo/tree/main/facilitator)
 
 ## Running on Mainnet
 
@@ -343,7 +343,7 @@ Before going live, follow these steps:
 
 ### Next Steps
 
--   See [Demo Examples](https://github.com/bankofai/x402-demo/tree/main/server) for more complex payment flows.
+-   See [Demo Examples](https://github.com/BofAI/x402-demo/tree/main/server) for more complex payment flows.
 -   Dive deeper into [Core Concepts](../core-concepts/http-402.md) to understand how x402 works.
 -   Start experiencing as a [Human User](./quickstart-for-human.md) or configure an [AI Agent](./quickstart-for-agent.md).
 

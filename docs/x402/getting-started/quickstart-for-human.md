@@ -37,7 +37,7 @@ Install from GitHub source:
 
 ```bash
 # Clone the repository
-git clone https://github.com/bankofai/x402.git
+git clone https://github.com/BofAI/x402.git
 cd x402/python/x402
 
 # Install
@@ -47,7 +47,7 @@ pip install -e .
 Or install directly from a Release tag:
 
 ```bash
-pip install "bankofai-x402[tron] @ git+https://github.com/bankofai/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
 Install required dependencies:
@@ -460,4 +460,4 @@ Through this guide, you have completed the following integration steps:
 
 - [npm package](https://www.npmjs.com/package/@bankofai/x402) - x402 TypeScript SDK
 - [PyPI package](https://pypi.org/project/bankofai-x402/) - x402 Python SDK
-- [Example Code Repository](https://github.com/bankofai/x402-demo) - Complete integration demo
+- [Example Code Repository](https://github.com/BofAI/x402-demo) - Complete integration demo

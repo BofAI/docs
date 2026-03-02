@@ -42,7 +42,7 @@ To use x402, you need access to a Facilitator service. There are currently two o
 1. **Run Your Own Facilitator (Self-Hosted):**  
    Deploy and manage your own Facilitator instance for full control over fee policies and energy management strategies.
 
-2. **Use the [Official Facilitator](https://github.com/bankofai/x402-facilitator):**  
+2. **Use the [Official Facilitator](https://github.com/BofAI/x402-facilitator):**  
    An officially hosted Facilitator service is available. This option allows you to use the service without maintaining infrastructure.
 
 ### Facilitator API Endpoints

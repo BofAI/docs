@@ -1,7 +1,7 @@
 # 使用 SKILLS
 
 Skills 支持集成至 OpenClaw、ClawdCode、OpenCode 等多种 AI Agents。本文以 OpenClaw 为例说明如何使用 skills。
-在开始前，请确保您已完成 OpenClaw 的安装，并下载 [OpenClaw 扩展](https://github.com/bankofai/openclaw-extension)，按其文档完成了 MCP Server 的基础配置。
+在开始前，请确保您已完成 OpenClaw 的安装，并下载 [OpenClaw 扩展](https://github.com/BofAI/openclaw-extension)，按其文档完成了 MCP Server 的基础配置。
 
 ## 快速开始
 

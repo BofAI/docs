@@ -9,7 +9,7 @@
 
 ```shell
 # 克隆仓库
-git clone https://github.com/bankofai/mcp-server-tron.git
+git clone https://github.com/BofAI/mcp-server-tron.git
 cd mcp-server-tron
 
 # 安装依赖

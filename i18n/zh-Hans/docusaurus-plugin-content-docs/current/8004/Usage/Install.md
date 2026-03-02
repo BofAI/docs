@@ -15,13 +15,13 @@
 #### 1. 通过 GitHub 安装（当前推荐） 
 在终端窗口执行：
 ```bash
-pip install "git+https://github.com/bankofai/8004-sdk.git#subdirectory=python"
+pip install "git+https://github.com/BofAI/8004-sdk.git#subdirectory=python"
 ```
 > 当前 Python 包尚未发布到 PyPI。
 #### 2. 源码安装 
 在终端窗口执行：
 ```bash
-git clone https://github.com/bankofai/8004-sdk.git
+git clone https://github.com/BofAI/8004-sdk.git
 cd 8004-sdk/python
 pip install -e .
 ```
@@ -58,7 +58,7 @@ npm install @bankofai/8004-sdk
 #### 2. 源码安装
 在终端窗口执行：
 ```bash
-git clone https://github.com/bankofai/8004-sdk.git
+git clone https://github.com/BofAI/8004-sdk.git
 cd 8004-sdk/ts
 npm install
 npm run build

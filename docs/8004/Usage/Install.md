@@ -16,14 +16,14 @@
 #### 1. Install via GitHub (Currently Recommended)
 Run the following command in your terminal:
 ```bash
-pip install "git+https://github.com/bankofai/8004-sdk.git#subdirectory=python"
+pip install "git+https://github.com/BofAI/8004-sdk.git#subdirectory=python"
 ```
 > The Python package has not yet been published to PyPI.
 
 #### 2. Install from source
 Execute in a terminal window:
 ```bash
-git clone https://github.com/bankofai/8004-sdk.git
+git clone https://github.com/BofAI/8004-sdk.git
 cd 8004-sdk/python
 pip install -e .
 ```
@@ -61,7 +61,7 @@ npm install @bankofai/8004-sdk
 #### 2. Install from source
 Execute in a terminal window:
 ```bash
-git clone https://github.com/bankofai/8004-sdk.git
+git clone https://github.com/BofAI/8004-sdk.git
 cd 8004-sdk/ts
 npm install
 npm run build

@@ -2,7 +2,7 @@
 
 Skills can be integrated into various AI Agents, such as OpenClaw, ClawdCode, and OpenCode. This guide uses OpenClaw as an example to demonstrate how to use Skills.
 
-Before you begin, please ensure that you have installed OpenClaw, downloaded the [OpenClaw Extension](https://github.com/bankofai/openclaw-extension), and completed the basic configuration of the MCP Server according to its documentation.
+Before you begin, please ensure that you have installed OpenClaw, downloaded the [OpenClaw Extension](https://github.com/BofAI/openclaw-extension), and completed the basic configuration of the MCP Server according to its documentation.
 
 ## Quick Start
 
