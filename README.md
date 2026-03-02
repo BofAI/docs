@@ -2,7 +2,7 @@
 
 **Building a Decentralized Financial Sovereignty and Commercial Interconnection Layer for AI Agents**
 
-[![Standard](https://img.shields.io/badge/Protocol-bankofai-blue.svg)](https://github.com/bankofai)
+[![Standard](https://img.shields.io/badge/Protocol-bankofai-blue.svg)](https://github.com/BofAI)
 
 BANK OF AI is designed to empower AI Agents with **financial sovereignty, identity authentication, skill extensibility, and automated payment capabilities**. Through standardized protocols, we enable AI to autonomously earn income, pay for resources, and build credit on the blockchain—just like humans.
 
@@ -80,8 +80,8 @@ OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, 
 ### 🤖 For Agents/Buyers  
 *Want your agent to have autonomous payment and on-chain interaction capabilities?*
 
-1. **Install OpenClaw**: Configure your environment and connect to the [mcp-server-tron](https://github.com/bankofai/mcp-server-tron).  
-2. **Sync Skills**: Load `sunswap` or `x402-payment` from the [skills](https://github.com/bankofai/skills) repository.  
+1. **Install OpenClaw**: Configure your environment and connect to the [mcp-server-tron](https://github.com/BofAI/mcp-server-tron).  
+2. **Sync Skills**: Load `sunswap` or `x402-payment` from the [skills](https://github.com/BofAI/skills) repository.  
 3. **Start Transacting**: Your agent can now automatically process payment requests from sellers and execute settlements.
 
 ---
@@ -89,7 +89,7 @@ OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, 
 ## 🏗️ Developer Resources
 
 - **Documentation Center**: [docs.bankofai.io](https://docs.bankofai.io)  
-- **Live Demo**: [x402-demo Repository](https://github.com/bankofai/x402-demo)  
+- **Live Demo**: [x402-demo Repository](https://github.com/BofAI/x402-demo)  
 - **Technical Support**: Submit issues or join discussions on GitHub.
 
 ---
