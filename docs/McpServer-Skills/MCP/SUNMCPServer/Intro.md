@@ -18,9 +18,9 @@ The SUN MCP Server uses the [Model Context Protocol](https://modelcontextprotoco
 
 ## MCP Server URL
 
-|Environment|url|
-|:---|:---|
-|Production|[sun-mcp-server.bankofai.io/mcp](sun-mcp-server.bankofai.io/mcp)|
+| Environment | url                                                                              |
+| :---------- | :------------------------------------------------------------------------------- |
+| Production  | [https://sun-mcp-server.bankofai.io/mcp](https://sun-mcp-server.bankofai.io/mcp) |
 
 ## Security Considerations
 

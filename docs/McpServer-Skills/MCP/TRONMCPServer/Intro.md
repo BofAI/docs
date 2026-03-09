@@ -17,7 +17,7 @@ The TRON MCP server leverages the Model Context Protocol to deliver blockchain s
 
 | Environment | url                                                                |
 | :---------- | :----------------------------------------------------------------- |
-| Production  | [tron-mcp-server.bankofai.io/mcp](tron-mcp-server.bankofai.io/mcp) |
+| Production  | [https://tron-mcp-server.bankofai.io/mcp](https://tron-mcp-server.bankofai.io/mcp) |
 
 ## Security Considerations
 

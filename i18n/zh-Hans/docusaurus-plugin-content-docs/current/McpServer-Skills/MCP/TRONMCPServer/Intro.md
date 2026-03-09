@@ -17,7 +17,7 @@ TRON MCP Server 利用模型上下文协议为 AI 代理提供区块链服务。
 
 |Environment|url|
 |:---|:---|
-|Production|[tron-mcp-server.bankofai.io/mcp](tron-mcp-server.bankofai.io/mcp)|
+|Production|[https://tron-mcp-server.bankofai.io/mcp](https://tron-mcp-server.bankofai.io/mcp)|
 
 ## 安全注意事项
 
