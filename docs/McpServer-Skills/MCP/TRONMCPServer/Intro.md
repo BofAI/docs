@@ -13,6 +13,12 @@ The TRON MCP server leverages the Model Context Protocol to deliver blockchain s
 - **Wallet Integration**: Supports private key and mnemonic (BIP-39) wallets.
 - **Multi-Network**: Seamless support for Mainnet, Nile, and Shasta.
 
+## MCP Server URL
+
+| Environment | url                                                                |
+| :---------- | :----------------------------------------------------------------- |
+| Production  | [tron-mcp-server.bankofai.io/mcp](tron-mcp-server.bankofai.io/mcp) |
+
 ## Security Considerations
 
 - **Private Key Management**: Private keys and mnemonics should always be managed securely via environment variables. Never hardcode them or store them in insecure files.
