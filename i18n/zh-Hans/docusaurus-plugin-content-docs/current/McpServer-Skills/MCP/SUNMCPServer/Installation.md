@@ -24,14 +24,14 @@ npm run build
 
 ```bash
 # 运行测试
-npm run test
+npm test
 
 # 启动服务（stdio）
-npm run start
+npm start
 ```
 
 使用 HTTP（streamable-http）模式时：
 
 ```bash
-npm run start -- --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
+npm start -- --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
 ```

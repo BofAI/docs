@@ -24,14 +24,14 @@ npm run build
 
 ```bash
 # Run tests
-npm run test
+npm test
 
 # Start server (stdio)
-npm run start
+npm start
 ```
 
 For HTTP (streamable-http) mode:
 
 ```bash
-npm run start -- --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
+npm start -- --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
 ```
