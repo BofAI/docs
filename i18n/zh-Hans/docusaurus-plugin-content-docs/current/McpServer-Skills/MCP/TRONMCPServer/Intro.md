@@ -13,6 +13,12 @@ TRON MCP Server 利用模型上下文协议为 AI 代理提供区块链服务。
 - **钱包集成**：支持私钥和助记词 (BIP-39) 钱包。
 - **多网络**：无缝支持主网、Nile 和 Shasta。
 
+## MCP 服务器地址 
+
+|Environment|url|
+|:---|:---|
+|Production|[tron-mcp-server.bankofai.io/mcp](tron-mcp-server.bankofai.io/mcp)|
+
 ## 安全注意事项
 
 - **私钥管理**：私钥和助记词应始终通过环境变量安全管理，切勿硬编码或存储在不安全的文件中。

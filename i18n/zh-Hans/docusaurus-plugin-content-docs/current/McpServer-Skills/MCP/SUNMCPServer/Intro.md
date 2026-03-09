@@ -16,6 +16,12 @@ SUN MCP Server 是面向 **TRON 网络上 SUN.IO（SUNSWAP）** 生态的 Model 
 - **钱包**：支持私钥或 BIP-39 助记词；可选 Agent Wallet 提供方以支持远程签名。
 - **多网络**：支持 Mainnet、Nile、Shasta，可配置 RPC 与 TronGrid API Key。
 
+## MCP 服务器地址 
+
+|Environment|url|
+|:---|:---|
+|Production|[sun-mcp-server.bankofai.io/mcp](sun-mcp-server.bankofai.io/mcp)|
+
 ## 安全说明
 
 - **私钥与助记词**：仅通过环境变量配置 `TRON_PRIVATE_KEY` 或 `TRON_MNEMONIC`，不要写死在代码或可能被提交的配置文件中。

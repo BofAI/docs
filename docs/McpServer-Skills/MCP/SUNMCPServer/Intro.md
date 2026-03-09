@@ -16,6 +16,12 @@ The SUN MCP Server uses the [Model Context Protocol](https://modelcontextprotoco
 - **Wallet**: Private key or BIP-39 mnemonic; optional Agent Wallet provider for remote signing.
 - **Multi-network**: Mainnet, Nile, and Shasta with configurable RPC and TronGrid API key.
 
+## MCP Server URL
+
+|Environment|url|
+|:---|:---|
+|Production|[sun-mcp-server.bankofai.io/mcp](sun-mcp-server.bankofai.io/mcp)|
+
 ## Security Considerations
 
 - **Private key management**: Configure `TRON_PRIVATE_KEY` or `TRON_MNEMONIC` via environment variables only. Do not hardcode them or store them in config files that may be committed.
