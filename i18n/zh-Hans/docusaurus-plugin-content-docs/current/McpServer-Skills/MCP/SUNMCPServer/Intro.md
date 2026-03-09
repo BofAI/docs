@@ -20,7 +20,7 @@ SUN MCP Server 是面向 **TRON 网络上 SUN.IO（SUNSWAP）** 生态的 Model 
 
 |Environment|url|
 |:---|:---|
-|Production|[sun-mcp-server.bankofai.io/mcp](sun-mcp-server.bankofai.io/mcp)|
+|Production|[https://sun-mcp-server.bankofai.io/mcp](https://sun-mcp-server.bankofai.io/mcp)|
 
 ## 安全说明
 
