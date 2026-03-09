@@ -110,6 +110,18 @@ const sidebars = {
             },
             {
               type: 'category',
+              label: 'SUN MCP Server',
+              collapsed: true,
+              items: [
+                'McpServer-Skills/MCP/SUNMCPServer/Intro',
+                'McpServer-Skills/MCP/SUNMCPServer/Features',
+                'McpServer-Skills/MCP/SUNMCPServer/Installation',
+                'McpServer-Skills/MCP/SUNMCPServer/Configuration',
+                'McpServer-Skills/MCP/SUNMCPServer/API',
+              ],
+            },
+            {
+              type: 'category',
               label: 'BSC MCP Server',
               collapsed: true,
               items: [
