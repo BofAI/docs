@@ -20,10 +20,14 @@ This extension provides tools for blockchain interaction:
 Multi-chain blockchain access for AI agents via Model Context Protocol (MCP):
 
 - **[mcp-server-tron](https://github.com/BofAI/mcp-server-tron)** - TRON blockchain interaction
+  - Wallet management, message signing, address conversion & validation
   - Balance checks, TRX/TRC20 transfers, smart contract calls
+  - Contract deployment, multicall, ABI fetching, contract settings management
+  - Block & transaction queries (by height, hash, range)
   - Resource estimation (Energy/Bandwidth), staking (Stake 2.0), resource delegation
   - Governance & proposals, event queries, mempool, node info
   - Account management, TronGrid data queries, transaction broadcast
+  - Full-node query API (energy/bandwidth price history, TRX burn stats, block balance changes)
   - Multi-network support (Mainnet, Nile, Shasta)
   - Read-only mode for safe public deployment
 

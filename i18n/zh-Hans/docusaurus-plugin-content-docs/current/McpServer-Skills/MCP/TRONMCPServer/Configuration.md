@@ -130,3 +130,102 @@ bash start.sh
 ```
 
 **重要提示**：如果您已在系统环境中设置了这些变量，我们建议省略 `env` 部分。如果您的 MCP 客户端不继承系统变量，请使用占位符或确保配置文件未共享或提交到版本控制。
+
+**选项 C：托管服务（只读）** 直接连接到公共托管实例——无需安装。
+
+**服务地址**：`https://tron-mcp-server.bankofai.io/mcp`
+- **传输协议**：Streamable HTTP
+- **模式**：只读（写入工具已禁用）
+
+**Claude Desktop**
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-tron": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://tron-mcp-server.bankofai.io/mcp"
+      ]
+    }
+  }
+}
+```
+
+带 TronGrid API Key：
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-tron": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://tron-mcp-server.bankofai.io/mcp",
+        "--header",
+        "TRONGRID-API-KEY:<your-api-key>"
+      ]
+    }
+  }
+}
+```
+
+**Claude Code**
+
+CLI 命令：
+
+```shell
+claude mcp add --transport http mcp-server-tron https://tron-mcp-server.bankofai.io/mcp
+```
+
+或在项目根目录添加 `.mcp.json`：
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-tron": {
+      "type": "http",
+      "url": "https://tron-mcp-server.bankofai.io/mcp"
+    }
+  }
+}
+```
+
+**通用 HTTP 调用**
+
+初始化连接：
+
+```shell
+curl -X POST https://tron-mcp-server.bankofai.io/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "initialize",
+    "params": {
+      "protocolVersion": "2025-03-26",
+      "capabilities": {},
+      "clientInfo": {"name": "my-client", "version": "1.0"}
+    },
+    "id": 1
+  }'
+```
+
+调用工具（使用初始化响应中的 `mcp-session-id`）：
+
+```shell
+curl -X POST https://tron-mcp-server.bankofai.io/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "mcp-session-id: <session-id>" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "get_chain_info",
+      "arguments": {"network": "mainnet"}
+    },
+    "id": 2
+  }'
+```
