@@ -19,9 +19,12 @@ OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402
 通过模型上下文协议（MCP）为 AI 代理提供多链区块链访问：
 
 - **[mcp-server-tron](https://github.com/BofAI/mcp-server-tron)** - TRON 区块链交互
-  - 余额查询、转账、智能合约调用
-  - 资源估算（能量/带宽）
+  - 余额查询、TRX/TRC20 转账、智能合约调用
+  - 资源估算（能量/带宽）、质押（Stake 2.0）、资源委托
+  - 治理与提案、事件查询、内存池、节点信息
+  - 账户管理、TronGrid 数据查询、交易广播
   - 多网络支持（主网、Nile、Shasta）
+  - 只读模式，适用于安全的公开部署
 
 - **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** - BNB Chain 官方 MCP Server
   - 多链支持：BSC、opBNB、以太坊、Greenfield

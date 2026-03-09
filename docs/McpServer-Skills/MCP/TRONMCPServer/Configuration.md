@@ -45,8 +45,11 @@ The server runs in HTTP mode on port **3001** by default.
 # Start in stdio mode (for MCP clients like Claude Desktop/Cursor)
 npm start
 
-# Start in HTTP mode (Server-Sent Events)
+# Start in HTTP mode (Streamable HTTP)
 npm run start:http
+
+# Start in read-only mode (write tools disabled)
+npm start -- --readonly
 ```
 
 ### Testing
@@ -54,13 +57,23 @@ npm run start:http
 The project includes a comprehensive test suite, including unit and integration tests (using Nile network).
 
 ```shell
+# Lint check
+npm run lint
+
 # Run all tests
 npm test
 
 # Run specific test suites
-npx vitest tests/core/tools.test.ts          # Unit tests for tools
-npx vitest tests/core/services/multicall.test.ts # Multicall integration
-npx vitest tests/core/services/services.test.ts # Service integration
+npx vitest tests/core/tools.test.ts              # Unit tests for tools
+npx vitest tests/core/services/services.test.ts   # Service integration (Nile)
+npx vitest tests/core/services/agent-wallet.test.ts # Agent-wallet unit tests
+```
+
+### Production Deployment
+
+```shell
+# Build and start with PM2 (read-only mode)
+bash start.sh
 ```
 
 ### Client Configuration
