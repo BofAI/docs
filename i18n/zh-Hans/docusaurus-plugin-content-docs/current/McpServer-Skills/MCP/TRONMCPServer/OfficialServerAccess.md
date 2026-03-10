@@ -12,43 +12,7 @@ import TabItem from '@theme/TabItem';
 - **传输协议**：Streamable HTTP
 - **模式**：只读（写入工具已禁用）
 
-## 环境要求
-*   **Node.js**：v20.0.0 或更高版本。
-*   可选：**TronGrid API Key**：建议申请（[trongrid.io](https://www.trongrid.io/)）以避免主网频率限制。
-
-## 关键配置（环境变量）
-
-**重要安全提示**：为了您的安全，**切勿**将您的私钥或助记词直接保存在 MCP 配置文件（如 `claude_desktop_config.json` 或 `mcp.json`）中。相反，请将它们设置为您操作系统或 shell 配置中的环境变量。
-
-要启用写入操作（转账、合约调用）并确保可靠的 API 访问，您应该配置以下变量。
-
-### 1. 网络配置
-
-*   `TRONGRID_API_KEY`：(可选) 您的 TronGrid API 密钥。
-    *   **原因**：TRON 主网 RPC 具有严格的速率限制。使用 [TronGrid](https://www.trongrid.io/) 的 API 密钥可确保可靠的性能和更高的吞吐量。
-    *   **用法**：
-        
-        ```shell
-        export TRONGRID_API_KEY="<YOUR_TRONGRID_API_KEY_HERE>"
-        ```
-        
-
-### 2. 钱包配置（使用环境变量）
-
-**选项 1：私钥**
-
-```shell
-# 推荐：将其添加到您的 ~/.zshrc 或 ~/.bashrc
-export TRON_PRIVATE_KEY="<YOUR_PRIVATE_KEY_HERE>"
-```
-
-**选项 2：助记词**
-
-```shell
-# 推荐：将其添加到您的 ~/.zshrc 或 ~/.bashrc
-export TRON_MNEMONIC="<WORD1> <WORD2> ... <WORD12>"
-export TRON_ACCOUNT_INDEX="0" # 可选，默认值：0
-```
+**重要安全提示**：为了您的安全，**切勿**将您的私钥或助记词直接保存在 MCP 配置文件（如 `claude_desktop_config.json` 或 `mcp.json`）中。相反，请将它们设置为您操作系统或 shell 配置中的环境变量。    
 
 ## 客户端集成
 

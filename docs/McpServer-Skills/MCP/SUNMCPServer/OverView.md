@@ -1,4 +1,4 @@
-# Introduction
+# OverView
 
 SUN MCP Server is a Model Context Protocol (MCP) server for the **SUN.IO (SUNSWAP)** ecosystem on the TRON network. It allows AI agents to query SUN.IO API data (tokens, pools, prices, protocol metrics, transactions, farming, contracts) and perform DeFi operations such as swaps and V2/V3 liquidity management through a unified tool interface.
 
@@ -103,7 +103,3 @@ Tools are generated from `specs/sunio-open-api.json`, requesting the SUN.IO publ
 - **Use Testnet First**: Please test fully on Nile or Shasta before operating on the mainnet.
 - **Minimum Privilege**: The wallet configured for the agent only keeps the minimum funds required to complete the task.
 - **Audit**: It is recommended to do a security audit of the server side and integration method before production use.
-
-## License
-
-This project is released under the MIT License.

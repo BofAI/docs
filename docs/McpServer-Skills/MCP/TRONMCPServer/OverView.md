@@ -1,4 +1,4 @@
-# Introduction
+# OverView
 
 TRON MCP Server is designed to provide AI agents with the ability to interact with the TRON blockchain. Through a unified interface, AI agents can utilize tools and AI-guided prompts to access TRON network services, supporting TRX, TRC20 tokens, and smart contract operations. The server leverages the `tronweb` library to fully support the TRON ecosystem.
 
@@ -57,6 +57,4 @@ A specific list of functions provided by TRON MCP Server for the reference of de
 *   **Testnet First**: Always thoroughly test on Nile or Shasta testnets before deploying any operations to the mainnet.
 *   **Principle of Least Privilege**: Wallets configured for AI agents should only contain the minimum funds required to perform their tasks.
    
-## License
 
-This project is released under the MIT License.

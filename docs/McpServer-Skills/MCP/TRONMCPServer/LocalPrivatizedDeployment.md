@@ -54,43 +54,22 @@ export TRON_ACCOUNT_INDEX="0" # Optional, default: 0
     ```
 
 
-## Local Run
 
-```shell
-# Start in stdio mode (suitable for MCP clients such as Claude Desktop/Cursor)
-npm start
-
-# Start in HTTP mode (Streamable HTTP)
-npm run start:http
-
-# Start in read-only mode (disable write tools)
-npm start -- --readonly
-```
-
-## Testing
-
-The project includes a comprehensive test suite, including unit tests and integration tests (using the Nile network).
-
-```shell
-# Lint check
-npm run lint
-
-# Run all tests
+## Verification
+Default stdio mode:
+```bash
+# Run tests
 npm test
 
-# Run specific test suites
-npx vitest tests/core/tools.test.ts              # Unit tests for tools
-npx vitest tests/core/services/services.test.ts   # Service integration (Nile)
-npx vitest tests/core/services/agent-wallet.test.ts # Agent-wallet unit tests
+# Start service (stdio)
+npm start
 ```
 
-## Production Deployment
+When using HTTP (streamable-http) mode:
 
-```shell
-# Compile and start with PM2 (read-only mode)
-bash start.sh
+```bash
+npm run start:http
 ```
-
 
 ## Client Integration
 

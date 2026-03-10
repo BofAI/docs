@@ -55,41 +55,20 @@ export TRON_ACCOUNT_INDEX="0" # 可选，默认值：0
     ```
 
 
-## 本地运行
-
-```shell
-# 以 stdio 模式启动（适用于 Claude Desktop/Cursor 等 MCP 客户端）
-npm start
-
-# 以 HTTP 模式启动（Streamable HTTP）
-npm run start:http
-
-# 以只读模式启动（禁用写入工具）
-npm start -- --readonly
-```
-
-## 测试
-
-项目包含一个全面的测试套件，包括单元测试和集成测试（使用 Nile 网络）。
-
-```shell
-# Lint 检查
-npm run lint
-
-# 运行所有测试
+## 验证
+默认 stdio 模式：
+```bash
+# 运行测试
 npm test
 
-# 运行特定的测试套件
-npx vitest tests/core/tools.test.ts              # 工具的单元测试
-npx vitest tests/core/services/services.test.ts   # 服务集成（Nile）
-npx vitest tests/core/services/agent-wallet.test.ts # Agent-wallet 单元测试
+# 启动服务（stdio）
+npm start
 ```
 
-## 生产部署
+使用 HTTP（streamable-http）模式时：
 
-```shell
-# 编译并使用 PM2 启动（只读模式）
-bash start.sh
+```bash
+npm run start:http
 ```
 
 

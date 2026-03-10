@@ -12,43 +12,11 @@ For users who only need to read blockchain data (not involving transactions), yo
 - **Transport Protocol**: Streamable HTTP
 - **Mode**: Read-only (write tools disabled)
 
-## Environment Requirements
-*   **Node.js**: v20.0.0 or higher.
 *   Optional: **TronGrid API Key**: It is recommended to apply ([trongrid.io](https://www.trongrid.io/)) to avoid mainnet frequency limits.
 
-## Key Configuration (Environment Variables)
 
 **Important Security Note**: For your safety, **NEVER** save your private keys or mnemonics directly in MCP configuration files (such as `claude_desktop_config.json` or `mcp.json`). Instead, please set them as environment variables in your operating system or shell configuration.
 
-To enable write operations (transfers, contract calls) and ensure reliable API access, you should configure the following variables.
-
-### 1. Network Configuration
-
-*   `TRONGRID_API_KEY`: (Optional) Your TronGrid API key.
-    *   **Reason**: TRON mainnet RPC has strict rate limits. Using an API key from [TronGrid](https://www.trongrid.io/) ensures reliable performance and higher throughput.
-    *   **Usage**:
-        
-        ```shell
-        export TRONGRID_API_KEY="<YOUR_TRONGRID_API_KEY_HERE>"
-        ```
-        
-
-### 2. Wallet Configuration (Using Environment Variables)
-
-**Option 1: Private Key**
-
-```shell
-# Recommended: Add this to your ~/.zshrc or ~/.bashrc
-export TRON_PRIVATE_KEY="<YOUR_PRIVATE_KEY_HERE>"
-```
-
-**Option 2: Mnemonic**
-
-```shell
-# Recommended: Add this to your ~/.zshrc or ~/.bashrc
-export TRON_MNEMONIC="<WORD1> <WORD2> ... <WORD12>"
-export TRON_ACCOUNT_INDEX="0" # Optional, default: 0
-```
 
 ## Client Integration
 

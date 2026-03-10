@@ -93,6 +93,7 @@ const sidebars = {
           label: 'MCP Server',
           collapsed: true,
           items: [
+            'McpServer-Skills/MCP/OverView',
             {
               type: 'category',
               label: 'TRON MCP Server',
@@ -122,7 +123,7 @@ const sidebars = {
               label: 'BSC MCP Server',
               collapsed: true,
               items: [
-                'McpServer-Skills/MCP/BSCMCPServer/Intro',
+                'McpServer-Skills/MCP/BSCMCPServer/OverView',
                 'McpServer-Skills/MCP/BSCMCPServer/Features',
                 'McpServer-Skills/MCP/BSCMCPServer/Installation',
               ],
