@@ -101,10 +101,10 @@ const sidebars = {
               label: 'TRON MCP Server',
               collapsed: true,
               items: [
-                'McpServer-Skills/MCP/TRONMCPServer/Intro',
-                'McpServer-Skills/MCP/TRONMCPServer/Features',
-                'McpServer-Skills/MCP/TRONMCPServer/Installation',
-                'McpServer-Skills/MCP/TRONMCPServer/Configuration',
+                
+                'McpServer-Skills/MCP/TRONMCPServer/OverView',
+                'McpServer-Skills/MCP/TRONMCPServer/OfficialServerAccess',
+                'McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment',
                 'McpServer-Skills/MCP/TRONMCPServer/API',
               ],
             },
@@ -113,10 +113,9 @@ const sidebars = {
               label: 'SUN MCP Server',
               collapsed: true,
               items: [
-                'McpServer-Skills/MCP/SUNMCPServer/Intro',
-                'McpServer-Skills/MCP/SUNMCPServer/Features',
-                'McpServer-Skills/MCP/SUNMCPServer/Installation',
-                'McpServer-Skills/MCP/SUNMCPServer/Configuration',
+                'McpServer-Skills/MCP/SUNMCPServer/OverView',
+                'McpServer-Skills/MCP/SUNMCPServer/OfficialServerAccess',
+                'McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment',
                 'McpServer-Skills/MCP/SUNMCPServer/API',
               ],
             },
