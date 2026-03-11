@@ -135,7 +135,7 @@ const sidebars = {
           label: 'SKILLS',
           collapsed: true,
           items: [
-            'McpServer-Skills/SKILLS/Intro',
+            'McpServer-Skills/SKILLS/OverView',
             'McpServer-Skills/SKILLS/SkillsList',
             'McpServer-Skills/SKILLS/UseSkills',
             'McpServer-Skills/SKILLS/CreateSKILL',
