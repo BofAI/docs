@@ -93,13 +93,13 @@ const sidebars = {
           label: 'MCP Server',
           collapsed: true,
           items: [
-            'McpServer-Skills/MCP/OverView',
+            'McpServer-Skills/MCP/Intro',
             {
               type: 'category',
               label: 'TRON MCP Server',
               collapsed: true,
               items: [
-                'McpServer-Skills/MCP/TRONMCPServer/OverView',
+                'McpServer-Skills/MCP/TRONMCPServer/Intro',
                 'McpServer-Skills/MCP/TRONMCPServer/OfficialServerAccess',
                 'McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment',
                 'McpServer-Skills/MCP/TRONMCPServer/API',
@@ -111,7 +111,7 @@ const sidebars = {
               label: 'SUN MCP Server',
               collapsed: true,
               items: [
-                'McpServer-Skills/MCP/SUNMCPServer/OverView',
+                'McpServer-Skills/MCP/SUNMCPServer/Intro',
                 'McpServer-Skills/MCP/SUNMCPServer/OfficialServerAccess',
                 'McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment',
                 'McpServer-Skills/MCP/SUNMCPServer/API',
@@ -123,7 +123,7 @@ const sidebars = {
               label: 'BSC MCP Server',
               collapsed: true,
               items: [
-                'McpServer-Skills/MCP/BSCMCPServer/OverView',
+                'McpServer-Skills/MCP/BSCMCPServer/Intro',
                 'McpServer-Skills/MCP/BSCMCPServer/Features',
                 'McpServer-Skills/MCP/BSCMCPServer/Installation',
               ],
@@ -135,7 +135,7 @@ const sidebars = {
           label: 'SKILLS',
           collapsed: true,
           items: [
-            'McpServer-Skills/SKILLS/OverView',
+            'McpServer-Skills/SKILLS/Intro',
             'McpServer-Skills/SKILLS/SkillsList',
             'McpServer-Skills/SKILLS/UseSkills',
             'McpServer-Skills/SKILLS/CreateSKILL',
