@@ -37,17 +37,6 @@ export TRON_ACCOUNT_INDEX="0"   # 可选，默认 0
 
 若两者都未设置且未提供 Agent Wallet 提供方，写类工具（转账、兑换、流动性）将报“无可用钱包”错误。
 
-### 3. 服务与 OpenAPI
-
-- **OPENAPI_SPEC_PATH**：OpenAPI 规范路径（默认来自 `config.json`，如 `./specs/sunio-open-api.json`）。
-- **TARGET_API_BASE_URL**：SUN.IO API 基础 URL（默认来自 config，如 `https://open.sun.io`）。
-- **MCP_TRANSPORT**：`stdio` 或 `streamable-http`。
-- **MCP_SERVER_HOST**、**MCP_SERVER_PORT**、**MCP_SERVER_PATH**：在 transport 为 `streamable-http` 时使用。
-- **MCP_WHITELIST_OPERATIONS**、**MCP_BLACKLIST_OPERATIONS**：控制将哪些 OpenAPI 操作暴露为工具。
-- **TARGET_API_TIMEOUT_MS**：SUN.IO API 请求超时（毫秒）。
-
-配置优先级：命令行参数 &gt; 环境变量 &gt; `config.json`。
-
 ## 安装
 1.  **克隆并进入目录**：
     ```shell
@@ -89,9 +78,9 @@ npm start -- --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath 
   "mcpServers": {
     "sun-mcp-server": {
       "command": "node",
-      "args": ["/sun-mcp-server 的绝对路径/dist/src/server.js"],
+      "args": ["/absolute path to sun-mcp-server/dist/src/server.js"],
       "env": {
-        "OPENAPI_SPEC_PATH": "/sun-mcp-server 的绝对路径/specs/sunio-open-api.json",
+        "OPENAPI_SPEC_PATH": "/absolute path to sun-mcp-server/specs/sunio-open-api.json",
         "TARGET_API_BASE_URL": "https://open.sun.io"
       },
       "enabled": true
@@ -115,9 +104,9 @@ npm start -- --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath 
     {
       "name": "sun-mcp-server",
       "command": "node",
-      "args": ["/sun-mcp-server 的绝对路径/dist/src/server.js"],
+      "args": ["/absolute path to sun-mcp-server/dist/src/server.js"],
       "env": {
-        "OPENAPI_SPEC_PATH": "/sun-mcp-server 的绝对路径/specs/sunio-open-api.json",
+        "OPENAPI_SPEC_PATH": "/absolute path to sun-mcp-server/specs/sunio-open-api.json",
         "TARGET_API_BASE_URL": "https://open.sun.io"
       }
     }

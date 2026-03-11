@@ -37,16 +37,6 @@ export TRON_ACCOUNT_INDEX="0"   # Optional, default 0
 
 If neither is set and no Agent Wallet provider is provided, write-type tools (transfer, swap, liquidity) will report a "no wallet available" error.
 
-### 3. Service and OpenAPI
-
-- **OPENAPI_SPEC_PATH**: OpenAPI specification path (default from `config.json`, such as `./specs/sunio-open-api.json`).
-- **TARGET_API_BASE_URL**: SUN.IO API base URL (default from config, such as `https://open.sun.io`).
-- **MCP_TRANSPORT**: `stdio` or `streamable-http`.
-- **MCP_SERVER_HOST**, **MCP_SERVER_PORT**, **MCP_SERVER_PATH**: Used when transport is `streamable-http`.
-- **MCP_WHITELIST_OPERATIONS**, **MCP_BLACKLIST_OPERATIONS**: Control which OpenAPI operations are exposed as tools.
-- **TARGET_API_TIMEOUT_MS**: SUN.IO API request timeout (milliseconds).
-
-Configuration priority: command line parameters > environment variables > `config.json`.
 
 ## Installation
 1.  **Clone and enter the directory**:
