@@ -1,4 +1,4 @@
-# 创建 SKILLS
+# 如何创建 SKILLS
 
 查看 [AGENTS.md](https://github.com/BofAI/skills/blob/main/) 了解如何创建新技能。
 

@@ -66,7 +66,7 @@
 - **持仓**：getUserPositions, getPoolUserPositionTick
 - **池子**：getPools, getTopApyPoolList, searchPools, searchCountPools, getPoolHooks, getPoolVolHistory, getPoolLiqHistory
 - **交易对**：getPairsFromEntity
-- **农场**：getFarms, getFarmTransactions, getFarmPositions
+- **矿池**：getFarms, getFarmTransactions, getFarmPositions
 
 ## 默认合约地址
 
