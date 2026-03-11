@@ -79,10 +79,10 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
   "mcpServers": {
     "sun-mcp-server": {
       "command": "node",
-      "args": ["/absolute path to sun-mcp-server/dist/src/server.js"],
+      "args": ["tsx", "/ABSOLUTE/PATH/TO/sun-mcp-server/src/index.ts"],
       "env": {
-        "OPENAPI_SPEC_PATH": "/absolute path to sun-mcp-server/specs/sunio-open-api.json",
-        "TARGET_API_BASE_URL": "https://open.sun.io"
+        "TRON_PRIVATE_KEY": "YOUR_KEY_HERE (Or set in system env)",
+        "TRONGRID_API_KEY": "YOUR_KEY_HERE (Or set in system env)"
       },
       "enabled": true
     }
@@ -105,10 +105,10 @@ Configure in `.cursor/mcp.json` at the project root:
     {
       "name": "sun-mcp-server",
       "command": "node",
-      "args": ["/absolute path to sun-mcp-server/dist/src/server.js"],
+      "args": ["tsx", "/ABSOLUTE/PATH/TO/sun-mcp-server/src/index.ts"],
       "env": {
-        "OPENAPI_SPEC_PATH": "/absolute path to sun-mcp-server/specs/sunio-open-api.json",
-        "TARGET_API_BASE_URL": "https://open.sun.io"
+        "TRON_PRIVATE_KEY": "YOUR_KEY_HERE (Or set in system env)",
+        "TRONGRID_API_KEY": "YOUR_KEY_HERE (Or set in system env)"
       }
     }
   ]

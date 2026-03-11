@@ -42,9 +42,7 @@ With TronGrid API Key:
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp",
-        "--header",
-        "TRONGRID-API-KEY:<your-api-key>"
+        "https://sun-mcp-server.bankofai.io/mcp"
       ]
     }
   }
