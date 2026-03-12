@@ -53,6 +53,7 @@ OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402
 来自 **[Skills 仓库](https://github.com/BofAI/skills)** 的预构建工作流和工具：
 
 **可用 Skills ：**
+
 | SKILL | 功能 |
 | :--- | :--- |
 | **sunswap** | SunSwap DEX 技能，用于余额查询、报价、兑换及流动性相关工作流。 |

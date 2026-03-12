@@ -53,6 +53,8 @@ Multi-chain blockchain access for AI agents via Model Context Protocol (MCP):
 Pre-built workflows and tools from the **[skills repository](https://github.com/BofAI/skills)**:
 
 **Available Skills:**
+
+
 | Skill | Function |
 | :--- | :--- |
 | **sunswap** | SunSwap DEX skill for balance queries, quotes, swaps, and liquidity workflows. |
