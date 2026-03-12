@@ -31,6 +31,18 @@ Multi-chain blockchain access for AI agents via Model Context Protocol (MCP):
   - Multi-network support (Mainnet, Nile, Shasta)
   - Read-only mode for safe public deployment
 
+- **[sun-mcp-server](https://github.com/BofAI/sun-mcp-server)** - SUN.IO (SUNSWAP) DeFi interaction
+  - SUN.IO API queries: tokens, pools, prices, protocol metrics, transactions, farming
+  - Wallet management, balance queries (TRX & TRC20), multi-wallet switching
+  - Token pricing & swap quoting via smart router
+  - Smart swaps via Universal Router with automatic best-route finding
+  - V2 liquidity: add/remove with automatic native TRX handling
+  - V3 concentrated liquidity: mint, increase, decrease positions & collect fees
+  - V4 concentrated liquidity: mint, increase, decrease positions with Permit2 support
+  - Smart contract interaction: read/write with automatic TRC20 approval handling
+  - Multi-network support (Mainnet, Nile, Shasta)
+  - Supports private keys, BIP-39 mnemonics, and Agent Wallet
+
 - **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** - BNB Chain official MCP server
   - Multi-chain support: BSC, opBNB, Ethereum, Greenfield
   - Wallet operations, smart contracts, token transfers
@@ -41,10 +53,13 @@ Multi-chain blockchain access for AI agents via Model Context Protocol (MCP):
 Pre-built workflows and tools from the **[skills repository](https://github.com/BofAI/skills)**:
 
 **Available Skills:**
-- **sunswap** - SunSwap DEX trading skill for TRON token swaps
-- **8004-skill** - 8004 Trustless Agents (on-chain identity, reputation, and validation for AI agents on TRON & BSC)
-- **x402-payment** - Enables agent payments on TRON network (x402 protocol)
-- **x402-payment-demo** - Demo of x402 payment protocol
+| Skill | Function |
+| :--- | :--- |
+| **sunswap** | SunSwap DEX skill for balance queries, quotes, swaps, and liquidity workflows. |
+| **8004-skill** | ERC-8004 skill for on-chain agent identity, trust, verification, and registration workflows. |
+| **x402-payment** | x402 payment skill for invoking paid agents and paid APIs on supported chains. |
+| **x402-payment-demo** | Demo workflow for end-to-end x402 protected resource access. |
+| **ainft-skill** | Local AINFT skill for balance queries and account-related queries. |
 
 For complete documentation and usage instructions, see the [skills repository](https://github.com/BofAI/skills).
 

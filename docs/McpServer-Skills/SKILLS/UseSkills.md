@@ -5,33 +5,34 @@ Skills support integration into various AI Agents such as OpenClaw, ClawdCode, a
 Before you begin, please ensure that you have completed the installation of OpenClaw and downloaded the [OpenClaw Extension](https://github.com/BofAI/openclaw-extension), and have completed the basic configuration of the MCP Server according to its documentation.
 
 
-## Compatible Platforms and Installation Guide
+## Installation
 
-Agent Skills are widely supported by various AI agent platforms that support **MCP (Model Context Protocol)**.
+### Option 1: OpenClaw Extension (Recommended)
 
-### Compatible AI Agents
-*   **ClawdCode**: A powerful AI programming assistant.
-*   **OpenCode**: An open-source AI development environment.
-*   **OpenClaw**: A flexible AI agent framework.
-*   And all other AI platforms that support the MCP protocol.
+If you use OpenClaw, the fastest way is to install the OpenClaw extension:
 
-### Quick Installation Example (using OpenClaw)
-Configuration can be completed in just two simple steps:
-1.  **Install an AI Agent** (e.g., OpenClaw).
-2.  **Install the OpenClaw Extension**: Run the following command in your terminal:
-    ```bash
-    curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
-    ```
+```bash
+curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
+```
 
-### Other AI Agent Platform Configurations
-If you are using platforms like ClawdCode or OpenCode:
-1.  **Install your AI Agent**.
-2.  **Manually configure the MCP Server** (refer to the MCP Server documentation for each platform).
-3.  **Clone the skill library locally**:
-    ```bash
-    git clone https://github.com/BofAI/skills.git
-    ```
-4.  **Point your AI Agent to the skill directory**, or directly reference specific `SKILL.md` files when needed.
+The extension helps with:
+*   Cloning the skills repository.
+*   Setting up common MCP servers.
+*   Configuring supported skills.
+
+### Option 2: Manual Installation
+
+For ClawdCode, OpenCode, or any other MCP-compatible platform:
+
+1.  Install your AI agent platform.
+2.  Configure the MCP servers required for your workflows.
+3.  Clone this repository.
+4.  Point your agent to the `skills/` directory, or directly reference specific `SKILL.md` files.
+
+```bash
+git clone https://github.com/BofAI/skills.git
+cd skills/skills
+```
 
 
 
@@ -41,10 +42,11 @@ If you are using platforms like ClawdCode or OpenCode:
 
 Currently available skills:
 
-- **sunswap/** - SunSwap DEX trading skill, used for token exchange
-- **8004/** - 8004 Trusted Agent - AI Agent's on-chain identity and reputation system
-- **x402-payment/** - Enables agent payment functionality on blockchain networks (x402 protocol)
-- **x402-payment-demo/** - x402 Payment Protocol Demo
+- **sunswap/** - SunSwap DEX skill for balance queries, quotes, swaps, and liquidity workflows.
+- **8004-skill/** - ERC-8004 skill for on-chain agent identity, trust, verification, and registration workflows.
+- **x402-payment/** - x402 payment skill for invoking paid agents and paid APIs on supported chains.
+- **x402-payment-demo/** - Demo workflow for end-to-end x402 protected resource access.
+- **ainft-skill/** - Local AINFT skill for balance queries and account-related queries.
 
 ### 2. How to Use a Skill?
 
@@ -76,6 +78,24 @@ You just need to tell the AI:
 *   **Seamless Activation**: Automatically loads `skills/sunswap/SKILL.md` in the background and executes the query script.
 *   **Intelligent Reply**: Directly provides the result.
 
-####  How to Make the AI Use Skills Better?
+#### How to Make the AI Use Skills Better?
 *   **Provide clear context**: For example, "Use the `xxx` skill to handle the `yyy` task."
 *   **Specify parameters**: If the skill requires specific information (e.g., amount, currency, date), providing it all at once in the instruction will significantly increase the success rate.
+
+
+### 3. Usage Examples By Skill
+
+#### sunswap
+> Please read `skills/sunswap/SKILL.md` and check how much TRX I can get for 100 USDT on SunSwap.
+
+#### 8004-skill
+> Please read `skills/8004-skill/SKILL.md` and look up the on-chain registration details for agent 1:8 on TRON mainnet.
+
+#### x402-payment
+> Please read `skills/x402-payment/SKILL.md` and call this paid agent endpoint using x402.
+
+#### x402-payment-demo
+> Please read `skills/x402-payment-demo/SKILL.md` and run a demo x402 payment flow end to end.
+
+#### ainft-skill
+> Please read `skills/ainft-skill/SKILL.md` and check the current AINFT balance and recent orders for this account.
