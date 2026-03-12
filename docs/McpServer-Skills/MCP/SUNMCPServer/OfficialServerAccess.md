@@ -1,10 +1,15 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Official Server Access
+
 For users who only need to read blockchain data (not involving transactions), you can connect directly to the officially hosted instance. **Note: The official service only provides a read-only interface and does not support operations such as transfers or contract writing.**
 
 ## Service Information
-| Environment | URL |
-| :--- | :--- |
-| Production | [https://sun-mcp-server.bankofai.io/mcp](https://sun-mcp-server.bankofai.io/mcp)|
+
+| Environment | URL                                                                              |
+| :---------- | :------------------------------------------------------------------------------- |
+| Production  | [https://sun-mcp-server.bankofai.io/mcp](https://sun-mcp-server.bankofai.io/mcp) |
 
 - **Transport Protocol**:
   - **stdio**: Default; used for local MCP clients (such as Claude Desktop, Cursor).
@@ -12,7 +17,6 @@ For users who only need to read blockchain data (not involving transactions), yo
 - **Mode**: Read-only (write tools disabled)
 
 **Security**: Do not save private keys or mnemonics in MCP configuration files (such as `claude_desktop_config.json` or `mcp.json`), they should be set through environment variables in the system or shell.
-
 
 ## Client Integration
 
@@ -24,10 +28,7 @@ For users who only need to read blockchain data (not involving transactions), yo
   "mcpServers": {
     "sun-mcp-server": {
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp"
-      ]
+      "args": ["mcp-remote", "https://sun-mcp-server.bankofai.io/mcp"]
     }
   }
 }
@@ -40,10 +41,7 @@ With TronGrid API Key:
   "mcpServers": {
     "sun-mcp-server": {
       "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp"
-      ]
+      "args": ["mcp-remote", "https://sun-mcp-server.bankofai.io/mcp"]
     }
   }
 }
