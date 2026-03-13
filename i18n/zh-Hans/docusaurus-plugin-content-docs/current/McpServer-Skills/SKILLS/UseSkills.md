@@ -1,13 +1,13 @@
-# 如何使用 SKILLS
+# BankOfAI Skills
 
-**Skill（技能）** 是 AI 智能体可以用来完成特定任务的可复用能力。每个技能封装了特定领域的知识（例如如何使用 SunSwap DEX），为智能体提供分步操作指引，并包含常见使用模式的示例。
+BankOfAI Skills 的每个技能封装了特定领域的知识（例如如何使用 SunSwap DEX），为智能体提供分步操作指引，并包含常见使用模式的示例。
 
-Skills 支持集成至 OpenClaw、Claude Code、Claude Desktop、Cursor 等兼容 MCP 的 AI Agents。
+BankOfAI Skills 支持集成至 OpenClaw、Claude Code、Claude Desktop、Cursor 等兼容 MCP 的 AI Agents。
 
 
 ## 快速开始
 
-本节以 `OpenClaw + OpenClaw 扩展` 为例，这是本仓库的主要安装路径。
+本节以 `OpenClaw + OpenClaw 扩展` 为例。
 
 ### 1. 安装
 
@@ -35,7 +35,7 @@ cd openclaw-extension
 ls ~/.openclaw/skills
 ```
 
-你应该能看到 `sunswap`、`x402-payment`、`x402-payment-demo`、`ainft-skill` 等条目。
+你应该能看到 `sunswap`、`x402-payment`、`x402-payment-demo`、`ainft-skill`、`tronscan-skill` 等条目。
 
 然后在 OpenClaw 中通过提示词验证：
 
@@ -66,70 +66,36 @@ ls ~/.openclaw/skills
 :::
 
 
-## 在其他平台上安装
+## 其他平台安装
 
-如果你不使用 OpenClaw，通用模式如下：
+### OpenClaw
 
-1.  安装或配置你的 AI 智能体。
-2.  配置工作流所需的 MCP 服务器。
-3.  将技能仓库克隆到本地。
-4.  让智能体读取目标 `SKILL.md`。
+OpenClaw 提供最完整的集成体验，自动连接技能和 MCP 依赖。
 
-如果平台不支持专用技能目录，请在提示词中显式引用 `SKILL.md` 文件。
+```bash
+curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
+```
 
 ### Claude Code
 
-```bash
-git clone https://github.com/BofAI/skills.git ~/.bofai/skills
-```
-
-然后使用显式提示词指向技能文件：
-
-```text
-请阅读 ~/.bofai/skills/skills/sunswap/SKILL.md，帮我查看 100 USDT 能兑换多少 TRX。
-```
-
-### Claude Desktop
-
-克隆仓库：
-
-```bash
-git clone https://github.com/BofAI/skills.git ~/.bofai/skills
-```
-
-使用方式：
-*   在平台的本地集成入口中配置 MCP 服务器。
-*   将本仓库保存在本地磁盘。
-*   显式告诉智能体要读取哪个 `SKILL.md`。
-
-```text
-请阅读 ~/.bofai/skills/skills/sunswap/SKILL.md，帮我查看 100 USDT 能兑换多少 TRX。
-```
+1.  克隆仓库：
+    ```bash
+    git clone https://github.com/BofAI/skills.git /tmp/bofai-skills
+    ```
+2.  将技能复制到 Claude Code 配置目录以实现自动发现：
+    ```bash
+    mkdir -p ~/.config/claude-code/skills
+    cp -r /tmp/bofai-skills/* ~/.config/claude-code/skills/
+    ```
+3.  Claude Code 启动时将自动加载这些技能。
 
 ### Cursor
 
-```bash
-git clone https://github.com/BofAI/skills.git ~/.bofai/skills
-```
-
-然后在 Cursor 聊天中指向本地技能文件，或者打开仓库让它读取 `skills/<技能名>/SKILL.md`：
-
-```text
-请阅读 skills/x402-payment/SKILL.md，说明需要配置哪些环境变量。
-```
-
-### 手动安装（通用）
-
-适用于任何没有专用安装器的 MCP 兼容平台：
-
-```bash
-git clone https://github.com/BofAI/skills.git ~/.bofai/skills
-```
-
-然后：
-1.  自行配置所需的 MCP 服务器。
-2.  如果平台支持技能目录，将其指向 `~/.bofai/skills/skills`。
-3.  否则，在提示词中直接引用 `SKILL.md` 文件。
+1.  将仓库克隆到项目根目录：
+    ```bash
+    git clone https://github.com/BofAI/skills.git .cursor/skills
+    ```
+2.  如需项目范围内可用，可将技能路径添加到 `.cursorrules`，或在 Cursor Chat 中使用 `@` 符号引用特定的 `SKILL.md` 文件来提供上下文。
 
 
 
@@ -141,21 +107,53 @@ git clone https://github.com/BofAI/skills.git ~/.bofai/skills
 | **x402-payment** | x402 支付技能，用于在受支持的链上调用付费智能体和付费 API。 |
 | **x402-payment-demo** | 端到端 x402 受保护资源访问的演示工作流。 |
 | **ainft-skill** | 本地 AINFT 技能，用于余额查询和账户相关查询。 |
+| **tronscan-skill** | 通过 TronScan API 进行 TRON 区块链数据查询，支持账户、交易、代币、区块及全网统计。 |
 
 
 ## 各技能使用示例
 
-#### sunswap
-> 请阅读 `skills/sunswap/SKILL.md`，帮我查看 100 USDT 在 SunSwap 上能兑换多少 TRX。
+### sunswap
 
-#### x402-payment
-> 请阅读 `skills/x402-payment/SKILL.md`，使用 x402 协议调用这个付费智能体端点。
+**余额查询：**
+> 帮我查看我在 SunSwap 上的 TRX 和 USDT 余额。
 
-#### x402-payment-demo
-> 请阅读 `skills/x402-payment-demo/SKILL.md`，端到端运行一次 x402 支付演示流程。
+**价格查询：**
+> TRX 当前的价格是多少？
 
-#### ainft-skill
-> 请阅读 `skills/ainft-skill/SKILL.md`，查询该账户当前的 AINFT 余额和最近的订单。
+**兑换报价：**
+> 100 USDT 在 SunSwap 上能兑换多少 TRX？
+
+**执行兑换：**
+> 在 SunSwap 上将 100 TRX 兑换为 USDT。
+
+**流动性：**
+> 在 SunSwap V2 池中添加 100 TRX 和 15 USDT 的流动性。
+
+### tronscan-skill
+
+**账户查询：**
+> 帮我查询地址 TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf 的账户信息。
+
+**钱包组合：**
+> 显示该地址的钱包组合和 USD 估值。
+
+**交易验证：**
+> 查询这笔交易哈希的详情和执行状态。
+
+**代币排名：**
+> 显示市值排名前 10 的 TRC20 代币。
+
+**全网概览：**
+> 给我一份 TRON 全网概览 — 交易吞吐量、超级代表和供应量指标。
+
+### x402-payment
+> 阅读 x402-payment 技能，使用 x402 协议调用这个付费智能体端点。
+
+### x402-payment-demo
+> 阅读 x402-payment-demo 技能，端到端运行一次 x402 支付演示流程。
+
+### ainft-skill
+> 阅读 ainft-skill 技能，查询该账户当前的 AINFT 余额和最近的订单。
 
 
 ## 安全注意事项

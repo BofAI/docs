@@ -82,6 +82,4 @@ export TRONGRID_API_KEY="your_api_key"    # 主网推荐配置
 
 ---
 
-### 问：如何贡献新技能？
 
-**答**：参考 [如何创建新技能](./CreateSKILL.md) 完成开发，然后按照 [CONTRIBUTING.md](https://github.com/BofAI/skills/blob/main/CONTRIBUTING.md) 提交 Pull Request。

@@ -79,8 +79,4 @@ export TRONGRID_API_KEY="your_api_key"    # Recommended for mainnet
 
 Private key loading priority: `TRON_PRIVATE_KEY` > `PRIVATE_KEY` > Config file > Wallet file
 
----
 
-### Q: How do I contribute a new skill?
-
-**A**: Follow the [How to Create a New Skill](./CreateSKILL.md) guide to develop your skill, then submit a Pull Request following [CONTRIBUTING.md](https://github.com/BofAI/skills/blob/main/CONTRIBUTING.md).

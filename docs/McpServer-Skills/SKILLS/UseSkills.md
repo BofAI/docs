@@ -1,13 +1,13 @@
-# How to Use SKILLS
+# BankOfAI Skills
 
-A **Skill** is a reusable capability that AI agents can use to accomplish specific tasks. Each skill encapsulates domain knowledge (e.g., how to use SunSwap DEX), provides step-by-step instructions for agents, and includes examples showing common usage patterns.
+Each BankOfAI Skill encapsulates domain knowledge (e.g., how to use SunSwap DEX), provides step-by-step instructions for agents, and includes examples showing common usage patterns.
 
-Skills support integration into OpenClaw, Claude Code, Claude Desktop, Cursor, and other MCP-compatible AI Agents.
+BankOfAI Skills support integration into OpenClaw, Claude Code, Claude Desktop, Cursor, and other MCP-compatible AI Agents.
 
 
 ## Quick Start
 
-This section uses `OpenClaw + OpenClaw Extension` as example, which is the primary installation path.
+This section uses `OpenClaw + OpenClaw Extension` as example.
 
 ### 1. Installation
 
@@ -35,7 +35,7 @@ Check the local skills directory:
 ls ~/.openclaw/skills
 ```
 
-You should see entries such as `sunswap`, `x402-payment`, `x402-payment-demo`, `ainft-skill`, etc.
+You should see entries such as `sunswap`, `x402-payment`, `x402-payment-demo`, `ainft-skill`, `tronscan-skill`, etc.
 
 Then verify in OpenClaw by asking a direct prompt:
 
@@ -68,68 +68,34 @@ Check how much TRX 100 USDT can swap to on SunSwap right now.
 
 ## Installation on Other Platforms
 
-If you are not using OpenClaw, the common pattern is:
+### OpenClaw
 
-1.  Install or configure the AI agent.
-2.  Configure the required MCP servers for your workflow.
-3.  Clone the skills repository locally.
-4.  Let the agent read the target `SKILL.md`.
+OpenClaw provides the most integrated experience, automatically wiring skills and MCP dependencies.
 
-If a platform does not support a dedicated skills directory, explicitly reference the `SKILL.md` file in your prompt.
+```bash
+curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
+```
 
 ### Claude Code
 
-```bash
-git clone https://github.com/BofAI/skills.git ~/.bofai/skills
-```
-
-Then use explicit prompts that point to a skill file:
-
-```text
-Please read ~/.bofai/skills/skills/sunswap/SKILL.md and check how much TRX I can get for 100 USDT.
-```
-
-### Claude Desktop
-
-Clone the repository:
-
-```bash
-git clone https://github.com/BofAI/skills.git ~/.bofai/skills
-```
-
-Usage pattern:
-*   Configure MCP servers in the platform's local integration entry.
-*   Keep this repository on disk.
-*   Explicitly tell the agent which `SKILL.md` to read.
-
-```text
-Please read ~/.bofai/skills/skills/sunswap/SKILL.md and check how much TRX I can get for 100 USDT.
-```
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/BofAI/skills.git /tmp/bofai-skills
+    ```
+2.  Copy the skills to your Claude Code configuration directory for automatic discovery:
+    ```bash
+    mkdir -p ~/.config/claude-code/skills
+    cp -r /tmp/bofai-skills/* ~/.config/claude-code/skills/
+    ```
+3.  Claude Code will now automatically load these skills upon startup.
 
 ### Cursor
 
-```bash
-git clone https://github.com/BofAI/skills.git ~/.bofai/skills
-```
-
-Then either point Cursor to the local skill file in chat, or open the repository and ask it to read `skills/<skill-name>/SKILL.md`:
-
-```text
-Please read skills/x402-payment/SKILL.md and explain the required environment variables.
-```
-
-### Manual Installation (Generic)
-
-For any MCP-compatible platform without a dedicated installer:
-
-```bash
-git clone https://github.com/BofAI/skills.git ~/.bofai/skills
-```
-
-Then:
-1.  Configure the required MCP servers yourself.
-2.  Point the platform to `~/.bofai/skills/skills` if it supports a skills directory.
-3.  Otherwise, reference `SKILL.md` files directly in prompts.
+1.  Clone the repository into your project's root:
+    ```bash
+    git clone https://github.com/BofAI/skills.git .cursor/skills
+    ```
+2.  For project-wide availability, add the skill path to your `.cursorrules` or reference the specific `SKILL.md` file using the `@` symbol in Cursor Chat to provide the necessary context.
 
 
 
@@ -141,21 +107,53 @@ Then:
 | **x402-payment** | x402 payment skill for invoking paid agents and paid APIs on supported chains. |
 | **x402-payment-demo** | Demo workflow for end-to-end x402 protected resource access. |
 | **ainft-skill** | Local AINFT skill for balance queries and account-related queries. |
+| **tronscan-skill** | Comprehensive TRON blockchain data lookup via TronScan API. Supports accounts, transactions, tokens, blocks, and network-wide statistics. |
 
 
 ## Usage Examples By Skill
 
-#### sunswap
-> Please read `skills/sunswap/SKILL.md` and check how much TRX I can get for 100 USDT on SunSwap.
+### sunswap
 
-#### x402-payment
-> Please read `skills/x402-payment/SKILL.md` and call this paid agent endpoint using x402.
+**Balance Query:**
+> Check my TRX and USDT balance on SunSwap.
 
-#### x402-payment-demo
-> Please read `skills/x402-payment-demo/SKILL.md` and run a demo x402 payment flow end to end.
+**Price Query:**
+> What is the current price of TRX?
 
-#### ainft-skill
-> Please read `skills/ainft-skill/SKILL.md` and check the current AINFT balance and recent orders for this account.
+**Swap Quote:**
+> How much TRX can I get for 100 USDT on SunSwap?
+
+**Execute Swap:**
+> Swap 100 TRX to USDT on SunSwap.
+
+**Liquidity:**
+> Add liquidity with 100 TRX and 15 USDT to the V2 pool on SunSwap.
+
+### tronscan-skill
+
+**Account Lookup:**
+> Look up the account info for address TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf.
+
+**Wallet Portfolio:**
+> Show me the wallet portfolio and USD value for this address.
+
+**Transaction Verification:**
+> Check the details and status of this transaction hash.
+
+**Token Ranking:**
+> Show me the top 10 TRC20 tokens by market cap.
+
+**Network Overview:**
+> Give me a TRON network overview — transaction throughput, super representatives, and supply metrics.
+
+### x402-payment
+> Read the x402-payment skill and call this paid agent endpoint using x402.
+
+### x402-payment-demo
+> Read the x402-payment-demo skill and run a demo x402 payment flow end to end.
+
+### ainft-skill
+> Read the ainft-skill and check the current AINFT balance and recent orders for this account.
 
 
 ## Security Notes

@@ -81,7 +81,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'MCP Server & SKILLS',
-      collapsed: true,
+      collapsed: false,
       items: [
         {
           type: 'doc',
@@ -91,7 +91,7 @@ const sidebars = {
         {
           type: 'category',
           label: 'MCP Server',
-          collapsed: true,
+          collapsed: false,
           items: [
             'McpServer-Skills/MCP/Intro',
             {
@@ -133,7 +133,7 @@ const sidebars = {
         {
           type: 'category',
           label: 'SKILLS',
-          collapsed: true,
+          collapsed: false,
           items: [
             'McpServer-Skills/SKILLS/Intro',
             'McpServer-Skills/SKILLS/UseSkills',
