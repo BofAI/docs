@@ -30,6 +30,18 @@ OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402
   - 多网络支持（主网、Nile、Shasta）
   - 只读模式，适用于安全的公开部署
 
+- **[sun-mcp-server](https://github.com/BofAI/sun-mcp-server)** - SUN.IO (SUNSWAP) DeFi 交互
+  - SUN.IO API 查询：代币、池子、价格、协议指标、交易、挖矿
+  - 钱包管理、余额查询（TRX 与 TRC20）、多钱包切换
+  - 代币价格与智能路由器兑换报价
+  - 通过 Universal Router 智能兑换，自动寻找最佳路径
+  - V2 流动性：添加/移除，自动处理原生 TRX
+  - V3 集中流动性：铸造、增加、减少仓位及收取手续费
+  - V4 集中流动性：铸造、增加、减少仓位，支持 Permit2
+  - 智能合约交互：读写合约，自动处理 TRC20 授权
+  - 多网络支持（主网、Nile、Shasta）
+  - 支持私钥、BIP-39 助记词和 Agent Wallet
+
 - **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** - BNB Chain 官方 MCP Server
   - 多链支持：BSC、opBNB、以太坊、Greenfield
   - 钱包操作、智能合约、代币转账
@@ -41,10 +53,13 @@ OpenClaw 扩展是由 **BANK OF AI** 开发的一套工具，旨在通过 **x402
 来自 **[Skills 仓库](https://github.com/BofAI/skills)** 的预构建工作流和工具：
 
 **可用 Skills ：**
-- **sunswap** - 用于 TRON 代币兑换的 SunSwap DEX 交易 Skill
-- **8004-skill** - 8004 无信任代理（TRON 和 BSC 上 AI 代理的链上身份、声誉和验证）
-- **x402-payment** - 在 TRON 网络上启用代理支付（x402 协议）
-- **x402-payment-demo** - x402 支付协议演示
+
+| SKILL | 功能 |
+| :--- | :--- |
+| **sunswap** | SunSwap DEX 技能，用于余额查询、报价、兑换及流动性相关工作流。 |
+| **x402-payment** | x402 支付技能，用于在受支持的链上调用付费智能体和付费 API。 |
+| **x402-payment-demo** | 端到端 x402 受保护资源访问的演示工作流。 |
+| **ainft-skill** | 本地 AINFT 技能，用于余额查询和账户相关查询。 |
 
 有关完整的文档和使用说明，请参阅 [Skills 仓库](https://github.com/BofAI/skills)。
 

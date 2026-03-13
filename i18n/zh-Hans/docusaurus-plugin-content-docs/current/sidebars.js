@@ -94,7 +94,7 @@ const sidebars = {
         {
           type: 'category',
           label: 'MCP Server',
-          collapsed: true,
+          collapsed: false,
           items: [
             'McpServer-Skills/MCP/Intro',
             {
@@ -135,12 +135,10 @@ const sidebars = {
         {
           type: 'category',
           label: 'SKILLS',
-          collapsed: true,
+          collapsed: false,
           items: [
             'McpServer-Skills/SKILLS/Intro',
-            'McpServer-Skills/SKILLS/SkillsList',
-            'McpServer-Skills/SKILLS/UseSkills',
-            'McpServer-Skills/SKILLS/CreateSKILL',
+            'McpServer-Skills/SKILLS/BANKOFAISkill',
             'McpServer-Skills/SKILLS/Faq',
           ],
         },
