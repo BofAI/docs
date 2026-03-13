@@ -1,8 +1,26 @@
 # BANK OF AI Skills
 
-Each BANK OF AI Skill encapsulates domain knowledge (e.g., how to use SunSwap DEX), provides step-by-step instructions for agents, and includes examples showing common usage patterns.
+BANK OF AI Skills is a collection of reusable skill packages designed for AI agents. Each skill encapsulates domain knowledge (such as DEX trading, on-chain data queries, payment protocols, etc.), centered around a `SKILL.md` file that provides step-by-step instructions, executable scripts, and common usage examples — enabling agents to perform on-chain operations like a professional user.
 
-BANK OF AI Skills support integration into OpenClaw, Claude Code, Claude Desktop, Cursor, and other MCP-compatible AI Agents.
+BANK OF AI Skills support integration into OpenClaw, Claude Code, Claude Desktop, Cursor, and other MCP-compatible AI Agents. No coding is required — simply describe your task in natural language, and the agent will automatically match and execute the corresponding skill.
+
+:::tip Security Notes
+*   **Never hardcode private keys** in prompts or configurations. Always use environment variables.
+*   **Testnet vs Mainnet**: Pay attention to the network environment. It is recommended to test on testnet first before switching to mainnet.
+*   **Slippage protection**: For DeFi-related skills (such as swaps), always set appropriate slippage tolerance to prevent losses from price fluctuations.
+:::
+
+
+## Skills List
+
+The following skills are currently available, covering DEX trading, on-chain data queries, payment protocols, and NFTs:
+
+| Skill | Function |
+| :--- | :--- |
+| **x402-payment** | x402 payment skill for invoking paid agents and paid APIs on supported chains. |
+| **ainft-skill** | Local AINFT skill for balance queries and account-related queries. |
+| **sunswap** | SunSwap DEX skill for balance queries, quotes, swaps, and liquidity workflows. |
+| **tronscan-skill** | Comprehensive TRON blockchain data lookup via TronScan API. Supports accounts, transactions, tokens, blocks, and network-wide statistics. |
 
 
 ## Quick Start
@@ -98,19 +116,13 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 2.  For project-wide availability, add the skill path to your `.cursorrules` or reference the specific `SKILL.md` file using the `@` symbol in Cursor Chat to provide the necessary context.
 
 
-
-## Skills List
-
-| Skill | Function |
-| :--- | :--- |
-| **sunswap** | SunSwap DEX skill for balance queries, quotes, swaps, and liquidity workflows. |
-| **x402-payment** | x402 payment skill for invoking paid agents and paid APIs on supported chains. |
-| **x402-payment-demo** | Demo workflow for end-to-end x402 protected resource access. |
-| **ainft-skill** | Local AINFT skill for balance queries and account-related queries. |
-| **tronscan-skill** | Comprehensive TRON blockchain data lookup via TronScan API. Supports accounts, transactions, tokens, blocks, and network-wide statistics. |
-
-
 ## Usage Examples By Skill
+
+### x402-payment
+> Call this paid agent endpoint using the x402 protocol.
+
+### ainft-skill
+> Check the current AINFT balance and recent orders for this account.
 
 ### sunswap
 
@@ -145,19 +157,3 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 
 **Network Overview:**
 > Give me a TRON network overview — transaction throughput, super representatives, and supply metrics.
-
-### x402-payment
-> Read the x402-payment skill and call this paid agent endpoint using x402.
-
-### x402-payment-demo
-> Read the x402-payment-demo skill and run a demo x402 payment flow end to end.
-
-### ainft-skill
-> Read the ainft-skill and check the current AINFT balance and recent orders for this account.
-
-
-## Security Notes
-
-*   **Never hardcode private keys** in prompts or configurations. Always use environment variables.
-*   **Testnet vs Mainnet**: Pay attention to the network environment. It is recommended to test on testnet first before switching to mainnet.
-*   **Slippage protection**: For DeFi-related skills (such as swaps), always set appropriate slippage tolerance to prevent losses from price fluctuations.

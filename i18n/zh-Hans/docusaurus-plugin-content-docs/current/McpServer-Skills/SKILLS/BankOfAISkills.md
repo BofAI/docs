@@ -1,13 +1,31 @@
 # BANK OF AI Skills
 
-BANK OF AI Skills 的每个技能封装了特定领域的知识（例如如何使用 SunSwap DEX），为智能体提供分步操作指引，并包含常见使用模式的示例。
+BANK OF AI Skills 是一组为 AI 智能体设计的可复用技能包。每个技能封装了特定领域的知识（如 DEX 交易、链上数据查询、支付协议等），以 `SKILL.md` 为核心，为智能体提供分步操作指引、可执行脚本和常见使用模式的示例，让智能体能够像专业用户一样完成链上操作。
 
-BANK OF AI Skills 支持集成至 OpenClaw、Claude Code、Claude Desktop、Cursor 等兼容 MCP 的 AI Agents。
+BANK OF AI Skills 支持集成至 OpenClaw、Claude Code、Claude Desktop、Cursor 等兼容 MCP 的 AI Agents。你无需编写代码，只需用自然语言描述任务，智能体便会自动匹配并执行对应的技能。
+
+:::tip 安全注意事项
+*   **切勿硬编码私钥**：不要在提示词或配置中直接写入私钥，请始终使用环境变量。
+*   **测试网与主网**：注意区分网络环境，建议先在测试网上验证后再切换到主网操作。
+*   **滑点保护**：使用 DeFi 相关技能（如兑换）时，务必设置合适的滑点容忍度，防止因价格波动造成损失。
+:::
+
+
+## 技能列表
+
+以下是当前可用的技能，涵盖 DEX 交易、链上数据查询、支付协议和 NFT 等场景：
+
+| SKILL | 功能 |
+| :--- | :--- |
+| **x402-payment** | x402 支付技能，用于在受支持的链上调用付费智能体和付费 API。 |
+| **ainft-skill** | 本地 AINFT 技能，用于余额查询和账户相关查询。 |
+| **sunswap** | SunSwap DEX 技能，用于余额查询、报价、兑换及流动性相关工作流。 |
+| **tronscan-skill** | 通过 TronScan API 进行 TRON 区块链数据查询，支持账户、交易、代币、区块及全网统计。 |
 
 
 ## 快速开始
 
-本节以 `OpenClaw + OpenClaw 扩展` 为例。
+以 `OpenClaw + OpenClaw 扩展` 为例。
 
 ### 1. 安装
 
@@ -99,18 +117,14 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 
 
 
-## 技能列表
-
-| SKILL | 功能 |
-| :--- | :--- |
-| **sunswap** | SunSwap DEX 技能，用于余额查询、报价、兑换及流动性相关工作流。 |
-| **x402-payment** | x402 支付技能，用于在受支持的链上调用付费智能体和付费 API。 |
-| **x402-payment-demo** | 端到端 x402 受保护资源访问的演示工作流。 |
-| **ainft-skill** | 本地 AINFT 技能，用于余额查询和账户相关查询。 |
-| **tronscan-skill** | 通过 TronScan API 进行 TRON 区块链数据查询，支持账户、交易、代币、区块及全网统计。 |
-
 
 ## 各技能使用示例
+
+### x402-payment
+> 使用 x402 协议调用这个付费智能体端点。
+
+### ainft-skill
+> 帮我查询该账户当前的 AINFT 余额和最近的订单。
 
 ### sunswap
 
@@ -146,18 +160,7 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 **全网概览：**
 > 给我一份 TRON 全网概览 — 交易吞吐量、超级代表和供应量指标。
 
-### x402-payment
-> 阅读 x402-payment 技能，使用 x402 协议调用这个付费智能体端点。
-
-### x402-payment-demo
-> 阅读 x402-payment-demo 技能，端到端运行一次 x402 支付演示流程。
-
-### ainft-skill
-> 阅读 ainft-skill 技能，查询该账户当前的 AINFT 余额和最近的订单。
 
 
-## 安全注意事项
 
-*   **切勿硬编码私钥**：不要在提示词或配置中直接写入私钥，请始终使用环境变量。
-*   **测试网与主网**：注意区分网络环境，建议先在测试网上验证后再切换到主网操作。
-*   **滑点保护**：使用 DeFi 相关技能（如兑换）时，务必设置合适的滑点容忍度，防止因价格波动造成损失。
+
