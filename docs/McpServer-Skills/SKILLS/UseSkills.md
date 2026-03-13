@@ -163,4 +163,3 @@ Then:
 *   **Never hardcode private keys** in prompts or configurations. Always use environment variables.
 *   **Testnet vs Mainnet**: Pay attention to the network environment. It is recommended to test on testnet first before switching to mainnet.
 *   **Slippage protection**: For DeFi-related skills (such as swaps), always set appropriate slippage tolerance to prevent losses from price fluctuations.
-*   **Verify gas/fee requirements**: Ensure the account has sufficient TRX or native tokens for transaction fees.
