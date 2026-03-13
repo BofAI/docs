@@ -14,7 +14,7 @@
 | :--- | :--- | :--- |
 | **定义** | 指令文档 + 脚本集合 | 工具服务 |
 | **作用** | 教 AI **如何做**某件事 | 提供 AI **做事的能力** |
-| **示例** | sunswap 技能教 AI 如何执行兑换流程 | mcp-server-tron 提供链上交互能力 |
+| **示例** | sunswap 技能教 AI 如何执行兑换流程 | tron-mcp-server 提供链上交互能力 |
 
 简单来说：Skill 是"操作手册"，MCP Server 是"工具箱"。Skill 告诉 AI 如何使用 MCP Server 提供的工具。
 
@@ -28,7 +28,7 @@
 ```yaml
 dependencies:
   - node >= 18
-  - mcp-server-tron
+  - tron-mcp-server
 ```
 
 2. `package.json` 中的 npm 依赖：
@@ -54,26 +54,6 @@ cd skills/sunswap && npm install
 
 ---
 
-### 问：支持哪些网络？
-
-**答**：
-
-| 网络 | 标识符 | 链 | 说明 |
-| :--- | :--- | :--- | :--- |
-| TRON 主网 | `mainnet` | TRON | 默认网络 |
-| TRON Nile | `nile` | TRON | 测试网 |
-| TRON Shasta | `shasta` | TRON | 测试网 |
-| BSC 主网 | `bsc` | BSC | EVM 链 |
-| BSC 测试网 | `bsc-testnet` | BSC | EVM 测试网 |
-
-使用 `--network` 参数切换网络：
-
-```bash
-node scripts/swap.js TRX USDT 100 --network nile
-```
-
----
-
 ### 问：如何切换测试网和主网？
 
 **答**：通过 `--network` 参数指定。建议始终先在测试网（`nile` 或 `shasta`）上完成验证，再切换到 `mainnet`。
@@ -88,16 +68,6 @@ node scripts/swap.js TRX USDT 100 --network mainnet --execute
 
 ---
 
-### 问：执行写操作安全吗？
-
-**答**：所有涉及链上写操作的脚本默认为 **dry-run 模式**（只模拟不执行）。必须显式添加 `--execute` 标志才会真正执行交易。
-
-```bash
-node scripts/swap.js TRX USDT 100              # dry-run，不执行
-node scripts/swap.js TRX USDT 100 --execute    # 实际执行
-```
-
----
 
 ### 问：私钥如何配置？
 

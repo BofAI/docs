@@ -14,7 +14,7 @@
 | :--- | :--- | :--- |
 | **Definition** | Instruction document + script collection | Tool service |
 | **Role** | Teaches AI **how to do** something | Provides AI **the ability to do** something |
-| **Example** | sunswap skill teaches AI the swap workflow | mcp-server-tron provides on-chain interaction capabilities |
+| **Example** | sunswap skill teaches AI the swap workflow | tron-mcp-server provides on-chain interaction capabilities |
 
 In short: a Skill is the "operation manual," and an MCP Server is the "toolbox." Skills tell the AI how to use the tools provided by MCP Servers.
 
@@ -28,7 +28,7 @@ In short: a Skill is the "operation manual," and an MCP Server is the "toolbox."
 ```yaml
 dependencies:
   - node >= 18
-  - mcp-server-tron
+  - tron-mcp-server
 ```
 
 2. npm dependencies in `package.json`:
@@ -54,26 +54,6 @@ If installed via the OpenClaw extension, skills are automatically configured, an
 
 ---
 
-### Q: What networks are supported?
-
-**A**:
-
-| Network | Identifier | Chain | Description |
-| :--- | :--- | :--- | :--- |
-| TRON Mainnet | `mainnet` | TRON | Default network |
-| TRON Nile | `nile` | TRON | Testnet |
-| TRON Shasta | `shasta` | TRON | Testnet |
-| BSC Mainnet | `bsc` | BSC | EVM chain |
-| BSC Testnet | `bsc-testnet` | BSC | EVM testnet |
-
-Use the `--network` parameter to switch networks:
-
-```bash
-node scripts/swap.js TRX USDT 100 --network nile
-```
-
----
-
 ### Q: How do I switch between testnet and mainnet?
 
 **A**: Specify via the `--network` parameter. It is recommended to always complete verification on a testnet (`nile` or `shasta`) first before switching to `mainnet`.
@@ -84,17 +64,6 @@ node scripts/swap.js TRX USDT 100 --network nile
 
 # Mainnet
 node scripts/swap.js TRX USDT 100 --network mainnet --execute
-```
-
----
-
-### Q: Are write operations safe?
-
-**A**: All scripts involving on-chain write operations default to **dry-run mode** (simulate only, no execution). You must explicitly add the `--execute` flag to actually execute a transaction.
-
-```bash
-node scripts/swap.js TRX USDT 100              # dry-run, no execution
-node scripts/swap.js TRX USDT 100 --execute    # actual execution
 ```
 
 ---

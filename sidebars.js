@@ -81,7 +81,7 @@ const sidebars = {
     {
       type: 'category',
       label: 'MCP Server & SKILLS',
-      collapsed: false,
+      collapsed: true,
       items: [
         {
           type: 'doc',
