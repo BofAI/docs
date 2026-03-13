@@ -49,7 +49,6 @@ OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, 
 | Feature | Traditional AI Agents | **BANK OF AI–Empowered Agents** |
 | :--- | :--- | :--- |
 | **Payment System** | Credit card / centralized API keys | **x402 native on-chain instant settlement** |
-| **Identity System** | Centralized email/phone registration | **8004 on-chain identity (NFT)** |
 | **Financial Capability** | Limited, requires human pre-authorization | **Autonomous DeFi interaction (Swap/Lending)** |
 | **Interaction Model** | Primarily human–machine | **A2A (Agent-to-Agent) direct settlement** |
 | **Trust Mechanism** | Vendor-backed (black box) | **Public reputation & cryptographic verification (transparent)** |
@@ -62,8 +61,7 @@ OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, 
 *Want to monetize your API, content, or services?*
 
 1. **Integrate x402**: Deploy server-side logic to detect payment requirements and return a `402` status code with payment instructions.  
-2. **Register Identity**: Mint your on-chain identity following the `8004` specification.  
-3. **Publish Skills**: Write a `SKILL.md` for your service so other AI agents can understand how to interact with it.
+2. **Publish Skills**: Write a `SKILL.md` for your service so other AI agents can understand how to interact with it.
 
 ---
 
