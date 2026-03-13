@@ -20,7 +20,6 @@ BankOfAI Skills 可以操作**真实的链上资产**。区块链交易一旦上
 | SKILL | 功能 | 
 | :--- | :--- | 
 | **x402-payment** | x402 支付技能，用于在受支持的链上调用付费智能体和付费 API。 | 
-| **ainft-skill** | 本地 AINFT 技能，用于余额查询和账户相关查询。 | 
 | **sunswap** | SunSwap DEX 技能，用于余额查询、报价、兑换及流动性相关工作流。 | 
 | **tronscan-skill** | 通过 TronScan API 进行 TRON 区块链数据查询，支持账户、交易、代币、区块及全网统计。 | 
 
@@ -55,7 +54,7 @@ cd openclaw-extension
 ls ~/.openclaw/skills
 ```
 
-你应该能看到 `sunswap`、`x402-payment`、`x402-payment-demo`、`ainft-skill`、`tronscan-skill` 等条目。
+你应该能看到 `sunswap`、`x402-payment`、`x402-payment-demo`、`tronscan-skill` 等条目。
 
 然后在 OpenClaw 中通过提示词验证：
 
@@ -133,13 +132,6 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 
 **调用付费端点（⚠️ Write）：**
 > 使用 x402 协议调用这个付费智能体端点。
-
----
-
-### ainft-skill
-
-**账户资产查询（🟢 Read）：**
-> 帮我查询该账户当前的 AINFT 余额和最近的订单。
 
 ---
 
