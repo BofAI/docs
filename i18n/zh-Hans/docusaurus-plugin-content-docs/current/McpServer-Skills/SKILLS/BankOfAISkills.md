@@ -132,7 +132,7 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 ### tronscan-skill
 
 **账户查询：**
-> 帮我查询地址 TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf 的账户信息。
+> 帮我查询地址 TXXXXXXXXXXXXXXXXXXXXXXX 的账户信息。
 
 **钱包组合：**
 > 显示该地址的钱包组合和 USD 估值。

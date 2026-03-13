@@ -132,7 +132,7 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 ### tronscan-skill
 
 **Account Lookup:**
-> Look up the account info for address TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf.
+> Look up the account info for address TXXXXXXXXXXXXXXXXXXXXXXX.
 
 **Wallet Portfolio:**
 > Show me the wallet portfolio and USD value for this address.
