@@ -1,8 +1,8 @@
-# BankOfAI Skills
+# BANK Of AI Skills
 
-Each BankOfAI Skill encapsulates domain knowledge (e.g., how to use SunSwap DEX), provides step-by-step instructions for agents, and includes examples showing common usage patterns.
+Each BANK Of AI Skill encapsulates domain knowledge (e.g., how to use SunSwap DEX), provides step-by-step instructions for agents, and includes examples showing common usage patterns.
 
-BankOfAI Skills support integration into OpenClaw, Claude Code, Claude Desktop, Cursor, and other MCP-compatible AI Agents.
+BANK Of AI Skills support integration into OpenClaw, Claude Code, Claude Desktop, Cursor, and other MCP-compatible AI Agents.
 
 
 ## Quick Start
