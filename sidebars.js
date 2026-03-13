@@ -136,7 +136,7 @@ const sidebars = {
           collapsed: false,
           items: [
             'McpServer-Skills/SKILLS/Intro',
-            'McpServer-Skills/SKILLS/BANKOfAISkills',
+            'McpServer-Skills/SKILLS/BANKOFAISkills',
             'McpServer-Skills/SKILLS/Faq',
           ],
         },

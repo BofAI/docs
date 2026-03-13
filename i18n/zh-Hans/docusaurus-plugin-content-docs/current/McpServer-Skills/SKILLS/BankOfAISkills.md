@@ -1,8 +1,8 @@
-# BANK Of AI Skills
+# BANK OF AI Skills
 
-BANK Of AI Skills 的每个技能封装了特定领域的知识（例如如何使用 SunSwap DEX），为智能体提供分步操作指引，并包含常见使用模式的示例。
+BANK OF AI Skills 的每个技能封装了特定领域的知识（例如如何使用 SunSwap DEX），为智能体提供分步操作指引，并包含常见使用模式的示例。
 
-BANK Of AI Skills 支持集成至 OpenClaw、Claude Code、Claude Desktop、Cursor 等兼容 MCP 的 AI Agents。
+BANK OF AI Skills 支持集成至 OpenClaw、Claude Code、Claude Desktop、Cursor 等兼容 MCP 的 AI Agents。
 
 
 ## 快速开始
