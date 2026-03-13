@@ -23,17 +23,7 @@ x402 is an open blockchain payment protocol based on the HTTP `402 Payment Requi
 
 ---
 
-### 2. 🆔 8004 Protocol: Identity & Reputation Framework
-
-The 8004 Protocol uses the blockchain as a decentralized public registry, forming the foundation of trust for AI agents.
-
-- **Identity Registry**: Mints identity as NFTs, mapping on-chain `agentId` to metadata with transferable and secure ownership.  
-- **Reputation System**: Provides a neutral public storage standard for multi-dimensional feedback, with ranking determined at the application layer.  
-- **Consensus Validation**: Integrates **TEE proofs**, **crypto-economic staking**, and **zkML** to enable verifiable agent behavior.
-
----
-
-### 3. 🛠️ MCP Server & Skills: The “Hands and Brain” of Agents
+### 2. 🛠️ MCP Server & Skills: The “Hands and Brain” of Agents
 
 Built on the Model Context Protocol (MCP) architecture, providing full on-chain execution capabilities for agents.
 
@@ -44,7 +34,7 @@ Built on the Model Context Protocol (MCP) architecture, providing full on-chain 
 
 ---
 
-### 4. 🧩 OpenClaw Extension: Financial Assistant for AI Agents
+### 3. 🧩 OpenClaw Extension: Financial Assistant for AI Agents
 
 OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, aiming to become the “central bank” of the agent economy.
 
