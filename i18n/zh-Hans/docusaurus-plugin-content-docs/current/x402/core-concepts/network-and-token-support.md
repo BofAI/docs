@@ -90,7 +90,12 @@ x402 使用统一的 `exact` 支付方案作为其链上支付的标准。
 - **Permit2**：用于 **USDT (TRON 和 EVM)** 等原生不支持 EIP-3009 的代币。这需要用户对 `Permit2` 合约进行一次性 `approve` 授权，之后即可通过链下签名进行多次支付。
 - **EIP-2612 (Permit)**：适用于支持签名批准的代币。SDK 可以将 permit 和转账合并为一个无缝流程。
 
-SDK 将这些协议差异抽象化，让开发者只需关注支付金额和接收者。
+### 代币兼容性说明
+
+- **USDT (TRON 和 EVM)**：原生不支持 EIP-3009。它**必须**使用 **Permit2** 流程，这需要对 `Permit2` 合约进行一次性 `approve` 授权。
+- **USDC (Base)**：原生支持 **EIP-3009**，允许通过 `transferWithAuthorization` 实现完全无 Gas 且无需预先授权的支付体验。
+
+x402 SDK 会根据代币的功能自动选择合适的方法。对于 USDT 用户，TypeScript SDK 提供了扩展程序以简化 Permit2 授权流程。
 
 #### 运作原理
 

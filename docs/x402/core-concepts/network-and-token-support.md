@@ -110,7 +110,12 @@ The `exact` scheme provides a consistent interface for executing payments across
 - **Permit2**: Used for tokens like **USDT (on TRON and EVM)** that do not natively support EIP-3009. This requires a one-time `approve` of the Permit2 contract by the user, after which multiple payments can be signed off-chain.
 - **EIP-2612 (Permit)**: For tokens that support signed approvals. The SDK can combine the permit and transfer into a seamless flow.
 
-The SDK abstracts these protocol differences away, allowing developers to focus on the payment amount and recipient.
+### Token Compatibility Note
+
+- **USDT (TRON & EVM)**: Does not natively support EIP-3009. It **must** use the **Permit2** flow, which requires a one-time `approve` of the Permit2 contract.
+- **USDC (Base)**: Natively supports **EIP-3009**, allowing for a completely gasless and approval-less payment experience via `transferWithAuthorization`.
+
+The x402 SDK automatically selects the appropriate method based on the token's capabilities. For USDT users, the TypeScript SDK provides extensions to streamline the Permit2 approval process.
 
 ### How it Works
 

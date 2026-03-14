@@ -62,8 +62,8 @@ This page tracks the implementation progress and feature support status of the x
 | Feature                  | Python | TypeScript |
 | ------------------------ | ------ | ---------- |
 | Automatic 402 handling   | ✅     | ✅         |
-| Automatic token approval | ⏳     | ⏳         |
-| Allowance check          | ⏳     | ⏳         |
+| Automatic token approval | ⏳     | ✅ (EVM)   |
+| Allowance check          | ⏳     | ✅ (EVM)   |
 | Signing (TRON)           | ✅     | ✅         |
 | Signing (EVM)            | ✅     | ✅         |
 
