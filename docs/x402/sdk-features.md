@@ -11,104 +11,104 @@ This page tracks the implementation progress and feature support status of the x
 
 ## Core Components
 
-| Component | Python | TypeScript |
-|------------|--------|------------|
-| Server | ✅ | ⏳ |
-| Client | ✅ | ✅ |
-| Facilitator | ✅ | ⏳ |
+| Component   | Python | TypeScript |
+| ----------- | ------ | ---------- |
+| Server      | ✅     | ✅         |
+| Client      | ✅     | ✅         |
+| Facilitator | ✅     | ✅         |
 
 ### HTTP Framework Integration
 
-| Role | Python | TypeScript |
-|------|--------|------------|
-| Server | FastAPI, Flask | - |
-| Client | httpx | fetch |
+| Role   | Python          | TypeScript    |
+| ------ | --------------- | ------------- |
+| Server | FastAPI, Flask  | Express, Hono |
+| Client | httpx, requests | fetch, axios  |
 
 ---
 
 ## Networks
 
-| Network | Python | TypeScript |
-|-----------|--------|------------|
-| tron:mainnet | ✅ | ✅ |
-| tron:nile | ✅ | ✅ |
-| tron:shasta | ✅ | ✅ |
-| eip155:56 (BSC Mainnet) | ✅ | ✅ |
-| eip155:97 (BSC Testnet) | ✅ | ✅ |
+| Network                 | Python | TypeScript |
+| ----------------------- | ------ | ---------- |
+| tron:mainnet            | ✅     | ✅         |
+| tron:nile               | ✅     | ✅         |
+| tron:shasta             | ✅     | ✅         |
+| eip155:56 (BSC Mainnet) | ✅     | ✅         |
+| eip155:97 (BSC Testnet) | ✅     | ✅         |
 
 ---
 
 ## Payment Mechanisms
 
-| Mechanism | Python | TypeScript |
-|-------------|--------|------------|
-| exact_permit/tron | ✅ | ✅ |
-| exact_permit/bsc | ✅ | ✅ |
-| exact/tron | ✅ | ✅ |
-| exact/bsc | ✅ | ✅ |
+| Mechanism         | Python | TypeScript |
+| ----------------- | ------ | ---------- |
+| exact_permit/tron | ✅     | ✅         |
+| exact_permit/bsc  | ✅     | ✅         |
+| exact/tron        | ✅     | ✅         |
+| exact/bsc         | ✅     | ✅         |
 
 ---
 
 ## Signers
 
-| Signer | Python | TypeScript |
-|----------|--------|------------|
-| TronClientSigner | ✅ | ✅ |
-| EvmClientSigner | ✅ | ✅ |
-| TronFacilitatorSigner | ✅ | ⏳ |
-| EvmFacilitatorSigner | ✅ | ⏳ |
+| Signer                | Python | TypeScript |
+| --------------------- | ------ | ---------- |
+| TronClientSigner      | ✅     | ✅         |
+| EvmClientSigner       | ✅     | ✅         |
+| TronFacilitatorSigner | ✅     | ✅         |
+| EvmFacilitatorSigner  | ✅     | ✅         |
 
 ---
 
 ## Client Features
 
-| Feature | Python | TypeScript |
-|------------|--------|------------|
-| Automatic 402 handling | ✅ | ✅ |
-| Automatic token approval | ✅ | ✅ |
-| Allowance check | ✅ | ✅ |
-| Signing (TRON) | ✅ | ✅ |
-| Signing (EVM) | ✅ | ✅ |
+| Feature                  | Python | TypeScript |
+| ------------------------ | ------ | ---------- |
+| Automatic 402 handling   | ✅     | ✅         |
+| Automatic token approval | ✅     | ✅         |
+| Allowance check          | ✅     | ✅         |
+| Signing (TRON)           | ✅     | ✅         |
+| Signing (EVM)            | ✅     | ✅         |
 
 ---
 
 ## Server Features
 
-| Feature | Python | TypeScript |
-|------------|--------|------------|
-| `@x402_protected` decorator | ✅ | ⏳ |
-| Payment verification | ✅ | ⏳ |
-| Payment settlement | ✅ | ⏳ |
-| Fee support | ✅ | ⏳ |
+| Feature              | Python | TypeScript |
+| -------------------- | ------ | ---------- |
+| Payment Middleware   | ✅     | ✅         |
+| Payment verification | ✅     | ✅         |
+| Payment settlement   | ✅     | ✅         |
+| Fee support          | ✅     | ✅         |
 
 ---
 
 ## Facilitator Features
 
-| Feature | Python | TypeScript |
-|------------|--------|------------|
-| `/verify` endpoint | ✅ | ⏳ |
-| `/settle` endpoint | ✅ | ⏳ |
-| `/fee/quote` endpoint | ✅ | ⏳ |
-| `/supported` endpoint | ✅ | ⏳ |
-| Submit transaction | ✅ | ⏳ |
-| Confirm transaction | ✅ | ⏳ |
+| Feature               | Python | TypeScript |
+| --------------------- | ------ | ---------- |
+| `/verify` endpoint    | ✅     | ✅         |
+| `/settle` endpoint    | ✅     | ✅         |
+| `/fee/quote` endpoint | ✅     | ✅         |
+| `/supported` endpoint | ✅     | ✅         |
+| Submit transaction    | ✅     | ✅         |
+| Confirm transaction   | ✅     | ✅         |
 
 ---
 
 ## Supported Tokens
 
-| Token | Python | TypeScript |
-|--------|--------|------------|
-| USDT (TRC-20) | ✅ | ✅ |
-| Custom TRC-20 | ✅ | ✅ |
-| USDT (BEP-20) | ✅ | ✅ |
-| Custom BEP-20 | ✅ | ✅ |
+| Token         | Python | TypeScript |
+| ------------- | ------ | ---------- |
+| USDT (TRC-20) | ✅     | ✅         |
+| Custom TRC-20 | ✅     | ✅         |
+| USDT (BEP-20) | ✅     | ✅         |
+| Custom BEP-20 | ✅     | ✅         |
 
 ---
 
 ## Legend
 
-- ✅ = Implemented  
-- ⏳ = Planned / In Progress  
-- ❌ = Not Planned  
+- ✅ = Implemented
+- ⏳ = Planned / In Progress
+- ❌ = Not Planned
