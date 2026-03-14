@@ -23,6 +23,20 @@ Not at all. Any Web API or content provider—whether Web3-native or traditional
 
 ---
 
+### Assets & Networks
+
+#### What assets and networks are supported?
+
+| Network                       | Token         | Status      |
+| ----------------------------- | ------------- | ----------- |
+| TRON Mainnet (`tron:mainnet`) | USDT (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:nile`)       | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:shasta`)   | USDT (TRC-20) | **Testnet** |
+| BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
+| BSC Testnet (`eip155:97`)     | USDT (BEP-20) | **Testnet** |
+
+---
+
 ### Language & Framework Support
 
 #### What languages and frameworks are supported?

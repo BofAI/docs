@@ -22,3 +22,4 @@ package-lock.json
 # VSCode
 .vscode/
 /.idea/git_toolbox_prj.xml
+.claude/

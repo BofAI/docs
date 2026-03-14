@@ -45,21 +45,21 @@ Here are the key configuration items you will need:
 
 The x402 SDK provides everything you need to add payment protection to your API.
 
-**Option A: Install using uv (Recommended)**
+**Option A: Install from GitHub (Recommended)**
 
 ```bash
-# For TRON support
-uv add "bankofai.x402[fastapi,tron]"
-# For BSC (EVM) support
-uv add "bankofai.x402[fastapi,evm]"
-# For both
-uv add "bankofai.x402[fastapi,tron,evm]"
+pip install "bankofai-x402[tron,evm,fastapi] @ git+https://github.com/BofAI/x402.git@main#subdirectory=python/x402"
 ```
 
-**Option B: Install using pip**
+**Option B: Install from Source (for Development)**
 
 ```bash
-pip install "bankofai.x402[fastapi,tron,evm]"
+# Clone the repository
+git clone https://github.com/BofAI/x402.git
+cd x402/python/x402
+
+# Install with FastAPI and multi-chain support
+pip install -e ".[fastapi,tron,evm]"
 ```
 
 **Verify Installation:** Run `python -c "import bankofai.x402; print('SDK installed successfully!')"` to verify.

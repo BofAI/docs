@@ -29,9 +29,10 @@
 
 ## 机制
 
-| 机制  | Python | TypeScript |
-| ----- | ------ | ---------- |
-| exact | ✅     | ✅         |
+| 机制       | Python | TypeScript |
+| ---------- | ------ | ---------- |
+| exact/tron | ✅     | ✅         |
+| exact/bsc  | ✅     | ✅         |
 
 ---
 

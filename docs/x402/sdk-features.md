@@ -40,9 +40,10 @@ This page tracks the implementation progress and feature support status of the x
 
 ## Payment Mechanisms
 
-| Mechanism | Python | TypeScript |
-| --------- | ------ | ---------- |
-| exact     | ✅     | ✅         |
+| Mechanism  | Python | TypeScript |
+| ---------- | ------ | ---------- |
+| exact/tron | ✅     | ✅         |
+| exact/bsc  | ✅     | ✅         |
 
 ---
 

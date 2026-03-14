@@ -20,7 +20,6 @@ By introducing a Facilitator, servers no longer need to maintain direct connecti
 
 - **Payment Verification**: Ensures that the signed payload strictly complies with the server's declared payment requirements.
 - **Payment Settlement**: Submits validated transactions to the blockchain and monitors their confirmation status.
-- **Fee Management**: Supports configurable service fees (optional) for facilitating payments.
 - **Result Feedback**: Returns verification and settlement results to the server, enabling it to decide whether to deliver the requested resource.
 
 > **Note**: The Facilitator **does not custody funds** and does not act as an escrow. It only executes verification and on-chain operations according to the client’s signed authorization.
@@ -58,16 +57,6 @@ The Facilitator provides the following API endpoints:
 | `/settle`    | POST   | Execute on-chain settlement           |
 
 For implementation details, please refer to the [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md).
-
-## Fee Structure
-
-The Facilitator supports flexible service fee configurations:
-
-- **Base Fee**: A fixed service fee per transaction (e.g., `1 USDT`).
-- **Percentage Fee**: A percentage-based fee calculated from the transaction amount.
-- **No Fee Mode**: Supports zero-fee operation.
-
-Fee information is included in the Payment Requirements sent from the server to the client.
 
 ## Trust Model
 

@@ -45,21 +45,21 @@ import TabItem from '@theme/TabItem';
 
 x402 SDK 提供了为 API 添加支付保护所需的一切功能。
 
-**选项 A：使用 uv 安装（推荐）**
+**选项 A：从 GitHub 安装（推荐）**
 
 ```bash
-# 支持 TRON 网络
-uv add "bankofai.x402[fastapi,tron]"
-# 支持 BSC (EVM) 网络
-uv add "bankofai.x402[fastapi,evm]"
-# 同时支持两者
-uv add "bankofai.x402[fastapi,tron,evm]"
+pip install "bankofai-x402[tron,evm,fastapi] @ git+https://github.com/BofAI/x402.git@main#subdirectory=python/x402"
 ```
 
-**选项 B：使用 pip 安装**
+**选项 B：从源码安装（用于开发）**
 
 ```bash
-pip install "bankofai.x402[fastapi,tron,evm]"
+# 克隆仓库
+git clone https://github.com/BofAI/x402.git
+cd x402/python/x402
+
+# 安装并开启 FastAPI 及多链支持
+pip install -e ".[fastapi,tron,evm]"
 ```
 
 **验证安装：** 运行 `python -c "import bankofai.x402; print('SDK installed successfully!')"` 来验证。
@@ -83,28 +83,28 @@ from bankofai.x402.mechanisms.tron.exact import ExactTronServerScheme
 
 app = FastAPI()
 
-# ========== 配置 ==========
-# 替换为您的 TRON 钱包地址
+# ========== Configuration ==========
+# Replace with YOUR TRON wallet address
 PAY_TO_ADDRESS = "YourTronWalletAddressHere"
-# Facilitator 地址
+# Facilitator URL
 FACILITATOR_URL = "http://localhost:8001"
 NETWORK = "tron:nile"
-# ==========================
+# ====================================
 
-# 初始化 x402 服务器
+# Initialize x402 server
 facilitator = HTTPFacilitatorClient(FacilitatorConfig(url=FACILITATOR_URL))
 server = x402ResourceServer(facilitator)
 server.register(NETWORK, ExactTronServerScheme())
-server.initialize() # 从 Facilitator 获取支持的支付类型
+server.initialize() # Fetch supported kinds from facilitator
 
-# 配置受保护的路由
+# Configure protected routes
 routes = {
     "GET /protected": RouteConfig(
         accepts=[
             PaymentOption(
                 scheme="exact",
                 pay_to=PAY_TO_ADDRESS,
-                price="0.0001", # 使用默认资产 (TRON 上为 USDT)
+                price="0.0001", # Uses default asset (USDT on TRON)
                 network=NETWORK,
             ),
         ],
@@ -112,7 +112,7 @@ routes = {
     ),
 }
 
-# 添加 x402 中间件
+# Add x402 Middleware
 app.add_middleware(PaymentMiddlewareASGI, routes=routes, server=server)
 
 @app.get("/protected")
@@ -137,27 +137,27 @@ from bankofai.x402.mechanisms.evm.exact import ExactEvmServerScheme
 
 app = FastAPI()
 
-# ========== 配置 ==========
-# 替换为您的 BSC 钱包地址
+# ========== Configuration ==========
+# Replace with YOUR BSC wallet address
 PAY_TO_ADDRESS = "0xYourBscWalletAddressHere"
-# Facilitator 地址
+# Facilitator URL
 FACILITATOR_URL = "http://localhost:8001"
-NETWORK = "eip155:97" # BSC 测试网
-# ==========================
+NETWORK = "eip155:97" # BSC Testnet
+# ====================================
 
-# 初始化 x402 服务器
+# Initialize x402 server
 facilitator = HTTPFacilitatorClient(FacilitatorConfig(url=FACILITATOR_URL))
 server = x402ResourceServer(facilitator)
 server.register(NETWORK, ExactEvmServerScheme())
 
-# 配置受保护的路由
+# Configure protected routes
 routes = {
     "GET /protected": RouteConfig(
         accepts=[
             PaymentOption(
                 scheme="exact",
                 pay_to=PAY_TO_ADDRESS,
-                price="0.0001", # 使用默认资产 (TRON 上为 USDT)
+                price="0.0001", # Uses default asset (USDT on TRON)
                 network=NETWORK,
             ),
         ],
@@ -165,7 +165,7 @@ routes = {
     ),
 }
 
-# 添加 x402 中间件
+# Add x402 Middleware
 app.add_middleware(PaymentMiddlewareASGI, routes=routes, server=server)
 
 @app.get("/protected")
@@ -327,26 +327,6 @@ NETWORK = "eip155:56"  # 从 "eip155:97" 更改为 "eip155:56"
 
 1.  **准备 Gas 费**：确保 Facilitator 钱包中持有足够的 BNB，用于支付 gas 费用。
 2.  **切换网络配置**：将 Facilitator 的网络配置更新为 `eip155:56`。
-
-</TabItem>
-</Tabs>
-
-### 2. 更新您的 Facilitator
-
-如果您在主网上运行自己的 Facilitator 服务，请执行以下操作：
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-1.  **申请 TronGrid API Key**：前往 [TronGrid](https://www.trongrid.io/) 注册并创建 API Key。为了确保主网 RPC 访问的稳定性，这一步是必需的。
-2.  **更新环境变量**：配置主网凭证（包括 `TRON_GRID_API_KEY`）。
-3.  **准备 Gas 费**：确保 Facilitator 钱包中持有足够的 TRX，用于支付能量（Energy）和带宽（Bandwidth）费用。
-4.  **切换网络配置**：将 Facilitator 的网络配置更新为 `NetworkConfig.TRON_MAINNET`。
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-1.  **准备 Gas 费**：确保 Facilitator 钱包中持有足够的 BNB，用于支付 gas 费用。
-2.  **切换网络配置**：将 Facilitator 的网络配置更新为 `NetworkConfig.BSC_MAINNET`。
 
 </TabItem>
 </Tabs>
