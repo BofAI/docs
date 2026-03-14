@@ -383,7 +383,7 @@ Through this guide, you have completed the following integration steps:
 - **Configure Identity**: Initialize the Wallet Signer with your private key.
 - **Initialize Client**: Instantiate `x402Client` and register the payment processing mechanism.
 - **Initiate Request**: Access the paid API interface through the encapsulated HTTP client.
-- **Automated Process**: The SDK will automatically handle the full payment lifecycle, including necessary token authorization (Approve).
+- **Automated Process**: The SDK handles the 402 detection and signing lifecycle. For tokens requiring Permit2 (like USDT), ensure you have granted sufficient allowance to the Permit2 contract beforehand.
 
 ## Next Steps
 

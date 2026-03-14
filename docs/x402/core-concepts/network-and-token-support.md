@@ -106,9 +106,9 @@ x402 uses the `exact` payment scheme as its unified standard for on-chain paymen
 
 The `exact` scheme provides a consistent interface for executing payments across different token standards and blockchain protocols. It automatically selects the optimal transfer method based on the asset's capabilities:
 
-- **EIP-3009 (Native Authorization)**: For tokens like USDC on TRON/EVM that support `transferWithAuthorization`. This allows gasless payments without a prior `approve` transaction.
-- **EIP-2612 (Permit)**: For tokens that support signed approvals. The SDK combines the permit and transfer into a seamless flow.
-- **Standard ERC-20 / TRC-20**: For traditional tokens, the SDK handles the necessary `approve` (if using Permit2) or direct transfer flows.
+- **EIP-3009 (Native Authorization)**: Supported by tokens like **USDC on Base**. This allows gasless payments through `transferWithAuthorization` without a prior `approve` transaction.
+- **Permit2**: Used for tokens like **USDT (on TRON and EVM)** that do not natively support EIP-3009. This requires a one-time `approve` of the Permit2 contract by the user, after which multiple payments can be signed off-chain.
+- **EIP-2612 (Permit)**: For tokens that support signed approvals. The SDK can combine the permit and transfer into a seamless flow.
 
 The SDK abstracts these protocol differences away, allowing developers to focus on the payment amount and recipient.
 
@@ -118,7 +118,7 @@ The SDK abstracts these protocol differences away, allowing developers to focus 
    The client signs a message authorizing a specific payment amount and recipient. The SDK automatically includes the appropriate metadata (nonce, deadline, etc.) based on the underlying token protocol (e.g., TIP-712 for TRON).
 
 2. **Verify & Settle**  
-   The server verifies the signature and submits it to the Facilitator. The Facilitator executes the transaction on-chain using the most efficient method supported by the token.
+   The server verifies the signature and submits it to the Facilitator. The Facilitator executes the transaction on-chain using the most efficient method supported by the token. For Permit2-based tokens, the Facilitator uses the `Permit2` contract to move funds.
 
 ---
 

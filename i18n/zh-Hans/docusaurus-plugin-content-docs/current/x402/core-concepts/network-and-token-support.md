@@ -86,16 +86,16 @@ x402 使用统一的 `exact` 支付方案作为其链上支付的标准。
 
 `exact` 方案为跨不同代币标准和区块链协议的支付提供了统一的接口。它会根据资产的功能自动选择最佳的转账方式：
 
-- **EIP-3009 (原生授权)**：适用于 TRON/EVM 上支持 `transferWithAuthorization` 的代币（如 USDC）。这允许在没有预先 `approve` 交易的情况下进行无 Gas 支付。
-- **EIP-2612 (Permit)**：适用于支持签名批准的代币。SDK 将 permit 和转账合并为一个无缝流程。
-- **标准 ERC-20 / TRC-20**：对于传统代币，SDK 会处理必要的 `approve`（如果使用 Permit2）或直接转账流程。
+- **EIP-3009 (原生授权)**：由 **Base 链上的 USDC** 等代币支持。这允许通过 `transferWithAuthorization` 进行无 Gas 支付，无需预先执行 `approve` 交易。
+- **Permit2**：用于 **USDT (TRON 和 EVM)** 等原生不支持 EIP-3009 的代币。这需要用户对 `Permit2` 合约进行一次性 `approve` 授权，之后即可通过链下签名进行多次支付。
+- **EIP-2612 (Permit)**：适用于支持签名批准的代币。SDK 可以将 permit 和转账合并为一个无缝流程。
 
 SDK 将这些协议差异抽象化，让开发者只需关注支付金额和接收者。
 
 #### 运作原理
 
 1. **授权 (Authorize)**：客户端签署一条授权特定支付金额和接收者的消息。SDK 会根据底层代币协议（例如 TRON 的 TIP-712）自动包含适当的元数据（nonce、deadline 等）。
-2. **验证与结算 (Verify & Settle)**：服务端验证签名并将其提交给 Facilitator。Facilitator 使用代币支持的最有效方式在链上执行交易。
+2. **验证与结算 (Verify & Settle)**：服务端验证签名并将其提交给 Facilitator。Facilitator 使用代币支持的最有效方式在链上执行交易。对于基于 Permit2 的代币，Facilitator 将调用 `Permit2` 合约完成资金划转。
 
 ### 部署私有 Facilitator
 
