@@ -103,7 +103,7 @@ routes = {
             PaymentOption(
                 scheme="exact",
                 pay_to=PAY_TO_ADDRESS,
-                price="0.0001 USDT",
+                price="0.0001", # Uses default asset (USDT on TRON)
                 network=NETWORK,
             ),
         ],
@@ -156,7 +156,7 @@ routes = {
             PaymentOption(
                 scheme="exact",
                 pay_to=PAY_TO_ADDRESS,
-                price="0.0001 USDT",
+                price="0.0001", # Uses default asset (USDT on TRON)
                 network=NETWORK,
             ),
         ],
@@ -183,7 +183,7 @@ if __name__ == "__main__":
 
 | Parameter | Description                                                | Example                           |
 | --------- | ---------------------------------------------------------- | --------------------------------- |
-| `prices`  | Payment amount per request (list)                          | `["0.0001 USDT"]`                 |
+| `prices`  | Payment amount per request (list)                          | `["0.0001"]`                      |
 | `schemes` | Payment scheme per price (list): `exact_permit` or `exact` | `["exact_permit"]`                |
 | `network` | Network identifier                                         | `tron:nile`/`eip155:97` (testnet) |
 | `pay_to`  | Your wallet receiving address                              | `T...` or `0x...`                 |

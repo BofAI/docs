@@ -103,7 +103,7 @@ routes = {
             PaymentOption(
                 scheme="exact",
                 pay_to=PAY_TO_ADDRESS,
-                price="0.0001 USDT",
+                price="0.0001", # 使用默认资产 (TRON 上为 USDT)
                 network=NETWORK,
             ),
         ],
@@ -156,7 +156,7 @@ routes = {
             PaymentOption(
                 scheme="exact",
                 pay_to=PAY_TO_ADDRESS,
-                price="0.0001 USDT",
+                price="0.0001", # 使用默认资产 (TRON 上为 USDT)
                 network=NETWORK,
             ),
         ],
@@ -183,7 +183,7 @@ if __name__ == "__main__":
 
 | 参数      | 描述                                                      | 示例                              |
 | --------- | --------------------------------------------------------- | --------------------------------- |
-| `prices`  | 单次请求的支付金额（列表）                                | `["0.0001 USDT"]`                 |
+| `prices`  | 单次请求的支付金额（列表）                                | `["0.0001"]`                      |
 | `schemes` | 每个价格对应的支付方案（列表）：`exact_permit` 或 `exact` | `["exact_permit"]`                |
 | `network` | 网络标识符                                                | `tron:nile`/`eip155:97`（测试网） |
 | `pay_to`  | 您的钱包收款地址                                          | `T...` 或 `0x...`                 |
