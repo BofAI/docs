@@ -181,12 +181,12 @@ if __name__ == "__main__":
 
 **Key Configuration Options:**
 
-| Parameter | Description                                                | Example                           |
-| --------- | ---------------------------------------------------------- | --------------------------------- |
-| `prices`  | Payment amount per request (list)                          | `["0.0001"]`                      |
-| `schemes` | Payment scheme per price (list): `exact_permit` or `exact` | `["exact_permit"]`                |
-| `network` | Network identifier                                         | `tron:nile`/`eip155:97` (testnet) |
-| `pay_to`  | Your wallet receiving address                              | `T...` or `0x...`                 |
+| Parameter | Description                              | Example                           |
+| --------- | ---------------------------------------- | --------------------------------- |
+| `prices`  | Payment amount per request (list)        | `["0.0001"]`                      |
+| `schemes` | Payment scheme per price (list): `exact` | `["exact"]`                       |
+| `network` | Network identifier                       | `tron:nile`/`eip155:97` (testnet) |
+| `pay_to`  | Your wallet receiving address            | `T...` or `0x...`                 |
 
 **How it Works:** When an unpaid request is received, your server automatically returns an HTTP 402 (Payment Required) status code with payment instructions. The rest of the process is handled automatically by the client SDK!
 
@@ -241,7 +241,6 @@ BSC_PRIVATE_KEY=your_facilitator_private_key_here
 - `GET /supported` - Supported features
 - `POST /verify` - Verify payment payload
 - `POST /settle` - Settle payment on-chain
-- `POST /fee/quote` - Get fee quote
 
 ## Step Four: Test Your Integration
 

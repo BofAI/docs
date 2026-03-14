@@ -40,12 +40,9 @@ This page tracks the implementation progress and feature support status of the x
 
 ## Payment Mechanisms
 
-| Mechanism         | Python | TypeScript |
-| ----------------- | ------ | ---------- |
-| exact_permit/tron | ✅     | ✅         |
-| exact_permit/bsc  | ✅     | ✅         |
-| exact/tron        | ✅     | ✅         |
-| exact/bsc         | ✅     | ✅         |
+| Mechanism | Python | TypeScript |
+| --------- | ------ | ---------- |
+| exact     | ✅     | ✅         |
 
 ---
 
@@ -89,7 +86,6 @@ This page tracks the implementation progress and feature support status of the x
 | --------------------- | ------ | ---------- |
 | `/verify` endpoint    | ✅     | ✅         |
 | `/settle` endpoint    | ✅     | ✅         |
-| `/fee/quote` endpoint | ✅     | ✅         |
 | `/supported` endpoint | ✅     | ✅         |
 | Submit transaction    | ✅     | ✅         |
 | Confirm transaction   | ✅     | ✅         |

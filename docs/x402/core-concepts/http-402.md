@@ -52,7 +52,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "tron:nile",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
@@ -98,7 +98,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "eip155:97",
       "amount": "100000000000000",
       "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
@@ -129,25 +129,25 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
   }
 }
 ```
+
 </TabItem>
 </Tabs>
 
-
 **Key Fields:**
 
-| Field               | Description                                                                 |
-| ------------------- | --------------------------------------------------------------------------- |
-| `x402Version`       | Protocol version (currently 2)                                              |
-| `error`             | Human-readable error message                                                |
-| `resource`          | Information about the requested resource                                    |
-| `accepts`           | Array of accepted payment options                                           |
-| `scheme`            | Payment scheme (`exact_permit` or `exact`)                                  |
-| `network`           | Network identifier (`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`)  |
-| `amount`            | Payment amount in the smallest unit (e.g., 100 = 0.0001 USDT)              |
-| `asset`             | TRC-20/BEP-20 token contract address                                        |
-| `payTo`             | Seller's wallet address                                                     |
-| `maxTimeoutSeconds` | Maximum validity duration of the payment                                    |
-| `extra.fee`         | Facilitator fee information (includes `facilitatorId`, `feeTo`, `feeAmount`, `caller`) |
+| Field               | Description                                                                                          |
+| ------------------- | ---------------------------------------------------------------------------------------------------- |
+| `x402Version`       | Protocol version (currently 2)                                                                       |
+| `error`             | Human-readable error message                                                                         |
+| `resource`          | Information about the requested resource                                                             |
+| `accepts`           | Array of accepted payment options                                                                    |
+| `scheme`            | Payment scheme (`exact`)                                                                             |
+| `network`           | Network identifier (`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`)                           |
+| `amount`            | Payment amount in the smallest unit (e.g., 100 = 0.0001 USDT)                                        |
+| `asset`             | TRC-20/BEP-20 token contract address                                                                 |
+| `payTo`             | Seller's wallet address                                                                              |
+| `maxTimeoutSeconds` | Maximum validity duration of the payment                                                             |
+| `extra.fee`         | Facilitator fee information (includes `facilitatorId`, `feeTo`, `feeAmount`, `caller`)               |
 | `extensions`        | Additional context for the payment scheme (e.g., `paymentPermitContext` with nonce, validity window) |
 
 ## Payment Signature Structure
@@ -160,7 +160,7 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
+  "scheme": "exact",
   "network": "tron:nile",
   "payload": {
     "signature": "0x...",
@@ -194,7 +194,7 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
+  "scheme": "exact",
   "network": "eip155:97",
   "payload": {
     "signature": "0x...",
@@ -221,6 +221,7 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
   }
 }
 ```
+
 </TabItem>
 </Tabs>
 
@@ -237,5 +238,5 @@ HTTP 402 is the foundation of the x402 protocol. It enables servers to integrate
 
 Next, explore:
 
-- [Client / Server](./client-server.md) — Understand the roles and responsibilities of clients and servers  
-- [Facilitator](./facilitator.md) — Learn how servers verify and settle payments  
+- [Client / Server](./client-server.md) — Understand the roles and responsibilities of clients and servers
+- [Facilitator](./facilitator.md) — Learn how servers verify and settle payments

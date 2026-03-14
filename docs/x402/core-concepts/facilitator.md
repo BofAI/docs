@@ -11,7 +11,7 @@ A Facilitator is a middleware service primarily responsible for:
 
 - **Payload Verification**: Validating the payment payload submitted by the client.
 - **Settlement Execution**: Submitting transactions to the blockchain on behalf of the server to complete settlement.
-- **Token Transfer**: Executing token transfers by calling the `permitTransferFrom` method of the `PaymentPermit` contract.
+- **Token Transfer**: Executing token transfers by interacting with the `Permit2` contract or native authorization methods (EIP-3009).
 
 By introducing a Facilitator, servers no longer need to maintain direct connections to blockchain nodes or implement complex signature verification logic themselves. This reduces operational complexity while ensuring accurate and real-time transaction validation.
 
@@ -49,13 +49,12 @@ To use x402, you need access to a Facilitator service. There are currently two o
 
 The Facilitator provides the following API endpoints:
 
-| Endpoint      | Method | Description                         |
-| :------------ | :----- | :---------------------------------- |
-| `/`           | GET    | Retrieve basic service information  |
-| `/supported`  | GET    | Query supported feature configuration |
-| `/fee/quote`  | POST   | Get estimated fee quote             |
-| `/verify`     | POST   | Verify payment payload validity     |
-| `/settle`     | POST   | Execute on-chain settlement         |
+| Endpoint     | Method | Description                           |
+| :----------- | :----- | :------------------------------------ |
+| `/`          | GET    | Retrieve basic service information    |
+| `/supported` | GET    | Query supported feature configuration |
+| `/verify`    | POST   | Verify payment payload validity       |
+| `/settle`    | POST   | Execute on-chain settlement           |
 
 For implementation details, please refer to the [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md).
 
@@ -67,7 +66,7 @@ The Facilitator supports flexible service fee configurations:
 - **Percentage Fee**: A percentage-based fee calculated from the transaction amount.
 - **No Fee Mode**: Supports zero-fee operation.
 
-Detailed fee information is returned via the `/fee/quote` endpoint and included in the Payment Requirements sent from the server to the client.
+Fee information is included in the Payment Requirements sent from the server to the client.
 
 ## Trust Model
 
@@ -91,5 +90,5 @@ Within the x402 protocol architecture, the **Facilitator** serves as an independ
 
 We recommend exploring:
 
-- [Wallet](./wallet.md) — Learn how to manage wallets used for payments  
-- [Network and Token Support](./network-and-token-support.md) — Learn about supported networks and tokens  
+- [Wallet](./wallet.md) — Learn how to manage wallets used for payments
+- [Network and Token Support](./network-and-token-support.md) — Learn about supported networks and tokens

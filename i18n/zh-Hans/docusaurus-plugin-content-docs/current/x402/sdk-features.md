@@ -29,12 +29,11 @@
 
 ## 机制
 
-| 机制              | Python | TypeScript |
-| ----------------- | ------ | ---------- |
-| exact_permit/tron | ✅     | ✅         |
-| exact_permit/bsc  | ✅     | ✅         |
-| exact/tron        | ✅     | ✅         |
-| exact/bsc         | ✅     | ✅         |
+| 机制  | Python | TypeScript |
+| ----- | ------ | ---------- |
+| exact | ✅     | ✅         |
+
+---
 
 ## 签名器
 
@@ -44,6 +43,8 @@
 | EvmClientSigner       | ✅     | ✅         |
 | TronFacilitatorSigner | ✅     | ✅         |
 | EvmFacilitatorSigner  | ✅     | ✅         |
+
+---
 
 ## 客户端功能
 
@@ -55,6 +56,8 @@
 | 签名 (TRON)  | ✅     | ✅         |
 | 签名 (EVM)   | ✅     | ✅         |
 
+---
+
 ## 服务端功能
 
 | 功能       | Python | TypeScript |
@@ -64,13 +67,14 @@
 | 支付结算   | ✅     | ✅         |
 | 费用支持   | ✅     | ✅         |
 
+---
+
 ## Facilitator 功能
 
 | 功能            | Python | TypeScript |
 | --------------- | ------ | ---------- |
 | /verify 端点    | ✅     | ✅         |
 | /settle 端点    | ✅     | ✅         |
-| /fee/quote 端点 | ✅     | ✅         |
 | /supported 端点 | ✅     | ✅         |
 | 提交交易        | ✅     | ✅         |
 | 确认交易        | ✅     | ✅         |

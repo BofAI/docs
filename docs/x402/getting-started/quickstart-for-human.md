@@ -116,41 +116,34 @@ asyncio.run(main())
 
 ```typescript
 import 'dotenv/config'
-import {
-  X402Client,
-  X402FetchClient,
-  ExactPermitTronClientMechanism,
-  TronClientSigner,
-  SufficientBalancePolicy,
-} from '@bankofai/x402'
+import { TronWeb } from 'tronweb'
+import { x402Client, wrapFetchWithPayment, x402HTTPClient } from '@bankofai/x402-fetch'
+import { ExactTronScheme } from '@bankofai/x402-tron/exact/client'
+import { createClientTronSigner } from '@bankofai/x402-tron'
 
 const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
-
-// ========== Configuration ==========
-const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile' // Replace with your target server
-// ====================================
+const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile'
 
 async function main(): Promise<void> {
-  // Create signer (network is resolved dynamically)
-  const signer = new TronClientSigner(TRON_PRIVATE_KEY)
+  // Create signer
+  const tronWeb = new TronWeb({ fullHost: 'https://nile.trongrid.io' })
+  const signer = createClientTronSigner(tronWeb, TRON_PRIVATE_KEY)
 
-  // Create x402 client, register mechanism and balance policy
-  const x402 = new X402Client()
-  x402.register('tron:*', new ExactPermitTronClientMechanism(signer))
-  x402.registerPolicy(SufficientBalancePolicy)
+  // Create x402 client and register mechanism
+  const client = new x402Client()
+  client.register('tron:*', new ExactTronScheme(signer))
 
-  const client = new X402FetchClient(x402)
+  const fetchWithPayment = wrapFetchWithPayment(fetch, client)
 
   // Make request - payment is handled automatically
-  const response = await client.get(SERVER_URL)
+  const response = await fetchWithPayment(SERVER_URL)
 
   console.log(`Status: ${response.status}`)
 
   // Parse payment response
-  const paymentResponse = response.headers.get('payment-response')
-  if (paymentResponse) {
-    const jsonString = Buffer.from(paymentResponse, 'base64').toString('utf8')
-    const settleResponse = JSON.parse(jsonString)
+  const httpClient = new x402HTTPClient(client)
+  const settleResponse = httpClient.getPaymentSettleResponse((name) => response.headers.get(name))
+  if (settleResponse) {
     console.log(`Transaction: ${settleResponse.transaction}`)
   }
 

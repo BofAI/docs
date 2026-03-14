@@ -52,7 +52,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "tron:nile",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
@@ -98,7 +98,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "eip155:97",
       "amount": "100000000000000",
       "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
@@ -129,25 +129,26 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   }
 }
 ```
+
 </TabItem>
 </Tabs>
 
 **关键字段：**
 
-| 字段                | 描述                                              |
-| ------------------- | ------------------------------------------------- |
-| `x402Version`       | 协议版本（当前为 2）                              |
-| `error`             | 人类可读的错误提示                                |
-| `resource`          | 关于请求资源的信息                                |
-| `accepts`           | 接受的支付选项数组                                |
-| `scheme`            | 支付方案（`exact_permit` 或 `exact`）                     |
-| `network`           | 网络标识符（`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`） |
-| `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
-| `asset`             | TRC-20/BEP-20 代币合约地址                               |
-| `payTo`             | 卖家的钱包地址                              |
-| `maxTimeoutSeconds` | 支付有效期的最大时长                              |
+| 字段                | 描述                                                                         |
+| ------------------- | ---------------------------------------------------------------------------- |
+| `x402Version`       | 协议版本（当前为 2）                                                         |
+| `error`             | 人类可读的错误提示                                                           |
+| `resource`          | 关于请求资源的信息                                                           |
+| `accepts`           | 接受的支付选项数组                                                           |
+| `scheme`            | 支付方案（`exact`）                                                          |
+| `network`           | 网络标识符（`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`）          |
+| `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT）                            |
+| `asset`             | TRC-20/BEP-20 代币合约地址                                                   |
+| `payTo`             | 卖家的钱包地址                                                               |
+| `maxTimeoutSeconds` | 支付有效期的最大时长                                                         |
 | `extra.fee`         | Facilitator 费用信息（包含 `facilitatorId`、`feeTo`、`feeAmount`、`caller`） |
-| `extensions`        | 支付方案的附加上下文（如 `paymentPermitContext`，包含 nonce、有效期窗口等） |
+| `extensions`        | 支付方案的附加上下文（如 `paymentPermitContext`，包含 nonce、有效期窗口等）  |
 
 ## 支付签名结构
 
@@ -159,7 +160,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
+  "scheme": "exact",
   "network": "tron:nile",
   "payload": {
     "signature": "0x...",
@@ -193,7 +194,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
+  "scheme": "exact",
   "network": "eip155:97",
   "payload": {
     "signature": "0x...",
@@ -220,9 +221,9 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   }
 }
 ```
+
 </TabItem>
 </Tabs>
-
 
 ## 总结
 
