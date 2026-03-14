@@ -263,11 +263,10 @@ The SDK may throw errors during the payment process. Here's how to handle them:
       <TabItem value="python" label="Python">
 
 ```python
-from bankofai.x402.exceptions import (
-    X402Error,
-    InsufficientBalanceError,
-    SignatureCreationError,
-    UnsupportedNetworkError,
+from bankofai.x402 import (
+    PaymentError,
+    NoMatchingRequirementsError,
+    SchemeNotFoundError,
 )
 
 try:
@@ -276,19 +275,15 @@ try:
 
     print(f"Status: {response.status_code}")
 
-except UnsupportedNetworkError as e:
+except SchemeNotFoundError as e:
     # No mechanism registered for the network
     print(f"Network not supported: {e}")
 
-except InsufficientBalanceError as e:
-    # Token balance insufficient
-    print(f"Insufficient balance: {e}")
+except NoMatchingRequirementsError as e:
+    # All requirements filtered out by policies or none matching
+    print(f"No matching requirements: {e}")
 
-except SignatureCreationError as e:
-    # Failed to sign payment
-    print(f"Signature failed: {e}")
-
-except X402Error as e:
+except PaymentError as e:
     # Other x402 errors
     print(f"Payment error: {e}")
 ```
@@ -325,11 +320,10 @@ try {
   <TabItem value="python" label="Python">
 
 ```python
-from bankofai.x402.exceptions import (
-    X402Error,
-    InsufficientBalanceError,
-    SignatureCreationError,
-    UnsupportedNetworkError,
+from bankofai.x402 import (
+    PaymentError,
+    NoMatchingRequirementsError,
+    SchemeNotFoundError,
 )
 
 try:
@@ -338,19 +332,15 @@ try:
 
     print(f"Status: {response.status_code}")
 
-except UnsupportedNetworkError as e:
+except SchemeNotFoundError as e:
     # No mechanism registered for the network
     print(f"Network not supported: {e}")
 
-except InsufficientBalanceError as e:
-    # Token balance insufficient
-    print(f"Insufficient balance: {e}")
+except NoMatchingRequirementsError as e:
+    # All requirements filtered out by policies or none matching
+    print(f"No matching requirements: {e}")
 
-except SignatureCreationError as e:
-    # Failed to sign payment
-    print(f"Signature failed: {e}")
-
-except X402Error as e:
+except PaymentError as e:
     # Other x402 errors
     print(f"Payment error: {e}")
 ```

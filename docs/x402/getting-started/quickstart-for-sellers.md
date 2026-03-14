@@ -95,6 +95,7 @@ NETWORK = "tron:nile"
 facilitator = HTTPFacilitatorClient(FacilitatorConfig(url=FACILITATOR_URL))
 server = x402ResourceServer(facilitator)
 server.register(NETWORK, ExactTronServerScheme())
+server.initialize() # Fetch supported kinds from facilitator
 
 # Configure protected routes
 routes = {

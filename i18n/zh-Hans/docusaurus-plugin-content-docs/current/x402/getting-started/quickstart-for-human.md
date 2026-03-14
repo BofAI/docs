@@ -268,11 +268,10 @@ SDK 在支付过程中可能会抛出错误。处理方法如下：
       <TabItem value="python" label="Python">
 
 ```python
-from bankofai.x402.exceptions import (
-    X402Error,
-    InsufficientBalanceError,
-    SignatureCreationError,
-    UnsupportedNetworkError,
+from bankofai.x402 import (
+    PaymentError,
+    NoMatchingRequirementsError,
+    SchemeNotFoundError,
 )
 
 try:
@@ -281,19 +280,15 @@ try:
 
     print(f"状态码: {response.status_code}")
 
-except UnsupportedNetworkError as e:
+except SchemeNotFoundError as e:
     # 未为该网络注册机制
     print(f"不支持的网络: {e}")
 
-except InsufficientBalanceError as e:
-    # 代币余额不足
-    print(f"余额不足: {e}")
+except NoMatchingRequirementsError as e:
+    # 策略过滤掉了所有要求或没有匹配项
+    print(f"没有匹配的支付要求: {e}")
 
-except SignatureCreationError as e:
-    # 支付签名失败
-    print(f"签名失败: {e}")
-
-except X402Error as e:
+except PaymentError as e:
     # 其他 x402 错误
     print(f"支付错误: {e}")
 ```
@@ -330,11 +325,10 @@ try {
   <TabItem value="python" label="Python">
 
 ```python
-from bankofai.x402.exceptions import (
-    X402Error,
-    InsufficientBalanceError,
-    SignatureCreationError,
-    UnsupportedNetworkError,
+from bankofai.x402 import (
+    PaymentError,
+    NoMatchingRequirementsError,
+    SchemeNotFoundError,
 )
 
 try:
@@ -343,19 +337,15 @@ try:
 
     print(f"状态码: {response.status_code}")
 
-except UnsupportedNetworkError as e:
+except SchemeNotFoundError as e:
     # 未为该网络注册机制
     print(f"不支持的网络: {e}")
 
-except InsufficientBalanceError as e:
-    # 代币余额不足
-    print(f"余额不足: {e}")
+except NoMatchingRequirementsError as e:
+    # 策略过滤掉了所有要求或没有匹配项
+    print(f"没有匹配的支付要求: {e}")
 
-except SignatureCreationError as e:
-    # 支付签名失败
-    print(f"签名失败: {e}")
-
-except X402Error as e:
+except PaymentError as e:
     # 其他 x402 错误
     print(f"支付错误: {e}")
 ```

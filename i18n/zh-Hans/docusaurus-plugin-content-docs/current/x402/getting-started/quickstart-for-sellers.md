@@ -95,6 +95,7 @@ NETWORK = "tron:nile"
 facilitator = HTTPFacilitatorClient(FacilitatorConfig(url=FACILITATOR_URL))
 server = x402ResourceServer(facilitator)
 server.register(NETWORK, ExactTronServerScheme())
+server.initialize() # 从 Facilitator 获取支持的支付类型
 
 # 配置受保护的路由
 routes = {
