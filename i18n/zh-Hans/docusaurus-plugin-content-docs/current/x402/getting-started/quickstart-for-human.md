@@ -30,12 +30,12 @@ import TabItem from '@theme/TabItem';
 <Tabs groupId="language">
 <TabItem value="python" label="Python">
 
-使用 uv 或 pip 安装：
+使用 uv 或 pip 安装（如需支持 BSC，请添加 `evm`）：
 
 ```bash
-uv add "bankofai.x402[tron,httpx]"
+uv add "bankofai.x402[tron,evm,httpx]"
 # 或
-pip install "bankofai.x402[tron,httpx]"
+pip install "bankofai.x402[tron,evm,httpx]"
 ```
 
 </TabItem>

@@ -30,12 +30,12 @@ Here are the key configuration items you will need:
 <Tabs groupId="language">
 <TabItem value="python" label="Python">
 
-Install using uv or pip:
+Install using uv or pip (add `evm` if you need BSC support):
 
 ```bash
-uv add "bankofai.x402[tron,httpx]"
+uv add "bankofai.x402[tron,evm,httpx]"
 # or
-pip install "bankofai.x402[tron,httpx]"
+pip install "bankofai.x402[tron,evm,httpx]"
 ```
 
 </TabItem>

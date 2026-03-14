@@ -48,13 +48,18 @@ x402 SDK 提供了为 API 添加支付保护所需的一切功能。
 **选项 A：使用 uv 安装（推荐）**
 
 ```bash
+# 支持 TRON 网络
 uv add "bankofai.x402[fastapi,tron]"
+# 支持 BSC (EVM) 网络
+uv add "bankofai.x402[fastapi,evm]"
+# 同时支持两者
+uv add "bankofai.x402[fastapi,tron,evm]"
 ```
 
 **选项 B：使用 pip 安装**
 
 ```bash
-pip install "bankofai.x402[fastapi,tron]"
+pip install "bankofai.x402[fastapi,tron,evm]"
 ```
 
 **验证安装：** 运行 `python -c "import bankofai.x402; print('SDK installed successfully!')"` 来验证。
