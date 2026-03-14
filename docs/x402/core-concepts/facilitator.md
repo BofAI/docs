@@ -12,7 +12,7 @@ A Facilitator is a middleware service primarily responsible for:
 - **Payload Verification**: Validating the payment payload submitted by the client.
 - **Settlement Execution**: Submitting transactions to the blockchain on behalf of the server to complete settlement.
 - **Protocol Optimization**: Automatically selecting the best transfer method (EIP-3009, EIP-2612, or Permit2) based on the token's capabilities.
-- **Gas Abstracton**: Covering the transaction execution costs (TRX/BNB) so that neither the buyer nor the seller needs to worry about gas management for the payment itself.
+- **Gas Abstraction**: Covering the transaction execution costs (TRX/BNB) so that neither the buyer nor the seller needs to worry about gas management for the payment itself.
 
 By introducing a Facilitator, servers no longer need to maintain direct connections to blockchain nodes or implement complex signature verification logic themselves. This reduces operational complexity while ensuring accurate and real-time transaction validation.
 

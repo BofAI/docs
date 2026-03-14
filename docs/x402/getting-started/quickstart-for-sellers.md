@@ -7,11 +7,12 @@ import TabItem from '@theme/TabItem';
 
 ## Overview
 
-As a seller, you can start receiving payments in just **3 steps**:
+As a seller, you can start receiving payments in just **4 steps**:
 
 1.  **Install x402 SDK** — Install the Python SDK
 2.  **Develop Server** — Add payment protection to your API endpoints
 3.  **Start Facilitator** — Run the payment verification service
+4.  **Test Your Integration** — Verify everything is working correctly
 
 ### Prerequisites
 
@@ -157,7 +158,7 @@ routes = {
             PaymentOption(
                 scheme="exact",
                 pay_to=PAY_TO_ADDRESS,
-                price="0.0001", # Uses default asset (USDT on TRON)
+                price="0.0001", # Uses default asset (USDT on BSC)
                 network=NETWORK,
             ),
         ],

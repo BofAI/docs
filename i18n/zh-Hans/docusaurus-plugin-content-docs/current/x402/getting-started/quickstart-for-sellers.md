@@ -7,11 +7,12 @@ import TabItem from '@theme/TabItem';
 
 ## 概览
 
-作为卖家，只需 **3 步** 即可开始接收支付：
+作为卖家，只需 **4 步** 即可开始接收支付：
 
 1. **安装 x402 SDK** — 安装 Python SDK
 2. **开发服务器** — 为您的 API 端点添加支付保护
 3. **启动 Facilitator** — 运行支付验证服务
+4. **测试集成** — 验证一切是否正常运行
 
 ### 先决条件
 
@@ -157,7 +158,7 @@ routes = {
             PaymentOption(
                 scheme="exact",
                 pay_to=PAY_TO_ADDRESS,
-                price="0.0001", # Uses default asset (USDT on TRON)
+                price="0.0001", # Uses default asset (USDT on BSC)
                 network=NETWORK,
             ),
         ],

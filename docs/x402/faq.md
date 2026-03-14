@@ -103,7 +103,7 @@ x402 is compatible with standard TRC-20 and BEP-20 tokens. The `exact` scheme au
 2. **Seller** verifies signatures without accessing private keys.
 3. **Facilitator** uses its own key to submit transactions on-chain.
 
-#### How does refunds work?
+#### How do refunds work?
 
 The `exact` scheme uses a **push payment** model—once executed on-chain, it is irreversible.
 
