@@ -9,7 +9,7 @@ Based on the [Model Context Protocol](https://modelcontextprotocol.io/), this se
 - **Custom SUNSWAP tools** (`sunswap_*`): Wallets, balances, quotes, swaps, and V2/V3 liquidity, supported by `tronweb` and on-chain contract calls.
 
 ## MCP Server URL
-For the convenience of users with different needs, you can choose to connect directly to the [official cloud service](./UsingOfficialService.md) or choose to perform [local deployment](./UsingLocalService.md) on your own computer. The official service only provides read-only services.
+For the convenience of users with different needs, you can choose to connect directly to the [official cloud service](./OfficialServerAccess.md) or choose to perform [local deployment](./LocalPrivatizedDeployment.md) on your own computer. The official service only provides read-only services.
 
 | Environment | URL |
 | :--- | :--- |

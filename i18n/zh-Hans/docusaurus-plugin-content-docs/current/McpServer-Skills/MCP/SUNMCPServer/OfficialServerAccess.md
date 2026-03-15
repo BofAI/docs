@@ -46,7 +46,9 @@ import TabItem from '@theme/TabItem';
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp"
+        "https://sun-mcp-server.bankofai.io/mcp",
+        "--header",
+        "TRONGRID-API-KEY:<your-api-key>"
       ]
     }
   }
@@ -54,7 +56,7 @@ import TabItem from '@theme/TabItem';
 ```
 
 </TabItem>
-<TabItem value="Claude Code" label="Cluade Code">
+<TabItem value="Claude Code" label="Claude Code">
 
 CLI 命令：
 

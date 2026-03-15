@@ -1,8 +1,5 @@
 # Facilitator
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 The Facilitator is an **optional but highly recommended** service designed to simplify payment verification and settlement between clients (buyers) and servers (sellers) on blockchain networks.
 
 ## What is a Facilitator?
@@ -43,7 +40,7 @@ To use x402, you need access to a Facilitator service. There are currently two o
    Deploy and manage your own Facilitator instance for full control over fee policies and energy management strategies.
 
 2. **Use the [Official Facilitator](https://github.com/BofAI/x402-facilitator):**  
-   An officially hosted Facilitator service is available. This option allows you to use the service without maintaining infrastructure.
+   An officially hosted Facilitator service is available. This option allows you to use the service without maintaining infrastructure. A [Facilitator API Key](./facilitator-api-key.md) is required to unlock production-level request rate limits.
 
 ### Facilitator API Endpoints
 
@@ -91,5 +88,6 @@ Within the x402 protocol architecture, the **Facilitator** serves as an independ
 
 We recommend exploring:
 
+- [Facilitator API Key](./facilitator-api-key.md) — How to apply for and configure an API Key for the official Facilitator
 - [Wallet](./wallet.md) — Learn how to manage wallets used for payments  
 - [Network and Token Support](./network-and-token-support.md) — Learn about supported networks and tokens  

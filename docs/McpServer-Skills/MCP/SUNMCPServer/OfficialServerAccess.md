@@ -41,14 +41,19 @@ With TronGrid API Key:
   "mcpServers": {
     "sun-mcp-server": {
       "command": "npx",
-      "args": ["mcp-remote", "https://sun-mcp-server.bankofai.io/mcp"]
+      "args": [
+        "mcp-remote",
+        "https://sun-mcp-server.bankofai.io/mcp",
+        "--header",
+        "TRONGRID-API-KEY:<your-api-key>"
+      ]
     }
   }
 }
 ```
 
 </TabItem>
-<TabItem value="Claude Code" label="Cluade Code">
+<TabItem value="Claude Code" label="Claude Code">
 
 CLI command:
 

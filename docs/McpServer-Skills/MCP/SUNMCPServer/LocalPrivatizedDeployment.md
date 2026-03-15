@@ -78,7 +78,7 @@ Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) o
 {
   "mcpServers": {
     "sun-mcp-server": {
-      "command": "node",
+      "command": "npx",
       "args": ["tsx", "/ABSOLUTE/PATH/TO/sun-mcp-server/src/index.ts"],
       "env": {
         "TRON_PRIVATE_KEY": "YOUR_KEY_HERE (Or set in system env)",
@@ -104,7 +104,7 @@ Configure in `.cursor/mcp.json` at the project root:
   "servers": [
     {
       "name": "sun-mcp-server",
-      "command": "node",
+      "command": "npx",
       "args": ["tsx", "/ABSOLUTE/PATH/TO/sun-mcp-server/src/index.ts"],
       "env": {
         "TRON_PRIVATE_KEY": "YOUR_KEY_HERE (Or set in system env)",

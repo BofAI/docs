@@ -1,9 +1,6 @@
 # Facilitator
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
-Facilitator 是一项**可选但强烈推荐**的服务，旨在简化客户端（买方）与服务端（卖方）在区块链网络上的支付验证与结算流程。
+Facilitator 是一项**可选但强烈推荐**的服务，旨在简化客户端（买家）与服务端（卖家）在区块链网络上的支付验证与结算流程。
 
 ## 什么是 Facilitator ？
 
@@ -40,7 +37,7 @@ Facilitator 是一种中间件服务，主要负责：
 要使用 x402，您需要接入 Facilitator 服务。目前有两种方案可供选择：
 
 1. **运行您自己的 Facilitator（自托管）：** 您可以部署并管理自己的 Facilitator 实例。这种方式让您能够完全掌控费用和能量（Energy）管理策略。
-2. **使用[官方 Facilitator](https://github.com/BofAI/x402-facilitator)：** 官方托管的 Facilitator 服务已上线，您无需自行维护基础设施即可直接使用。
+2. **使用[官方 Facilitator](https://github.com/BofAI/x402-facilitator)：** 官方托管的 Facilitator 服务已上线，您无需自行维护基础设施即可直接使用。使用官方服务需要配置 [Facilitator API Key](./facilitator-api-key.md)，以解锁生产级别的调用频率。
 
 ### Facilitator API 端点
 
@@ -71,7 +68,7 @@ Facilitator 支持灵活配置服务费用：
 x402 协议的设计核心在于**最小化信任假设**：
 
 - **授权签名**：Facilitator 仅能划转客户端签名授权范围内的资金。
-- **资金直达**：资金从客户端直接流向卖方（若有服务费，则部分流向 Facilitator ），中间不经过资金池。
+- **资金直达**：资金从客户端直接流向卖家（若有服务费，则部分流向 Facilitator ），中间不经过资金池。
 - **链上验证**：所有交易记录均在区块链上公开可查。
 
 即使是**恶意的 Facilitator**也无法执行以下操作：
@@ -88,5 +85,6 @@ x402 协议的设计核心在于**最小化信任假设**：
 
 接下来，建议您深入了解：
 
+- [Facilitator API Key](./facilitator-api-key.md) — 如何申请和配置官方 Facilitator 的 API Key
 - [钱包](./wallet.md) — 了解如何管理用于支付的钱包
 - [网络与代币支持](./network-and-token-support.md) — 了解支持的网络和代币

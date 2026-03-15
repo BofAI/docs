@@ -9,7 +9,7 @@ SUN MCP Server 是面向 **TRON 网络上 SUN.IO（SUNSWAP）** 生态的 Model 
 - **自定义 SUNSWAP 工具**（`sunswap_*`）：钱包、余额、报价、兑换及 V2/V3 流动性，由 `tronweb` 与链上合约调用支持。
 
 ## MCP 服务器 URL
-为了方便不同需求的用户，你可以选择直接连接[官方云服务](./UsingOfficialService.md)，也可以选择在自己的电脑上进行[本地化部署](./UsingLocalService.md)。其中官方服务只提供读取服务。
+为了方便不同需求的用户，你可以选择直接连接[官方云服务](./OfficialServerAccess.md)，也可以选择在自己的电脑上进行[本地化部署](./LocalPrivatizedDeployment.md)。其中官方服务只提供读取服务。
 
 |环境|url|
 |:---|:---|
