@@ -23,28 +23,14 @@ Not at all. Any Web API or content provider—whether Web3-native or traditional
 
 ---
 
-### Assets & Networks
-
-#### What assets and networks are supported?
-
-| Network                       | Token         | Status      |
-| ----------------------------- | ------------- | ----------- |
-| TRON Mainnet (`tron:mainnet`) | USDT (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:nile`)       | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:shasta`)   | USDT (TRC-20) | **Testnet** |
-| BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
-| BSC Testnet (`eip155:97`)     | USDT (BEP-20) | **Testnet** |
-
----
-
 ### Language & Framework Support
 
 #### What languages and frameworks are supported?
 
 x402 currently provides the following SDKs:
 
-- **Python**: Integrated with FastAPI and Flask
-- **TypeScript**: Supports standard `fetch` clients
+- **Python**: Integrated with FastAPI and Flask  
+- **TypeScript**: Supports standard `fetch` clients  
 
 Both SDKs fully implement Client, Server, and Facilitator functionality.
 
@@ -64,8 +50,8 @@ All payment payloads are **signed by the buyer**, and settlement is executed **d
 
 A Facilitator can only:
 
-- Transfer the exact amount authorized by the buyer
-- Send funds to the specific recipient address defined in the signed payload
+- Transfer the exact amount authorized by the buyer  
+- Send funds to the specific recipient address defined in the signed payload  
 
 ---
 
@@ -75,21 +61,38 @@ A Facilitator can only:
 
 Common pricing models include:
 
-- **Flat rate per call**: e.g., `1 USDT` per request
-- **Tiered pricing**: Different prices for endpoints like `/basic` and `/pro`
-- **`exact` scheme**: Pay the exact amount determined by the service
+- **Flat rate per call**: e.g., `1 USDT` per request  
+- **Tiered pricing**: Different prices for endpoints like `/basic` and `/pro`  
+- **`exact_permit` / `exact` scheme**: Pay the exact amount determined by the service  
 
 #### What payment schemes does x402 support?
 
-x402 uses the `exact` payment scheme as its unified standard. It allows the client to authorize a specific payment amount, and the server to settle the transaction via a Facilitator. This is ideal for **pay-per-request**, **metered billing**, and **AI agent autonomous payments**.
+x402 supports `exact_permit` and `exact` payment schemes. Both allow the client to authorize a **maximum payment amount**, and the server to settle the **actual cost incurred** (up to the authorized limit). This is ideal for **metered billing**, **LLM token usage**, and similar use cases.
 
-#### Does x402 support recurring payments?
+---
 
-Currently, x402 focuses on per-request or per-session authorizations. While it doesn't support traditional "infinite" recurring billing yet, a single authorization can be used for multi-step settlement if configured by the payment scheme. Full recurring subscription support is on our long-term roadmap.
+### Assets, Networks & Fees
 
-#### Is x402 compatible with all tokens?
+#### What assets and networks are supported?
 
-x402 is compatible with standard TRC-20 and BEP-20 tokens. The `exact` scheme automatically adapts to the token's capabilities, including standard transfers, EIP-2612 Permit, and EIP-3009 Native Authorization.
+| Network                     | Token         | Status      |
+| --------------------------- | ------------- | ----------- |
+| TRON Mainnet (`tron:mainnet`) | USDT (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:nile`)       | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:shasta`)   | USDT (TRC-20) | **Testnet** |
+| TRON Mainnet (`tron:mainnet`) | USDD (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:nile`)       | USDD (TRC-20) | **Testnet** |
+| BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
+| BSC Testnet (`eip155:97`)     | USDT (BEP-20) | **Testnet** |
+
+Custom TRC-20 and BEP-20 tokens can also be added via the TokenRegistry.
+
+#### What fees are involved?
+
+- **Network Fees**:
+  - TRON: TRX for Energy and Bandwidth (paid by the Facilitator)
+  - BSC: BNB for gas (paid by the Facilitator)
+- **Facilitator Service Fee**: Configurable by each Facilitator (can be set to zero)
 
 ---
 
@@ -99,18 +102,18 @@ x402 is compatible with standard TRC-20 and BEP-20 tokens. The `exact` scheme au
 
 **No.** Recommended security model:
 
-1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).
-2. **Seller** verifies signatures without accessing private keys.
-3. **Facilitator** uses its own key to submit transactions on-chain.
+1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).  
+2. **Seller** verifies signatures without accessing private keys.  
+3. **Facilitator** uses its own key to submit transactions on-chain.  
 
-#### How do refunds work?
+#### How does refunds work?
 
-The `exact` scheme uses a **push payment** model—once executed on-chain, it is irreversible.
+The `exact_permit` / `exact` scheme uses a **push payment** model—once executed on-chain, it is irreversible.
 
 Refund options:
 
-1. **Business-layer refund**: Seller manually sends a new USDT transfer back to the buyer.
-2. **Preventative settlement**: Server settles only the actual usage amount under the payment scheme.
+1. **Business-layer refund**: Seller manually sends a new USDT transfer back to the buyer.  
+2. **Preventative settlement**: Server settles only the actual usage amount under the payment scheme.  
 
 ---
 
@@ -120,10 +123,10 @@ Refund options:
 
 The flow mirrors a human user:
 
-1. Send initial request.
-2. Parse `PAYMENT-REQUIRED` header in the response.
-3. Sign the payment payload using the x402 client SDK.
-4. Retry request with `PAYMENT-SIGNATURE` header attached.
+1. Send initial request.  
+2. Parse `PAYMENT-REQUIRED` header in the response.  
+3. Sign the payment payload using the x402 client SDK.  
+4. Retry request with `PAYMENT-SIGNATURE` header attached.  
 
 #### Does an agent need a wallet?
 
@@ -135,24 +138,24 @@ The flow mirrors a human user:
 
 #### How do I run x402 locally?
 
-1. **Clone the repository:** Download the [x402-demo repository](https://github.com/BofAI/x402-demo).
-2. **Install dependencies:** Run `pip install -r requirements.txt`.
-3. **Configure environment:** Copy `.env.example` to `.env` and configure your private keys.
-4. **Start Facilitator:** `python facilitator/main.py`
-5. **Start Server:** `python server/main.py`
-6. **Run Client:** `python client/main.py`
+1. **Clone the repository:** Download the [x402-demo repository](https://github.com/BofAI/x402-demo).  
+2. **Install dependencies:** Run `pip install -r requirements.txt`.  
+3. **Configure environment:** Copy `.env.example` to `.env` and configure your private keys.  
+4. **Start Facilitator:** `python facilitator/main.py`  
+5. **Start Server:** `python server/main.py`  
+6. **Run Client:** `python client/main.py`  
 
 #### Which testnet is recommended?
 
 **TRON Nile** is recommended for TRON testing:
 
-- Faucet: https://nileex.io/join/getJoinPage
-- Explorer: https://nile.tronscan.org
+- Faucet: https://nileex.io/join/getJoinPage  
+- Explorer: https://nile.tronscan.org  
 
 **BSC Testnet** is recommended for BSC testing:
 
-- Faucet: https://www.bnbchain.org/en/testnet-faucet
-- Explorer: https://testnet.bscscan.com
+- Faucet: https://www.bnbchain.org/en/testnet-faucet  
+- Explorer: https://testnet.bscscan.com  
 
 ---
 
@@ -162,21 +165,21 @@ The flow mirrors a human user:
 
 Common causes:
 
-1. Invalid signature (incorrect domain or payload).
-2. Insufficient payment amount.
-3. Insufficient token allowance granted to Facilitator.
-4. Insufficient wallet balance.
+1. Invalid signature (incorrect domain or payload).  
+2. Insufficient payment amount.  
+3. Insufficient token allowance granted to Facilitator.  
+4. Insufficient wallet balance.  
 
 Check the `error` field in the server’s JSON response for detailed diagnostics.
 
 #### It works on Nile but fails on Mainnet — why?
 
-- Network configuration not updated
-- Using testnet tokens instead of real mainnet tokens
-- Facilitator lacks sufficient gas tokens
-- Token contract address differs between networks
+- Network configuration not updated  
+- Using testnet tokens instead of real mainnet tokens  
+- Facilitator lacks sufficient gas tokens  
+- Token contract address differs between networks  
 
 ### Still Have Questions?
 
 • Submit a GitHub Issue in the [x402 repository](https://github.com/BofAI/x402)  
-• Refer to [x402-demo](https://github.com/BofAI/x402-demo) for a complete, runnable example
+• Refer to [x402-demo](https://github.com/BofAI/x402-demo) for a complete, runnable example  
