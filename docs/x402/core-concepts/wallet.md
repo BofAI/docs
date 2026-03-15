@@ -76,13 +76,11 @@ x402 uses typed data signing for secure payment authorization.
 
 ## Token Approval
 
-Depending on the token protocol, the client may need to authorize the Facilitator or a proxy contract to transfer tokens.
+For the `exact_permit` payment scheme, the client must authorize the `PaymentPermit` contract to transfer tokens from their wallet for settlement.  
 
-- **EIP-3009 (Native Authorization)**: No separate `approve` is required. The authorization is included in the signed payment payload.
-- **EIP-2612 (Permit)**: The SDK handles the permit signing, which replaces the manual `approve` transaction.
-- **Standard ERC-20 / TRC-20**: For traditional tokens, the client must authorize the `Permit2` contract (used by x402 for unified settlement) via the standard `approve` function.
+This is completed via the standard TRC-20/BEP-20 `approve` function.
 
-The x402 client SDK automatically detects the required flow and prompts for approval or signature as needed.
+The x402 client SDK automatically handles this process.
 
 ---
 
@@ -90,19 +88,19 @@ The x402 client SDK automatically detects the required flow and prompts for appr
 
 ### TRON RPC Endpoints
 
-| Network              | RPC Endpoint                     |
-| :------------------- | :------------------------------- |
-| **Mainnet**          | `https://api.trongrid.io`        |
-| **Nile (Testnet)**   | `https://nile.trongrid.io`       |
+| Network | RPC Endpoint |
+| :------- | :------------ |
+| **Mainnet** | `https://api.trongrid.io` |
+| **Nile (Testnet)** | `https://nile.trongrid.io` |
 | **Shasta (Testnet)** | `https://api.shasta.trongrid.io` |
 
 ---
 
 ### BSC RPC Endpoints
 
-| Network     | RPC Endpoint                                     |
-| :---------- | :----------------------------------------------- |
-| **Mainnet** | `https://bsc-dataseed.binance.org`               |
+| Network | RPC Endpoint |
+| :------- | :------------ |
+| **Mainnet** | `https://bsc-dataseed.binance.org` |
 | **Testnet** | `https://data-seed-prebsc-1-s1.binance.org:8545` |
 
 ---
@@ -137,5 +135,5 @@ The x402 client SDK automatically detects the required flow and prompts for appr
 
 Continue exploring:
 
-- [Network and Token Support](./network-and-token-support.md) — View supported networks and token lists
-- [SDK Features](../sdk-features.md) — Explore the full capabilities of the x402 SDK
+- [Network and Token Support](./network-and-token-support.md) — View supported networks and token lists  
+- [SDK Features](../sdk-features.md) — Explore the full capabilities of the x402 SDK  

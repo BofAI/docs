@@ -15,36 +15,60 @@ import TabItem from '@theme/TabItem';
 
 以下是您所需的关键配置项：
 
-| 项目          | 描述                             | 获取方式                                                           |
-| ------------- | -------------------------------- | ------------------------------------------------------------------ |
-| **私钥**      | 用于对支付进行签名的钱包私钥     | 从钱包导出                                                         |
-| **测试 TRX**  | 用于支付测试网交易的手续费 (Gas) | [Nile 水龙头](https://nileex.io/join/getJoinPage)                  |
+| 项目          | 描述                             | 获取方式                                                            |
+| ------------- | -------------------------------- | ------------------------------------------------------------------- |
+| **私钥** | 用于对支付进行签名的钱包私钥     | 从钱包导出                   |
+| **测试 TRX**  | 用于支付测试网交易的手续费 (Gas) | [Nile 水龙头](https://nileex.io/join/getJoinPage)                   |
 | **测试 USDT** | 用于进行支付的测试代币           | [Nile USDT 水龙头](https://nileex.io/join/getJoinPage)或在社区索取 |
-| **测试 BNB**  | 用于支付测试网交易的手续费 (Gas) | [Testnet 水龙头](https://www.bnbchain.org/en/testnet-faucet)       |
-| **测试 USDT** | 用于进行支付的测试代币           | [Testnet USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet)  |
+| **测试 BNB**  | 用于支付测试网交易的手续费 (Gas) | [Testnet 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
+| **测试 USDT** | 用于进行支付的测试代币           | [Testnet USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
+
+
+
+
+
 
 **安全提示：** 切勿分享您的私钥！请将其安全地存储在环境变量中，切勿直接写入代码。
 
 ## 1. 安装 x402 SDK
 
-<Tabs groupId="language">
-<TabItem value="python" label="Python">
-
-从 GitHub 安装：
+x402 Python 包暂未发布至 PyPI。请从 GitHub 源码安装：
 
 ```bash
-pip install "bankofai-x402[tron,evm,httpx] @ git+https://github.com/BofAI/x402.git@main#subdirectory=python/x402"
+# Clone the repository
+git clone https://github.com/BofAI/x402.git
+cd x402/python/x402
+
+# Install
+pip install -e .
 ```
 
-</TabItem>
-<TabItem value="ts" label="TypeScript">
+或者直接从 Release 标签安装：
 
 ```bash
-npm install @bankofai/x402-fetch @bankofai/x402-tron @bankofai/x402-evm tronweb viem
+pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
-</TabItem>
-</Tabs>
+安装所需的依赖：
+
+```bash
+pip install eth_account web3
+```
+
+安装 x402 TypeScript 包：
+
+```bash
+npm install @bankofai/x402 tronweb dotenv
+```
+
+> **注意：** `@bankofai/x402` 包是 ESM 模块。如果在使用 `npx tsx` 运行时遇到 `ERR_PACKAGE_PATH_NOT_EXPORTED` 错误，请在您的 `package.json` 中添加 `"type": "module"`：
+>
+> ```json
+> {
+>   "type": "module"
+> }
+> ```
+
 
 ## 2. 配置环境变量
 
@@ -63,9 +87,9 @@ export TRON_PRIVATE_KEY=your_private_key_here
 ```bash
 export BSC_PRIVATE_KEY=your_private_key_here
 ```
-
 </TabItem>
 </Tabs>
+
 
 ## 3. 自动发起付费请求
 
@@ -74,15 +98,15 @@ export BSC_PRIVATE_KEY=your_private_key_here
     <Tabs groupId="language">
       <TabItem value="python" label="Python">
 
+
 ```python
 import asyncio
 import os
 import httpx
 
-from bankofai.x402 import x402Client
-from bankofai.x402.http.clients import x402_httpx_transport
-from bankofai.x402.mechanisms.tron.exact.register import register_exact_tron_client
-from bankofai.x402.mechanisms.tron.signers import ClientTronSigner
+from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
+from bankofai.x402.mechanisms.tron.exact_permit import ExactPermitTronClientMechanism
+from bankofai.x402.signers.client import TronClientSigner
 
 
 # ========== Configuration ==========
@@ -92,19 +116,22 @@ SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"  # Replace with your
 
 
 async def main():
-    # Configure signer
-    signer = ClientTronSigner(os.getenv("TRON_PRIVATE_KEY"))
+    # Configure signer (network is resolved dynamically)
+    signer = TronClientSigner.from_private_key(os.getenv("TRON_PRIVATE_KEY"))
 
-    # Create x402 client and register mechanism
-    client = x402Client()
-    register_exact_tron_client(client, signer)
+    # Create x402 client, register mechanism and balance policy
+    x402_client = X402Client()
+    x402_client.register("tron:*", ExactPermitTronClientMechanism(signer))
+    x402_client.register_policy(SufficientBalancePolicy)
 
-    # Make request - payment is handled automatically via transport
-    async with httpx.AsyncClient(transport=x402_httpx_transport(client), timeout=60.0) as http_client:
-        response = await http_client.get(SERVER_URL)
+    async with httpx.AsyncClient(timeout=60.0) as http_client:
+        client = X402HttpClient(http_client, x402_client)
+
+        # Make request - payment is handled automatically
+        response = await client.get(SERVER_URL)
 
         print(f"Status: {response.status_code}")
-        print("Body:", response.text)
+        print("Headers:", response.headers)
 
 
 asyncio.run(main())
@@ -115,38 +142,40 @@ asyncio.run(main())
 
 ```typescript
 import 'dotenv/config'
-import { TronWeb } from 'tronweb'
-import { x402Client, wrapFetchWithPayment, x402HTTPClient } from '@bankofai/x402-fetch'
-import { ExactTronScheme } from '@bankofai/x402-tron/exact/client'
-import { createClientTronSigner } from '@bankofai/x402-tron'
+import {
+  X402Client, X402FetchClient,
+  ExactPermitTronClientMechanism, TronClientSigner,
+  SufficientBalancePolicy,
+} from '@bankofai/x402'
 
 const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
 
-// ========== 配置 ==========
-// 您想要访问的 x402 服务器 URL
-const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile' // 替换为您的目标服务器
-// ==========================
+// ========== Configuration ==========
+// The x402 server URL you want to access
+const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile' // Replace with your target server
+// ====================================
 
 async function main(): Promise<void> {
-  // Create signer
-  const tronWeb = new TronWeb({ fullHost: 'https://nile.trongrid.io' })
-  const signer = createClientTronSigner(tronWeb, TRON_PRIVATE_KEY)
+  // Create signer (network is resolved dynamically)
+  const signer = new TronClientSigner(TRON_PRIVATE_KEY)
 
-  // Create x402 client and register mechanism
-  const client = new x402Client()
-  client.register('tron:*', new ExactTronScheme(signer))
+  // Create x402 client, register mechanism and balance policy
+  const x402 = new X402Client()
+  x402.register('tron:*', new ExactPermitTronClientMechanism(signer))
+  x402.registerPolicy(SufficientBalancePolicy)
 
-  const fetchWithPayment = wrapFetchWithPayment(fetch, client)
+  const client = new X402FetchClient(x402)
 
   // Make request - payment is handled automatically
-  const response = await fetchWithPayment(SERVER_URL)
+  const response = await client.get(SERVER_URL)
 
   console.log(`Status: ${response.status}`)
 
   // Parse payment response
-  const httpClient = new x402HTTPClient(client)
-  const settleResponse = httpClient.getPaymentSettleResponse((name) => response.headers.get(name))
-  if (settleResponse) {
+  const paymentResponse = response.headers.get('payment-response')
+  if (paymentResponse) {
+    const jsonString = Buffer.from(paymentResponse, 'base64').toString('utf8')
+    const settleResponse = JSON.parse(jsonString)
     console.log(`Transaction: ${settleResponse.transaction}`)
   }
 
@@ -161,6 +190,8 @@ async function main(): Promise<void> {
 main().catch(console.error)
 ```
 
+
+
   </TabItem>
 </Tabs>
 </TabItem>
@@ -173,11 +204,10 @@ import asyncio
 import os
 import httpx
 
-from bankofai.x402 import x402Client
-from bankofai.x402.http.clients import x402_httpx_transport
-from bankofai.x402.mechanisms.evm.exact.register import register_exact_evm_client
-from bankofai.x402.mechanisms.evm import EthAccountSigner
-from eth_account import Account
+from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
+from bankofai.x402.mechanisms.evm.exact_permit import ExactPermitEvmClientMechanism
+from bankofai.x402.mechanisms.evm.exact import ExactEvmClientMechanism
+from bankofai.x402.signers.client import EvmClientSigner
 
 
 # ========== Configuration ==========
@@ -186,20 +216,23 @@ SERVER_URL = "https://x402-demo.bankofai.io/protected-bsc-testnet"  # Replace wi
 
 
 async def main():
-    # Configure signer
-    account = Account.from_key(os.getenv("BSC_PRIVATE_KEY"))
-    signer = EthAccountSigner(account)
+    # Configure signer (network is resolved dynamically)
+    signer = EvmClientSigner.from_private_key(os.getenv("BSC_PRIVATE_KEY"))
 
-    # Create x402 client and register mechanism
-    client = x402Client()
-    register_exact_evm_client(client, signer)
+    # Create x402 client, register mechanisms and balance policy
+    x402_client = X402Client()
+    x402_client.register("eip155:*", ExactPermitEvmClientMechanism(signer))
+    x402_client.register("eip155:*", ExactEvmClientMechanism(signer))
+    x402_client.register_policy(SufficientBalancePolicy)
 
-    # Make request - payment is handled automatically via transport
-    async with httpx.AsyncClient(transport=x402_httpx_transport(client), timeout=60.0) as http_client:
-        response = await http_client.get(SERVER_URL)
+    async with httpx.AsyncClient(timeout=60.0) as http_client:
+        client = X402HttpClient(http_client, x402_client)
+
+        # Make request - payment is handled automatically
+        response = await client.get(SERVER_URL)
 
         print(f"Status: {response.status_code}")
-        print("Body:", response.text)
+        print("Headers:", response.headers)
 
 
 asyncio.run(main())
@@ -210,32 +243,40 @@ asyncio.run(main())
 
 ```typescript
 import 'dotenv/config'
-import { x402Client, wrapFetchWithPayment, x402HTTPClient } from '@bankofai/x402-fetch'
-import { ExactEvmScheme } from '@bankofai/x402-evm/exact/client'
-import { privateKeyToAccount } from 'viem/accounts'
+import {
+  X402Client, X402FetchClient,
+  ExactPermitEvmClientMechanism, ExactEvmClientMechanism,
+  EvmClientSigner, SufficientBalancePolicy,
+} from '@bankofai/x402'
 
-const BSC_PRIVATE_KEY = process.env.BSC_PRIVATE_KEY! as `0x${string}`
-const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet'
+const BSC_PRIVATE_KEY = process.env.BSC_PRIVATE_KEY!
+
+// ========== Configuration ==========
+const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet' // Replace with your target server
+// ====================================
 
 async function main(): Promise<void> {
-  // Create signer
-  const signer = privateKeyToAccount(BSC_PRIVATE_KEY)
+  // Create signer (network is resolved dynamically)
+  const signer = new EvmClientSigner(BSC_PRIVATE_KEY)
 
-  // Create x402 client and register mechanism
-  const client = new x402Client()
-  client.register('eip155:*', new ExactEvmScheme(signer))
+  // Create x402 client, register mechanisms and balance policy
+  const x402 = new X402Client()
+  x402.register('eip155:*', new ExactPermitEvmClientMechanism(signer))
+  x402.register('eip155:*', new ExactEvmClientMechanism(signer))
+  x402.registerPolicy(SufficientBalancePolicy)
 
-  const fetchWithPayment = wrapFetchWithPayment(fetch, client)
+  const client = new X402FetchClient(x402)
 
   // Make request - payment is handled automatically
-  const response = await fetchWithPayment(SERVER_URL)
+  const response = await client.get(SERVER_URL)
 
   console.log(`Status: ${response.status}`)
 
   // Parse payment response
-  const httpClient = new x402HTTPClient(client)
-  const settleResponse = httpClient.getPaymentSettleResponse((name) => response.headers.get(name))
-  if (settleResponse) {
+  const paymentResponse = response.headers.get('payment-response')
+  if (paymentResponse) {
+    const jsonString = Buffer.from(paymentResponse, 'base64').toString('utf8')
+    const settleResponse = JSON.parse(jsonString)
     console.log(`Transaction: ${settleResponse.transaction}`)
   }
 
@@ -260,33 +301,40 @@ main().catch(console.error)
 
 SDK 在支付过程中可能会抛出错误。处理方法如下：
 
+
 <Tabs groupId="chain">
   <TabItem value="tron" label="TRON">
     <Tabs groupId="language">
       <TabItem value="python" label="Python">
 
+
 ```python
-from bankofai.x402 import (
-    PaymentError,
-    NoMatchingRequirementsError,
-    SchemeNotFoundError,
+from bankofai.x402.exceptions import (
+    X402Error,
+    InsufficientAllowanceError,
+    SignatureCreationError,
+    UnsupportedNetworkError,
 )
 
 try:
-    async with httpx.AsyncClient(transport=x402_httpx_transport(client)) as http_client:
-        response = await http_client.get(SERVER_URL)
+    response = await client.get(SERVER_URL)
 
     print(f"Status: {response.status_code}")
+    print("Headers:", response.headers)
 
-except SchemeNotFoundError as e:
+except UnsupportedNetworkError as e:
     # No mechanism registered for the network
     print(f"Network not supported: {e}")
 
-except NoMatchingRequirementsError as e:
-    # All requirements filtered out by policies or none matching
-    print(f"No matching requirements: {e}")
+except InsufficientAllowanceError as e:
+    # Token allowance insufficient
+    print(f"Insufficient allowance: {e}")
 
-except PaymentError as e:
+except SignatureCreationError as e:
+    # Failed to sign payment
+    print(f"Signature failed: {e}")
+
+except X402Error as e:
     # Other x402 errors
     print(f"Payment error: {e}")
 ```
@@ -294,9 +342,10 @@ except PaymentError as e:
   </TabItem>
   <TabItem value="ts" label="TypeScript">
 
+
 ```typescript
 try {
-  const response = await fetchWithPayment(SERVER_URL)
+  const response = await client.get(SERVER_URL)
 
   if (response.status === 200) {
     console.log('Success:', await response.json())
@@ -304,11 +353,11 @@ try {
     console.error(`Request failed: ${response.status}`)
     console.error(await response.text())
   }
-} catch (error: any) {
+} catch (error) {
   if (error.message.includes('No mechanism registered')) {
     console.error('Network not supported - register the appropriate mechanism')
-  } else if (error.message.includes('balance')) {
-    console.error('Insufficient token balance')
+  } else if (error.message.includes('allowance')) {
+    console.error('Insufficient token allowance')
   } else {
     console.error('Payment error:', error.message)
   }
@@ -323,27 +372,32 @@ try {
   <TabItem value="python" label="Python">
 
 ```python
-from bankofai.x402 import (
-    PaymentError,
-    NoMatchingRequirementsError,
-    SchemeNotFoundError,
+from bankofai.x402.exceptions import (
+    X402Error,
+    InsufficientAllowanceError,
+    SignatureCreationError,
+    UnsupportedNetworkError,
 )
 
 try:
-    async with httpx.AsyncClient(transport=x402_httpx_transport(client)) as http_client:
-        response = await http_client.get(SERVER_URL)
+    response = await client.get(SERVER_URL)
 
     print(f"Status: {response.status_code}")
+    print("Headers:", response.headers)
 
-except SchemeNotFoundError as e:
+except UnsupportedNetworkError as e:
     # No mechanism registered for the network
     print(f"Network not supported: {e}")
 
-except NoMatchingRequirementsError as e:
-    # All requirements filtered out by policies or none matching
-    print(f"No matching requirements: {e}")
+except InsufficientAllowanceError as e:
+    # Token allowance insufficient
+    print(f"Insufficient allowance: {e}")
 
-except PaymentError as e:
+except SignatureCreationError as e:
+    # Failed to sign payment
+    print(f"Signature failed: {e}")
+
+except X402Error as e:
     # Other x402 errors
     print(f"Payment error: {e}")
 ```
@@ -353,7 +407,7 @@ except PaymentError as e:
 
 ```typescript
 try {
-  const response = await fetchWithPayment(SERVER_URL)
+  const response = await client.get(SERVER_URL)
 
   if (response.status === 200) {
     console.log('Success:', await response.json())
@@ -361,11 +415,11 @@ try {
     console.error(`Request failed: ${response.status}`)
     console.error(await response.text())
   }
-} catch (error: any) {
+} catch (error) {
   if (error.message.includes('No mechanism registered')) {
     console.error('Network not supported - register the appropriate mechanism')
-  } else if (error.message.includes('balance')) {
-    console.error('Insufficient token balance')
+  } else if (error.message.includes('allowance')) {
+    console.error('Insufficient token allowance')
   } else {
     console.error('Payment error:', error.message)
   }
@@ -378,15 +432,23 @@ try {
 </TabItem> 
 </Tabs>
 
+
+
+
+
+
+
+ 
+
 ## 总结
 
 通过本指南，您已经完成了以下集成步骤：
 
 - **安装依赖**：集成 `x402` SDK ， `tronweb` 库（TRON），`ethers.js`库（BSC）。
 - **配置身份**：使用私钥初始化钱包签名器 (Wallet Signer)。
-- **初始化客户端**：实例化 `x402Client` 并注册支付处理机制。
+- **初始化客户端**：实例化 `X402Client` 并注册支付处理机制。
 - **发起请求**：通过封装后的 HTTP 客户端访问付费 API 接口。
-- **自动化流程**：SDK 负责处理 402 检测和签名生命周期。对于需要 Permit2 的代币（如 USDT），请确保您已预先向 Permit2 合约授予了足够的额度。
+- **自动化流程**：SDK 将自动处理支付全生命周期，包括必要的代币授权 (Approve)。
 
 ## 下一步
 

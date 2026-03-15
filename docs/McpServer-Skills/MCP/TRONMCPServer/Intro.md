@@ -3,7 +3,7 @@
 TRON MCP Server is designed to provide AI agents with the ability to interact with the TRON blockchain. Through a unified interface, AI agents can utilize tools and AI-guided prompts to access TRON network services, supporting TRX, TRC20 tokens, and smart contract operations. The server leverages the `tronweb` library to fully support the TRON ecosystem.
 
 ## MCP Server URL
-For the convenience of users with different needs, you can choose to connect directly to the [official cloud service](./OfficialServerAccess.md) or choose to perform [local deployment](./LocalPrivatizedDeployment.md) on your own computer. Among them, the official service only provides reading services.
+For the convenience of users with different needs, you can choose to connect directly to the [official cloud service](./UsingOfficialService.md) or choose to perform [local deployment](./UsingLocalService.md) on your own computer. Among them, the official service only provides reading services.
 
 | Environment | URL |
 | :------- | :--------------------------------------- |
