@@ -262,7 +262,7 @@ Think of the Facilitator as an **automated notary**: when someone pays your API,
 <Tabs>
 <TabItem value="official" label="✅ Official Facilitator (Recommended)">
 
-The official hosted Facilitator requires **no infrastructure on your end**.
+The official hosted Facilitator requires **no infrastructure on your end**. Detailed information can also be found in [OfficialFacilitator](../core-concepts/OfficialFacilitator.md)
 
 #### 3.1 Configure the Service Endpoint
 

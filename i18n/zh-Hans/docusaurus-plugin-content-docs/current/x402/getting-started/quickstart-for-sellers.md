@@ -272,7 +272,7 @@ if __name__ == "__main__":
 <Tabs>
 <TabItem value="official" label="✅ 官方 Facilitator（推荐）">
 
-官方托管的 Facilitator 服务，**无需维护任何基础设施**。
+官方托管的 Facilitator 服务，**无需维护任何基础设施**。 详细信息也可参考 [官方 Facilitator](../core-concepts/OfficialFacilitator.md)
 
 #### 3.1 配置服务端点
 
