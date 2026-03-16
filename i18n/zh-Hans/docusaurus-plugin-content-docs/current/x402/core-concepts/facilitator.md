@@ -72,7 +72,7 @@ Facilitator 是一种中间件服务，主要负责：
 3. 在 Dashboard 点击"创建 API Key"
 4. 复制生成的 API Key，妥善保管
 
-> 📖 **详细图文操作步骤**请参见：[Facilitator API Key 申请指南](./facilitator-api-key.md)
+> 📖 **详细图文操作步骤**请参见：[官方 Facilitator](./OfficialFacilitator.md)
 
 > ⚠️ **API Key 安全提示：** API Key 相当于您访问官方服务的凭证，**请勿提交到 Git 或分享给他人**。未配置 API Key 时限速为 1 次/分钟；配置后提升至 1000 次/分钟，足以支撑生产环境。
 
@@ -383,13 +383,15 @@ FACILITATOR_URL = "https://your-server.com"
 
 无论使用官方还是自托管，Facilitator 均提供以下标准 API 端点：
 
-| 端点 | 方法 | 描述 |
-|:-----|:-----|:-----|
-| `/` | GET | 获取服务基础信息 |
-| `/supported` | GET | 查询支持的功能配置 |
-| `/fee/quote` | POST | 获取预估费用报价 |
-| `/verify` | POST | 验证支付载荷有效性 |
-| `/settle` | POST | 执行链上结算 |
+| 方法 | 路径 | 描述 |
+|------|------|------|
+| GET | `/health` | 服务健康检查 |
+| GET | `/supported` | 查询支持的支付能力和配置 |
+| POST | `/fee/quote` | 获取支付要求的费用预估 |
+| POST | `/verify` | 验证支付载荷有效性 |
+| POST | `/settle` | 执行链上结算（官方 Facilitator 下**受限速保护**） |
+| GET | `/payments/{payment_id}` | 按支付 ID 查询支付记录 |
+| GET | `/payments/tx/{tx_hash}` | 按交易哈希查询支付记录 |
 
 ---
 
@@ -429,7 +431,7 @@ x402 协议的设计核心在于**最小化信任假设**：
 
 ## 下一步
 
-- [Facilitator API Key](./facilitator-api-key.md) — 如何申请和配置官方 Facilitator 的 API Key（详细图文步骤）
+- [官方 Facilitator](./OfficialFacilitator.md) — 如何申请和配置官方 Facilitator 的 API Key（详细图文步骤）
 - [卖家快速入门](../getting-started/quickstart-for-sellers.md) — 完整的服务端接入流程
 - [钱包](./wallet.md) — 了解如何管理用于支付的钱包
 - [网络与代币支持](./network-and-token-support.md) — 了解支持的网络和代币

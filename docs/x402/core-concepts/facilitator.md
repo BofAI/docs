@@ -72,7 +72,7 @@ The officially hosted Facilitator service is available and ready to use — no i
 3. Click "Create API Key" in the Dashboard
 4. Copy the generated API Key and keep it safe
 
-> 📖 **For detailed step-by-step instructions with screenshots**, see: [Facilitator API Key Guide](./facilitator-api-key.md)
+> 📖 **For detailed step-by-step instructions with screenshots**, see: [Official Facilitator](./OfficialFacilitator.md)
 
 > ⚠️ **API Key security:** Your API Key is your credential for accessing the official service. **Do not commit it to Git or share it with anyone.** Without an API Key, the rate limit is 1 request/minute; with one configured, the limit is raised to 1,000 requests/minute, sufficient for production use.
 
@@ -383,13 +383,15 @@ See the [x402-facilitator repository](https://github.com/BofAI/x402-facilitator)
 
 Whether using the official service or a self-hosted instance, the Facilitator provides the following standard API endpoints:
 
-| Endpoint | Method | Description |
-|:---------|:-------|:------------|
-| `/` | GET | Retrieve basic service information |
-| `/supported` | GET | Query supported feature configuration |
-| `/fee/quote` | POST | Get estimated fee quote |
-| `/verify` | POST | Verify payment payload validity |
-| `/settle` | POST | Execute on-chain settlement |
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/health` | Liveness check |
+| GET | `/supported` | Supported payment capabilities and configuration |
+| POST | `/fee/quote` | Get fee quote for payment requirements |
+| POST | `/verify` | Verify payment payload validity |
+| POST | `/settle` | Execute on-chain settlement (**rate-limited** on the Official Facilitator) |
+| GET | `/payments/{payment_id}` | Query payment records by payment ID |
+| GET | `/payments/tx/{tx_hash}` | Query payment records by transaction hash |
 
 ---
 
@@ -429,7 +431,7 @@ Within the x402 protocol architecture, the **Facilitator** serves as an independ
 
 ## Next Steps
 
-- [Facilitator API Key](./facilitator-api-key.md) — How to apply for and configure an API Key for the official Facilitator (step-by-step with screenshots)
+- [Official Facilitator](./OfficialFacilitator.md) — How to apply for and configure an API Key for the official Facilitator (step-by-step with screenshots)
 - [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md) — Complete server-side integration walkthrough
 - [Wallet](./wallet.md) — Learn how to manage wallets used for payments
 - [Network and Token Support](./network-and-token-support.md) — Learn about supported networks and tokens

@@ -272,41 +272,50 @@ if __name__ == "__main__":
 <Tabs>
 <TabItem value="official" label="✅ 官方 Facilitator（推荐）">
 
-官方托管的 Facilitator 服务，**无需维护任何基础设施**，只需申请一个 API Key 即可使用。
+官方托管的 Facilitator 服务，**无需维护任何基础设施**。
 
-> 💡 **为什么需要 API Key？** 未配置时限速 1 次/分钟；配置后提升至 1000 次/分钟，足以支撑生产环境。
+#### 3.1 配置服务端点
 
-**官方服务涉及两个地址，用途不同，请注意区分：**
+将您的 `FACILITATOR_URL` 设置为官方 Facilitator 服务地址：
 
-| 地址 | 用途 |
-|------|------|
-| [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) | **管理后台** — 用于注册账号、申请和管理 Facilitator API Key |
-| [https://facilitator.bankofai.io](https://facilitator.bankofai.io) |  **服务端点** — 在项目代码的 `FACILITATOR_URL` 中配置，用于实际处理付款验证和结算请求（API 调用，非浏览器访问） |
+```
+https://facilitator.bankofai.io
+```
 
-#### 3.1 申请 Facilitator API Key
+这是您的 x402 服务端用来验证和结算支付的地址，**仅供 API 调用**，无需用浏览器访问。
 
-1. 打开浏览器，访问 [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io)
+> ⚠️ **未配置 API Key 时，此端点按 IP 地址限速为每分钟 1 次请求。** 测试够用，但生产环境中会直接卡住您的 API。请继续第 3.2 步申请 API Key。
+
+#### 3.2 申请 API Key
+
+在管理后台免费申请 API Key：
+
+[https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io)
+
+1. 在浏览器中打开上方链接
 2. 点击 **TronLink**，使用钱包登录（仅用于身份验证，**不会扣款**）
 3. 登录后进入 Dashboard，点击**"创建 API Key"**
 4. 点击确认，然后在 Dashboard 中点击 **View** 查看并复制您的 API Key
 
-> 📖 **详细图文步骤**请参见：[Facilitator API Key 申请指南](../core-concepts/facilitator-api-key.md)
+配置 API Key 后，限速提升至 **1000 次/分钟**，足以支撑生产环境。
+
+> 📖 **详细图文步骤**请参见：[官方 Facilitator](../core-concepts/OfficialFacilitator.md)
 
 > ⚠️ **安全提示：** API Key 是您的服务凭证，**请像对待密码一样保护它，绝不提交到 Git**
 
-#### 3.2 配置 `.env` 文件
+#### 3.3 配置 `.env` 文件
 
 在您的项目目录（存放 `server.py` 的目录）中，创建或编辑 `.env` 文件，添加以下内容：
 
 ```bash
-# 官方 Facilitator API Key（在 admin-facilitator.bankofai.io 申请）
-FACILITATOR_API_KEY=在此填入您的API Key
-
 # 官方 Facilitator 服务地址
 FACILITATOR_URL=https://facilitator.bankofai.io
+
+# API Key（在 admin-facilitator.bankofai.io 申请）— SDK 自动通过 X-API-KEY 请求头传递
+FACILITATOR_API_KEY=在此填入您的API Key
 ```
 
-#### 3.3 更新 server.py 连接官方 Facilitator
+#### 3.4 更新 server.py 连接官方 Facilitator
 
 将 `server.py` 中的 Facilitator 初始化部分修改为从环境变量读取配置（在文件顶部添加 `import os`）：
 
@@ -492,7 +501,7 @@ curl http://localhost:8000/protected
 - [完整服务器示例代码](https://github.com/BofAI/x402-demo/tree/main/server)
 - [Facilitator 示例代码](https://github.com/BofAI/x402-demo/tree/main/facilitator)
 - [Facilitator 详细说明](../core-concepts/facilitator.md) — 两种方式的完整安装步骤对比
-- [Facilitator API Key 申请指南](../core-concepts/facilitator-api-key.md) — 官方服务 API Key 图文教程
+- [官方 Facilitator](../core-concepts/OfficialFacilitator.md) — 官方服务 API Key 图文教程
 
 ---
 

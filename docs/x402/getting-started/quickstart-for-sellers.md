@@ -262,41 +262,50 @@ Think of the Facilitator as an **automated notary**: when someone pays your API,
 <Tabs>
 <TabItem value="official" label="✅ Official Facilitator (Recommended)">
 
-The official hosted Facilitator requires **no infrastructure on your end** — just an API Key.
+The official hosted Facilitator requires **no infrastructure on your end**.
 
-> 💡 **Why an API Key?** Without one, the rate limit is 1 request/minute. With one, it rises to 1,000/minute — enough for production.
+#### 3.1 Configure the Service Endpoint
 
-**The official service uses two distinct addresses — please note the difference:**
+Set your `FACILITATOR_URL` to the Official Facilitator service endpoint:
 
-| Address | Purpose |
-|---------|---------|
-| [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) | **Admin Portal** — register, create and manage your Facilitator API Key (open in browser) |
-| `https://facilitator.bankofai.io` | **Service Endpoint** — set as `FACILITATOR_URL` in your code; handles payment verification and settlement (API calls, not browser) |
+```
+https://facilitator.bankofai.io
+```
 
-#### 3.1 Get Your Facilitator API Key
+This is the address your x402 server calls to verify and settle payments. It is for **API calls only** — do not open it in a browser.
 
-1. Open [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) in your browser
+> ⚠️ **Without an API Key, this endpoint is rate-limited to 1 request/minute per IP.** This is fine for testing, but will block your API in production. Proceed to step 3.2 to get your API Key.
+
+#### 3.2 Get Your API Key
+
+Apply for a free API Key at the admin portal:
+
+[https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io)
+
+1. Open the link above in your browser
 2. Click **TronLink** to sign in with your wallet (identity verification only — **no funds deducted**)
 3. On the Dashboard, click **"Create API Key"**
 4. Click Confirm, then click **View** to reveal and copy your API Key
 
-> 📖 **Step-by-step screenshots:** [Facilitator API Key Guide](../core-concepts/facilitator-api-key.md)
+With an API Key configured, the rate limit rises to **1,000 requests/minute** — enough for production.
+
+> 📖 **Step-by-step screenshots:** [Official Facilitator](../core-concepts/OfficialFacilitator.md)
 
 > ⚠️ **Security:** Your API Key is a service credential — **treat it like a password and never commit it to Git.**
 
-#### 3.2 Configure Your `.env` File
+#### 3.3 Configure Your `.env` File
 
-In your project directory (where `server.py` lives), create or edit a `.env` file and add:
+The Facilitator authenticates requests via the HTTP header `X-API-KEY: <your_key>`. The SDK handles this automatically — just set the following in your `.env` file and the SDK attaches the header on every Facilitator call:
 
 ```bash
-# Facilitator API Key (obtained from admin-facilitator.bankofai.io)
-FACILITATOR_API_KEY=paste_your_api_key_here
-
 # Official Facilitator service endpoint
 FACILITATOR_URL=https://facilitator.bankofai.io
+
+# API Key — SDK sends this as the X-API-KEY header automatically
+FACILITATOR_API_KEY=paste_your_api_key_here
 ```
 
-#### 3.3 Update server.py to Use the Official Facilitator
+#### 3.4 Update server.py to Use the Official Facilitator
 
 Add `import os` at the top of `server.py` and update the Facilitator initialization:
 
@@ -480,7 +489,7 @@ To test payment end-to-end, you need a client that can sign payments:
 - [Full server example](https://github.com/BofAI/x402-demo/tree/main/server)
 - [Facilitator example](https://github.com/BofAI/x402-demo/tree/main/facilitator)
 - [Facilitator deep-dive](../core-concepts/facilitator.md) — detailed setup comparison for both options
-- [Facilitator API Key guide](../core-concepts/facilitator-api-key.md) — step-by-step with screenshots
+- [Official Facilitator](../core-concepts/OfficialFacilitator.md) — step-by-step with screenshots
 
 ---
 

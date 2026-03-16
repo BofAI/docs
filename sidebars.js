@@ -31,7 +31,7 @@ const sidebars = {
             'x402/core-concepts/http-402',
             'x402/core-concepts/client-server',
             'x402/core-concepts/facilitator',
-            'x402/core-concepts/facilitator-api-key',
+            'x402/core-concepts/OfficialFacilitator',
             'x402/core-concepts/wallet',
             'x402/core-concepts/network-and-token-support',
           ],

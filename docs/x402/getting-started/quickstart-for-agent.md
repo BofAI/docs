@@ -17,7 +17,7 @@ The `x402-payment` skill currently supports the following platforms:
 
 | Platform | Installation Method |
 |----------|---------------------|
-| **OpenClaw** | `npx clawhub install x402-payment` (one-command install) |
+| **OpenClaw** | Manually copy skill files into the `.openclaw/skills` directory |
 | **opencode** | Manually copy skill files into the `.opencode/skill/` directory |
 
 Before continuing, confirm that you are using one of the supported platforms above.
