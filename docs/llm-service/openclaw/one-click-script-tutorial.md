@@ -4,7 +4,7 @@
 
 1. Node.js 22 or higher is installed
 2. OpenClaw is installed and initialized (you have run `openclaw onboard`)
-3. Network connection is normal, and the AINFT API is accessible
+3. Network connection is normal, and the BANK OF AI API is accessible
 
 ### Script Commands
 
@@ -34,8 +34,7 @@ iwr https://chat.bankofai.io/scripts/openclaw-install-bankofai-provider.ps1 | ie
 2. Go to the [API Key Management Page](https://chat.bankofai.io/key)
 3. Click to apply for a new API Key
 
-
-![](https://files.readme.io/9011e70e9009bd0e6bcf318f8100e23e7b483a783fc7786b03e03107437d05d6-image.png)
+![](https://files.readme.io/354a3d414f37e7df28f2cbf92dd055db9b67a20cab8738f6d5ac007226b6931b-image.png)
 
 <br />
 
@@ -48,7 +47,7 @@ Depending on your operating system, execute the corresponding command above. The
 - Check the environment (Node.js, OpenClaw, etc.)
 - Prompt you to enter your API Key
 
-![](https://files.readme.io/1ab2f1ab9d444b570d435296f06270b541186c9d487bc795b2106b873baf7a23-image.png)
+![](https://files.readme.io/ef091efb8911db673af8a5eade7b281a52f641c93d41fbd57cb898ee91893e76-Image_16-3-2026_at_7.00PM.png)
 
 ***
 
@@ -56,7 +55,7 @@ Depending on your operating system, execute the corresponding command above. The
 
 After validating the API Key, the script will fetch the list of available models and prompt you to select a default model:
 
-![](https://files.readme.io/f420e5e6e6214f0e02c56c546a3625f5793bb1dc6e5cb8ef4aed6e547a054308-image.png)
+![](https://files.readme.io/be3b9162405e38988898261db3effa8adcf92b6d9e37181d36b32c1cf8bcd1e3-Image_16-3-2026_at_7.01PM.png)
 
 **:exclamation: Note:exclamation: **Gemini series models are currently largely unusable in OpenClaw due to client fingerprinting strictness for function calls. Please choose with caution.
 
@@ -70,7 +69,9 @@ Once the selection is complete, the script will automatically:
 - Update the OpenClaw configuration file
 - Restart the Gateway
 
-![](https://files.readme.io/7772254ccf61a1147f9aa87f036ce1045b1077f824dede9a93781a5738c542ba-image.png)
+![](https://files.readme.io/a08c7fcee0cbe906042ef52fefa15348750ad5cd2db8c4f555f92ecabba72761-Image_16-3-2026_at_7.03PM.png)
+
+<br />
 
 ***
 
@@ -89,9 +90,10 @@ Or manually edit the `~/.openclaw/openclaw.json` configuration file.
 - Web UI - Dashboard
 
 Visit <http://127.0.0.1:18789/> (18789 is the default port for OpenClaw) in your browser to access the OpenClaw Dashboard. Click "Agent" in the left navigation menu, and select the desired model in the Primary model dropdown:
+
 > **Please note:** Once you change the model via the Dashboard, command-line model switching will no longer work because the Dashboard automatically adds a `list` field to the config file.
 
-![](https://files.readme.io/0e5b17eef08531b83f513a737522772e52a50602c02ec62d0ef147611f95ac24-image.png)
+![](https://files.readme.io/3668289b53d185d158dd8393f46c0e171c0d301b5bdc624792c8cf8e6f9c4936-16-3-26_6.56.png)
 
 <br />
 
@@ -115,7 +117,7 @@ A: Please ensure that:
 
 1. Node.js 22 or higher is installed
 2. OpenClaw is installed and initialized (you have run `openclaw onboard`)
-3. Network connection is normal, and the AINFT API is accessible
+3. Network connection is normal, and the BANK OF AI API is accessible
 
 **Q: How do I switch models?**
 
