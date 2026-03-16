@@ -5,7 +5,7 @@
     "swagger": "2.0",
     "info": {
         "description": "OpenAPI spec for /v1/models and /v1/chat/completions (OpenAI format).",
-        "title": "AI API (OpenAI Compatible)",
+        "title": "BANKOFAI API (OpenAI Compatible)",
         "contact": {},
         "version": "1.0"
     },
