@@ -26,6 +26,19 @@
 
 ---
 
+## 官方服务地址说明
+
+官方 Facilitator 涉及两个地址，用途完全不同，请注意区分：
+
+| 地址 | 用途 |
+|------|------|
+| [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) | **管理后台** — 用于注册账号、申请和管理 Facilitator API Key（浏览器访问） |
+| [https://facilitator.bankofai.io](https://facilitator.bankofai.io) | **服务端点** — 在项目代码的 `FACILITATOR_URL` 中配置，用于实际处理付款验证和结算请求（API 调用，非浏览器访问） |
+
+> 💡 只有管理后台地址需要用浏览器打开；服务端点地址填入 `.env` 文件即可，不需要用浏览器访问。
+
+---
+
 ## 创建 API Key
 
 ### 前提条件

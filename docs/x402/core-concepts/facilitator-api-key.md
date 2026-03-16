@@ -26,6 +26,19 @@ For production environments, **configuring an API Key is strongly recommended**.
 
 ---
 
+## Official Service URL Reference
+
+The official Facilitator involves two distinct addresses with completely different purposes — please make sure you understand the difference:
+
+| Address | Purpose |
+|---------|---------|
+| [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) | **Admin Portal** — Register, create, and manage your Facilitator API Key (open in browser) |
+| [https://facilitator.bankofai.io](https://facilitator.bankofai.io) | **Service Endpoint** — Set as `FACILITATOR_URL` in your code; handles payment verification and settlement (API calls only, not for browser access) |
+
+> 💡 Only the Admin Portal URL needs to be opened in a browser. The Service Endpoint URL goes into your `.env` file — you do not need to visit it in a browser.
+
+---
+
 ## Creating an API Key
 
 ### Prerequisites

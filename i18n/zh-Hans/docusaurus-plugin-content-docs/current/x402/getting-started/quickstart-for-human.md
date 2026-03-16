@@ -3,101 +3,211 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+## 本指南适合谁？
+
+本指南适合想要通过代码**调用 x402 付费 API** 的开发者。完成后，您将能够用 Python 或 TypeScript 编写脚本，自动完成"付款 → 获取 API 内容"的完整流程，无需手动操作。
+
+> **测试优先：** 本指南默认使用测试网，不涉及真实资金。您可以安全地跟着步骤操作，熟悉整个流程后再连接真实钱包。
+
+---
+
 ## 前置准备
 
-在开始集成前，请确保您的环境满足以下要求：
+### 第一件事：私钥安全
 
-- **钱包**：持有一定量 USDT 余额的钱包账户。
-- **运行环境**：Python 3.10+ (含 pip) 或 Node.js 18+ (含 npm)。
-- **目标服务**：一个支持 x402 协议的支付服务端点。
+> 🔴 **私钥安全警告——请务必先读这一节：**
+>
+> - **私钥** 是控制您钱包的唯一凭证，相当于银行卡的密码+卡号合一，**获取私钥的人即可完全控制您的资产**
+> - 本指南需要您配置私钥，请务必遵守以下规则：
+>   1. **永远不要**将私钥直接写进代码文件（如 `client.py`）
+>   2. **永远不要**将含有私钥的文件提交到 Git 或上传到 GitHub
+>   3. **永远不要**通过微信、邮件、聊天记录发送私钥
+>   4. 私钥应只存放在本地的 `.env` 文件或系统环境变量中
+>   5. 测试时，请专门创建一个只含少量测试代币的**测试钱包**，不要使用存有真实资产的钱包
 
-## 配置参考
+### 准备工作清单
 
-以下是您所需的关键配置项：
+在开始之前，请确认以下条件：
 
-| 项目          | 描述                             | 获取方式                                                            |
-| ------------- | -------------------------------- | ------------------------------------------------------------------- |
-| **私钥** | 用于对支付进行签名的钱包私钥     | 从钱包导出                   |
-| **测试 TRX**  | 用于支付测试网交易的手续费 (Gas) | [Nile 水龙头](https://nileex.io/join/getJoinPage)                   |
-| **测试 USDT** | 用于进行支付的测试代币           | [Nile USDT 水龙头](https://nileex.io/join/getJoinPage)或在社区索取 |
-| **测试 BNB**  | 用于支付测试网交易的手续费 (Gas) | [Testnet 水龙头](https://www.bnbchain.org/en/testnet-faucet)                   |
-| **测试 USDT** | 用于进行支付的测试代币           | [Testnet USDT 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
+- [ ] 已安装 **Python 3.10+** 或 **Node.js 18+**（根据您选择的语言）
+- [ ] 已创建一个专用**测试钱包**（见下方说明）
+- [ ] 已获取测试代币（免费）
+- [ ] 知道要访问的 x402 付费 API 地址（或使用我们提供的演示地址）
 
+### 创建测试钱包并获取测试代币
 
+<Tabs>
+<TabItem value="TRON" label="TRON">
 
+**创建测试钱包：**
 
+1. 安装 [TronLink 浏览器插件](https://www.tronlink.org/) 或手机 App
+2. 点击"创建钱包"，设置密码，**将助记词抄写在纸上保管好**
+3. 钱包创建后，复制您的地址（以 `T` 开头）
 
+**获取测试代币（免费）：**
 
-**安全提示：** 切勿分享您的私钥！请将其安全地存储在环境变量中，切勿直接写入代码。
+1. 前往 [Nile 测试网水龙头](https://nileex.io/join/getJoinPage)
+2. 粘贴您的 TRON 测试钱包地址，领取测试 TRX 和测试 USDT/USDD
+3. 在 TronLink 中切换到"Nile 测试网"，确认余额到账
 
-## 1. 安装 x402 SDK
+**导出私钥：**
 
-x402 Python 包暂未发布至 PyPI。请从 GitHub 源码安装：
+1. 在 TronLink 中进入"设置 → 账户管理 → 导出私钥"
+2. 输入密码确认
+3. 复制这串私钥（64位十六进制字符），下一步会用到
 
-```bash
-# Clone the repository
-git clone https://github.com/BofAI/x402.git
-cd x402/python/x402
+> ✅ **成功标志：** 拥有 TRON 测试钱包地址和对应私钥，钱包中有测试 TRX 和 USDT（或 USDD）
 
-# Install
-pip install -e .
-```
+</TabItem>
+<TabItem value="BSC" label="BSC">
 
-或者直接从 Release 标签安装：
+**创建测试钱包：**
+
+1. 安装 [MetaMask 浏览器插件](https://metamask.io/)
+2. 点击"创建新钱包"，设置密码，**将助记词抄写在纸上保管好**
+3. 复制您的钱包地址（以 `0x` 开头）
+
+**获取测试代币（免费）：**
+
+1. 前往 [BSC 测试网水龙头](https://www.bnbchain.org/en/testnet-faucet)
+2. 粘贴 BSC 测试钱包地址，领取测试 BNB 和测试 USDT
+3. 在 MetaMask 中切换到 BSC 测试网，确认余额到账
+
+**导出私钥：**
+
+1. 在 MetaMask 中点击账户图标 → "账户详情" → "导出私钥"
+2. 输入 MetaMask 密码确认
+3. 复制这串私钥（64位十六进制字符），下一步会用到
+
+> ✅ **成功标志：** 拥有 BSC 测试钱包地址和对应私钥，钱包中有测试 BNB 和 USDT
+
+</TabItem>
+</Tabs>
+
+---
+
+## 第一步：安装 SDK
+
+根据您使用的编程语言，选择对应的安装方式：
+
+<Tabs groupId="language">
+<TabItem value="python" label="Python">
+
+打开终端，执行以下命令安装 x402 Python SDK：
 
 ```bash
 pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
 ```
 
-安装所需的依赖：
+再安装 EVM（BSC）所需的额外依赖：
 
 ```bash
 pip install eth_account web3
 ```
 
-安装 x402 TypeScript 包：
+验证安装：
+
+```bash
+python -c "import bankofai.x402; print('安装成功！')"
+```
+
+> ✅ **成功标志：** 终端输出 `安装成功！`
+
+如遇安装问题，也可从源码安装：
+
+```bash
+git clone https://github.com/BofAI/x402.git
+cd x402/python/x402
+pip install -e .
+```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
+
+打开终端，在您的项目目录下执行：
 
 ```bash
 npm install @bankofai/x402 tronweb dotenv
 ```
 
-> **注意：** `@bankofai/x402` 包是 ESM 模块。如果在使用 `npx tsx` 运行时遇到 `ERR_PACKAGE_PATH_NOT_EXPORTED` 错误，请在您的 `package.json` 中添加 `"type": "module"`：
->
-> ```json
-> {
->   "type": "module"
-> }
-> ```
+由于 `@bankofai/x402` 是 ESM 模块，请在您的 `package.json` 中添加以下字段（如果没有则添加）：
 
+```json
+{
+  "type": "module"
+}
+```
 
-## 2. 配置环境变量
+> 💡 如果在使用 `npx tsx` 运行时遇到 `ERR_PACKAGE_PATH_NOT_EXPORTED` 错误，通常是因为缺少这个 `"type": "module"` 配置。
 
-将您的钱包私钥设置为环境变量：
+> ✅ **成功标志：** `npm install` 执行完毕，`node_modules` 目录中出现 `@bankofai` 文件夹
+
+</TabItem>
+</Tabs>
+
+---
+
+## 第二步：配置私钥环境变量
+
+**不要将私钥写进代码！** 请将私钥存储为环境变量，这样代码从环境中读取，私钥不会出现在代码文件里。
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
+在终端中执行（将 `your_private_key_here` 替换为您在前置准备中导出的私钥）：
+
+```bash
+export TRON_PRIVATE_KEY=your_private_key_here
+```
+
+> 💡 **更推荐的方式：** 在项目目录创建 `.env` 文件，写入 `TRON_PRIVATE_KEY=你的私钥`，然后在 `.gitignore` 中添加 `.env`，防止意外提交到 Git。
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+在终端中执行（将 `your_private_key_here` 替换为您在前置准备中导出的私钥）：
+
+```bash
+export BSC_PRIVATE_KEY=your_private_key_here
+```
+
+> 💡 **更推荐的方式：** 在项目目录创建 `.env` 文件，写入 `BSC_PRIVATE_KEY=你的私钥`，然后在 `.gitignore` 中添加 `.env`，防止意外提交到 Git。
+
+</TabItem>
+</Tabs>
+
+验证环境变量已生效：
 
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
 ```bash
-export TRON_PRIVATE_KEY=your_private_key_here
+echo $TRON_PRIVATE_KEY
 ```
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
 ```bash
-export BSC_PRIVATE_KEY=your_private_key_here
+echo $BSC_PRIVATE_KEY
 ```
+
 </TabItem>
 </Tabs>
 
+> ✅ **成功标志：** 终端输出您的私钥字符串（不是空白）
 
-## 3. 自动发起付费请求
+---
+
+## 第三步：编写并运行调用代码
+
+新建一个文件（如 `client.py` 或 `client.ts`），复制对应的代码：
 
 <Tabs groupId="chain">
-  <TabItem value="tron" label="TRON">
-    <Tabs groupId="language">
-      <TabItem value="python" label="Python">
-
+<TabItem value="tron" label="TRON">
+<Tabs groupId="language">
+<TabItem value="python" label="Python">
 
 ```python
 import asyncio
@@ -109,17 +219,18 @@ from bankofai.x402.mechanisms.tron.exact_permit import ExactPermitTronClientMech
 from bankofai.x402.signers.client import TronClientSigner
 
 
-# ========== Configuration ==========
-# The x402 server URL you want to access
-SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"  # Replace with your target server
-# ====================================
+# ========== 配置项 ==========
+# 您要访问的 x402 付费 API 地址
+# 下方是我们提供的测试地址，您可以先用它验证流程是否通畅
+SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"
+# ===========================
 
 
 async def main():
-    # Configure signer (network is resolved dynamically)
+    # 用私钥初始化签名器（网络由服务器响应动态确定）
     signer = TronClientSigner.from_private_key(os.getenv("TRON_PRIVATE_KEY"))
 
-    # Create x402 client, register mechanism and balance policy
+    # 创建 x402 客户端，注册付款机制和余额检查策略
     x402_client = X402Client()
     x402_client.register("tron:*", ExactPermitTronClientMechanism(signer))
     x402_client.register_policy(SufficientBalancePolicy)
@@ -127,18 +238,31 @@ async def main():
     async with httpx.AsyncClient(timeout=60.0) as http_client:
         client = X402HttpClient(http_client, x402_client)
 
-        # Make request - payment is handled automatically
+        # 发起请求——SDK 会自动处理付款，您无需手动操作
         response = await client.get(SERVER_URL)
 
-        print(f"Status: {response.status_code}")
-        print("Headers:", response.headers)
+        print(f"状态码: {response.status_code}")
+        print("响应内容:", response.text)
 
 
 asyncio.run(main())
 ```
 
-  </TabItem>
-  <TabItem value="ts" label="TypeScript">
+**运行代码：**
+
+```bash
+python client.py
+```
+
+**预期输出：**
+
+```
+状态码: 200
+响应内容: {"data": "这是需要付款才能获取的内容！"}
+```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
 
 ```typescript
 import 'dotenv/config'
@@ -150,54 +274,67 @@ import {
 
 const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
 
-// ========== Configuration ==========
-// The x402 server URL you want to access
-const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile' // Replace with your target server
-// ====================================
+// ========== 配置项 ==========
+// 您要访问的 x402 付费 API 地址
+// 下方是我们提供的测试地址，您可以先用它验证流程是否通畅
+const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile'
+// ===========================
 
 async function main(): Promise<void> {
-  // Create signer (network is resolved dynamically)
+  // 用私钥初始化签名器
   const signer = new TronClientSigner(TRON_PRIVATE_KEY)
 
-  // Create x402 client, register mechanism and balance policy
+  // 创建 x402 客户端，注册付款机制和余额检查策略
   const x402 = new X402Client()
   x402.register('tron:*', new ExactPermitTronClientMechanism(signer))
   x402.registerPolicy(SufficientBalancePolicy)
 
   const client = new X402FetchClient(x402)
 
-  // Make request - payment is handled automatically
+  // 发起请求——SDK 会自动处理付款，您无需手动操作
   const response = await client.get(SERVER_URL)
 
-  console.log(`Status: ${response.status}`)
+  console.log(`状态码: ${response.status}`)
 
-  // Parse payment response
+  // 解析付款回执（可选）
   const paymentResponse = response.headers.get('payment-response')
   if (paymentResponse) {
     const jsonString = Buffer.from(paymentResponse, 'base64').toString('utf8')
     const settleResponse = JSON.parse(jsonString)
-    console.log(`Transaction: ${settleResponse.transaction}`)
+    console.log(`交易哈希: ${settleResponse.transaction}`)
   }
 
-  // Handle response
+  // 打印响应内容
   const contentType = response.headers.get('content-type') ?? ''
   if (contentType.includes('application/json')) {
     const body = await response.json()
-    console.log('Response:', body)
+    console.log('响应内容:', body)
   }
 }
 
 main().catch(console.error)
 ```
 
+**运行代码：**
 
+```bash
+npx tsx client.ts
+```
 
-  </TabItem>
+**预期输出：**
+
+```
+状态码: 200
+交易哈希: abc123...
+响应内容: { data: '这是需要付款才能获取的内容！' }
+```
+
+</TabItem>
 </Tabs>
 </TabItem>
 <TabItem value="bsc" label="BSC">
 <Tabs groupId="language">
-  <TabItem value="python" label="Python">
+<TabItem value="python" label="Python">
 
 ```python
 import asyncio
@@ -210,16 +347,17 @@ from bankofai.x402.mechanisms.evm.exact import ExactEvmClientMechanism
 from bankofai.x402.signers.client import EvmClientSigner
 
 
-# ========== Configuration ==========
-SERVER_URL = "https://x402-demo.bankofai.io/protected-bsc-testnet"  # Replace with your target server
-# ====================================
+# ========== 配置项 ==========
+# 您要访问的 x402 付费 API 地址
+SERVER_URL = "https://x402-demo.bankofai.io/protected-bsc-testnet"
+# ===========================
 
 
 async def main():
-    # Configure signer (network is resolved dynamically)
+    # 用私钥初始化签名器
     signer = EvmClientSigner.from_private_key(os.getenv("BSC_PRIVATE_KEY"))
 
-    # Create x402 client, register mechanisms and balance policy
+    # 创建 x402 客户端，注册付款机制和余额检查策略
     x402_client = X402Client()
     x402_client.register("eip155:*", ExactPermitEvmClientMechanism(signer))
     x402_client.register("eip155:*", ExactEvmClientMechanism(signer))
@@ -228,18 +366,31 @@ async def main():
     async with httpx.AsyncClient(timeout=60.0) as http_client:
         client = X402HttpClient(http_client, x402_client)
 
-        # Make request - payment is handled automatically
+        # 发起请求——SDK 会自动处理付款，您无需手动操作
         response = await client.get(SERVER_URL)
 
-        print(f"Status: {response.status_code}")
-        print("Headers:", response.headers)
+        print(f"状态码: {response.status_code}")
+        print("响应内容:", response.text)
 
 
 asyncio.run(main())
 ```
 
-  </TabItem>
-  <TabItem value="ts" label="TypeScript">
+**运行代码：**
+
+```bash
+python client.py
+```
+
+**预期输出：**
+
+```
+状态码: 200
+响应内容: {"data": "这是需要付款才能获取的内容！"}
+```
+
+</TabItem>
+<TabItem value="ts" label="TypeScript">
 
 ```typescript
 import 'dotenv/config'
@@ -251,15 +402,16 @@ import {
 
 const BSC_PRIVATE_KEY = process.env.BSC_PRIVATE_KEY!
 
-// ========== Configuration ==========
-const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet' // Replace with your target server
-// ====================================
+// ========== 配置项 ==========
+// 您要访问的 x402 付费 API 地址
+const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet'
+// ===========================
 
 async function main(): Promise<void> {
-  // Create signer (network is resolved dynamically)
+  // 用私钥初始化签名器
   const signer = new EvmClientSigner(BSC_PRIVATE_KEY)
 
-  // Create x402 client, register mechanisms and balance policy
+  // 创建 x402 客户端，注册付款机制和余额检查策略
   const x402 = new X402Client()
   x402.register('eip155:*', new ExactPermitEvmClientMechanism(signer))
   x402.register('eip155:*', new ExactEvmClientMechanism(signer))
@@ -267,46 +419,69 @@ async function main(): Promise<void> {
 
   const client = new X402FetchClient(x402)
 
-  // Make request - payment is handled automatically
+  // 发起请求——SDK 会自动处理付款，您无需手动操作
   const response = await client.get(SERVER_URL)
 
-  console.log(`Status: ${response.status}`)
+  console.log(`状态码: ${response.status}`)
 
-  // Parse payment response
+  // 解析付款回执（可选）
   const paymentResponse = response.headers.get('payment-response')
   if (paymentResponse) {
     const jsonString = Buffer.from(paymentResponse, 'base64').toString('utf8')
     const settleResponse = JSON.parse(jsonString)
-    console.log(`Transaction: ${settleResponse.transaction}`)
+    console.log(`交易哈希: ${settleResponse.transaction}`)
   }
 
-  // Handle response
+  // 打印响应内容
   const contentType = response.headers.get('content-type') ?? ''
   if (contentType.includes('application/json')) {
     const body = await response.json()
-    console.log('Response:', body)
+    console.log('响应内容:', body)
   }
 }
 
 main().catch(console.error)
 ```
 
-  </TabItem>
+**运行代码：**
 
+```bash
+npx tsx client.ts
+```
+
+**预期输出：**
+
+```
+状态码: 200
+交易哈希: abc123...
+响应内容: { data: '这是需要付款才能获取的内容！' }
+```
+
+</TabItem>
 </Tabs>
-</TabItem> 
+</TabItem>
 </Tabs>
 
-## 4. 错误处理
+---
 
-SDK 在支付过程中可能会抛出错误。处理方法如下：
+## 第四步：错误排查
+
+运行代码时如果出现报错，参考以下常见原因和解决方法：
+
+| 错误信息 | 原因 | 解决方法 |
+|----------|------|----------|
+| `环境变量未设置` 或 `None` | 私钥环境变量没有正确设置 | 重新执行第二步的 `export` 命令，注意是在**同一个终端窗口**中运行 |
+| `Insufficient balance` / 余额不足 | 测试钱包里没有足够的测试 USDT/USDD | 回到前置准备，从水龙头重新领取测试代币 |
+| `UnsupportedNetworkError` | 代码中注册的网络与服务器不匹配 | 确认 `SERVER_URL` 对应的网络与您注册的 mechanism 一致（TRON 对应 `tron:*`，BSC 对应 `eip155:*`） |
+| `InsufficientAllowanceError` | 代币授权额度不足 | SDK 通常会自动处理授权，如持续出现请检查钱包余额 |
+| `Connection timeout` | 网络请求超时 | 检查网络连接，或将代码中的 `timeout=60.0` 改为更大的值 |
+| `ModuleNotFoundError` | SDK 未正确安装 | 重新执行第一步的安装命令 |
 
 
 <Tabs groupId="chain">
-  <TabItem value="tron" label="TRON">
-    <Tabs groupId="language">
-      <TabItem value="python" label="Python">
-
+<TabItem value="tron" label="TRON">
+<Tabs groupId="language">
+<TabItem value="python" label="Python">
 
 ```python
 from bankofai.x402.exceptions import (
@@ -318,48 +493,41 @@ from bankofai.x402.exceptions import (
 
 try:
     response = await client.get(SERVER_URL)
-
-    print(f"Status: {response.status_code}")
-    print("Headers:", response.headers)
+    print(f"状态码: {response.status_code}")
+    print("响应内容:", response.text)
 
 except UnsupportedNetworkError as e:
-    # No mechanism registered for the network
-    print(f"Network not supported: {e}")
+    print(f"网络不支持（请检查是否注册了正确的 mechanism）: {e}")
 
 except InsufficientAllowanceError as e:
-    # Token allowance insufficient
-    print(f"Insufficient allowance: {e}")
+    print(f"代币授权额度不足（请检查钱包余额）: {e}")
 
 except SignatureCreationError as e:
-    # Failed to sign payment
-    print(f"Signature failed: {e}")
+    print(f"签名失败（请检查私钥是否正确）: {e}")
 
 except X402Error as e:
-    # Other x402 errors
-    print(f"Payment error: {e}")
+    print(f"付款出错: {e}")
 ```
 
-  </TabItem>
-  <TabItem value="ts" label="TypeScript">
-
+</TabItem>
+<TabItem value="ts" label="TypeScript">
 
 ```typescript
 try {
   const response = await client.get(SERVER_URL)
-
   if (response.status === 200) {
-    console.log('Success:', await response.json())
+    console.log('成功:', await response.json())
   } else {
-    console.error(`Request failed: ${response.status}`)
+    console.error(`请求失败，状态码: ${response.status}`)
     console.error(await response.text())
   }
 } catch (error) {
   if (error.message.includes('No mechanism registered')) {
-    console.error('Network not supported - register the appropriate mechanism')
+    console.error('网络不支持——请检查是否注册了正确的 mechanism')
   } else if (error.message.includes('allowance')) {
-    console.error('Insufficient token allowance')
+    console.error('代币授权额度不足——请检查钱包余额')
   } else {
-    console.error('Payment error:', error.message)
+    console.error('付款出错:', error.message)
   }
 }
 ```
@@ -369,7 +537,7 @@ try {
 </TabItem>
 <TabItem value="bsc" label="BSC">
 <Tabs groupId="language">
-  <TabItem value="python" label="Python">
+<TabItem value="python" label="Python">
 
 ```python
 from bankofai.x402.exceptions import (
@@ -381,81 +549,73 @@ from bankofai.x402.exceptions import (
 
 try:
     response = await client.get(SERVER_URL)
-
-    print(f"Status: {response.status_code}")
-    print("Headers:", response.headers)
+    print(f"状态码: {response.status_code}")
+    print("响应内容:", response.text)
 
 except UnsupportedNetworkError as e:
-    # No mechanism registered for the network
-    print(f"Network not supported: {e}")
+    print(f"网络不支持（请检查是否注册了正确的 mechanism）: {e}")
 
 except InsufficientAllowanceError as e:
-    # Token allowance insufficient
-    print(f"Insufficient allowance: {e}")
+    print(f"代币授权额度不足（请检查钱包余额）: {e}")
 
 except SignatureCreationError as e:
-    # Failed to sign payment
-    print(f"Signature failed: {e}")
+    print(f"签名失败（请检查私钥是否正确）: {e}")
 
 except X402Error as e:
-    # Other x402 errors
-    print(f"Payment error: {e}")
+    print(f"付款出错: {e}")
 ```
 
-  </TabItem>
-  <TabItem value="ts" label="TypeScript">
+</TabItem>
+<TabItem value="ts" label="TypeScript">
 
 ```typescript
 try {
   const response = await client.get(SERVER_URL)
-
   if (response.status === 200) {
-    console.log('Success:', await response.json())
+    console.log('成功:', await response.json())
   } else {
-    console.error(`Request failed: ${response.status}`)
+    console.error(`请求失败，状态码: ${response.status}`)
     console.error(await response.text())
   }
 } catch (error) {
   if (error.message.includes('No mechanism registered')) {
-    console.error('Network not supported - register the appropriate mechanism')
+    console.error('网络不支持——请检查是否注册了正确的 mechanism')
   } else if (error.message.includes('allowance')) {
-    console.error('Insufficient token allowance')
+    console.error('代币授权额度不足——请检查钱包余额')
   } else {
-    console.error('Payment error:', error.message)
+    console.error('付款出错:', error.message)
   }
 }
 ```
 
-  </TabItem>
-  
+</TabItem>
 </Tabs>
-</TabItem> 
+</TabItem>
 </Tabs>
 
-
-
-
-
-
-
- 
+---
 
 ## 总结
 
-通过本指南，您已经完成了以下集成步骤：
+通过本指南，您完成了以下步骤：
 
-- **安装依赖**：集成 `x402` SDK ， `tronweb` 库（TRON），`ethers.js`库（BSC）。
-- **配置身份**：使用私钥初始化钱包签名器 (Wallet Signer)。
-- **初始化客户端**：实例化 `X402Client` 并注册支付处理机制。
-- **发起请求**：通过封装后的 HTTP 客户端访问付费 API 接口。
-- **自动化流程**：SDK 将自动处理支付全生命周期，包括必要的代币授权 (Approve)。
+- **创建测试钱包** 并领取了测试代币，理解了私钥安全的重要性
+- **安装 SDK** 并配置了私钥环境变量（而非写入代码）
+- **编写并运行**了自动付款的客户端代码
+- **理解了整个付款流程**：SDK 自动检测 402 响应 → 自动签名 → 自动付款 → 获取内容
+
+---
 
 ## 下一步
 
-- 浏览 [核心概念](../core-concepts/http-402.md) 以了解协议
-- 查看 [网络支持](../core-concepts/network-and-token-support.md) 以获取支持的代币详情
+- 阅读[核心概念](../core-concepts/http-402.md)深入了解 x402 协议
+- 查看[网络支持](../core-concepts/network-and-token-support.md)了解支持的代币和网络
+- 想搭建自己的付费 API？参见[卖家快速入门](./quickstart-for-sellers.md)
+
+---
 
 ## 参考资料
 
-- [npm package](https://www.npmjs.com/package/@bankofai/x402) - x402 JavaScript SDK
-- [示例代码仓库](https://github.com/BofAI/x402-demo) - 完整的集成演示
+- [npm 包](https://www.npmjs.com/package/@bankofai/x402) — x402 TypeScript SDK
+- [Python SDK 源码](https://github.com/BofAI/x402/tree/main/python/x402) — x402 Python SDK（从 GitHub 安装）
+- [示例代码仓库](https://github.com/BofAI/x402-demo) — 完整集成演示
