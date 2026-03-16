@@ -19,7 +19,7 @@ The full setup takes **4 steps**, estimated time: **15–20 minutes**.
 
 ## Prerequisites
 
-### Step Zero: Verify Your Environment
+### Verify Your Environment
 
 Run the following commands in your terminal (macOS/Linux Terminal, or Windows PowerShell) to confirm the required tools are installed:
 
@@ -35,7 +35,7 @@ If any command returns "not found", install the missing tools:
 
 ---
 
-### Step Zero (cont.): Create a Receiving Wallet
+### Create a Receiving Wallet
 
 You need a blockchain wallet address to receive tokens (USDT or USDD) from your API users. Follow the steps below for your chosen network:
 
