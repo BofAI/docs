@@ -107,20 +107,14 @@ Choose the installation method for your platform:
 <Tabs>
 <TabItem value="openclaw" label="OpenClaw">
 
-Run the following command in your terminal to install with one command:
+1. Download the skill files from the [x402-payment skill repository](https://github.com/BofAI/skills/tree/main/x402-payment)
+2. In your project root, confirm the `.openclaw/skills/` directory exists (create it if not):
+   ```bash
+   mkdir -p .openclaw/skills/x402-payment
+   ```
+3. Copy the downloaded skill files into that directory
 
-```bash
-npx clawhub install x402-payment
-```
-
-**On success, you should see output similar to:**
-
-```
-Installing x402-payment skill...
-✓ Skill installed successfully
-```
-
-> ✅ **Success indicator:** The install command completes with no errors
+> ✅ **Success indicator:** The `.openclaw/skills/x402-payment/` directory contains the skill files
 
 </TabItem>
 <TabItem value="opencode" label="opencode">

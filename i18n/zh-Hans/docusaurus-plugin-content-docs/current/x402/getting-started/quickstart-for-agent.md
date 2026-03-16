@@ -107,20 +107,14 @@ echo $BSC_PRIVATE_KEY
 <Tabs>
 <TabItem value="openclaw" label="OpenClaw">
 
-在终端中执行以下命令，一键安装：
+1. 前往 [x402-payment 技能仓库](https://github.com/BofAI/skills/tree/main/x402-payment) 下载技能文件
+2. 在您的项目根目录下，确认存在 `.openclaw/skills/` 目录（如不存在则创建）：
+   ```bash
+   mkdir -p .openclaw/skills/x402-payment
+   ```
+3. 将下载的技能文件复制到该目录中
 
-```bash
-npx clawhub install x402-payment
-```
-
-**成功后，您应该看到类似输出：**
-
-```
-Installing x402-payment skill...
-✓ Skill installed successfully
-```
-
-> ✅ **成功标志：** 安装命令执行完毕，无报错
+> ✅ **成功标志：** `.openclaw/skills/x402-payment/` 目录中有技能文件
 
 </TabItem>
 <TabItem value="opencode" label="opencode">
