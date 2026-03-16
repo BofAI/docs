@@ -79,7 +79,7 @@ If you need full control over fee policies and energy management, or have specif
 > - Only deposit a small amount of tokens into the Facilitator wallet (enough for fees); do not store large amounts
 > - Keep the private key only in your `.env` file — **never upload it to GitHub or share it with anyone**
 
-Quick usage examples can be found in [quickstart-for-sellers](../getting-started/quickstart-for-sellers.md)
+Quick usage examples can be found in [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md)
 
 ---
 
