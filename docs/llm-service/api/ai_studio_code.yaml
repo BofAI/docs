@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: 用户管理 API 示例
+  description: 这是一个用于在 GitHub 上展示的 OpenAPI 规范示例，包含了基础的用户查询接口。
+  version: 1.0.0
+  contact:
+    name: 你的名字/团队名
+    url: https://github.com/你的用户名
+    email: your-email@example.com
+
+# 定义 API 的基础路径 (可配置多个，如下方包含生产环境和测试环境)
+servers:
+  - url: https://api.yoursite.com/v1
+    description: 生产环境服务器
+  - url: https://staging-api.yoursite.com/v1
+    description: 测试环境服务器
+
+# 定义所有的接口路径
+paths:
+  /users/{id}:
+    get:
+      tags:
+        - Users  # 用于在 Swagger UI 中对接口进行分类
+      summary: 获取用户信息
+      description: 根据用户的唯一 ID 获取该用户的详细信息。
+      operationId: getUserById
+      
+      # 定义请求参数
+      parameters:
+        - name: id
+          in: path      # 参数位置：可以是在 path(路径), query(问号后面), header, cookie
+          description: 用户的唯一 ID
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 1
+
+      # 定义所有可能的响应结果
+      responses:
+        '200':
+          description: 请求成功，返回用户信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse' # 引用下方定义的数据模型
+        '400':
+          description: 请求参数错误 (例如 ID 格式不对)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: 用户不存在
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+# 定义可复用的组件 (如数据模型、安全认证等)
+components:
+  schemas:
+    # 成功响应的 User 数据模型
+    UserResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 200
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+              format: int64
+              example: 1
+            name:
+              type: string
+              example: GitHub User
+            email:
+              type: string
+              format: email
+              example: user@example.com
+            createdAt:
+              type: string
+              format: date-time
+              example: "2023-10-01T12:00:00Z"
+              
+    # 失败响应的 Error 数据模型
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 404
+        message:
+          type: string
+          example: "未找到该用户"
