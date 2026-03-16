@@ -57,7 +57,7 @@ After validating the API Key, the script will fetch the list of available models
 
 ![](https://files.readme.io/be3b9162405e38988898261db3effa8adcf92b6d9e37181d36b32c1cf8bcd1e3-Image_16-3-2026_at_7.01PM.png)
 
-**:exclamation: Note:exclamation: **Gemini series models are currently largely unusable in OpenClaw due to client fingerprinting strictness for function calls. Please choose with caution.
+>**Note:** Gemini series models are currently largely unusable in OpenClaw due to client fingerprinting strictness for function calls. Please choose with caution.
 
 ***
 
@@ -91,7 +91,7 @@ Or manually edit the `~/.openclaw/openclaw.json` configuration file.
 
 Visit <http://127.0.0.1:18789/> (18789 is the default port for OpenClaw) in your browser to access the OpenClaw Dashboard. Click "Agent" in the left navigation menu, and select the desired model in the Primary model dropdown:
 
-> **Please note:** Once you change the model via the Dashboard, command-line model switching will no longer work because the Dashboard automatically adds a `list` field to the config file.
+> **Note:** Once you change the model via the Dashboard, command-line model switching will no longer work because the Dashboard automatically adds a `list` field to the config file.
 
 ![](https://files.readme.io/3668289b53d185d158dd8393f46c0e171c0d301b5bdc624792c8cf8e6f9c4936-16-3-26_6.56.png)
 
