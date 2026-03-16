@@ -52,7 +52,7 @@ import TabItem from '@theme/TabItem';
 ```
 
 </TabItem>
-<TabItem value="Claude Code" label="Cluade Code">
+<TabItem value="Claude Code" label="Claude Code">
 
 CLI 命令：
 

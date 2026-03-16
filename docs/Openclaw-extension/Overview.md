@@ -57,10 +57,9 @@ Pre-built workflows and tools from the **[skills repository](https://github.com/
 
 | Skill | Function |
 | :--- | :--- |
-| **sunswap** | SunSwap DEX skill for balance queries, quotes, swaps, and liquidity workflows. |
 | **x402-payment** | x402 payment skill for invoking paid agents and paid APIs on supported chains. |
-| **x402-payment-demo** | Demo workflow for end-to-end x402 protected resource access. |
-| **ainft-skill** | Local AINFT skill for balance queries and account-related queries. |
+| **sunswap** | SunSwap DEX skill for balance queries, quotes, swaps, and liquidity workflows. |
+| **tronscan-skill** | TRON blockchain data query via TronScan API, supporting accounts, transactions, tokens, blocks, and network statistics. |
 
 For complete documentation and usage instructions, see the [skills repository](https://github.com/BofAI/skills).
 

@@ -77,7 +77,7 @@ npm start -- --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath 
 {
   "mcpServers": {
     "sun-mcp-server": {
-      "command": "node",
+      "command": "npx",
       "args": ["tsx", "/ABSOLUTE/PATH/TO/sun-mcp-server/src/index.ts"],
       "env": {
         "TRON_PRIVATE_KEY": "YOUR_KEY_HERE (Or set in system env)",
@@ -103,7 +103,7 @@ npm start -- --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath 
   "servers": [
     {
       "name": "sun-mcp-server",
-      "command": "node",
+      "command": "npx",
       "args": ["tsx", "/ABSOLUTE/PATH/TO/sun-mcp-server/src/index.ts"],
       "env": {
         "TRON_PRIVATE_KEY": "YOUR_KEY_HERE (Or set in system env)",

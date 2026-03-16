@@ -56,7 +56,7 @@ With TronGrid API Key:
 ```
 
 </TabItem>
-<TabItem value="Claude Code" label="Cluade Code">
+<TabItem value="Claude Code" label="Claude Code">
 
 CLI command:
 

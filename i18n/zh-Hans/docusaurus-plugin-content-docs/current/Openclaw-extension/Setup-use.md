@@ -31,7 +31,7 @@ cd openclaw-extension
 ### 安装内容
 
 - ✅ **MCP Server** - TRON 和 BSC 区块链访问已配置在 `~/.mcporter/mcporter.json` 中
-- ✅ **SKills** - 预构建的工作流已安装到您选择的位置
+- ✅ **Skills** - 预构建的工作流已安装到您选择的位置
 - ✅ **可用组件**：请参阅 [mcp-server-tron](https://github.com/BofAI/mcp-server-tron)、[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp) 和 [Skills 仓库](https://github.com/BofAI/skills)
 
 **注意**：此安装程序使用 `mcporter`（OpenClaw 的官方 MCP 管理器）进行配置。请确保首先安装 OpenClaw。

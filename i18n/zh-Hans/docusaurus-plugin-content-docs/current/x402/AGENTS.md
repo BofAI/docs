@@ -11,7 +11,7 @@ import TabItem from '@theme/TabItem';
 ## 2. 目录结构说明
 
 - `docs/core-concepts/` — 协议详解（含 HTTP 402、客户端-服务器模型、Facilitator、钱包管理及网络支持）。
-- `docs/getting-started/` — 面向买方与卖方的上手指南（使用 Tabs 展示多语言代码）。
+- `docs/getting-started/` — 面向买家与卖家的上手指南（使用 Tabs 展示多语言代码）。
 - `docs/index.md` — 欢迎页 / 落地页 (Landing Page)。
 - `docs/faq.md` — 常见问题解答。
 - `sidebars.js` — Docusaurus 侧边栏配置文件。
