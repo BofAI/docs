@@ -69,12 +69,15 @@ const sidebars = {
           type: 'doc',
           id: '8004/SupportedNetworks',
         },
-
         {
           type: 'category',
           label: 'Usage',
           collapsed: false,
-          items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
+          items: [
+            '8004/Usage/Install',
+            '8004/Usage/ConfigureAgents',
+            '8004/Usage/RegistrationHTTP'
+          ],
         },
       ],
     },
@@ -103,7 +106,6 @@ const sidebars = {
                 'McpServer-Skills/MCP/TRONMCPServer/OfficialServerAccess',
                 'McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment',
                 'McpServer-Skills/MCP/TRONMCPServer/API',
-                
               ],
             },
             {
@@ -115,7 +117,6 @@ const sidebars = {
                 'McpServer-Skills/MCP/SUNMCPServer/OfficialServerAccess',
                 'McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment',
                 'McpServer-Skills/MCP/SUNMCPServer/API',
-                
               ],
             },
             {
@@ -146,7 +147,56 @@ const sidebars = {
       type: 'category',
       label: 'Openclaw Extension',
       collapsed: false,
-      items: ['Openclaw-extension/Overview', 'Openclaw-extension/Setup-use'],
+      items: [
+        'Openclaw-extension/Overview',
+        'Openclaw-extension/Setup-use'
+      ],
+    },
+
+    /* --- 这里是为你修正后的 LLM Service 部分 --- */
+    {
+      type: 'category',
+      label: 'LLM Service',
+      collapsed: false,
+      items: [
+        { type: 'doc', id: 'llm-service/introduction', label: 'Introduction' },
+        { type: 'doc', id: 'llm-service/quick-start', label: 'Quick Start' },
+        { type: 'doc', id: 'llm-service/pricing-and-usage', label: 'Pricing and Usage' },
+        {
+          type: 'category',
+          label: 'Models',
+          collapsed: true,
+          items: [
+            'llm-service/models/chatgpt-5-2',
+            'llm-service/models/chatgpt-5-mini',
+            'llm-service/models/chatgpt-5-nano',
+            'llm-service/models/claude-haiku-4-5',
+            'llm-service/models/claude-opus-4-5',
+            'llm-service/models/claude-opus-4-6',
+            'llm-service/models/claude-sonnet-4-5',
+            'llm-service/models/claude-sonnet-4-6',
+            'llm-service/models/gemini-3-1-pro',
+            'llm-service/models/gemini-3-flash',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'OpenClaw',
+          collapsed: true,
+          items: [
+            'llm-service/openclaw/integration-guide',
+            'llm-service/openclaw/one-click-script-tutorial',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'API',
+          collapsed: true,
+          items: [
+            'llm-service/api/chat-completion',
+          ],
+        },
+      ],
     },
   ],
 }
