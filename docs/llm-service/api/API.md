@@ -1,9 +1,9 @@
-# AI API (OpenAI Compatible)
+# BANK OF AI LLM API (OpenAI Compatible)
 OpenAPI spec for /v1/models and /v1/chat/completions (OpenAI format).
 
 ## Version: 1.0
 
-**Schemes:** https:
+**Schemes:** https
 
 **Host:** api.bankofai.io
 
