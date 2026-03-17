@@ -5,12 +5,14 @@ on:
     branches:
       - main
       - master
+      - merge-tn
     tags:
       - 'v*.*.*'
   pull_request:
     branches:
       - main
       - master
+      - merge-tn
   workflow_dispatch:
 
 env:
