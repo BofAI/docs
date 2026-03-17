@@ -1,30 +1,41 @@
 # ChatGPT-5-nano
 
-## Overview
-ChatGPT-5-nano is an advanced language model that strikes an excellent balance between performance, speed, and cost. It is designed to provide near-professional AI capabilities at a moderate cost within the Bank of AI ecosystem.
+## 概述
 
-## Key Features
-* **Enhanced Reasoning Ability:** Nano shows significant improvements in logical reasoning, code generation, and multilingual processing compared to lighter models.
-* **Efficient Performance:** Carefully tuned to maintain high output quality while sustaining a fast response speed.
-* **Multifunctional Integration:** Capable of handling a diverse range of tasks, making it a powerful assistant for developers and content creators.
+ChatGPT-5-nano 是一款在性能、速度和成本之间取得良好平衡的语言模型。在 Bank of AI 生态中，它以适中的成本提供接近专业级的 AI 能力。
 
-## Best Use Cases
-* **Code Assistance and Debugging:** Understanding and generating code across multiple programming languages, assisting with debugging and documentation.
-* **Multilingual Translation and Writing:** Providing high-quality cross-language translation and creating content in authentic language styles.
-* **Structured Content Generation:** Generating well-formatted reports, technical documents, tutorials, and other structured content.
+---
 
-## Capabilities and Limitations
+## 核心特性
 
-| Capability | Detailed Description |
+- **推理能力增强：** 相比更轻量的模型，在逻辑推理、代码生成和多语言处理方面有明显提升  
+- **高效性能：** 在保持较高输出质量的同时，维持较快响应速度  
+- **多功能能力：** 可处理多种任务类型，是开发者与内容创作者的实用助手  
+
+---
+
+## 适用场景
+
+- **代码辅助与调试：** 支持多语言代码理解与生成，帮助调试和编写技术文档  
+- **多语言翻译与写作：** 提供高质量跨语言翻译，并生成自然流畅的内容  
+- **结构化内容生成：** 生成格式规范的报告、技术文档、教程等  
+
+---
+
+## 能力与限制
+
+| 能力 | 说明 |
 | :--- | :--- |
-| **Reasoning Ability** | **Strong.** Can handle complex logical problems and programming tasks, performing well in specific domains. |
-| **Creative Ability** | **Strong.** Generates creative and in-depth text content, meeting high writing requirements. |
-| **Multimodal Ability** | **Limited Support.** Can understand and describe simple image content, but does not support deep multimodal analysis. |
-| **Response Speed** | **Medium.** Faster than flagship models, though slightly slower than the mini model. |
-| **Context Window** | **Large.** Supports a context window of hundreds of thousands of tokens for long document processing. |
+| **推理能力** | 强。能够处理复杂逻辑问题与编程任务，在特定领域表现优秀 |
+| **创造能力** | 强。可生成富有创意且内容深入的文本 |
+| **多模态能力** | 有限支持。可理解和描述简单图像，但不支持深度多模态分析 |
+| **响应速度** | 中等。快于旗舰模型，但略慢于 mini 模型 |
+| **上下文窗口** | 大。支持数十万级 Token 上下文，适合长文档处理 |
 
-## Credits and Pricing
+---
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
+## 积分与定价
+
+| 模型 | 输入（积分/Token） | 输出（积分/Token） |
 | :--- | :--- | :--- |
 | **ChatGPT-5-nano** | 0.05 | 0.40 |
