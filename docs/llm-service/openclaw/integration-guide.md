@@ -1,5 +1,5 @@
-# Integrating OpenClaw with BankOfAI
-## From Zero to Private Agent: Deploying OpenClaw with BankOfAI in 15 Minutes
+# Integrating OpenClaw with Bank of AI
+## From Zero to Private Agent: Deploying OpenClaw with Bank of AI in 15 Minutes
 
 OpenClaw (formerly ClawdBot or Moltbot) is an open-source personal AI assistant that runs locally on your machine. Unlike cloud-based SaaS tools, it gives you full control over your data, workflows, and integrations.
 
@@ -10,11 +10,11 @@ With OpenClaw, you can interact through Telegram, WhatsApp, Lark, or directly vi
 - Execute real-world actions
 - Build powerful AI agents with persistent memory
 
-This guide walks you from **zero to a fully working private AI agent powered by BankOfAI**.
+This guide walks you from **zero to a fully working private AI agent powered by Bank of AI**.
 
 ---
 
-# Step 1: Get Your BankOfAI API Key
+# Step 1: Get Your Bank of AI API Key
 
 1. Visit: https://chat.bankofai.io/chat  
 2. Log in to your account  
@@ -29,10 +29,10 @@ Make sure your system meets the following requirements:
 
 | Requirement | Details |
 |---|---|
-| Node.js | **Recommended: v24** |
+| Node.js | **Recommended: v24+** |
 | | Supported: v22 LTS (>=22.16) |
 | OS | macOS / Linux / Windows (WSL2) |
-| Package Manager | npm (default) |
+| Package Manager | npm (default) or pnpm (for building from source) |
 
 Check your Node version:
 
@@ -107,7 +107,7 @@ During setup:
 
 ---
 
-# Step 5: Configure BankOfAI
+# Step 5: Configure Bank of AI
 
 Open config file:
 
@@ -117,7 +117,7 @@ Open config file:
 
 ---
 
-## 5.1 Add BankOfAI Provider
+## 5.1 Add Bank of AI Provider
 
 ```json
 {
@@ -276,7 +276,7 @@ openclaw docs
 
 # ✅ Done
 
-You now have a fully working **OpenClaw + BankOfAI private AI agent**.
+You now have a fully working **OpenClaw + Bank of AI private AI agent**.
 
 You can now:
 
@@ -287,4 +287,4 @@ You can now:
 
 ---
 
-🚀 Welcome to your personal AI infrastructure.
+🚀 Welcome to your personal AI infrastructure powered by Bank of AI.
