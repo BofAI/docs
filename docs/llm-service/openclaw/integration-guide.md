@@ -9,16 +9,14 @@ Because it's open-source and self-hosted, OpenClaw has attracted a vibrant commu
 
 This guide will walk you through everything from scratch: downloading, installing, and setting up OpenClaw, as well as connecting it to the Bank of AI API. By the end, you'll have built your very own AI assistant.
 
-***
+---
 
 ## **Step 1: Get Your Bank of AI API Key**
 
-***
+1. Log in to https://chat.bankofai.io/chat  
+2. Navigate to the API key management page and apply for your api_key  
 
-1. Log in to <https://chat.bankofai.io/chat>.
-2. Navigate to the API key management page and apply for your api_key.
-
-***
+---
 
 ## **Step 2: Prepare Your System**
 
@@ -32,24 +30,13 @@ Before installing, make sure your system meets these basic requirements. OpenCla
 
 To check your environment, open a terminal and run:
 
-[block:image]
-{
-  "images": [
-    {
-      "image": [
-        "https://files.readme.io/ac27744855c7066d117a856e7005166662e707462312b1925c4e368f5c9c7427-1.png",
-        null,
-        ""
-      ],
-      "align": "center"
-    }
-  ]
-}
-[/block]
+```bash
+node -v
+```
 
-If the version is lower than v22.0.0, or you see a "command not found" error, please install or upgrade Node.js from the [official website](https://nodejs.org/).
+If the version is lower than v22.0.0, or you see a "command not found" error, please install or upgrade Node.js from the official website: https://nodejs.org/
 
-***
+---
 
 ## **Step 3: Install OpenClaw**
 
@@ -59,13 +46,13 @@ This method is the quickest and easiest as it will detect your OS, install depen
 
 For macOS or Linux terminals, execute the following:
 
-```
+```bash
 npm install -g openclaw
 ```
 
 For Windows users using PowerShell, run the same command:
 
-```
+```bash
 npm install -g openclaw
 ```
 
@@ -75,103 +62,90 @@ npm install -g openclaw
 
 On some systems—especially macOS where libvips was installed via Homebrew—you might encounter an error with the sharp module (an image processing library). To fix this, try forcing the installation of pre-built binaries, which bypasses local compilation:
 
-```
+```bash
 npm install -g openclaw --force
 ```
 
 #### **Problem 2: "Command Not Found"**
 
-After installation, you might see "openclaw: command not found". This usually means your system can't find where globally installed npm packages are located. Find npm's global installation path by running:
+After installation, you might see:
 
+```bash
+openclaw: command not found
 ```
+
+This usually means your system can't find where globally installed npm packages are located. Find npm's global installation path by running:
+
+```bash
 npm config get prefix
 ```
 
-If the output is, for example, /usr/local, then your binaries live in /usr/local/bin. You will need to add this path to your shell profile (\~/.zshrc or \~/.bashrc):
+If the output is, for example, `/usr/local`, then your binaries live in `/usr/local/bin`. You will need to add this path to your shell profile (`~/.zshrc` or `~/.bashrc`):
 
-```
+```bash
 export PATH="/usr/local/bin:$PATH"
 ```
 
-After saving the file, restart your terminal or run source \~/.zshrc (or your specific config file) to apply the changes. The openclaw command should now work.
+After saving the file, restart your terminal or run:
 
-<br />
+```bash
+source ~/.zshrc
+```
 
-[block:image]
-{
-  "images": [
-    {
-      "image": [
-        "https://files.readme.io/6f39989ed49f307a5168bd934c4ffaf2a79db8a2268c6959c3bb731f43138598-2.png",
-        null,
-        ""
-      ],
-      "align": "center"
-    }
-  ]
-}
-[/block]
+The openclaw command should now work.
 
-***
+---
 
 ## **Step 4: Complete the Initialization Wizard**
 
-After installation, the onboarding wizard should trigger automatically:
-
-[block:image]
-{
-  "images": [
-    {
-      "image": [
-        "https://files.readme.io/aad882d79978e215c2c03278d008893d004a4d14abe097d4d4a046f3c9241a1f-3.png",
-        null,
-        ""
-      ],
-      "align": "center"
-    }
-  ]
-}
-[/block]
+After installation, the onboarding wizard should trigger automatically.
 
 If you accidentally closed the window, you can restart the wizard (and install the background daemon) by running:
 
-```
+```bash
 openclaw onboard
 ```
 
 The wizard will walk you through three primary sections:
 
-- AI Model Configuration: The wizard will request an API key for the large language model service (Anthropic Claude, OpenAI GPT, etc.).  
-  → For now, select "Skip for now". We'll set this up manually in the next step.
+- **AI Model Configuration**  
+  The wizard will request an API key for the large language model service (Anthropic Claude, OpenAI GPT, etc.).  
+  → For now, select **"Skip for now"**. We'll set this up manually in the next step.
 
-  [block:image]{"images":[{"image":["https://files.readme.io/458a23b58f79ec97f4fee7ed6668a6a799cb37f95be57ddfe96830ad77bb2bb5-4.png",null,""],"align":"center"}]}[/block]
+- **Communication Channels**  
+  Choose which messaging apps you want to use to talk to OpenClaw (e.g., Telegram, WhatsApp).
 
-  <br />
-- Communication Channels: Choose which messaging apps you want to use to talk to OpenClaw (e.g., Telegram, WhatsApp).
-
-  [block:image]{"images":[{"image":["https://files.readme.io/178a9aded9bb4934dcaf7445c0c4edf4569836183ac6019b8c8d08e2917b4549-5.png",null,""],"align":"center"}]}[/block]
-- Skills: We recommend selecting No (Use the Spacebar to toggle selections and Enter to confirm). You may also skip and add them later.
-
-  [block:image]{"images":[{"image":["https://files.readme.io/d4155d69eb1dd69c1586fa5ab844c602914b0b5a1934265bd97e1f8444b40b5a-6.png",null,""],"align":"center"}]}[/block]
+- **Skills**  
+  We recommend selecting **No** (use the Spacebar to toggle selections and Enter to confirm). You can add them later.
 
 Once the wizard finishes and the OpenClaw UI launches, you will need to manually edit the configuration file to connect it to Bank of AI.
 
-***
+---
 
 ## **Step 5: Configure the Bank of AI Model**
 
-After completing the onboarding wizard, you'll need to manually add your Bank of AI configuration to OpenClaw and set it as the default model. There are two ways to complete the configuration:
+After completing the onboarding wizard, you'll need to manually add your Bank of AI configuration to OpenClaw and set it as the default model.
 
-- **[One-Click Script](https://docs.ainft.com/reference/openclaw-ainft-integration-one-click-script-tutorial)**: Please refer to this article.
-- **Manual Configuration**: Please follow the instructions below.
+There are two ways to complete the configuration:
+
+- **One-Click Script**: https://docs.ainft.com/reference/openclaw-ainft-integration-one-click-script-tutorial  
+- **Manual Configuration**: Follow the instructions below  
+
+---
 
 ### **5.1 Edit the Configuration File**
 
-Open the configuration file located at \~/.openclaw/openclaw.json. OpenClaw reads this file at startup to load all its LLM configurations. 
+Open the configuration file located at:
 
-Locate the "models" section and merge the following JSON snippet. Be sure to replace {BANKOFAI_API_KEY} with the unique key generated in your [API key management dashboard](https://chat.bankofai.io/key).
-
+```bash
+~/.openclaw/openclaw.json
 ```
+
+OpenClaw reads this file at startup to load all its LLM configurations. 
+
+Locate the `"models"` section and merge the following JSON snippet. Be sure to replace `{BANKOFAI_API_KEY}` with your actual API key from https://chat.bankofai.io/key.
+
+```json
 {
   "models": {
     "mode": "merge",
@@ -212,11 +186,13 @@ Locate the "models" section and merge the following JSON snippet. Be sure to rep
 }
 ```
 
+---
+
 ### **5.2 Set the Default Model**
 
-In the same openclaw.json file, locate the agents section, and set the default model to your preferred choice. This example uses bankofai/gpt-5-nano:
+In the same `openclaw.json` file, locate the `agents` section and set the default model:
 
-```
+```json
 {
   "agents": {
     "default": {
@@ -226,40 +202,29 @@ In the same openclaw.json file, locate the agents section, and set the default m
 }
 ```
 
+---
+
 ### **5.3 Restart the Gateway**
 
-For the configuration changes to take effect, you must restart the OpenClaw gateway: 
+For the configuration changes to take effect, restart the OpenClaw gateway:
 
-```
+```bash
 openclaw gateway restart
 ```
 
+---
+
 ### **5.4 Test the Connection**
 
-Send a test message from your terminal to verify everything is working:
+Send a test message from your terminal:
 
-```
+```bash
 openclaw agent --agent main --message "How are you doing today?"
 ```
 
-[block:image]
-{
-  "images": [
-    {
-      "image": [
-        "https://files.readme.io/312c6feb51ea9f4071b75efd3182ef0507a6981baebd3bf7e8d57dec33978efd-7.png",
-        null,
-        ""
-      ],
-      "align": "center"
-    }
-  ]
-}
-[/block]
+If you receive a coherent response, congratulations—you have successfully connected OpenClaw to Bank of AI!
 
-If you receive a coherent response, congrats—you have successfully connected OpenClaw to Bank of AI!
-
-***
+---
 
 ## **Step 6: Understand Gateway and Diagnostic Commands**
 
@@ -278,122 +243,111 @@ During setup, you'll frequently encounter the term "Gateway".
 | Uninstall the Gateway | openclaw gateway uninstall |
 | Check Gateway Status  | openclaw gateway status    |
 
-### **Diagnostic Command**
+---
 
-Once completing onboarding and updating your configuration file, it's wise to run the following diagnostic commands to ensure everything is set up correctly. 
+### **Diagnostic Commands**
 
-| Command                 | Description                                                                                                                                                                                    |
-| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| openclaw doctor         | Performs a comprehensive health check of your system environment and configuration. Run this first if you encounter any issues; it provides specific recommended actions for each error found. |
-| openclaw gateway status | Shows real-time information about the Gateway.                                                                                                                                                 |
+Once completing onboarding and updating your configuration file, run:
 
-Example:
-
-```
+```bash
 openclaw doctor
 ```
 
-Simply follow the prompts and suggestions in the output to resolve any errors. You can use openclaw gateway status (or simply openclaw status) to monitor the real-time status of the Gateway and all active sessions. If the Gateway is functioning correctly, the output will display a "Healthy" status with no exceptions.
+You can also check status:
 
-***
+```bash
+openclaw gateway status
+```
+
+If the Gateway is functioning correctly, it will show a **Healthy** status.
+
+---
 
 ## **Step 7: Launch OpenClaw**
 
-With the configuration complete, you can interact with your AI assistant through either a web-based dashboard or a Terminal User Interface (TUI).
+With the configuration complete, you can interact with your AI assistant through either a web dashboard or a terminal interface.
 
 ### **Option 1: Web Dashboard**
 
-OpenClaw's built-in web interface, called the Dashboard (or Control UI), is the most intuitive way to manage and use your assistant. 
-
-To launch the Dashboard: First, ensure the Gateway is running. In your terminal, execute:
-
-```
+```bash
 openclaw ui
 ```
 
-This command will generate a URL containing a temporary login token and open it in your default web browser. By default, the address is http://127.0.0.1:18789, though the port may vary based on your configuration.
-
-From the Dashboard, you can:
-
-- Chat with your AI assistant in real-time.   
-- View and manage your chat history.   
-- Configure models, channels, and skills.   
-- Track the real-time status of the system.
-
-### **Option 2: The Terminal UI (TUI)**
-
-For users who prefer to work within the terminal, OpenClaw offers a full-screen text-based interface called the TUI. 
-
-Ensure your Gateway is running, then start it with:
+Then open:
 
 ```
+http://127.0.0.1:18789
+```
+
+You can:
+
+- Chat with your AI  
+- View history  
+- Configure models  
+- Monitor system status  
+
+---
+
+### **Option 2: Terminal UI (TUI)**
+
+```bash
 openclaw tui
 ```
 
-The command launches a full-screen application featuring dedicated sections for chat history, real-time system status, and an interactive input box.
-
-[block:image]
-{
-  "images": [
-    {
-      "image": [
-        "https://files.readme.io/9ca9be0db1c21be12488934030c8ef3076c17fbb4fc26cfdb0e71425e46d121d-8.png",
-        null,
-        ""
-      ],
-      "align": "center"
-    }
-  ]
-}
-[/block]
-
-You can send messages just like in a chat app. The TUI also supports the following slash commands for quick actions: 
+### Commands
 
 | Command          | Description                             |
 | ---------------- | --------------------------------------- |
-| /status          | View the current system status.         |
-| /session \<key\> | Switch to a specific chat session.      |
-| /model \<name\>  | Switch the LLM for the current session. |
-| /help            | View a list of all available commands.  |
+| /status          | View the current system status          |
+| /session <key>   | Switch to a specific chat session       |
+| /model <name>    | Switch the LLM                          |
+| /help            | View available commands                 |
 
-The TUI is optimized for a focused, keyboard-centric experience, making it the ideal choice for developers who prefer staying within the terminal environment.
+---
 
 ## **Step 8: Master Essential Commands**
 
-Beyond the graphical interfaces, the OpenClaw Command Line Interface (CLI) is also a powerful tool designed for advanced configuration and automation. 
+### 1. Check Model Status
 
-### **Core Management Commands**
-
-Here are some of the most useful commands for daily use:
-
-#### **1\. Check Model Status**
-
-```
+```bash
 openclaw models status
 ```
 
-Use this to check the status of your configured AI models and their API keys—for example, to see if a key is still valid or is about to expire. Ensuring your models are healthy is the first step to a functioning assistant.
+---
 
-#### **2\. Manage Communication Channels**
+### 2. Manage Channels
 
-```
+```bash
 openclaw channels list
 ```
 
-This displays all the messaging platforms you have configured and their current connection status.
+---
 
-#### **3\. Query Long-Term Memory**
+### 3. Search Memory
 
-```
+```bash
 openclaw memory search "keyword"
 ```
 
-This executes a semantic search of your AI assistant's long-term memory, allowing you to retrieve any information you've shared with it in the past.
+---
 
-#### **4\. View Documentation**
+### 4. View Docs
 
-```
+```bash
 openclaw docs
 ```
 
-If you want to dive deeper into a specific command or feature, this command provides a direct portal to the official OpenClaw documentation.
+---
+
+# ✅ Done
+
+You now have a fully working **OpenClaw + Bank of AI private AI agent**.
+
+You can now:
+
+- Build automation workflows  
+- Connect Telegram bots  
+- Execute on-chain operations  
+- Create your own AI agent product  
+
+🚀 Welcome to your personal AI infrastructure powered by Bank of AI.
