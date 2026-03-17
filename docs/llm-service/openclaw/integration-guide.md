@@ -138,7 +138,7 @@ There are two ways to complete the configuration:
 Open the configuration file located at:
 
 ```bash
-~/.openclaw/openclaw.json
+vim ~/.openclaw/openclaw.json
 ```
 
 OpenClaw reads this file at startup to load all its LLM configurations. 
