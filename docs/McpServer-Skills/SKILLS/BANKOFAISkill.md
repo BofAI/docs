@@ -1,6 +1,6 @@
 # BANK OF AI Skills
 
-BANK OF AI Skills is a ready-to-use skill pack designed for AI agents, covering core DeFi scenarios in the TRON/BNB ecosystem — DEX trading, perpetual contracts, on-chain data queries, and payment protocols. Each skill encapsulates a complete business workflow: from how to call APIs and what order to execute steps, to handling approvals and protecting user assets, all embedded in `SKILL.md` and accompanying scripts.
+BANK OF AI Skills is a collection of ready-to-use skill packages designed for AI Agents, covering a wide range of scenarios within the TRON ecosystem—such as DEX trading, perpetual contracts, on-chain data queries, and payment protocols. Each skill encapsulates a complete business workflow, including how to call APIs, the order of execution steps, how to handle authorization, and how to safeguard user assets, all defined within `SKILL.md` and supporting scripts.
 
 You don't need to write code — just tell the AI in natural language what you want to do, and it will automatically find and execute the corresponding skill.
 
