@@ -42,6 +42,8 @@ iwr https://chat.bankofai.io/scripts/openclaw-install-bankofai-provider.ps1 | ie
 
 3. 创建新的 API Key  
 
+![](https://files.readme.io/354a3d414f37e7df28f2cbf92dd055db9b67a20cab8738f6d5ac007226b6931b-image.png)
+
 ---
 
 ### 2 运行安装脚本
@@ -51,11 +53,15 @@ iwr https://chat.bankofai.io/scripts/openclaw-install-bankofai-provider.ps1 | ie
 - 检查环境（Node.js、OpenClaw 等）
 - 提示输入 API Key  
 
+![](https://files.readme.io/ef091efb8911db673af8a5eade7b281a52f641c93d41fbd57cb898ee91893e76-Image_16-3-2026_at_7.00PM.png)
+
 ---
 
 ### 3 选择默认模型
 
 验证 API Key 后，脚本会获取模型列表并提示选择默认模型。
+
+![](https://files.readme.io/be3b9162405e38988898261db3effa8adcf92b6d9e37181d36b32c1cf8bcd1e3-Image_16-3-2026_at_7.01PM.png)
 
 > 注意：Gemini 系列模型在 OpenClaw 中存在兼容性问题（函数调用限制），建议谨慎选择。
 
@@ -68,6 +74,8 @@ iwr https://chat.bankofai.io/scripts/openclaw-install-bankofai-provider.ps1 | ie
 - 备份原配置  
 - 更新 OpenClaw 配置文件  
 - 重启 Gateway  
+
+![](https://files.readme.io/a08c7fcee0cbe906042ef52fefa15348750ad5cd2db8c4f555f92ecabba72761-Image_16-3-2026_at_7.03PM.png)
 
 ---
 
@@ -93,6 +101,8 @@ http://127.0.0.1:18789/
 
 - 左侧点击 Agent  
 - 在 Primary model 中选择模型  
+
+![](https://files.readme.io/3668289b53d185d158dd8393f46c0e171c0d301b5bdc624792c8cf8e6f9c4936-16-3-26_6.56.png)
 
 > 注意：如果通过 Dashboard 修改模型，配置文件会新增 `list` 字段，此时命令行切换将失效。
 
