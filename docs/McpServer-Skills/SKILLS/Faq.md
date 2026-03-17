@@ -32,7 +32,7 @@ Currently supported: **OpenClaw** (most complete integration), **Claude Code**, 
 ls ~/.openclaw/skills
 ```
 
-You should see directories like `sunswap`, `sunperp-skill`, `tronscan-skill`, `x402-payment`, `ainft-skill`, etc.
+You should see directories like `sunswap`, `sunperp-skill`, `tronscan-skill`, `x402-payment`, `recharge-skill`, etc.
 
 Then verify in OpenClaw:
 
@@ -75,8 +75,8 @@ export SUNPERP_SECRET_KEY="your_SunPerp_Secret_Key"
 # TronScan data queries (needed for tronscan-skill)
 export TRONSCAN_API_KEY="your_TronScan_API_Key"
 
-# AINFT (needed for ainft-skill)
-export AINFT_API_KEY="your_AINFT_API_Key"
+# BANK OF AI (needed for recharge-skill)
+export BANKOFAI_API_KEY="your_BANKOFAI_API_Key"
 ```
 
 After adding them, run `source ~/.zshrc` to apply, then restart your AI tool.

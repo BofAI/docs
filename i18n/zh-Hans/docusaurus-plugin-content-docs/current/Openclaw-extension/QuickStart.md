@@ -52,10 +52,12 @@ cd openclaw-extension
 📦 Available MCP Servers:
   1) mcp-server-tron    - TRON blockchain interaction
   2) bnbchain-mcp       - BNB Chain (BSC, opBNB, Ethereum) interaction
-  3) ainft-merchant     - Remote AINFT recharge MCP
+  3) bankofai-recharge  - Remote BANK OF AI recharge MCP
 
 Select servers to install (e.g., 1,2,3 or 'all'):
 ```
+
+> **关于 bankofai-recharge**：这是一个远程 MCP，直接连接到 `https://recharge.bankofai.io/mcp`，无需配置本地凭证——安装程序会自动配置好远程端点。
 
 对于每个选中的服务器，安装程序会继续询问凭证存储方式：
 
@@ -72,10 +74,11 @@ Select servers to install (e.g., 1,2,3 or 'all'):
 
 ```
 🔧 Available Skills:
-  1) sunswap          - SunSwap DEX trading skill
-  2) tronscan-skill   - TRON blockchain data lookup
-  3) x402-payment     - Agent payment protocol (x402)
-  4) ainft-skill       - AINFT balance/order queries
+  1) recharge-skill   - BANK OF AI account query and recharge
+  2) sunperp-skill    - SunPerp perpetual futures trading (TRON)
+  3) sunswap          - SunSwap DEX trading skill
+  4) tronscan-skill   - TRON blockchain data lookup
+  5) x402-payment     - Agent payment protocol (x402)
 
 Select skills to install (e.g., 1,2,3 or 'all'):
 ```
@@ -90,8 +93,9 @@ Select skills to install (e.g., 1,2,3 or 'all'):
 
 部分 Skill 有额外的凭证需求，安装程序会在安装时逐一提示：
 
+- **recharge-skill** — 需要 BANK OF AI API Key（`BANKOFAI_API_KEY`）
+- **sunperp-skill** — 需要 SunPerp API 密钥（`SUNPERP_ACCESS_KEY` + `SUNPERP_SECRET_KEY`）
 - **x402-payment** — 可选配置 Gasfree API 凭证（用于免 Gas 交易）
-- **ainft-skill** — 需要 AINFT API Key
 - **tronscan-skill** — 提示你在 shell 中设置 `TRONSCAN_API_KEY` 环境变量
 - **sunswap** — 提示配置 TRON 私钥（如果前面没有配置）
 

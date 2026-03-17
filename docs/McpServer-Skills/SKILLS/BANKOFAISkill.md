@@ -22,7 +22,7 @@ BANK OF AI Skills can operate on **real on-chain assets**. Blockchain transactio
 | **sunperp-skill** | v1.0.0 | SunPerp perpetual contracts — market data, orders, positions, withdrawals | `SUNPERP_ACCESS_KEY` + `SUNPERP_SECRET_KEY` |
 | **tronscan-skill** | v1.0.0 | TronScan on-chain data queries — accounts, transactions, tokens, blocks | `TRONSCAN_API_KEY` |
 | **x402-payment** | v1.4.0 | x402 protocol payments — calling paid APIs and paid agents | `TRON_PRIVATE_KEY` or `EVM_PRIVATE_KEY` |
-| **ainft-skill** | v1.1.1 | AINFT balance queries, order history, TRC20 deposits | `AINFT_API_KEY` |
+| **recharge-skill** | v1.1.1 | BANK OF AI balance queries, order history, TRC20 recharge via MCP | `BANKOFAI_API_KEY` |
 
 ---
 
@@ -48,7 +48,7 @@ Verify that skills are ready after installation:
 ls ~/.openclaw/skills
 ```
 
-You should see directories like `sunswap`, `sunperp-skill`, `tronscan-skill`, `x402-payment`, `ainft-skill`, etc.
+You should see directories like `sunswap`, `sunperp-skill`, `tronscan-skill`, `x402-payment`, `recharge-skill`, etc.
 
 ### Installation on Other Platforms
 
@@ -185,17 +185,20 @@ Use x402 protocol to call this paid agent endpoint: https://api.example.com
 Help me check the current Gasfree wallet status and available balance.
 ```
 
-### ainft-skill
+### recharge-skill
 
 ```
 # 🟢 Query balance
-How much balance does my AINFT account have?
+How much balance does my BANK OF AI account have?
 
 # 🟢 Query orders
-Show my recent AINFT order history.
+Show my recent BANK OF AI order history.
 
-# ⚠️ Deposit
-Deposit 1 USDT to my AINFT account.
+# ⚠️ Recharge
+Recharge 1 USDT to my BANK OF AI account.
+
+# ⚠️ Recharge (Chinese)
+给 BANK OF AI 充值 1 USDT
 ```
 
 ---

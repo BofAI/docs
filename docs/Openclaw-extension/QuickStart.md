@@ -51,10 +51,12 @@ The installer displays all available MCP Servers and asks which ones you want to
 📦 Available MCP Servers:
   1) mcp-server-tron    - TRON blockchain interaction
   2) bnbchain-mcp       - BNB Chain (BSC, opBNB, Ethereum) interaction
-  3) ainft-merchant     - Remote AINFT recharge MCP
+  3) bankofai-recharge  - Remote BANK OF AI recharge MCP
 
 Select servers to install (e.g., 1,2,3 or 'all'):
 ```
+
+> **Note on bankofai-recharge**: This is a remote MCP that connects directly to `https://recharge.bankofai.io/mcp`. No local credentials are needed — the installer configures the endpoint automatically.
 
 For each selected server, the installer continues by asking how you want to store credentials:
 
@@ -71,10 +73,11 @@ The installer clones the [Skills repository](https://github.com/BofAI/skills) fr
 
 ```
 🔧 Available Skills:
-  1) sunswap          - SunSwap DEX trading skill
-  2) tronscan-skill   - TRON blockchain data lookup
-  3) x402-payment     - Agent payment protocol (x402)
-  4) ainft-skill       - AINFT balance/order queries
+  1) recharge-skill   - BANK OF AI account query and recharge
+  2) sunperp-skill    - SunPerp perpetual futures trading (TRON)
+  3) sunswap          - SunSwap DEX trading skill
+  4) tronscan-skill   - TRON blockchain data lookup
+  5) x402-payment     - Agent payment protocol (x402)
 
 Select skills to install (e.g., 1,2,3 or 'all'):
 ```
@@ -89,8 +92,9 @@ Then choose the installation location:
 
 Some Skills have additional credential requirements, which the installer will prompt you for during installation:
 
+- **recharge-skill** — Requires BANK OF AI API Key (`BANKOFAI_API_KEY`)
+- **sunperp-skill** — Requires SunPerp API keys (`SUNPERP_ACCESS_KEY` + `SUNPERP_SECRET_KEY`)
 - **x402-payment** — Optional configuration of Gasfree API credentials (for zero-gas transactions)
-- **ainft-skill** — Requires AINFT API Key
 - **tronscan-skill** — Prompts you to set `TRONSCAN_API_KEY` environment variable in your shell
 - **sunswap** — Prompts to configure TRON private key (if not configured earlier)
 

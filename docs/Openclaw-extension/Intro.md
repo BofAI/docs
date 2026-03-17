@@ -25,12 +25,13 @@ OpenClaw Extension consists of two main categories of components: **MCP Servers*
 
 ### MCP Server — On-Chain Operation Capabilities
 
-MCP Servers are bridges between your AI assistant and the blockchain, providing on-chain operation capabilities through the [Model Context Protocol (MCP)](../McpServer-Skills/MCP/Intro.md) standard interface. Currently supports MCP Servers for three blockchain chains and one remote service:
+MCP Servers are bridges between your AI assistant and the blockchain, providing on-chain operation capabilities through the [Model Context Protocol (MCP)](../McpServer-Skills/MCP/Intro.md) standard interface. Currently supports MCP Servers for two blockchain chains plus one remote recharge service:
 
-| MCP Server | Target Chain | Core Capabilities |
+| MCP Server | Target | Core Capabilities |
 | :--- | :--- | :--- |
 | **[mcp-server-tron](https://github.com/BofAI/mcp-server-tron)** | TRON | 95 tools covering wallets, transfers, contracts, staking, governance, and all operations |
 | **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** | BSC / opBNB / Ethereum | Multi-chain EVM operations, wallets, contracts, cross-chain |
+| **bankofai-recharge** | BANK OF AI (Remote) | Remote recharge MCP — top up your BANK OF AI account via on-chain USDT. Default endpoint: `https://recharge.bankofai.io/mcp` |
 
 ### Skills — Pre-built Workflows
 
@@ -42,7 +43,7 @@ Skills are encapsulated business process templates. Unlike individual tools prov
 | **sunperp-skill** | SunPerp perpetual futures trading — market data, orders, positions, leverage, withdrawals |
 | **tronscan-skill** | Query on-chain data via TronScan API (accounts, transactions, tokens, blocks, network statistics) |
 | **x402-payment** | x402 payment skill for calling paid agents and APIs, supporting Gasfree zero-gas transactions |
-| **ainft-skill** | AINFT balance and order queries, plus TRC20 top-ups |
+| **recharge-skill** | BANK OF AI balance and order queries, plus TRC20 recharge via MCP |
 
 
 ---

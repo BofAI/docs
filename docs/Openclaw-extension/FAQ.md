@@ -90,7 +90,6 @@ This is by design. Write tools only appear after wallet credentials are configur
 - Environment variable `PRIVATE_KEY` (bnbchain-mcp)
 - `env.TRON_PRIVATE_KEY` or `env.PRIVATE_KEY` for corresponding Server in mcporter.json
 
-After configuring credentials, restart OpenClaw. For detailed instructions, see [Configuration Reference](./Configuration.md).
 
 ### MCP Server startup timeout
 
@@ -137,15 +136,15 @@ cat ~/.x402-config.json
 
 Confirm it contains valid `gasfree_api_key` and `gasfree_api_secret`. If you need to reconfigure, you can edit the file directly or re-run the installer.
 
-### AINFT API Key invalid
+### BANK OF AI API Key invalid
 
-Check contents of `~/.mcporter/ainft-config.json`:
+Check contents of `~/.mcporter/bankofai-config.json` (or `~/.bankofai/config.json`):
 
 ```bash
-cat ~/.mcporter/ainft-config.json
+cat ~/.mcporter/bankofai-config.json
 ```
 
-Confirm the `api_key` field contains a valid Key. Note that ainft-skill has a credential priority order (CLI arguments > environment variables > config files); if you set different values in multiple places, you might read the unexpected one.
+Confirm the `api_key` field contains a valid Key. Note that recharge-skill has a credential priority order (CLI arguments > environment variables > `bankofai-config.json` in working directory > `~/.bankofai/config.json` > `~/.mcporter/bankofai-config.json`); if you set different values in multiple places, you might read the unexpected one.
 
 ---
 
@@ -203,7 +202,8 @@ OpenClaw Extension has no automatic uninstaller. Manual uninstall steps:
 3. **Delete credential files**:
    ```bash
    rm -f ~/.x402-config.json
-   rm -f ~/.mcporter/ainft-config.json
+   rm -f ~/.mcporter/bankofai-config.json
+   rm -f ~/.bankofai/config.json
    rm -f ~/.clawdbot/wallets/.deployer_pk
    ```
 4. **Clean environment variables**: Remove related export statements from `~/.zshrc` or `~/.bashrc`

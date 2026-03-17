@@ -137,15 +137,15 @@ cat ~/.x402-config.json
 
 确认包含有效的 `gasfree_api_key` 和 `gasfree_api_secret`。如果需要重新配置，可以直接编辑文件或重新运行安装程序。
 
-### AINFT API Key 无效
+### BANK OF AI API Key 无效
 
-检查 `~/.mcporter/ainft-config.json` 的内容：
+检查 `~/.bankofai/config.json` 或 `~/.mcporter/bankofai-config.json` 的内容：
 
 ```bash
-cat ~/.mcporter/ainft-config.json
+cat ~/.bankofai/config.json
 ```
 
-确认 `api_key` 字段包含有效的 Key。注意 ainft-skill 的凭证读取有优先级顺序（CLI 参数 > 环境变量 > 配置文件），如果你在多个地方设置了不同的值，可能会读到意外的那个。
+确认 `api_key` 字段包含有效的 Key。注意 recharge-skill 的凭证读取有优先级顺序（CLI 参数 > 环境变量 > 工作目录 `bankofai-config.json` > `~/.bankofai/config.json` > `~/.mcporter/bankofai-config.json`），如果你在多个地方设置了不同的值，可能会读到意外的那个。
 
 ---
 
@@ -204,7 +204,8 @@ OpenClaw Extension 没有自动卸载程序。手动卸载步骤：
 3. **删除凭证文件**：
    ```bash
    rm -f ~/.x402-config.json
-   rm -f ~/.mcporter/ainft-config.json
+   rm -f ~/.bankofai/config.json
+   rm -f ~/.mcporter/bankofai-config.json
    rm -f ~/.clawdbot/wallets/.deployer_pk
    ```
 4. **清理环境变量**：从 `~/.zshrc` 或 `~/.bashrc` 中移除相关 export 语句
