@@ -127,15 +127,6 @@ npx -y @bnb-chain/mcp@latest --help
 2. **Key 是否仍然有效**：登录 [trongrid.io](https://www.trongrid.io/) 确认状态
 3. **是否正确加载**：如果在环境变量中设置，确认已运行 `source ~/.zshrc`
 
-### Gasfree 凭证不起作用
-
-检查 `~/.x402-config.json` 的格式和内容：
-
-```bash
-cat ~/.x402-config.json
-```
-
-确认包含有效的 `gasfree_api_key` 和 `gasfree_api_secret`。如果需要重新配置，可以直接编辑文件或重新运行安装程序。
 
 ### BANK OF AI API Key 无效
 

@@ -126,15 +126,6 @@ Validation: Import the private key into the appropriate wallet (TronLink or Meta
 2. **Is Key still valid?**: Log in to [trongrid.io](https://www.trongrid.io/) to check status
 3. **Is it properly loaded?**: If set in environment variables, confirm you ran `source ~/.zshrc`
 
-### Gasfree credentials not working
-
-Check format and contents of `~/.x402-config.json`:
-
-```bash
-cat ~/.x402-config.json
-```
-
-Confirm it contains valid `gasfree_api_key` and `gasfree_api_secret`. If you need to reconfigure, you can edit the file directly or re-run the installer.
 
 ### BANK OF AI API Key invalid
 

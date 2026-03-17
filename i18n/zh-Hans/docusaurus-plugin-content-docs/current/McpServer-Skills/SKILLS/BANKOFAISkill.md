@@ -180,9 +180,6 @@ BTC-USDT 永续合约的当前价格、24h 涨跌幅和资金费率是多少？
 ```
 # ⚠️ 调用付费端点
 使用 x402 协议调用这个付费智能体端点：https://api.example.com
-
-# 🟢 查询 Gasfree 状态
-帮我查看当前 Gasfree 钱包的状态和可用余额。
 ```
 
 ### recharge-skill

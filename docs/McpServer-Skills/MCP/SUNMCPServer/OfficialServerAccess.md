@@ -37,15 +37,6 @@ Add the following MCP service endpoint to your AI client configuration:
 
 > Note: This is an MCP protocol endpoint, not a webpage. Opening it directly in a browser will not display anything.
 
-The official cloud service supports **two usage modes**:
-
-| Mode | Rate Limit | Description |
-| :--- | :--- | :--- |
-| **Without API Key (default)** | 100,000 requests / day | Ready to use immediately, suitable for getting started and low-frequency queries |
-| **With TronGrid API Key** | 500,000 requests / day | Higher request limit, suitable for frequent queries and production use |
-
-For use cases involving frequent mainnet data queries, it is recommended to register a free TronGrid API Key at [trongrid.io](https://www.trongrid.io/), and configure it in the request header for higher throughput and stability.
-
 ---
 
 ## Client Configuration
@@ -57,7 +48,7 @@ Configuration file path:
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 
-**Basic Config (No API Key)**:
+**Basic Config**:
 
 ```json
 {
@@ -72,26 +63,6 @@ Configuration file path:
   }
 }
 ```
-
-**Config with TronGrid API Key**:
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp",
-        "--header",
-        "TRONGRID-API-KEY:<your-api-key>"
-      ]
-    }
-  }
-}
-```
-
-Replace `<your-api-key>` with your actual TronGrid API Key.
 
 </TabItem>
 <TabItem value="Claude Code" label="Claude Code">

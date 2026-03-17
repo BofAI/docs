@@ -1,15 +1,10 @@
 # Introduction
 
-BANK OF AI provides a complete solution, from infrastructure to business logic, for building autonomous AI Agents based on blockchain networks through a dual-layer architecture of MCP Server and Skills.
+BANK OF AI provides a comprehensive AI Agent capability framework through **MCP Server** and **Skills**: the former delivers standardized blockchain interaction capabilities, while the latter organizes these capabilities into executable workflows, enabling AI Agents to perform complex operations in on-chain environments.
 
-Developers only need to deploy the MCP Server and load the corresponding Skills to evolve AI agents from "chatbots" into Web3 economic entities with asset management capabilities and on-chain interaction abilities.
+* **MCP Server** is designed to provide a standardized framework for interactions between Large Language Models (LLMs) and external tools and data sources. Its core lies in a well-defined client-server architecture and layered communication mechanism, ensuring that AI applications can securely and efficiently access and utilize external information.
 
-## Architecture Overview
-
-| Layer | Component | Role |
-| :--- | :--- | :--- |
-| Infrastructure Layer | **MCP Server** | Provides AI agents with low-level capabilities for blockchain interaction (querying data, initiating transactions, calling contracts, etc.) |
-| Business Logic Layer | **Skills** | Provides AI agents with domain-specific operation guides and workflows (e.g., DEX trading, payment protocols, etc.) |
+* **Skills** are capability abstractions that orchestrate multiple tools into structured workflows, enabling AI Agents to complete complex, multi-step tasks.
 
 ## Quick Navigation
 

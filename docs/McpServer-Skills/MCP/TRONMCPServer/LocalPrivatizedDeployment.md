@@ -335,5 +335,5 @@ You can get free test TRX for the Nile testnet from the TRON faucet. Visit [nile
 
 ## Next Steps
 
-- Want to see detailed parameters and usage for each tool? → [Full Capability Listt](./ToolList.md)
+- Want to see detailed parameters and usage for each tool? → [Full Capability List](./ToolList.md)
 - Encountering issues? → [FAQ](./FAQ.md)

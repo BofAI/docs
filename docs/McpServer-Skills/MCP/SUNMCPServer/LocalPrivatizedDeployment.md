@@ -123,33 +123,8 @@ Same security risks as the private key option. Mnemonic phrases stored in plaint
 
 ---
 
-### Step 2: Configure Network (Optional)
 
-#### TronGrid API Key
-
-TronGrid is the official TRON RPC provider. Using an API Key can increase request rate limits.
-
-**Getting an API Key:**
-
-1. Visit [TronGrid Official Website](https://www.trongrid.io)
-2. Register an account or log in
-3. Generate an API Key in the console
-4. Copy the API Key to environment variable
-
-**Environment Variables:**
-
-```bash
-TRON_GRID_API_KEY=your_api_key_here
-```
-
-:::info
-If you don't set `TRON_GRID_API_KEY`, SUN MCP Server will use public endpoints, but may be subject to rate limiting.
-:::
-
-
----
-
-### Step 3: Install Server
+### Step 2: Local Private Deployment
 
 #### Option A: Run directly with npx (Recommended)
 
@@ -169,7 +144,7 @@ npx -y @bankofai/sun-mcp-server
 **Run with environment variables:**
 
 ```bash
-TRON_NETWORK=nile TRON_GRID_API_KEY=your_api_key npx -y @bankofai/sun-mcp-server
+TRON_NETWORK=nile npx -y @bankofai/sun-mcp-server
 ```
 
 #### Option B: Clone from Source
@@ -202,7 +177,7 @@ sun-mcp-server
 
 ---
 
-### Step 4: Connect AI Client
+### Step 3: Client Configuration
 
 After configuration is complete, you need to add the connection definition of SUN MCP Server in your AI client.
 
@@ -236,7 +211,6 @@ Add to `~/.claude/resources/mcp/servers.json`:
       "env": {
         "AGENT_WALLET_PASSWORD": "your_secure_password",
         "AGENT_WALLET_DIR": "~/.agent-wallet",
-        "TRON_GRID_API_KEY": "your_api_key",
         "TRON_NETWORK": "nile"
       }
     }
@@ -244,11 +218,14 @@ Add to `~/.claude/resources/mcp/servers.json`:
 }
 ```
 
-**Claude Code (CLI) Configuration:**
+**Claude Code**
 
 ```bash
-export MCP_SERVERS='{"sun":{"command":"npx","args":["-y","@bankofai/sun-mcp-server"],"env":{"TRON_NETWORK":"nile","TRON_GRID_API_KEY":"your_api_key"}}}'
-claude code
+# Basic
+claude mcp add sun-mcp-server -- npx -y @bankofai/sun-mcp-server
+
+# With environment variables
+claude mcp add -e AGENT_WALLET_PASSWORD=xxx sun-mcp-server -- npx -y @bankofai/sun-mcp-server
 ```
 
 **Cursor Configuration:**
@@ -262,8 +239,7 @@ Add to `~/.cursor/extensions/mcp/servers.json`:
       "command": "npx",
       "args": ["-y", "@bankofai/sun-mcp-server"],
       "env": {
-        "TRON_NETWORK": "nile",
-        "TRON_GRID_API_KEY": "your_api_key"
+        "TRON_NETWORK": "nile"
       }
     }
   }
@@ -288,7 +264,6 @@ Add to `~/.claude/resources/mcp/servers.json`:
       "args": ["tsx", "/path/to/sun-mcp-server/src/index.ts"],
       "env": {
         "AGENT_WALLET_PASSWORD": "your_secure_password",
-        "TRON_GRID_API_KEY": "your_api_key",
         "TRON_NETWORK": "nile"
       }
     }
@@ -307,8 +282,7 @@ Add to `~/.cursor/extensions/mcp/servers.json`:
       "command": "npx",
       "args": ["tsx", "/path/to/sun-mcp-server/src/index.ts"],
       "env": {
-        "TRON_NETWORK": "nile",
-        "TRON_GRID_API_KEY": "your_api_key"
+        "TRON_NETWORK": "nile"
       }
     }
   }
@@ -364,7 +338,6 @@ HTTP mode is suitable for local development and testing. For remote deployment, 
 
 ```bash
 export TRON_NETWORK=nile
-export TRON_GRID_API_KEY=your_api_key
 sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
 ```
 
@@ -373,7 +346,7 @@ sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPat
 
 ---
 
-### Step 5: Verify Connection
+### Step 4: Verify Connection
 
 After starting the AI client, you should be able to see the tool list of SUN MCP Server. Perform the following tests to confirm the configuration is correct:
 
@@ -382,7 +355,7 @@ After starting the AI client, you should be able to see the tool list of SUN MCP
 Try the following command in chat:
 
 ```
-Query the block height of TRON mainnet
+Check the current prices of USDT and TRX on SunSwap
 ```
 
 Expect to receive the current block number.
@@ -405,9 +378,8 @@ You can get test TRX from [TRON Nile Faucet](https://nile.trongrid.io/join), the
 If you encounter connection issues:
 
 1. **Check Network Connection**: Ensure you can access TRON network endpoints
-2. **Verify API Key**: If `TRON_GRID_API_KEY` is configured, ensure it's valid
-3. **View Logs**: When running the server, check console output for error messages
-4. **Test Network**: Try switching to testnet (Nile) to rule out network issues
+2. **View Logs**: When running the server, check console output for error messages
+3. **Test Network**: Try switching to testnet (Nile) to rule out network issues
 :::
 
 ---

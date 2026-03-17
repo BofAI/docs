@@ -61,14 +61,14 @@ import TabItem from '@theme/TabItem';
 
 | 模式 | 限速 | 说明 |
 | :--- |--- |:--- |
-| **无 API Key（默认）** | 100,000 Requests / Day |即开即用，适合入门体验和低频查询 |
+| **无 TronGrid API Key（默认）** | 100,000 Requests / Day |即开即用，适合入门体验和低频查询 |
 | **带 TronGrid API Key** | 500,000 Requests / Day |更高的请求频率上限，适合频繁查询和生产级使用 |
 
 两种模式的接入方式完全相同，区别仅在于请求频率限制。
 
 ---
 
-### 无 API Key 模式（默认）
+### 无 TronGrid API Key 模式（默认）
 
 不配置任何 API Key 即可直接使用。适用于：
 

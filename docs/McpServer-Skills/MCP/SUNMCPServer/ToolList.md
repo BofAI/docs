@@ -1,16 +1,22 @@
 # Full Capability List
 
-SUN MCP Server provides **41 tools** (18 custom DeFi tools + 23 SUN.IO OpenAPI derived tools).
+SUN MCP Server provides **41 tools**.
 
-## Understanding Two Key Concepts
+## Understand Two Key Concepts First
+
+Before browsing the tool list, there are two things you should know:
 
 :::info Read vs Write
-- **Read Tools**: Only query data, do not affect on-chain state. Can be used in both cloud service and local deployment.
-- **Write Tools**: Modify on-chain state (swaps, liquidity operations, etc.). Only available in local deployment with configured wallet.
+Each tool is labeled with a **mode** — "read" or "write":
+
+- **Read tools**: Only query on-chain data and do not affect any state. They can be used in both cloud services and local deployments.
+- **Write tools**: Modify blockchain state (e.g., transfers, staking, contract interactions). These are only available in local deployments with a configured wallet.
+
+If you have not configured a wallet, write tools will not appear in the AI’s available tool list — they are automatically hidden, so there’s no risk of triggering them by mistake.
 :::
 
-:::tip network Parameter
-Most tools have an optional `network` parameter to specify the network environment for interaction. Defaults to mainnet configuration, can also switch to testnet.
+:::tip `network` parameter
+Most tools include an optional `network` parameter used to specify the target network environment. By default, the mainnet is used, but it can be switched to a testnet if needed.
 :::
 
 ---
@@ -340,15 +346,4 @@ System automatically:
 Although most parameters are auto-calculated, for critical operations (such as adding large amounts of liquidity), it's recommended to actively specify parameters to get higher control precision.
 :::
 
----
-
-## Quick Reference
-
-**Need to query data?** Use read tools: `get_*`, `search_*`, `scan*` series.
-
-**Need to execute transactions?** Use write tools: `swap`, `mint`, `add`, `remove`, `collect`, `send_contract` series.
-
-**Not sure about parameters?** Tools will auto-calculate reasonable defaults, or prompt you for additional info when necessary.
-
-**Want to learn more?** Check [SUN MCP Server main documentation](../README.md) or [API Reference](../API-Reference.md).
 

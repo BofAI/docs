@@ -94,7 +94,6 @@ Some Skills have additional credential requirements, which the installer will pr
 
 - **recharge-skill** — Requires BANK OF AI API Key (`BANKOFAI_API_KEY`)
 - **sunperp-skill** — Requires SunPerp API keys (`SUNPERP_ACCESS_KEY` + `SUNPERP_SECRET_KEY`)
-- **x402-payment** — Optional configuration of Gasfree API credentials (for zero-gas transactions)
 - **tronscan-skill** — Prompts you to set `TRONSCAN_API_KEY` environment variable in your shell
 - **sunswap** — Prompts to configure TRON private key (if not configured earlier)
 

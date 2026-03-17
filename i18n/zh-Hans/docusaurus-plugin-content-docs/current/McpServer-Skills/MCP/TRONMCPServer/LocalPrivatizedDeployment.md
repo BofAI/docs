@@ -134,15 +134,24 @@ export TRON_ACCOUNT_INDEX="0"
 
 #### TronGrid API Key
 
-TRON 主网公共 RPC 有严格的频率限制。如果你的使用场景涉及频繁的链上查询，强烈建议配置一个免费的 TronGrid API Key：
+TronGrid 是官方的 TRON RPC 提供商。使用 API Key 可以提高请求速率限制。
+
+**获取 API Key：**
+
+1. 访问 [TronGrid 官方网站](https://www.trongrid.io)
+2. 注册账户或登录
+3. 在控制台生成 API Key
+4. 复制 API Key 到环境变量
+
+**环境变量：**
 
 ```bash
-# 添加到 ~/.zshrc 或 ~/.bashrc
-export TRONGRID_API_KEY="<你的 TronGrid API Key>"
+TRON_GRID_API_KEY=your_api_key_here
 ```
 
-在 [trongrid.io](https://www.trongrid.io/) 注册即可免费获取。不配置时服务器仍然可以运行，但高频操作下可能出现限速错误。测试网（Nile、Shasta）受频率限制的影响较小。
-
+:::info
+如果不设置 `TRON_GRID_API_KEY`，TRON MCP Server 将使用公共端点，但可能受到速率限制。
+:::
 
 ---
 

@@ -2,13 +2,24 @@
 
 TRON MCP Server provides **95 tools**, **6 prompts**, and **1 resource** for interacting with the TRON blockchain. Tools are the core capability — they are the actual functions the AI calls on your behalf.
 
-:::info Read vs Write
-- **Read** tools: Available in both cloud (read-only) and local deployments. These are query-only operations with no on-chain impact.
-- **Write** tools: Only available with local deployment + wallet configured. These modify blockchain state (transfers, staking, contract calls, etc.).
+## Understand Two Key Concepts First
 
-If no wallet is configured, write tools are automatically hidden from the AI.
+Before exploring the tool list, there are two important things you should know:
+
+:::info Read vs Write
+Each tool is labeled with a **mode** — "read" or "write":
+
+- **Read tools**: Only query on-chain data and do not affect any state. They can be used in both cloud services and local deployments.
+- **Write tools**: Modify blockchain state (e.g., transfers, staking, contract interactions). These are only available in local deployments with a configured wallet.
+
+If you have not configured a wallet, write tools will not appear in the AI’s available tool list — they are automatically hidden, so there’s no risk of triggering them by mistake.
 :::
 
+:::tip `network` parameter
+Most tools include an optional `network` parameter used to specify the target network (`mainnet`, `nile`, or `shasta`). If not specified, the default is `mainnet`.
+
+During testing, it is recommended to explicitly set `nile` each time to avoid unintended operations on the mainnet.
+:::
 ---
 
 ## Tools (95 total)

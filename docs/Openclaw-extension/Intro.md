@@ -42,7 +42,7 @@ Skills are encapsulated business process templates. Unlike individual tools prov
 | **sunswap** | SunSwap DEX trading including balance queries, quotes, swaps, and liquidity management |
 | **sunperp-skill** | SunPerp perpetual futures trading — market data, orders, positions, leverage, withdrawals |
 | **tronscan-skill** | Query on-chain data via TronScan API (accounts, transactions, tokens, blocks, network statistics) |
-| **x402-payment** | x402 payment skill for calling paid agents and APIs, supporting Gasfree zero-gas transactions |
+| **x402-payment** | x402 payment skill for calling paid agents and APIs |
 | **recharge-skill** | BANK OF AI balance and order queries, plus TRC20 recharge via MCP |
 
 

@@ -180,9 +180,6 @@ Query the last 20 USDT transfers from address TXX...
 ```
 # ⚠️ Call paid endpoint
 Use x402 protocol to call this paid agent endpoint: https://api.example.com
-
-# 🟢 Check Gasfree status
-Help me check the current Gasfree wallet status and available balance.
 ```
 
 ### recharge-skill

@@ -17,7 +17,7 @@ SUN MCP Server 是连接 AI 助手与 TRON 链上最大去中心化交易所 [SU
 
 ## 它能做什么？
 
-SUN MCP Server 覆盖了与 SunSwap DEX 交互的完整操作，从链上数据查询到代币兑换和流动性管理，共提供 **41 个工具**（18 个自定义工具 + 23 个 SUN.IO OpenAPI 工具）。
+SUN MCP Server 覆盖了与 SunSwap DEX 交互的完整操作，从链上数据查询到代币兑换和流动性管理，共提供 **41 个工具**。
 
 以下是核心能力概览——每一项都可以通过自然语言触发：
 

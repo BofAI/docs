@@ -163,43 +163,6 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
    - Use strong password (minimum 8 characters)
    - Avoid special characters, use alphanumeric combination
 
-### TronGrid API Key Not Working
-
-**Symptom:** API calls return errors or rate limiting errors.
-
-**Resolution Steps:**
-
-1. **Check Environment Variable Name**
-   ```bash
-   # Correct name
-   export TRON_GRID_API_KEY="your_api_key"
-   
-   # Incorrect name (common error)
-   export TRONGRID_API_KEY="..."  # ❌ Don't do this
-   ```
-
-2. **Verify API Key Validity**
-   - Log in to [TronGrid Dashboard](https://dashboard.trongrid.io)
-   - Confirm API Key not expired or disabled
-   - Check request quota is sufficient
-
-3. **Verify Environment Variable Set**
-   ```bash
-   echo $TRON_GRID_API_KEY
-   ```
-
-4. **Restart Server**
-   ```bash
-   # Restart after setting
-   npx -y @bankofai/sun-mcp-server
-   ```
-
-5. **Check Network Connection**
-   ```bash
-   curl -H "TRONGRID-API-KEY: $TRON_GRID_API_KEY" \
-     https://api.trongrid.io/v1/now
-   # Should return block information
-   ```
 
 ### "Conflicting Wallet Modes"
 
@@ -387,7 +350,7 @@ Check transaction hash details on https://tronscan.org for error message
 
 1. **Provide Accurate Address in Prompt**
    ```
-   Please use USDT (T9yD14Nj9j7xAB4dbGknA47WWJcZ541TZJ)
+   Please use USDT (TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t)
    ```
 
 2. **Use Official Token List**
@@ -428,22 +391,15 @@ Check transaction hash details on https://tronscan.org for error message
 
 **Optimization Steps:**
 
-1. **Configure TronGrid API Key**
-   ```bash
-   export TRON_GRID_API_KEY="your_api_key"
-   ```
-   - Without API Key uses public node, slower speed
-   - With API Key accesses dedicated node
-
-2. **Simplify Workflow**
+1. **Simplify Workflow**
    - Reduce multi-tool coordination steps
    - Avoid large number of consecutive queries
 
-3. **Use Local Server**
+2. **Use Local Server**
    - See [Local Privatized Deployment](LocalPrivatizedDeployment.md)
    - May be faster than official server (depends on network)
 
-4. **Batch Operations**
+3. **Batch Operations**
    ```
    Merge related queries to reduce round trips
    ```
@@ -574,6 +530,6 @@ npm update @modelcontextprotocol/sdk
 ## Get More Help
 
 - **GitHub Issues:** https://github.com/BofAI/sun-mcp-server/issues
-- **Complete Documentation:** Check [Tool List](ToolList.md) and [Best Practices](BestPractices.md)
+- **Full Capability List:** Check [Full Capability List](ToolList.md) 
 - **Local Deployment:** See [Local Privatized Deployment](LocalPrivatizedDeployment.md)
 - **Official Server:** See [Official Server Access](OfficialServerAccess.md)

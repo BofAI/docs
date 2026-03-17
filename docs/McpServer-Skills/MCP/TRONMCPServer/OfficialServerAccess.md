@@ -60,14 +60,14 @@ The official cloud service supports **two usage modes**:
 
 | Mode | Rate Limit | Description |
 | :--- | :--- | :--- |
-| **Without API Key (default)** | 100,000 requests / day | Ready to use immediately, suitable for getting started and low-frequency queries |
+| **Without TronGrid API Key (default)** | 100,000 requests / day | Ready to use immediately, suitable for getting started and low-frequency queries |
 | **With TronGrid API Key** | 500,000 requests / day | Higher request limit, suitable for frequent queries and production use |
 
 Both modes use the same connection method — the only difference is the request rate limit.
 
 ---
 
-### Without API Key Mode (Default)
+### Without TronGrid API Key Mode (Default)
 
 No API Key configuration needed to get started. Best for:
 

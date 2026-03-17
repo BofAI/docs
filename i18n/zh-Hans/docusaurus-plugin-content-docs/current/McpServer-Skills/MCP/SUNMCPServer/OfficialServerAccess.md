@@ -45,15 +45,6 @@ import TabItem from '@theme/TabItem';
 
 > 注意：这是一个 MCP 协议端点，不是网页地址。在浏览器中直接打开不会显示任何内容。
 
-官方云服务支持**两种使用模式**：
-
-| 模式 | 限速 |说明 |
-| :--- | :--- | :--- |
-| **无 API Key（默认）** |100,000 Requests / Day  |即开即用，适合入门体验和低频查询 |
-| **带 TronGrid API Key** |500,000 Requests / Day |更高的请求频率上限，适合频繁查询和生产级使用 |
-
-如果你的使用场景涉及频繁查询主网数据，建议在 [trongrid.io](https://www.trongrid.io/) 注册一个免费的 TronGrid API Key，配置到请求头中以获得更高的吞吐量和稳定性。
-
 ---
 
 ## 客户端配置
@@ -65,7 +56,7 @@ import TabItem from '@theme/TabItem';
 - **macOS**：`~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**：`%APPDATA%\Claude\claude_desktop_config.json`
 
-**基础配置（不含 API Key）**：
+**基础配置**：
 
 ```json
 {
@@ -80,26 +71,6 @@ import TabItem from '@theme/TabItem';
   }
 }
 ```
-
-**含 TronGrid API Key 的配置**：
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp",
-        "--header",
-        "TRONGRID-API-KEY:<your-api-key>"
-      ]
-    }
-  }
-}
-```
-
-将 `<your-api-key>` 替换为你的实际 TronGrid API Key。
 
 </TabItem>
 <TabItem value="Claude Code" label="Claude Code">

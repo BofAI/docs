@@ -163,43 +163,6 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
    - 使用强密码（最少 8 字符）
    - 避免特殊字符，使用字母数字组合
 
-### TronGrid API Key 不生效
-
-**症状：** API 调用返回错误或速率限制错误。
-
-**解决步骤：**
-
-1. **检查环境变量名称**
-   ```bash
-   # 正确的名称
-   export TRON_GRID_API_KEY="your_api_key"
-   
-   # 错误的名称（常见错误）
-   export TRONGRID_API_KEY="..."  # ❌ 不要这样做
-   ```
-
-2. **验证 API Key 有效性**
-   - 登录 [TronGrid 控制面板](https://dashboard.trongrid.io)
-   - 确认 API Key 未过期或被禁用
-   - 检查请求限额是否足够
-
-3. **验证环境变量已设置**
-   ```bash
-   echo $TRON_GRID_API_KEY
-   ```
-
-4. **重启服务器**
-   ```bash
-   # 设置后重启
-   npx -y @bankofai/sun-mcp-server
-   ```
-
-5. **检查网络连接**
-   ```bash
-   curl -H "TRONGRID-API-KEY: $TRON_GRID_API_KEY" \
-     https://api.trongrid.io/v1/now
-   # 应返回块信息
-   ```
 
 ### "Conflicting wallet modes"
 
@@ -387,7 +350,7 @@ sun-mcp-server
 
 1. **在提示中提供准确的地址**
    ```
-   请使用 USDT（T9yD14Nj9j7xAB4dbGknA47WWJcZ541TZJ）
+   请使用 USDT（TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t）
    ```
 
 2. **使用官方代币列表**
@@ -428,22 +391,15 @@ sun-mcp-server
 
 **优化步骤：**
 
-1. **配置 TronGrid API Key**
-   ```bash
-   export TRON_GRID_API_KEY="your_api_key"
-   ```
-   - 无 API Key 使用公开节点，速度较慢
-   - 有 API Key 访问专用节点
-
-2. **简化工作流**
+1. **简化工作流**
    - 减少多工具协调的步骤数
    - 避免大量连续查询
 
-3. **使用本地服务器**
+2. **使用本地服务器**
    - 参考 [本地私有化部署](LocalPrivatizedDeployment.md)
    - 可能比官方服务器更快（取决于网络）
 
-4. **批量操作**
+3. **批量操作**
    ```
    合并相关查询以减少往返次数
    ```
@@ -574,6 +530,6 @@ npm update @modelcontextprotocol/sdk
 ## 获取更多帮助
 
 - **GitHub Issues：** https://github.com/BofAI/sun-mcp-server/issues
-- **完整文档：** 查阅 [工具列表](ToolList.md) 
+- **完整能力清单：** 查阅 [完整能力清单](ToolList.md) 
 - **本地部署：** 参考 [本地私有化部署](LocalPrivatizedDeployment.md)
-- **官方服务器：** 参考 [官方服务器访问](OfficialServerAccess.md)
+- **官方服务器：** 参考 [官方云服务接入](OfficialServerAccess.md)

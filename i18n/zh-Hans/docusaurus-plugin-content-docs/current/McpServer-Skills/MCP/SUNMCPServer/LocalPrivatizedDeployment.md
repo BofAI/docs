@@ -120,36 +120,9 @@ export TRON_ACCOUNT_INDEX="0"
 与私钥方式的安全风险相同。明文存储的助记词容易泄露，请只用于存放少量资金的开发/测试钱包。
 :::
 
-
 ---
 
-### 第二步：配置网络（可选）
-
-#### TronGrid API Key
-
-TronGrid 是官方的 TRON RPC 提供商。使用 API Key 可以提高请求速率限制。
-
-**获取 API Key：**
-
-1. 访问 [TronGrid 官方网站](https://www.trongrid.io)
-2. 注册账户或登录
-3. 在控制台生成 API Key
-4. 复制 API Key 到环境变量
-
-**环境变量：**
-
-```bash
-TRON_GRID_API_KEY=your_api_key_here
-```
-
-:::info
-如果不设置 `TRON_GRID_API_KEY`，SUN MCP Server 将使用公共端点，但可能受到速率限制。
-:::
-
-
----
-
-### 第三步：安装服务器
+### 第二步：本地私有化部署
 
 #### 方式 A：npx 直接运行（推荐）
 
@@ -169,7 +142,7 @@ npx -y @bankofai/sun-mcp-server
 **带环境变量运行：**
 
 ```bash
-TRON_NETWORK=nile TRON_GRID_API_KEY=your_api_key npx -y @bankofai/sun-mcp-server
+TRON_NETWORK=nile npx -y @bankofai/sun-mcp-server
 ```
 
 #### 方式 B：从源码克隆
@@ -202,7 +175,7 @@ sun-mcp-server
 
 ---
 
-### 第四步：连接 AI 客户端
+### 第三步：客户端配置
 
 配置完成后，需要在 AI 客户端中添加 SUN MCP Server 的连接定义。
 
@@ -236,7 +209,6 @@ sun-mcp-server
       "env": {
         "AGENT_WALLET_PASSWORD": "your_secure_password",
         "AGENT_WALLET_DIR": "~/.agent-wallet",
-        "TRON_GRID_API_KEY": "your_api_key",
         "TRON_NETWORK": "nile"
       }
     }
@@ -244,11 +216,14 @@ sun-mcp-server
 }
 ```
 
-**Claude Code (CLI) 配置：**
+**Claude Code**
 
 ```bash
-export MCP_SERVERS='{"sun":{"command":"npx","args":["-y","@bankofai/sun-mcp-server"],"env":{"TRON_NETWORK":"nile","TRON_GRID_API_KEY":"your_api_key"}}}'
-claude code
+# 基础配置
+claude mcp add sun-mcp-server -- npx -y @bankofai/sun-mcp-server
+
+# 携带环境变量
+claude mcp add -e AGENT_WALLET_PASSWORD=xxx sun-mcp-server -- npx -y @bankofai/sun-mcp-server
 ```
 
 **Cursor 配置：**
@@ -262,8 +237,7 @@ claude code
       "command": "npx",
       "args": ["-y", "@bankofai/sun-mcp-server"],
       "env": {
-        "TRON_NETWORK": "nile",
-        "TRON_GRID_API_KEY": "your_api_key"
+        "TRON_NETWORK": "nile"
       }
     }
   }
@@ -288,7 +262,6 @@ claude code
       "args": ["tsx", "/path/to/sun-mcp-server/src/index.ts"],
       "env": {
         "AGENT_WALLET_PASSWORD": "your_secure_password",
-        "TRON_GRID_API_KEY": "your_api_key",
         "TRON_NETWORK": "nile"
       }
     }
@@ -307,8 +280,7 @@ claude code
       "command": "npx",
       "args": ["tsx", "/path/to/sun-mcp-server/src/index.ts"],
       "env": {
-        "TRON_NETWORK": "nile",
-        "TRON_GRID_API_KEY": "your_api_key"
+        "TRON_NETWORK": "nile"
       }
     }
   }
@@ -364,7 +336,6 @@ HTTP 模式适用于本地开发和测试。对于远程部署，请使用 HTTPS
 
 ```bash
 export TRON_NETWORK=nile
-export TRON_GRID_API_KEY=your_api_key
 sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
 ```
 
@@ -373,7 +344,7 @@ sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPat
 
 ---
 
-### 第五步：验证接入是否成功
+### 第四步：验证接入是否成功
 
 启动 AI 客户端后，应该能看到 SUN MCP Server 的工具列表。进行以下测试以确认配置正确：
 
@@ -382,7 +353,7 @@ sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPat
 在聊天中尝试以下命令：
 
 ```
-查询 TRON 主网的区块高度
+查一下 SunSwap 上 USDT 和 TRX 的当前价格
 ```
 
 期望返回当前区块号。
@@ -405,9 +376,8 @@ TRON_NETWORK=nile
 如果遇到连接问题：
 
 1. **检查网络连接**：确保能访问 TRON 网络端点
-2. **验证 API Key**：如果配置了 `TRON_GRID_API_KEY`，确保其有效
-3. **查看日志**：运行服务器时查看控制台输出，寻找错误信息
-4. **测试网络**：尝试切换到测试网（Nile）排除网络问题
+2. **查看日志**：运行服务器时查看控制台输出，寻找错误信息
+3. **测试网络**：尝试切换到测试网（Nile）排除网络问题
 :::
 
 ---

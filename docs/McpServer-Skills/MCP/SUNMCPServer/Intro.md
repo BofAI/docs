@@ -17,7 +17,7 @@ What this means for different people:
 
 ## What can it do?
 
-SUN MCP Server covers the full range of SunSwap DEX interactions, from on-chain data queries to token swaps and liquidity management, providing **41 tools** (18 custom tools + 23 SUN.IO OpenAPI tools).
+SUN MCP Server covers the full range of SunSwap DEX interactions, from on-chain data queries to token swaps and liquidity management, providing **41 tools**.
 
 Here's a capability overview—each item can be triggered through natural language:
 

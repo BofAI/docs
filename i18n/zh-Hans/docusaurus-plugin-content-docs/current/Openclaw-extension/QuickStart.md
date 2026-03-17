@@ -95,7 +95,6 @@ Select skills to install (e.g., 1,2,3 or 'all'):
 
 - **recharge-skill** — 需要 BANK OF AI API Key（`BANKOFAI_API_KEY`）
 - **sunperp-skill** — 需要 SunPerp API 密钥（`SUNPERP_ACCESS_KEY` + `SUNPERP_SECRET_KEY`）
-- **x402-payment** — 可选配置 Gasfree API 凭证（用于免 Gas 交易）
 - **tronscan-skill** — 提示你在 shell 中设置 `TRONSCAN_API_KEY` 环境变量
 - **sunswap** — 提示配置 TRON 私钥（如果前面没有配置）
 
