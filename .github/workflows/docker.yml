@@ -12,6 +12,7 @@ on:
     branches:
       - main
       - master
+      - merge-tn      # ← 加这行
   workflow_dispatch:
 
 env:
