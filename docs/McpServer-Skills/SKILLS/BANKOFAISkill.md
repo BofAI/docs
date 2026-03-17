@@ -1,262 +1,227 @@
 # BANK OF AI Skills
 
-BANK OF AI Skills is a set of reusable skill packages designed for AI agents. Each skill encapsulates knowledge in a specific domain (e.g., DEX trading, on-chain data querying, payment protocols, etc.), with `SKILL.md` as its core, providing agents with step-by-step operational guidance, executable scripts, and examples of common usage patterns, enabling agents to perform on-chain operations like professional users.
+BANK OF AI Skills is a ready-to-use skill pack designed for AI agents, covering core DeFi scenarios in the TRON/BNB ecosystem — DEX trading, perpetual contracts, on-chain data queries, and payment protocols. Each skill encapsulates a complete business workflow: from how to call APIs and what order to execute steps, to handling approvals and protecting user assets, all embedded in `SKILL.md` and accompanying scripts.
 
-BANK OF AI Skills supports integration with MCP-compatible AI Agents such as OpenClaw, Claude Code, Claude Desktop, and Cursor. You don't need to write code; simply describe the task in natural language, and the agent will automatically match and execute the corresponding skill.
+You don't need to write code — just tell the AI in natural language what you want to do, and it will automatically find and execute the corresponding skill.
 
-:::warning Security Pre-declaration — Please read before using any Skill
-BankOfAI Skills can operate on **real on-chain assets**. Once a blockchain transaction is on-chain, it is **irreversible**. There is no "undo" button, no customer service rollback, and funds sent to the wrong address cannot be recovered. Before you begin, please keep these three iron rules in mind:
+:::warning Before Using Any Skill, Please Read
+BANK OF AI Skills can operate on **real on-chain assets**. Blockchain transactions are **irreversible** once on-chain — there's no "undo" button, no customer service rollback, and funds sent to the wrong address cannot be recovered. Remember three essential rules before using:
 
-1. **Private keys should never appear in chat windows, prompts, or configuration files.** Only pass them through environment variables (e.g., `TRON_PRIVATE_KEY`, `PRIVATE_KEY`). Do not paste private keys into any AI conversation, do not hardcode them in scripts, and certainly do not commit them to version control systems. If a private key is accidentally leaked, replace it immediately.
-2. **Testnet first, then Mainnet.** Every new operation—whether it's swapping, transferring, or adding liquidity—must first be verified on the Nile or Shasta testnets before being executed on the mainnet. Testnet tokens have no real value, so you can experiment with confidence without any economic loss.
-3. **Write operations must be manually confirmed.** Before executing any on-chain transaction, the Agent should show you the complete operation details—including recipient address, token type, amount, estimated fees, and slippage—and wait for your explicit confirmation before broadcasting the transaction. Never enable automatic execution for write operations.
+1. **Private keys must never appear in chat windows or config files.** Only pass them through environment variables (like `TRON_PRIVATE_KEY`). If a private key is compromised, move assets to a new wallet immediately.
+2. **Test on testnet first, then mainnet.** Every new operation must be verified first on Nile or Shasta testnet before switching to mainnet execution.
+3. **Write operations require manual confirmation.** Before executing any on-chain transaction, the AI should show you the complete operation details and wait for your explicit confirmation.
 :::
 
+---
 
-## Skill List
+## Available Skills Overview
 
-Below are the currently available skills, covering scenarios such as DEX trading, on-chain data querying, payment protocols, and NFTs:
+| Skill | Version | Functionality | Required Credentials |
+| :--- | :--- | :--- | :--- |
+| **sunswap** | v2.0.0 | SunSwap DEX trading — balance, quotes, swaps, V2/V3 liquidity | `TRON_PRIVATE_KEY` |
+| **sunperp-skill** | v1.0.0 | SunPerp perpetual contracts — market data, orders, positions, withdrawals | `SUNPERP_ACCESS_KEY` + `SUNPERP_SECRET_KEY` |
+| **tronscan-skill** | v1.0.0 | TronScan on-chain data queries — accounts, transactions, tokens, blocks | `TRONSCAN_API_KEY` |
+| **x402-payment** | v1.4.0 | x402 protocol payments — calling paid APIs and paid agents | `TRON_PRIVATE_KEY` or `EVM_PRIVATE_KEY` |
+| **ainft-skill** | v1.1.1 | AINFT balance queries, order history, TRC20 deposits | `AINFT_API_KEY` |
 
-| SKILL | Function | 
-| :--- | :--- | 
-| **x402-payment** | x402 payment skill, used to call paid agents and paid APIs on supported chains. | 
-| **sunswap** | SunSwap DEX skill, used for balance queries, quotes, swaps, and liquidity-related workflows. | 
-| **tronscan-skill** | TRON blockchain data query via TronScan API, supporting accounts, transactions, tokens, blocks, and network statistics. | 
+---
 
+## Installation
 
-## Quick Start
-
-Taking `OpenClaw + OpenClaw Extension` as an example.
-
-### 1. Installation
-
-Install [OpenClaw Extension](https://github.com/BofAI/openclaw-extension), which automatically installs the integration layer, connects to the MCP server, and installs the skill repository.
+The simplest installation method is using **OpenClaw Extension** — install all components with one command, automatically configure the skills directory, and the AI is ready out of the box:
 
 ```bash
+# Method 1: Direct run (for trusted sources)
 curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
-```
 
-If you want to inspect the installation script before running:
-
-```bash
+# Method 2: Check script before running (recommended)
 git clone https://github.com/BofAI/openclaw-extension.git
 cd openclaw-extension
 ./install.sh
 ```
 
-### 2. Verification
+After installation, skills will be placed in the `~/.openclaw/skills/` directory, and OpenClaw will automatically discover and load them.
 
-After installation, verify that the skill repository is available.
-
-Check the local skill directory:
+Verify that skills are ready after installation:
 
 ```bash
 ls ~/.openclaw/skills
 ```
 
-You should see entries like `sunswap`, `x402-payment`, `x402-payment-demo`, `tronscan-skill`.
+You should see directories like `sunswap`, `sunperp-skill`, `tronscan-skill`, `x402-payment`, `ainft-skill`, etc.
 
-Then verify in OpenClaw with a prompt:
+### Installation on Other Platforms
 
-```text
-Read the sunswap skill and tell me what this skill can do.
-```
+If you use Claude Code, Cursor, or other AI tools that support Skills, you can also install manually:
 
-### 3. First Use
-
-Start with a simple read-only workflow. There are two ways to call a skill:
-
-**Explicit Call** — Directly tell the agent which skill file to read. Suitable when you know the target skill or need deterministic behavior:
-
-```text
-Read the sunswap skill and help me check how much TRX 100 USDT can swap for on SunSwap.
-```
-
-**Implicit Trigger** — Describe the task and let the agent automatically match and activate the corresponding skill. Suitable when the skill is installed and the request clearly corresponds to a workflow:
-
-```text
-Help me check how much TRX 100 USDT can swap for on SunSwap right now.
-```
-
-:::tip Usage Tips
-*   **Provide clear context**: For example, "Use `xxx` skill to handle `yyy` task."
-*   **Specify parameters**: If the skill requires specific information (e.g., amount, currency, date), providing all of it at once in the instruction can significantly increase the success rate.
-*   **Start with read-only operations**: For first-time use, it is recommended to start with query-type operations (e.g., balance inquiry, price quote) to familiarize yourself with how the skill works before attempting write operations (e.g., swaps, transfers).
-:::
-
-
-## Other Platform Installations
-
-### OpenClaw
-
-OpenClaw provides the most complete integration experience, automatically connecting skills and MCP dependencies.
+**Claude Code:**
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
+git clone https://github.com/BofAI/skills.git /tmp/bofai-skills
+mkdir -p ~/.config/claude-code/skills
+cp -r /tmp/bofai-skills/* ~/.config/claude-code/skills/
 ```
 
-### Claude Code
+Claude Code will automatically load these skills when it starts.
 
-1.  Clone the repository:
-    ```bash
-    git clone https://github.com/BofAI/skills.git /tmp/bofai-skills
-    ```
-2.  Copy the skills to the Claude Code configuration directory for automatic discovery:
-    ```bash
-    mkdir -p ~/.config/claude-code/skills
-    cp -r /tmp/bofai-skills/* ~/.config/claude-code/skills/
-    ```
-3.  Claude Code will automatically load these skills upon startup.
+**Cursor:**
 
-### Cursor
+```bash
+# Clone to project root
+git clone https://github.com/BofAI/skills.git .cursor/skills
+```
 
-1.  Clone the repository to the project root directory:
-    ```bash
-    git clone https://github.com/BofAI/skills.git .cursor/skills
-    ```
-2.  To make skills available project-wide, you can add the skill path to `.cursorrules`, or use the `@` symbol in Cursor Chat to reference specific `SKILL.md` files to provide context.
+In Cursor Chat, use the `@` symbol to reference specific `SKILL.md` files for context, or add the skills path to `.cursorrules`.
 
+**Universal Method (any AI tool):**
 
+```bash
+git clone https://github.com/BofAI/skills.git ~/bofai-skills
+```
 
+Then explicitly tell the AI to read a skill file in your conversation:
 
-## Skill Usage Examples
-
-### Operation Type Description
-
-- 🟢 **Read** — Read-only query, no on-chain transactions will occur  
-- ⚠️ **Write** — Will initiate on-chain transactions (requires user confirmation)
+```
+Please read ~/bofai-skills/sunswap/SKILL.md and help me check the current price of TRX.
+```
 
 ---
 
-### x402-payment
+## Verify Installation
 
-**Call Paid Endpoint (⚠️ Write):**
-> Use the x402 protocol to call this paid agent endpoint.
+After installation, starting with read-only operations is the best entry point — no private keys needed, zero risk, perfect for getting familiar with how skills work.
+
+In your client, enter:
+
+```
+How much TRX can I get for 100 USDT on SunSwap?
+```
+
+```
+Help me check the current market data for BTC-USDT perpetual contract.
+```
 
 ---
+
+## Usage Examples for Each Skill
+
+Each example is marked with an operation type:
+- 🟢 **Read-only** — produces no on-chain transactions, no private key needed
+- ⚠️ **Write operation** — initiates on-chain transactions, requires user confirmation before execution
 
 ### sunswap
 
-**Balance Query (🟢 Read):**
-> Help me check my TRX and USDT balances on SunSwap.
+```
+# 🟢 Query balance
+Help me check my TRX and USDT balances.
 
-**Price Query (🟢 Read):**
-> What is the current price of TRX?
+# 🟢 Query price
+What's the current price of TRX?
 
-**Swap Quote (🟢 Read):**
-> How much TRX can 100 USDT swap for on SunSwap?
+# 🟢 Get swap quote
+How much TRX can I get for 100 USDT on SunSwap?
 
-**Execute Swap (⚠️ Write):**
-> Swap 100 TRX for USDT on SunSwap.
+# ⚠️ Execute swap
+Swap 100 TRX for USDT on SunSwap Nile testnet.
 
-**Liquidity Operations (⚠️ Write):**
-> Add 100 TRX and 15 USDT liquidity to the SunSwap V2 pool.
+# ⚠️ Add liquidity
+Add 100 TRX and 15 USDT liquidity to the TRX/USDT pool on SunSwap V2.
 
----
+# 🟢 View V3 positions
+Help me check all my current SunSwap V3 liquidity positions.
+
+# ⚠️ Collect fees
+Help me collect fee rewards from V3 position #12345.
+```
+
+### sunperp-skill
+
+```
+# 🟢 View market data
+What are the current price, 24h change, and funding rate for BTC-USDT perpetual contract?
+
+# 🟢 View account
+What's my SunPerp account balance and available margin?
+
+# 🟢 View open positions
+What open positions do I have? Show entry price, unrealized P&L and liquidation price.
+
+# ⚠️ Open position
+Open 1 BTC-USDT long position at market price on SunPerp with 10x leverage, set 5% stop loss.
+
+# ⚠️ Close position
+Close all my BTC-USDT positions.
+
+# ⚠️ Withdraw
+Withdraw 10 USDT from SunPerp to my on-chain address.
+```
 
 ### tronscan-skill
 
-**Account Query (🟢 Read):**
-> Help me query the account information for address TXXXXXXXXXXXXXXXXXXXXXXX.
-
-**Wallet Portfolio (🟢 Read):**
-> Show the wallet portfolio and USD valuation for this address.
-
-**Transaction Verification (🟢 Read):**
-> Query the details and execution status of this transaction hash.
-
-**Token Ranking (🟢 Read):**
-> Show the top 10 TRC20 tokens by market capitalization.
-
-**Network Overview (🟢 Read):**
-> Give me a TRON network overview — transaction throughput, super representatives, and supply metrics.
-
-## Security Guidelines
-
-On-chain operations are irreversible. The following are not suggestions, but **rules that must be followed**.
-
-### Private Key Management
-
 ```
-✗ Never do this:
-"Help me execute a swap with private key a]K9x...z3"    → Private key exposed in chat history/logs
+# 🟢 Account query
+Help me query the complete account info and holdings for address TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf.
 
-✓ Correct practice:
-export TRON_PRIVATE_KEY="Your private key"    → Pass via environment variables
+# 🟢 Transaction query
+Query the details of this transaction hash: abc123...
+
+# 🟢 Token info
+Show the top 10 TRC20 tokens by market cap.
+
+# 🟢 Network overview
+Give me a TRON network overview: current TPS, number of Super Representatives, total accounts.
+
+# 🟢 Transfer history
+Query the last 20 USDT transfers from address TXX...
 ```
 
-Principle: **Private keys must never appear anywhere in prompts, configuration files, or chat logs.** Agents should obtain them through environment variables or secure key management services.
-
-### Network Environment Isolation
-
-| Operation Phase | Recommended Network | Description |
-|---------|---------|------|
-| First Use/Learning | Nile Testnet | Zero-cost trial and error, play around freely |
-| Feature Verification | Shasta Testnet | Closer to mainnet environment |
-| Formal Operation | Mainnet | Switch only after confirming everything is correct |
-
-When switching networks, always **explicitly declare** to avoid the Agent executing transactions on the wrong network:
-
-```text
-"Switch to TRON Mainnet, then help me check the balance."
-```
-
-### DeFi Operation Security
-
-- **Slippage Protection**: When executing a Swap, always set a slippage tolerance (recommended 0.5%–1%) to prevent losses due to price fluctuations.
-- **Quote First, then Execute**: For any swap operation, first let the Agent query for a quote, and only execute after confirming the price is reasonable.
-- **Large Amount Splitting**: For large transactions, it is recommended to split them into multiple smaller executions to reduce the risk of slippage for a single transaction.
-- **Authorization Management**: Regularly check token authorizations (Approve) and revoke authorizations that are no longer in use.
-
-### Operation Confirmation Checklist
-
-For any **write operation**, the Agent should confirm the following information with the user before execution:
-
-1. Operation type (Swap / Add Liquidity / Transfer, etc.)
-2. Involved tokens and amounts
-3. Current network (Testnet / Mainnet)
-4. Estimated Gas fees
-5. Slippage settings
-
-**Execute only after explicit user confirmation.**
-
-
-## Best Practices
-
-### Tips for Giving Instructions
-
-**Provide all parameters at once** to reduce agent guessing and follow-up questions:
-
-```text
-# Bad → Agent needs to ask repeatedly
-"Help me swap some tokens."
-
-# Good → All key information in one go
-"Swap 100 USDT for TRX on SunSwap, set slippage to 0.5%, use Mainnet."
-```
-
-### Recommended Learning Path
+### x402-payment
 
 ```
-1. Read-only queries        → Familiarize with Skill interaction
-   ↓
-2. Testnet write operations     → Verify full process, zero risk
-   ↓
-3. Mainnet small amount operations     → Confirm everything is working
-   ↓
-4. Formal Mainnet use     → Daily operations
+# ⚠️ Call paid endpoint
+Use x402 protocol to call this paid agent endpoint: https://api.example.com
+
+# 🟢 Check Gasfree status
+Help me check the current Gasfree wallet status and available balance.
 ```
 
-### Common Troubleshooting
+### ainft-skill
 
-| Problem | Possible Cause | Solution |
-|------|---------|---------|
-| Agent says "Skill not found" | Skill file not in correct directory | Check installation path, refer to installation section |
-| Agent behavior does not match expectations | Implicit trigger matched wrong skill | Use explicit call instead |
-| On-chain transaction failed | Insufficient Gas / Too low slippage / Network error | Check balance, adjust slippage, confirm network |
-| Quote differs significantly from actual execution | Insufficient liquidity or market volatility | Reduce transaction amount, or wait for market stabilization |
+```
+# 🟢 Query balance
+How much balance does my AINFT account have?
 
+# 🟢 Query orders
+Show my recent AINFT order history.
 
+# ⚠️ Deposit
+Deposit 1 USDT to my AINFT account.
+```
 
+---
 
+## Recommended Learning Path
 
+If you're just starting with BANK OF AI Skills, following this order makes it smoother:
+
+Step 1: Read-only queries
+  → Start with tronscan-skill to query accounts and check transactions, get familiar with skill interaction
+  → Use sunswap to check prices and quotes, no real trades
+
+Step 2: Testnet write operations
+  → Execute swaps, add liquidity, open contracts on Nile testnet
+  → Confirm AI behavior matches expectations, parameters pass correctly
+
+Step 3: Mainnet small transactions
+  → Verify the complete workflow with small amounts of capital
+
+Step 4: Mainnet production use
+  → Daily operations, adjust parameters and skill combinations as needed
+
+---
+
+## Next Steps
+
+- Want to understand how Skills work? → [What Are Skills?](./Intro.md)
+- Encountering issues? → [FAQ](./Faq.md)
+- Using OpenClaw Extension? → [OpenClaw Extension Documentation](../../Openclaw-extension/Intro.md)

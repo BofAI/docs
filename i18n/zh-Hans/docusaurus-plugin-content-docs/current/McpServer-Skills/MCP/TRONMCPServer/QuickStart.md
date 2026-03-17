@@ -1,0 +1,126 @@
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 快速开始
+
+这个页面的目标很简单：**让你在 1 分钟内完成接入，发起第一次区块链查询。**
+
+我们会使用[官方云服务](./OfficialServerAccess.md)来完成这次快速体验。云服务是只读的，不需要安装任何依赖、不需要配置钱包、不需要申请 API Key——你只需要把一段配置复制到 AI 客户端，重启，然后开始提问。
+
+---
+
+## 准备工作
+
+在开始之前，确保你已经安装了以下工具：
+
+- 所有支持 MCP 的 AI 客户端：例如 [Claude Desktop](https://claude.ai/download)、[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [Cursor](https://cursor.sh) 。
+- **Node.js v20.0.0 或更高版本**（用于执行 `npx` 命令）（[Node.js 下载](https://nodejs.org/)）
+
+验证 Node.js 版本：
+
+```bash
+node --version  # 应输出 v20.x.x 或更高
+```
+
+---
+
+## 添加配置
+
+选择你使用的 AI 客户端，把对应的配置复制进去：
+
+<Tabs>
+<TabItem value="Claude Desktop" label="Claude Desktop">
+
+打开配置文件：
+- **macOS**：`~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Windows**：`%APPDATA%\Claude\claude_desktop_config.json`
+
+添加以下内容：
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-tron": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://tron-mcp-server.bankofai.io/mcp"
+      ]
+    }
+  }
+}
+```
+
+</TabItem>
+<TabItem value="Claude Code" label="Claude Code">
+
+在终端执行：
+
+```bash
+claude mcp add --transport http mcp-server-tron https://tron-mcp-server.bankofai.io/mcp
+```
+
+</TabItem>
+<TabItem value="Cursor" label="Cursor">
+
+在项目根目录添加 `.cursor/mcp.json`：
+
+```json
+{
+  "mcpServers": {
+    "mcp-server-tron": {
+      "url": "https://tron-mcp-server.bankofai.io/mcp"
+    }
+  }
+}
+```
+
+</TabItem>
+</Tabs>
+
+---
+
+## 重启并测试
+
+保存配置后，**完全退出并重新启动** AI 客户端。重启后客户端会自动连接 TRON MCP Server。
+
+然后在对话框中输入你的第一条查询：
+
+```
+查一下 TRON 地址 TXyz... 的 TRX 余额
+```
+
+如果一切正常，AI 会自动调用 `get_balance` 工具并返回该地址的 TRX 余额。看到结果，说明你已经成功接入了。
+
+:::info 关于云服务的能力范围
+以上配置连接的是**官方云只读服务**，支持所有查询类操作（查余额、查交易、查合约状态等），但不支持写操作（转账、合约调用等）。如需完整的读写功能，请参阅[本地私有化部署](./LocalPrivatizedDeployment.md)。
+:::
+
+---
+
+## 继续探索
+
+接入成功后，不妨多试几个问法，感受一下 TRON MCP Server 的能力范围：
+
+| 试试这样说 | 它会做什么 |
+| :--- | :--- |
+| "查一下地址 TXyz... 的 USDT 余额" | 查询指定地址的 TRC20 代币余额 |
+| "查一下交易哈希 abc123... 的详细信息" | 获取交易详情、资源消耗和状态 |
+| "TRON 主网当前最新区块号是多少？" | 查询最新区块高度和链信息 |
+| "查询 TRON 主网当前的能量和带宽价格" | 获取实时资源价格 |
+| "把地址 41abc... 转换成 Base58 格式" | 地址格式转换 |
+| "查看账户 TXyz... 的资源使用情况" | 获取账户的能量、带宽和质押详情 |
+| "获取合约 TXyz... 的 ABI" | 读取智能合约接口定义 |
+| "查询合约 TXyz... 最近触发的事件" | 获取合约事件日志 |
+
+这些只是冰山一角。完整的 95 个工具和 6 个提示词模板，请查阅 [完整能力清单](./ToolList.md)。
+
+---
+
+## 下一步
+
+你已经完成了第一次链上交互。接下来取决于你想做什么：
+
+- 需要转账、合约调用等写操作？ → [本地私有化部署](./LocalPrivatizedDeployment.md)
+- 想深入了解云服务的配置选项（如 TronGrid API Key）？ → [官方云服务接入](./OfficialServerAccess.md)
+- 想看所有可用工具的详细说明？ → [完整能力清单](./ToolList.md)

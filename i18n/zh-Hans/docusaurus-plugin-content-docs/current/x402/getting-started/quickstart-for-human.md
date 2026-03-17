@@ -97,7 +97,7 @@ import TabItem from '@theme/TabItem';
 打开终端，执行以下命令安装 x402 Python SDK：
 
 ```bash
-pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git#subdirectory=python/x402"
 ```
 
 再安装 EVM（BSC）所需的额外依赖：
