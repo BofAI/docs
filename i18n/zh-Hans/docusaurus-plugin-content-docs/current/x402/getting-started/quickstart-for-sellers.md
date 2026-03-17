@@ -1,7 +1,7 @@
-# 卖家快速入门
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+
+# 卖家快速入门
 
 > **测试网优先：** 本指南默认使用测试网，所有操作均使用免费测试代币，**不会涉及任何真实资金**。待测试通过后，再参考文末的[切换到主网](#在主网运行)章节进行上线。
 
@@ -9,7 +9,7 @@ import TabItem from '@theme/TabItem';
 
 完成本指南后，您将拥有一个**可对 API 调用收费的服务**：
 
-- 当用户或 AI 代理调用您的 API 时，系统自动要求对方支付指定代币（默认为 USDT，同时支持 USDD 及自定义 TRC-20/BEP-20 代币）
+- 当用户或 AI 代理调用您的 API 时，系统自动要求对方支付指定代币 
 - 支持按请求收费、计量使用、动态定价等多种收费模式
 - 付款验证和区块链结算全程自动完成，收款直接到您的钱包
 
@@ -37,9 +37,8 @@ git --version      # 版本控制工具
 
 ### 创建收款钱包
 
-您需要一个区块链钱包地址，用于接收用户支付的代币（USDT 或 USDD）。请根据您选择的网络按照以下步骤操作：
+您需要一个区块链钱包地址，用于接收用户支付的代币。请根据您选择的网络按照以下步骤操作：
 
-> 💡 **关于 USDD：** USDD 是 TRON 网络的原生稳定币，与 USDT 同样受到 x402 的完整支持，在 TRON 主网上可优先考虑使用。BSC 网络目前仅支持 USDT。
 
 <Tabs>
 <TabItem value="TRON" label="TRON（推荐）">
@@ -105,7 +104,7 @@ git --version      # 版本控制工具
 **测试网 vs. 主网的区别：**
 
 - **测试网**：使用免费的测试代币，不涉及真实资金，适合开发和调试。网络标识符：`tron:nile` / `eip155:97`
-- **主网**：涉及真实 USDT/USDD 支付，正式上线时使用。网络标识符：`tron:mainnet` / `eip155:56`
+- **主网**：涉及真实支付，正式上线时使用。网络标识符：`tron:mainnet` / `eip155:56`
 
 ---
 
@@ -116,7 +115,7 @@ git --version      # 版本控制工具
 **推荐方式（直接从 GitHub 安装，适合快速上手）：**
 
 ```bash
-pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/BofAI/x402.git#subdirectory=python/x402"
 ```
 
 安装完成后，运行以下命令验证是否成功：
@@ -507,7 +506,7 @@ curl http://localhost:8000/protected
 
 ## 在主网运行
 
-在测试网完整验证后，只需以下几步即可上线接收真实 USDT/USDD 付款：
+在测试网完整验证后，只需以下几步即可上线接收真实付款：
 
 ### 1. 更新服务器配置
 

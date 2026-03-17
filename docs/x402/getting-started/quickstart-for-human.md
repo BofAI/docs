@@ -93,7 +93,7 @@ This guide is for developers who want to **call an x402-protected API from code*
 Run the following in your terminal:
 
 ```bash
-pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git#subdirectory=python/x402"
 ```
 
 Also install EVM (BSC) dependencies:
