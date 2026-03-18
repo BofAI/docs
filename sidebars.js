@@ -31,6 +31,7 @@ const sidebars = {
             'x402/core-concepts/http-402',
             'x402/core-concepts/client-server',
             'x402/core-concepts/facilitator',
+            'x402/core-concepts/OfficialFacilitator',
             'x402/core-concepts/wallet',
             'x402/core-concepts/network-and-token-support',
           ],
@@ -99,9 +100,11 @@ const sidebars = {
               collapsed: true,
               items: [
                 'McpServer-Skills/MCP/TRONMCPServer/Intro',
+                'McpServer-Skills/MCP/TRONMCPServer/QuickStart',
                 'McpServer-Skills/MCP/TRONMCPServer/OfficialServerAccess',
                 'McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment',
-                'McpServer-Skills/MCP/TRONMCPServer/API',
+                'McpServer-Skills/MCP/TRONMCPServer/ToolList',
+                'McpServer-Skills/MCP/TRONMCPServer/FAQ',
               ],
             },
             {
@@ -110,9 +113,11 @@ const sidebars = {
               collapsed: true,
               items: [
                 'McpServer-Skills/MCP/SUNMCPServer/Intro',
+                'McpServer-Skills/MCP/SUNMCPServer/QuickStart',
                 'McpServer-Skills/MCP/SUNMCPServer/OfficialServerAccess',
                 'McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment',
-                'McpServer-Skills/MCP/SUNMCPServer/API',
+                'McpServer-Skills/MCP/SUNMCPServer/ToolList',
+                'McpServer-Skills/MCP/SUNMCPServer/FAQ',
               ],
             },
             {
@@ -143,7 +148,7 @@ const sidebars = {
       type: 'category',
       label: 'Openclaw Extension',
       collapsed: false,
-      items: ['Openclaw-extension/Overview', 'Openclaw-extension/Setup-use'],
+      items: ['Openclaw-extension/Intro', 'Openclaw-extension/QuickStart', 'Openclaw-extension/FAQ'],
     },
 
     {

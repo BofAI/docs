@@ -3,76 +3,151 @@ import TabItem from '@theme/TabItem';
 
 # Quickstart for Sellers
 
-**Note:** This quickstart guide will first use testnet configurations to ensure a safe testing process. When you are ready to go live in a production environment, please refer to [Running on Mainnet](#running-on-mainnet) for simple configuration changes required to receive real payments on the mainnet.
+> **Testnet First:** This guide uses the testnet by default. All operations use free test tokens — **no real funds are involved**. Once testing is complete, refer to the [Switch to Mainnet](#running-on-mainnet) section at the end of this guide.
 
-## Overview
+## What You'll Build
 
-As a seller, you can start receiving payments in just **3 steps**:
+After completing this guide, you'll have a **service that charges for API calls**:
 
-1.  **Install x402 SDK** — Install the Python SDK
-2.  **Develop Server** — Add payment protection to your API endpoints
-3.  **Start Facilitator** — Run the payment verification service
+- When a user or AI agent calls your API, the system automatically requires payment of a specified token
+- Supports per-request billing, metered usage, dynamic pricing, and more
+- Payment verification and blockchain settlement are fully automated — funds go directly to your wallet
 
-### Prerequisites
+The entire flow takes **4 steps**, estimated time: **15–20 minutes**.
 
-Before you begin, please ensure you have:
+---
 
--   **Python 3.10+** and pip ([Download Python](https://www.python.org/downloads/))
--   A **wallet address** to receive funds
--   Basic knowledge of Python Web Development (this tutorial will use FastAPI)
+## Prerequisites
 
-**Pre-configured Examples:** We provide out-of-the-box example code: [Server Example](https://github.com/BofAI/x402-demo/tree/main/server) and [Facilitator Example](https://github.com/BofAI/x402-demo/tree/main/facilitator). You can clone the repository and run them directly!
+### Verify Your Environment
+
+In your terminal (Terminal on macOS/Linux, or PowerShell/Command Prompt on Windows), run the following commands to confirm the required tools are installed:
+
+```bash
+python --version   # Requires 3.10 or higher
+pip --version      # Installed alongside Python
+git --version      # Version control tool
+```
+
+If any command says "command not found", install it first:
+- Python: go to [python.org](https://www.python.org/downloads/) to download the installer
+- Git: go to [git-scm.com](https://git-scm.com/) to download
+
+---
+
+### Create a Payment Wallet
+
+You need a blockchain wallet address to receive tokens from users. Follow the steps below based on your chosen network:
+
+<Tabs>
+<TabItem value="TRON" label="TRON (Recommended)">
+
+**Create a TronLink Wallet (approx. 3 minutes):**
+
+1. Install the [TronLink extension](https://www.tronlink.org/) in your browser (Chrome/Firefox supported), or download the TronLink app on your phone
+2. Open the extension and click "Create Wallet"
+3. Set a login password (used to unlock the wallet, stored locally only)
+4. **Important:** The system will display a seed phrase (12 English words) — **write it down on paper** and keep it safe; this is the only way to recover your wallet
+5. Verify the seed phrase as prompted to complete wallet creation
+6. Copy your wallet address from the home screen (starts with the letter **`T`**, e.g. `TXyz1234...`)
+
+**Claim Free Test Tokens (approx. 2 minutes):**
+
+1. Go to the [Nile Testnet Faucet](https://nileex.io/join/getJoinPage)
+2. Paste your TRON wallet address into the input field
+3. Click to claim and wait about 1–2 minutes
+4. Switch to "Nile Testnet" in TronLink, refresh, and confirm your TRX and USDT/USDD balance has arrived
+
+> ✅ **Success:** Wallet shows test TRX and test USDT (or USDD) balance greater than 0
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+**Create a MetaMask Wallet (approx. 3 minutes):**
+
+1. Install the [MetaMask extension](https://metamask.io/) in your browser (Chrome/Firefox/Edge supported)
+2. Open the extension and click "Create a new wallet"
+3. Set a password, then **write down your seed phrase (12 English words) on paper and keep it safe**
+4. Verify the seed phrase as prompted to complete creation
+5. Copy your wallet address from the home screen (starts with **`0x`**, e.g. `0xAbc123...`)
+
+**Claim Free Test Tokens (approx. 2 minutes):**
+
+1. Go to the [BSC Testnet Faucet](https://www.bnbchain.org/en/testnet-faucet)
+2. Paste your wallet address and claim test BNB and test USDT
+3. Switch to BSC Testnet in MetaMask and confirm the balance has arrived
+
+> ✅ **Success:** Wallet shows test BNB and test USDT balance greater than 0
+
+</TabItem>
+</Tabs>
+
+> ⚠️ **Wallet Security Reminder:**
+> - Your seed phrase and private key are the "master key" to your wallet — **no one (including platform support) should ever ask you for them**
+> - Write your seed phrase on paper and store it in a safe physical location — do not save it in your phone gallery or cloud storage
+> - This tutorial uses a test wallet; it is recommended to create a dedicated new wallet for testing rather than using a wallet with real assets
+
+---
 
 ### Configuration Reference
 
-Here are the key configuration items you will need:
-
-| Configuration Item      | Description                               | How to Obtain                                                              |
-| ----------------------- | ----------------------------------------- | -------------------------------------------------------------------------- |
-| **TRON Wallet Address** | Your address for receiving payments (starts with `T`) | Create via wallet                                                          |
-| **Test TRX**            | Gas for testnet transactions              | [Nile Faucet](https://nileex.io/join/getJoinPage)                          |
-| **Test USDT**           | Test tokens for payment process           | [Nile USDT Faucet](https://nileex.io/join/getJoinPage) or request from community |
-| **BSC Wallet Address**  | Your address for receiving payments       | Create via wallet                                                          |
-| **Test BNB**            | Gas for testnet transactions              | [Testnet Faucet](https://www.bnbchain.org/en/testnet-faucet)               |
-| **Test USDT**           | Test tokens for payments                  | [Testnet USDT Faucet](https://www.bnbchain.org/en/testnet-faucet)          |
+| Configuration | Description | How to Obtain |
+|--------|------|----------|
+| **TRON Wallet Address** | Wallet address starting with `T` | Copy from TronLink |
+| **BSC Wallet Address** | Wallet address starting with `0x` | Copy from MetaMask |
+| **Test TRX** | TRON testnet fee token | [Nile Faucet](https://nileex.io/join/getJoinPage) |
+| **Test USDT/USDD (TRON)** | TRON test payment token (both USDT and USDD supported) | [Nile Faucet](https://nileex.io/join/getJoinPage) |
+| **Test BNB** | BSC testnet fee token | [BSC Testnet Faucet](https://www.bnbchain.org/en/testnet-faucet) |
+| **Test USDT (BSC)** | BSC test payment token | [BSC Testnet Faucet](https://www.bnbchain.org/en/testnet-faucet) |
 
 **Testnet vs. Mainnet:**
 
--   **Testnet**: Uses free test tokens, no real funds involved. Use network identifiers `tron:nile` or `eip155:97`.
--   **Mainnet**: Involves real USDT payments. Use network identifiers `tron:mainnet` or `eip155:56`.
+- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:nile` / `eip155:97`
+- **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:mainnet` / `eip155:56`
 
-## Step One: Install x402 SDK
+---
 
-The x402 SDK provides everything you need to add payment protection to your API.
+## Step 1: Install the x402 SDK
 
-**Option A: Install from GitHub (Recommended)**
+Open your terminal and run the following install command:
+
+**Recommended (install directly from GitHub, ideal for getting started quickly):**
 
 ```bash
-pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"
+pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/BofAI/x402.git#subdirectory=python/x402"
 ```
 
-**Option B: Install from Source (for Development)**
+After installation, run the following command to verify it succeeded:
+
+```bash
+python -c "import bankofai.x402; print('SDK installed successfully!')"
+```
+
+> ✅ **Success:** Terminal outputs `SDK installed successfully!`
+
+**Alternative (install from source, for developers who need to modify the source code):**
 
 ```bash
 # Clone the repository
 git clone https://github.com/BofAI/x402.git
 cd x402/python/x402
 
-# Install with FastAPI support
+# Install (with FastAPI support)
 pip install -e ".[fastapi]"
 ```
 
-**Verify Installation:** Run `python -c "import x402; print('SDK installed successfully!')"` to verify.
+> 💡 **Permission error?** Prefix the command with `sudo` (macOS/Linux), or run PowerShell as Administrator (Windows).
 
-## Step Two: Develop Your Server
+---
 
-Now, let's create a simple API server with payment protection. The SDK provides a decorator that automatically handles payment verification.
+## Step 2: Create a Payment-Protected API Server
 
-Create a new file named `server.py`:
+Now let's create an API server with payment protection. The x402 SDK provides an `@x402_protected` decorator — simply add it to any endpoint you want to charge for, and the SDK will automatically handle all payment verification logic.
+
+In your project directory, create a new file named `server.py` and paste in the following code:
 
 <Tabs>
 <TabItem value="TRON" label="TRON">
-
 
 ```python
 from fastapi import FastAPI
@@ -83,26 +158,26 @@ from bankofai.x402.config import NetworkConfig
 
 app = FastAPI()
 
-# ========== Configuration ==========
-# Replace with YOUR TRON wallet address (this is where you receive payments)
+# ========== Modify the following two settings ==========
+# Replace the address below with your TRON wallet address from Prerequisites (used to receive payments)
 PAY_TO_ADDRESS = "YourTronWalletAddressHere"
 
-# Facilitator URL (we'll start this in Step 3)
+# Facilitator service URL (will be started in Step 3, default address does not need to change)
 FACILITATOR_URL = "http://localhost:8001"
-# ====================================
+# ========================================================
 
 # Initialize x402 server
 server = X402Server()
 server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 
-# This endpoint requires payment to access
+# Add payment protection to this API endpoint
 @app.get("/protected")
 @x402_protected(
     server=server,
-    prices=["0.0001 USDT"],              # Price per request (supports multiple tokens)
-    schemes=["exact_permit"],             # Payment scheme
-    network=NetworkConfig.TRON_NILE,     # Use testnet for testing
-    pay_to=PAY_TO_ADDRESS,               # Your wallet address
+    prices=["0.0001 USDT"],          # Charge per request (adjust as needed)
+    schemes=["exact_permit"],         # Payment scheme
+    network=NetworkConfig.TRON_NILE, # Using testnet now (change to TRON_MAINNET when going live)
+    pay_to=PAY_TO_ADDRESS,           # Your receiving wallet address
 )
 async def protected_endpoint():
     return {"data": "This is premium content!"}
@@ -127,27 +202,27 @@ from bankofai.x402.mechanisms.evm.exact import ExactEvmServerMechanism
 
 app = FastAPI()
 
-# ========== Configuration ==========
-# Replace with YOUR BSC wallet address (this is where you receive payments)
+# ========== Modify the following two settings ==========
+# Replace the address below with your BSC wallet address from Prerequisites (used to receive payments)
 PAY_TO_ADDRESS = "0xYourBscWalletAddressHere"
 
-# Facilitator URL (we'll start this in Step 3)
+# Facilitator service URL (will be started in Step 3, default address does not need to change)
 FACILITATOR_URL = "http://localhost:8001"
-# ====================================
+# ========================================================
 
-# Initialize x402 server and register BSC mechanisms
+# Initialize x402 server and register BSC payment mechanisms
 server = X402Server()
 server.register(NetworkConfig.BSC_TESTNET, ExactPermitEvmServerMechanism())
 server.register(NetworkConfig.BSC_TESTNET, ExactEvmServerMechanism())
 server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 
-# This endpoint requires payment to access
+# Add payment protection to this API endpoint
 @app.get("/protected")
 @x402_protected(
     server=server,
-    prices=["0.0001 USDT"],              # Price per request
-    network=NetworkConfig.BSC_TESTNET,   # BSC Testnet
-    pay_to=PAY_TO_ADDRESS,               # Your wallet address
+    prices=["0.0001 USDT"],            # Charge per request
+    network=NetworkConfig.BSC_TESTNET, # Using testnet now (change to BSC_MAINNET when going live)
+    pay_to=PAY_TO_ADDRESS,             # Your receiving wallet address
     schemes=["exact_permit"],
 )
 async def protected_endpoint():
@@ -162,122 +237,280 @@ if __name__ == "__main__":
 </TabItem>
 </Tabs>
 
-**Key Configuration Options:**
+**Key Configuration Parameters:**
 
-| Parameter | Description                 | Example                       |
-| --------- | --------------------------- | ----------------------------- |
-| `prices`  | Payment amount per request (list) | `["0.0001 USDT"]`             |
-| `schemes` | Payment scheme per price (list): `exact_permit` or `exact` | `["exact_permit"]` |
-| `network` | Network identifier          | `tron:nile`/`eip155:97` (testnet) |
-| `pay_to`  | Your wallet receiving address | `T...` or `0x...`  |
+| Parameter | Description | Example Value |
+|------|------|--------|
+| `PAY_TO_ADDRESS` | Your receiving wallet address | `TXyz...` (TRON) or `0xAbc...` (BSC) |
+| `prices` | Price per request | `["0.0001 USDT"]` |
+| `network` | Network to use | Testnet: `TRON_NILE` / `BSC_TESTNET` |
+| `schemes` | Payment scheme | `["exact_permit"]` |
 
-**How it Works:** When an unpaid request is received, your server automatically returns an HTTP 402 (Payment Required) status code with payment instructions. The rest of the process is handled automatically by the client SDK!
+**How it works:** When an unpaid request reaches your API, the server automatically returns an HTTP 402 (Payment Required) response with payment instructions in the response headers. The client SDK automatically completes the payment and re-sends the request — the process is nearly invisible to the end user.
 
-## Step Three: Start the Facilitator
+---
 
-The Facilitator is a service used to verify and settle payments on-chain. You need to run this service before starting your API server.
+## Step 3: Connect to a Facilitator
 
-**Options:**
+### What is a Facilitator?
 
--   **Run your own Facilitator** (recommended for testing)
--   **Use the [official Facilitator](https://github.com/BofAI/x402-facilitator)**
+Simply put, a Facilitator is an **automated settlement service**: when someone pays your API, the Facilitator verifies that the payment is genuine and settles it on the blockchain, ensuring funds are recorded on-chain.
 
-### Run Your Own Facilitator
+**You must complete the Facilitator configuration before starting your API server.**
 
-Open a **new terminal window** and run the following commands:
+### Two Options — Which Should You Choose?
+
+| | Official Facilitator (Recommended) | Self-Hosted Facilitator |
+|---|---|---|
+| **Maintenance required** | No — officially hosted | Yes — you run it yourself |
+| **Wallet private key required** | No | Yes (to pay transaction fees) |
+| **Difficulty** | Low (just apply for an API Key) | Medium (requires deployment and configuration) |
+| **Best for** | Fast deployment, most users | Full control over fee strategy |
+
+<Tabs>
+<TabItem value="official" label="✅ Official Facilitator (Recommended)">
+
+The officially hosted Facilitator service requires **no infrastructure to maintain**. You can also refer to [Official Facilitator](../core-concepts/OfficialFacilitator.md) for details.
+
+#### 3.1 Configure the Service Endpoint
+
+Set your `FACILITATOR_URL` to the official Facilitator service address:
+
+```
+https://facilitator.bankofai.io
+```
+
+This is the address your x402 server uses to verify and settle payments — **for API calls only**, no need to open it in a browser.
+
+> ⚠️ **Without an API Key, this endpoint is rate-limited to 1 request per minute per IP address.** This is sufficient for testing, but in production it will throttle your API. Continue to step 3.2 to apply for an API Key.
+
+#### 3.2 Apply for an API Key
+
+Apply for a free API Key in the admin dashboard:
+
+[https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io)
+
+1. Open the link above in your browser
+2. Click **TronLink** to log in with your wallet (for identity verification only — **no charges will be made**)
+3. After logging in, go to the Dashboard and click **"Create API Key"**
+4. Confirm, then click **View** in the Dashboard to see and copy your API Key
+
+With an API Key, the rate limit increases to **1,000 requests/minute**, sufficient for production use.
+
+> 📖 **Detailed step-by-step guide** available at: [Official Facilitator](../core-concepts/OfficialFacilitator.md)
+
+> ⚠️ **Security reminder:** Your API Key is a service credential — **treat it like a password and never commit it to Git**
+
+#### 3.3 Configure the `.env` File
+
+In your project directory (where `server.py` is located), create or edit the `.env` file and add the following:
 
 ```bash
-# Clone the demo repository
+# Official Facilitator service URL
+FACILITATOR_URL=https://facilitator.bankofai.io
+
+# API Key (apply at admin-facilitator.bankofai.io) — SDK passes it automatically via the X-API-KEY header
+FACILITATOR_API_KEY=paste_your_api_key_here
+```
+
+#### 3.4 Update server.py to Connect to the Official Facilitator
+
+Update the Facilitator initialization section in `server.py` to read configuration from environment variables (add `import os` at the top of the file):
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
+```python
+import os
+# ... other imports unchanged ...
+
+# Official Facilitator service URL (read from environment variable)
+# SDK automatically reads FACILITATOR_API_KEY from the environment — no need to pass it explicitly
+FACILITATOR_URL = os.getenv("FACILITATOR_URL", "https://facilitator.bankofai.io")
+
+# Initialize x402 server and connect to Official Facilitator
+server = X402Server()
+server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
+```
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+```python
+import os
+# ... other imports unchanged ...
+
+# Official Facilitator service URL (read from environment variable)
+# SDK automatically reads FACILITATOR_API_KEY from the environment — no need to pass it explicitly
+FACILITATOR_URL = os.getenv("FACILITATOR_URL", "https://facilitator.bankofai.io")
+
+# Initialize x402 server, register BSC mechanisms, connect to Official Facilitator
+server = X402Server()
+server.register(NetworkConfig.BSC_TESTNET, ExactPermitEvmServerMechanism())
+server.register(NetworkConfig.BSC_TESTNET, ExactEvmServerMechanism())
+server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
+```
+
+</TabItem>
+</Tabs>
+
+> ✅ **Done!** The Official Facilitator is configured — **no local service to start**. Proceed directly to Step 4 to test.
+
+</TabItem>
+<TabItem value="selfhost" label="Self-Hosted Facilitator">
+
+The self-hosted option gives you full control over fee strategy and energy management. It is intended for advanced users with specific customization requirements.
+
+> ⚠️ **Security reminder — please read first:**
+> - You need the private key of a **dedicated wallet** to pay blockchain transaction fees — **this wallet should be separate from your receiving wallet**
+> - The Facilitator wallet only needs a small amount of tokens (for fees) — do not deposit large amounts
+> - The private key lives only in the `.env` file — **never upload it to GitHub or share it with anyone**
+
+#### 3.1 Prepare a Dedicated Facilitator Wallet
+
+Create a dedicated new wallet for the Facilitator, following the same steps as in Prerequisites, then claim test tokens from the faucet (to pay transaction fees).
+
+#### 3.2 Clone and Configure the Facilitator Project
+
+Open a **new terminal window** (keep the existing one open) and run:
+
+```bash
+# Download the demo project (includes the Facilitator implementation)
 git clone https://github.com/BofAI/x402-demo.git
 cd x402-demo
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Copy and configure environment variables
+# Create configuration file from the template
 cp .env.sample .env
 ```
 
-**Configure `.env` file:**
+Open the `.env` file in the `x402-demo` directory with a text editor and fill in the private key for your dedicated Facilitator wallet:
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
 
 ```bash
-# Facilitator wallet private key (for settling payments on-chain)
-TRON_PRIVATE_KEY=your_facilitator_private_key_here
+# Private key of the dedicated Facilitator wallet (NOT your receiving wallet!)
+# How to get it: TronLink → Settings → Account Management → Export Private Key
+TRON_PRIVATE_KEY=paste_your_facilitator_private_key_here
 
-# TronGrid API Key (required for mainnet, optional for testnet)
-TRON_GRID_API_KEY=your_trongrid_api_key_here
-
-# BSC Facilitator wallet private key (for settling payments on-chain)
-BSC_PRIVATE_KEY=your_facilitator_private_key_here
+# TronGrid API Key (required for mainnet, can be left blank for testnet)
+# Apply at: https://www.trongrid.io/
+TRON_GRID_API_KEY=
 ```
 
-**Facilitator Wallet:** The Facilitator requires a wallet holding native gas tokens (TRX for TRON, BNB for BSC) to pay for transaction fees. For testnet, get free tokens from the respective faucets.
+</TabItem>
+<TabItem value="BSC" label="BSC">
 
+```bash
+# Private key of the dedicated Facilitator wallet (NOT your receiving wallet!)
+# How to get it: MetaMask → Account Details → Export Private Key
+BSC_PRIVATE_KEY=paste_your_facilitator_private_key_here
+```
 
-**Start Facilitator:**
+</TabItem>
+</Tabs>
+
+#### 3.3 Start the Facilitator Service
 
 ```bash
 ./start.sh facilitator
 ```
 
-**Facilitator Endpoints:** Once running, the Facilitator provides the following endpoints at `http://localhost:8001`:
+**After a successful start, you should see:**
 
--   `GET /supported` - Supported features
--   `POST /verify` - Verify payment payload
--   `POST /settle` - Settle payment on-chain
--   `POST /fee/quote` - Get fee quote
+```
+Facilitator running on http://localhost:8001
+Supported endpoints:
+  GET  /supported
+  POST /verify
+  POST /settle
+  POST /fee/quote
+```
 
-## Step Four: Test Your Integration
+> ✅ **Success:** Terminal shows `Facilitator running on http://localhost:8001` — **keep this terminal window open, do not close it**
 
-Now, let's verify that everything is working correctly!
+The `FACILITATOR_URL = "http://localhost:8001"` in `server.py` is already configured for self-hosting — **no changes needed**. Proceed to Step 4.
 
-### 4.1 Start Your Server
+</TabItem>
+</Tabs>
 
-In a **new terminal window** (keep the Facilitator running):
+---
+
+## Step 4: Start and Test Your API
+
+### 4.1 Start the API Server
+
+Open a **third terminal window** (do not close the previous ones), navigate to the directory containing `server.py`, and run:
 
 ```bash
 python server.py
 ```
 
-Your server is now running at `http://localhost:8000`.
+**After a successful start, you should see:**
 
-### 4.2 Test Payment Process
+```
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:     Application startup complete.
+```
 
-**Test 1: Unpaid Access**
+> ✅ **Success:** Terminal shows `Uvicorn running on http://0.0.0.0:8000`
+
+### 4.2 Test Unpaid Access (Should Be Rejected)
+
+In any terminal, run:
 
 ```bash
 curl http://localhost:8000/protected
 ```
 
-Expected result: HTTP 402 response, with payment instructions in the `PAYMENT-REQUIRED` header.
+**Expected result:** The server returns an HTTP 402 response with content similar to:
 
-**Test 2: Full Payment Process**
+```json
+{"error": "Payment required", "x402Version": 1}
+```
 
-To test the full payment process, you need a client capable of signing payments. Please refer to:
+> ✅ **This is exactly what we want!** It confirms that payment protection is working — unpaid requests are successfully blocked.
 
--   [Quickstart for Human Users](./quickstart-for-human.md) - For browser-based payments
--   [Quickstart for AI Agents](./quickstart-for-agent.md) - For AI Agent payments
+### 4.3 Test the Full Payment Flow
+
+To test the complete pay → receive content flow, you need a client that can sign payments:
+
+- [Human User Quickstart](./quickstart-for-human.md) — Call your paid API using code
+- [AI Agent Quickstart](./quickstart-for-agent.md) — Configure an AI agent to call your API automatically
+
+---
 
 ## Troubleshooting
 
-| Issue                                   | Solution                                                                                                                               |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `Connection refused` when connecting to Facilitator | Ensure the Facilitator is running on port 8001                                                                                         |
-| `ModuleNotFoundError: x402`             | Run `pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/BofAI/x402.git@v0.3.1#subdirectory=python/x402"`                                  |
-| Invalid wallet address error            | Ensure your address is correct                                                                                                         |
+| Issue | Solution |
+|------|----------|
+| `Connection refused` when connecting to Facilitator | If using **self-hosted**: confirm the Facilitator terminal from Step 3 is still running on port 8001. If using **official**: check that `FACILITATOR_URL` is correctly set to `https://facilitator.bankofai.io` |
+| `ModuleNotFoundError: bankofai` | Re-run the install command from Step 1 |
+| Wallet address format error | TRON addresses start with `T`; BSC addresses start with `0x` — check that the address was copied in full |
+| Facilitator fails to start (self-hosted) | Check that the private key in the `.env` file is correctly filled in, with no extra spaces or line breaks |
+| API Key invalid or rate limited (official) | Confirm `FACILITATOR_API_KEY` is correctly filled in; go to [admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) to check the key status |
+| `server.py` fails to start | Confirm `PAY_TO_ADDRESS` has been replaced with a real wallet address (do not leave the placeholder text) |
 
-**Need help?** Check out the full examples:
+**Need more examples and references?**
 
--   [Server Example](https://github.com/BofAI/x402-demo/tree/main/server)
--   [Facilitator Example](https://github.com/BofAI/x402-demo/tree/main/facilitator)
+- [Complete server example code](https://github.com/BofAI/x402-demo/tree/main/server)
+- [Facilitator example code](https://github.com/BofAI/x402-demo/tree/main/facilitator)
+- [Facilitator reference](../core-concepts/facilitator.md) — Full setup comparison for both options
+- [Official Facilitator](../core-concepts/OfficialFacilitator.md) — Step-by-step guide with screenshots for the API Key
+
+---
 
 ## Running on Mainnet
 
-Once you have tested your integration on the testnet, you are ready to accept real payments on the mainnet.
+After fully validating on the testnet, only a few steps are needed to go live and accept real payments:
 
 ### 1. Update Server Configuration
 
-In your `server.py`, change the `network` parameter in the `@x402_protected` decorator:
+Modify the `network` parameter in the `@x402_protected` decorator in `server.py`:
+
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
@@ -286,7 +519,7 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
     server=server,
     prices=["0.0001 USDT"],
     schemes=["exact_permit"],
-    network=NetworkConfig.TRON_MAINNET,  # Change from TRON_NILE to TRON_MAINNET
+    network=NetworkConfig.TRON_MAINNET,  # Changed from TRON_NILE to TRON_MAINNET
     pay_to=PAY_TO_ADDRESS,
 )
 ```
@@ -299,7 +532,7 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
     server=server,
     prices=["0.0001 USDT"],
     schemes=["exact_permit"],
-    network=NetworkConfig.BSC_MAINNET,  # Change from BSC_TESTNET to BSC_MAINNET
+    network=NetworkConfig.BSC_MAINNET,  # Changed from BSC_TESTNET to BSC_MAINNET
     pay_to=PAY_TO_ADDRESS,
 )
 ```
@@ -307,55 +540,60 @@ In your `server.py`, change the `network` parameter in the `@x402_protected` dec
 </TabItem>
 </Tabs>
 
-### 2. Update Your Facilitator
+### 2. Update Facilitator Configuration
 
-If you are running your own Facilitator service on the TRON mainnet, do the following:
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
-1.  **Apply for a TronGrid API Key**: Go to [TronGrid](https://www.trongrid.io/) to register and create an API Key. This step is necessary to ensure the stability of mainnet RPC access.
-2.  **Update Environment Variables**: Configure mainnet credentials (including `TRON_GRID_API_KEY`).
-3.  **Prepare Gas Fees**: Ensure the Facilitator wallet holds enough TRX to pay for Energy and Bandwidth fees.
-4.  **Switch Network Configuration**: Update the Facilitator's network configuration to `NetworkConfig.TRON_MAINNET`.
+1. **Apply for a TronGrid API Key**: go to [TronGrid](https://www.trongrid.io/) to register and create an API Key, then fill it into the `TRON_GRID_API_KEY` field in `.env` (required for mainnet)
+2. **Replace the private key**: update the private key in `.env` to the mainnet Facilitator wallet's private key
+3. **Fund the fee wallet**: transfer sufficient real TRX to the Facilitator mainnet wallet (to pay Energy and Bandwidth fees)
+4. **Update the network config**: change the network configuration in the Facilitator code to `NetworkConfig.TRON_MAINNET`
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-1.  **Prepare Gas Fees**: Ensure the Facilitator wallet holds enough BNB to pay for gas fees.
-2.  **Switch Network Configuration**: Update the Facilitator's network configuration to `NetworkConfig.BSC_MAINNET`.
+1. **Fund the fee wallet**: transfer sufficient real BNB to the Facilitator mainnet wallet (to pay Gas fees)
+2. **Update the network config**: change the network configuration in the Facilitator code to `NetworkConfig.BSC_MAINNET`
 
 </TabItem>
 </Tabs>
 
-### 3. Update Your Receiving Wallet
+### 3. Confirm Your Receiving Wallet Address
 
-Please ensure your receiving address is a **real mainnet address** to ensure you can properly receive USDT payments.
+Ensure that `PAY_TO_ADDRESS` is set to a **real mainnet wallet address** you control, and confirm you have a backup of the seed phrase or private key for that wallet.
 
-### 4. Conduct Real Payment Tests
+### 4. Perform a Small Real-Money Test Before Going Live
 
-Before going live, follow these steps:
+> ⚠️ **Mainnet warning — real funds are involved. Please follow these steps carefully:**
+>
+> 1. Ensure all functionality (payment, receipt, error handling) has been fully validated on the testnet
+> 2. After going live on mainnet, **start with one minimum-amount real test (e.g. 0.0001 USDT)**
+> 3. Confirm the transaction succeeded on the blockchain explorer ([TronScan](https://tronscan.org) or [BscScan](https://bscscan.com))
+> 4. Open your receiving wallet and confirm the funds have arrived
+> 5. Only open your API to the public after confirming everything is correct
 
-1.  First, try a **minimal payment** for testing.
-2.  Verify that funds successfully reach your wallet.
-3.  Monitor the Facilitator service for any abnormal errors.
+---
 
-**Warning:** Mainnet transactions involve real funds. Be sure to thoroughly test on the testnet first, and when switching to mainnet, always start with small amounts for verification.
+## Next Steps
 
-### Next Steps
+- View [demo examples](https://github.com/BofAI/x402-demo/tree/main/server) for more complex payment flows
+- Read the [core concepts](../core-concepts/http-402.md) to understand how the x402 protocol works
+- Want detailed configuration for both Facilitator options? See the [Facilitator documentation](../core-concepts/facilitator.md)
+- Experience calling a paid API from the [user perspective](./quickstart-for-human.md), or configure an [AI agent](./quickstart-for-agent.md) to call your service automatically
 
--   See [Demo Examples](https://github.com/BofAI/x402-demo/tree/main/server) for more complex payment flows.
--   Dive deeper into [Core Concepts](../core-concepts/http-402.md) to understand how x402 works.
--   Start experiencing as a [Human User](./quickstart-for-human.md) or configure an [AI Agent](./quickstart-for-agent.md).
+---
 
-### Summary
+## Summary
 
-Congratulations! You have completed the seller quickstart guide. Let's review your achievements:
+Congratulations 🎉! You've completed the Seller Quickstart. Here's everything you accomplished:
 
-| Step       | Accomplishment                               |
-| ---------- | -------------------------------------------- |
-| **Step One** | Installed the x402 SDK                       |
-| **Step Two** | Created a payment-protected server endpoint  |
-| **Step Three** | Started the Facilitator service for payment verification |
-| **Step Four** | Completed integration testing                |
+| Step | What You Did |
+|------|----------|
+| **Prerequisites** | Created a receiving wallet, obtained test tokens, reviewed configuration parameters |
+| **Step 1** | Installed the x402 SDK |
+| **Step 2** | Created an API server with payment protection |
+| **Step 3** | Configured and connected the Facilitator settlement service |
+| **Step 4** | Verified payment protection and the full payment flow |
 
-Congratulations 🎉! Your API is now ready to receive blockchain-based payments via x402!
+Your API is now ready to accept blockchain payments via the x402 protocol!

@@ -1,106 +1,143 @@
-# Introduction
+# What Are Skills?
 
-## What are Skills?
-Simply put, they are "skill packs."
+You may have already used MCP Server to let an AI assistant check balances, send transfers, and invoke contracts. But you'll notice that some tasks aren't "call a tool once and done" — for example, swapping tokens on a DEX requires checking your balance first, getting a quote, approving the transaction, then executing the swap. Each step involves decision-making and parameter handling.
 
-**Agent Skills** is an open format that allows AI to learn new capabilities. You can think of it as a **plugin package** or a **skill folder**.
+**Skills exist precisely for this kind of multi-step task.**
 
-Each "skill pack" contains everything needed to complete a specific task:
-*   **Instructions**: Tells the AI when to use this skill and how to do it.
-*   **Toolbox**: Contains automated scripts or code to help the AI perform tasks.
-*   **References**: Professional documents or templates that provide a basis for the AI's work.
+A Skill is a "task handbook" — it's not a tool itself, but rather instructions that tell the AI how to combine a series of tools in the correct order with the correct parameters to complete a full business workflow.
 
-In this way, you can "load" new capabilities into your AI at any time, and these capabilities are **reusable, shareable, and controllable**.
+---
 
+## The Difference Between Skills and MCP Server
 
+Many people ask this question when first encountering Skills: what's the difference from MCP Server?
 
-## What's inside a skill pack?
-
-Opening a skill folder, you will usually see the following:
-
-| Folder/File | Role | Function |
+| | MCP Server | Skill |
 | :--- | :--- | :--- |
-| `SKILL.md` | **Core Brain** | **Required!** Contains the skill's name, description, and detailed operating guidelines. |
-| `scripts/` | **Automation Tools** | Optional. Contains script code that the AI can directly run to process data. |
-| `references/` | **Knowledge Base** | Optional. Contains professional documents, API specifications, and other reference materials. |
-| `assets/` | **Asset Library** | Optional. Contains templates, images, or other resources. |
+| **Essence** | Tool service | Task handbook + script collection |
+| **Purpose** | Provide AI with **atomic capabilities to get things done** | Teach AI **how to combine capabilities to complete a task** |
+| **Example** | `mcp-server-tron` provides the `send_trx` tool | `sunswap` tells AI how to use multiple tools to execute a DEX swap |
+| **Analogy** | Kitchen knives, pots, and stoves | A recipe |
 
+Simply put: **MCP Server is a toolbox, Skill is an instruction manual.** A Skill tells the AI which drawer to open, which tool to grab, and what steps to follow to complete the task.
 
-## Core Principle
-The "memory" of large models (i.e., the context window) is extremely valuable and expensive. If all detailed descriptions of all skills are fed to the AI at once, it will not only consume a huge amount of tokens (making it expensive) but also lead to AI distraction, slow responses, and even frequent "hallucinations" (making it less intelligent).
+---
 
-To solve this problem, the Skills architecture introduces the **Progressive Disclosure design philosophy** and a **three-tier graded loading mechanism**.
+## What Does a Skill Look Like?
 
-### "Load on demand" like finding a book in a library
-This is like looking up information in a library; you wouldn't move hundreds of books to your desk at once. Instead, you follow an efficient retrieval logic:
+A Skill is a folder with a very simple structure:
 
-*   **Level 1: Metadata (Lightweight Card Catalog) – Scanning Shelf Labels**
-    *   **Principle**: When the AI starts, the system only exposes the `name` and `description` of all mounted skills to it.
-    *   **Advantage**: Since only "cards" are loaded, resource consumption is extremely low. This allows the AI to easily "remember" and manage hundreds or thousands of skills simultaneously, maintaining fast response times.
+| File/Directory | Purpose | Required? |
+| :--- | :--- | :--- |
+| `SKILL.md` | Core instruction document — where AI learns how to execute the task | **Yes** |
+| `scripts/` | Executable scripts — AI calls these to perform specific operations | Optional |
+| `resources/` | Reference data — contract addresses, token lists, config files, etc. | Optional |
+| `package.json` | npm dependency declaration (required if the Skill has scripts) | Optional |
 
-*   **Level 2: Instruction Document (Practical Guide) – Opening a Specific Directory**
-    *   **Principle**: Only when your needs precisely match a certain skill will the AI read the corresponding `SKILL.md` file.
-    *   **Advantage**: This exclusive guide provides the AI with the operational logic, boundary constraints, and Standard Operating Procedures (SOPs) for the current task at critical moments, ensuring that execution stays on track.
-
-*   **Level 3: External Resources (Deep Toolchain) – Consulting Appendices and Practical Operations**
-    *   **Principle**: When the task enters deep waters (e.g., executing complex Python scripts, pulling large API data), the AI will only call underlying tools at the moment they are needed.
-    *   **Advantage**: These tools run silently in the background, ultimately returning only refined core results to the AI. They hardly occupy the AI's valuable thinking space, achieving a perfect balance of performance and depth.
-
-
-## Calling Logic
-
-The process of AI selecting and executing a Skill can be divided into four precise steps:
-
-<div style={{ textAlign: 'left' }}>
-  <img
-    src={require('./image/skill_call.jpg').default}
-    alt="RangeOrder1"
-    width="100%"
-    height="30%"
-  />
-</div>
-
-### Step 1: Intent Recognition
-The AI first parses your natural language request, quickly scans the "identity cards" (metadata) of all Skills in its resource library, and precisely locks onto the skill that best matches the current task.
-
-### Step 2: Rule Internalization
-After selecting a Skill, the AI immediately retrieves the corresponding "operation manual" (`SKILL.md`) and carefully studies the specific execution steps, rule limitations, and contextual requirements.
-
-### Step 3: Tool Execution
-Based on the manual's guidance, the AI begins to plan its path and execute. When it encounters a specific operational node, it accurately invokes the underlying bound tools or scripts to complete the substantive work.
-
-### Step 4: Feedback and Reflection
-After the task is completed, the AI organizes the results into an easy-to-read format and reports them to you; if it encounters missing information or execution anomalies, it will promptly ask you for help.
-
-
-## `SKILL.md` File Format
-
-`SKILL.md` is written in a way that both AI and humans can understand.
-At the top of the `SKILL.md` file, the following `Frontmatter` must be included:
-* `name`: A short identifier (skill name)
-* `description`: Explains when the skill should be used
-
-The body of the Markdown document contains the actual operating instructions and has no specific restrictions on structure or content.
+The top of `SKILL.md` contains YAML Frontmatter that declares basic information about the Skill:
 
 ```yaml
 ---
-name: pdf-processing
-description: Extract PDF text, fill forms, merge files. Use when handling PDFs.
+name: SunSwap DEX Trading
+description: Execute token swaps on SunSwap DEX for TRON blockchain using automated scripts.
+version: 2.0.0
+dependencies:
+  - node >= 18.0.0
+  - tronweb
+tags:
+  - defi
+  - dex
+  - swap
+  - tron
 ---
 
-# PDF Processing
+# SunSwap DEX Trading Skill
 
-## When to use this skill
-Use this skill when the user needs to work with PDF files...
-
-## How to extract text
-1. Use pdfplumber for text extraction...
-
-## How to fill forms
-...
+## 🚀 Quick Start
+...(specific operation instructions)
 ```
 
-### Advantages:
-1.  **Easy to Understand**: Humans can read it, making it convenient for you to modify and optimize the AI's behavior at any time.
-2.  **Infinitely Expandable**: It can be simple text instructions or complex automated workflows.
-3.  **Easy to Transfer**: A skill is just a folder; you can send it to friends or use it universally across different AI tools.
+The `name` and `description` fields are key for AI to identify and match skills — the more accurate they are, the more easily the AI can find them at the right moment. The main content is the specific operation instructions with no format restrictions — it can be text explanations, code examples, parameter tables, or anything that helps the AI understand.
+
+---
+
+## Why Not Just Give All Instructions Directly to the AI?
+
+The key question for understanding Skills design: if we just tell the AI how to operate, why not just say it in the conversation?
+
+This approach has two fundamental problems:
+
+**Context window is limited and expensive.** If we stuff the complete content of all Skills into every conversation, the instructions alone would consume huge amounts of tokens, making the AI slower and dramatically increasing costs per conversation.
+
+**Scattered attention.** When the AI faces detailed explanations for dozens of Skills, it struggles to focus on the current task and easily confuses rules and parameters across different skills, leading to errors.
+
+Skills solve this with **three-tier progressive loading** — only loading what's needed when it's needed.
+
+---
+
+## Three-Tier Progressive Loading
+
+Think of Skills as a library's retrieval system:
+
+**Tier 1: Shelf Index (ultra-lightweight)**
+
+When starting up, the system only exposes to the AI the `name` and `description` of all Skills — like labels on shelves. These "index cards" are tiny, so loading even hundreds of Skills at once creates no burden. Through this tier, the AI decides "which skill do I need for this task?"
+
+**Tier 2: Operation Manual (loaded on demand)**
+
+Only when the AI confirms it needs a particular Skill does it read the complete `SKILL.md` content. This step triggers only when a skill is matched, providing the AI with specific execution steps, parameter requirements, edge conditions, and common error handling.
+
+**Tier 3: Tool Execution (real-time invocation)**
+
+Only when the task execution reaches a point requiring actual operations (like querying on-chain balance, executing a swap), the AI calls the corresponding script or MCP tool to do the substantive work, then returns the result to the conversation.
+
+This design lets the system manage large numbers of Skills while maintaining low latency and high accuracy.
+
+---
+
+## How Does the AI Find and Use a Skill?
+
+The AI selects and executes a Skill in four steps:
+
+**Step 1: Intent Recognition**
+
+You send a request (e.g., "Help me swap 100 USDT for TRX on SunSwap"), the AI parses the intent, scans the descriptions of all mounted Skills, and finds the best match.
+
+**Step 2: Rule Internalization**
+
+The AI reads the Skill's `SKILL.md`, understanding the execution steps, parameter formats, network selection, and security constraints.
+
+**Step 3: Tool Execution**
+
+Following the manual's guidance, the AI proceeds step by step — calling scripts to check balance, get quotes, verify approvals, execute the swap — waiting for your confirmation at critical points.
+
+**Step 4: Result Feedback**
+
+After completion, the AI presents results in an easy-to-read format. When information is missing or execution fails, it asks proactively.
+
+---
+
+## Two Ways to Invoke Skills
+
+You can trigger a Skill in two ways:
+
+**Explicit Invocation** — directly tell the AI which Skill to read, suitable for scenarios requiring deterministic behavior:
+
+```
+Read the sunswap skill and help me check how much TRX I can get for 100 USDT on SunSwap.
+```
+
+**Implicit Triggering** — describe the task and let the AI auto-match, suitable for everyday conversation:
+
+```
+Check how much TRX I can get for 100 USDT on SunSwap right now.
+```
+
+The difference lies in control: explicit invocation ensures the AI uses the Skill you specified; implicit triggering is more natural but if the description isn't clear enough, the AI might match the wrong Skill. When execution doesn't meet expectations, switching to explicit invocation usually solves the problem.
+
+---
+
+## Next Steps
+
+- Want to know what Skills BANK OF AI provides? → [BANK OF AI Skills](./BANKOFAISkill.md)
+- Have questions? → [FAQ](./Faq.md)

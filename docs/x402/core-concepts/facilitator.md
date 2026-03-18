@@ -1,7 +1,7 @@
-# Facilitator
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+
+# Facilitator
 
 The Facilitator is an **optional but highly recommended** service designed to simplify payment verification and settlement between clients (buyers) and servers (sellers) on blockchain networks.
 
@@ -22,7 +22,7 @@ By introducing a Facilitator, servers no longer need to maintain direct connecti
 - **Fee Management**: Supports configurable service fees (optional) for facilitating payments.
 - **Result Feedback**: Returns verification and settlement results to the server, enabling it to decide whether to deliver the requested resource.
 
-> **Note**: The Facilitator **does not custody funds** and does not act as an escrow. It only executes verification and on-chain operations according to the client’s signed authorization.
+> **Note**: The Facilitator **does not custody funds** and does not act as an escrow. It only executes verification and on-chain operations according to the client's signed authorization.
 
 ## Why Use a Facilitator?
 
@@ -35,29 +35,69 @@ Integrating a Facilitator provides significant advantages:
 
 Although developers may implement verification and settlement logic locally, using a Facilitator significantly accelerates development and ensures protocol-compliant implementation.
 
-### Facilitator Options
+---
+
+## Facilitator Options: Which Should You Use?
 
 To use x402, you need access to a Facilitator service. There are currently two options:
 
-1. **Run Your Own Facilitator (Self-Hosted):**  
-   Deploy and manage your own Facilitator instance for full control over fee policies and energy management strategies.
+| | Official Facilitator | Self-Hosted Facilitator |
+|---|---|---|
+| **Best for** | Most sellers, especially those new to x402 | Advanced users who need full control over fee policies and energy management |
+| **Requires server maintenance** | No | Yes |
+| **Requires wallet private key** | No | Yes (for paying transaction fees) |
+| **Setup difficulty** | Low (just obtain an API Key) | Medium (requires deployment and configuration) |
+| **Fee control** | Fixed policy | Fully customizable |
+| **Recommended for** | Testing, quick launch, small to medium-scale apps | Large-scale production, custom fee structures |
 
-2. **Use the [Official Facilitator](https://github.com/BofAI/x402-facilitator):**  
-   An officially hosted Facilitator service is available. This option allows you to use the service without maintaining infrastructure.
+---
 
-### Facilitator API Endpoints
+## Option 1: Use the Official Facilitator (Recommended)
 
-The Facilitator provides the following API endpoints:
+The officially hosted Facilitator service is available and ready to use — no infrastructure to maintain on your side.
 
-| Endpoint      | Method | Description                         |
-| :------------ | :----- | :---------------------------------- |
-| `/`           | GET    | Retrieve basic service information  |
-| `/supported`  | GET    | Query supported feature configuration |
-| `/fee/quote`  | POST   | Get estimated fee quote             |
-| `/verify`     | POST   | Verify payment payload validity     |
-| `/settle`     | POST   | Execute on-chain settlement         |
+**Workflow:** Obtain an API Key → Add it to your project → Point `FACILITATOR_URL` at the official service endpoint.
 
-For implementation details, please refer to the [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md).
+**The official service involves two distinct URLs — please note the difference:**
+
+| Address | Purpose |
+|---------|---------|
+| [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) | **Admin Portal** — Register, create, and manage your Facilitator API Key (open in browser) |
+| [https://facilitator.bankofai.io](https://facilitator.bankofai.io) | **Service Endpoint** — Set as `FACILITATOR_URL` in your code; handles payment verification and settlement (API calls only, not for browser access) |
+
+Quick usage examples can be found in [OfficialFacilitator](./OfficialFacilitator.md)
+
+---
+
+## Option 2: Self-Hosted Facilitator
+
+If you need full control over fee policies and energy management, or have specific privacy or compliance requirements, you can deploy your own Facilitator service.
+
+> ⚠️ **Self-hosting security notes:**
+> - A self-hosted Facilitator requires a **dedicated wallet** private key to pay blockchain transaction fees
+> - **This Facilitator wallet should be separate from your payment recipient wallet** — create a new wallet specifically for this purpose
+> - Only deposit a small amount of tokens into the Facilitator wallet (enough for fees); do not store large amounts
+> - Keep the private key only in your `.env` file — **never upload it to GitHub or share it with anyone**
+
+Quick usage examples can be found in [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md)
+
+---
+
+## Facilitator API Endpoints
+
+Whether using the official service or a self-hosted instance, the Facilitator provides the following standard API endpoints:
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/health` | Liveness check |
+| GET | `/supported` | Supported payment capabilities and configuration |
+| POST | `/fee/quote` | Get fee quote for payment requirements |
+| POST | `/verify` | Verify payment payload validity |
+| POST | `/settle` | Execute on-chain settlement (**rate-limited** on the Official Facilitator) |
+| GET | `/payments/{payment_id}` | Query payment records by payment ID |
+| GET | `/payments/tx/{tx_hash}` | Query payment records by transaction hash |
+
+---
 
 ## Fee Structure
 
@@ -69,27 +109,33 @@ The Facilitator supports flexible service fee configurations:
 
 Detailed fee information is returned via the `/fee/quote` endpoint and included in the Payment Requirements sent from the server to the client.
 
+---
+
 ## Trust Model
 
 The x402 protocol is designed around **minimal trust assumptions**:
 
-- **Signature-Based Authorization**: The Facilitator can only transfer funds within the scope explicitly authorized by the client’s signature.
+- **Signature-Based Authorization**: The Facilitator can only transfer funds within the scope explicitly authorized by the client's signature.
 - **Direct Fund Flow**: Funds move directly from the client to the seller (and partially to the Facilitator if fees apply), without passing through a pooled account.
 - **On-Chain Transparency**: All transactions are publicly verifiable on-chain.
 
 Even a **malicious Facilitator** cannot:
 
-- Transfer funds beyond the client’s authorized limit.
+- Transfer funds beyond the client's authorized limit.
 - Redirect funds to an address not specified in the signed payload.
 - Modify any signed payment terms.
+
+---
 
 ## Summary
 
 Within the x402 protocol architecture, the **Facilitator** serves as an independent on-chain verification and settlement layer. It enables servers to securely confirm payments and complete blockchain settlements without deploying a full blockchain infrastructure.
 
+---
+
 ## Next Steps
 
-We recommend exploring:
-
-- [Wallet](./wallet.md) — Learn how to manage wallets used for payments  
-- [Network and Token Support](./network-and-token-support.md) — Learn about supported networks and tokens  
+- [Official Facilitator](./OfficialFacilitator.md) — How to apply for and configure an API Key for the official Facilitator (step-by-step with screenshots)
+- [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md) — Complete server-side integration walkthrough
+- [Wallet](./wallet.md) — Learn how to manage wallets used for payments
+- [Network and Token Support](./network-and-token-support.md) — Learn about supported networks and tokens
