@@ -8,7 +8,7 @@ https://api.bankofai.io/
 
 ### Available authorizations
 #### bearerAuth (HTTP, bearer)
-Bearer <token>, e.g. Bearer sk-xxx  
+Bearer `<token>`, e.g. Bearer sk-xxx
 Bearer format: JWT
 
 ---
