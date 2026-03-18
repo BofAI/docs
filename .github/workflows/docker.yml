@@ -5,14 +5,12 @@ on:
     branches:
       - main
       - master
-      - ai-bankofai-patch-1
     tags:
       - 'test'
   pull_request:
     branches:
       - main
       - master
-      - ai-bankofai-patch-1
   workflow_dispatch:
 
 env:
