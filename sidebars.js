@@ -153,7 +153,6 @@ const sidebars = {
       ],
     },
 
-    /* --- 这里是为你修正后的 LLM Service 部分 --- */
     {
       type: 'category',
       label: 'LLM Service',
@@ -177,6 +176,9 @@ const sidebars = {
             'llm-service/models/claude-sonnet-4-6',
             'llm-service/models/gemini-3-1-pro',
             'llm-service/models/gemini-3-flash',
+            'llm-service/models/glm-5',
+            'llm-service/models/kimi-k2.5',
+            'llm-service/models/minimax-m2.5',
           ],
         },
         {
@@ -193,7 +195,7 @@ const sidebars = {
           label: 'API',
           collapsed: true,
           items: [
-            'llm-service/api/chat-completion',
+            'llm-service/api/API',
           ],
         },
       ],

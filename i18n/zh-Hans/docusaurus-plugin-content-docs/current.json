@@ -43,5 +43,29 @@
   "sidebar.docsSidebar.doc.OverView": {
     "message": "简介",
     "description": "The label for the doc item OverView in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.LLM Service": {
+    "message": "LLM 服务",
+    "description": "The label for category LLM Service in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Quick Start": {
+    "message": "快速入门",
+    "description": "The label for the doc item Quick Start in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Pricing and Usage": {
+    "message": "定价与用量",
+    "description": "The label for the doc item Pricing and Usage in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Models": {
+    "message": "模型列表",
+    "description": "The label for category Models in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.OpenClaw": {
+    "message": "OpenClaw 集成",
+    "description": "The label for category OpenClaw in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.API": {
+    "message": "API 参考",
+    "description": "The label for category API in sidebar docsSidebar"
   }
 }

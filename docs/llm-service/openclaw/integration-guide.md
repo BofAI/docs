@@ -299,8 +299,8 @@ openclaw tui
 | Command          | Description                             |
 | ---------------- | --------------------------------------- |
 | /status          | View the current system status          |
-| /session <key>   | Switch to a specific chat session       |
-| /model <name>    | Switch the LLM                          |
+| /session `<key>`   | Switch to a specific chat session       |
+| /model `<name>`    | Switch the LLM                          |
 | /help            | View available commands                 |
 
 ---

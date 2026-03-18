@@ -76,7 +76,7 @@ List available models. Auth: Bearer token. Response: object, success, data.
 | frequency_penalty | number | FrequencyPenalty: -2.0 to 2.0. Penalize repeated tokens. Default 0. | No |
 | max_tokens | integer | MaxTokens: maximum number of tokens that can be generated in the completion. | No |
 | messages | [ [main.ChatMessage](#mainchatmessage) ] | Messages: list of messages in the conversation. Required. | No |
-| model | string | Model: ID of the model to use (e.g. gpt-4). Required.<br>*Example:* `"gpt-4"` | No |
+| model | string | Model: ID of the model to use (e.g. gpt-4). Required.<br/>*Example:* `"gpt-4"` | No |
 | n | integer | N: how many chat completion choices to generate. Default 1. | No |
 | presence_penalty | number | PresencePenalty: -2.0 to 2.0. Penalize tokens that appear in the text so far. Default 0. | No |
 | response_format | [main.ChatResponseFormat](#mainchatresponseformat) | ResponseFormat: specify output format: { "type": "text" } or { "type": "json_object" } or json_schema. | No |
@@ -104,9 +104,9 @@ List available models. Auth: Bearer token. Response: object, success, data.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| content | string | Content: message content. For tool role, the result of the tool call.<br>*Example:* `"Hello"` | No |
+| content | string | Content: message content. For tool role, the result of the tool call.<br/>*Example:* `"Hello"` | No |
 | name | string | Name: optional name for the message author (e.g. to disambiguate multiple users). | No |
-| role | string | Role: "system" \| "user" \| "assistant" \| "tool". System sets behavior; user/assistant are conversation; tool is tool result.<br>*Example:* `"user"` | No |
+| role | string | Role: "system" \| "user" \| "assistant" \| "tool". System sets behavior; user/assistant are conversation; tool is tool result.<br/>*Example:* `"user"` | No |
 | tool_call_id | string | ToolCallId: when role is "tool", the id of the tool call this result is for. Required for tool messages. | No |
 | tool_calls | [ [main.ChatToolCallItem](#mainchattoolcallitem) ] | ToolCalls: when role is "assistant" and the model called tools, array of { id, type, function: { name, arguments } }. | No |
 
@@ -122,7 +122,7 @@ List available models. Auth: Bearer token. Response: object, success, data.
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | function | [main.ChatToolFunction](#mainchattoolfunction) | Function: function definition (name, description, parameters). | No |
-| type | string | Type: must be "function".<br>*Example:* `"function"` | No |
+| type | string | Type: must be "function".<br/>*Example:* `"function"` | No |
 
 #### main.ChatToolCallFunction
 
@@ -137,7 +137,7 @@ List available models. Auth: Bearer token. Response: object, success, data.
 | ---- | ---- | ----------- | -------- |
 | function | [main.ChatToolCallFunction](#mainchattoolcallfunction) | Function: name and arguments of the call. | No |
 | id | string | Id: ID of the tool call. | No |
-| type | string | Type: "function".<br>*Example:* `"function"` | No |
+| type | string | Type: "function".<br/>*Example:* `"function"` | No |
 
 #### main.ChatToolFunction
 
