@@ -150,6 +150,49 @@ const sidebars = {
       collapsed: false,
       items: ['Openclaw-extension/Overview', 'Openclaw-extension/Setup-use'],
     },
+
+    {
+      type: 'category',
+      label: 'LLM Service',
+      collapsed: false,
+      items: [
+        { type: 'doc', id: 'llmservice/introduction', label: '简介' },
+        { type: 'doc', id: 'llmservice/quick-start', label: '快速开始' },
+        { type: 'doc', id: 'llmservice/pricing-and-usage', label: '定价与使用' },
+        {
+          type: 'category',
+          label: '模型',
+          collapsed: true,
+          items: [
+            'llmservice/models/chatgpt-5-2',
+            'llmservice/models/chatgpt-5-mini',
+            'llmservice/models/chatgpt-5-nano',
+            'llmservice/models/claude-haiku-4-5',
+            'llmservice/models/claude-opus-4-5',
+            'llmservice/models/claude-opus-4-6',
+            'llmservice/models/claude-sonnet-4-5',
+            'llmservice/models/claude-sonnet-4-6',
+            'llmservice/models/gemini-3-1-pro',
+            'llmservice/models/gemini-3-flash',
+            'llmservice/models/glm-5',
+            'llmservice/models/kimi-k2.5',
+            'llmservice/models/minimax-m2.5',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'OpenClaw',
+          collapsed: true,
+          items: ['llmservice/openclaw/integration-guide', 'llmservice/openclaw/one-click-script-tutorial'],
+        },
+        {
+          type: 'category',
+          label: 'API',
+          collapsed: true,
+          items: ['llmservice/api/API'],
+        },
+      ],
+    },
   ],
 }
 

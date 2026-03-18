@@ -103,11 +103,11 @@ module.exports = {
         redirects: [
           {
             from: '/llmservice',
-            to: '/llm-service/introduction',
+            to: '/llmservice/introduction',
           },
           {
             from: '/zh-Hans/llmservice',
-            to: '/zh-Hans/llm-service/introduction',
+            to: '/zh-Hans/llmservice/introduction',
           },
         ],
       },
