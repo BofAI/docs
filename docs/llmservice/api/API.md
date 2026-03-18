@@ -23,12 +23,12 @@ List available models. Auth: Bearer token. Response: object, success, data.
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | object: list; success: true; data: array of { id, object, created, owned_by } | **application/json**: [V1ModelsResponse](#v1modelsresponse)<br> |
-| 400 | Bad Request - invalid parameters or malformed body | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 401 | Unauthorized - invalid or missing authentication | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 403 | Forbidden - access denied, insufficient quota, or banned | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 429 | Too Many Requests - rate limit exceeded | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 500 | Internal Server Error | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 200 | object: list; success: true; data: array of { id, object, created, owned_by } | **application/json**: [V1ModelsResponse](#v1modelsresponse)<br/> |
+| 400 | Bad Request - invalid parameters or malformed body | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 401 | Unauthorized - invalid or missing authentication | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 403 | Forbidden - access denied, insufficient quota, or banned | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 429 | Too Many Requests - rate limit exceeded | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 500 | Internal Server Error | **application/json**: [ErrorResponse](#errorresponse)<br/> |
 
 ##### Security
 
@@ -48,20 +48,20 @@ Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. St
 
 | Required | Schema |
 | -------- | ------ |
-|  Yes | **application/json**: [ChatCompletionsRequest](#chatcompletionsrequest)<br> |
+|  Yes | **application/json**: [ChatCompletionsRequest](#chatcompletionsrequest)<br/> |
 
 #### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | Success. Schema differs by stream mode. | **application/json**: [ChatCompletionsResponse](#chatcompletionsresponse)<br>**text/event-stream**: [ChatCompletionsResponse](#chatcompletionsresponse)<br> |
-| 400 | Bad Request - invalid parameters, malformed body, or invalid request | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 401 | Unauthorized - invalid or missing authentication | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 403 | Forbidden - access denied, insufficient quota, or model access restricted | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 429 | Too Many Requests - rate limit exceeded | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 500 | Internal Server Error | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 502 | Bad Gateway - upstream service error | **application/json**: [ErrorResponse](#errorresponse)<br> |
-| 503 | Service Unavailable - overloaded or no available channel | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 200 | Success. Schema differs by stream mode. | **application/json**: [ChatCompletionsResponse](#chatcompletionsresponse)<br/>**text/event-stream**: [ChatCompletionsResponse](#chatcompletionsresponse)<br/> |
+| 400 | Bad Request - invalid parameters, malformed body, or invalid request | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 401 | Unauthorized - invalid or missing authentication | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 403 | Forbidden - access denied, insufficient quota, or model access restricted | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 429 | Too Many Requests - rate limit exceeded | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 500 | Internal Server Error | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 502 | Bad Gateway - upstream service error | **application/json**: [ErrorResponse](#errorresponse)<br/> |
+| 503 | Service Unavailable - overloaded or no available channel | **application/json**: [ErrorResponse](#errorresponse)<br/> |
 
 ##### Security
 
@@ -99,7 +99,7 @@ Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. St
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| model | string | ID of the model to use (e.g. gpt-4).<br>*Example:* `"gpt-4"` | Yes |
+| model | string | ID of the model to use (e.g. gpt-4).<br/>*Example:* `"gpt-4"` | Yes |
 | messages | [ [ChatMessage](#chatmessage) ] | List of messages in the conversation. | Yes |
 | stream | boolean | If true, partial message deltas will be sent as server-sent events. Default false. | No |
 | max_tokens | integer | Maximum number of tokens that can be generated in the completion. | No |
@@ -119,8 +119,8 @@ Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. St
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| role | string | "system" \| "user" \| "assistant" \| "tool". System sets behavior; user/assistant are conversation; tool is tool result.<br>*Example:* `"user"` | No |
-| content | string | Message content. For tool role, the result of the tool call.<br>*Example:* `"Hello"` | No |
+| role | string | "system" \| "user" \| "assistant" \| "tool". System sets behavior; user/assistant are conversation; tool is tool result.<br/>*Example:* `"user"` | No |
+| content | string | Message content. For tool role, the result of the tool call.<br/>*Example:* `"Hello"` | No |
 | name | string | Optional name for the message author (e.g. to disambiguate multiple users). | No |
 | tool_call_id | string | When role is "tool", the id of the tool call this result is for. Required for tool messages. | No |
 | tool_calls | [ [ChatToolCallItem](#chattoolcallitem) ] | When role is "assistant" and the model called tools, array of { id, type, function: { name, arguments } }. | No |
@@ -138,7 +138,7 @@ Specify output format: { "type": "text" } or { "type": "json_object" } or json_s
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| type | string | Must be "function".<br>*Example:* `"function"` | No |
+| type | string | Must be "function".<br/>*Example:* `"function"` | No |
 | function | [ChatToolFunction](#chattoolfunction) | Function definition (name, description, parameters). | No |
 
 #### ChatToolFunction
@@ -154,7 +154,7 @@ Specify output format: { "type": "text" } or { "type": "json_object" } or json_s
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | id | string | ID of the tool call. | No |
-| type | string | "function".<br>*Example:* `"function"` | No |
+| type | string | "function".<br/>*Example:* `"function"` | No |
 | function | [ChatToolCallFunction](#chattoolcallfunction) | Name and arguments of the call. | No |
 
 #### ChatToolCallFunction
@@ -170,7 +170,7 @@ Precise mode: specifies the particular function to call.
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| type | string, <br>**Available values:** "function" | Must be "function".<br>*Enum:* `"function"`<br>*Example:* `"function"` | Yes |
+| type | string, <br/>**Available values:** "function" | Must be "function".<br/>*Enum:* `"function"`<br/>*Example:* `"function"` | Yes |
 | function | [ToolChoiceFunction](#toolchoicefunction) | Function definition to call. | Yes |
 
 #### ToolChoiceFunction
@@ -186,7 +186,7 @@ Non-stream: object=chat.completion, choices[].message, usage. Stream: object=cha
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | id | string | *Example:* `"chatcmpl-xxx"` | No |
-| object | string, <br>**Available values:** "chat.completion", "chat.completion.chunk" | "chat.completion" (non-stream) or "chat.completion.chunk" (stream).<br>*Enum:* `"chat.completion"`, `"chat.completion.chunk"` | No |
+| object | string, <br/>**Available values:** "chat.completion", "chat.completion.chunk" | "chat.completion" (non-stream) or "chat.completion.chunk" (stream).<br/>*Enum:* `"chat.completion"`, `"chat.completion.chunk"` | No |
 | created | integer | *Example:* `1677652288` | No |
 | model | string | *Example:* `"gpt-4"` | No |
 | service_tier | string | *Example:* `"default"` | No |
