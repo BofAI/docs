@@ -72,13 +72,25 @@ If the output is `3.10.x` or higher, you can proceed directly to installation. O
 We recommend using [pyenv](https://github.com/pyenv/pyenv) to manage Python versions:
 
 ```bash
-# Install pyenv (skip if already installed)
+# Step 1: Install pyenv
 curl https://pyenv.run | bash
+```
 
-# Reload shell config
-source ~/.bashrc   # or source ~/.zshrc
+After installation, you need to add pyenv to your shell config manually — otherwise the terminal won't find the `pyenv` command:
 
-# Install Python 3.10
+```bash
+# Append these three lines to ~/.bashrc (or ~/.zshrc for zsh users)
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
+# Reload config to apply changes in the current terminal
+source ~/.bashrc
+```
+
+Once pyenv is available, install Python:
+
+```bash
 pyenv install 3.10
 pyenv global 3.10
 ```

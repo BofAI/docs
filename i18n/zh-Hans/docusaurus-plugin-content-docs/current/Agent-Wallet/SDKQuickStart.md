@@ -72,13 +72,25 @@ python3 --version
 推荐使用 [pyenv](https://github.com/pyenv/pyenv) 管理 Python 版本：
 
 ```bash
-# 安装 pyenv（已安装可跳过）
+# 第一步：安装 pyenv
 curl https://pyenv.run | bash
+```
 
-# 重新加载 shell 配置
-source ~/.bashrc   # 或 source ~/.zshrc
+安装完成后，需要手动将 pyenv 加入 shell 配置，否则终端找不到 `pyenv` 命令：
 
-# 安装 Python 3.10
+```bash
+# 将以下三行追加到 ~/.bashrc（zsh 用户改为 ~/.zshrc）
+echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+echo 'eval "$(pyenv init -)"' >> ~/.bashrc
+
+# 重新加载配置，使当前终端立即生效
+source ~/.bashrc
+```
+
+确认 pyenv 可用后，安装 Python：
+
+```bash
 pyenv install 3.10
 pyenv global 3.10
 ```
