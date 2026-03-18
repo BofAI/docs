@@ -3,6 +3,9 @@ Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. St
 
 ## Version: 1.0
 
+### BaseURL
+https://api.bankofai.io/
+
 ### Available authorizations
 #### bearerAuth (HTTP, bearer)
 Bearer <token>, e.g. Bearer sk-xxx  
