@@ -5,7 +5,7 @@ require('dotenv').config()
 module.exports = {
   title: 'BANK OF AI | Developer Guide',
   tagline: 'HTTP 402 Payment Protocol for TRON',
-  url: 'https://docs.x402-tron.org/',
+  url: 'https://docs.bankofai.io',
   baseUrl: '/',
   trailingSlash: true,
   i18n: {
@@ -97,17 +97,21 @@ module.exports = {
   ],
   plugins: [
     require.resolve('./docusaurus-plugin-global-style'),
-    // [
-    //   '@docusaurus/plugin-client-redirects',
-    //   {
-    //     redirects: [
-    //       {
-    //         from: '/overview',
-    //         to: '/',
-    //       },
-    //     ],
-    //   },
-    // ],
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        redirects: [
+          {
+            from: '/llmservice',
+            to: '/llmservice/introduction',
+          },
+          {
+            from: '/zh-Hans/llmservice',
+            to: '/zh-Hans/llmservice/introduction',
+          },
+        ],
+      },
+    ],
     function webpackFallbackPlugin() {
       return {
         name: 'custom-webpack-fallback-plugin',
