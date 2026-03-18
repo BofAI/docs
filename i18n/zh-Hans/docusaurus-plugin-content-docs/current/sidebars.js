@@ -150,6 +150,12 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Agent Wallet',
+      collapsed: false,
+      items: ['Agent-Wallet/Intro', 'Agent-Wallet/QuickStart', 'Agent-Wallet/FAQ'],
+    },
+    {
+      type: 'category',
       label: 'Openclaw 扩展插件',
       collapsed: false,
       items: ['Openclaw-extension/Intro', 'Openclaw-extension/QuickStart', 'Openclaw-extension/FAQ'],
