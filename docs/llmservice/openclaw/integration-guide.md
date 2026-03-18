@@ -270,7 +270,7 @@ With the configuration complete, you can interact with your AI assistant through
 ### **Option 1: Web Dashboard**
 
 ```bash
-openclaw ui
+openclaw dashboard
 ```
 
 Then open:
