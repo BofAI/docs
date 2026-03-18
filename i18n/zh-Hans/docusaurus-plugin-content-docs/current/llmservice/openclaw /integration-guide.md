@@ -183,7 +183,7 @@ openclaw doctor
 ## Web UI
 
 ```bash
-openclaw ui
+openclaw dashboard
 ```
 
 打开：
