@@ -75,8 +75,8 @@ The system auto-generates a strong password and creates one TRON wallet and one 
 ┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
 │ Wallet ID            │ Type            │ Address                                      │
 ├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│ default_tron         │ tron_local      │ TB37CfKbRacD6TUBNPK7GirUheUJwbAGH5           │
-│ default_evm          │ evm_local       │ 0xd679B660f6b331e1fdA877cee0aAd361A7f3b628   │
+│ default_tron         │ tron_local      │ TB37...                                      │
+│ default_evm          │ evm_local       │ 0xd679B...                                   │
 └──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
 
 ⭐ Active wallet: default_tron
@@ -118,7 +118,7 @@ You'll be prompted to paste the private key (input is hidden):
 ┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
 │ Wallet ID            │ Type            │ Address                                      │
 ├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│ default_tron         │ tron_local      │ TNmoJ3Be59WFEq5dsW6eCkZjveiL3G8HVB           │
+│ default_tron         │ tron_local      │ TNmo...                                      │
 └──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
 
 ⭐ Active wallet: default_tron
@@ -141,8 +141,8 @@ Wallets:
 ┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
 │ Wallet ID            │ Type            │ Address                                      │
 ├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│* default_tron        │ tron_local      │ TB37CfKbRacD6TUBNPK7GirUheUJwbAGH5           │
-│  default_evm         │ evm_local       │ 0xd679B660f6b331e1fdA877cee0aAd361A7f3b628   │
+│* default_tron        │ tron_local      │ TB37...                                      │
+│  default_evm         │ evm_local       │ 0xd679B...                                   │
 └──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
 ```
 

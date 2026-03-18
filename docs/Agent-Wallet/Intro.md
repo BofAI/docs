@@ -99,21 +99,6 @@ Available in both **Python** and **TypeScript**, with identical interfaces and f
 
 ---
 
-## Where Agent-wallet Fits in the BANK OF AI Ecosystem
-
-Agent-wallet is the signing layer of the entire ecosystem. Other components (such as MCP Server and x402 SDK) rely on Agent-wallet for private key operations when signing is required:
-
-```
-AI Agent
-  └── Skills / x402 SDK          ← Decides "what to do"
-        └── MCP Server           ← Builds transactions, queries on-chain data
-              └── Agent-wallet   ← Signs (and only that)
-```
-
-Agent-wallet has no knowledge of business logic. Its only job is to securely hold keys and sign on demand.
-
----
-
 ## Where to Start
 
 | Your Goal | Start Here |

@@ -99,21 +99,6 @@ const sig = await wallet.signMessage(new TextEncoder().encode("Hello"));
 
 ---
 
-## 在 BANK OF AI 体系中的位置
-
-Agent-wallet 是整个生态的签名层。其他组件（如 MCP Server、x402 SDK）在需要签名时，依赖 Agent-wallet 提供私钥操作：
-
-```
-AI 代理
-  └── Skills / x402 SDK          ← 决定"做什么"
-        └── MCP Server           ← 构建交易，查询链上数据
-              └── Agent-wallet   ← 签名（仅此一件事）
-```
-
-Agent-wallet 本身不知道业务逻辑，只负责安全地持有密钥、按需签名。
-
----
-
 ## 从哪里开始
 
 | 你的目标 | 从这里开始 |
