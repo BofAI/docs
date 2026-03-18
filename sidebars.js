@@ -70,7 +70,6 @@ const sidebars = {
           type: 'doc',
           id: '8004/SupportedNetworks',
         },
-
         {
           type: 'category',
           label: 'Usage',
@@ -156,6 +155,49 @@ const sidebars = {
       label: 'Openclaw Extension',
       collapsed: false,
       items: ['Openclaw-extension/Intro', 'Openclaw-extension/QuickStart', 'Openclaw-extension/FAQ'],
+    },
+
+    {
+      type: 'category',
+      label: 'LLM Service',
+      collapsed: false,
+      items: [
+        { type: 'doc', id: 'llmservice/introduction', label: 'Introduction' },
+        { type: 'doc', id: 'llmservice/quick-start', label: 'Quick Start' },
+        { type: 'doc', id: 'llmservice/pricing-and-usage', label: 'Pricing and Usage' },
+        {
+          type: 'category',
+          label: 'Models',
+          collapsed: true,
+          items: [
+            'llmservice/models/chatgpt-5-2',
+            'llmservice/models/chatgpt-5-mini',
+            'llmservice/models/chatgpt-5-nano',
+            'llmservice/models/claude-haiku-4-5',
+            'llmservice/models/claude-opus-4-5',
+            'llmservice/models/claude-opus-4-6',
+            'llmservice/models/claude-sonnet-4-5',
+            'llmservice/models/claude-sonnet-4-6',
+            'llmservice/models/gemini-3-1-pro',
+            'llmservice/models/gemini-3-flash',
+            'llmservice/models/glm-5',
+            'llmservice/models/kimi-k2.5',
+            'llmservice/models/minimax-m2.5',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'OpenClaw',
+          collapsed: true,
+          items: ['llmservice/openclaw/integration-guide', 'llmservice/openclaw/one-click-script-tutorial'],
+        },
+        {
+          type: 'category',
+          label: 'API',
+          collapsed: true,
+          items: ['llmservice/api/API'],
+        },
+      ],
     },
   ],
 }
