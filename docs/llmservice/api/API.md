@@ -1,173 +1,233 @@
-# BANK OF AI LLM API (OpenAI Compatible)
-OpenAPI spec for /v1/models and /v1/chat/completions (OpenAI format).
+# AI API (OpenAI Compatible)
+Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. Stream: SSE chunks with choices[].delta.content.
 
 ## Version: 1.0
 
-**Schemes:** https
-
-**Host:** api.bankofai.io
-
----
-### /v1/chat/completions
-
-#### POST
-##### Summary
-
-Create chat completion (OpenAI compatible)
-
-##### Description
-
-Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. Stream: SSE chunks with choices[].delta.content.
-
-##### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| Authorization | header | Bearer &lt;token&gt;, e.g. Bearer sk-xxx | Yes | string |
-| body | body | Request body (model, messages required; stream, max_tokens, temperature, top_p, stop, n optional) | Yes | [main.ChatCompletionsRequest](#mainchatcompletionsrequest) |
-
-##### Responses
-
-| Code | Description | Schema |
-| ---- | ----------- | ------ |
-| 200 | Non-stream: choices[].content. Stream (SSE): each chunk is ChatCompletionsStreamChunk with choices[].delta.content. | [main.ChatCompletionsResponse](#mainchatcompletionsresponse) |
-| 401 | Authentication failed | object |
+### Available authorizations
+#### bearerAuth (HTTP, bearer)
+Bearer <token>, e.g. Bearer sk-xxx  
+Bearer format: JWT
 
 ---
-### /v1/models
+## Model List
 
-#### GET
-##### Summary
-
-List models (OpenAI compatible)
-
-##### Description
+### [GET] /v1/models
+**List models (OpenAI compatible)**
 
 List available models. Auth: Bearer token. Response: object, success, data.
 
-##### Parameters
-
-| Name | Located in | Description | Required | Schema |
-| ---- | ---------- | ----------- | -------- | ------ |
-| Authorization | header | Bearer &lt;token&gt;, e.g. Bearer sk-xxx | Yes | string |
-
-##### Responses
+#### Responses
 
 | Code | Description | Schema |
 | ---- | ----------- | ------ |
-| 200 | object: list; success: true; data: array of { id, object, created, owned_by } | [main.V1ModelsResponse](#mainv1modelsresponse) |
-| 401 | Authentication failed | object |
+| 200 | object: list; success: true; data: array of { id, object, created, owned_by } | **application/json**: [V1ModelsResponse](#v1modelsresponse)<br> |
+| 400 | Bad Request - invalid parameters or malformed body | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 401 | Unauthorized - invalid or missing authentication | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 403 | Forbidden - access denied, insufficient quota, or banned | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 429 | Too Many Requests - rate limit exceeded | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 500 | Internal Server Error | **application/json**: [ErrorResponse](#errorresponse)<br> |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| bearerAuth |  |
 
 ---
-### Models
+## Chat Completions
 
-#### main.ChatChoice
+### [POST] /v1/chat/completions
+**Create chat completion (OpenAI compatible)**
+
+Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. Stream: SSE chunks with choices[].delta.content.
+
+#### Request Body
+
+| Required | Schema |
+| -------- | ------ |
+|  Yes | **application/json**: [ChatCompletionsRequest](#chatcompletionsrequest)<br> |
+
+#### Responses
+
+| Code | Description | Schema |
+| ---- | ----------- | ------ |
+| 200 | Success. Schema differs by stream mode. | **application/json**: [ChatCompletionsResponse](#chatcompletionsresponse)<br>**text/event-stream**: [ChatCompletionsResponse](#chatcompletionsresponse)<br> |
+| 400 | Bad Request - invalid parameters, malformed body, or invalid request | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 401 | Unauthorized - invalid or missing authentication | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 403 | Forbidden - access denied, insufficient quota, or model access restricted | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 429 | Too Many Requests - rate limit exceeded | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 500 | Internal Server Error | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 502 | Bad Gateway - upstream service error | **application/json**: [ErrorResponse](#errorresponse)<br> |
+| 503 | Service Unavailable - overloaded or no available channel | **application/json**: [ErrorResponse](#errorresponse)<br> |
+
+##### Security
+
+| Security Schema | Scopes |
+| --------------- | ------ |
+| bearerAuth |  |
+
+---
+### Schemas
+
+#### ErrorResponse
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| error | { **"message"**: string, **"type"**: string, **"param"**: string, null, **"code"**: string, null } |  | No |
+
+#### V1ModelsResponse
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| object | string | *Example:* `"list"` | No |
+| success | boolean | *Example:* `true` | No |
+| data | [ [V1ModelItem](#v1modelitem) ] |  | No |
+
+#### V1ModelItem
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | string | *Example:* `"gpt-4"` | No |
+| object | string | *Example:* `"model"` | No |
+| created | integer | *Example:* `1626777600` | No |
+| owned_by | string | *Example:* `"openai"` | No |
+
+#### ChatCompletionsRequest
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| model | string | ID of the model to use (e.g. gpt-4).<br>*Example:* `"gpt-4"` | Yes |
+| messages | [ [ChatMessage](#chatmessage) ] | List of messages in the conversation. | Yes |
+| stream | boolean | If true, partial message deltas will be sent as server-sent events. Default false. | No |
+| max_tokens | integer | Maximum number of tokens that can be generated in the completion. | No |
+| temperature | number | Sampling temperature between 0 and 2. Higher = more random. Default 1. | No |
+| top_p | number | Nucleus sampling: consider tokens with top_p probability mass. Default 1. | No |
+| stop |  | Up to 4 sequences where the API will stop generating. String or array of strings. | No |
+| n | integer | How many chat completion choices to generate. Default 1. | No |
+| frequency_penalty | number | -2.0 to 2.0. Penalize repeated tokens. Default 0. | No |
+| presence_penalty | number | -2.0 to 2.0. Penalize tokens that appear in the text so far. Default 0. | No |
+| seed | integer | Random seed for deterministic sampling (if supported by model). | No |
+| response_format | [ChatResponseFormat](#chatresponseformat) |  | No |
+| tools | [ [ChatTool](#chattool) ] | List of tools the model may call. Each has type "function" and function { name, description?, parameters? }. | No |
+| tool_choice |  |  | No |
+| user | string | Optional end-user identifier for abuse monitoring. | No |
+
+#### ChatMessage
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| role | string | "system" \| "user" \| "assistant" \| "tool". System sets behavior; user/assistant are conversation; tool is tool result.<br>*Example:* `"user"` | No |
+| content | string | Message content. For tool role, the result of the tool call.<br>*Example:* `"Hello"` | No |
+| name | string | Optional name for the message author (e.g. to disambiguate multiple users). | No |
+| tool_call_id | string | When role is "tool", the id of the tool call this result is for. Required for tool messages. | No |
+| tool_calls | [ [ChatToolCallItem](#chattoolcallitem) ] | When role is "assistant" and the model called tools, array of { id, type, function: { name, arguments } }. | No |
+
+#### ChatResponseFormat
+
+Specify output format: { "type": "text" } or { "type": "json_object" } or json_schema.
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| type | string | "text" or "json_object". | No |
+| json_schema |  | When type is json_schema, optional schema for the output. | No |
+
+#### ChatTool
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| type | string | Must be "function".<br>*Example:* `"function"` | No |
+| function | [ChatToolFunction](#chattoolfunction) | Function definition (name, description, parameters). | No |
+
+#### ChatToolFunction
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| name | string | Name of the function. | No |
+| description | string | Optional description for the model. | No |
+| parameters |  | Optional JSON schema for the function arguments. | No |
+
+#### ChatToolCallItem
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | string | ID of the tool call. | No |
+| type | string | "function".<br>*Example:* `"function"` | No |
+| function | [ChatToolCallFunction](#chattoolcallfunction) | Name and arguments of the call. | No |
+
+#### ChatToolCallFunction
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| name | string | Name of the function to call. | No |
+| arguments | string | JSON string of the arguments. | No |
+
+#### ToolChoiceObject
+
+Precise mode: specifies the particular function to call.
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| type | string, <br>**Available values:** "function" | Must be "function".<br>*Enum:* `"function"`<br>*Example:* `"function"` | Yes |
+| function | [ToolChoiceFunction](#toolchoicefunction) | Function definition to call. | Yes |
+
+#### ToolChoiceFunction
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| name | string | Name of the function to call. | Yes |
+
+#### ChatCompletionsResponse
+
+Non-stream: object=chat.completion, choices[].message, usage. Stream: object=chat.completion.chunk, choices[].delta; final chunk has usage.
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| id | string | *Example:* `"chatcmpl-xxx"` | No |
+| object | string, <br>**Available values:** "chat.completion", "chat.completion.chunk" | "chat.completion" (non-stream) or "chat.completion.chunk" (stream).<br>*Enum:* `"chat.completion"`, `"chat.completion.chunk"` | No |
+| created | integer | *Example:* `1677652288` | No |
+| model | string | *Example:* `"gpt-4"` | No |
+| service_tier | string | *Example:* `"default"` | No |
+| system_fingerprint | string, null |  | No |
+| choices | [ [ChatChoice](#chatchoice) ] | Empty in final usage chunk. | No |
+| usage |  | Non-stream: always present. Stream: null until final chunk. | No |
+| obfuscation | string |  | No |
+
+#### ChatMessageContent
+
+Non-stream choices[].message. Full assistant message with role, content, refusal, annotations.
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| role | string | *Example:* `"assistant"` | No |
+| content | string | Assistant reply text. | No |
+| refusal | string, null | Refusal reason when model declines; null otherwise. | No |
+| annotations | [  ] | Citations, references, etc. | No |
+
+#### ChatChoice
+
+Non-stream: message. Stream: delta. finish_reason null until last content chunk.
+
+| Name | Type | Description | Required |
+| ---- | ---- | ----------- | -------- |
+| index | integer |  | No |
+| message | [ChatMessageContent](#chatmessagecontent) | Non-stream only. Full assistant message. | No |
+| delta | [ChatChoiceDelta](#chatchoicedelta) | Stream only. Incremental content; empty {} on stop. | No |
+| finish_reason | string, null | Null until done; e.g. "stop", "length", "tool_calls". | No |
+
+#### ChatChoiceDelta
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
 | content | string |  | No |
-| finish_reason | string | *Example:* `"stop"` | No |
-| index | integer |  | No |
+| role | string |  | No |
+| tool_calls | [ [ChatToolCallItem](#chattoolcallitem) ] |  | No |
 
-#### main.ChatCompletionsRequest
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| frequency_penalty | number | FrequencyPenalty: -2.0 to 2.0. Penalize repeated tokens. Default 0. | No |
-| max_tokens | integer | MaxTokens: maximum number of tokens that can be generated in the completion. | No |
-| messages | [ [main.ChatMessage](#mainchatmessage) ] | Messages: list of messages in the conversation. Required. | No |
-| model | string | Model: ID of the model to use (e.g. gpt-4). Required.<br/>*Example:* `"gpt-4"` | No |
-| n | integer | N: how many chat completion choices to generate. Default 1. | No |
-| presence_penalty | number | PresencePenalty: -2.0 to 2.0. Penalize tokens that appear in the text so far. Default 0. | No |
-| response_format | [main.ChatResponseFormat](#mainchatresponseformat) | ResponseFormat: specify output format: { "type": "text" } or { "type": "json_object" } or json_schema. | No |
-| seed | integer | Seed: random seed for deterministic sampling (if supported by model). | No |
-| stop |  | Stop: up to 4 sequences where the API will stop generating. String or array of strings. | No |
-| stream | boolean | Stream: if true, partial message deltas will be sent as server-sent events. Default false. | No |
-| temperature | number | Temperature: sampling temperature between 0 and 2. Higher = more random. Default 1. | No |
-| tool_choice |  | ToolChoice: "none" \| "auto" \| { "type": "function", "function": { "name": "..." } }. Controls which tool(s) to call. | No |
-| tools | [ [main.ChatTool](#mainchattool) ] | Tools: list of tools the model may call. Each has type "function" and function { name, description?, parameters? }. | No |
-| top_p | number | TopP: nucleus sampling: consider tokens with top_p probability mass. Default 1. | No |
-| user | string | User: optional end-user identifier for abuse monitoring. | No |
-
-#### main.ChatCompletionsResponse
+#### ChatUsage
 
 | Name | Type | Description | Required |
 | ---- | ---- | ----------- | -------- |
-| choices | [ [main.ChatChoice](#mainchatchoice) ] |  | No |
-| created | integer | *Example:* `1677652288` | No |
-| id | string | *Example:* `"chatcmpl-xxx"` | No |
-| model | string | *Example:* `"gpt-4"` | No |
-| object | string | *Example:* `"chat.completion"` | No |
-| usage | [main.ChatUsage](#mainchatusage) |  | No |
-
-#### main.ChatMessage
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| content | string | Content: message content. For tool role, the result of the tool call.<br/>*Example:* `"Hello"` | No |
-| name | string | Name: optional name for the message author (e.g. to disambiguate multiple users). | No |
-| role | string | Role: "system" \| "user" \| "assistant" \| "tool". System sets behavior; user/assistant are conversation; tool is tool result.<br/>*Example:* `"user"` | No |
-| tool_call_id | string | ToolCallId: when role is "tool", the id of the tool call this result is for. Required for tool messages. | No |
-| tool_calls | [ [main.ChatToolCallItem](#mainchattoolcallitem) ] | ToolCalls: when role is "assistant" and the model called tools, array of { id, type, function: { name, arguments } }. | No |
-
-#### main.ChatResponseFormat
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| json_schema |  | JsonSchema: when type is json_schema, optional schema for the output. | No |
-| type | string | Type: "text" or "json_object". | No |
-
-#### main.ChatTool
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| function | [main.ChatToolFunction](#mainchattoolfunction) | Function: function definition (name, description, parameters). | No |
-| type | string | Type: must be "function".<br/>*Example:* `"function"` | No |
-
-#### main.ChatToolCallFunction
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| arguments | string | Arguments: JSON string of the arguments. | No |
-| name | string | Name: name of the function to call. | No |
-
-#### main.ChatToolCallItem
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| function | [main.ChatToolCallFunction](#mainchattoolcallfunction) | Function: name and arguments of the call. | No |
-| id | string | Id: ID of the tool call. | No |
-| type | string | Type: "function".<br/>*Example:* `"function"` | No |
-
-#### main.ChatToolFunction
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| description | string | Description: optional description for the model. | No |
-| name | string | Name: name of the function. | No |
-| parameters |  | Parameters: optional JSON schema for the function arguments. | No |
-
-#### main.ChatUsage
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| completion_tokens | integer | CompletionTokens: number of tokens in the completion. | No |
-| prompt_tokens | integer | PromptTokens: number of tokens in the prompt. | No |
-| total_tokens | integer | TotalTokens: total tokens (prompt + completion). | No |
-
-#### main.V1ModelItem
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| created | integer | *Example:* `1626777600` | No |
-| id | string | *Example:* `"gpt-4"` | No |
-| object | string | *Example:* `"model"` | No |
-| owned_by | string | *Example:* `"openai"` | No |
-
-#### main.V1ModelsResponse
-
-| Name | Type | Description | Required |
-| ---- | ---- | ----------- | -------- |
-| data | [ [main.V1ModelItem](#mainv1modelitem) ] |  | No |
-| object | string | *Example:* `"list"` | No |
-| success | boolean | *Example:* `true` | No |
+| prompt_tokens | integer | Number of tokens in the prompt. | No |
+| completion_tokens | integer | Number of tokens in the completion. | No |
+| total_tokens | integer | Total tokens (prompt + completion). | No |
+| prompt_tokens_details | { **"cached_tokens"**: integer, **"audio_tokens"**: integer } |  | No |
+| completion_tokens_details | { **"reasoning_tokens"**: integer, **"audio_tokens"**: integer, **"accepted_prediction_tokens"**: integer, **"rejected_prediction_tokens"**: integer } |  | No |
