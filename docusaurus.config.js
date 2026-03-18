@@ -97,21 +97,6 @@ module.exports = {
   ],
   plugins: [
     require.resolve('./docusaurus-plugin-global-style'),
-    [
-      '@docusaurus/plugin-client-redirects',
-      {
-        redirects: [
-          {
-            from: '/llmservice',
-            to: '/llmservice/introduction',
-          },
-          {
-            from: '/zh-Hans/llmservice',
-            to: '/zh-Hans/llmservice/introduction',
-          },
-        ],
-      },
-    ],
     function webpackFallbackPlugin() {
       return {
         name: 'custom-webpack-fallback-plugin',
