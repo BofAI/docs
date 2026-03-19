@@ -85,10 +85,7 @@ This page collects frequently asked questions when using SUN MCP Server and thei
 
 **Solution:**
 
-1. **Configure Agent Wallet**
-   ```bash
-   export AGENT_WALLET_PASSWORD="your_secure_password"
-   ```
+1. **Configure [Agent Wallet](../../../Agent-Wallet/Intro)** (recommended) — set `AGENT_WALLET_PASSWORD`
 
 2. **Or Configure Private Key (Testnet Only)**
    ```bash
@@ -136,32 +133,9 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 **Resolution Steps:**
 
-1. **Verify Password Environment Variable**
-   ```bash
-   echo $AGENT_WALLET_PASSWORD
-   # Should output your password
-   ```
-
-2. **Check Agent Wallet Directory**
-   ```bash
-   # Default location
-   ls ~/.agent-wallet/
-   # Should contain wallet.json and other files
-   ```
-
-3. **Reinitialize Wallet**
-   ```bash
-   # Delete existing wallet (backup important data!)
-   rm -rf ~/.agent-wallet/
-   
-   # Restart server with correct password
-   export AGENT_WALLET_PASSWORD="your_new_password"
-   sun-mcp-server
-   ```
-
-4. **Verify Password Complexity**
-   - Use strong password (minimum 8 characters)
-   - Avoid special characters, use alphanumeric combination
+1. **Verify password**: Run `echo $AGENT_WALLET_PASSWORD` to confirm the variable is set correctly.
+2. **Check wallet directory**: Verify `~/.agent-wallet/` exists and contains wallet files. If you used a custom directory, ensure `AGENT_WALLET_DIR` points to the correct path.
+3. **If password is lost**: You'll need to re-initialize the wallet. See the [Agent-Wallet Quick Start](../../../Agent-Wallet/QuickStart) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
 
 
 ### "Conflicting Wallet Modes"
@@ -297,12 +271,7 @@ sun-mcp-server
    - Check Permit2 request structured data
    - Confirm chain ID, token address, deadline correct
 
-3. **Reinitialize Wallet**
-   ```bash
-   rm -rf ~/.agent-wallet/
-   export AGENT_WALLET_PASSWORD="your_password"
-   sun-mcp-server
-   ```
+3. **Reinitialize Wallet** — see [Agent-Wallet Quick Start](../../../Agent-Wallet/QuickStart) for re-initialization instructions.
 
 4. **Use Alternate Authorization Method**
    ```

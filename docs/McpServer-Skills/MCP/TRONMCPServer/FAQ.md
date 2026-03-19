@@ -57,7 +57,7 @@ This is not an error — it's by design. Write tools (transfers, staking, etc.) 
 
 To unlock write tools, configure one of the three wallet modes:
 
-- Set `AGENT_WALLET_PASSWORD` (Agent Wallet mode, recommended)
+- Set `AGENT_WALLET_PASSWORD` ([Agent Wallet](../../../Agent-Wallet/Intro) mode, recommended)
 - Set `TRON_PRIVATE_KEY` (Private Key mode)
 - Set `TRON_MNEMONIC` (Mnemonic mode)
 
@@ -91,18 +91,9 @@ If the server reports an invalid private key at startup, it's usually a format i
 
 ### "Agent wallet password incorrect" error
 
-`AGENT_WALLET_PASSWORD` must exactly match the master password set during `agent-wallet init`. If you're not sure:
+`AGENT_WALLET_PASSWORD` must exactly match the master password set during wallet initialization. Verify that the wallet directory exists (`ls ~/.agent-wallet/`) and that `AGENT_WALLET_DIR` points to the correct path if you used a custom directory.
 
-1. **Check that the wallet directory exists**:
-   ```bash
-   ls ~/.agent-wallet/  # Default location
-   ```
-   If you used a custom directory, ensure `AGENT_WALLET_DIR` points to the correct path.
-
-2. **If the password is lost**, you'll need to re-initialize. Note: this creates a new wallet — funds in the old wallet must be recovered through other means.
-   ```bash
-   agent-wallet init
-   ```
+If the password is lost, you'll need to re-initialize — see the [Agent-Wallet Quick Start](../../../Agent-Wallet/QuickStart) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
 
 ### TronGrid API Key not working
 

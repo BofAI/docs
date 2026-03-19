@@ -85,10 +85,7 @@ description: SUN MCP Server 的常见问题解答，涵盖连接、认证、DeFi
 
 **解决方案：**
 
-1. **配置 Agent Wallet**
-   ```bash
-   export AGENT_WALLET_PASSWORD="your_secure_password"
-   ```
+1. **配置 [Agent Wallet](../../../Agent-Wallet/Intro)**（推荐）— 设置 `AGENT_WALLET_PASSWORD`
 
 2. **或配置私钥（仅测试网）**
    ```bash
@@ -136,32 +133,9 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 **解决步骤：**
 
-1. **验证密码环境变量**
-   ```bash
-   echo $AGENT_WALLET_PASSWORD
-   # 应输出你的密码
-   ```
-
-2. **检查 Agent Wallet 目录**
-   ```bash
-   # 默认位置
-   ls ~/.agent-wallet/
-   # 应包含 wallet.json 等文件
-   ```
-
-3. **重新初始化 Wallet**
-   ```bash
-   # 删除现有 wallet（备份重要数据！）
-   rm -rf ~/.agent-wallet/
-   
-   # 使用正确的密码重启服务器
-   export AGENT_WALLET_PASSWORD="your_new_password"
-   sun-mcp-server
-   ```
-
-4. **验证密码复杂性**
-   - 使用强密码（最少 8 字符）
-   - 避免特殊字符，使用字母数字组合
+1. **验证密码**：运行 `echo $AGENT_WALLET_PASSWORD` 确认变量已正确设置。
+2. **检查钱包目录**：确认 `~/.agent-wallet/` 存在并包含钱包文件。如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
+3. **密码丢失**：需要重新初始化钱包——详见 [Agent-Wallet 快速开始](../../../Agent-Wallet/QuickStart)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。
 
 
 ### "Conflicting wallet modes"
@@ -297,12 +271,7 @@ sun-mcp-server
    - 检查 Permit2 请求的结构化数据
    - 确认链 ID、代币地址、截止时间正确
 
-3. **重新初始化 Wallet**
-   ```bash
-   rm -rf ~/.agent-wallet/
-   export AGENT_WALLET_PASSWORD="your_password"
-   sun-mcp-server
-   ```
+3. **重新初始化 Wallet** — 参见 [Agent-Wallet 快速开始](../../../Agent-Wallet/QuickStart) 了解重新初始化步骤。
 
 4. **使用备用授权方法**
    ```

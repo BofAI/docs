@@ -29,8 +29,8 @@ During testing, it is recommended to explicitly set `nile` each time to avoid un
 | Tool Name | Description | Key Parameters | Mode |
 | :--- | :--- | :--- | :--- |
 | `get_wallet_address` | Get the address (Base58 & Hex) of the currently configured wallet. | - | Read |
-| `list_wallets` | List all available wallets with IDs and addresses (Agent Wallet mode). | - | Read |
-| `select_wallet` | Switch the active wallet at runtime (Agent Wallet mode). | `walletId` | Write |
+| `list_wallets` | List all available wallets with IDs and addresses ([Agent Wallet](../../../Agent-Wallet/Intro) mode). | - | Read |
+| `select_wallet` | Switch the active wallet at runtime ([Agent Wallet](../../../Agent-Wallet/Intro) mode). | `walletId` | Write |
 | `sign_message` | Sign an arbitrary message using the configured wallet. | `message` | Write |
 | `convert_address` | Convert addresses between Hex (`41...`/`0x...`) and Base58 (`T...`) formats. | `address` | Read |
 

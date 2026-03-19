@@ -67,26 +67,15 @@ The wallet determines which identity the AI assistant uses to perform on-chain o
 
 #### Option 1: Agent Wallet (Recommended)
 
-This is the most secure option. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds.
+This is the most secure option. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
-**Install and initialize Agent Wallet:**
+> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
 
-```bash
-# Install
-npm install -g @bankofai/agent-wallet
-
-# Create encrypted wallet
-agent-wallet start
-```
-Agent Wallet also supports **multi-wallet management** — you can create multiple wallets and switch between them at runtime using the `select_wallet` tool, ideal for scenarios requiring operations across different accounts.
-
-> For detailed installation and usage instructions, see the [agent-wallet documentation](https://github.com/BofAI/agent-wallet/blob/main/doc/getting-started.md).
-
-**Set environment variables:**
+**Set environment variables after initializing Agent Wallet:**
 
 ```bash
 # Add to ~/.zshrc or ~/.bashrc
-export AGENT_WALLET_PASSWORD="<your-master-password>"
+export AGENT_WALLET_PASSWORD='<your-master-password>'
 
 # Optional: specify custom wallet directory (default: ~/.agent-wallet)
 export AGENT_WALLET_DIR="~/.agent-wallet"

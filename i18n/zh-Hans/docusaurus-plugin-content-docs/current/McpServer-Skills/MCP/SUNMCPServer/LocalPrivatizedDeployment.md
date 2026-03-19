@@ -61,26 +61,15 @@ import TabItem from '@theme/TabItem';
 
 #### 方式一：通过 Agent Wallet（推荐）创建钱包
 
-这是最安全的方式。私钥加密存储在本地磁盘，不会以明文形式暴露在环境变量中。即使环境变量被泄露，攻击者仍需要加密的密钥库文件才能访问资金。
+这是最安全的方式。私钥加密存储在本地磁盘，不会以明文形式暴露在环境变量中。即使环境变量被泄露，攻击者仍需要加密的密钥库文件才能访问资金。Agent Wallet 还支持**多钱包管理**和运行时通过 `select_wallet` 工具切换钱包。
 
-**安装并初始化 Agent Wallet：**
+> Agent Wallet 的安装、初始化及详细用法请参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro)。
 
-```bash
-# 安装
-npm install -g @bankofai/agent-wallet
-
-# 创建加密钱包
-agent-wallet start
-```
-Agent Wallet 还支持**多钱包管理**——你可以创建多个钱包，在运行时通过 `select_wallet` 工具随时切换，非常适合需要在不同账户间操作的场景。
-
-> 了解详细的安装和使用说明请参阅 [agent-wallet 文档](https://github.com/BofAI/agent-wallet/blob/main/doc/getting-started.md)。
-
-**设置环境变量：**
+**初始化 Agent Wallet 后设置环境变量：**
 
 ```bash
 # 添加到 ~/.zshrc 或 ~/.bashrc
-export AGENT_WALLET_PASSWORD="<你的主密码>"
+export AGENT_WALLET_PASSWORD='<你的主密码>'
 
 # 可选：指定自定义钱包目录（默认：~/.agent-wallet）
 export AGENT_WALLET_DIR="~/.agent-wallet"

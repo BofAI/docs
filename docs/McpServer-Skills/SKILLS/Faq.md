@@ -186,7 +186,7 @@ The default uses the `v1.4.12` tag version.
 5. Revoke token approvals on all protocols using the old wallet
 6. Review the transaction history of the old wallet to confirm whether any unauthorized operations have occurred
 
-Agent Wallet (encrypted storage) is safer than plaintext private keys — even if environment variables are compromised, attackers still need additional encryption keys to access funds. If you manage significant capital, consider switching to Agent Wallet mode.
+[Agent Wallet](../../Agent-Wallet/Intro) (encrypted storage) is safer than plaintext private keys — even if environment variables are compromised, attackers still need additional encryption keys to access funds. If you manage significant capital, consider switching to Agent Wallet mode.
 
 ### How do I uninstall or update a skill?
 

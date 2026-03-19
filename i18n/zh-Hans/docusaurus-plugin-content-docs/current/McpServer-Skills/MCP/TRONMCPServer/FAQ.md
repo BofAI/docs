@@ -57,7 +57,7 @@
 
 要解锁写入工具，配置以下三种钱包模式之一：
 
-- 设置 `AGENT_WALLET_PASSWORD`（Agent Wallet 模式，推荐）
+- 设置 `AGENT_WALLET_PASSWORD`（[Agent Wallet](../../../Agent-Wallet/Intro) 模式，推荐）
 - 设置 `TRON_PRIVATE_KEY`（私钥模式）
 - 设置 `TRON_MNEMONIC`（助记词模式）
 
@@ -91,18 +91,9 @@
 
 ### "Agent Wallet 密码错误"
 
-`AGENT_WALLET_PASSWORD` 必须与执行 `agent-wallet init` 时设置的主密码完全一致。如果你不确定：
+`AGENT_WALLET_PASSWORD` 必须与钱包初始化时设置的主密码完全一致。请确认钱包目录存在（`ls ~/.agent-wallet/`），如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
 
-1. **检查钱包目录是否存在**：
-   ```bash
-   ls ~/.agent-wallet/  # 默认位置
-   ```
-   如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
-
-2. **密码丢失**时需要重新初始化。注意：这会创建一个新的钱包，旧钱包的资金需要通过其他方式恢复。
-   ```bash
-   agent-wallet init
-   ```
+如果密码丢失，需要重新初始化钱包——详见 [Agent-Wallet 快速开始](../../../Agent-Wallet/QuickStart)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。
 
 ### TronGrid API Key 不生效
 

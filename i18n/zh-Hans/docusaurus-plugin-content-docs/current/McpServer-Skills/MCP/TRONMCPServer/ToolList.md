@@ -30,8 +30,8 @@ TRON MCP Server 提供 **95 个工具**、**6 个提示词模板**和 **1 个资
 | 工具名称 | 描述 | 关键参数 | 模式 |
 | :--- | :--- | :--- | :--- |
 | `get_wallet_address` | 获取当前已配置钱包的地址（Base58 和 Hex 格式） | - | 读取 |
-| `list_wallets` | 列出所有可用钱包的 ID 和地址（Agent Wallet 模式） | - | 读取 |
-| `select_wallet` | 在运行时切换活跃钱包（Agent Wallet 模式） | `walletId` | 写入 |
+| `list_wallets` | 列出所有可用钱包的 ID 和地址（[Agent Wallet](../../../Agent-Wallet/Intro) 模式） | - | 读取 |
+| `select_wallet` | 在运行时切换活跃钱包（[Agent Wallet](../../../Agent-Wallet/Intro) 模式） | `walletId` | 写入 |
 | `sign_message` | 使用已配置的钱包对任意消息进行签名 | `message` | 写入 |
 | `convert_address` | 在 Hex（`41...`/`0x...`）和 Base58（`T...`）格式之间转换地址 | `address` | 读取 |
 
