@@ -13,10 +13,9 @@ All examples are available in both TypeScript and Python — use the tabs to swi
 
 Before running any example below, make sure you have:
 
-1. Python ≥ 3.11 (the SDK uses `StrEnum` and other 3.11+ features); no version constraint for TypeScript
-2. Installed the Agent-wallet SDK (see [SDK Quick Start](./SDKQuickStart.md))
-3. Initialized a local wallet via the CLI, or configured static mode environment variables
-4. Set `AGENT_WALLET_PASSWORD` (local mode) or `AGENT_WALLET_PRIVATE_KEY` (static mode)
+1. Installed the Agent-wallet SDK (see [SDK Quick Start](./SDKQuickStart.md))
+2. Initialized a local wallet via the CLI, or configured static mode environment variables
+3. Set `AGENT_WALLET_PASSWORD` (local mode) or `AGENT_WALLET_PRIVATE_KEY` (static mode)
 
 ---
 
@@ -67,14 +66,7 @@ sudo apt-get install -y libffi-dev libbz2-dev libssl-dev libreadline-dev libsqli
 </TabItem>
 </Tabs>
 
-:::tip `visible: true` and address format
-The code passes `visible: true` to TronGrid. This parameter affects the address format the API expects:
 
-- **`visible: true`**: the API expects addresses in **Base58 format** (the standard human-readable TRON address, e.g. `TNmo...`)
-- **`visible: false` (or omitted)**: the API expects addresses in **hex format** (e.g. `41b9f...`)
-
-The example uses Base58 addresses, consistent with `visible: true`.
-:::
 
 ### Full Code
 
@@ -212,6 +204,15 @@ asyncio.run(
 :::caution Notes
 - Use the Nile testnet for testing. Get test tokens from the [Nile Faucet](https://nileex.io/join/getJoinPage).
 - For mainnet, change `TRONGRID_API` to `https://api.trongrid.io` and `network` to `tron:mainnet`.
+:::
+
+:::tip `visible: true` and address format
+The code passes `visible: true` to TronGrid. This parameter affects the address format the API expects:
+
+- **`visible: true`**: the API expects addresses in **Base58 format** (the standard human-readable TRON address, e.g. `TNmo...`)
+- **`visible: false` (or omitted)**: the API expects addresses in **hex format** (e.g. `41b9f...`)
+
+The example uses Base58 addresses, consistent with `visible: true`.
 :::
 
 ---
