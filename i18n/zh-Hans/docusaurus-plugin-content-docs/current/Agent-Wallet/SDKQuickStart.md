@@ -59,13 +59,13 @@ npm install @bankofai/agent-wallet
 
 **确认 Python 版本**
 
-需要 Python ≥ 3.10，先检查当前版本：
+需要 Python ≥ 3.11（SDK 使用了 `StrEnum` 等 3.11+ 特性），先检查当前版本：
 
 ```bash
 python3 --version
 ```
 
-如果输出 `3.10.x` 或更高，可以直接安装。如果版本不足或提示命令不存在，按下方说明安装或升级。
+如果输出 `3.11.x` 或更高，可以直接安装。如果版本不足或提示命令不存在，按下方说明安装或升级。
 
 :::tip 安装 / 升级 Python
 
@@ -88,14 +88,24 @@ echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-确认 pyenv 可用后，安装 Python：
+确认 pyenv 可用后，先安装构建 Python 所需的系统依赖。**跳过这一步会导致 `_ctypes`、`ssl` 等模块缺失，进而引发标准库模块（如 `asyncio`）无法导入。**
 
 ```bash
-pyenv install 3.10
-pyenv global 3.10
+# CentOS / RHEL / Amazon Linux / Fedora
+sudo yum install -y libffi-devel bzip2-devel openssl-devel readline-devel sqlite-devel xz-devel
+
+# Ubuntu / Debian
+sudo apt-get install -y libffi-dev libbz2-dev libssl-dev libreadline-dev libsqlite3-dev liblzma-dev
 ```
 
-也可以直接从 [python.org](https://www.python.org/downloads/) 下载安装包，选择 **3.10 或更高版本**。
+安装好系统依赖后，再构建 Python：
+
+```bash
+pyenv install 3.11
+pyenv global 3.11
+```
+
+也可以直接从 [python.org](https://www.python.org/downloads/) 下载安装包，选择 **3.11 或更高版本**。
 
 :::
 
@@ -106,13 +116,19 @@ Python 包目前未发布到 PyPI，需从源码安装：
 ```bash
 git clone https://github.com/BofAI/agent-wallet.git
 cd agent-wallet/packages/python
-pip install -e ".[all]"
+pip3.11 install -e ".[all]"
+```
+
+SDK 依赖 `tronpy` 和 `eth_account` 处理 TRON 和 EVM 签名，若安装后遇到这两个包的导入错误，手动补装：
+
+```bash
+pip3.11 install tronpy eth_account
 ```
 
 验证安装：
 
 ```bash
-python -c "import agent_wallet; print('安装成功')"
+python3.11 -c "import agent_wallet; print('安装成功')"
 ```
 
 </TabItem>
@@ -129,10 +145,23 @@ python -c "import agent_wallet; print('安装成功')"
 私钥加密存储在本地，适合需要管理多个钱包或长期持久化密钥的场景。使用前需要先通过 CLI 完成初始化（`agent-wallet start`），然后设置主密码：
 
 ```bash
-export AGENT_WALLET_PASSWORD="Abc12345!"
+export AGENT_WALLET_PASSWORD='Abc12345!'
 # 可选：自定义目录，默认 ~/.agent-wallet
 export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
+
+:::caution 密码包含特殊字符时必须用单引号
+如果主密码包含 `$`、`!` 等 shell 特殊字符（例如自动生成的强密码），**必须用单引号**包裹，否则 shell 会对这些字符进行展开，导致密码被篡改：
+
+```bash
+# ✅ 正确：单引号，密码原样传入
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+
+# ❌ 错误：双引号，$ 会被 shell 展开
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+```
+:::
+
 
 ### 静态模式
 

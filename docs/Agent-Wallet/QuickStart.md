@@ -210,8 +210,21 @@ Once you've completed the quick start, refer to this section as needed.
 Typing the password on every signing command gets tedious. Set an environment variable to skip the interactive prompt:
 
 ```bash
-export AGENT_WALLET_PASSWORD="Abc12345!"
+export AGENT_WALLET_PASSWORD='Abc12345!'
 ```
+
+:::caution Always use single quotes when the password contains special characters
+Master passwords — especially auto-generated ones — may contain `$`, `!`, or other shell-special characters. **Always use single quotes** to prevent the shell from expanding them:
+
+```bash
+# ✅ Correct
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+
+# ❌ Wrong: $ gets expanded by the shell
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+```
+:::
+
 
 After this, all signing commands run without prompting:
 

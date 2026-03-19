@@ -59,13 +59,13 @@ npm install @bankofai/agent-wallet
 
 **Check Your Python Version**
 
-Requires Python ≥ 3.10. Check your current version:
+Requires Python ≥ 3.11 (the SDK uses `StrEnum` and other 3.11+ features). Check your current version:
 
 ```bash
 python3 --version
 ```
 
-If the output is `3.10.x` or higher, you can proceed directly to installation. Otherwise, follow the instructions below.
+If the output is `3.11.x` or higher, you can proceed directly to installation. Otherwise, follow the instructions below.
 
 :::tip Install / Upgrade Python
 
@@ -88,14 +88,24 @@ echo 'eval "$(pyenv init -)"' >> ~/.bashrc
 source ~/.bashrc
 ```
 
-Once pyenv is available, install Python:
+Once pyenv is available, install the required system dependencies first. **Skipping this step will cause modules like `_ctypes` and `ssl` to be missing, which can break standard library imports including `asyncio`.**
 
 ```bash
-pyenv install 3.10
-pyenv global 3.10
+# CentOS / RHEL / Amazon Linux / Fedora
+sudo yum install -y libffi-devel bzip2-devel openssl-devel readline-devel sqlite-devel xz-devel
+
+# Ubuntu / Debian
+sudo apt-get install -y libffi-dev libbz2-dev libssl-dev libreadline-dev libsqlite3-dev liblzma-dev
 ```
 
-You can also download an installer from [python.org](https://www.python.org/downloads/), selecting **3.10 or higher**.
+Then build Python:
+
+```bash
+pyenv install 3.11
+pyenv global 3.11
+```
+
+You can also download an installer from [python.org](https://www.python.org/downloads/), selecting **3.11 or higher**.
 
 :::
 
@@ -106,13 +116,19 @@ The Python package is not yet published to PyPI and must be installed from sourc
 ```bash
 git clone https://github.com/BofAI/agent-wallet.git
 cd agent-wallet/packages/python
-pip install -e ".[all]"
+pip3.11 install -e ".[all]"
+```
+
+The SDK depends on `tronpy` and `eth_account` for TRON and EVM signing. If you encounter import errors for either package after installation, install them manually:
+
+```bash
+pip3.11 install tronpy eth_account
 ```
 
 Verify the installation:
 
 ```bash
-python -c "import agent_wallet; print('Installation successful')"
+python3.11 -c "import agent_wallet; print('Installation successful')"
 ```
 
 </TabItem>
@@ -129,10 +145,23 @@ Before calling the SDK, you need to tell Agent-wallet where to find your keys vi
 Private keys are stored encrypted on disk. Best for managing multiple wallets or persisting keys long-term. You must initialize first via the CLI (`agent-wallet start`), then set the master password:
 
 ```bash
-export AGENT_WALLET_PASSWORD="Abc12345!"
+export AGENT_WALLET_PASSWORD='Abc12345!'
 # Optional: custom directory, defaults to ~/.agent-wallet
 export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
+
+:::caution Always use single quotes when the password contains special characters
+Master passwords — especially auto-generated strong ones — may contain `$`, `!`, or other shell-special characters. **Always use single quotes** to prevent the shell from expanding them, which would silently corrupt the password:
+
+```bash
+# ✅ Correct: single quotes, password passed as-is
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+
+# ❌ Wrong: double quotes, $ gets expanded by the shell
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+```
+:::
+
 
 ### Static Mode
 

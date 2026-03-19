@@ -13,9 +13,10 @@ All examples are available in both TypeScript and Python — use the tabs to swi
 
 Before running any example below, make sure you have:
 
-1. Installed the Agent-wallet SDK (see [SDK Quick Start](./SDKQuickStart.md))
-2. Initialized a local wallet via the CLI, or configured static mode environment variables
-3. Set `AGENT_WALLET_PASSWORD` (local mode) or `AGENT_WALLET_PRIVATE_KEY` (static mode)
+1. Python ≥ 3.11 (the SDK uses `StrEnum` and other 3.11+ features); no version constraint for TypeScript
+2. Installed the Agent-wallet SDK (see [SDK Quick Start](./SDKQuickStart.md))
+3. Initialized a local wallet via the CLI, or configured static mode environment variables
+4. Set `AGENT_WALLET_PASSWORD` (local mode) or `AGENT_WALLET_PRIVATE_KEY` (static mode)
 
 ---
 
@@ -45,14 +46,35 @@ npm install @bankofai/agent-wallet axios
 </TabItem>
 <TabItem value="python" label="Python">
 
+This example uses `aiohttp` (a third-party HTTP library) and `asyncio` (Python standard library — no install needed):
+
 ```bash
 pip install aiohttp
 ```
 
-(The Agent-wallet Python SDK is already included — no separate install needed.)
+:::caution If you see missing standard library module errors
+If importing `asyncio` or other standard library modules fails, it's usually because system dependencies were missing when pyenv built Python from source. Install the following packages and then re-run `pyenv install 3.11`:
+
+```bash
+# CentOS / RHEL / Amazon Linux
+sudo yum install -y libffi-devel bzip2-devel openssl-devel readline-devel sqlite-devel xz-devel
+
+# Ubuntu / Debian
+sudo apt-get install -y libffi-dev libbz2-dev libssl-dev libreadline-dev libsqlite3-dev liblzma-dev
+```
+:::
 
 </TabItem>
 </Tabs>
+
+:::tip `visible: true` and address format
+The code passes `visible: true` to TronGrid. This parameter affects the address format the API expects:
+
+- **`visible: true`**: the API expects addresses in **Base58 format** (the standard human-readable TRON address, e.g. `TNmo...`)
+- **`visible: false` (or omitted)**: the API expects addresses in **hex format** (e.g. `41b9f...`)
+
+The example uses Base58 addresses, consistent with `visible: true`.
+:::
 
 ### Full Code
 
@@ -81,6 +103,7 @@ async function transferTRX(
       owner_address: fromAddress,
       to_address: toAddress,
       amount: amountSun,
+      visible: true,
     }
   );
 
@@ -145,6 +168,7 @@ async def transfer_trx(
                 "owner_address": from_address,
                 "to_address": to_address,
                 "amount": amount_sun,
+                "visible": True,
             },
         ) as resp:
             unsigned_tx = await resp.json()

@@ -212,8 +212,21 @@ Signature: 22008ffd...0e1c
 每次签名都输入密码很麻烦。通过环境变量可以跳过交互式提示：
 
 ```bash
-export AGENT_WALLET_PASSWORD="Abc12345!"
+export AGENT_WALLET_PASSWORD='Abc12345!'
 ```
+
+:::caution 密码包含特殊字符时必须用单引号
+主密码（尤其是自动生成的强密码）可能包含 `$`、`!` 等 shell 特殊字符，**必须用单引号**包裹，否则 shell 会展开这些字符导致密码错误：
+
+```bash
+# ✅ 正确
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+
+# ❌ 错误：$ 会被 shell 展开
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+```
+:::
+
 
 设置后，所有签名命令不再提示输入密码，直接输出结果：
 
