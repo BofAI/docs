@@ -3,13 +3,15 @@ import TabItem from '@theme/TabItem';
 
 # SDK Quick Start
 
-This page is for developers who want to call Agent-wallet's signing interface directly from Python or TypeScript code.
+You've tried the CLI and can sign from the command line. Now you want signing inside your own code — an MCP Server, an automation script, an AI agent workflow.
 
-Unlike the CLI, the SDK is designed for embedding signing capabilities into your own program — such as providing signing support for an AI agent inside an MCP Server, or authorizing on-chain operations from an automation script. Your code is responsible for building and broadcasting transactions; Agent-wallet handles local signing and returns the result.
+This page shows you how. By the end, you'll be able to initialize a wallet provider, retrieve the active wallet, and sign messages, transactions, and EIP-712 typed data — all in a few lines of TypeScript or Python.
 
-By the end of this guide, you'll be able to initialize a wallet provider in code, retrieve the active wallet, and sign messages, transactions, and EIP-712 typed data. If you haven't initialized a local wallet yet, it's recommended to complete Steps 1 through 3 of the [CLI Quick Start](./QuickStart.md) first.
+:::tip New here?
+If you haven't created a wallet yet, start with the [CLI Quick Start](./QuickStart.md) first (Steps 1–3 take under a minute). The SDK reads from the same wallet the CLI creates — no need to set up anything twice.
+:::
 
-Both installation instructions and code examples are provided for TypeScript and Python — use the tabs to switch between them.
+Both installation instructions and code examples are provided for TypeScript and Python — use the tabs to switch.
 
 ---
 
@@ -111,24 +113,21 @@ You can also download an installer from [python.org](https://www.python.org/down
 
 **Install the SDK**
 
-The Python package is not yet published to PyPI and must be installed from source:
-
 ```bash
-git clone https://github.com/BofAI/agent-wallet.git
-cd agent-wallet/packages/python
-pip3.11 install -e ".[all]"
+pip install 'bankofai-agent-wallet[evm,tron]'
 ```
 
-The SDK depends on `tronpy` and `eth_account` for TRON and EVM signing. If you encounter import errors for either package after installation, install them manually:
+If you only need one chain, install the corresponding extra:
 
 ```bash
-pip3.11 install tronpy eth_account
+pip install 'bankofai-agent-wallet[tron]'   # TRON only
+pip install 'bankofai-agent-wallet[evm]'    # EVM only
 ```
 
 Verify the installation:
 
 ```bash
-python3.11 -c "import agent_wallet; print('Installation successful')"
+python3 -c "import agent_wallet; print('Installation successful')"
 ```
 
 </TabItem>
@@ -138,9 +137,9 @@ python3.11 -c "import agent_wallet; print('Installation successful')"
 
 ## Step 2: Configure a Mode
 
-Before calling the SDK, you need to tell Agent-wallet where to find your keys via environment variables. The SDK provides two modes — local mode is best for long-term management of multiple wallets, while static mode is best for directly injecting a private key. `resolveWalletProvider()` automatically detects the environment variables that are set and selects the corresponding mode, with no additional logic needed in your code.
+Before calling the SDK, you need to tell Agent-wallet where to find your keys via environment variables. The SDK provides two modes — **local mode** (encrypted keys on disk, `local_secure`) is best for long-term management of multiple wallets, while **static mode** (env-based) is best for directly injecting a private key. `resolveWalletProvider()` automatically detects the environment variables that are set and selects the corresponding mode, with no additional logic needed in your code.
 
-### Local Mode
+### Local Mode (`local_secure`)
 
 Private keys are stored encrypted on disk. Best for managing multiple wallets or persisting keys long-term. You must initialize first via the CLI (`agent-wallet start`), then set the master password:
 
@@ -163,7 +162,7 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 :::
 
 
-### Static Mode
+### Static Mode (env-based)
 
 Provide a private key or mnemonic directly via environment variable — no local key file required. Best for CI/CD or one-off scripts. The `network` parameter must be specified when using static mode:
 
@@ -391,20 +390,21 @@ print("Signature:", sig)
 
 ### Manage Multiple Wallets
 
-If you need to manage multiple wallets in code, use `LocalWalletProvider` directly:
+If you need to manage multiple wallets in code, use `resolveWalletProvider()` in local mode. The provider reads the wallet configuration and lets you switch the active wallet:
 
 <Tabs>
 <TabItem value="ts" label="TypeScript">
 
 ```typescript
-import { LocalWalletProvider } from "@bankofai/agent-wallet";
+import { resolveWalletProvider } from "@bankofai/agent-wallet";
 
-const provider = new LocalWalletProvider("~/.agent-wallet", "Abc12345!");
+// Local mode: AGENT_WALLET_PASSWORD must be set
+const provider = resolveWalletProvider({ network: "tron:nile" });
 
 // List all wallets
 const wallets = await provider.listWallets();
 for (const w of wallets) {
-  console.log(`${w.id} (${w.type}): ${w.address}`);
+  console.log(`${w.id} (${w.type})`);
 }
 
 // Switch the active wallet
@@ -425,7 +425,7 @@ os.environ["AGENT_WALLET_PASSWORD"] = "Abc12345!"
 
 from agent_wallet import resolve_wallet_provider
 
-provider = resolve_wallet_provider()
+provider = resolve_wallet_provider(network="tron:nile")
 
 async def main():
     wallet = await provider.get_active_wallet()

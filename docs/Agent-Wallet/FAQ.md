@@ -1,164 +1,120 @@
 # FAQ
 
----
-
-## About Agent-wallet
-
-### What is Agent-wallet and what does it do?
-
-Agent-wallet is a **signing-only SDK**. It does two things: stores private keys encrypted locally, and signs messages, transactions, and EIP-712 typed data locally.
-
-It does NOT: connect to RPCs, query on-chain data, build transactions, broadcast transactions, or initiate transfers or payments autonomously.
-
-This separation is intentional — signing is a highly sensitive operation that should be as simple, auditable, and dependency-free as possible. The more focused the SDK, the smaller the attack surface.
-
-### How is it different from a regular blockchain wallet?
-
-Regular wallets (like MetaMask or TronLink) are designed for human users — they typically include balance displays, transfer UIs, DApp connections, and require manual confirmation for every operation.
-
-Agent-wallet is designed for programs. It exposes only a signing interface, with no UI, no network functionality, and no need for human interaction. The caller (an MCP Server, workflow code, etc.) is responsible for building transactions; Agent-wallet only signs and returns the result for the caller to broadcast.
-
-### What about transfers and payments?
-
-Agent-wallet does not implement transfers itself. A complete transfer flow requires three steps:
-
-1. **Build the transaction** — The caller constructs an unsigned transaction object via TronGrid, Infura, or another RPC
-2. **Sign** — The caller passes the unsigned transaction to Agent-wallet, which signs it locally and returns the result
-3. **Broadcast** — The caller submits the signed transaction to the RPC for broadcasting
-
-Agent-wallet only participates in step 2.
-
-### What's the difference between the CLI and the SDK? Which should I use?
-
-Both provide the same underlying capabilities, but for different scenarios:
-
-- **CLI** is for manual operation — initializing wallets, managing keys, testing signatures by hand. Day-to-day key management is done through the CLI.
-- **SDK** is for programmatic integration — calling the signing interface from your own code, such as inside an MCP Server or an automation script.
-
-Most users will use both: the CLI to initialize and manage wallets, and the SDK to call signing in code.
+Let's answer the three things you're probably most worried about, then cover the day-to-day details.
 
 ---
 
-## Local Mode vs. Static Mode
+## 💰 Will AI drain my entire wallet?
 
-### When should I use local mode vs. static mode?
+This is the most common question, and the answer is: **even if your AI agent gets compromised, your core assets stay safe.**
 
-**Local mode** (set `AGENT_WALLET_PASSWORD`) is suitable when:
-- You need to manage multiple wallets
-- You want keys encrypted and persisted locally long-term
-- You need to interact with wallets via the CLI
+We strongly recommend creating a dedicated wallet just for your AI agent, topped up with only the small amount it actually needs (e.g., enough to cover gas fees). Your main wallet and large holdings never get touched. Worst case, the loss is limited to whatever was in that small agent wallet.
 
-**Static mode** (set `AGENT_WALLET_PRIVATE_KEY` or `AGENT_WALLET_MNEMONIC`) is suitable when:
-- You only need a single wallet
-- You're in a CI/CD or one-off script scenario
-- Keys are already managed by an external system and you don't want an additional local storage layer
+```bash
+# Create a dedicated small wallet for your AI agent
+agent-wallet add
+```
 
-### Can I use both modes at the same time?
+And your wallet file is protected by strong encryption. Even if someone gets hold of the file, without the master password it's just garbage — brute-forcing it is economically worthless.
 
-No, you can't run both simultaneously — but you can switch at any time. `AGENT_WALLET_PASSWORD` takes precedence over the private key / mnemonic variables. `AGENT_WALLET_PRIVATE_KEY` and `AGENT_WALLET_MNEMONIC` cannot be set at the same time.
+---
 
-### How do I fill in the `network` parameter?
+## 🔌 Can my AI still sign if I go offline?
 
-The `network` parameter determines which chain adapter to use:
+Yes. **All Agent-wallet signing operations complete 100% on your local machine.**
+
+There's no network dependency by design — no RPC calls, no cloud services, no remote API requests. Your private key never touches the network.
+
+Going offline only affects transaction building and broadcasting (that's the MCP Server's job). Signing itself is fully offline.
+
+---
+
+## 🔑 What if I forget my password?
+
+**It's gone.**
+
+The master password is the only credential for decrypting all private keys. We don't store it — not on disk, not in memory (it's wiped immediately after signing). There's no "forgot password" flow, no backdoor.
+
+If you forget your password:
+- Have another backup of your private key or mnemonic? Run `agent-wallet reset`, reinitialize, and reimport.
+- No backup at all? Access to that wallet is permanently lost.
+
+**So do this right now**: open your password manager and store the master password. Seriously.
+
+---
+
+## Everyday Use
+
+### What exactly is Agent-wallet?
+
+A purely local encrypted signing tool. It does two things: 1) encrypts and stores your private keys; 2) signs locally. No internet, no cloud. It has no standalone UI of its own — instead, it operates as an invisible security hub that integrates seamlessly into AI frontends like OpenClaw.
+
+### CLI vs SDK — which do I need?
+
+- **CLI** — command-line tool for creating wallets, managing keys, and manually testing signatures
+- **SDK** — TypeScript / Python library for calling signing directly from your own code
+
+Most users don't need the SDK. If you're using OpenClaw and MCP Server, creating a wallet with the CLI and setting the environment variable is all you need. The SDK is for developers building their own agents.
+
+---
+
+## Wallet Types
+
+### What's the difference between `local_secure` and `raw_secret`?
+
+| | `local_secure` | `raw_secret` |
+| :--- | :---: | :---: |
+| **Key encryption** | ✅ Strong encryption | ❌ Plaintext |
+| **If an agent reads the file** | ✅ Key is inaccessible | ❌ Stolen instantly |
+| **Use case** | ✅ All scenarios | ⚠️ Fully isolated dev environments only |
+
+**Always use `local_secure`** unless you're 100% certain no other agent is running on that machine.
+
+### What values does the `network` parameter accept?
 
 | Value | Description |
 | :--- | :--- |
+| `tron:mainnet` | TRON Mainnet |
+| `tron:nile` | TRON Nile Testnet |
+| `tron:shasta` | TRON Shasta Testnet |
 | `eip155:1` | Ethereum Mainnet |
 | `eip155:56` | BSC Mainnet |
 | `eip155:137` | Polygon Mainnet |
 | `eip155:8453` | Base Mainnet |
 | `eip155:42161` | Arbitrum Mainnet |
-| `tron:mainnet` | TRON Mainnet |
-| `tron:nile` | TRON Nile Testnet |
-| `tron:shasta` | TRON Shasta Testnet |
-
-Any value with the `eip155:` prefix routes to the EVM adapter; `tron:` routes to the TRON adapter. The chain ID itself doesn't affect signing logic — it only determines which adapter handles the request.
 
 ---
 
 ## Security
 
-### How are private keys stored?
+### Does the private key ever leave my machine?
 
-In local mode, private keys are stored encrypted in **Keystore V3** format, using scrypt (N=262144, r=8, p=1) + AES-128-CTR + keccak256 MAC. This is the encryption standard widely used across the Ethereum ecosystem. The computational cost of scrypt is extremely high, making brute-force attacks effectively infeasible.
+Never. Agent-wallet makes zero network requests. Zero RPC calls, zero cloud services. Your private key never leaves your machine.
 
-The master password is never stored. `master.json` holds only an encrypted sentinel value used to verify whether a password is correct — not the password itself.
+### How should I store the master password securely?
 
-### Will my keys ever be sent over the network?
-
-Never. All signing operations are pure local computation. Agent-wallet makes no network calls. Your private keys never leave your machine.
-
-### How should I protect my master password?
-
-- Pass it via an environment variable (`AGENT_WALLET_PASSWORD`) rather than writing it in code
-- Don't commit `.env` files containing passwords to Git — add them to `.gitignore`
-- Use a password manager (such as 1Password or Bitwarden) to store your master password
-
-### What if I forget my master password?
-
-The master password cannot be recovered. Agent-wallet does not store it and provides no recovery mechanism.
-
-If you forget your master password:
-- If you have another backup of your private key (such as a mnemonic), run `agent-wallet reset` to wipe local data, then re-initialize and re-import your key
-- If you have no other backup, the encrypted key files cannot be decrypted and access to those wallets is permanently lost
-
-This is why we strongly recommend **backing up your private key or mnemonic separately** when creating a wallet — don't rely solely on Agent-wallet's local storage.
-
-### Are keys used by AI agents safe?
-
-That depends on how you configure them. Recommended practices:
-
-- Create a dedicated wallet for the agent — don't use your personal primary wallet
-- Fund that wallet with only the small amount the agent needs to operate
-- Pass keys or passwords via environment variables — never hardcode them
-
-This way, even if the agent behaves unexpectedly, losses are limited to the pre-funded amount.
+- ✅ Use a password manager (1Password, Bitwarden)
+- ✅ Pass it via the `AGENT_WALLET_PASSWORD` environment variable
+- ❌ Don't hardcode it in source code
+- ❌ Don't commit a `.env` containing the password to git
 
 ---
 
-## Cross-Language Compatibility
+## Cross-language
 
-### Are key files interchangeable between Python and TypeScript?
+### Are key files compatible between Python and TypeScript?
 
-Yes. Both implementations use the exact same Keystore V3 format. A key file created by Python can be read directly by TypeScript and vice versa. This means you can initialize a wallet with the CLI (TypeScript) and use the same keys directly in Python code.
+Yes. Both implementations use exactly the same encryption format. A wallet created with the CLI works directly with the Python SDK, and vice versa.
 
-### Do both language versions produce the same signatures?
+### Do both languages produce the same signature?
 
-Yes. The same private key signing the same data produces identical results in both Python and TypeScript. Address derivation rules and EIP-712 encoding logic are also identical.
-
-### What are the API differences between the two language versions?
-
-The interface design is a 1:1 correspondence. The main difference is naming convention: TypeScript uses camelCase (`signMessage`, `getActiveWallet`) while Python uses snake_case (`sign_message`, `get_active_wallet`). Behavior is otherwise identical.
+Identical. Same private key + same data = same signature.
 
 ---
 
-## Relationship with Other Components
+## What's Next
 
-### What is the relationship between Agent-wallet and MCP Server?
-
-MCP Servers (such as TRON MCP Server and BSC MCP Server) provide AI agents with on-chain operation tools — querying balances, building transactions, etc. When an MCP Server needs a signature, it calls Agent-wallet to sign, then handles broadcasting itself.
-
-Agent-wallet is the signing backend for MCP Servers. MCP Servers do not directly handle private keys.
-
-### What is the relationship between Agent-wallet and the x402 protocol?
-
-x402 is an HTTP payment protocol. When an agent needs to complete an x402 payment, it must sign the PaymentPermit typed data (EIP-712 format). That signature is provided by Agent-wallet.
-
-The x402 SDK handles building payment requests and managing the protocol flow; Agent-wallet handles signing. Their responsibilities are clearly separated — Agent-wallet has no knowledge of or concern for x402 business logic.
-
----
-
-## Supported Chains
-
-| Chain Type | Network Identifier | Specific Networks |
-| :--- | :--- | :--- |
-| EVM | `eip155:*` | Ethereum, BSC, Polygon, Base, Arbitrum, and any EVM-compatible chain |
-| TRON | `tron:*` | TRON Mainnet, Nile Testnet, Shasta Testnet |
-
----
-
-## Next Steps
-
-- Initialize a wallet and start signing → [CLI Quick Start](./QuickStart.md)
-- Integrate signing in your code → [SDK Quick Start](./SDKQuickStart.md)
-- Understand the overall design → [Introduction](./Intro.md)
+- Set up your full environment → [CLI Quick Start](./QuickStart.md)
+- Sign from code → [SDK Quick Start](./SDKQuickStart.md)
+- See real transfer examples → [Full Examples](./FullExample.md)
+- Learn about OpenClaw Extension → [OpenClaw Introduction](../Openclaw-extension/Intro.md)

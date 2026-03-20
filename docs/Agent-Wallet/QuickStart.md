@@ -1,188 +1,218 @@
 # CLI Quick Start
 
-This guide walks you through installing Agent-wallet, initializing a wallet, and signing your first message or transaction from the command line. After completing these four steps, you'll have a locally encrypted wallet and be ready to sign messages and transactions via CLI.
+Four steps, from zero to your first signature. The whole thing takes under a minute — just copy and paste.
 
-The second half of this page is a full command reference — come back to it whenever you need it.
-
-If you're a developer looking to call the signing interface directly from Python or TypeScript code, see [SDK Quick Start](./SDKQuickStart.md).
+:::tip Already a developer?
+If you want to call signing directly from TypeScript or Python code, skip to [SDK Quick Start](./SDKQuickStart.md).
+:::
 
 ---
 
-## Step 1: Install
+## 🧰 Step 1: Set Up Your Environment
 
-### Check Your Node.js Version
-
-Agent-wallet CLI requires Node.js ≥ 18. First check your current version:
+Agent-wallet CLI requires Node.js ≥ 18. Check what you have:
 
 ```bash
 node -v
 ```
 
-If the output is `v18.0.0` or higher, you can jump straight to installation. Otherwise, follow the instructions below.
+Output is `v18.x.x` or higher? Jump to Step 2. Nothing installed or version too old? Follow the steps below:
 
-:::tip Install / Upgrade Node.js
+:::tip Install / upgrade Node.js
 
-We recommend using [nvm](https://github.com/nvm-sh/nvm) to manage Node.js versions:
+We recommend [nvm](https://github.com/nvm-sh/nvm) — one command handles everything:
 
+**1 — Install nvm** (skip if already installed):
 ```bash
-# Install nvm (skip if already installed)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
 
-# Reload shell config
-source ~/.bashrc   # or source ~/.zshrc
+**2 — Reload your shell config:**
+```bash
+source ~/.bashrc   # zsh users: source ~/.zshrc
+```
 
-# Install Node.js 18 LTS
+**3 — Install Node.js 18:**
+```bash
 nvm install 18
+```
 
-# Switch to Node.js 18
+**4 — Switch to Node.js 18:**
+```bash
 nvm use 18
 ```
 
-You can also download the **LTS** installer directly from [nodejs.org](https://nodejs.org).
-
+Or download the LTS installer directly from [nodejs.org](https://nodejs.org).
 :::
 
-### Install Agent-wallet CLI
+---
+
+## 📦 Step 2: Install Agent-wallet
+
+One command:
 
 ```bash
 npm install -g @bankofai/agent-wallet
 ```
 
-Verify the installation:
+Python users can also install via pip:
+```bash
+pip install bankofai-agent-wallet
+```
 
+Verify the install worked:
 ```bash
 agent-wallet --help
 ```
 
+If you see the help output, you're good to go.
+
 ---
 
-## Step 2: Initialize a Wallet
+## 🔐 Step 3: Create Your Personal Encrypted Safe
 
-The `start` command handles initialization and wallet creation in one step. There are three options:
-
-### Option A: Fully Automatic (Recommended for Beginners)
-
+Run:
 ```bash
 agent-wallet start
 ```
 
-The system auto-generates a strong password and creates one TRON wallet and one EVM wallet:
+This initializes your **Agent-wallet encrypted safe**. The process is interactive — just follow the prompts.
+
+If you don't specify a password manually (the `-p` flag), the system auto-generates a strong one and shows it once:
 
 ```
-🔐 Wallet initialized!
+? Quick start type: local_secure  — Encrypted key stored locally (recommended)
+Wallet ID (e.g. my_wallet_1) (default):
 
-🪙 Wallets:
-┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
-│ Wallet ID            │ Type            │ Address                                      │
-├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│ default_tron         │ tron_local      │ TB37...                                      │
-│ default_evm          │ evm_local       │ 0xd679B...                                   │
-└──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
+Wallet initialized!
+? Import source: generate  — Generate a new random private key
 
-⭐ Active wallet: default_tron
+Wallets:
+┌───────────┬──────────────┐
+│ Wallet ID │ Type         │
+├───────────┼──────────────┤
+│ default   │ local_secure │
+└───────────┴──────────────┘
 
-🔑 Your master password: E&LCi*KL1Sp4mg4!
-   ⚠️  Save this password! You'll need it for signing and other operations.
+Your master password: WiJxcI#t6@73K#OE
+   Save this password! You'll need it for signing and other operations.
+
+Active wallet: default
 ```
 
-:::caution Security Tips
-- **Keep your master password safe** — It's the only credential that decrypts all your private keys. If lost, it cannot be recovered. Use a password manager.
-- **Never hardcode it in source code** — For non-interactive use, pass it via the `AGENT_WALLET_PASSWORD` environment variable instead.
-- **Don't commit `.env` files** — Add `.env` to `.gitignore` to prevent passwords or keys from leaking into version control.
-- **Use a dedicated wallet for agents** — Don't give an AI agent your personal wallet's private key. Create a separate wallet and fund it with only the amount the agent needs.
+:::caution ⚠️ Master password = the only key to all your assets
+This password is the sole credential for decrypting all your private keys. **Lose it and it's gone forever — no backup, no backdoor, no recovery.**
+
+Do this right now:
+1. Open your password manager (1Password, Bitwarden, etc.)
+2. Create a new entry and paste in the master password
+3. Don't screenshot it, don't put it in a desktop sticky note, don't text it to yourself
 :::
 
-### Option B: Custom Password
-
+**Want to set your own password?**
 ```bash
 agent-wallet start -p Abc12345!
 ```
+Requirements: at least 8 characters, with uppercase, lowercase, numbers, and special characters.
 
-Password requirements: at least 8 characters, including uppercase, lowercase, numbers, and special characters.
-
-### Option C: Import an Existing Private Key
-
-If you already have a private key you'd like to import:
-
+**Already have a private key to import?**
 ```bash
-agent-wallet start -p Abc12345! -i tron
+agent-wallet start -p Abc12345! -k your-private-key-hex
 ```
 
-You'll be prompted to paste the private key (input is hidden):
-
+**Have a mnemonic phrase?**
+```bash
+agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 ```
-🔐 Wallet initialized!
-✔ Paste private key (hex)
-
-🪙 Imported wallet:
-┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
-│ Wallet ID            │ Type            │ Address                                      │
-├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│ default_tron         │ tron_local      │ TNmo...                                      │
-└──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
-
-⭐ Active wallet: default_tron
-```
-
-The `-i` flag accepts `tron`, `evm`, `tron_local`, or `evm_local`.
 
 ---
 
-## Step 3: View Your Wallets
+## ✨ Step 4: Your First Test Signature
 
-List all wallets:
+The exciting moment — run:
 
 ```bash
-agent-wallet list
+agent-wallet sign msg "Hello from my AI agent" -n tron
 ```
 
-```
-Wallets:
-┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
-│ Wallet ID            │ Type            │ Address                                      │
-├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│* default_tron        │ tron_local      │ TB37...                                      │
-│  default_evm         │ evm_local       │ 0xd679B...                                   │
-└──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
-```
+You'll be prompted for your master password, then see output like:
 
-The `*` marks the currently active wallet, which is used by default for all signing operations.
-
----
-
-## Step 4: Sign
-
-### Sign a Message
-
-```bash title="Input"
-agent-wallet sign msg "Hello"
-```
-
-```text title="Output"
+```text
 Master password: ********
 Signature: 4a9c8f...e71b
 ```
 
-### Sign a Transaction
+**When that hash string appears on screen — congratulations, your encrypted safe is live!** 🎉
 
-Pass the transaction as a JSON string (you must build the unsigned transaction via RPC first):
+Your private key is encrypted on disk. That signature just happened entirely on your local machine, with zero data sent over the network.
 
-```bash title="Input"
-agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}'
+---
+
+## 🚀 Quick Start Done! What's Next?
+
+| I want to… | Do this |
+| :--- | :--- |
+| Connect my wallet to AI tools | Set `export AGENT_WALLET_PASSWORD='your-password'`, see [Introduction](./Intro.md) |
+| Sign from my own code | Go to [SDK Quick Start](./SDKQuickStart.md) |
+| See a complete transfer example | Go to [Full Examples](./FullExample.md) |
+| Browse the full command reference | ↓ Keep reading |
+
+---
+
+## Command Reference
+
+Everything you'll need day-to-day after the quick start. Look things up as needed.
+
+### Password-free Signing
+
+Typing your password interactively every time? That's a non-starter for automation. Three ways to skip it:
+
+**Option A — Environment variable** (recommended for CI / agent pipelines):
+```bash
+export AGENT_WALLET_PASSWORD='Abc12345!'
+```
+Once set, all signing commands run silently:
+```bash
+agent-wallet sign msg "Hello" -n tron
+agent-wallet sign tx '{"txID":"..."}' -n tron
 ```
 
-```text title="Output"
-Master password: ********
-Signed tx:
-{
-  "txID": "abc123...",
-  "signature": ["..."]
-}
+:::caution Password contains special characters? Always use single quotes
+```bash
+# ✅ Correct — shell treats it literally
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+
+# ❌ Wrong — $ gets expanded by the shell, password silently breaks
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+```
+:::
+
+**Option B — Inline `-p`** (one-off use):
+```bash
+agent-wallet sign msg "Hello" -n tron -p "Abc12345!"
 ```
 
-### Sign EIP-712 Typed Data
+**Option C — `--save-runtime-secrets`** (saves password to `~/.agent-wallet/runtime_secrets.json` for auto-loading):
+```bash
+agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
+```
 
-```bash title="Input"
+### Signature Types
+
+Every `sign` subcommand requires `--network` / `-n` to specify the chain:
+
+**Sign a message:**
+```bash
+agent-wallet sign msg "Hello" -n tron
+```
+
+**Sign a transaction** (build the unsigned tx via RPC first):
+```bash
+agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
+```
+
+**Sign EIP-712 typed data:**
+```bash
 agent-wallet sign typed-data '{
   "types": {
     "EIP712Domain": [{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],
@@ -191,154 +221,60 @@ agent-wallet sign typed-data '{
   "primaryType": "Transfer",
   "domain": {"name":"MyDApp","chainId":1},
   "message": {"to":"0x7099...","amount":1000000}
-}'
+}' -n eip155:1
 ```
 
-```text title="Output"
-Master password: ********
-Signature: 22008ffd...0e1c
-```
+### Managing Multiple Wallets
 
----
-
-## Command Reference
-
-Once you've completed the quick start, refer to this section as needed.
-
-### Skip the Password Prompt
-
-Typing the password on every signing command gets tedious. Set an environment variable to skip the interactive prompt:
-
+**Add a new wallet:**
 ```bash
-export AGENT_WALLET_PASSWORD='Abc12345!'
-```
-
-:::caution Always use single quotes when the password contains special characters
-Master passwords — especially auto-generated ones — may contain `$`, `!`, or other shell-special characters. **Always use single quotes** to prevent the shell from expanding them:
-
-```bash
-# ✅ Correct
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
-
-# ❌ Wrong: $ gets expanded by the shell
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
-```
-:::
-
-
-After this, all signing commands run without prompting:
-
-```bash
-agent-wallet sign msg "Hello"
-agent-wallet sign tx '{"txID":"..."}'
-```
-
-You can also pass the password inline with `-p`:
-
-```bash
-agent-wallet sign msg "Hello" -p "Abc12345!"
-```
-
-### Manage Multiple Wallets
-
-#### 1. Add a New Wallet
-
-An interactive prompt lets you choose the wallet type (`tron_local` or `evm_local`) and generate or import a key:
-
-```bash title="Input"
 agent-wallet add
 ```
 
-```text title="Output"
-Master password: ********
-Wallet name: my-bsc-wallet
-> Wallet type: evm_local
-> Private key: generate
-Generated new private key.
-  Address: 0x8c714fe3...
-  Saved: id_my-bsc-wallet.json
-Wallet 'my-bsc-wallet' added.
-```
-
-#### 2. Switch the Active Wallet
-
-```bash title="Input"
+**Switch the active wallet:**
+```bash
 agent-wallet use my-bsc-wallet
 ```
 
-```text title="Output"
-Active wallet: my-bsc-wallet (evm_local)
-```
-
-#### 3. Sign with a Specific Wallet
-
-Use `-w` to sign with a specific wallet regardless of the active wallet setting:
-
+**Sign with a specific wallet** (without switching the active one):
 ```bash
-agent-wallet sign msg "Hello" -w my-bsc-wallet -p "Abc12345!"
+agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p "Abc12345!"
 ```
 
-#### 4. Inspect a Wallet
-
-```bash title="Input"
+**Inspect a wallet:**
+```bash
 agent-wallet inspect my-bsc-wallet
 ```
 
-```text title="Output"
-Wallet      my-bsc-wallet
-Type        evm_local
-Address     0x8c714fe3...
-Identity    id_my-bsc-wallet.json ✓
-Credential  —
+**List all wallets:**
+```bash
+agent-wallet list
 ```
 
-#### 5. Remove a Wallet
-
-```bash title="Input"
+**Remove a wallet:**
+```bash
 agent-wallet remove my-bsc-wallet
 ```
 
-```text title="Output"
-Remove wallet 'my-bsc-wallet'? (y/N): y
-  Deleted: id_my-bsc-wallet.json
-Wallet 'my-bsc-wallet' removed.
-```
+### Change Master Password
 
-### Other Operations
+All key files are re-encrypted with the new password:
 
-#### 1. Change Master Password
-
-The master password is the only credential used to encrypt all local private keys. Agent-wallet never stores the master password itself — it uses the password to encrypt each key file. When you change it, all key files are re-encrypted with the new password.
-
-```bash title="Input"
+```bash
 agent-wallet change-password
 ```
 
-```text title="Output"
-Current password: ********
-New password: ********
-Confirm new password: ********
-Password changed. Re-encrypted 3 files.
-```
+### Reset Everything
 
-#### 2. Reset All Data
+Deletes all contents under `~/.agent-wallet/`. **Irreversible** — requires confirmation:
 
-```bash title="Input"
+```bash
 agent-wallet reset
 ```
 
-```text title="Output"
-⚠️  This will delete ALL wallet data in: /home/you/.agent-wallet
-Are you sure you want to reset? This cannot be undone. (y/N): y
-Really delete everything? Last chance! (y/N): y
-✅ Wallet data reset complete.
-```
+### Custom Storage Directory
 
-Deletes everything in `~/.agent-wallet/`. This action is irreversible and requires double confirmation.
-
-#### 3. Custom Storage Directory
-
-All commands support `--dir` to specify a custom key storage directory (default: `~/.agent-wallet`):
+All commands support `--dir` to specify a custom key storage path (default: `~/.agent-wallet`):
 
 ```bash
 agent-wallet start --dir ./my-secrets
@@ -347,8 +283,8 @@ agent-wallet sign msg "Hello" --dir ./my-secrets
 
 ---
 
-## Next Steps
+## What's Next
 
-- Use signing in your code → [SDK Quick Start](./SDKQuickStart.md)
-- Understand the design → [Introduction](./Intro.md)
+- Connect AI tools to your wallet → [Introduction — casual user path](./Intro.md)
+- Sign from code → [SDK Quick Start](./SDKQuickStart.md)
 - Browse common questions → [FAQ](./FAQ.md)

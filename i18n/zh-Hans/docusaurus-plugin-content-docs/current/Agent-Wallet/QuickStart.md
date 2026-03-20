@@ -1,190 +1,216 @@
 # CLI 快速开始
 
-本指南帮你通过命令行完成 Agent-wallet 的安装、钱包初始化和签名操作。完成四个步骤后，你将拥有一个加密保存在本地的钱包，并能通过命令行对消息和交易进行签名。
+四步，从零到完成第一次签名。整个过程不到一分钟——复制粘贴就行。
 
-页面后半段是完整的命令参考，日常使用时按需查阅即可。
-
-如果你是开发者，想在 Python 或 TypeScript 代码中直接调用签名接口，参阅 [SDK 快速开始](./SDKQuickStart.md)。
+:::tip 已经是开发者了？
+如果你想直接在 TypeScript 或 Python 代码里调用签名，跳到 [SDK 快速开始](./SDKQuickStart.md)。
+:::
 
 ---
 
-## 第一步：安装
+## 🧰 第一步：准备环境
 
-### 确认 Node.js 版本
-
-需要 Node.js ≥ 18，先检查当前版本：
+Agent-wallet CLI 需要 Node.js ≥ 18。先看看你有没有：
 
 ```bash
 node -v
 ```
 
-如果输出 `v18.0.0` 或更高，可以直接跳到安装步骤。如果版本较低或提示命令不存在，按下方说明安装或升级。
+输出 `v18.x.x` 或更高？直接跳到第二步。没有或者版本太低？按下面的步骤安装：
 
 :::tip 安装 / 升级 Node.js
 
-推荐使用 [nvm](https://github.com/nvm-sh/nvm) 管理 Node.js 版本，方便随时切换：
+推荐用 [nvm](https://github.com/nvm-sh/nvm)，一条命令搞定：
 
+**1 — 安装 nvm**（已有可跳过）：
 ```bash
-# 安装 nvm（已安装可跳过）
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
 
-# 重新加载 shell 配置
-source ~/.bashrc   # 或 source ~/.zshrc
+**2 — 重新加载终端配置：**
+```bash
+source ~/.bashrc   # zsh 用户改成 source ~/.zshrc
+```
 
-# 安装 Node.js 18 LTS
+**3 — 安装 Node.js 18：**
+```bash
 nvm install 18
+```
 
-# 切换到 Node.js 18
+**4 — 切换到 Node.js 18：**
+```bash
 nvm use 18
 ```
 
-也可以直接从 [nodejs.org](https://nodejs.org) 下载安装包，选择 **LTS** 版本即可。
-
+也可以直接去 [nodejs.org](https://nodejs.org) 下载 LTS 安装包。
 :::
 
-### 安装 Agent-wallet CLI
+---
+
+## 📦 第二步：安装 Agent-wallet
 
 ```bash
 npm install -g @bankofai/agent-wallet
 ```
 
-验证安装：
+Python 用户也可以用 pip：
+```bash
+pip install bankofai-agent-wallet
+```
 
+验证安装成功：
 ```bash
 agent-wallet --help
 ```
 
+看到帮助信息就说明安装好了。
+
 ---
 
-## 第二步：初始化钱包
+## 🔐 第三步：打造你的专属保险箱
 
-`start` 命令一步完成初始化并创建默认钱包，有三种方式可选：
-
-### 方式 A：全自动（推荐新手）
-
+运行：
 ```bash
 agent-wallet start
 ```
 
-系统会自动生成强密码，同时创建一个 TRON 钱包和一个 EVM 钱包：
+系统会引导你初始化 **Agent-wallet 加密保险箱**。整个过程是交互式的——跟着提示走就行。
+
+如果你没有手动指定密码（`-p` 参数），系统会自动生成一个强密码并显示一次：
 
 ```
-🔐 Wallet initialized!
+? Quick start type: local_secure  — Encrypted key stored locally (recommended)
+Wallet ID (e.g. my_wallet_1) (default):
 
-🪙 Wallets:
-┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
-│ Wallet ID            │ Type            │ Address                                      │
-├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│ default_tron         │ tron_local      │ TB37...                                      │
-│ default_evm          │ evm_local       │ 0xd679B...                                   │
-└──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
+Wallet initialized!
+? Import source: generate  — Generate a new random private key
 
-⭐ Active wallet: default_tron
+Wallets:
+┌───────────┬──────────────┐
+│ Wallet ID │ Type         │
+├───────────┼──────────────┤
+│ default   │ local_secure │
+└───────────┴──────────────┘
 
-🔑 Your master password: E&LCi*KL1Sp4mg4!
-   ⚠️  Save this password! You'll need it for signing and other operations.
+Your master password: WiJxcI#t6@73K#OE
+   Save this password! You'll need it for signing and other operations.
+
+Active wallet: default
 ```
 
-:::caution 安全提示
-- **保管好主密码** — 主密码是解密所有私钥的唯一凭据，丢失后无法恢复。建议使用密码管理器保存。
-- **不要明文写在代码里** — 如果需要非交互式使用，通过环境变量 `AGENT_WALLET_PASSWORD` 传入，而不是硬编码在脚本中。
-- **不要提交 `.env` 文件** — 将 `.env` 加入 `.gitignore`，避免密码或私钥泄露到版本库。
-- **为代理使用专用钱包** — 不要把个人主钱包的私钥交给 AI 代理，而是创建独立钱包并只充入所需的小额资金。
+:::caution ⚠️ 主密码 = 你所有资产的唯一钥匙
+这个密码是解开所有私钥的唯一凭证。**忘了就找不回来——我们也没有备份，没有后门，神仙难救。**
+
+请现在就做这件事：
+1. 打开你的密码管理器（1Password、Bitwarden 等）
+2. 新建一条记录，把主密码存进去
+3. 不要截图，不要记在桌面便签上，不要发给自己的微信
 :::
 
-
-### 方式 B：自定义密码
-
+**想自己设密码？**
 ```bash
 agent-wallet start -p Abc12345!
 ```
+密码要求：至少 8 位，包含大写、小写、数字和特殊字符。
 
-密码要求：至少 8 个字符，包含大写字母、小写字母、数字和特殊符号。
-
-### 方式 C：导入已有私钥
-
-如果你已有一个私钥希望直接导入：
-
+**已经有私钥，想导入？**
 ```bash
-agent-wallet start -p Abc12345! -i tron
+agent-wallet start -p Abc12345! -k 你的私钥十六进制
 ```
 
-运行后会提示你粘贴私钥（输入内容不会显示在屏幕上）：
-
+**有助记词？**
+```bash
+agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 ```
-🔐 Wallet initialized!
-✔ Paste private key (hex)
-
-🪙 Imported wallet:
-┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
-│ Wallet ID            │ Type            │ Address                                      │
-├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│ default_tron         │ tron_local      │ TNmo...                                      │
-└──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
-
-⭐ Active wallet: default_tron
-```
-
-`-i` 参数支持 `tron`、`evm`、`tron_local`、`evm_local`。
-
 
 ---
 
-## 第三步：查看钱包
+## ✨ 第四步：第一次测试签名
 
-列出所有钱包：
+激动人心的时刻——运行：
 
 ```bash
-agent-wallet list
+agent-wallet sign msg "Hello from my AI agent" -n tron
 ```
 
-```
-Wallets:
-┌──────────────────────┬─────────────────┬──────────────────────────────────────────────┐
-│ Wallet ID            │ Type            │ Address                                      │
-├──────────────────────┼─────────────────┼──────────────────────────────────────────────┤
-│* default_tron        │ tron_local      │ TB37...                                      │
-│  default_evm         │ evm_local       │ 0xd679B...                                   │
-└──────────────────────┴─────────────────┴──────────────────────────────────────────────┘
-```
+系统会让你输入主密码，然后输出：
 
-`*` 标记当前活跃钱包，签名时默认使用活跃钱包。
-
----
-
-## 第四步：签名
-
-### 签名消息
-
-```bash title="输入"
-agent-wallet sign msg "Hello"
-```
-
-```text title="输出"
+```text
 Master password: ********
 Signature: 4a9c8f...e71b
 ```
 
-### 签名交易
+**当屏幕上吐出那串哈希字符时——恭喜你，保险箱配置成功了！** 🎉
 
-交易内容以 JSON 字符串形式传入（你需要先通过 RPC 构建好未签名的交易）：
+你的私钥已经加密存储在磁盘上，刚才的签名完全在本地完成，没有任何数据发送到网络。
 
-```bash title="输入"
-agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}'
+---
+
+## 🚀 快速开始完成！接下来做什么？
+
+| 我想… | 做这个 |
+| :--- | :--- |
+| 让 AI 工具用上我的钱包 | 设置环境变量 `export AGENT_WALLET_PASSWORD='你的密码'`，详见 [简介](./Intro.md) |
+| 在自己的代码里签名 | 去 [SDK 快速开始](./SDKQuickStart.md) |
+| 看完整的转账示例 | 去 [完整示例](./FullExample.md) |
+| 继续看下面的命令手册 | ↓ 往下翻 |
+
+---
+
+## 命令手册
+
+快速开始之后，下面是你日常会用到的所有命令。按需查阅。
+
+### 免密码签名
+
+每次签名都要交互输密码？自动化流程里完全行不通。三种方式跳过：
+
+**方式 A — 环境变量**（推荐用于 CI / 代理流水线）：
+```bash
+export AGENT_WALLET_PASSWORD='Abc12345!'
+```
+设置后，所有签名命令静默运行：
+```bash
+agent-wallet sign msg "Hello" -n tron
+agent-wallet sign tx '{"txID":"..."}' -n tron
 ```
 
-```text title="输出"
-Master password: ********
-Signed tx:
-{
-  "txID": "abc123...",
-  "signature": ["..."]
-}
+:::caution 密码有特殊字符？务必用单引号
+```bash
+# ✅ 正确 — shell 按字面意思处理
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+
+# ❌ 错误 — $ 被 shell 展开，密码静默出错
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+```
+:::
+
+**方式 B — 内联 `-p`**（临时用一次）：
+```bash
+agent-wallet sign msg "Hello" -n tron -p "Abc12345!"
 ```
 
-### 签名 EIP-712 结构化数据
+**方式 C — `--save-runtime-secrets`**（密码存入 `~/.agent-wallet/runtime_secrets.json`，下次自动读取）：
+```bash
+agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
+```
 
-```bash title="输入"
+### 签名类型
+
+每条 `sign` 子命令都需要 `--network` / `-n` 来指定链：
+
+**签名消息：**
+```bash
+agent-wallet sign msg "Hello" -n tron
+```
+
+**签名交易**（需要先通过 RPC 构建未签名交易）：
+```bash
+agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
+```
+
+**签名 EIP-712 结构化数据：**
+```bash
 agent-wallet sign typed-data '{
   "types": {
     "EIP712Domain": [{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],
@@ -193,156 +219,60 @@ agent-wallet sign typed-data '{
   "primaryType": "Transfer",
   "domain": {"name":"MyDApp","chainId":1},
   "message": {"to":"0x7099...","amount":1000000}
-}'
-```
-
-```text title="输出"
-Master password: ********
-Signature: 22008ffd...0e1c
-```
-
----
-
-## 命令参考
-
-完成快速开始后，可以按需查阅以下内容。
-
-### 跳过密码提示
-
-每次签名都输入密码很麻烦。通过环境变量可以跳过交互式提示：
-
-```bash
-export AGENT_WALLET_PASSWORD='Abc12345!'
-```
-
-:::caution 密码包含特殊字符时必须用单引号
-主密码（尤其是自动生成的强密码）可能包含 `$`、`!` 等 shell 特殊字符，**必须用单引号**包裹，否则 shell 会展开这些字符导致密码错误：
-
-```bash
-# ✅ 正确
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
-
-# ❌ 错误：$ 会被 shell 展开
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
-```
-:::
-
-
-设置后，所有签名命令不再提示输入密码，直接输出结果：
-
-```bash
-agent-wallet sign msg "Hello"
-agent-wallet sign tx '{"txID":"..."}'
-```
-
-也可以在单条命令中通过 `-p` 参数传入：
-
-```bash
-agent-wallet sign msg "Hello" -p "Abc12345!"
+}' -n eip155:1
 ```
 
 ### 管理多个钱包
 
-#### 1. 添加新钱包
-
-交互式提示中选择钱包类型（`tron_local` 或 `evm_local`）、生成或导入私钥：
-
-```bash title="输入"
+**添加新钱包：**
+```bash
 agent-wallet add
 ```
 
-```text title="输出"
-Master password: ********
-Wallet name: my-bsc-wallet
-> Wallet type: evm_local
-> Private key: generate
-Generated new private key.
-  Address: 0x8c714fe3...
-  Saved: id_my-bsc-wallet.json
-Wallet 'my-bsc-wallet' added.
-```
-
-#### 2. 切换活跃钱包
-
-```bash title="输入"
+**切换活跃钱包：**
+```bash
 agent-wallet use my-bsc-wallet
 ```
 
-```text title="输出"
-Active wallet: my-bsc-wallet (evm_local)
-```
-
-#### 3. 指定钱包签名
-
-签名时可以用 `-w` 显式指定钱包，不受活跃钱包影响：
-
+**用指定钱包签名**（不切换活跃钱包）：
 ```bash
-agent-wallet sign msg "Hello" -w my-bsc-wallet -p "Abc12345!"
+agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p "Abc12345!"
 ```
 
-#### 4. 查看钱包详情
-
-```bash title="输入"
+**查看钱包详情：**
+```bash
 agent-wallet inspect my-bsc-wallet
 ```
 
-```text title="输出"
-Wallet      my-bsc-wallet
-Type        evm_local
-Address     0x8c714fe3...
-Identity    id_my-bsc-wallet.json ✓
-Credential  —
+**查看所有钱包：**
+```bash
+agent-wallet list
 ```
 
-#### 5. 删除钱包
-
-```bash title="输入"
+**删除钱包：**
+```bash
 agent-wallet remove my-bsc-wallet
 ```
 
-```text title="输出"
-Remove wallet 'my-bsc-wallet'? (y/N): y
-  Deleted: id_my-bsc-wallet.json
-Wallet 'my-bsc-wallet' removed.
-```
+### 修改主密码
 
-### 其他操作
+修改后，所有密钥文件会用新密码重新加密：
 
-#### 1. 修改主密码
-
-主密码是加密所有本地私钥的唯一凭据。Agent-wallet 不存储主密码本身，而是用它对每个私钥文件进行加密——修改主密码时，所有密钥文件会用新密码重新加密。
-
-```bash title="输入"
+```bash
 agent-wallet change-password
 ```
 
-```text title="输出"
-Current password: ********
-New password: ********
-Confirm new password: ********
-Password changed. Re-encrypted 3 files.
-```
+### 重置所有数据
 
-会重新加密所有密钥文件。
+删除 `~/.agent-wallet/` 下的所有内容，**不可撤销**，需要二次确认：
 
-#### 2. 重置所有数据
-
-```bash title="输入"
+```bash
 agent-wallet reset
 ```
 
-```text title="输出"
-⚠️  This will delete ALL wallet data in: /home/you/.agent-wallet
-Are you sure you want to reset? This cannot be undone. (y/N): y
-Really delete everything? Last chance! (y/N): y
-✅ Wallet data reset complete.
-```
+### 自定义存储目录
 
-删除 `~/.agent-wallet/` 目录下的全部数据，操作不可逆，会要求二次确认。
-
-#### 3. 自定义存储目录
-
-所有命令都支持 `--dir` 参数指定自定义密钥目录（默认 `~/.agent-wallet`）：
+所有命令支持 `--dir` 指定密钥存储路径（默认 `~/.agent-wallet`）：
 
 ```bash
 agent-wallet start --dir ./my-secrets
@@ -353,6 +283,6 @@ agent-wallet sign msg "Hello" --dir ./my-secrets
 
 ## 下一步
 
-- 在代码中使用签名能力 → [SDK 快速开始](./SDKQuickStart.md)
-- 了解整体设计 → [简介](./Intro.md)
+- 让 AI 工具用上你的钱包 → [简介 — 普通玩家路径](./Intro.md)
+- 在代码里集成签名 → [SDK 快速开始](./SDKQuickStart.md)
 - 查看常见问题 → [常见问题](./FAQ.md)

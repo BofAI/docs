@@ -1,9 +1,11 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Full Usage Examples
+# Full Examples
 
-Agent-wallet handles signing only — building and broadcasting transactions is your responsibility. This page walks through complete end-to-end examples that chain all three steps together: TRON transfers, EVM transfers, and x402 PaymentPermit signing.
+You know how to sign. Now let's put it all together — build a transaction, sign it with Agent-wallet, and broadcast it to the network.
+
+This page walks through three real-world scenarios end to end: sending TRX on TRON, sending BNB on BSC, and signing an x402 payment permit. Each example is complete and runnable — copy, configure your addresses, and go.
 
 All examples are available in both TypeScript and Python — use the tabs to switch.
 
@@ -15,7 +17,7 @@ Before running any example below, make sure you have:
 
 1. Installed the Agent-wallet SDK (see [SDK Quick Start](./SDKQuickStart.md))
 2. Initialized a local wallet via the CLI, or configured static mode environment variables
-3. Set `AGENT_WALLET_PASSWORD` (local mode) or `AGENT_WALLET_PRIVATE_KEY` (static mode)
+3. Set `AGENT_WALLET_PASSWORD` (local `local_secure` mode) or `AGENT_WALLET_PRIVATE_KEY` (static mode)
 
 ---
 
