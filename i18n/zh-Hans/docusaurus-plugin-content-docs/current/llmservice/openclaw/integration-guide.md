@@ -1,4 +1,4 @@
-# Integrating OpenClaw with Bank of AI
+# OpenClaw × Bank of AI 集成
 ## 从零到私有 AI Agent：15 分钟部署 OpenClaw 与 Bank of AI
 
 OpenClaw（原名 ClawdBot 或 Moltbot）是一个开源的个人 AI 助手。不同于云端 SaaS 工具，OpenClaw 运行在本地机器上，使你能够完全掌控数据和工作流。你可以通过 WhatsApp、Telegram、Lark、钉钉等熟悉的通讯平台与其交互，用于处理邮件、管理日历、编写代码，甚至自动化你的智能家居。
