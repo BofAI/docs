@@ -128,7 +128,7 @@ After completing the onboarding wizard, you'll need to manually add your Bank of
 
 There are two ways to complete the configuration:
 
-- **One-Click Script**: https://docs.ainft.com/reference/openclaw-ainft-integration-one-click-script-tutorial  
+- **One-Click Script**: [Click here for the tutorial](https://docs.bankofai.io/llmservice/openclaw/one-click-script-tutorial/) 
 - **Manual Configuration**: Follow the instructions below  
 
 ---
