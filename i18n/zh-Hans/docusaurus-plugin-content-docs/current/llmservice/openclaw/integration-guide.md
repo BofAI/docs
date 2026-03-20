@@ -130,7 +130,7 @@ openclaw onboard
 有两种方式可以完成配置：
 
 - **One-Click Script（自动脚本方式）**  
-  https://docs.bankofai.io/llmservice/openclaw/one-click-script-tutorial/
+  https://docs.bankofai.io/zh-Hans/llmservice/openclaw/one-click-script-tutorial/
 
 - **Manual Configuration（手动配置）**  
   按照下面步骤操作
