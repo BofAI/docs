@@ -1,8 +1,9 @@
 name: Release Publish
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - main
 
 env:
   IMAGE_NAME: bankofai/docs
@@ -28,14 +29,16 @@ jobs:
         run: |
           echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
-      - name: Extract Docker metadata
+      - name: Get version from package.json
+        id: version
+        run: echo "VERSION=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Set Docker tags
         id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ${{ env.IMAGE_NAME }}
-          tags: |
-            type=semver,pattern={{version}}
-            type=raw,value=latest
+        run: |
+          echo "tags<<EOF" >> $GITHUB_OUTPUT
+          echo "${{ env.IMAGE_NAME }}:${{ steps.version.outputs.VERSION }}" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v6
