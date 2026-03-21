@@ -83,7 +83,7 @@ agent-wallet sign msg "Hello from my AI agent" -n tron
 
 当屏幕上吐出一串哈希字符时——恭喜，你的加密保险箱配置成功了。
 
-> 想看每一步的详细说明？去 **[CLI 工具手册](./Developer/CLI-Reference.md)**。
+> 想看每一步的详细说明？去 **[CLI 命令行手册](./Developer/CLI-Reference.md)**。
 
 ---
 
@@ -107,7 +107,7 @@ export AGENT_WALLET_PASSWORD='你的主密码'
 
 ### 🛠️ 我是进阶用户——想用 CLI 管理钱包
 
-需要免密签名、管理多个钱包、自定义存储目录？去 **[CLI 工具手册](./Developer/CLI-Reference.md)**。
+需要免密签名、管理多个钱包、自定义存储目录？去 **[CLI 命令行手册](./Developer/CLI-Reference.md)**。
 
 ### 🛠️ 我是开发者——自己写代理
 
