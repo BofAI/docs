@@ -1,14 +1,14 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# SDK Quick Start
+# SDK Guide
 
 You've tried the CLI and can sign from the command line. Now you want signing inside your own code — an MCP Server, an automation script, an AI agent workflow.
 
 This page shows you how. By the end, you'll be able to initialize a wallet provider, retrieve the active wallet, and sign messages, transactions, and EIP-712 typed data — all in a few lines of TypeScript or Python.
 
 :::tip New here?
-If you haven't created a wallet yet, start with the [CLI Quick Start](./QuickStart.md) first (Steps 1–3 take under a minute). The SDK reads from the same wallet the CLI creates — no need to set up anything twice.
+If you haven't created a wallet yet, start with the [Quick Start](../QuickStart.md) first (Steps 1–3 take under a minute). The SDK reads from the same wallet the CLI creates — no need to set up anything twice.
 :::
 
 Both installation instructions and code examples are provided for TypeScript and Python — use the tabs to switch.
@@ -145,7 +145,7 @@ It supports two modes:
 
 ### 🛡️ Core Usage: Local Vault Mode (Strongly Recommended)
 
-If you've already followed the [CLI Quick Start](./QuickStart.md), your private key is already safely locked inside a hidden file on your machine.
+If you've already followed the [Quick Start](../QuickStart.md), your private key is already safely locked inside a hidden file on your machine.
 
 **In this mode, you never need to (and shouldn't) touch your plaintext private key.** Just tell the SDK your "unlock password" and you're good to go.
 
@@ -525,6 +525,7 @@ WalletError
 
 ## Next Steps
 
-- Manage wallets from the command line → [CLI Quick Start](./QuickStart.md)
-- Understand Agent-wallet's design → [Introduction](./Intro.md)
-- Browse common questions → [FAQ](./FAQ.md)
+- Prefer the command line? → [CLI Reference](./CLI-Reference.md)
+- Looking for ready-made code? → [SDK Cookbook](./SDK-Cookbook.md)
+- Understand Agent-wallet's design → [Introduction](../Intro.md)
+- Common questions → [FAQ](../FAQ.md)

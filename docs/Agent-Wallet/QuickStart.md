@@ -1,84 +1,68 @@
-# CLI Quick Start
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-Four steps, from zero to your first signature. The whole thing takes under a minute — just copy and paste.
+# Quick Start
 
-:::tip Already a developer?
-If you want to call signing directly from TypeScript or Python code, skip to [SDK Quick Start](./SDKQuickStart.md).
+Three steps, from zero to invoking your encrypted safe in the OpenClaw chat box. No coding required, no gas fees — just copy and paste.
+
+:::tip Want CLI command details?
+This page only walks you through the shortest path. For password-free configuration, managing multiple wallets, signature types, and other advanced topics, see the [CLI Reference](./Developer/CLI-Reference.md).
 :::
 
 ---
 
-## 🧰 Step 1: Set Up Your Environment
+## Step 1: Install and Initialize Your Wallet
 
-Agent-wallet CLI requires Node.js ≥ 18. Check what you have:
+### 1.1 Prepare Your Environment: Install Node.js
+
+Agent-wallet requires Node.js (a runtime environment, version >= 18) on your computer.
+
+Open a terminal (Mac users press `Command + Space` and search for "Terminal"; Windows users search for "cmd" or "PowerShell"), then type:
 
 ```bash
 node -v
 ```
 
-Output is `v18.x.x` or higher? Jump to Step 2. Nothing installed or version too old? Follow the steps below:
+- **If the output shows `v18.x.x` or higher:** Great, skip straight to 1.2!
+- **If there's no output or an error:** Don't panic — go to the **[Node.js official website](https://nodejs.org)** and download the latest **LTS** installer. Install it like any regular software — double-click and follow the prompts. After installation, close and reopen your terminal, then run `node -v` again to confirm.
 
-:::tip Install / upgrade Node.js
+<details>
+<summary>Developer preferred: Install via nvm (beginners can skip this)</summary>
 
-We recommend [nvm](https://github.com/nvm-sh/nvm) — one command handles everything:
-
-**1 — Install nvm** (skip if already installed):
 ```bash
+# 1. Install nvm (skip if already installed)
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-```
 
-**2 — Reload your shell config:**
-```bash
+# 2. Reload your terminal config
 source ~/.bashrc   # zsh users: source ~/.zshrc
+
+# 3. Install and switch to Node.js 18
+nvm install 18 && nvm use 18
 ```
 
-**3 — Install Node.js 18:**
-```bash
-nvm install 18
-```
+</details>
 
-**4 — Switch to Node.js 18:**
-```bash
-nvm use 18
-```
-
-Or download the LTS installer directly from [nodejs.org](https://nodejs.org).
-:::
-
----
-
-## 📦 Step 2: Install Agent-wallet
-
-One command:
+### 1.2 Install Agent-wallet
 
 ```bash
 npm install -g @bankofai/agent-wallet
 ```
 
-Python users can also install via pip:
-```bash
-pip install bankofai-agent-wallet
-```
-
-Verify the install worked:
+Verify the installation:
 ```bash
 agent-wallet --help
 ```
 
 If you see the help output, you're good to go.
 
----
-
-## 🔐 Step 3: Create Your Personal Encrypted Safe
+### 1.3 Create Your Encrypted Safe
 
 Run:
 ```bash
 agent-wallet start
 ```
 
-This initializes your **Agent-wallet encrypted safe**. The process is interactive — just follow the prompts.
-
-If you don't specify a password manually (the `-p` flag), the system auto-generates a strong one and shows it once:
+The system will guide you through initializing your **Agent-wallet encrypted safe**. The process is interactive — just follow the prompts:
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
@@ -100,7 +84,7 @@ Your master password: WiJxcI#t6@73K#OE
 Active wallet: default
 ```
 
-:::caution ⚠️ Master password = the only key to all your assets
+:::caution Master password = the only key to all your assets
 This password is the sole credential for decrypting all your private keys. **Lose it and it's gone forever — no backup, no backdoor, no recovery.**
 
 Do this right now:
@@ -109,182 +93,103 @@ Do this right now:
 3. Don't screenshot it, don't put it in a desktop sticky note, don't text it to yourself
 :::
 
-**Want to set your own password?**
-```bash
-agent-wallet start -p Abc12345!
-```
-Requirements: at least 8 characters, with uppercase, lowercase, numbers, and special characters.
-
-**Already have a private key to import?**
-```bash
-agent-wallet start -p Abc12345! -k your-private-key-hex
-```
-
-**Have a mnemonic phrase?**
-```bash
-agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
-```
-
 ---
 
-## ✨ Step 4: Your First Test Signature
+## Step 2: Feed the Password to Your AI (Critical!)
 
-The exciting moment — run:
+For OpenClaw to automatically use your wallet, you must configure the password in its runtime environment. Select the tab matching your operating system and **just copy-paste**:
+
+### 2.1 Permanently Save and Activate the Password
+
+<Tabs>
+<TabItem value="mac" label="Mac Users (Zsh)" default>
+
+**Step 1:** Copy the command below, replace the content inside the single quotes with your actual password, paste it into the terminal and press Enter:
 
 ```bash
-agent-wallet sign msg "Hello from my AI agent" -n tron
+echo "export AGENT_WALLET_PASSWORD='your-master-password'" >> ~/.zshrc
 ```
 
-You'll be prompted for your master password, then see output like:
+**Step 2:** Copy this command, paste and press Enter to apply the config immediately:
 
-```text
-Master password: ********
-Signature: 4a9c8f...e71b
-```
-
-**When that hash string appears on screen — congratulations, your encrypted safe is live!** 🎉
-
-Your private key is encrypted on disk. That signature just happened entirely on your local machine, with zero data sent over the network.
-
----
-
-## 🚀 Quick Start Done! What's Next?
-
-| I want to… | Do this |
-| :--- | :--- |
-| Connect my wallet to AI tools | Set `export AGENT_WALLET_PASSWORD='your-password'`, see [Introduction](./Intro.md) |
-| Sign from my own code | Go to [SDK Quick Start](./SDKQuickStart.md) |
-| See a complete transfer example | Go to [Full Examples](./FullExample.md) |
-| Browse the full command reference | ↓ Keep reading |
-
----
-
-## Command Reference
-
-Everything you'll need day-to-day after the quick start. Look things up as needed.
-
-### Password-free Signing
-
-Typing your password interactively every time? That's a non-starter for automation. Three ways to skip it:
-
-**Option A — Environment variable** (recommended for CI / agent pipelines):
 ```bash
-export AGENT_WALLET_PASSWORD='Abc12345!'
-```
-Once set, all signing commands run silently:
-```bash
-agent-wallet sign msg "Hello" -n tron
-agent-wallet sign tx '{"txID":"..."}' -n tron
+source ~/.zshrc
 ```
 
-:::caution Password contains special characters? Always use single quotes
-```bash
-# ✅ Correct — shell treats it literally
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+</TabItem>
+<TabItem value="win-linux" label="Windows / Linux Users (Bash)">
 
-# ❌ Wrong — $ gets expanded by the shell, password silently breaks
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+**Step 1:** Copy the command below, replace the content inside the single quotes with your actual password, paste it into the terminal and press Enter:
+
+```bash
+echo "export AGENT_WALLET_PASSWORD='your-master-password'" >> ~/.bashrc
+```
+
+**Step 2:** Copy this command, paste and press Enter to apply the config immediately:
+
+```bash
+source ~/.bashrc
+```
+
+</TabItem>
+</Tabs>
+
+:::caution Password has special characters? Don't touch the single quotes!
+Auto-generated passwords often contain `$`, `!`, and other special characters. The commands above already use single quotes to wrap the password — **just replace the text inside the quotes, never switch to double quotes**, or the shell will silently mangle the value:
+
+```bash
+# ✅ Correct — single quotes, password saved as-is
+echo "export AGENT_WALLET_PASSWORD='P@ss$w0rd!'" >> ~/.zshrc
+
+# ❌ Wrong — double quotes around password, $ gets expanded by shell, password silently breaks
+echo "export AGENT_WALLET_PASSWORD=\"P@ss$w0rd!\"" >> ~/.zshrc
 ```
 :::
 
-**Option B — Inline `-p`** (one-off use):
-```bash
-agent-wallet sign msg "Hello" -n tron -p "Abc12345!"
-```
+### 2.2 Restart Your AI Backend Service
 
-**Option C — `--save-runtime-secrets`** (saves password to `~/.agent-wallet/runtime_secrets.json` for auto-loading):
-```bash
-agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
-```
+:::danger Many people forget this step, then wonder why AI can't find the password!
+You just saved a new password, but the AI assistant running in the background hasn't refreshed yet — it's still blind to the change! You need to shut it down and restart it for the new password to take effect.
+:::
 
-### Signature Types
-
-Every `sign` subcommand requires `--network` / `-n` to specify the chain:
-
-**Sign a message:**
-```bash
-agent-wallet sign msg "Hello" -n tron
-```
-
-**Sign a transaction** (build the unsigned tx via RPC first):
-```bash
-agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
-```
-
-**Sign EIP-712 typed data:**
-```bash
-agent-wallet sign typed-data '{
-  "types": {
-    "EIP712Domain": [{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],
-    "Transfer": [{"name":"to","type":"address"},{"name":"amount","type":"uint256"}]
-  },
-  "primaryType": "Transfer",
-  "domain": {"name":"MyDApp","chainId":1},
-  "message": {"to":"0x7099...","amount":1000000}
-}' -n eip155:1
-```
-
-### Managing Multiple Wallets
-
-**Add a new wallet:**
-```bash
-agent-wallet add
-```
-
-**Switch the active wallet:**
-```bash
-agent-wallet use my-bsc-wallet
-```
-
-**Sign with a specific wallet** (without switching the active one):
-```bash
-agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p "Abc12345!"
-```
-
-**Inspect a wallet:**
-```bash
-agent-wallet inspect my-bsc-wallet
-```
-
-**List all wallets:**
-```bash
-agent-wallet list
-```
-
-**Remove a wallet:**
-```bash
-agent-wallet remove my-bsc-wallet
-```
-
-### Change Master Password
-
-All key files are re-encrypted with the new password:
-
-```bash
-agent-wallet change-password
-```
-
-### Reset Everything
-
-Deletes all contents under `~/.agent-wallet/`. **Irreversible** — requires confirmation:
-
-```bash
-agent-wallet reset
-```
-
-### Custom Storage Directory
-
-All commands support `--dir` to specify a custom key storage path (default: `~/.agent-wallet`):
-
-```bash
-agent-wallet start --dir ./my-secrets
-agent-wallet sign msg "Hello" --dir ./my-secrets
-```
+Whether or not you currently have the OpenClaw backend service running, make sure to **shut it down**, then **restart it** from the same terminal window where you ran the commands above.
 
 ---
 
-## What's Next
+## Step 3: Wake Up Your Encrypted Safe in OpenClaw
 
-- Connect AI tools to your wallet → [Introduction — casual user path](./Intro.md)
-- Sign from code → [SDK Quick Start](./SDKQuickStart.md)
-- Browse common questions → [FAQ](./FAQ.md)
+Your safe is ready, the password is configured. Now open **OpenClaw** and test whether it can successfully invoke your local encrypted safe — just like chatting with a real person.
+
+:::info Haven't installed OpenClaw Extension yet?
+Head to [OpenClaw Extension Quick Start](../Openclaw-extension/QuickStart.md) first, then come back here.
+:::
+
+### Zero-Risk Test 1: Check Your Address
+
+Type in the chat box:
+
+> Show me the wallet address currently bound to my local wallet (TRON network).
+
+The AI will automatically read your encrypted safe and report back the wallet address you just created. **This proves the password configuration is working correctly!**
+
+### Zero-Risk Test 2: Let AI Sign for You
+
+Then say:
+
+> Sign this message with my wallet: "Hello Agent-wallet!"
+
+The AI will complete the signing locally and offline, returning a hash string.
+
+**Congratulations!** You didn't spend a single cent on gas fees, you never touched your private key, but you've successfully given your AI secure cryptographic signing capability.
+
+---
+
+## You've Completed the Full Flow
+
+| I want to… | Go here |
+| :--- | :--- |
+| Use CLI for advanced operations | [CLI Reference](./Developer/CLI-Reference.md) |
+| Build my own agent with code | [SDK Guide](./Developer/SDK-Guide.md) |
+| Find ready-made code examples | [SDK Cookbook](./Developer/SDK-Cookbook.md) |
+| Understand the security design | [Introduction](./Intro.md) |
+| Check common questions | [FAQ](./FAQ.md) |

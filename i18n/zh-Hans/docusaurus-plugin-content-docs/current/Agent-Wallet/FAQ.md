@@ -56,6 +56,14 @@ agent-wallet add
 
 大多数人不需要 SDK。如果你是用 OpenClaw 和 MCP Server 的普通用户，CLI 建完钱包、配好环境变量就够了。SDK 是给自己写代理的开发者用的。
 
+### Agent-wallet 和 MetaMask 有什么区别？
+
+MetaMask 是给人用的浏览器钱包，有图形界面，每次签名需要你手动点"确认"。Agent-wallet 是给 AI 代理用的命令行钱包，专门设计为非交互式——AI 可以在后台静默调用签名，不需要人盯着屏幕点按钮。两者的加密原理类似（都是 Keystore V3），但使用场景完全不同。
+
+### 一台电脑上可以创建多少个钱包？
+
+没有限制。你可以为不同的 AI 代理、不同的链、不同的用途分别创建独立钱包。用 `agent-wallet add` 添加，用 `agent-wallet use` 切换。
+
 ---
 
 ## 钱包类型
@@ -93,17 +101,17 @@ agent-wallet add
 
 你平时用 Web3 钱包（比如 MetaMask）时，肯定不会每次都复制粘贴明文私钥，而是用一个短密码去解锁它。Agent-wallet 就是专为 AI 打造的命令行版 MetaMask。
 
-* 传统方式（明文私钥）： 就像把现金直接放在桌子上。任何一个恶意的浏览器插件、一次不小心的代码提交、或者后台日志扫描，只要看一眼你的 `.env` 文件，钱瞬间就被转走了。这是典型的单点白给。
+* 传统方式（明文私钥）： 就像把现金直接放在桌子上。任何一个恶意的浏览器插件、一次不小心的代码提交、或者后台日志扫描，只要看一眼你的环境变量文件，钱瞬间就被转走了。这是典型的单点白给。
 * Agent-wallet 模式： 它把风险拆分成了两把锁。
    1. 物理保险箱： 你的私钥被行业顶级的算法加密，锁死在你电脑深处的隐藏文件夹里（`~/.agent-wallet`）。
-   2. 开箱密码： 你放在环境变量（`.env`）里的，仅仅是解锁这个保险箱的密码。
+   2. 开箱密码： 你放在环境变量里的，仅仅是解锁这个保险箱的密码。
 
 这就意味着，如果发生了泄露：
 
 * 黑客如果只偷到了你的密码（比如通过扫描环境变量），他没有你的加密钱包文件，密码就只是一串没用的字符。
 * 黑客如果只偷走了你的加密钱包文件，他没有你的主密码，文件就是一堆几万年都破解不开的乱码。
 
-黑客必须同时黑进你的电脑、精准定位并偷走隐藏的钱包文件，并且同时窃取到环境变量里的密码，才能动你的钱。这种攻击难度比仅仅扫描一下 `.env` 要高出无数倍！
+黑客必须同时黑进你的电脑、精准定位并偷走隐藏的钱包文件，并且同时窃取到环境变量里的密码，才能动你的钱。这种攻击难度比仅仅扫描一下环境变量要高出无数倍！
 
 ### 密钥会通过网络发出去吗？
 
@@ -114,7 +122,54 @@ agent-wallet add
 - ✅ 用密码管理器（1Password、Bitwarden）
 - ✅ 通过环境变量 `AGENT_WALLET_PASSWORD` 传入
 - ❌ 不要写在代码里
-- ❌ 不要提交含密码的 `.env` 到 git
+- ❌ 不要提交含密码的环境变量文件到 git
+
+### 加密算法安全吗？会不会被暴力破解？
+
+Agent-wallet 使用 Keystore V3 标准加密（scrypt + AES-128-CTR），这和 Ethereum 官方钱包使用的加密方案完全一致。scrypt 算法的设计目标就是让暴力破解在计算和内存上都极其昂贵——即使使用专用硬件，破解一个强密码也需要数万年。
+
+---
+
+## 安装与环境
+
+### 支持哪些操作系统？
+
+macOS、Linux、Windows（通过 WSL）均可。只要能跑 Node.js >= 18 或 Python >= 3.11，就能用。
+
+### `npm install -g` 报权限错误怎么办？
+
+常见于 macOS / Linux。两种解法：
+
+**方法 1（推荐）：用 nvm 管理 Node.js**，它会把全局包装在用户目录下，不需要 `sudo`。
+
+**方法 2：修复 npm 全局目录权限**：
+```bash
+mkdir -p ~/.npm-global
+npm config set prefix '~/.npm-global'
+echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.zshrc
+source ~/.zshrc
+```
+
+### 配了密码但 AI 说"找不到钱包"或"密码错误"？
+
+最常见的三个原因：
+
+1. **密码没生效**：你在终端 A 配了 `export`，但 AI 在终端 B 运行。解决：重启 AI 后台服务（参考 [快速开始](./QuickStart.md) 第二步）。
+2. **密码被 shell 吃了**：双引号包裹的密码里有 `$` 或 `!`，被 shell 展开了。解决：改用单引号。
+3. **存储目录不对**：你之前用 `--dir` 指定了自定义路径，但 AI 在默认路径找。解决：`export AGENT_WALLET_DIR="/你的自定义路径"`。
+
+### `agent-wallet` 命令找不到（command not found）？
+
+说明全局安装没有生效。检查：
+```bash
+# 确认 npm 全局 bin 目录在 PATH 里
+npm bin -g
+```
+如果输出的路径不在你的 `$PATH` 中，手动添加：
+```bash
+echo "export PATH=$(npm bin -g):$PATH" >> ~/.zshrc
+source ~/.zshrc
+```
 
 ---
 
@@ -130,9 +185,31 @@ agent-wallet add
 
 ---
 
+## 与 OpenClaw 集成
+
+### OpenClaw 是必须的吗？
+
+不是。Agent-wallet 是一个独立的签名工具，可以通过 CLI 或 SDK 独立使用。OpenClaw 只是最方便的前端——它让你用自然语言就能调用签名，不用写代码。
+
+### OpenClaw 里说"签名失败"或"钱包未连接"？
+
+按以下顺序排查：
+
+1. 确认 `AGENT_WALLET_PASSWORD` 环境变量已设置（在运行 OpenClaw 的那个终端里执行 `echo $AGENT_WALLET_PASSWORD` 验证）
+2. 确认 MCP Server 是在设置了环境变量**之后**启动的
+3. 确认钱包已初始化：`agent-wallet list` 应该能看到至少一个钱包
+4. 如果以上都正确，尝试用 CLI 手动签名测试：`agent-wallet sign msg "test" -n tron`
+
+### 在 OpenClaw 里签名需要花 Gas 费吗？
+
+签名本身不花 Gas。签名只是用你的私钥对一段数据做密码学运算，完全在本地完成。只有当签名后的交易被广播到链上时，才需要 Gas 费。查地址、签名消息这类操作永远免费。
+
+---
+
 ## 下一步
 
-- 动手配置全套环境 → [CLI 快速开始](./QuickStart.md)
-- 在代码里集成签名 → [SDK 快速开始](./SDKQuickStart.md)
-- 看完整的转账示例 → [完整示例](./FullExample.md)
-- 了解 OpenClaw Extension → [OpenClaw 简介](../Openclaw-extension/Intro.md)
+- 没写过代码？ → [快速开始](./QuickStart.md)
+- 喜欢敲命令？ → [CLI 命令行手册](./Developer/CLI-Reference.md)
+- 要开发应用？ → [SDK 接入指南](./Developer/SDK-Guide.md)
+- 找现成代码？ → [完整代码示例](./Developer/SDK-Cookbook.md)
+- 了解 OpenClaw Extension → [OpenClaw Extension 简介](../Openclaw-extension/Intro.md)

@@ -1,9 +1,13 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# Full Examples
+# SDK Cookbook
 
-You know how to sign. Now let's put it all together — build a transaction, sign it with Agent-wallet, and broadcast it to the network.
+:::tip Why read this page?
+In the [SDK Guide](./SDK-Guide.md), you learned how to use Agent-wallet for "offline signing." But in real-world scenarios, an AI agent can't just sign — it needs to: **1. Query the node to build a transaction → 2. Agent-wallet signs → 3. Broadcast to the blockchain.**
+
+Agent-wallet focuses on doing the core secure signing step (step 2) well. This page provides a set of **"ready-to-use"** complete scripts that combine TronGrid and Ethers.js / Web3.py to walk you through the full end-to-end flow. You can copy these scripts directly into your production environment!
+:::
 
 This page walks through three real-world scenarios end to end: sending TRX on TRON, sending BNB on BSC, and signing an x402 payment permit. Each example is complete and runnable — copy, configure your addresses, and go.
 
@@ -15,7 +19,7 @@ All examples are available in both TypeScript and Python — use the tabs to swi
 
 Before running any example below, make sure you have:
 
-1. Installed the Agent-wallet SDK (see [SDK Quick Start](./SDKQuickStart.md))
+1. Installed the Agent-wallet SDK (see [SDK Guide](./SDK-Guide.md))
 2. Initialized a local wallet via the CLI, or configured static mode environment variables
 3. Set `AGENT_WALLET_PASSWORD` (local `local_secure` mode) or `AGENT_WALLET_PRIVATE_KEY` (static mode)
 
@@ -512,6 +516,7 @@ The x402 SDK automatically constructs the PaymentPermit data and calls the signi
 
 ## Next Steps
 
-- Review the full signing API reference → [SDK Quick Start](./SDKQuickStart.md)
+- Prefer the command line? → [CLI Reference](./CLI-Reference.md)
+- Building your own agent? → [SDK Guide](./SDK-Guide.md)
 - Learn how x402 and Agent-wallet work together → [x402 Introduction](../../x402/index.md)
-- Browse common questions → [FAQ](./FAQ.md)
+- Common questions → [FAQ](../FAQ.md)

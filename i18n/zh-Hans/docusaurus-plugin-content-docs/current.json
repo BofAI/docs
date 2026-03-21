@@ -67,5 +67,9 @@
   "sidebar.docsSidebar.category.API": {
     "message": "API 参考",
     "description": "The label for category API in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Developer": {
+    "message": "开发者",
+    "description": "The label for category Developer in sidebar docsSidebar"
   }
 }

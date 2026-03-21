@@ -1,0 +1,222 @@
+# CLI Reference
+
+A complete reference for every Agent-wallet command. Whether you're reviewing the basics or configuring automation scripts, you'll find the answer here.
+
+:::tip Just getting started?
+If you haven't created a wallet yet, head to [Quick Start](../QuickStart.md) first — three steps, under a minute.
+:::
+
+---
+
+## Basic Commands
+
+The core operations you'll use most often — creating wallets and signing.
+
+### `agent-wallet start` (Initialize / Create Wallet)
+
+**Interactive creation (recommended):**
+```bash
+agent-wallet start
+```
+The system walks you through choosing a wallet type, generating keys, and setting a master password. Just follow the prompts.
+
+**Custom password:**
+```bash
+agent-wallet start -p Abc12345!
+```
+Password requirements: at least 8 characters, including uppercase, lowercase, numbers, and special characters.
+
+**Import an existing private key:**
+```bash
+agent-wallet start -p Abc12345! -k your-private-key-hex
+```
+
+**Import a mnemonic:**
+```bash
+agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
+```
+
+### `agent-wallet sign` (Core Signing Operations)
+
+Every `sign` subcommand requires `--network` / `-n` to specify the chain.
+
+**Sign a message:**
+```bash
+agent-wallet sign msg "Hello" -n tron
+```
+
+**Sign a transaction** (build the unsigned tx via RPC first):
+```bash
+agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
+```
+
+**Sign EIP-712 typed data:**
+```bash
+agent-wallet sign typed-data '{
+  "types": {
+    "EIP712Domain": [{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],
+    "Transfer": [{"name":"to","type":"address"},{"name":"amount","type":"uint256"}]
+  },
+  "primaryType": "Transfer",
+  "domain": {"name":"MyDApp","chainId":1},
+  "message": {"to":"0x7099...","amount":1000000}
+}' -n eip155:1
+```
+
+---
+
+## Wallet Management
+
+Manage multiple wallets — add, switch, inspect, remove.
+
+**Add a new wallet:**
+```bash
+agent-wallet add
+```
+
+**List all wallets:**
+```bash
+agent-wallet list
+```
+
+**Switch the active wallet:**
+```bash
+agent-wallet use my-bsc-wallet
+```
+
+**Inspect a wallet:**
+```bash
+agent-wallet inspect my-bsc-wallet
+```
+
+**Sign with a specific wallet** (without switching the active one):
+```bash
+agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p "Abc12345!"
+```
+
+**Remove a wallet:**
+```bash
+agent-wallet remove my-bsc-wallet
+```
+
+---
+
+## Non-Interactive Execution (For Automation & Background Services)
+
+By default, signing commands pause and prompt you to type your password interactively. But if an AI agent is running in the background, or you're running an automation script, this "stop and wait for input" behavior will cause the program to hang or error out.
+
+To let the program run silently from start to finish (non-interactive mode), you need to pre-supply the password. Depending on your use case, there are three approaches:
+
+### Method A: Environment Variable Injection (Recommended for AI Agents / CI Pipelines)
+
+Store the password in the current system environment. When the program needs the password, it automatically retrieves it — fully silent:
+
+```bash
+export AGENT_WALLET_PASSWORD='Abc12345!'
+```
+
+Once set, all signing commands in the current window return results instantly, no more pausing:
+
+```bash
+agent-wallet sign msg "Hello" -n tron
+agent-wallet sign tx '{"txID":"..."}' -n tron
+```
+
+:::caution Password contains special characters? Always use single quotes
+```bash
+# ✅ Correct — shell treats it literally
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+
+# ❌ Wrong — $ gets expanded by the shell, password silently breaks
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+```
+:::
+
+### Method B: Local Password Cache (True "Set and Forget")
+
+The ultimate convenience solution. After running a command once with the `--save-runtime-secrets` flag, the password is permanently cached in a local file (`~/.agent-wallet/runtime_secrets.json`). The next time you run any signing command, the system automatically reads from the cache. No need for inline passwords or environment variables:
+
+```bash
+agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
+```
+
+### Method C: Inline `-p` Flag (For One-Off Commands)
+
+Pass the password directly at the end of the command. The program takes the password and runs immediately — no prompts:
+
+```bash
+agent-wallet sign msg "Hello" -n tron -p "Abc12345!"
+```
+
+:::danger Security Warning
+When using `-p` to pass the password inline, the plaintext password is permanently recorded in your terminal's `history`. Only use this method in fully isolated test environments!
+:::
+
+### Custom Storage Directory
+
+All commands support the `--dir` flag to specify a custom encrypted safe storage path (default: `~/.agent-wallet`). For example, you can build your safe directly on an encrypted USB drive — plug and play, unplug and go:
+
+```bash
+agent-wallet start --dir /Volumes/MyUSB/agent-wallet
+agent-wallet sign msg "Hello" -n tron --dir /Volumes/MyUSB/agent-wallet
+```
+
+---
+
+## Dangerous Operations
+
+:::danger The following operations are irreversible — use with extreme caution!
+:::
+
+### `agent-wallet change-password` (Change Master Password)
+
+After changing, **all key files are re-encrypted with the new password**. The old password becomes invalid immediately — make sure to update your password manager.
+
+```bash
+agent-wallet change-password
+```
+
+### `agent-wallet reset` (Reset All Data)
+
+Deletes everything under `~/.agent-wallet/`. **This is a nuclear option — once executed, all wallets, keys, and configuration are permanently gone, with no recovery.** The system will ask for confirmation.
+
+```bash
+agent-wallet reset
+```
+
+---
+
+## Real-World Example: Signing in a Shell Script
+
+The CLI isn't just for manual typing — it integrates perfectly into your automation scripts.
+
+This minimal example demonstrates how to perform a non-interactive signing operation in a Bash script, cleanly capturing the signature result into a variable for subsequent use (no complex network request code involved):
+
+```bash
+#!/bin/bash
+# Enable strict mode: stop immediately on any error
+set -e
+
+# 1. Pre-inject the password so all subsequent signing commands run silently
+export AGENT_WALLET_PASSWORD='your-master-password'
+
+echo "Calling local encrypted safe for signing..."
+
+# 2. Core operation: execute signing, capture the hash output into the SIGNATURE variable
+SIGNATURE=$(agent-wallet sign msg "Hello from my script" -n tron)
+
+# 3. Got the clean signature result — continue with downstream logic
+echo "✅ Signing successful!"
+echo "Extracted signature: $SIGNATURE"
+
+# From here, you can use $SIGNATURE to build requests, construct JSON, or pass it to other pipeline tasks...
+```
+
+---
+
+## Next Steps
+
+- New to this? → [Quick Start](../QuickStart.md)
+- Building your own agent? → [SDK Guide](./SDK-Guide.md)
+- Looking for ready-made code? → [SDK Cookbook](./SDK-Cookbook.md)
+- Common questions → [FAQ](../FAQ.md)

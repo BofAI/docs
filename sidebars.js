@@ -148,7 +148,21 @@ const sidebars = {
       type: 'category',
       label: 'Agent Wallet',
       collapsed: false,
-      items: ['Agent-Wallet/Intro', 'Agent-Wallet/QuickStart', 'Agent-Wallet/SDKQuickStart', 'Agent-Wallet/FullExample', 'Agent-Wallet/FAQ'],
+      items: [
+        'Agent-Wallet/Intro',
+        'Agent-Wallet/QuickStart',
+        {
+          type: 'category',
+          label: 'Developer',
+          collapsed: true,
+          items: [
+            'Agent-Wallet/Developer/CLI-Reference',
+            'Agent-Wallet/Developer/SDK-Guide',
+            'Agent-Wallet/Developer/SDK-Cookbook',
+          ],
+        },
+        'Agent-Wallet/FAQ',
+      ],
     },
     {
       type: 'category',

@@ -1,0 +1,221 @@
+# CLI 命令行手册
+
+包含了 Agent-wallet 所有命令的完整参考。无论你是想复习基础操作，还是想配置自动化脚本，这里都有答案。
+
+:::tip 刚刚入门？
+如果你还没创建过钱包，先去 [快速开始](../QuickStart.md) 走一遍——三步搞定，不到一分钟。
+:::
+
+---
+
+## 基础命令
+
+高频使用的核心操作——创建钱包和签名。
+
+### `agent-wallet start`（初始化 / 创建钱包）
+
+**交互式创建（推荐）：**
+```bash
+agent-wallet start
+```
+系统会一步步引导你选择钱包类型、生成密钥、设置主密码。跟着提示走就行。
+
+**自定义密码：**
+```bash
+agent-wallet start -p Abc12345!
+```
+密码要求：至少 8 位，包含大写、小写、数字和特殊字符。
+
+**导入已有私钥：**
+```bash
+agent-wallet start -p Abc12345! -k 你的私钥十六进制
+```
+
+**导入助记词：**
+```bash
+agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
+```
+
+### `agent-wallet sign`（核心签名操作）
+
+每条 `sign` 子命令都需要 `--network` / `-n` 来指定链。
+
+**签名消息：**
+```bash
+agent-wallet sign msg "Hello" -n tron
+```
+
+**签名交易**（需要先通过 RPC 构建未签名交易）：
+```bash
+agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
+```
+
+**签名 EIP-712 结构化数据：**
+```bash
+agent-wallet sign typed-data '{
+  "types": {
+    "EIP712Domain": [{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],
+    "Transfer": [{"name":"to","type":"address"},{"name":"amount","type":"uint256"}]
+  },
+  "primaryType": "Transfer",
+  "domain": {"name":"MyDApp","chainId":1},
+  "message": {"to":"0x7099...","amount":1000000}
+}' -n eip155:1
+```
+
+---
+
+## 钱包管理
+
+管理多个钱包——添加、切换、查看、删除。
+
+**添加新钱包：**
+```bash
+agent-wallet add
+```
+
+**列出所有钱包：**
+```bash
+agent-wallet list
+```
+
+**切换活跃钱包：**
+```bash
+agent-wallet use my-bsc-wallet
+```
+
+**查看钱包详情：**
+```bash
+agent-wallet inspect my-bsc-wallet
+```
+
+**用指定钱包签名**（不切换活跃钱包）：
+```bash
+agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p "Abc12345!"
+```
+
+**删除钱包：**
+```bash
+agent-wallet remove my-bsc-wallet
+```
+
+---
+
+## 非交互式执行（专为自动化与后台设计）
+
+默认情况下，执行签名命令时，终端会停下来并出现一行提示，等待你手动敲击键盘输入密码。但如果是 AI 代理在后台运行，或者你在跑自动化脚本，这种"中途停下来等人输入"的机制会导致程序直接卡死报错。
+
+为了让程序能一口气静默跑完（非交互模式），你需要提前把密码"喂"给命令。根据你的使用场景，有以下三种方式：
+
+### 方式 A：环境变量注入（推荐用于 AI 代理 / CI 流水线）
+
+将密码提前存在当前系统环境里，程序运行需要密码时会自动去环境里拿，全程静默：
+
+```bash
+export AGENT_WALLET_PASSWORD='Abc12345!'
+```
+
+设置后，当前窗口的所有签名命令直接秒出结果，不再停顿等待：
+
+```bash
+agent-wallet sign msg "Hello" -n tron
+agent-wallet sign tx '{"txID":"..."}' -n tron
+```
+
+:::caution 密码有特殊字符？务必用单引号
+```bash
+# 正确 — shell 按字面意思处理
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+
+# 错误 — $ 被 shell 展开，导致密码在后台静默报错
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+```
+:::
+
+### 方式 B：密码本地缓存（真正的"一劳永逸"）
+
+这是最省事的终极方案。执行一次带 `--save-runtime-secrets` 参数的命令后，密码会被永久缓存在本地文件（`~/.agent-wallet/runtime_secrets.json`）中。下次再运行任何签名命令时，系统会自动读取该缓存。你既不需要在命令行写密码，也不需要配环境变量：
+
+```bash
+agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
+```
+
+### 方式 C：命令行内联 `-p`（适合临时跑单次指令）
+
+直接把密码写在命令的结尾。程序拿到密码就直接干活，不会再停下来问你：
+
+```bash
+agent-wallet sign msg "Hello" -n tron -p "Abc12345!"
+```
+
+:::danger 安全提示
+直接用 `-p` 传递密码时，明文密码会被永久留在你电脑的终端 `history`（历史记录）中。强烈建议仅在完全隔离的测试环境中使用此方法！
+:::
+
+### 自定义存储目录
+
+所有命令都支持 `--dir` 参数来指定加密保险箱的存储路径（默认在 `~/.agent-wallet`）。比如，你可以把保险箱直接建在加密 U 盘里，即插即用，拔下即走：
+
+```bash
+agent-wallet start --dir /Volumes/MyUSB/agent-wallet
+agent-wallet sign msg "Hello" -n tron --dir /Volumes/MyUSB/agent-wallet
+```
+
+---
+
+## 危险操作
+
+:::danger 以下操作不可逆，请谨慎使用！
+:::
+
+### `agent-wallet change-password`（修改主密码）
+
+修改后，**所有密钥文件会用新密码重新加密**。旧密码立即失效，请确保已在密码管理器中更新。
+
+```bash
+agent-wallet change-password
+```
+
+### `agent-wallet reset`（重置所有数据）
+
+删除 `~/.agent-wallet/` 下的所有内容。**这是核弹级操作——一旦执行，所有钱包、密钥、配置全部消失，无法恢复。** 系统会要求二次确认。
+
+```bash
+agent-wallet reset
+```
+
+---
+
+## 实战：在 Shell 脚本中调用签名
+
+CLI 不只是拿来手敲的——它可以完美嵌入你的自动化脚本。
+
+下面这个极简示例展示了如何在 Bash 脚本中完成一次非交互式签名，并把签名结果干净地存入变量，供后续业务使用（不涉及复杂的网络请求代码）：
+
+```bash
+#!/bin/bash
+# 开启严格模式：遇到报错立刻停止
+set -e
+
+# 1. 提前注入密码，让后续的签名命令全程静默无弹窗
+export AGENT_WALLET_PASSWORD='你的主密码'
+
+echo "正在调用本地保险箱签名..."
+
+# 2. 核心操作：执行签名，并将终端打印出的哈希结果直接存入 SIGNATURE 变量
+SIGNATURE=$(agent-wallet sign msg "Hello from my script" -n tron)
+
+# 3. 拿到干净的签名结果，继续后续流程
+echo "✅ 签名成功！"
+echo "提取到的签名内容是: $SIGNATURE"
+
+# 接下来，你可以拿这个 $SIGNATURE 去发请求、拼 JSON，或者传给其他流水线任务...
+```
+---
+
+## 下一步
+
+- 没写过代码？ → [快速上手](../QuickStart.md)
+- 要开发应用？ → [SDK 接入指南](./SDK-Guide.md)
+- 找现成代码？ → [完整代码示例](./SDK-Cookbook.md)
+- 查看常见问题 → [FAQ](../FAQ.md)

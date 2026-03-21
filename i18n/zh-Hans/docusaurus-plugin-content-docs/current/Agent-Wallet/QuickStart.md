@@ -1,61 +1,51 @@
-# CLI 快速开始
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
 
-四步，从零到完成第一次签名。整个过程不到一分钟——复制粘贴就行。
+# 快速开始
 
-:::tip 已经是开发者了？
-如果你想直接在 TypeScript 或 Python 代码里调用签名，跳到 [SDK 快速开始](./SDKQuickStart.md)。
+三步，从零到在 OpenClaw 聊天框里唤醒你的加密保险箱。不用写代码，不花一分钱 Gas 费——复制粘贴就行。
+
+:::tip 想看 CLI 命令细节？
+本页只带你跑通最短路径。免密配置、管理多个钱包、签名类型等进阶内容，请看 [CLI 命令行手册](./Developer/CLI-Reference.md)。
 :::
 
 ---
 
-## 🧰 第一步：准备环境
+## 第一步：安装并初始化钱包
 
-Agent-wallet CLI 需要 Node.js ≥ 18。先看看你有没有：
+### 1.1 准备环境：安装 Node.js
+
+Agent-wallet 需要你的电脑里有 Node.js（这是一个运行环境，版本需 >= 18）。
+
+打开终端（Mac 用户按 `Command + 空格` 搜索"终端"；Windows 用户搜"cmd"或"PowerShell"），输入：
 
 ```bash
 node -v
 ```
 
-输出 `v18.x.x` 或更高？直接跳到第二步。没有或者版本太低？按下面的步骤安装：
+- **如果输出 `v18.x.x` 或更高数字：** 太棒了，直接跳到 1.2！
+- **如果没有输出或报错：** 别慌，去 **[Node.js 官方网站](https://nodejs.org)** 下载最新的 **LTS** 安装包，像装普通软件一样双击安装，一路"下一步"即可。装完后关掉终端重新打开，再输入 `node -v` 确认。
 
-:::tip 安装 / 升级 Node.js
+<details>
+<summary>开发者首选：使用 nvm 安装（小白请跳过）</summary>
 
-推荐用 [nvm](https://github.com/nvm-sh/nvm)，一条命令搞定：
-
-**1 — 安装 nvm**（已有可跳过）：
 ```bash
+# 1. 安装 nvm（已有可跳过）
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-```
 
-**2 — 重新加载终端配置：**
-```bash
+# 2. 重新加载终端配置
 source ~/.bashrc   # zsh 用户改成 source ~/.zshrc
+
+# 3. 安装并切换到 Node.js 18
+nvm install 18 && nvm use 18
 ```
 
-**3 — 安装 Node.js 18：**
-```bash
-nvm install 18
-```
+</details>
 
-**4 — 切换到 Node.js 18：**
-```bash
-nvm use 18
-```
-
-也可以直接去 [nodejs.org](https://nodejs.org) 下载 LTS 安装包。
-:::
-
----
-
-## 📦 第二步：安装 Agent-wallet
+### 1.2 安装 Agent-wallet
 
 ```bash
 npm install -g @bankofai/agent-wallet
-```
-
-Python 用户也可以用 pip：
-```bash
-pip install bankofai-agent-wallet
 ```
 
 验证安装成功：
@@ -65,18 +55,14 @@ agent-wallet --help
 
 看到帮助信息就说明安装好了。
 
----
-
-## 🔐 第三步：打造你的专属保险箱
+### 1.3 创建你的加密保险箱
 
 运行：
 ```bash
 agent-wallet start
 ```
 
-系统会引导你初始化 **Agent-wallet 加密保险箱**。整个过程是交互式的——跟着提示走就行。
-
-如果你没有手动指定密码（`-p` 参数），系统会自动生成一个强密码并显示一次：
+系统会引导你初始化 **Agent-wallet 加密保险箱**。整个过程是交互式的——跟着提示走就行：
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
@@ -98,7 +84,7 @@ Your master password: WiJxcI#t6@73K#OE
 Active wallet: default
 ```
 
-:::caution ⚠️ 主密码 = 你所有资产的唯一钥匙
+:::caution 主密码 = 你所有资产的唯一钥匙
 这个密码是解开所有私钥的唯一凭证。**忘了就找不回来——我们也没有备份，没有后门，神仙难救。**
 
 请现在就做这件事：
@@ -107,182 +93,103 @@ Active wallet: default
 3. 不要截图，不要记在桌面便签上，不要发给自己的微信
 :::
 
-**想自己设密码？**
-```bash
-agent-wallet start -p Abc12345!
-```
-密码要求：至少 8 位，包含大写、小写、数字和特殊字符。
-
-**已经有私钥，想导入？**
-```bash
-agent-wallet start -p Abc12345! -k 你的私钥十六进制
-```
-
-**有助记词？**
-```bash
-agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
-```
-
 ---
 
-## ✨ 第四步：第一次测试签名
+## 第二步：把密码"喂"给 AI（极其重要！）
 
-激动人心的时刻——运行：
+为了让 OpenClaw 能自动使用你的钱包，你必须把密码配置到它的运行环境中。请根据你的电脑系统，选择对应的标签页，**无脑复制执行**即可。
+
+### 2.1 永久保存并使密码生效
+
+<Tabs>
+<TabItem value="mac" label="Mac 用户 (Zsh)" default>
+
+**第 1 步：** 复制下面这条命令，把单引号里的内容换成你的真实密码，粘贴到终端里回车：
 
 ```bash
-agent-wallet sign msg "Hello from my AI agent" -n tron
+echo "export AGENT_WALLET_PASSWORD='你的主密码'" >> ~/.zshrc
 ```
 
-系统会让你输入主密码，然后输出：
+**第 2 步：** 再复制这条命令，粘贴回车，让配置立即生效：
 
-```text
-Master password: ********
-Signature: 4a9c8f...e71b
-```
-
-**当屏幕上吐出那串哈希字符时——恭喜你，保险箱配置成功了！** 🎉
-
-你的私钥已经加密存储在磁盘上，刚才的签名完全在本地完成，没有任何数据发送到网络。
-
----
-
-## 🚀 快速开始完成！接下来做什么？
-
-| 我想… | 做这个 |
-| :--- | :--- |
-| 让 AI 工具用上我的钱包 | 设置环境变量 `export AGENT_WALLET_PASSWORD='你的密码'`，详见 [简介](./Intro.md) |
-| 在自己的代码里签名 | 去 [SDK 快速开始](./SDKQuickStart.md) |
-| 看完整的转账示例 | 去 [完整示例](./FullExample.md) |
-| 继续看下面的命令手册 | ↓ 往下翻 |
-
----
-
-## 命令手册
-
-快速开始之后，下面是你日常会用到的所有命令。按需查阅。
-
-### 免密码签名
-
-每次签名都要交互输密码？自动化流程里完全行不通。三种方式跳过：
-
-**方式 A — 环境变量**（推荐用于 CI / 代理流水线）：
 ```bash
-export AGENT_WALLET_PASSWORD='Abc12345!'
-```
-设置后，所有签名命令静默运行：
-```bash
-agent-wallet sign msg "Hello" -n tron
-agent-wallet sign tx '{"txID":"..."}' -n tron
+source ~/.zshrc
 ```
 
-:::caution 密码有特殊字符？务必用单引号
-```bash
-# ✅ 正确 — shell 按字面意思处理
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
+</TabItem>
+<TabItem value="win-linux" label="Windows / Linux 用户 (Bash)">
 
-# ❌ 错误 — $ 被 shell 展开，密码静默出错
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
+**第 1 步：** 复制下面这条命令，把单引号里的内容换成你的真实密码，粘贴到终端里回车：
+
+```bash
+echo "export AGENT_WALLET_PASSWORD='你的主密码'" >> ~/.bashrc
+```
+
+**第 2 步：** 再复制这条命令，粘贴回车，让配置立即生效：
+
+```bash
+source ~/.bashrc
+```
+
+</TabItem>
+</Tabs>
+
+:::caution 密码有特殊字符？千万不要动单引号！
+自动生成的密码经常含有 `$`、`!` 等特殊字符。上面的命令已经用了单引号包裹密码，**直接替换引号内的文字就好，千万不要改成双引号**，否则 shell 会把密码"消化"掉：
+
+```bash
+# 正确 — 单引号，密码原样保存
+echo "export AGENT_WALLET_PASSWORD='P@ss$w0rd!'" >> ~/.zshrc
+
+# 错误 — 双引号包密码，$ 被 shell 展开，密码静默出错
+echo "export AGENT_WALLET_PASSWORD=\"P@ss$w0rd!\"" >> ~/.zshrc
 ```
 :::
 
-**方式 B — 内联 `-p`**（临时用一次）：
-```bash
-agent-wallet sign msg "Hello" -n tron -p "Abc12345!"
-```
+### 2.2 重启你的 AI 后台服务
 
-**方式 C — `--save-runtime-secrets`**（密码存入 `~/.agent-wallet/runtime_secrets.json`，下次自动读取）：
-```bash
-agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
-```
+:::danger 这一步很多人忘了，结果 AI 死活读不到密码！
+因为你刚才新存了密码，而正在后台运行的 AI 助手还没刷新——它还是个"瞎子"！只有关掉它重新启动，它才能"看"到你的新密码。
+:::
 
-### 签名类型
-
-每条 `sign` 子命令都需要 `--network` / `-n` 来指定链：
-
-**签名消息：**
-```bash
-agent-wallet sign msg "Hello" -n tron
-```
-
-**签名交易**（需要先通过 RPC 构建未签名交易）：
-```bash
-agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
-```
-
-**签名 EIP-712 结构化数据：**
-```bash
-agent-wallet sign typed-data '{
-  "types": {
-    "EIP712Domain": [{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],
-    "Transfer": [{"name":"to","type":"address"},{"name":"amount","type":"uint256"}]
-  },
-  "primaryType": "Transfer",
-  "domain": {"name":"MyDApp","chainId":1},
-  "message": {"to":"0x7099...","amount":1000000}
-}' -n eip155:1
-```
-
-### 管理多个钱包
-
-**添加新钱包：**
-```bash
-agent-wallet add
-```
-
-**切换活跃钱包：**
-```bash
-agent-wallet use my-bsc-wallet
-```
-
-**用指定钱包签名**（不切换活跃钱包）：
-```bash
-agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p "Abc12345!"
-```
-
-**查看钱包详情：**
-```bash
-agent-wallet inspect my-bsc-wallet
-```
-
-**查看所有钱包：**
-```bash
-agent-wallet list
-```
-
-**删除钱包：**
-```bash
-agent-wallet remove my-bsc-wallet
-```
-
-### 修改主密码
-
-修改后，所有密钥文件会用新密码重新加密：
-
-```bash
-agent-wallet change-password
-```
-
-### 重置所有数据
-
-删除 `~/.agent-wallet/` 下的所有内容，**不可撤销**，需要二次确认：
-
-```bash
-agent-wallet reset
-```
-
-### 自定义存储目录
-
-所有命令支持 `--dir` 指定密钥存储路径（默认 `~/.agent-wallet`）：
-
-```bash
-agent-wallet start --dir ./my-secrets
-agent-wallet sign msg "Hello" --dir ./my-secrets
-```
+不管你现在是否正开着 OpenClaw 的后台服务，请务必将它**关闭**，然后在刚才执行过命令的终端窗口里，**重新启动**它。
 
 ---
 
-## 下一步
+## 第三步：在 OpenClaw 里唤醒你的加密保险箱
 
-- 让 AI 工具用上你的钱包 → [简介 — 普通玩家路径](./Intro.md)
-- 在代码里集成签名 → [SDK 快速开始](./SDKQuickStart.md)
-- 查看常见问题 → [常见问题](./FAQ.md)
+保险箱建好了，密码也配好了。现在打开 **OpenClaw**，就像和真人聊天一样，测试一下它能不能成功调用你的本地加密保险箱。
+
+:::info 还没装 OpenClaw Extension？
+先去 [OpenClaw Extension 快速开始](../Openclaw-extension/QuickStart.md) 安装好，再回来继续。
+:::
+
+### 零风险测试 1：查地址
+
+在聊天框里输入：
+
+> 帮我查一下我当前绑定的本地钱包地址（TRON 网络）。
+
+AI 会自动读取你的加密保险箱，并准确报出你刚才创建的钱包地址。**这证明密码配置完全正确！**
+
+### 零风险测试 2：让 AI 替你签名
+
+接着对它说：
+
+> 用我的钱包签名这段话："Hello Agent-wallet!"
+
+AI 会在本地离线完成签名，并返回一串哈希字符。
+
+**恭喜！** 全程没花一分钱 Gas 费，你也完全没接触私钥，但你已经成功让 AI 拥有了安全的密码学签名能力。
+
+---
+
+## 你已经跑通了全流程
+
+| 我想… | 去这里 |
+| :--- | :--- |
+| 喜欢敲命令？ | [CLI 命令行手册](./Developer/CLI-Reference.md) |
+| 要开发应用？ | [SDK 接入指南](./Developer/SDK-Guide.md) |
+| 找现成代码？ | [完整代码示例](./Developer/SDK-Cookbook.md) |
+| 了解安全设计原理 | [简介](./Intro.md) |
+| 查看常见问题 | [FAQ](./FAQ.md) |

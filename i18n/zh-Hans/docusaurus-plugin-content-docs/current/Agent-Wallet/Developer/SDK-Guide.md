@@ -1,14 +1,14 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-# SDK 快速开始
+# SDK 接入指南
 
 CLI 已经跑通了，能从命令行签名。现在你想把签名能力放进代码里——MCP Server、自动化脚本、AI 代理工作流。
 
 本页教你怎么做。完成后，你就能用几行 TypeScript 或 Python 初始化钱包 Provider、获取活跃钱包，并对消息、交易、EIP-712 结构化数据进行签名。
 
 :::tip 刚刚入门？
-如果还没创建过钱包，先去 [CLI 快速开始](./QuickStart.md) 走一遍（前三步不到一分钟）。SDK 读取的就是 CLI 创建的那个钱包——不需要重复配置任何东西。
+如果还没创建过钱包，先去 [快速上手](../QuickStart.md) 走一遍（不到一分钟）。SDK 读取的就是 CLI 创建的那个钱包——不需要重复配置任何东西。
 :::
 
 文档提供 TypeScript 和 Python 两个版本的安装说明和代码示例，点击标签页切换。
@@ -143,9 +143,9 @@ python3 -c "import agent_wallet; print('Installation successful')"
 
 它支持以下两种模式：
 
-### 🛡️ 核心用法：本地金库模式（强烈推荐）
+### 🛡️ 核心用法：本地加密保险箱模式（强烈推荐）
 
-如果你刚才已经跟着 [CLI 快速开始](./QuickStart.md) 走过一遍，那你的私钥早就安全地躺在本地的隐藏文件里了。
+如果你刚才已经跟着 [快速上手](../QuickStart.md) 走过一遍，那你的私钥早就安全地躺在本地的隐藏文件里了。
 
 **在这个模式下，你根本不需要（也不应该）接触明文私钥。** 你只需要告诉 SDK 你的"开箱密码"即可。
 
@@ -169,7 +169,7 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 
 ### ⚠️ 备用方案：静态注入模式（仅限测试环境）
 
-如果你是在一个"用完即毁"的临时环境（比如 GitHub Actions 的自动化测试流水线），或者你手里只有别人的一个临时测试私钥，你可以跳过本地金库，直接把私钥喂给 SDK。
+如果你是在一个"用完即毁"的临时环境（比如 GitHub Actions 的自动化测试流水线），或者你手里只有别人的一个临时测试私钥，你可以跳过本地加密保险箱，直接把私钥喂给 SDK。
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY="你的私钥十六进制"
@@ -178,19 +178,19 @@ export AGENT_WALLET_MNEMONIC="word1 word2 word3 ..."
 ```
 
 :::danger 极度危险：违背核心安全原则！
-静态模式直接读取明文私钥，这意味着你放弃了 Agent-wallet 引以为傲的加密保护，退回了简介中所说的"单点白给"的老路。请仅在完全隔离的测试环境、或一次性 CI/CD 脚本中使用此模式！主网真金白银操作，请永远使用本地金库模式。
+静态模式直接读取明文私钥，这意味着你放弃了 Agent-wallet 引以为傲的加密保护，退回了简介中所说的"单点白给"的老路。请仅在完全隔离的测试环境、或一次性 CI/CD 脚本中使用此模式！主网真金白银操作，请永远使用本地加密保险箱模式。
 :::
 
 :::tip 环境变量冲突怎么办？
-如果环境变量里同时存在密码和私钥，SDK 会优先保护安全：强制使用 `AGENT_WALLET_PASSWORD` 进入本地金库模式，忽略明文私钥。
+如果环境变量里同时存在密码和私钥，SDK 会优先保护安全：强制使用 `AGENT_WALLET_PASSWORD` 进入本地加密保险箱模式，忽略明文私钥。
 :::
 
 ### 环境变量速查
 
 | 变量名 | 用途 | 模式 | 是否必填 |
 | :--- | :--- | :--- | :--- |
-| `AGENT_WALLET_PASSWORD` | 主密码，解锁本地隐藏文件 | 🛡️ 本地金库 | 核心必填 |
-| `AGENT_WALLET_DIR` | 密钥目录（默认 `~/.agent-wallet`） | 🛡️ 本地金库 | 可选 |
+| `AGENT_WALLET_PASSWORD` | 主密码，解锁本地隐藏文件 | 🛡️ 本地加密保险箱 | 核心必填 |
+| `AGENT_WALLET_DIR` | 密钥目录（默认 `~/.agent-wallet`） | 🛡️ 本地加密保险箱 | 可选 |
 | `AGENT_WALLET_PRIVATE_KEY` | 明文私钥（十六进制） | ⚠️ 静态注入 | 二选一（与助记词） |
 | `AGENT_WALLET_MNEMONIC` | 明文助记词短语 | ⚠️ 静态注入 | 二选一（与私钥） |
 | `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | BIP-44 派生索引（默认 `0`） | ⚠️ 静态注入 | 可选 |
@@ -525,6 +525,7 @@ WalletError
 
 ## 下一步
 
-- 用命令行管理钱包 → [CLI 快速开始](./QuickStart.md)
-- 了解 Agent-wallet 的设计思路 → [简介](./Intro.md)
-- 查看常见问题 → [常见问题](./FAQ.md)
+- 喜欢敲命令？ → [CLI 命令行手册](./CLI-Reference.md)
+- 找现成代码？ → [完整代码示例](./SDK-Cookbook.md)
+- 了解 Agent-wallet 的设计思路 → [简介](../Intro.md)
+- 查看常见问题 → [FAQ](../FAQ.md)

@@ -152,7 +152,21 @@ const sidebars = {
       type: 'category',
       label: 'Agent Wallet',
       collapsed: false,
-      items: ['Agent-Wallet/Intro', 'Agent-Wallet/QuickStart', 'Agent-Wallet/FAQ'],
+      items: [
+        'Agent-Wallet/Intro',
+        'Agent-Wallet/QuickStart',
+        {
+          type: 'category',
+          label: '开发者',
+          collapsed: true,
+          items: [
+            'Agent-Wallet/Developer/CLI-Reference',
+            'Agent-Wallet/Developer/SDK-Guide',
+            'Agent-Wallet/Developer/SDK-Cookbook',
+          ],
+        },
+        'Agent-Wallet/FAQ',
+      ],
     },
     {
       type: 'category',
