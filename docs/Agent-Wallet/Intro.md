@@ -28,28 +28,37 @@ The common thread: **your private key is always exposed somewhere** — on disk,
 
 ---
 
-## The Fix: Agent-wallet
+## The Fix: A Web3 Wallet Built for AI Agents
 
-Agent-wallet is a **local encrypted safe** that works even when you're offline.
+When you use a Web3 wallet like MetaMask, do you paste your raw private key in every time? Of course not. You unlock it with a password, and let it sign on your behalf.
 
-It does exactly one thing: **use industry-grade encryption to lock your vulnerable plaintext private key on your own machine, and sign locally.**
+**Agent-wallet is a local MetaMask purpose-built for AI agents.**
 
-Even if someone gets hold of your wallet file, without the master password it's pure garbage data. Brute-forcing it would take longer than the age of the universe — economically pointless. At the same time, all signing operations complete on your machine — no network calls, no third-party APIs, no cloud intermediaries.
+It minimizes your risk through a **"physical + password separation"** dual-lock mechanism:
 
-**Bottom line: steal the file all you want — it's unreadable. Sign locally — nothing to intercept.**
+1. **Lock #1 (Physical file):** Your private key is encrypted with industry-grade algorithms and stored in a hidden folder deep in your system (`~/.agent-wallet`).
+2. **Lock #2 (Authorization password):** Your AI agent only needs the "unlock password" (which you can set in an environment variable) to operate.
+
+**🤔 You might ask: "What if the AI leaks my unlock password?"**
+
+This is the most elegant part of Agent-wallet: **a leaked password ≠ stolen assets.**
+
+If a hacker steals only your password through a malicious plugin, they can't do anything — because they don't have your encrypted wallet file. If they steal only the wallet file without the password, it's just uncrackable gibberish.
+
+**A hacker would need to simultaneously break into your system, locate the hidden wallet file, AND steal the password from your environment variables to touch your funds.** The difficulty and cost of this kind of attack is orders of magnitude higher than simply scanning a plaintext private key in a `.env` file!
+
+**Bottom line: steal the file — it's useless without the password. Leak the password — it's useless without the file.**
 
 ---
 
 ## How It Compares
 
-| | Plaintext key / `.env` | Cloud wallet | Agent-wallet |
-| :--- | :---: | :---: | :---: |
-| **Agent reads your key file** | ❌ Stolen instantly | — Key is remote | ✅ Encrypted — useless without password |
-| **Who owns the key** | ⚠️ Whoever can read the file | ❌ The provider | ✅ Only you (master password) |
-| **Works offline** | ⚠️ Depends | ❌ Must be online | ✅ 100% offline signing |
-| **Designed for AI agents** | ❌ Manual integration | ⚠️ REST API, latency | ✅ CLI + SDK, local, instant |
-| **Multi-chain support** | ❌ Build it yourself | ⚠️ Provider-dependent | ✅ EVM + TRON, one interface |
-| **Production-ready** | ❌ Dangerous | ⚠️ Trust a third party | ✅ Self-hosted, auditable |
+| | Traditional (plaintext key in `.env`) | Cloud wallet | 🛡️ Agent-wallet Local Vault |
+| :--- | :--- | :--- | :--- |
+| **How it works** | Hand your card and PIN directly to the AI | Store your money on someone else's server | **Give AI the password, file stays locked locally** |
+| **Log / env variable leak** | ❌ **Total loss** | ⚠️ Key is remote, still hackable | ✅ **Only the password leaks — no file, hacker gets nothing** |
+| **Encrypted file stolen** | — | — | ✅ **No password, hacker can't open the file** |
+| **Works offline?** | ⚠️ Depends | ❌ Must be online | ✅ **100% offline signing** |
 
 ---
 

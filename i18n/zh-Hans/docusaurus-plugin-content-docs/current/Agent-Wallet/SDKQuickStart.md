@@ -137,20 +137,26 @@ python3 -c "import agent_wallet; print('Installation successful')"
 
 ## 第二步：配置模式
 
-调用 SDK 之前，需要通过环境变量告诉 Agent-wallet 去哪里找密钥。SDK 提供两种模式——**本地模式**（磁盘加密密钥，`local_secure`）适合长期管理多个钱包，**静态模式**（环境变量注入）适合直接传入单个私钥。`resolveWalletProvider()` 会自动检测已设置的环境变量并选择对应模式，代码里不需要写任何判断逻辑。
+调用 SDK 之前，需要通过环境变量告诉 Agent-wallet 去哪里找密钥。
 
-### 本地模式（`local_secure`）
+不要被复杂的概念吓到，`resolveWalletProvider()` 极其聪明，它会自动检测你配置了什么环境变量，并决定工作模式，代码里不需要写任何 `if/else` 判断逻辑。
 
-私钥加密存储在磁盘上，适合长期管理多个钱包。使用前需要先通过 CLI 初始化（`agent-wallet start`），然后设置主密码：
+它支持以下两种模式：
+
+### 🛡️ 核心用法：本地金库模式（强烈推荐）
+
+如果你刚才已经跟着 [CLI 快速开始](./QuickStart.md) 走过一遍，那你的私钥早就安全地躺在本地的隐藏文件里了。
+
+**在这个模式下，你根本不需要（也不应该）接触明文私钥。** 你只需要告诉 SDK 你的"开箱密码"即可。
 
 ```bash
 export AGENT_WALLET_PASSWORD='Abc12345!'
-# 可选：自定义目录，默认为 ~/.agent-wallet
+# 可选：如果你之前改过钱包存储目录，告诉 SDK 在哪找
 export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
 
 :::caution 密码含特殊字符时，务必用单引号
-自动生成的强密码可能含有 `$`、`!` 等 shell 特殊字符，**务必用单引号**，避免 shell 展开导致密码被篡改：
+自动生成的强密码可能含有 `$`、`!` 等 shell 特殊字符，务必用单引号，避免 shell 展开导致密码被破坏：
 
 ```bash
 # ✅ 正确：单引号，密码原样传入
@@ -161,10 +167,9 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 ```
 :::
 
+### ⚠️ 备用方案：静态注入模式（仅限测试环境）
 
-### 静态模式（环境变量注入）
-
-直接通过环境变量传入私钥或助记词，不需要本地密钥文件，适合 CI/CD 或一次性脚本。静态模式必须指定 `network` 参数：
+如果你是在一个"用完即毁"的临时环境（比如 GitHub Actions 的自动化测试流水线），或者你手里只有别人的一个临时测试私钥，你可以跳过本地金库，直接把私钥喂给 SDK。
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY="你的私钥十六进制"
@@ -172,21 +177,23 @@ export AGENT_WALLET_PRIVATE_KEY="你的私钥十六进制"
 export AGENT_WALLET_MNEMONIC="word1 word2 word3 ..."
 ```
 
-:::caution 注意事项
-- `AGENT_WALLET_PASSWORD` 优先于 `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC`——两者同时设置时，以本地模式为准
-- `AGENT_WALLET_PRIVATE_KEY` 和 `AGENT_WALLET_MNEMONIC` 不能同时设置
-- 私钥和密码不要硬编码在源代码里——始终通过环境变量或 `.env` 文件传入，并把 `.env` 加进 `.gitignore`
+:::danger 极度危险：违背核心安全原则！
+静态模式直接读取明文私钥，这意味着你放弃了 Agent-wallet 引以为傲的加密保护，退回了简介中所说的"单点白给"的老路。请仅在完全隔离的测试环境、或一次性 CI/CD 脚本中使用此模式！主网真金白银操作，请永远使用本地金库模式。
+:::
+
+:::tip 环境变量冲突怎么办？
+如果环境变量里同时存在密码和私钥，SDK 会优先保护安全：强制使用 `AGENT_WALLET_PASSWORD` 进入本地金库模式，忽略明文私钥。
 :::
 
 ### 环境变量速查
 
 | 变量名 | 用途 | 模式 | 是否必填 |
 | :--- | :--- | :--- | :--- |
-| `AGENT_WALLET_PASSWORD` | 主密码，启用本地模式 | 本地模式 | 必填 |
-| `AGENT_WALLET_DIR` | 密钥目录（默认 `~/.agent-wallet`） | 本地模式 | 可选 |
-| `AGENT_WALLET_PRIVATE_KEY` | 私钥（十六进制） | 静态模式 | 二选一（与助记词） |
-| `AGENT_WALLET_MNEMONIC` | 助记词短语 | 静态模式 | 二选一（与私钥） |
-| `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | 助记词派生索引（默认 `0`） | 静态模式 | 可选 |
+| `AGENT_WALLET_PASSWORD` | 主密码，解锁本地隐藏文件 | 🛡️ 本地金库 | 核心必填 |
+| `AGENT_WALLET_DIR` | 密钥目录（默认 `~/.agent-wallet`） | 🛡️ 本地金库 | 可选 |
+| `AGENT_WALLET_PRIVATE_KEY` | 明文私钥（十六进制） | ⚠️ 静态注入 | 二选一（与助记词） |
+| `AGENT_WALLET_MNEMONIC` | 明文助记词短语 | ⚠️ 静态注入 | 二选一（与私钥） |
+| `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | BIP-44 派生索引（默认 `0`） | ⚠️ 静态注入 | 可选 |
 
 ---
 
@@ -396,19 +403,21 @@ print("Signature:", sig)
 <TabItem value="ts" label="TypeScript">
 
 ```typescript
-import { resolveWalletProvider } from "@bankofai/agent-wallet";
+import { resolveWalletProvider, ConfigWalletProvider } from "@bankofai/agent-wallet";
 
 // 本地模式：需要设置 AGENT_WALLET_PASSWORD
 const provider = resolveWalletProvider({ network: "tron:nile" });
 
-// 列出所有钱包
-const wallets = await provider.listWallets();
-for (const w of wallets) {
-  console.log(`${w.id} (${w.type})`);
-}
+if (provider instanceof ConfigWalletProvider) {
+  // 列出所有钱包 — 返回 [walletId, config, isActive] 元组数组
+  const wallets = provider.listWallets();
+  for (const [id, config, isActive] of wallets) {
+    console.log(`${id} (${config.type})${isActive ? " ← 活跃" : ""}`);
+  }
 
-// 切换活跃钱包
-provider.setActive("my-evm-wallet");
+  // 切换活跃钱包
+  provider.setActive("my-evm-wallet");
+}
 
 // 获取并使用
 const wallet = await provider.getActiveWallet();
@@ -419,15 +428,23 @@ const sig = await wallet.signMessage(new TextEncoder().encode("Hello"));
 <TabItem value="python" label="Python">
 
 ```python
-# 设置环境变量——resolve_wallet_provider 自动进入本地模式
-import os
-os.environ["AGENT_WALLET_PASSWORD"] = "Abc12345!"
+import asyncio
+from agent_wallet import resolve_wallet_provider, ConfigWalletProvider
 
-from agent_wallet import resolve_wallet_provider
-
+# 需要设置 AGENT_WALLET_PASSWORD
 provider = resolve_wallet_provider(network="tron:nile")
 
 async def main():
+    if isinstance(provider, ConfigWalletProvider):
+        # 列出所有钱包 — 返回 [(wallet_id, config, is_active)] 元组列表
+        wallets = provider.list_wallets()
+        for wallet_id, config, is_active in wallets:
+            print(f"{wallet_id} ({config.type}){'  ← 活跃' if is_active else ''}")
+
+        # 切换活跃钱包
+        provider.set_active("my-evm-wallet")
+
+    # 获取并使用
     wallet = await provider.get_active_wallet()
     sig = await wallet.sign_message(b"Hello")
     print("Signature:", sig)

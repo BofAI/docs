@@ -33,7 +33,7 @@ Going offline only affects transaction building and broadcasting (that's the MCP
 
 **It's gone.**
 
-The master password is the only credential for decrypting all private keys. We don't store it — not on disk, not in memory (it's wiped immediately after signing). There's no "forgot password" flow, no backdoor.
+The master password is the only credential for decrypting all private keys. There's no "forgot password" flow, no backdoor.
 
 If you forget your password:
 - Have another backup of your private key or mnemonic? Run `agent-wallet reset`, reinitialize, and reimport.
@@ -86,6 +86,24 @@ Most users don't need the SDK. If you're using OpenClaw and MCP Server, creating
 ---
 
 ## Security
+
+### The password is also stored in an environment variable — how is that different from a plaintext private key?
+
+The difference is enormous! It's the difference between leaving cash on the table and locking it in a double-layered safe.
+
+When you use a Web3 wallet like MetaMask, you never copy-paste your raw private key every time — you unlock it with a short password. Agent-wallet is essentially a command-line MetaMask built for AI agents.
+
+* Traditional approach (plaintext private key): It's like leaving cash right on the table. Any malicious browser extension, one careless code commit, or a background log scan — one glance at your `.env` file and the money is gone instantly. A classic single point of failure.
+* Agent-wallet approach: It splits the risk into two locks.
+   1. Physical safe: Your private key is encrypted with industry-grade algorithms and locked in a hidden folder deep in your system (`~/.agent-wallet`).
+   2. Unlock password: What you put in your environment variable (`.env`) is merely the password to open this safe.
+
+This means if a leak occurs:
+
+* If a hacker only steals your password (e.g., by scanning environment variables), they don't have your encrypted wallet file — the password is just a useless string.
+* If a hacker only steals your encrypted wallet file, they don't have your master password — the file is uncrackable gibberish that would take millennia to brute-force.
+
+A hacker would need to simultaneously break into your computer, locate and steal the hidden wallet file, AND steal the password from your environment variables to touch your funds. The difficulty of this attack is orders of magnitude higher than simply scanning a `.env` file!
 
 ### Does the private key ever leave my machine?
 
