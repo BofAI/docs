@@ -28,7 +28,7 @@ The common thread: **your private key is always exposed somewhere** — on disk,
 
 ---
 
-## The Fix: A Web3 Wallet Built for AI Agents
+## The Breakthrough: Agent-Wallet — The Web3 Wallet Designed Exclusively for AI
 
 When you use a Web3 wallet like MetaMask, do you paste your raw private key in every time? Of course not. You unlock it with a password, and let it sign on your behalf.
 
