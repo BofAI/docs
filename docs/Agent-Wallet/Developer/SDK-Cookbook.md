@@ -131,6 +131,9 @@ async function transferTRX(
   if (!signedTx.signature) {
     throw new Error("Signed transaction is missing the signature field");
   }
+  if (!signedTx.txID) {
+    throw new Error("Signed transaction is missing the txID field");
+  }
   console.log("Signed, signature:", signedTx.signature);
 
   // Step 4: Broadcast via TronGrid
@@ -399,9 +402,19 @@ async def transfer_bnb(to_address: str, amount_ether: str):
     tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(signed_tx_hex))
     print("Broadcast successful! txHash:", tx_hash.hex())
 
-    # Wait for confirmation (optional — add timeout to avoid blocking forever)
-    receipt = await w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
-    print("Confirmed in block:", receipt["blockNumber"])
+    # Optional: wait for confirmation
+    # NOTE: This blocks the event loop for up to `timeout` seconds.
+    # For production AI agents, consider running this in a background task
+    # or using asyncio.wait_for() with a shorter timeout and retry logic.
+    import asyncio
+    try:
+        receipt = await asyncio.wait_for(
+            w3.eth.wait_for_transaction_receipt(tx_hash),
+            timeout=120
+        )
+        print("Confirmed in block:", receipt["blockNumber"])
+    except asyncio.TimeoutError:
+        print("Confirmation timed out — the transaction may still confirm. txHash:", tx_hash.hex())
 
     return tx_hash.hex()
 

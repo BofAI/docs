@@ -95,7 +95,7 @@ agent-wallet inspect my-bsc-wallet
 
 **Sign with a specific wallet** (without switching the active one):
 ```bash
-agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p "Abc12345!"
+agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
 ```
 
 **Remove a wallet:**
@@ -164,7 +164,7 @@ jobs:
 After running a command once with the `--save-runtime-secrets` flag, the password is permanently cached in a local file (`~/.agent-wallet/runtime_secrets.json`). The next time you run any signing command, the system automatically reads from the cache. No need for inline passwords or environment variables:
 
 ```bash
-agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
+agent-wallet sign msg "Hello" -n tron -p 'Abc12345!' --save-runtime-secrets
 ```
 
 :::danger This disables the dual-lock protection
@@ -173,6 +173,14 @@ Caching the password next to the wallet file means a single file system compromi
 `runtime_secrets.json` stores your master password in **plaintext**. Any program with access to your file system (malicious plugins, AI agents, automation scripts) can read it directly. Make sure this file is never committed to git or synced to the cloud.
 
 The tool automatically sets restrictive file permissions (`600` — owner-read-only) on creation. If you've manually moved or copied the file, verify the permissions: `chmod 600 ~/.agent-wallet/runtime_secrets.json`.
+
+To remove the cached password and restore full dual-lock protection:
+
+```bash
+rm ~/.agent-wallet/runtime_secrets.json
+```
+
+After deletion, signing commands will prompt for the password interactively again (or read from `AGENT_WALLET_PASSWORD` if set).
 :::
 
 ### Method C: Inline `-p` Flag (For One-Off Commands)
@@ -180,7 +188,7 @@ The tool automatically sets restrictive file permissions (`600` — owner-read-o
 Pass the password directly at the end of the command. The program takes the password and runs immediately — no prompts:
 
 ```bash
-agent-wallet sign msg "Hello" -n tron -p "Abc12345!"
+agent-wallet sign msg "Hello" -n tron -p 'Abc12345!'
 ```
 
 :::danger Security Warning

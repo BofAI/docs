@@ -131,6 +131,9 @@ async function transferTRX(
   if (!signedTx.signature) {
     throw new Error("签名后的交易缺少 signature 字段");
   }
+  if (!signedTx.txID) {
+    throw new Error("签名后的交易缺少 txID 字段");
+  }
   console.log("已签名，signature：", signedTx.signature);
 
   // 第四步：通过 TronGrid 广播
@@ -399,9 +402,19 @@ async def transfer_bnb(to_address: str, amount_ether: str):
     tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(signed_tx_hex))
     print("广播成功！txHash：", tx_hash.hex())
 
-    # 等待确认（可选 — 添加超时以防止无限阻塞）
-    receipt = await w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
-    print("已在区块中确认：", receipt["blockNumber"])
+    # 可选：等待确认
+    # 注意：此调用会阻塞事件循环最多 `timeout` 秒。
+    # 生产环境的 AI Agent 建议在后台任务中执行，
+    # 或使用 asyncio.wait_for() 配合更短的超时和重试逻辑。
+    import asyncio
+    try:
+        receipt = await asyncio.wait_for(
+            w3.eth.wait_for_transaction_receipt(tx_hash),
+            timeout=120
+        )
+        print("已在区块中确认：", receipt["blockNumber"])
+    except asyncio.TimeoutError:
+        print("等待确认超时——交易可能仍会被确认。txHash：", tx_hash.hex())
 
     return tx_hash.hex()
 

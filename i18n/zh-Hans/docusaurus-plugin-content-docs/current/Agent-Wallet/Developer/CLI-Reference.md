@@ -95,7 +95,7 @@ agent-wallet inspect my-bsc-wallet
 
 **用指定钱包签名**（不切换活跃钱包）：
 ```bash
-agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p "Abc12345!"
+agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
 ```
 
 **删除钱包：**
@@ -164,7 +164,7 @@ jobs:
 执行一次带 `--save-runtime-secrets` 参数的命令后，密码会被永久缓存在本地文件（`~/.agent-wallet/runtime_secrets.json`）中。下次再运行任何签名命令时，系统会自动读取该缓存。你既不需要在命令行写密码，也不需要配环境变量：
 
 ```bash
-agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
+agent-wallet sign msg "Hello" -n tron -p 'Abc12345!' --save-runtime-secrets
 ```
 
 :::danger 此操作会使双重锁保护失效
@@ -173,6 +173,14 @@ agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
 `runtime_secrets.json` 以**明文**存储你的主密码。任何能访问你文件系统的程序（恶意插件、AI 代理、自动化脚本）都可以直接读取。务必确保该文件不会被提交到 git 或同步到云端。
 
 工具在创建该文件时会自动设置严格的文件权限（`600`——仅所有者可读）。如果你手动移动或复制过该文件，请验证权限：`chmod 600 ~/.agent-wallet/runtime_secrets.json`。
+
+要删除已缓存的密码并恢复完整的双重锁保护：
+
+```bash
+rm ~/.agent-wallet/runtime_secrets.json
+```
+
+删除后，签名命令将再次以交互方式提示输入密码（或从 `AGENT_WALLET_PASSWORD` 环境变量读取）。
 :::
 
 ### 方式 C：命令行内联 `-p`（适合临时跑单次指令）
@@ -180,7 +188,7 @@ agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
 直接把密码写在命令的结尾。程序拿到密码就直接干活，不会再停下来问你：
 
 ```bash
-agent-wallet sign msg "Hello" -n tron -p "Abc12345!"
+agent-wallet sign msg "Hello" -n tron -p 'Abc12345!'
 ```
 
 :::danger 安全提示
