@@ -122,6 +122,10 @@ export AGENT_WALLET_PASSWORD='你的主密码'
 source ~/.zshrc
 ```
 
+:::tip 为什么不用 echo 命令？
+`echo "export ..." >> ~/.zshrc` 虽然更快捷，但你的真实密码会被逐字记录在 Shell 的历史文件（`.zsh_history` / `.bash_history`）中。这些历史文件常常会被安全扫描器、备份工具、AI 编程助手抓取——恰恰是 Agent-wallet 要防范的风险。用编辑器直接编辑配置文件，密码不会出现在任何命令历史中。
+:::
+
 </TabItem>
 <TabItem value="win-linux" label="Linux / WSL 用户 (Bash)">
 
@@ -143,9 +147,6 @@ export AGENT_WALLET_PASSWORD='你的主密码'
 source ~/.bashrc
 ```
 
-</TabItem>
-</Tabs>
-
 :::info 没有 WSL 的 Windows 用户？
 如果你使用的是原生 Windows（未安装 WSL），可以通过 PowerShell 或系统属性设置环境变量：
 
@@ -157,9 +158,12 @@ source ~/.bashrc
 或者打开 **系统属性 → 高级 → 环境变量**，手动添加 `AGENT_WALLET_PASSWORD`。设置后请重启终端。
 :::
 
-:::tip 为什么不用 echo 命令？
-`echo "export ..." >> ~/.zshrc` 虽然更快捷，但你的真实密码会被逐字记录在 Shell 的历史文件（`.zsh_history` / `.bash_history`）中。这些历史文件常常会被安全扫描器、备份工具、AI 编程助手抓取——恰恰是 Agent-wallet 要防范的风险。用编辑器直接编辑配置文件，密码不会出现在任何命令历史中。
-:::
+</TabItem>
+</Tabs>
+
+
+
+
 
 :::caution 密码有特殊字符？千万不要动单引号！
 自动生成的密码经常含有 `$`、`!` 等特殊字符。上面的命令已经用了单引号包裹密码，**直接替换引号内的文字就好，千万不要改成双引号**，否则 shell 会把密码"消化"掉：
