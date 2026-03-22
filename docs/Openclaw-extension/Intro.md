@@ -31,7 +31,7 @@ MCP Servers are bridges between your AI assistant and the blockchain, providing 
 | :--- | :--- | :--- |
 | **[mcp-server-tron](https://github.com/BofAI/mcp-server-tron)** | TRON | 95 tools covering wallets, transfers, contracts, staking, governance, and all operations |
 | **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** | BSC / opBNB / Ethereum | Multi-chain EVM operations, wallets, contracts, cross-chain |
-| **[bankofai-recharge](https://recharge.bankofai.io/mcp)** | BANK OF AI (Remote) | Remote recharge MCP — top up your BANK OF AI account via on-chain USDT. Default endpoint: `https://recharge.bankofai.io/mcp` |
+| **bankofai-recharge** | BANK OF AI (Remote) | Remote recharge MCP — top up your BANK OF AI account via on-chain USDT. Default endpoint: `https://recharge.bankofai.io/mcp` |
 
 ### Skills — Pre-built Workflows
 

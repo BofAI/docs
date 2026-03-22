@@ -31,7 +31,7 @@ MCP Server 是 AI 助手与区块链之间的桥梁，通过 [Model Context Prot
 | :--- | :--- | :--- |
 | **[mcp-server-tron](https://github.com/BofAI/mcp-server-tron)** | TRON | 95 个工具，覆盖钱包、转账、合约、质押、治理等全部操作 |
 | **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** | BSC / opBNB / 以太坊 | 多链 EVM 操作、钱包、合约、跨链 |
-| **[bankofai-recharge](https://recharge.bankofai.io/mcp)** | BANK OF AI（远程） | 远程充值 MCP——通过链上 USDT 为 BANK OF AI 账户充值。默认端点：`https://recharge.bankofai.io/mcp` |
+| **bankofai-recharge** | BANK OF AI（远程） | 远程充值 MCP——通过链上 USDT 为 BANK OF AI 账户充值。默认端点：`https://recharge.bankofai.io/mcp` |
 
 ### Skills — 预构建工作流
 

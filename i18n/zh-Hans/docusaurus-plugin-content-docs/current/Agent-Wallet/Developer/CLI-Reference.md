@@ -122,6 +122,10 @@ agent-wallet sign msg "Hello" -n tron
 agent-wallet sign tx '{"txID":"..."}' -n tron
 ```
 
+:::tip 防止此命令被记录到 Shell 历史
+在命令前加一个空格（需要 Bash 中启用 `HISTCONTROL=ignorespace` 或 Zsh 中启用 `setopt HIST_IGNORE_SPACE`——大多数系统默认已开启）。或者直接用文本编辑器编辑 `~/.zshrc` / `~/.bashrc`，从根本上避免历史记录泄露。
+:::
+
 :::caution 密码有特殊字符？务必用单引号
 ```bash
 # 正确 — shell 按字面意思处理
@@ -131,6 +135,25 @@ export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
 export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 ```
 :::
+
+<details>
+<summary>GitHub Actions / CI 示例</summary>
+
+在 CI/CD 环境中，切勿将密码硬编码在工作流文件里。请使用仓库密钥（Secrets）：
+
+```yaml
+# .github/workflows/sign.yml
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: agent-wallet sign msg "Hello" -n tron
+        env:
+          AGENT_WALLET_PASSWORD: ${{ secrets.AGENT_WALLET_PASSWORD }}
+```
+
+</details>
 
 ### 方式 B：密码本地缓存（真正的"一劳永逸"）
 
@@ -142,6 +165,8 @@ agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
 
 :::danger 安全提示
 `runtime_secrets.json` 以**明文**存储你的主密码。任何能访问你文件系统的程序（恶意插件、AI 代理、自动化脚本）都可以直接读取。请仅在你完全信任运行环境的前提下使用此功能，且务必确保该文件不会被提交到 git 或同步到云端。
+
+工具在创建该文件时会自动设置严格的文件权限（`600`——仅所有者可读）。如果你手动移动或复制过该文件，请验证权限：`chmod 600 ~/.agent-wallet/runtime_secrets.json`。
 :::
 
 ### 方式 C：命令行内联 `-p`（适合临时跑单次指令）

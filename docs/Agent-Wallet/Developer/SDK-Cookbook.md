@@ -283,13 +283,17 @@ async function transferBNB(
   const nonce = await rpcProvider.getTransactionCount(fromAddress, "latest");
   const feeData = await rpcProvider.getFeeData();
 
+  if (!feeData.maxFeePerGas || !feeData.maxPriorityFeePerGas) {
+    throw new Error("Chain does not support EIP-1559 fee data");
+  }
+
   // Step 3: Build the unsigned transaction
   const unsignedTx = {
     to: toAddress,
     value: ethers.parseEther(amountEther),
     gas: 21000n,
-    maxFeePerGas: feeData.maxFeePerGas!,
-    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas!,
+    maxFeePerGas: feeData.maxFeePerGas,
+    maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
     nonce,
     chainId: CHAIN_ID,
     type: 2, // EIP-1559

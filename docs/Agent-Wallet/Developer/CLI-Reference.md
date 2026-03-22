@@ -122,6 +122,10 @@ agent-wallet sign msg "Hello" -n tron
 agent-wallet sign tx '{"txID":"..."}' -n tron
 ```
 
+:::tip Prevent this command from being recorded in shell history
+Prefix the command with a space (requires `HISTCONTROL=ignorespace` in Bash or `setopt HIST_IGNORE_SPACE` in Zsh — both are enabled by default on most systems). Or edit `~/.zshrc` / `~/.bashrc` directly in a text editor to avoid history exposure entirely.
+:::
+
 :::caution Password contains special characters? Always use single quotes
 ```bash
 # ✅ Correct — shell treats it literally
@@ -131,6 +135,25 @@ export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
 export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 ```
 :::
+
+<details>
+<summary>GitHub Actions / CI example</summary>
+
+In CI/CD environments, never hardcode the password in workflow files. Use repository secrets instead:
+
+```yaml
+# .github/workflows/sign.yml
+jobs:
+  sign:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: agent-wallet sign msg "Hello" -n tron
+        env:
+          AGENT_WALLET_PASSWORD: ${{ secrets.AGENT_WALLET_PASSWORD }}
+```
+
+</details>
 
 ### Method B: Local Password Cache (True "Set and Forget")
 
@@ -142,6 +165,8 @@ agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
 
 :::danger Security Warning
 `runtime_secrets.json` stores your master password in **plaintext**. Any program with access to your file system (malicious plugins, AI agents, automation scripts) can read it directly. Only use this feature if you fully trust the runtime environment, and make sure this file is never committed to git or synced to the cloud.
+
+The tool automatically sets restrictive file permissions (`600` — owner-read-only) on creation. If you've manually moved or copied the file, verify the permissions: `chmod 600 ~/.agent-wallet/runtime_secrets.json`.
 :::
 
 ### Method C: Inline `-p` Flag (For One-Off Commands)
