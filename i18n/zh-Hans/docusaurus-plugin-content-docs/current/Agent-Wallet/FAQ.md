@@ -165,11 +165,12 @@ source ~/.zshrc
 说明全局安装没有生效。检查：
 ```bash
 # 确认 npm 全局 bin 目录在 PATH 里
-npm bin -g
+npm prefix -g
+# 全局 bin 目录为：$(npm prefix -g)/bin
 ```
 如果输出的路径不在你的 `$PATH` 中，手动添加：
 ```bash
-echo "export PATH=$(npm bin -g):$PATH" >> ~/.zshrc
+echo "export PATH=$(npm prefix -g)/bin:$PATH" >> ~/.zshrc
 source ~/.zshrc
 ```
 

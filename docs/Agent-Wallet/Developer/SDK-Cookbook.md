@@ -98,6 +98,12 @@ async function transferTRX(
   const provider = resolveWalletProvider({ network: "tron:nile" });
   const wallet = await provider.getActiveWallet();
 
+  // Ensure fromAddress matches the wallet — a mismatch will cause a TronGrid error
+  const walletAddress = await wallet.getAddress();
+  if (fromAddress !== walletAddress) {
+    throw new Error(`fromAddress mismatch: expected ${walletAddress}, got ${fromAddress}`);
+  }
+
   // Step 2: Build the unsigned transaction via TronGrid
   const { data: unsignedTx } = await axios.post(
     `${TRONGRID_API}/wallet/createtransaction`,
@@ -328,9 +334,13 @@ async function transferBNB(
   const txResponse = await rpcProvider.broadcastTransaction("0x" + signedTxHex);
   console.log("Broadcast successful! txHash:", txResponse.hash);
 
-  // Wait for confirmation (optional)
-  const receipt = await txResponse.wait();
-  console.log("Confirmed in block:", receipt?.blockNumber);
+  // Wait for confirmation (optional — add timeout to avoid hanging)
+  try {
+    const receipt = await txResponse.wait(1); // wait 1 confirmation, throws on timeout
+    console.log("Confirmed in block:", receipt?.blockNumber);
+  } catch (e) {
+    console.warn("Receipt wait timed out or failed:", e);
+  }
 
   return txResponse.hash;
 }
@@ -389,8 +399,8 @@ async def transfer_bnb(to_address: str, amount_ether: str):
     tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(signed_tx_hex))
     print("Broadcast successful! txHash:", tx_hash.hex())
 
-    # Wait for confirmation (optional)
-    receipt = await w3.eth.wait_for_transaction_receipt(tx_hash)
+    # Wait for confirmation (optional — add timeout to avoid blocking forever)
+    receipt = await w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
     print("Confirmed in block:", receipt["blockNumber"])
 
     return tx_hash.hex()

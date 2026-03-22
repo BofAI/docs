@@ -98,6 +98,12 @@ async function transferTRX(
   const provider = resolveWalletProvider({ network: "tron:nile" });
   const wallet = await provider.getActiveWallet();
 
+  // 确保 fromAddress 与钱包地址一致——不匹配会导致 TronGrid 报错
+  const walletAddress = await wallet.getAddress();
+  if (fromAddress !== walletAddress) {
+    throw new Error(`fromAddress 不匹配：预期 ${walletAddress}，实际 ${fromAddress}`);
+  }
+
   // 第二步：通过 TronGrid 构建未签名交易
   const { data: unsignedTx } = await axios.post(
     `${TRONGRID_API}/wallet/createtransaction`,
@@ -328,9 +334,13 @@ async function transferBNB(
   const txResponse = await rpcProvider.broadcastTransaction("0x" + signedTxHex);
   console.log("广播成功！txHash：", txResponse.hash);
 
-  // 等待确认（可选）
-  const receipt = await txResponse.wait();
-  console.log("已在区块中确认：", receipt?.blockNumber);
+  // 等待确认（可选 — 添加超时以防止无限阻塞）
+  try {
+    const receipt = await txResponse.wait(1); // 等待 1 个确认，超时则抛出异常
+    console.log("已在区块中确认：", receipt?.blockNumber);
+  } catch (e) {
+    console.warn("等待回执超时或失败：", e);
+  }
 
   return txResponse.hash;
 }
@@ -389,8 +399,8 @@ async def transfer_bnb(to_address: str, amount_ether: str):
     tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(signed_tx_hex))
     print("广播成功！txHash：", tx_hash.hex())
 
-    # 等待确认（可选）
-    receipt = await w3.eth.wait_for_transaction_receipt(tx_hash)
+    # 等待确认（可选 — 添加超时以防止无限阻塞）
+    receipt = await w3.eth.wait_for_transaction_receipt(tx_hash, timeout=120)
     print("已在区块中确认：", receipt["blockNumber"])
 
     return tx_hash.hex()

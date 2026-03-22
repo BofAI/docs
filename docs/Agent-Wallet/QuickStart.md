@@ -146,6 +146,17 @@ source ~/.bashrc
 </TabItem>
 </Tabs>
 
+:::info Windows without WSL?
+If you're on native Windows (no WSL), set the environment variable via PowerShell or System Properties:
+
+```powershell
+# PowerShell — set permanently for your user
+[Environment]::SetEnvironmentVariable("AGENT_WALLET_PASSWORD", "your-master-password", "User")
+```
+
+Or open **System Properties → Advanced → Environment Variables** and add `AGENT_WALLET_PASSWORD` manually. Restart your terminal after setting it.
+:::
+
 :::tip Why not use the echo command?
 While `echo "export ..." >> ~/.zshrc` is quicker, your actual password gets recorded verbatim in the shell's history file (`.zsh_history` / `.bash_history`). These history files are commonly scanned by security tools, backup utilities, and AI coding assistants — exactly the kind of exposure Agent-wallet is designed to prevent. Editing the config file directly in an editor keeps the password out of any command history.
 :::
@@ -155,10 +166,10 @@ Auto-generated passwords often contain `$`, `!`, and other special characters. T
 
 ```bash
 # ✅ Correct — single quotes, password saved as-is
-echo "export AGENT_WALLET_PASSWORD='P@ss$w0rd!'" >> ~/.zshrc
+export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
 
-# ❌ Wrong — double quotes around password, $ gets expanded by shell, password silently breaks
-echo "export AGENT_WALLET_PASSWORD=\"P@ss$w0rd!\"" >> ~/.zshrc
+# ❌ Wrong — double quotes, $w0rd gets shell-expanded to empty string, password silently breaks
+export AGENT_WALLET_PASSWORD="P@ss$w0rd!"  # actual value becomes "P@ss!"
 ```
 :::
 

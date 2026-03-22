@@ -165,11 +165,12 @@ The three most common causes:
 The global installation didn't take effect. Check:
 ```bash
 # Confirm the npm global bin directory is in your PATH
-npm bin -g
+npm prefix -g
+# The global bin directory is: $(npm prefix -g)/bin
 ```
 If the output path isn't in your `$PATH`, add it manually:
 ```bash
-echo "export PATH=$(npm bin -g):$PATH" >> ~/.zshrc
+echo "export PATH=$(npm prefix -g)/bin:$PATH" >> ~/.zshrc
 source ~/.zshrc
 ```
 

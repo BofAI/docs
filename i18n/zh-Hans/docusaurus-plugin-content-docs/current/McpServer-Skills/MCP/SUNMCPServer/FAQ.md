@@ -135,7 +135,7 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 1. **验证密码**：运行 `echo $AGENT_WALLET_PASSWORD` 确认变量已正确设置。
 2. **检查钱包目录**：确认 `~/.agent-wallet/` 存在并包含钱包文件。如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
-3. **密码丢失**：需要重新初始化钱包。运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset重置所有数据)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。
+3. **密码丢失**：需要重新初始化钱包。**警告：此操作会永久清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset重置所有数据)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。含有特殊字符的密码是受支持的——设置环境变量时请使用单引号。
 
 
 ### "Conflicting wallet modes"
