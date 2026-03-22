@@ -21,7 +21,11 @@ Before running any example below, make sure you have:
 
 1. Installed the Agent-wallet SDK (see [SDK Guide](./SDK-Guide.md))
 2. Initialized a local wallet via the CLI, or configured static mode environment variables
-3. Set `AGENT_WALLET_PASSWORD` (local `local_secure` mode) or `AGENT_WALLET_PRIVATE_KEY` (static mode)
+3. Set `AGENT_WALLET_PASSWORD` (local `local_secure` mode — strongly recommended)
+
+:::danger Avoid static mode (`AGENT_WALLET_PRIVATE_KEY`) for real funds
+Static mode stores your private key as plaintext in an environment variable — the exact exposure Agent-wallet's `local_secure` mode is designed to prevent. Only use `AGENT_WALLET_PRIVATE_KEY` in fully isolated, offline test environments with throwaway keys. For mainnet operations, always use `AGENT_WALLET_PASSWORD` with your local encrypted safe.
+:::
 
 ---
 
@@ -112,7 +116,15 @@ async function transferTRX(
   console.log("Unsigned txID:", unsignedTx.txID);
 
   // Step 3: Sign locally with Agent-wallet
-  const signedTx = JSON.parse(await wallet.signTransaction(unsignedTx));
+  let signedTx: Record<string, unknown>;
+  try {
+    signedTx = JSON.parse(await wallet.signTransaction(unsignedTx));
+  } catch (e) {
+    throw new Error(`signTransaction returned invalid JSON: ${e}`);
+  }
+  if (!signedTx.signature) {
+    throw new Error("Signed transaction is missing the signature field");
+  }
   console.log("Signed, signature:", signedTx.signature);
 
   // Step 4: Broadcast via TronGrid
@@ -177,7 +189,13 @@ async def transfer_trx(
         print("Unsigned txID:", unsigned_tx["txID"])
 
         # Step 3: Sign locally with Agent-wallet
-        signed_tx = json.loads(await wallet.sign_transaction(unsigned_tx))
+        raw_signed = await wallet.sign_transaction(unsigned_tx)
+        try:
+            signed_tx = json.loads(raw_signed)
+        except json.JSONDecodeError as e:
+            raise ValueError(f"signTransaction returned invalid JSON: {e}") from e
+        if "signature" not in signed_tx:
+            raise ValueError("Signed transaction is missing the signature field")
         print("Signed, signature:", signed_tx["signature"])
 
         # Step 4: Broadcast via TronGrid
@@ -306,6 +324,7 @@ async function transferBNB(
   console.log("Signed");
 
   // Step 5: Broadcast
+  // signTransaction returns hex without '0x' prefix; ethers requires it
   const txResponse = await rpcProvider.broadcastTransaction("0x" + signedTxHex);
   console.log("Broadcast successful! txHash:", txResponse.hash);
 

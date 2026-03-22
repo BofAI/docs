@@ -93,7 +93,7 @@
 
 `AGENT_WALLET_PASSWORD` 必须与钱包初始化时设置的主密码完全一致。请确认钱包目录存在（`ls ~/.agent-wallet/`），如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
 
-如果密码丢失，需要重新初始化钱包——详见 [Agent-Wallet 快速开始](../../../Agent-Wallet/QuickStart)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。
+如果密码丢失，需要重新初始化钱包。运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset重置所有数据)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。
 
 ### TronGrid API Key 不生效
 

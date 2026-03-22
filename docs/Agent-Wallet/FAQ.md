@@ -76,7 +76,9 @@ No limit. You can create separate wallets for different AI agents, different cha
 | **If an agent reads the file** | ✅ Key is inaccessible | ❌ Stolen instantly |
 | **Use case** | ✅ All scenarios | ⚠️ Fully isolated dev environments only |
 
-**Always use `local_secure`** unless you're 100% certain no other agent is running on that machine.
+:::danger `raw_secret` exposes your private key as plaintext
+`raw_secret` stores your key unencrypted — the exact exposure `local_secure` mode is designed to prevent. If any other process on your machine can read files, your key can be stolen instantly. **Always use `local_secure`** unless you're 100% certain no other agent is running on that machine and it's a fully isolated, offline test environment.
+:::
 
 ### What values does the `network` parameter accept?
 

@@ -123,7 +123,7 @@ source ~/.zshrc
 ```
 
 </TabItem>
-<TabItem value="win-linux" label="Windows / Linux 用户 (Bash)">
+<TabItem value="win-linux" label="Linux / WSL 用户 (Bash)">
 
 **第 1 步：** 用编辑器打开 `~/.bashrc` 文件，在末尾添加以下内容（把单引号里的内容换成你的真实密码）：
 

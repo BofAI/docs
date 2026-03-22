@@ -26,6 +26,10 @@ agent-wallet start -p Abc12345!
 ```
 Password requirements: at least 8 characters, including uppercase, lowercase, numbers, and special characters.
 
+:::caution Shell history risk
+Passing `-p` inline records the password in your terminal's history file. For production wallets, prefer interactive mode (`agent-wallet start` without `-p`) or set `AGENT_WALLET_PASSWORD` as an environment variable — see [Non-Interactive Execution](#non-interactive-execution-for-automation--background-services).
+:::
+
 **Import an existing private key:**
 ```bash
 agent-wallet start -p Abc12345! -k your-private-key-hex
@@ -155,16 +159,18 @@ jobs:
 
 </details>
 
-### Method B: Local Password Cache (True "Set and Forget")
+### Method B: Local Password Cache (Convenience vs. Security Trade-off)
 
-The ultimate convenience solution. After running a command once with the `--save-runtime-secrets` flag, the password is permanently cached in a local file (`~/.agent-wallet/runtime_secrets.json`). The next time you run any signing command, the system automatically reads from the cache. No need for inline passwords or environment variables:
+After running a command once with the `--save-runtime-secrets` flag, the password is permanently cached in a local file (`~/.agent-wallet/runtime_secrets.json`). The next time you run any signing command, the system automatically reads from the cache. No need for inline passwords or environment variables:
 
 ```bash
 agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
 ```
 
-:::danger Security Warning
-`runtime_secrets.json` stores your master password in **plaintext**. Any program with access to your file system (malicious plugins, AI agents, automation scripts) can read it directly. Only use this feature if you fully trust the runtime environment, and make sure this file is never committed to git or synced to the cloud.
+:::danger This disables the dual-lock protection
+Caching the password next to the wallet file means a single file system compromise grants full access to your funds — defeating Agent-wallet's core "physical file + password separation" security model. **Only use this for throwaway test wallets.**
+
+`runtime_secrets.json` stores your master password in **plaintext**. Any program with access to your file system (malicious plugins, AI agents, automation scripts) can read it directly. Make sure this file is never committed to git or synced to the cloud.
 
 The tool automatically sets restrictive file permissions (`600` — owner-read-only) on creation. If you've manually moved or copied the file, verify the permissions: `chmod 600 ~/.agent-wallet/runtime_secrets.json`.
 :::

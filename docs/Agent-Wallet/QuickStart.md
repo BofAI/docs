@@ -123,7 +123,7 @@ source ~/.zshrc
 ```
 
 </TabItem>
-<TabItem value="win-linux" label="Windows / Linux Users (Bash)">
+<TabItem value="win-linux" label="Linux / WSL Users (Bash)">
 
 **Step 1:** Open `~/.bashrc` in an editor. Add the following line at the end of the file (replace the content inside the single quotes with your actual password):
 

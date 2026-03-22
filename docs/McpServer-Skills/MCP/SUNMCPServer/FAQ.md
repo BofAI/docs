@@ -135,7 +135,7 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 1. **Verify password**: Run `echo $AGENT_WALLET_PASSWORD` to confirm the variable is set correctly.
 2. **Check wallet directory**: Verify `~/.agent-wallet/` exists and contains wallet files. If you used a custom directory, ensure `AGENT_WALLET_DIR` points to the correct path.
-3. **If password is lost**: You'll need to re-initialize the wallet. See the [Agent-Wallet Quick Start](../../../Agent-Wallet/QuickStart) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
+3. **If password is lost**: You'll need to re-initialize the wallet. Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
 
 
 ### "Conflicting Wallet Modes"
@@ -271,7 +271,7 @@ sun-mcp-server
    - Check Permit2 request structured data
    - Confirm chain ID, token address, deadline correct
 
-3. **Reinitialize Wallet** — see [Agent-Wallet Quick Start](../../../Agent-Wallet/QuickStart) for re-initialization instructions.
+3. **Reinitialize Wallet** — run `agent-wallet reset` to wipe and start over. See [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) for details.
 
 4. **Use Alternate Authorization Method**
    ```
