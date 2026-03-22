@@ -105,11 +105,11 @@ export AGENT_WALLET_PASSWORD='你的主密码'
 
 > 跟着做一遍？去 **[快速开始](./QuickStart.md)**。
 
-### 🛠️ 我是进阶用户——想用 CLI 管理钱包
+### ⌨️ 我是进阶用户——想用 CLI 管理钱包
 
 需要免密签名、管理多个钱包、自定义存储目录？去 **[CLI 命令行手册](./Developer/CLI-Reference.md)**。
 
-### 🛠️ 我是开发者——自己写代理
+### 👨‍💻 我是开发者——自己写代理
 
 <details>
 <summary>展开开发者路径 — TypeScript / Python SDK</summary>

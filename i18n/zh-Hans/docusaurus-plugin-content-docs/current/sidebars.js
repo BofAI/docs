@@ -157,7 +157,7 @@ const sidebars = {
         'Agent-Wallet/QuickStart',
         {
           type: 'category',
-          label: '开发者',
+          label: '进一步探索',
           collapsed: true,
           items: [
             'Agent-Wallet/Developer/CLI-Reference',

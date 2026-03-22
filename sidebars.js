@@ -153,7 +153,7 @@ const sidebars = {
         'Agent-Wallet/QuickStart',
         {
           type: 'category',
-          label: 'Developer',
+          label: 'Explore Further',
           collapsed: true,
           items: [
             'Agent-Wallet/Developer/CLI-Reference',

@@ -106,11 +106,11 @@ Once set, your tools automatically call your Agent-wallet encrypted safe to sign
 
 > Want the step-by-step walkthrough? Head to **[Quick Start](./QuickStart.md)**.
 
-### 🛠️ I'm an advanced user — managing wallets via CLI
+### ⌨️ I'm an advanced user — managing wallets via CLI
 
 Need password-free signing, managing multiple wallets, or custom storage directories? Head to **[CLI Reference](./Developer/CLI-Reference.md)**.
 
-### 🛠️ I'm a developer — building my own agent
+### 👨‍💻 I'm a developer — building my own agent
 
 <details>
 <summary>Expand developer path — TypeScript / Python SDK</summary>
