@@ -104,13 +104,19 @@ For OpenClaw to automatically use your wallet, you must configure the password i
 <Tabs>
 <TabItem value="mac" label="Mac Users (Zsh)" default>
 
-**Step 1:** Copy the command below, replace the content inside the single quotes with your actual password, paste it into the terminal and press Enter:
+**Step 1:** Open `~/.zshrc` in an editor. Add the following line at the end of the file (replace the content inside the single quotes with your actual password):
 
 ```bash
-echo "export AGENT_WALLET_PASSWORD='your-master-password'" >> ~/.zshrc
+open -e ~/.zshrc
 ```
 
-**Step 2:** Copy this command, paste and press Enter to apply the config immediately:
+Add this line at the very end, then save and close:
+
+```bash
+export AGENT_WALLET_PASSWORD='your-master-password'
+```
+
+**Step 2:** Back in the terminal, copy this command, paste and press Enter to apply the config immediately:
 
 ```bash
 source ~/.zshrc
@@ -119,13 +125,19 @@ source ~/.zshrc
 </TabItem>
 <TabItem value="win-linux" label="Windows / Linux Users (Bash)">
 
-**Step 1:** Copy the command below, replace the content inside the single quotes with your actual password, paste it into the terminal and press Enter:
+**Step 1:** Open `~/.bashrc` in an editor. Add the following line at the end of the file (replace the content inside the single quotes with your actual password):
 
 ```bash
-echo "export AGENT_WALLET_PASSWORD='your-master-password'" >> ~/.bashrc
+nano ~/.bashrc
 ```
 
-**Step 2:** Copy this command, paste and press Enter to apply the config immediately:
+Add this line at the very end, then save and close (in nano, press `Ctrl + O` to save, `Ctrl + X` to exit):
+
+```bash
+export AGENT_WALLET_PASSWORD='your-master-password'
+```
+
+**Step 2:** Back in the terminal, copy this command, paste and press Enter to apply the config immediately:
 
 ```bash
 source ~/.bashrc
@@ -133,6 +145,10 @@ source ~/.bashrc
 
 </TabItem>
 </Tabs>
+
+:::tip Why not use the echo command?
+While `echo "export ..." >> ~/.zshrc` is quicker, your actual password gets recorded verbatim in the shell's history file (`.zsh_history` / `.bash_history`). These history files are commonly scanned by security tools, backup utilities, and AI coding assistants — exactly the kind of exposure Agent-wallet is designed to prevent. Editing the config file directly in an editor keeps the password out of any command history.
+:::
 
 :::caution Password has special characters? Don't touch the single quotes!
 Auto-generated passwords often contain `$`, `!`, and other special characters. The commands above already use single quotes to wrap the password — **just replace the text inside the quotes, never switch to double quotes**, or the shell will silently mangle the value:

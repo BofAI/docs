@@ -104,13 +104,19 @@ Active wallet: default
 <Tabs>
 <TabItem value="mac" label="Mac 用户 (Zsh)" default>
 
-**第 1 步：** 复制下面这条命令，把单引号里的内容换成你的真实密码，粘贴到终端里回车：
+**第 1 步：** 用编辑器打开 `~/.zshrc` 文件，在末尾添加以下内容（把单引号里的内容换成你的真实密码）：
 
 ```bash
-echo "export AGENT_WALLET_PASSWORD='你的主密码'" >> ~/.zshrc
+open -e ~/.zshrc
 ```
 
-**第 2 步：** 再复制这条命令，粘贴回车，让配置立即生效：
+在文件末尾添加这一行，保存并关闭：
+
+```bash
+export AGENT_WALLET_PASSWORD='你的主密码'
+```
+
+**第 2 步：** 回到终端，复制这条命令，粘贴回车，让配置立即生效：
 
 ```bash
 source ~/.zshrc
@@ -119,13 +125,19 @@ source ~/.zshrc
 </TabItem>
 <TabItem value="win-linux" label="Windows / Linux 用户 (Bash)">
 
-**第 1 步：** 复制下面这条命令，把单引号里的内容换成你的真实密码，粘贴到终端里回车：
+**第 1 步：** 用编辑器打开 `~/.bashrc` 文件，在末尾添加以下内容（把单引号里的内容换成你的真实密码）：
 
 ```bash
-echo "export AGENT_WALLET_PASSWORD='你的主密码'" >> ~/.bashrc
+nano ~/.bashrc
 ```
 
-**第 2 步：** 再复制这条命令，粘贴回车，让配置立即生效：
+在文件末尾添加这一行，保存并关闭（nano 中按 `Ctrl + O` 保存，`Ctrl + X` 退出）：
+
+```bash
+export AGENT_WALLET_PASSWORD='你的主密码'
+```
+
+**第 2 步：** 回到终端，复制这条命令，粘贴回车，让配置立即生效：
 
 ```bash
 source ~/.bashrc
@@ -133,6 +145,10 @@ source ~/.bashrc
 
 </TabItem>
 </Tabs>
+
+:::tip 为什么不用 echo 命令？
+`echo "export ..." >> ~/.zshrc` 虽然更快捷，但你的真实密码会被逐字记录在 Shell 的历史文件（`.zsh_history` / `.bash_history`）中。这些历史文件常常会被安全扫描器、备份工具、AI 编程助手抓取——恰恰是 Agent-wallet 要防范的风险。用编辑器直接编辑配置文件，密码不会出现在任何命令历史中。
+:::
 
 :::caution 密码有特殊字符？千万不要动单引号！
 自动生成的密码经常含有 `$`、`!` 等特殊字符。上面的命令已经用了单引号包裹密码，**直接替换引号内的文字就好，千万不要改成双引号**，否则 shell 会把密码"消化"掉：
