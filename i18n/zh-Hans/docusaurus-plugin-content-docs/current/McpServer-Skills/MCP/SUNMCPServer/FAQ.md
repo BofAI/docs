@@ -133,9 +133,9 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 **解决步骤：**
 
-1. **验证密码**：运行 `echo $AGENT_WALLET_PASSWORD` 确认变量已正确设置。
+1. **验证密码已设置**：运行 `[[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "已设置" || echo "未设置"` 确认变量已设置（不会泄露密码明文）。
 2. **检查钱包目录**：确认 `~/.agent-wallet/` 存在并包含钱包文件。如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
-3. **密码丢失**：需要重新初始化钱包。**警告：此操作会永久清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset重置所有数据)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。含有特殊字符的密码是受支持的——设置环境变量时请使用单引号。
+3. **密码丢失**：需要重新初始化钱包。**警告：此操作会永久清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。含有特殊字符的密码是受支持的——设置环境变量时请使用单引号。
 
 
 ### "Conflicting wallet modes"
@@ -148,17 +148,17 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 ```bash
 # 选项 1：Agent Wallet（推荐用于生产）
-export AGENT_WALLET_PASSWORD="your_password"
+export AGENT_WALLET_PASSWORD='your_password'
 unset TRON_PRIVATE_KEY
 unset TRON_MNEMONIC
 
 # 选项 2：私钥（仅限测试网）
-export TRON_PRIVATE_KEY="your_64_hex_chars"
+export TRON_PRIVATE_KEY='your_64_hex_chars'
 unset AGENT_WALLET_PASSWORD
 unset TRON_MNEMONIC
 
 # 选项 3：助记词
-export TRON_MNEMONIC="word1 word2 ... word12"
+export TRON_MNEMONIC='word1 word2 ... word12'
 unset AGENT_WALLET_PASSWORD
 unset TRON_PRIVATE_KEY
 ```
@@ -169,7 +169,7 @@ unset TRON_PRIVATE_KEY
 unset AGENT_WALLET_PASSWORD TRON_PRIVATE_KEY TRON_MNEMONIC
 
 # 只设置一个
-export AGENT_WALLET_PASSWORD="your_password"
+export AGENT_WALLET_PASSWORD='your_password'
 
 # 重启服务器
 sun-mcp-server
@@ -264,14 +264,14 @@ sun-mcp-server
 1. **检查 Wallet 支持**
    ```bash
    # Agent Wallet 必须支持 signTypedData
-   echo $AGENT_WALLET_PASSWORD  # 确认已设置
+   [[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "已设置" || echo "未设置"
    ```
 
 2. **验证签名数据**
    - 检查 Permit2 请求的结构化数据
    - 确认链 ID、代币地址、截止时间正确
 
-3. **重新初始化 Wallet** — 运行 `agent-wallet reset` 清除并重新开始。详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset重置所有数据)。
+3. **重新初始化 Wallet** — 运行 `agent-wallet reset` 清除并重新开始。详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data)。
 
 4. **使用备用授权方法**
    ```

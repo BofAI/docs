@@ -133,7 +133,7 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 **Resolution Steps:**
 
-1. **Verify password**: Run `echo $AGENT_WALLET_PASSWORD` to confirm the variable is set correctly.
+1. **Verify password is set**: Run `[[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "Password is set" || echo "Password NOT set"` to confirm the variable is set without revealing the value.
 2. **Check wallet directory**: Verify `~/.agent-wallet/` exists and contains wallet files. If you used a custom directory, ensure `AGENT_WALLET_DIR` points to the correct path.
 3. **If password is lost**: You'll need to re-initialize the wallet. **Warning: this permanently wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details. Passwords with special characters are supported — use single quotes when setting the environment variable.
 
@@ -148,17 +148,17 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 ```bash
 # Option 1: Agent Wallet (recommended for production)
-export AGENT_WALLET_PASSWORD="your_password"
+export AGENT_WALLET_PASSWORD='your_password'
 unset TRON_PRIVATE_KEY
 unset TRON_MNEMONIC
 
 # Option 2: Private Key (testnet only)
-export TRON_PRIVATE_KEY="your_64_hex_chars"
+export TRON_PRIVATE_KEY='your_64_hex_chars'
 unset AGENT_WALLET_PASSWORD
 unset TRON_MNEMONIC
 
 # Option 3: Mnemonic
-export TRON_MNEMONIC="word1 word2 ... word12"
+export TRON_MNEMONIC='word1 word2 ... word12'
 unset AGENT_WALLET_PASSWORD
 unset TRON_PRIVATE_KEY
 ```
@@ -169,7 +169,7 @@ unset TRON_PRIVATE_KEY
 unset AGENT_WALLET_PASSWORD TRON_PRIVATE_KEY TRON_MNEMONIC
 
 # Set only one
-export AGENT_WALLET_PASSWORD="your_password"
+export AGENT_WALLET_PASSWORD='your_password'
 
 # Restart server
 sun-mcp-server
@@ -264,7 +264,7 @@ sun-mcp-server
 1. **Check Wallet Support**
    ```bash
    # Agent Wallet must support signTypedData
-   echo $AGENT_WALLET_PASSWORD  # Confirm set
+   [[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "Password is set" || echo "Password NOT set"
    ```
 
 2. **Verify Signature Data**

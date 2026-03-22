@@ -172,9 +172,9 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 If you're working in a disposable environment (e.g., a GitHub Actions CI pipeline), or you only have someone else's temporary test key, you can skip the local vault and feed the private key directly to the SDK.
 
 ```bash
-export AGENT_WALLET_PRIVATE_KEY="your-private-key-in-hex"
+export AGENT_WALLET_PRIVATE_KEY='your-private-key-in-hex'
 # or
-export AGENT_WALLET_MNEMONIC="word1 word2 word3 ..."
+export AGENT_WALLET_MNEMONIC='word1 word2 word3 ...'
 ```
 
 :::danger Extremely Dangerous: Violates Core Security Principles!

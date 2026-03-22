@@ -172,9 +172,9 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 如果你是在一个"用完即毁"的临时环境（比如 GitHub Actions 的自动化测试流水线），或者你手里只有别人的一个临时测试私钥，你可以跳过本地加密保险箱，直接把私钥喂给 SDK。
 
 ```bash
-export AGENT_WALLET_PRIVATE_KEY="你的私钥十六进制"
+export AGENT_WALLET_PRIVATE_KEY='你的私钥十六进制'
 # 或
-export AGENT_WALLET_MNEMONIC="word1 word2 word3 ..."
+export AGENT_WALLET_MNEMONIC='word1 word2 word3 ...'
 ```
 
 :::danger 极度危险：违背核心安全原则！

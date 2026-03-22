@@ -219,6 +219,8 @@ agent-wallet sign msg "Hello" -n tron --dir /Volumes/MyUSB/agent-wallet
 agent-wallet change-password
 ```
 
+<a id="agent-wallet-reset-reset-all-data"></a>
+
 ### `agent-wallet reset`（重置所有数据）
 
 删除 `~/.agent-wallet/` 下的所有内容。**这是核弹级操作——一旦执行，所有钱包、密钥、配置全部消失，无法恢复。** 系统会要求二次确认。
@@ -240,8 +242,13 @@ CLI 不只是拿来手敲的——它可以完美嵌入你的自动化脚本。
 # 开启严格模式：遇到报错立刻停止
 set -e
 
-# 1. 提前注入密码，让后续的签名命令全程静默无弹窗
-export AGENT_WALLET_PASSWORD='你的主密码'
+# 1. 密码应在运行此脚本之前已在环境中设置好。
+#    例如通过 ~/.zshrc / ~/.bashrc — 详见快速开始中的"永久保存并使密码生效"。
+#    切勿在脚本文件中硬编码真实密码（密码会随脚本进入 git 历史记录）。
+if [[ -z "$AGENT_WALLET_PASSWORD" ]]; then
+  echo "错误：AGENT_WALLET_PASSWORD 未设置" >&2
+  exit 1
+fi
 
 echo "正在调用本地保险箱签名..."
 

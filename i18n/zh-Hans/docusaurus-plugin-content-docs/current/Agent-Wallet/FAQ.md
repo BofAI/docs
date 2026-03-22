@@ -198,7 +198,7 @@ source ~/.zshrc
 
 按以下顺序排查：
 
-1. 确认 `AGENT_WALLET_PASSWORD` 环境变量已设置（在运行 OpenClaw 的那个终端里执行 `echo $AGENT_WALLET_PASSWORD` 验证）
+1. 确认 `AGENT_WALLET_PASSWORD` 环境变量已设置（在运行 OpenClaw 的那个终端里执行 `[[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "已设置" || echo "未设置"` 验证，不会泄露密码明文）
 2. 确认 MCP Server 是在设置了环境变量**之后**启动的
 3. 确认钱包已初始化：`agent-wallet list` 应该能看到至少一个钱包
 4. 如果以上都正确，尝试用 CLI 手动签名测试：`agent-wallet sign msg "test" -n tron`

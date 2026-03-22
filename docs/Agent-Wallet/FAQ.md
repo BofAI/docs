@@ -198,7 +198,7 @@ No. Agent-wallet is a standalone signing tool that can be used independently via
 
 Troubleshoot in this order:
 
-1. Confirm the `AGENT_WALLET_PASSWORD` environment variable is set (run `echo $AGENT_WALLET_PASSWORD` in the terminal where OpenClaw is running)
+1. Confirm the `AGENT_WALLET_PASSWORD` environment variable is set (run `[[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "Password is set" || echo "Password NOT set"` in the terminal where OpenClaw is running)
 2. Confirm the MCP Server was started **after** the environment variable was set
 3. Confirm a wallet has been initialized: `agent-wallet list` should show at least one wallet
 4. If everything above checks out, try signing manually via CLI: `agent-wallet sign msg "test" -n tron`

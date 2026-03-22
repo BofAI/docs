@@ -240,8 +240,13 @@ This minimal example demonstrates how to perform a non-interactive signing opera
 # Enable strict mode: stop immediately on any error
 set -e
 
-# 1. Pre-inject the password so all subsequent signing commands run silently
-export AGENT_WALLET_PASSWORD='your-master-password'
+# 1. Password should already be set in the environment before running this script.
+#    e.g. via ~/.zshrc / ~/.bashrc — see "Permanently Save and Activate the Password" in QuickStart.
+#    NEVER hardcode a real password in a script file (it will end up in git history).
+if [[ -z "$AGENT_WALLET_PASSWORD" ]]; then
+  echo "Error: AGENT_WALLET_PASSWORD not set" >&2
+  exit 1
+fi
 
 echo "Calling local encrypted safe for signing..."
 
