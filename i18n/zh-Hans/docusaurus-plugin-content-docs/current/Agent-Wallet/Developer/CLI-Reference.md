@@ -20,6 +20,10 @@ agent-wallet start
 ```
 系统会一步步引导你选择钱包类型、生成密钥、设置主密码。跟着提示走就行。
 
+:::danger 切勿对真实资金使用 `raw_secret` 钱包类型
+交互式向导可能会提供 `raw_secret` 选项。该类型将私钥**以明文形式**存储在磁盘上——任何有文件系统访问权限的程序都能直接读取。`raw_secret` 仅适用于完全隔离的测试环境。持有真实资金的钱包请始终选择 `local_secure`。
+:::
+
 **自定义密码：**
 ```bash
 agent-wallet start -p Abc12345!
@@ -127,7 +131,7 @@ agent-wallet sign tx '{"txID":"..."}' -n tron
 ```
 
 :::tip 防止此命令被记录到 Shell 历史
-在命令前加一个空格（需要 Bash 中启用 `HISTCONTROL=ignorespace` 或 Zsh 中启用 `setopt HIST_IGNORE_SPACE`——大多数系统默认已开启）。或者直接用文本编辑器编辑 `~/.zshrc` / `~/.bashrc`，从根本上避免历史记录泄露。
+建议直接用文本编辑器编辑 `~/.zshrc` / `~/.bashrc`，从根本上避免历史记录泄露。如果选择在命令前加空格来阻止记录，请先确认你的 Shell 已启用相应设置：Bash 中运行 `echo $HISTCONTROL` 确认包含 `ignorespace`，Zsh 中运行 `setopt | grep HIST_IGNORE_SPACE` 确认已开启。这些设置在大多数系统上**并非**默认启用，需要手动配置。
 :::
 
 :::caution 密码有特殊字符？务必用单引号

@@ -72,7 +72,7 @@ This is the most secure option. Private keys are encrypted and stored on local d
 export AGENT_WALLET_PASSWORD='<your-master-password>'
 
 # Optional: specify custom wallet directory (default: ~/.agent-wallet)
-export AGENT_WALLET_DIR="~/.agent-wallet"
+export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
 
 

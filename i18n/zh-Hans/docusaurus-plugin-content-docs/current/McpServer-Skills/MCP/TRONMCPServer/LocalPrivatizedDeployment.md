@@ -78,7 +78,7 @@ node --version  # 应输出 v20.x.x 或更高
 export AGENT_WALLET_PASSWORD='<你的主密码>'
 
 # 可选：指定自定义钱包目录（默认：~/.agent-wallet）
-export AGENT_WALLET_DIR="~/.agent-wallet"
+export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
 
 

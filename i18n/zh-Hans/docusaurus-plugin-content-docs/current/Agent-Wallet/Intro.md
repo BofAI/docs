@@ -83,7 +83,7 @@ agent-wallet sign msg "Hello from my AI agent" -n tron
 
 当屏幕上吐出一串哈希字符时——恭喜，你的加密保险箱配置成功了。
 
-> 想看每一步的详细说明？去 **[CLI 命令行手册](./Developer/CLI-Reference.md)**。
+> 想看每一步的详细说明？去 **[快速开始](./QuickStart.md)**。
 
 ---
 

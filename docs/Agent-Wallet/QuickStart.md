@@ -78,7 +78,7 @@ Wallets:
 │ default   │ local_secure │
 └───────────┴──────────────┘
 
-Your master password: WiJxcI#t6@73K#OE
+Your master password: <your-unique-password-will-appear-here>
    Save this password! You'll need it for signing and other operations.
 
 Active wallet: default

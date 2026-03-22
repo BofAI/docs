@@ -20,6 +20,10 @@ agent-wallet start
 ```
 The system walks you through choosing a wallet type, generating keys, and setting a master password. Just follow the prompts.
 
+:::danger Avoid the `raw_secret` wallet type for real funds
+The interactive wizard may offer a `raw_secret` option. This type stores your private key **unencrypted** on disk — any program with file system access can read it directly. Only use `raw_secret` in fully isolated test environments. For any wallet holding real funds, always choose `local_secure`.
+:::
+
 **Custom password:**
 ```bash
 agent-wallet start -p Abc12345!
@@ -127,7 +131,7 @@ agent-wallet sign tx '{"txID":"..."}' -n tron
 ```
 
 :::tip Prevent this command from being recorded in shell history
-Prefix the command with a space (requires `HISTCONTROL=ignorespace` in Bash or `setopt HIST_IGNORE_SPACE` in Zsh — both are enabled by default on most systems). Or edit `~/.zshrc` / `~/.bashrc` directly in a text editor to avoid history exposure entirely.
+To prevent the command from being recorded in shell history, edit `~/.zshrc` / `~/.bashrc` directly in a text editor rather than running the command in the terminal. Alternatively, prefix the command with a space — but only if you have verified that `HISTCONTROL=ignorespace` is active in Bash (`echo $HISTCONTROL`) or `HIST_IGNORE_SPACE` is active in Zsh (`setopt | grep HIST_IGNORE_SPACE`). These settings are **not** enabled by default on most systems and must be configured explicitly.
 :::
 
 :::caution Password contains special characters? Always use single quotes

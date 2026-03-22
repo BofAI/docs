@@ -84,7 +84,7 @@ agent-wallet sign msg "Hello from my AI agent" -n tron
 
 When a hash string appears on screen — congratulations, your encrypted safe is live.
 
-> Want the full step-by-step walkthrough? Head to **[CLI Reference](./Developer/CLI-Reference.md)**.
+> Want the full step-by-step walkthrough? Head to **[Quick Start](./QuickStart.md)**.
 
 ---
 
