@@ -140,6 +140,10 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
 ```
 
+:::danger 安全提示
+`runtime_secrets.json` 以**明文**存储你的主密码。任何能访问你文件系统的程序（恶意插件、AI 代理、自动化脚本）都可以直接读取。请仅在你完全信任运行环境的前提下使用此功能，且务必确保该文件不会被提交到 git 或同步到云端。
+:::
+
 ### 方式 C：命令行内联 `-p`（适合临时跑单次指令）
 
 直接把密码写在命令的结尾。程序拿到密码就直接干活，不会再停下来问你：

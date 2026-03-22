@@ -140,6 +140,10 @@ The ultimate convenience solution. After running a command once with the `--save
 agent-wallet sign msg "Hello" -n tron -p "Abc12345!" --save-runtime-secrets
 ```
 
+:::danger Security Warning
+`runtime_secrets.json` stores your master password in **plaintext**. Any program with access to your file system (malicious plugins, AI agents, automation scripts) can read it directly. Only use this feature if you fully trust the runtime environment, and make sure this file is never committed to git or synced to the cloud.
+:::
+
 ### Method C: Inline `-p` Flag (For One-Off Commands)
 
 Pass the password directly at the end of the command. The program takes the password and runs immediately — no prompts:
