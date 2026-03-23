@@ -9,8 +9,7 @@ Get your AI up and running with BANK OF AI SKILLS in **2 steps** and less than *
 Open the "Terminal" on your computer (the black window where you type commands).
 
 :::tip Can't find Terminal? No worries
-**Mac:** Press `Command + Space`, type `Terminal` in the search box, hit Enter. The black window appears.
-**Windows:** Press `Win + R`, type `cmd` in the popup, hit Enter.
+Press `Command + Space`, type `Terminal` in the search box, hit Enter. The black window appears.
 :::
 
 **Copy this entire line**, paste it into the black window, and press Enter:
@@ -71,8 +70,6 @@ We recommend using **Agent Wallet**. Think of it as opening a dedicated payment 
 
 If you don't want to install another tool and just want to start trading right away, you can paste your private key into a simple config file on your computer — like editing a notepad:
 
-**🍎 Mac Users:**
-
 1. In Terminal (the black window), type `open -e ~/.zshrc` and press Enter.
 2. A text editor window will pop up. Scroll to the very bottom, start a new line, and paste your TRON private key:
    ```bash
@@ -80,15 +77,6 @@ If you don't want to install another tool and just want to start trading right a
    ```
    ⚠️ Important: Don't forget the double quotes on both sides!
 3. Press `Command + S` to save, then close the editor.
-
-**🪟 Windows (WSL) Users:**
-
-1. In the WSL terminal, type `notepad.exe ~/.bashrc` and press Enter.
-2. At the very bottom of the notepad that opens, paste the same line:
-   ```bash
-   export TRON_PRIVATE_KEY="your_real_or_testnet_private_key"
-   ```
-3. Press `Ctrl + S` to save, then close the notepad.
 
 :::danger Critical Step
 No matter which option you chose, you must **completely close and reopen your AI tool** for it to pick up the new key!

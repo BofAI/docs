@@ -165,7 +165,7 @@ jobs:
 
 ### Method B: Local Password Cache (Convenience vs. Security Trade-off)
 
-After running a command once with the `--save-runtime-secrets` flag, the password is permanently cached in a local file (`~/.agent-wallet/runtime_secrets.json`). The next time you run any signing command, the system automatically reads from the cache. No need for inline passwords or environment variables:
+After running a command once with the `--save-runtime-secrets` flag, the password is cached in a local file (`~/.agent-wallet/runtime_secrets.json`). The next time you run any signing command, the system automatically reads from the cache. No need for inline passwords or environment variables:
 
 ```bash
 agent-wallet sign msg "Hello" -n tron -p 'Abc12345!' --save-runtime-secrets
@@ -196,7 +196,7 @@ agent-wallet sign msg "Hello" -n tron -p 'Abc12345!'
 ```
 
 :::danger Security Warning
-When using `-p` to pass the password inline, the plaintext password is permanently recorded in your terminal's `history`. Only use this method in fully isolated test environments!
+When using `-p` to pass the password inline, the plaintext password is recorded in your terminal's `history`. Only use this method in fully isolated test environments!
 :::
 
 ### Custom Storage Directory
@@ -225,7 +225,7 @@ agent-wallet change-password
 
 ### `agent-wallet reset` (Reset All Data)
 
-Deletes everything under `~/.agent-wallet/`. **This is a nuclear option — once executed, all wallets, keys, and configuration are permanently gone, with no recovery.** The system will ask for confirmation.
+Deletes everything under `~/.agent-wallet/`. **This is a nuclear option — once executed, all wallets, keys, and configuration are gone, with no recovery.** The system will ask for confirmation.
 
 ```bash
 agent-wallet reset
@@ -245,7 +245,7 @@ This minimal example demonstrates how to perform a non-interactive signing opera
 set -e
 
 # 1. Password should already be set in the environment before running this script.
-#    e.g. via ~/.zshrc / ~/.bashrc — see "Permanently Save and Activate the Password" in QuickStart.
+#    e.g. via ~/.zshrc / ~/.bashrc — see "Save and Activate the Password" in QuickStart.
 #    NEVER hardcode a real password in a script file (it will end up in git history).
 if [[ -z "$AGENT_WALLET_PASSWORD" ]]; then
   echo "Error: AGENT_WALLET_PASSWORD not set" >&2

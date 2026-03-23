@@ -99,7 +99,7 @@ Active wallet: default
 
 为了让 OpenClaw 能自动使用你的钱包，你必须把密码配置到它的运行环境中。请根据你的电脑系统，选择对应的标签页，**无脑复制执行**即可。
 
-### 2.1 永久保存并使密码生效
+### 2.1 保存并使密码生效
 
 <Tabs>
 <TabItem value="mac" label="Mac 用户 (Zsh)" default>
@@ -174,34 +174,6 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"  # 实际值变为 "P@ss!"
 :::
 
 不管你现在是否正开着 OpenClaw 的后台服务，请务必将它**关闭**，然后在刚才执行过命令的终端窗口里，**重新启动**它。
-
----
-
-## 第三步：在 OpenClaw 里唤醒你的 Agent-wallet
-
-Agent-wallet 建好了，密码也配好了。现在打开 **OpenClaw**，就像和真人聊天一样，测试一下它能不能成功调用你的本地 Agent-wallet。
-
-:::info 还没装 OpenClaw Extension？
-先去 [OpenClaw Extension 快速开始](../Openclaw-extension/QuickStart.md) 安装好，再回来继续。
-:::
-
-### 零风险测试 1：查地址
-
-在聊天框里输入：
-
-> 帮我查一下我当前绑定的本地钱包地址（TRON 网络）。
-
-AI 代理会自动读取你的 Agent-wallet，并准确报出你刚才创建的钱包地址。**这证明密码配置完全正确！**
-
-### 零风险测试 2：让 AI 代理替你签名
-
-接着对它说：
-
-> 用我的钱包签名这段话："Hello Agent-wallet!"
-
-AI 代理会在本地离线完成签名，并返回一串哈希字符。
-
-**恭喜！** 全程没花一分钱 Gas 费，你也完全没接触私钥，但你已经成功让 AI 代理拥有了安全的密码学签名能力。
 
 ---
 

@@ -20,7 +20,6 @@ Before you begin, make sure the following basic software is installed on your co
 Open the "Terminal" on your computer (that black window).
 
 - **Mac:** Press `Command + Space`, type `Terminal` in the search box, and hit Enter.
-- **Windows:** You'll need to install WSL (Windows Subsystem for Linux) first, then open the WSL terminal.
 
 **Copy the entire line below**, paste it into the terminal, and press Enter:
 
@@ -107,8 +106,6 @@ Once you have the corresponding key, choose the simple method below based on its
 
 #### 🔧 Type A Keys: Add to "Hidden Notepad" (For TRONGRID and TRONSCAN)
 
-**🍎 Mac Users:**
-
 1. Type `open -e ~/.zshrc` in the terminal and press Enter.
 2. At the bottom of the text editor that opens, paste these lines (keep the double quotes `""`):
    ```
@@ -116,16 +113,6 @@ Once you have the corresponding key, choose the simple method below based on its
    export TRONSCAN_API_KEY="paste_your_TronScan_Key_here"
    ```
 3. Press `Command + S` to save and close, then reopen the terminal or restart OpenClaw for changes to take effect.
-
-**🪟 Windows (WSL) Users:**
-
-1. Type `notepad.exe ~/.bashrc` in the terminal and press Enter.
-2. At the bottom of the text editor that opens, paste the same lines:
-   ```
-   export TRONGRID_API_KEY="paste_your_TronGrid_Key_here"
-   export TRONSCAN_API_KEY="paste_your_TronScan_Key_here"
-   ```
-3. Press `Ctrl + S` to save and close, then reopen the terminal or restart OpenClaw for changes to take effect.
 
 #### 🔧 Type B Keys: One-Click Config File (For BANK OF AI)
 

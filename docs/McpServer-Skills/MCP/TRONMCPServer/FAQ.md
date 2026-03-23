@@ -89,7 +89,7 @@ If the server reports an invalid private key at startup, it's usually a format i
 
 `AGENT_WALLET_PASSWORD` must exactly match the master password generated when you ran `agent-wallet start`. Verify that the wallet directory exists (`ls ~/.agent-wallet/`) and that `AGENT_WALLET_DIR` points to the correct path if you used a custom directory.
 
-If the password is lost, you'll need to re-initialize. **Warning: this permanently wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
+If the password is lost, you'll need to re-initialize. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
 
 ### TronGrid API Key not working
 

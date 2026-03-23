@@ -37,7 +37,7 @@ The master password is the only credential for decrypting all private keys. Ther
 
 If you forget your password:
 - Have another backup of your private key or mnemonic? Run `agent-wallet reset`, reinitialize, and reimport.
-- No backup at all? Access to that wallet is permanently lost.
+- No backup at all? Access to that wallet is lost.
 
 **So do this right now**: open your password manager and store the master password. Seriously.
 

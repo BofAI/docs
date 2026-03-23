@@ -165,7 +165,7 @@ jobs:
 
 ### 方式 B：密码本地缓存（便利性与安全性的取舍）
 
-执行一次带 `--save-runtime-secrets` 参数的命令后，密码会被永久缓存在本地文件（`~/.agent-wallet/runtime_secrets.json`）中。下次再运行任何签名命令时，系统会自动读取该缓存。你既不需要在命令行写密码，也不需要配环境变量：
+执行一次带 `--save-runtime-secrets` 参数的命令后，密码会被缓存在本地文件（`~/.agent-wallet/runtime_secrets.json`）中。下次再运行任何签名命令时，系统会自动读取该缓存。你既不需要在命令行写密码，也不需要配环境变量：
 
 ```bash
 agent-wallet sign msg "Hello" -n tron -p 'Abc12345!' --save-runtime-secrets
@@ -196,7 +196,7 @@ agent-wallet sign msg "Hello" -n tron -p 'Abc12345!'
 ```
 
 :::danger 安全提示
-直接用 `-p` 传递密码时，明文密码会被永久留在你电脑的终端 `history`（历史记录）中。强烈建议仅在完全隔离的测试环境中使用此方法！
+直接用 `-p` 传递密码时，明文密码会被留在你电脑的终端 `history`（历史记录）中。强烈建议仅在完全隔离的测试环境中使用此方法！
 :::
 
 ### 自定义存储目录
@@ -247,7 +247,7 @@ CLI 不只是拿来手敲的——它可以完美嵌入你的自动化脚本。
 set -e
 
 # 1. 密码应在运行此脚本之前已在环境中设置好。
-#    例如通过 ~/.zshrc / ~/.bashrc — 详见快速开始中的"永久保存并使密码生效"。
+#    例如通过 ~/.zshrc / ~/.bashrc — 详见快速开始中的"保存并使密码生效"。
 #    切勿在脚本文件中硬编码真实密码（密码会随脚本进入 git 历史记录）。
 if [[ -z "$AGENT_WALLET_PASSWORD" ]]; then
   echo "错误：AGENT_WALLET_PASSWORD 未设置" >&2

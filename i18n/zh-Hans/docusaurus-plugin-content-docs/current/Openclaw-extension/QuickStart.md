@@ -20,7 +20,6 @@
 打开你电脑上的"终端"（也就是那个黑框框）。
 
 - **苹果电脑：** 按 `Command + 空格`，在弹出的搜索框里输入 `Terminal`，按回车。
-- **Windows 电脑：** 需要先装 WSL（Windows 子系统），然后打开 WSL 终端。
 
 把下面这行神奇的代码**完整复制**，粘贴进去，按回车：
 
@@ -107,8 +106,6 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 
 #### 🔧 A 类钥匙：填入"隐形便签"（适用于 TRONGRID 和 TRONSCAN）
 
-**🍎 苹果电脑 (Mac) 用户：**
-
 1. 在终端输入 `open -e ~/.zshrc` 并回车。
 2. 在弹出的记事本最下方，粘贴这行代码（注意保留双引号 `""`）：
    ```
@@ -116,16 +113,6 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
    export TRONSCAN_API_KEY="你的TronScan_Key填在这里"
    ```
 3. 按 `Command + S` 保存关闭，然后重新打开终端或重启 OpenClaw 即可生效。
-
-**🪟 Windows 电脑 (WSL) 用户：**
-
-1. 在终端输入 `notepad.exe ~/.bashrc` 并回车。
-2. 在弹出的记事本最下方，粘贴同样的代码：
-   ```
-   export TRONGRID_API_KEY="你的TronGrid_Key填在这里"
-   export TRONSCAN_API_KEY="你的TronScan_Key填在这里"
-   ```
-3. 按 `Ctrl + S` 保存关闭，然后重新打开终端或重启 OpenClaw 即可生效。
 
 #### 🔧 B 类钥匙：一键生成配置文件（适用于 BANK OF AI）
 

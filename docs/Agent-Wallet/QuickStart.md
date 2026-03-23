@@ -99,7 +99,7 @@ Do this right now:
 
 For OpenClaw to automatically use your wallet, you must configure the password in its runtime environment. Select the tab matching your operating system and **just copy-paste**:
 
-### 2.1 Permanently Save and Activate the Password
+### 2.1 Save and Activate the Password
 
 <Tabs>
 <TabItem value="mac" label="Mac Users (Zsh)" default>
@@ -174,34 +174,6 @@ You just saved a new password, but the AI assistant running in the background ha
 :::
 
 Whether or not you currently have the OpenClaw backend service running, make sure to **shut it down**, then **restart it** from the same terminal window where you ran the commands above.
-
----
-
-## Step 3: Wake Up Your Agent-wallet in OpenClaw
-
-Your Agent-wallet is ready, the password is configured. Now open **OpenClaw** and test whether it can successfully invoke your local Agent-wallet — just like chatting with a real person.
-
-:::info Haven't installed OpenClaw Extension yet?
-Head to [OpenClaw Extension Quick Start](../Openclaw-extension/QuickStart.md) first, then come back here.
-:::
-
-### Zero-Risk Test 1: Check Your Address
-
-Type in the chat box:
-
-> Show me the wallet address currently bound to my local wallet (TRON network).
-
-The AI will automatically read your Agent-wallet and report back the wallet address you just created. **This proves the password configuration is working correctly!**
-
-### Zero-Risk Test 2: Let AI Sign for You
-
-Then say:
-
-> Sign this message with my wallet: "Hello Agent-wallet!"
-
-The AI will complete the signing locally and offline, returning a hash string.
-
-**Congratulations!** You didn't spend a single cent on gas fees, you never touched your private key, but you've successfully given your AI secure cryptographic signing capability.
 
 ---
 

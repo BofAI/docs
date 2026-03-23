@@ -123,8 +123,6 @@ If you're comfortable with the command line, you can store credentials in your s
 4. Press `Ctrl + X`, then `Y`, then Enter to save
 5. Close the terminal, reopen it, and restart your AI tool
 
-**Windows:** We don't recommend Windows beginners manually configure system environment variables. Please use the Agent Wallet method above. If you're using WSL, the steps are the same as Mac (but edit `~/.bashrc` instead).
-
 Add the variables for the skills you need:
 
 ```bash
@@ -147,7 +145,7 @@ export BANKOFAI_API_KEY="your_BANKOFAI_API_Key"
 
 ### Which AI tools support Skills?
 
-Currently: **OpenClaw** (most seamless), and any AI assistant that can read local files.
+Currently: **OpenClaw** (most seamless), and any AI assistant that can read local skill files.
 
 ---
 
