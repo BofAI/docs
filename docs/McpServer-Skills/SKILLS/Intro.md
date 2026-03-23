@@ -83,7 +83,7 @@ When the AI needs to call a paid on-chain service or data API, it uses the x402 
 
 > 🗣️ "Use the x402 protocol to call this paid agent endpoint: https://api.example.com" (replace with the actual paid endpoint URL you want to call)
 
-### 🏦 Account Manager
+### 🏦 BANK OF AI Account Manager
 
 Check your BANK OF AI balance and top up with a single sentence.
 
