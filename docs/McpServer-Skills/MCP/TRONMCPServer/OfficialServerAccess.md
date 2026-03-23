@@ -53,42 +53,6 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 
 Once the command completes, the MCP Server is ready to use — your AI Agent can immediately start interacting with the TRON blockchain.
 
-The official cloud service supports **two usage modes**:
-
-| Mode | Rate Limit | Description |
-| :--- | :--- | :--- |
-| **Without TronGrid API Key (default)** | 100,000 requests / day | Ready to use immediately, suitable for getting started and low-frequency queries |
-| **With TronGrid API Key** | 500,000 requests / day | Higher request limit, suitable for frequent queries and production use |
-
-Both modes use the same connection method — the only difference is the request rate limit.
-
----
-
-### Without TronGrid API Key Mode (Default)
-
-No API Key configuration needed to get started. Best for:
-
-- First-time experience with TRON MCP Server
-- Occasional on-chain data queries
-- Teaching, demos, and feature verification
-
-In this mode, all tools are available, but mainnet queries under high-frequency usage may trigger TronGrid's public RPC rate limits.
-
----
-
-### With TronGrid API Key Mode (Recommended)
-
-For frequent mainnet queries, apply for a free TronGrid API Key to get a higher request rate limit.
-
-**How to apply:**
-
-1. Visit [trongrid.io](https://www.trongrid.io/)
-2. Register an account and create a project
-3. Copy the generated API Key
-4. Add the API Key header in your requests
-
-After configuring the API Key, your requests will go through TronGrid's authenticated channel, with more stable performance and higher throughput.
-
 ---
 
 ## Verify Connection

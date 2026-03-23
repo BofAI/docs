@@ -53,42 +53,6 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 
 执行完成后，即可使用相关 MCP Server，你的 AI Agent 可以立即开始与 TRON 区块链交互。
 
-官方云服务支持 **两种使用模式**：
-
-| 模式 | 限速 | 说明 |
-| :--- |--- |:--- |
-| **无 TronGrid API Key（默认）** | 100,000 Requests / Day |即开即用，适合入门体验和低频查询 |
-| **带 TronGrid API Key** | 500,000 Requests / Day |更高的请求频率上限，适合频繁查询和生产级使用 |
-
-两种模式的接入方式完全相同，区别仅在于请求频率限制。
-
----
-
-### 无 TronGrid API Key 模式（默认）
-
-不配置任何 API Key 即可直接使用。适用于：
-
-- 首次体验 TRON MCP Server
-- 偶尔查询链上数据
-- 教学演示和功能验证
-
-在这种模式下，所有工具均可正常调用，但主网查询在高频场景下可能触发 TronGrid 公共 RPC 的速率限制。
-
----
-
-### 带 TronGrid API Key 模式（推荐）
-
-如果你需要频繁查询主网数据，建议申请一个免费的 TronGrid API Key 以获得更高的请求频率上限。
-
-**申请步骤：**
-
-1. 访问 [trongrid.io](https://www.trongrid.io/)
-2. 注册账号并创建项目
-3. 复制生成的 API Key
-4. 在请求中添加 API Key 请求头
-
-配置 API Key 后，你的请求会通过 TronGrid 的认证通道，享受更稳定的性能和更高的吞吐量。
-
 ---
 
 ## 验证接入是否成功
