@@ -8,7 +8,7 @@ You've tried the CLI and can sign from the command line. Now you want signing in
 This page shows you how. By the end, you'll be able to initialize a wallet provider, retrieve the active wallet, and sign messages, transactions, and EIP-712 typed data — all in a few lines of TypeScript or Python.
 
 :::tip New here?
-If you haven't created a wallet yet, start with the [Quick Start](../QuickStart.md) first (Steps 1–3 take under a minute). The SDK reads from the same wallet the CLI creates — no need to set up anything twice.
+If you haven't created a wallet yet, start with the [Quick Start](../QuickStart.md) first (takes under a minute). The SDK reads from the same wallet the CLI creates — no need to set up anything twice.
 :::
 
 Both installation instructions and code examples are provided for TypeScript and Python — use the tabs to switch.
@@ -61,7 +61,7 @@ npm install @bankofai/agent-wallet
 
 **Check Your Python Version**
 
-Requires Python ≥ 3.11 (the SDK uses `StrEnum` and other 3.11+ features). Check your current version:
+Requires Python ≥ 3.11 (the SDK uses 3.11+ features):
 
 ```bash
 python3 --version
@@ -143,7 +143,7 @@ Don't be intimidated by the concepts — `resolveWalletProvider()` is extremely 
 
 It supports two modes:
 
-### 🛡️ Core Usage: Local Vault Mode (Strongly Recommended)
+### 🛡️ Core Usage: Local Agent-wallet Mode (Strongly Recommended)
 
 If you've already followed the [Quick Start](../QuickStart.md), your private key is already safely locked inside a hidden file on your machine.
 
@@ -169,7 +169,7 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 
 ### ⚠️ Fallback: Static Injection Mode (Test Environments Only)
 
-If you're working in a disposable environment (e.g., a GitHub Actions CI pipeline), or you only have someone else's temporary test key, you can skip the local vault and feed the private key directly to the SDK.
+If you're working in a disposable environment (e.g., a GitHub Actions CI pipeline), or you only have someone else's temporary test key, you can skip the local Agent-wallet and feed the private key directly to the SDK.
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY='your-private-key-in-hex'
@@ -178,19 +178,19 @@ export AGENT_WALLET_MNEMONIC='word1 word2 word3 ...'
 ```
 
 :::danger Extremely Dangerous: Violates Core Security Principles!
-Static mode reads your private key in plaintext, which means you forfeit Agent-wallet's encryption protection and fall back to the "single point of failure" approach described in the introduction. Only use this mode in fully isolated test environments or one-off CI/CD scripts! For mainnet operations with real funds, always use local vault mode.
+Static mode reads your private key in plaintext, which means you forfeit Agent-wallet's encryption protection and fall back to the "single point of failure" approach described in the introduction. Only use this mode in fully isolated test environments or one-off CI/CD scripts! For mainnet operations with real funds, always use local Agent-wallet mode.
 :::
 
 :::tip What if environment variables conflict?
-If both a password and a private key exist in your environment variables, the SDK prioritizes security: it forces `AGENT_WALLET_PASSWORD` to enter local vault mode and ignores the plaintext private key.
+If both a password and a private key exist in your environment variables, the SDK prioritizes security: it forces `AGENT_WALLET_PASSWORD` to enter local Agent-wallet mode and ignores the plaintext private key.
 :::
 
 ### Environment Variable Reference
 
 | Variable | Purpose | Mode | Required |
 | :--- | :--- | :--- | :--- |
-| `AGENT_WALLET_PASSWORD` | Master password, unlocks the local hidden file | 🛡️ Local Vault | Core required |
-| `AGENT_WALLET_DIR` | Key directory (default `~/.agent-wallet`) | 🛡️ Local Vault | Optional |
+| `AGENT_WALLET_PASSWORD` | Master password, unlocks the local hidden file | 🛡️ Local Agent-wallet | Core required |
+| `AGENT_WALLET_DIR` | Key directory (default `~/.agent-wallet`) | 🛡️ Local Agent-wallet | Optional |
 | `AGENT_WALLET_PRIVATE_KEY` | Plaintext private key (hex) | ⚠️ Static Injection | Choose one (with mnemonic) |
 | `AGENT_WALLET_MNEMONIC` | Plaintext mnemonic phrase | ⚠️ Static Injection | Choose one (with private key) |
 | `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | BIP-44 derivation index (default `0`) | ⚠️ Static Injection | Optional |

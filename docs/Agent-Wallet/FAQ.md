@@ -136,7 +136,7 @@ Agent-wallet uses the Keystore V3 standard encryption (scrypt + AES-128-CTR), th
 
 ### What operating systems are supported?
 
-macOS, Linux, and Windows (via WSL) are all supported. As long as you can run Node.js >= 18 or Python >= 3.11, you're good to go.
+macOS and Linux. As long as you can run Node.js >= 18 or Python >= 3.11, you're good to go. Windows is not currently supported.
 
 ### `npm install -g` gives a permission error?
 

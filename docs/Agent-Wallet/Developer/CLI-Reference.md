@@ -201,7 +201,7 @@ When using `-p` to pass the password inline, the plaintext password is permanent
 
 ### Custom Storage Directory
 
-All commands support the `--dir` flag to specify a custom encrypted safe storage path (default: `~/.agent-wallet`). For example, you can build your safe directly on an encrypted USB drive — plug and play, unplug and go:
+All commands support the `--dir` flag to specify a custom Agent-wallet storage path (default: `~/.agent-wallet`). For example, you can store your Agent-wallet directly on an encrypted USB drive — plug and play, unplug and go:
 
 ```bash
 agent-wallet start --dir /Volumes/MyUSB/agent-wallet
@@ -252,7 +252,7 @@ if [[ -z "$AGENT_WALLET_PASSWORD" ]]; then
   exit 1
 fi
 
-echo "Calling local encrypted safe for signing..."
+echo "Calling local Agent-wallet for signing..."
 
 # 2. Core operation: execute signing, capture the hash output into the SIGNATURE variable
 SIGNATURE=$(agent-wallet sign msg "Hello from my script" -n tron)

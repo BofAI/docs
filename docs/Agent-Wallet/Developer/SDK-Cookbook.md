@@ -24,7 +24,7 @@ Before running any example below, make sure you have:
 3. Set `AGENT_WALLET_PASSWORD` (local `local_secure` mode — strongly recommended)
 
 :::danger Avoid static mode (`AGENT_WALLET_PRIVATE_KEY`) for real funds
-Static mode stores your private key as plaintext in an environment variable — the exact exposure Agent-wallet's `local_secure` mode is designed to prevent. Only use `AGENT_WALLET_PRIVATE_KEY` in fully isolated, offline test environments with throwaway keys. For mainnet operations, always use `AGENT_WALLET_PASSWORD` with your local encrypted safe.
+Static mode stores your private key as plaintext in an environment variable — the exact exposure Agent-wallet's `local_secure` mode is designed to prevent. Only use `AGENT_WALLET_PRIVATE_KEY` in fully isolated, offline test environments with throwaway keys. For mainnet operations, always use `AGENT_WALLET_PASSWORD` with your local Agent-wallet.
 :::
 
 ---

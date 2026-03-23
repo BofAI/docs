@@ -143,7 +143,7 @@ python3 -c "import agent_wallet; print('Installation successful')"
 
 它支持以下两种模式：
 
-### 🛡️ 核心用法：本地加密保险箱模式（强烈推荐）
+### 🛡️ 核心用法：本地 Agent-wallet 模式（强烈推荐）
 
 如果你刚才已经跟着 [快速上手](../QuickStart.md) 走过一遍，那你的私钥早就安全地躺在本地的隐藏文件里了。
 
@@ -169,7 +169,7 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
 
 ### ⚠️ 备用方案：静态注入模式（仅限测试环境）
 
-如果你是在一个"用完即毁"的临时环境（比如 GitHub Actions 的自动化测试流水线），或者你手里只有别人的一个临时测试私钥，你可以跳过本地加密保险箱，直接把私钥喂给 SDK。
+如果你是在一个"用完即毁"的临时环境（比如 GitHub Actions 的自动化测试流水线），或者你手里只有别人的一个临时测试私钥，你可以跳过本地 Agent-wallet，直接把私钥喂给 SDK。
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY='你的私钥十六进制'
@@ -178,19 +178,19 @@ export AGENT_WALLET_MNEMONIC='word1 word2 word3 ...'
 ```
 
 :::danger 极度危险：违背核心安全原则！
-静态模式直接读取明文私钥，这意味着你放弃了 Agent-wallet 引以为傲的加密保护，退回了简介中所说的"单点白给"的老路。请仅在完全隔离的测试环境、或一次性 CI/CD 脚本中使用此模式！主网真金白银操作，请永远使用本地加密保险箱模式。
+静态模式直接读取明文私钥，这意味着你放弃了 Agent-wallet 引以为傲的加密保护，退回了简介中所说的"单点白给"的老路。请仅在完全隔离的测试环境、或一次性 CI/CD 脚本中使用此模式！主网真金白银操作，请永远使用本地 Agent-wallet 模式。
 :::
 
 :::tip 环境变量冲突怎么办？
-如果环境变量里同时存在密码和私钥，SDK 会优先保护安全：强制使用 `AGENT_WALLET_PASSWORD` 进入本地加密保险箱模式，忽略明文私钥。
+如果环境变量里同时存在密码和私钥，SDK 会优先保护安全：强制使用 `AGENT_WALLET_PASSWORD` 进入本地 Agent-wallet 模式，忽略明文私钥。
 :::
 
 ### 环境变量速查
 
 | 变量名 | 用途 | 模式 | 是否必填 |
 | :--- | :--- | :--- | :--- |
-| `AGENT_WALLET_PASSWORD` | 主密码，解锁本地隐藏文件 | 🛡️ 本地加密保险箱 | 核心必填 |
-| `AGENT_WALLET_DIR` | 密钥目录（默认 `~/.agent-wallet`） | 🛡️ 本地加密保险箱 | 可选 |
+| `AGENT_WALLET_PASSWORD` | 主密码，解锁本地隐藏文件 | 🛡️ 本地 Agent-wallet | 核心必填 |
+| `AGENT_WALLET_DIR` | 密钥目录（默认 `~/.agent-wallet`） | 🛡️ 本地 Agent-wallet | 可选 |
 | `AGENT_WALLET_PRIVATE_KEY` | 明文私钥（十六进制） | ⚠️ 静态注入 | 二选一（与助记词） |
 | `AGENT_WALLET_MNEMONIC` | 明文助记词短语 | ⚠️ 静态注入 | 二选一（与私钥） |
 | `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | BIP-44 派生索引（默认 `0`） | ⚠️ 静态注入 | 可选 |

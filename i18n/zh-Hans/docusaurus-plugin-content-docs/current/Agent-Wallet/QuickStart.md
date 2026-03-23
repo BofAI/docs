@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # 快速开始
 
-三步，从零到在 OpenClaw 聊天框里唤醒你的加密保险箱。不用写代码，不花一分钱 Gas 费——复制粘贴就行。
+三步，从零到在 OpenClaw 聊天框里唤醒你的 Agent-wallet。不用写代码，不花一分钱 Gas 费——复制粘贴就行。
 
 :::tip 想看 CLI 命令细节？
 本页只带你跑通最短路径。免密配置、管理多个钱包、签名类型等进阶内容，请看 [CLI 命令行手册](./Developer/CLI-Reference.md)。
@@ -17,7 +17,7 @@ import TabItem from '@theme/TabItem';
 
 Agent-wallet 需要你的电脑里有 Node.js（这是一个运行环境，版本需 >= 18）。
 
-打开终端（Mac 用户按 `Command + 空格` 搜索"终端"；Windows 用户搜"cmd"或"PowerShell"），输入：
+打开终端（Mac 用户按 `Command + 空格` 搜索"终端"），输入：
 
 ```bash
 node -v
@@ -55,14 +55,14 @@ agent-wallet --help
 
 看到帮助信息就说明安装好了。
 
-### 1.3 创建你的加密保险箱
+### 1.3 创建你的 Agent-wallet 钱包
 
 运行：
 ```bash
 agent-wallet start
 ```
 
-系统会引导你初始化 **Agent-wallet 加密保险箱**。整个过程是交互式的——跟着提示走就行：
+系统会引导你初始化 **Agent-wallet 钱包**。整个过程是交互式的——跟着提示走就行：
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
@@ -95,7 +95,7 @@ Active wallet: default
 
 ---
 
-## 第二步：把密码"喂"给 AI（极其重要！）
+## 第二步：把密码"喂"给 AI 代理（极其重要！）
 
 为了让 OpenClaw 能自动使用你的钱包，你必须把密码配置到它的运行环境中。请根据你的电脑系统，选择对应的标签页，**无脑复制执行**即可。
 
@@ -127,7 +127,7 @@ source ~/.zshrc
 :::
 
 </TabItem>
-<TabItem value="win-linux" label="Linux / WSL 用户 (Bash)">
+<TabItem value="linux" label="Linux 用户 ">
 
 **第 1 步：** 用编辑器打开 `~/.bashrc` 文件，在末尾添加以下内容（把单引号里的内容换成你的真实密码）：
 
@@ -147,16 +147,6 @@ export AGENT_WALLET_PASSWORD='你的主密码'
 source ~/.bashrc
 ```
 
-:::info 没有 WSL 的 Windows 用户？
-如果你使用的是原生 Windows（未安装 WSL），可以通过 PowerShell 或系统属性设置环境变量：
-
-```powershell
-# PowerShell — 为当前用户永久设置
-[Environment]::SetEnvironmentVariable("AGENT_WALLET_PASSWORD", "你的主密码", "User")
-```
-
-或者打开 **系统属性 → 高级 → 环境变量**，手动添加 `AGENT_WALLET_PASSWORD`。设置后请重启终端。
-:::
 
 </TabItem>
 </Tabs>
@@ -177,9 +167,9 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"  # 实际值变为 "P@ss!"
 ```
 :::
 
-### 2.2 重启你的 AI 后台服务
+### 2.2 重启你的 AI 代理后台服务
 
-:::danger 这一步很多人忘了，结果 AI 死活读不到密码！
+:::danger 这一步很多人忘了，结果 AI 代理死活读不到密码！
 因为你刚才新存了密码，而正在后台运行的 AI 助手还没刷新——它还是个"瞎子"！只有关掉它重新启动，它才能"看"到你的新密码。
 :::
 
@@ -187,9 +177,9 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"  # 实际值变为 "P@ss!"
 
 ---
 
-## 第三步：在 OpenClaw 里唤醒你的加密保险箱
+## 第三步：在 OpenClaw 里唤醒你的 Agent-wallet
 
-保险箱建好了，密码也配好了。现在打开 **OpenClaw**，就像和真人聊天一样，测试一下它能不能成功调用你的本地加密保险箱。
+Agent-wallet 建好了，密码也配好了。现在打开 **OpenClaw**，就像和真人聊天一样，测试一下它能不能成功调用你的本地 Agent-wallet。
 
 :::info 还没装 OpenClaw Extension？
 先去 [OpenClaw Extension 快速开始](../Openclaw-extension/QuickStart.md) 安装好，再回来继续。
@@ -201,17 +191,17 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"  # 实际值变为 "P@ss!"
 
 > 帮我查一下我当前绑定的本地钱包地址（TRON 网络）。
 
-AI 会自动读取你的加密保险箱，并准确报出你刚才创建的钱包地址。**这证明密码配置完全正确！**
+AI 代理会自动读取你的 Agent-wallet，并准确报出你刚才创建的钱包地址。**这证明密码配置完全正确！**
 
-### 零风险测试 2：让 AI 替你签名
+### 零风险测试 2：让 AI 代理替你签名
 
 接着对它说：
 
 > 用我的钱包签名这段话："Hello Agent-wallet!"
 
-AI 会在本地离线完成签名，并返回一串哈希字符。
+AI 代理会在本地离线完成签名，并返回一串哈希字符。
 
-**恭喜！** 全程没花一分钱 Gas 费，你也完全没接触私钥，但你已经成功让 AI 拥有了安全的密码学签名能力。
+**恭喜！** 全程没花一分钱 Gas 费，你也完全没接触私钥，但你已经成功让 AI 代理拥有了安全的密码学签名能力。
 
 ---
 

@@ -3,7 +3,7 @@ import TabItem from '@theme/TabItem';
 
 # Quick Start
 
-Three steps, from zero to invoking your encrypted safe in the OpenClaw chat box. No coding required, no gas fees — just copy and paste.
+Three steps, from zero to invoking your Agent-wallet in the OpenClaw chat box. No coding required, no gas fees — just copy and paste.
 
 :::tip Want CLI command details?
 This page only walks you through the shortest path. For password-free configuration, managing multiple wallets, signature types, and other advanced topics, see the [CLI Reference](./Developer/CLI-Reference.md).
@@ -17,7 +17,7 @@ This page only walks you through the shortest path. For password-free configurat
 
 Agent-wallet requires Node.js (a runtime environment, version >= 18) on your computer.
 
-Open a terminal (Mac users press `Command + Space` and search for "Terminal"; Windows users search for "cmd" or "PowerShell"), then type:
+Open a terminal (Mac users press `Command + Space` and search for "Terminal"), then type:
 
 ```bash
 node -v
@@ -55,14 +55,14 @@ agent-wallet --help
 
 If you see the help output, you're good to go.
 
-### 1.3 Create Your Encrypted Safe
+### 1.3 Create Your Agent-wallet Wallet
 
 Run:
 ```bash
 agent-wallet start
 ```
 
-The system will guide you through initializing your **Agent-wallet encrypted safe**. The process is interactive — just follow the prompts:
+The system will guide you through initializing your **Agent-wallet wallet**. The process is interactive — just follow the prompts:
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
@@ -127,7 +127,7 @@ While `echo "export ..." >> ~/.zshrc` is quicker, your actual password gets reco
 :::
 
 </TabItem>
-<TabItem value="win-linux" label="Linux / WSL Users (Bash)">
+<TabItem value="linux" label="Linux Users">
 
 **Step 1:** Open `~/.bashrc` in an editor. Add the following line at the end of the file (replace the content inside the single quotes with your actual password):
 
@@ -147,16 +147,6 @@ export AGENT_WALLET_PASSWORD='your-master-password'
 source ~/.bashrc
 ```
 
-:::info Windows without WSL?
-If you're on native Windows (no WSL), set the environment variable via PowerShell or System Properties:
-
-```powershell
-# PowerShell — set permanently for your user
-[Environment]::SetEnvironmentVariable("AGENT_WALLET_PASSWORD", "your-master-password", "User")
-```
-
-Or open **System Properties → Advanced → Environment Variables** and add `AGENT_WALLET_PASSWORD` manually. Restart your terminal after setting it.
-:::
 
 </TabItem>
 </Tabs>
@@ -187,9 +177,9 @@ Whether or not you currently have the OpenClaw backend service running, make sur
 
 ---
 
-## Step 3: Wake Up Your Encrypted Safe in OpenClaw
+## Step 3: Wake Up Your Agent-wallet in OpenClaw
 
-Your safe is ready, the password is configured. Now open **OpenClaw** and test whether it can successfully invoke your local encrypted safe — just like chatting with a real person.
+Your Agent-wallet is ready, the password is configured. Now open **OpenClaw** and test whether it can successfully invoke your local Agent-wallet — just like chatting with a real person.
 
 :::info Haven't installed OpenClaw Extension yet?
 Head to [OpenClaw Extension Quick Start](../Openclaw-extension/QuickStart.md) first, then come back here.
@@ -201,7 +191,7 @@ Type in the chat box:
 
 > Show me the wallet address currently bound to my local wallet (TRON network).
 
-The AI will automatically read your encrypted safe and report back the wallet address you just created. **This proves the password configuration is working correctly!**
+The AI will automatically read your Agent-wallet and report back the wallet address you just created. **This proves the password configuration is working correctly!**
 
 ### Zero-Risk Test 2: Let AI Sign for You
 
@@ -219,8 +209,8 @@ The AI will complete the signing locally and offline, returning a hash string.
 
 | I want to… | Go here |
 | :--- | :--- |
-| Use CLI for advanced operations | [CLI Reference](./Developer/CLI-Reference.md) |
-| Build my own agent with code | [SDK Guide](./Developer/SDK-Guide.md) |
-| Find ready-made code examples | [SDK Cookbook](./Developer/SDK-Cookbook.md) |
+| Prefer the command line? | [CLI Reference](./Developer/CLI-Reference.md) |
+| Building your own agent? | [SDK Guide](./Developer/SDK-Guide.md) |
+| Looking for ready-made code? | [SDK Cookbook](./Developer/SDK-Cookbook.md) |
 | Understand the security design | [Introduction](./Intro.md) |
 | Check common questions | [FAQ](./FAQ.md) |

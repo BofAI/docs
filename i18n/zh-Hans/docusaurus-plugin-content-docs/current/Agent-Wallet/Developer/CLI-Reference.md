@@ -201,7 +201,7 @@ agent-wallet sign msg "Hello" -n tron -p 'Abc12345!'
 
 ### 自定义存储目录
 
-所有命令都支持 `--dir` 参数来指定加密保险箱的存储路径（默认在 `~/.agent-wallet`）。比如，你可以把保险箱直接建在加密 U 盘里，即插即用，拔下即走：
+所有命令都支持 `--dir` 参数来指定 Agent-wallet 的存储路径（默认在 `~/.agent-wallet`）。比如，你可以把 Agent-wallet 直接建在加密 U 盘里，即插即用，拔下即走：
 
 ```bash
 agent-wallet start --dir /Volumes/MyUSB/agent-wallet
@@ -254,7 +254,7 @@ if [[ -z "$AGENT_WALLET_PASSWORD" ]]; then
   exit 1
 fi
 
-echo "正在调用本地保险箱签名..."
+echo "正在调用本地 Agent-wallet 签名..."
 
 # 2. 核心操作：执行签名，并将终端打印出的哈希结果直接存入 SIGNATURE 变量
 SIGNATURE=$(agent-wallet sign msg "Hello from my script" -n tron)
