@@ -51,7 +51,7 @@
 npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 ```
 
-执行完成后，即可使用相关 MCP Server，你的 AI Agent 可以立即开始与 TRON 区块链交互。
+执行完成后，重启 AI Agent，即可使用相关 MCP Server，开始与 TRON 区块链交互。
 
 ---
 

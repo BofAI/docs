@@ -32,7 +32,7 @@ Simply tell your AI Agent to execute the following command:
 npx add-mcp https://sun-mcp-server.bankofai.io/mcp
 ```
 
-Once the command completes, the MCP Server is ready to use — your AI Agent can immediately start interacting with SunSwap.
+Once the command completes, restart your AI Agent, and the MCP Server is ready to use — you can start interacting with SunSwap.
 
 ---
 
