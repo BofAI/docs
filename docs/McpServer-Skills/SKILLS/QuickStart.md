@@ -1,6 +1,6 @@
 # Quick Start
 
-Get your AI up and running with BANK OF AI Skills in **2 steps** and less than **1 minute**. No private keys, no configuration — just install and start talking.
+Get your AI up and running with BANK OF AI SKILLS in **2 steps** and less than **1 minute**. No private keys, no configuration — just install and start talking.
 
 ---
 

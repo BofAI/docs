@@ -94,36 +94,38 @@ Pick the path that fits you:
 
 ### 🎮 I'm a casual user — using existing tools
 
-No code required. You can directly use our companion tools: **[OpenClaw Extension](../Openclaw-extension/Intro.md) + [MCP Server](../McpServer-Skills/MCP/Intro.md) + [Skills](../McpServer-Skills/SKILLS/Intro.md)**.
+You don't need to know any code! You can directly use our ready-made "all-in-one" suite: **[OpenClaw Extension](../Openclaw-extension/Intro.md) + [MCP Server](../McpServer-Skills/MCP/Intro.md) + [Skills](../McpServer-Skills/SKILLS/Intro.md)**.
 
 #### 🤝 How do they work together?
 
-Think of your AI tools as a small company that manages your Web3 assets. The division of labor inside is crystal clear:
+To give you total peace of mind, we designed your AI assistant as a well-organized little "company" with clear division of labor:
 
-- 🧠 **The Business Team (OpenClaw + Skills + MCP):** They do the legwork — checking market prices, calculating slippage, executing swaps. They're resourceful and capable, but here's the key: they have no direct access to your funds.
-- 🏦 **The CFO (Agent Wallet):** The ultimate gatekeeper. Your private key (think: bank card PIN) is locked tight inside their local safe, invisible to any external tool.
+- 🧠 **The Business Team (OpenClaw + Skills + MCP):** They do the legwork out in the field — quick-thinking and well-equipped, they know how to check prices, calculate slippage, and find the best quotes. But most importantly: they have zero authority to touch your funds.
+- 🏦 **The CFO (Agent Wallet):** The one guarding the vault. Your private key (think: bank card PIN) is locked tight inside their local safe, completely invisible to the Business Team outside.
 
-**Here's how the secure workflow plays out**:
+Here's how a perfect secure pipeline works:
 
-1. You give the AI agent an order: "Buy 100 USDT worth of TRX."
-2. The Business Team springs into action — finds the best price and drafts a "transaction request form."
-3. They hand the form to the internal **CFO (Agent Wallet)**.
-4. The CFO verifies everything and never takes the private key out of the safe — instead, they stamp the form right there inside (this is what's technically called "signing"), then pass only the stamped form back out.
-5. The Business Team takes the stamped form and submits the final transaction to the blockchain.
+1. You sit back in the boss's chair and say: "Buy 100 USDT worth of TRX."
+2. The Business Team rushes off to check prices, calculate fees, and dutifully drafts a "transaction request form."
+3. They hand the form to the **CFO (Agent Wallet)**, who sits right next to the safe.
+4. The CFO verifies everything and never takes the private key out of the safe — instead, they stamp the form right there with an "approved" seal (technically called "signing"), then pass only the stamped form back out.
+5. The Business Team takes the stamped form and gets it done on the blockchain.
 
-✨ **The key takeaway:** Throughout the entire process, the AI tools that do the legwork only ever receive the "signature result" — never the key itself! This ensures your AI agent has powerful on-chain capabilities while keeping your assets secure.
+✨ **The key takeaway:** Throughout the entire process, the AI tools doing the legwork only ever receive the "stamped paper" — they never even catch a glimpse of the private key! This ensures AI agent can handle extremely complex tasks for you while keeping your assets absolutely secure.
 
-#### ⚙️ How do I connect them?
+#### ⚙️ Sounds great — how do I connect them?
 
-Just one step — give the "Business Team" an internal passphrase to wake up the CFO. Tell the tools the master password you generated when creating your Agent Wallet:
+Dead simple! No complex programming needed — just one thing: give the Business Team an internal passphrase to wake up the CFO.
+
+Just tell the tools the "master password" you generated when creating your Agent Wallet, like this:
 
 ```bash
 export AGENT_WALLET_PASSWORD='your-master-password'
 ```
 
-Once this single passphrase is set, the entire system works seamlessly and automatically. The tools will call your Agent-wallet to sign on your behalf, transforming your AI agent into a top-tier Web3 personal assistant that's both brilliantly capable and secure!
+That's it — one line of config! Once the passphrase is set, the entire system works seamlessly and automatically. Your AI agent will transform into a top-tier Web3 personal assistant that's both brilliantly capable and absolutely secure!
 
-> Want the step-by-step walkthrough? Head to **[Quick Start](./QuickStart.md)**.
+> Can't wait to try it? Head to 👉 **[Quick Start](./QuickStart.md)** and follow along.
 
 ### ⌨️ I'm an advanced user — managing wallets via CLI
 
