@@ -60,7 +60,7 @@ Head over to **[Quick Start](./QuickStart.md)** — it takes about 1 minute. Com
 
 ---
 
-## sunswap — Swap Tokens, Check Prices, Manage Pools
+## sunswap — Swap Tokens, Check Prices, Manage Pools {#sunswap}
 
 Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the AI.
 
@@ -92,7 +92,7 @@ Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the 
 
 ---
 
-## sunperp-skill — Perpetual Contract Trading
+## sunperp-skill — Perpetual Contract Trading {#sunperp-skill}
 
 Want to trade contracts? This skill handles market data, opening/closing positions, stop-loss, and withdrawals. Built-in safety: max 20x leverage, mandatory stop-loss — if losses exceed 5%, the AI automatically closes your position to prevent liquidation.
 
@@ -122,7 +122,7 @@ Want to trade contracts? This skill handles market data, opening/closing positio
 
 ---
 
-## tronscan-skill — On-Chain Data Detective
+## tronscan-skill — On-Chain Data Detective {#tronscan-skill}
 
 Want to know what's happening on-chain? This skill looks up accounts, transactions, tokens, blocks, and network stats. **Pure read-only, completely safe, costs nothing, needs no credentials.** The perfect first skill to get started.
 
@@ -146,7 +146,7 @@ Want to know what's happening on-chain? This skill looks up accounts, transactio
 
 ---
 
-## x402-payment — On-Chain "Pay-First" Auto-Settlement
+## x402-payment — On-Chain "Pay-First" Auto-Settlement {#x402-payment}
 
 Some APIs and AI agents require on-chain payment before use. This skill uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — the AI detects the charge, completes the on-chain payment, gets the result, and reports back. It always asks for your confirmation before paying.
 
@@ -156,7 +156,7 @@ Some APIs and AI agents require on-chain payment before use. This skill uses the
 
 ---
 
-## recharge-skill — BANK OF AI Account Management
+## recharge-skill — BANK OF AI Account Management {#recharge-skill}
 
 Check your balance, view order history, or top up your account.
 

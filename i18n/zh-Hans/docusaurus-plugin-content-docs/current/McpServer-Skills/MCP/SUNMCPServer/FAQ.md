@@ -9,9 +9,9 @@ description: SUN MCP Server 的常见问题解答，涵盖连接、认证、DeFi
 
 ## 连接问题
 
-### Claude Desktop "无法连接到 MCP 服务器"
+### MCP 客户端 "无法连接到 MCP 服务器"
 
-**症状：** Claude Desktop 显示服务器未响应或连接被拒绝。
+**症状：** MCP 客户端 显示服务器未响应或连接被拒绝。
 
 **解决步骤：**
 
@@ -31,12 +31,12 @@ description: SUN MCP Server 的常见问题解答，涵盖连接、认证、DeFi
    ```
 
 3. **检查 JSON 格式**
-   - 在 Claude Desktop 配置中验证 `stdio.json` 的 JSON 格式
+   - 在 MCP 客户端 配置中验证 `stdio.json` 的 JSON 格式
    - 常见错误：末尾多余逗号、未匹配的括号
 
-4. **重启 Claude Desktop**
+4. **重启 MCP 客户端**
    - 完全关闭应用程序
-   - 清除缓存：删除 `~/.claude` 目录中的临时文件
+   - 清除缓存（方法取决于你使用的特定 MCP 客户端）
    - 重新启动应用程序
 
 5. **检查服务器日志**
@@ -97,7 +97,7 @@ description: SUN MCP Server 的常见问题解答，涵盖连接、认证、DeFi
    export TRON_MNEMONIC="word1 word2 ... word12"
    ```
 
-4. **重新启动服务器**并重新连接 Claude Desktop
+4. **重新启动服务器**并重新连接 MCP 客户端
 
 验证配置成功的方式：查看 [完整能力清单](ToolList.md) 中的完整能力清单。
 
@@ -396,7 +396,7 @@ sun-mcp-server
 
 **是的。** 例如，可以同时运行官方主网服务器和本地 Nile 实例。
 
-**配置示例（Claude Desktop）：**
+**配置示例（MCP 客户端）：**
 
 ```json
 {

@@ -8,7 +8,7 @@
 
 连接问题通常发生在首次配置阶段。如果 AI 客户端无法识别 TRON 工具，多半是这里出了问题。
 
-### Claude Desktop 提示"无法连接到 MCP 服务器"
+### 你的 MCP 客户端提示"无法连接到 MCP 服务器"
 
 这是最常见的问题。按以下顺序逐一排查：
 
@@ -20,15 +20,11 @@
 
 2. **检查 npx 是否可用**。在终端运行 `npx --version`。如果找不到命令，说明 Node.js 安装不完整，需要重新安装。
 
-3. **验证配置文件格式**。`claude_desktop_config.json` 必须是合法的 JSON。常见错误包括多余的逗号、缺少引号或括号不匹配。可以用这个命令快速验证：
-   ```bash
-   cat ~/Library/Application\ Support/Claude/claude_desktop_config.json | python3 -m json.tool
-   ```
-   如果输出了格式化的 JSON，说明格式没问题。如果报错，按照错误提示修复。
+3. **验证配置文件格式**。你的 MCP 客户端配置文件必须是合法的 JSON。常见错误包括多余的逗号、缺少引号或括号不匹配。使用 JSON 校验工具验证你的配置文件。
 
-4. **完全重启**。关闭窗口不等于退出——你需要从菜单栏/系统托盘彻底退出 Claude Desktop，然后重新打开。macOS 上可以在 Dock 图标上右键选择"退出"。
+4. **完全重启**。关闭窗口不等于退出——你需要彻底退出你的 MCP 客户端，然后重新打开。
 
-5. **查看日志**。如果以上都没解决问题，查看 Claude Desktop 的日志文件。macOS 上在 `~/Library/Logs/Claude/` 目录下，搜索包含 "mcp" 或 "tron" 的条目。
+5. **查看日志**。如果以上都没解决问题，查看你的 MCP 客户端的日志文件，搜索包含 "mcp" 或 "tron" 的条目。
 
 ### HTTP 模式下"连接被拒绝"
 
@@ -191,25 +187,7 @@ AI 可能将 TRON MCP Server 的能力与其他区块链工具混淆。如果它
 
 ### 能否同时使用多个 TRON MCP Server 实例？
 
-可以。在配置中定义多个 MCP Server 条目即可——比如一个连接主网云服务（只读），另一个连接本地测试网部署（带钱包）。只需使用不同的名称：
-
-```json
-{
-  "mcpServers": {
-    "tron-mainnet": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://tron-mcp-server.bankofai.io/mcp"]
-    },
-    "tron-local": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/mcp-server-tron"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "your-password"
-      }
-    }
-  }
-}
-```
+可以。在 MCP 客户端配置中定义多个 MCP Server 条目即可——比如一个连接主网云服务（只读），另一个连接本地测试网部署（带钱包）。在客户端的 MCP 配置中使用不同的名称配置这两个服务。
 
 ### 如何更新到最新版本？
 

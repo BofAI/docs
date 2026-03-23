@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Quick Start
 
 The goal of this page is simple: **get you integrated and make your first DeFi query in just 1 minute.**
@@ -14,69 +11,19 @@ We'll use the [official cloud service](./OfficialServerAccess.md) for this quick
 Before you get started, make sure you have:
 
 1. **Node.js** >= 20.0.0 ([download link](https://nodejs.org/))
-2. **MCP Client**: Any AI client that supports MCP. For example [Claude Desktop](https://claude.ai/download), [Claude Code](https://docs.anthropic.com/en/docs/claude-code), or [Cursor](https://cursor.sh).
+2. **MCP Client**: Any AI client that supports MCP.
 
 ---
 
-## Add Configuration
-
-Choose the configuration method that matches the tool you're using:
-
-<Tabs>
-<TabItem value="claude-desktop" label="Claude Desktop">
-
-1. Open the Claude Desktop configuration file:
-   - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-   - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-2. Add the following configuration in the `mcpServers` section:
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://sun-mcp-server.bankofai.io/mcp"]
-    }
-  }
-}
-```
-
-3. Save the file and restart Claude Desktop.
-
-</TabItem>
-
-<TabItem value="claude-code" label="Claude Code">
+## Install
 
 Run the following command in the terminal to add SUN MCP Server:
 
 ```bash
-claude mcp add --transport http sun-mcp-server https://sun-mcp-server.bankofai.io/mcp
+npx add-mcp @bankofai/sun-mcp-server
 ```
 
-</TabItem>
-
-<TabItem value="cursor" label="Cursor">
-
-1. Open the Cursor configuration file: `.cursor/mcp.json`
-
-2. Add the following in the configuration:
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://sun-mcp-server.bankofai.io/mcp"]
-    }
-  }
-}
-```
-
-3. Save the file and restart Cursor.
-
-</TabItem>
-</Tabs>
+After the command completes, restart your MCP client.
 
 ---
 

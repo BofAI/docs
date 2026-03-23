@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Official Cloud Service Access
 
 ## What is the Official Cloud Service?
@@ -96,90 +93,7 @@ After configuring the API Key, your requests will go through TronGrid's authenti
 
 ## Client Configuration
 
-<Tabs>
-<TabItem value="Claude Desktop" label="Claude Desktop">
-
-Configuration file path:
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-**Basic Config (No API Key)**:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://tron-mcp-server.bankofai.io/mcp"
-      ]
-    }
-  }
-}
-```
-
-**Config with TronGrid API Key**:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://tron-mcp-server.bankofai.io/mcp",
-        "--header",
-        "TRONGRID-API-KEY:<your-api-key>"
-      ]
-    }
-  }
-}
-```
-
-Replace `<your-api-key>` with your actual TronGrid API Key.
-
-</TabItem>
-<TabItem value="Claude Code" label="Claude Code">
-
-**Command line:**
-
-```bash
-claude mcp add --transport http mcp-server-tron https://tron-mcp-server.bankofai.io/mcp
-```
-
-**Or add `.mcp.json` to your project root**:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "type": "http",
-      "url": "https://tron-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Cursor" label="Cursor">
-
-Add the following to your project root `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "url": "https://tron-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="通用 HTTP 调用" label="Generic HTTP Call">
-
-If you want to integrate TRON MCP Server into your own application, you can call it via standard HTTP requests.
+You can connect to the official cloud service via HTTP requests. Here's how:
 
 **Step 1: Initialize Connection**
 
@@ -221,6 +135,25 @@ curl -X POST https://tron-mcp-server.bankofai.io/mcp \
   }'
 ```
 
+To use a TronGrid API Key with the cloud service, add the header:
+
+```bash
+curl -X POST https://tron-mcp-server.bankofai.io/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "mcp-session-id: <your-session-id>" \
+  -H "TRONGRID-API-KEY:your-api-key" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "get_chain_info",
+      "arguments": {"network": "mainnet"}
+    },
+    "id": 2
+  }'
+```
+
 **Step 3: Discover Available Tools**
 
 ```bash
@@ -241,9 +174,6 @@ curl -X POST https://tron-mcp-server.bankofai.io/mcp \
 - Sessions automatically expire after 30 minutes of inactivity
 - Use `DELETE /mcp` (with `mcp-session-id` header) to explicitly close a session
 :::
-
-</TabItem>
-</Tabs>
 
 ---
 

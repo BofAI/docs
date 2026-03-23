@@ -59,35 +59,45 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 Five core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
 
-### 💱 Your Personal DEX Trader
+### 💱 Execute DEX Trades
 
-Check prices, compare rates, even swap tokens in one go. Like having a personal trader on call.
+Check prices, compare rates, even swap tokens in one go.
 
 > 🗣️ "How much TRX can I get for 100 USDT on SunSwap right now?"
 
-### 📈 Perpetual Contract Safety Officer
+💡 For more advanced features, see: [**sunswap** (DEX Trading Guide)](./BANKOFAISkill.md#sunswap)
+
+### 📈 Trade Perpetual Contracts
 
 View market data, open and close positions on SunPerp. Built-in safety lock: max 20x leverage, mandatory stop-loss on every position — keeps you from blowing up your account.
 
 > 🗣️ "What's BTC's funding rate right now? Open a 5x long position with a 5% stop-loss."
 
-### 🕵️ On-Chain Data Detective
+💡 For more parameter settings, see: [**sunperp-skill** (Perpetual Contract Safety Officer)](./BANKOFAISkill.md#sunperp-skill)
+
+### 🕵️ Query On-Chain Data
 
 Look up accounts, transactions, and check if a new token is legit. Pure read-only, completely safe, costs nothing.
 
 > 🗣️ "Check the holder distribution for that new token — is it controlled by a whale?"
 
-### ☕ On-Chain "Pay-First" Auto-Settlement
+💡 For more query dimensions, see: [**tronscan-skill** (On-Chain Data Detective)](./BANKOFAISkill.md#tronscan-skill)
+
+### ☕ Auto-Settle On-Chain Paid Services
 
 When the AI needs to call a paid on-chain service or data API, it uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — no manual QR scanning or wallet switching needed.
 
 > 🗣️ "Use the x402 protocol to call this paid agent endpoint: https://api.example.com" (replace with the actual paid endpoint URL you want to call)
 
-### 🏦 BANK OF AI Account Manager
+💡 For payment and authorization details, see: [**x402-payment** (On-Chain Auto-Settlement)](./BANKOFAISkill.md#x402-payment)
+
+### 🏦 Manage BANK OF AI Account
 
 Check your BANK OF AI balance and top up with a single sentence.
 
 > 🗣️ "How much balance do I have? Go ahead and recharge 5 USDT."
+
+💡 For top-up and withdrawal rules, see: [**recharge-skill** (Account Manager)](./BANKOFAISkill.md#recharge-skill)
 
 ---
 

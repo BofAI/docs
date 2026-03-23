@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # 官方云服务接入
 
 ## 什么是官方云服务？
@@ -97,90 +94,7 @@ import TabItem from '@theme/TabItem';
 
 ## 客户端配置
 
-<Tabs>
-<TabItem value="Claude Desktop" label="Claude Desktop">
-
-配置文件路径：
-- **macOS**：`~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**：`%APPDATA%\Claude\claude_desktop_config.json`
-
-**基础配置（不含 API Key）**：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://tron-mcp-server.bankofai.io/mcp"
-      ]
-    }
-  }
-}
-```
-
-**含 TronGrid API Key 的配置**：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://tron-mcp-server.bankofai.io/mcp",
-        "--header",
-        "TRONGRID-API-KEY:<your-api-key>"
-      ]
-    }
-  }
-}
-```
-
-将 `<your-api-key>` 替换为你的实际 TronGrid API Key。
-
-</TabItem>
-<TabItem value="Claude Code" label="Claude Code">
-
-**命令行添加**：
-
-```bash
-claude mcp add --transport http mcp-server-tron https://tron-mcp-server.bankofai.io/mcp
-```
-
-**或在项目根目录添加 `.mcp.json`**：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "type": "http",
-      "url": "https://tron-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Cursor" label="Cursor">
-
-在项目根目录添加 `.cursor/mcp.json`：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "url": "https://tron-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="通用 HTTP 调用" label="通用 HTTP 调用">
-
-如果你想将 TRON MCP Server 集成到自己的应用中，可以通过标准 HTTP 请求调用。
+你可以通过 HTTP 请求连接到官方云服务。下面是具体步骤：
 
 **第一步：初始化连接**
 
@@ -222,6 +136,25 @@ curl -X POST https://tron-mcp-server.bankofai.io/mcp \
   }'
 ```
 
+要使用 TronGrid API Key，在请求头中添加：
+
+```bash
+curl -X POST https://tron-mcp-server.bankofai.io/mcp \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json, text/event-stream" \
+  -H "mcp-session-id: <your-session-id>" \
+  -H "TRONGRID-API-KEY:your-api-key" \
+  -d '{
+    "jsonrpc": "2.0",
+    "method": "tools/call",
+    "params": {
+      "name": "get_chain_info",
+      "arguments": {"network": "mainnet"}
+    },
+    "id": 2
+  }'
+```
+
 **第三步：查看可用工具列表**
 
 ```bash
@@ -242,9 +175,6 @@ curl -X POST https://tron-mcp-server.bankofai.io/mcp \
 - Session 在 30 分钟无活动后自动过期
 - 可用 `DELETE /mcp`（携带 `mcp-session-id` 请求头）显式关闭 Session
 :::
-
-</TabItem>
-</Tabs>
 
 ---
 

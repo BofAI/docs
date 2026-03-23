@@ -6,7 +6,7 @@ The MCP Server is designed to provide a standardized framework for interaction b
 
 MCP follows a **client-server** architecture, primarily comprising the following three core participants:
 
-*   **MCP Host**: Typically the AI application itself (e.g., Claude Code or Claude Desktop). It is responsible for coordinating and managing one or more MCP Clients.
+*   **MCP Host**: Typically the AI application itself. It is responsible for coordinating and managing one or more MCP Clients.
 *   **MCP Client**: Instantiated by the MCP Host for each MCP Server. Each client maintains a dedicated connection with its corresponding MCP Server and obtains context information from the MCP Server for the host to use.
 *   **MCP Server**: A program responsible for providing context data to MCP Clients. Servers can run locally (e.g., a filesystem server) or remotely (e.g., a TRON MCP/SUN MCP server).
 

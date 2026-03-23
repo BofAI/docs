@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # 官方云服务接入
 
 ## 什么是官方云服务？
@@ -48,69 +45,6 @@ import TabItem from '@theme/TabItem';
 ---
 
 ## 客户端配置
-
-<Tabs>
-<TabItem value="Claude Desktop" label="Claude Desktop">
-
-配置文件路径：
-- **macOS**：`~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**：`%APPDATA%\Claude\claude_desktop_config.json`
-
-**基础配置**：
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp"
-      ]
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Claude Code" label="Claude Code">
-
-**命令行添加**：
-
-```bash
-claude mcp add --transport http sun-mcp-server https://sun-mcp-server.bankofai.io/mcp
-```
-
-**或在项目根目录添加 `.mcp.json`**：
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "type": "http",
-      "url": "https://sun-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Cursor" label="Cursor">
-
-在项目根目录添加 `.cursor/mcp.json`：
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "url": "https://sun-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="通用 HTTP 调用" label="通用 HTTP 调用">
 
 如果你想将 SUN MCP Server 集成到自己的应用中，可以通过标准 HTTP 请求调用。
 
@@ -174,9 +108,6 @@ curl -X POST https://sun-mcp-server.bankofai.io/mcp \
 - Session 在 30 分钟无活动后自动过期
 - 可用 `DELETE /mcp`（携带 `mcp-session-id` 请求头）显式关闭 Session
 :::
-
-</TabItem>
-</Tabs>
 
 ---
 

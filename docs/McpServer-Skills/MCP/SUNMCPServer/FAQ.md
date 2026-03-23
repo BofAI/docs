@@ -9,9 +9,9 @@ This page collects frequently asked questions when using SUN MCP Server and thei
 
 ## Connection Issues
 
-### Claude Desktop "Cannot Connect to MCP Server"
+### MCP client "Cannot Connect to MCP Server"
 
-**Symptom:** Claude Desktop shows server unresponsive or connection refused.
+**Symptom:** MCP client shows server unresponsive or connection refused.
 
 **Resolution Steps:**
 
@@ -31,12 +31,12 @@ This page collects frequently asked questions when using SUN MCP Server and thei
    ```
 
 3. **Check JSON Format**
-   - Verify JSON format of `stdio.json` in Claude Desktop configuration
+   - Verify JSON format of `stdio.json` in MCP client configuration
    - Common errors: trailing commas, unmatched brackets
 
-4. **Restart Claude Desktop**
+4. **Restart MCP client**
    - Completely close application
-   - Clear cache: delete temporary files in `~/.claude` directory
+   - Clear client cache (method depends on your specific MCP client)
    - Restart application
 
 5. **Check Server Logs**
@@ -97,7 +97,7 @@ This page collects frequently asked questions when using SUN MCP Server and thei
    export TRON_MNEMONIC="word1 word2 ... word12"
    ```
 
-4. **Restart server** and reconnect Claude Desktop
+4. **Restart server** and reconnect MCP client
 
 Verify successful configuration by checking [Full Capability List](ToolList.md) for Full Capability List.
 
@@ -396,7 +396,7 @@ Check transaction hash details on https://tronscan.org for error message
 
 **Yes.** For example, can run official mainnet server and local Nile instance simultaneously.
 
-**Configuration Example (Claude Desktop):**
+**Configuration Example (MCP client):**
 
 ```json
 {

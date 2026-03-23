@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # 快速开始
 
 这个页面的目标很简单：**让你在 1 分钟内完成接入，发起第一次 DeFi 查询。**
@@ -14,69 +11,19 @@ import TabItem from '@theme/TabItem';
 在开始之前，请确保你已经有：
 
 1. **Node.js** >= 20.0.0（[下载链接](https://nodejs.org/)）
-2. **MCP 客户端**：所有支持 MCP 的 AI 客户端。例如 [Claude Desktop](https://claude.ai/download)、[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [Cursor](https://cursor.sh) 。
+2. **MCP 客户端**：所有支持 MCP 的 AI 客户端。
 
 ---
 
-## 添加配置
-
-根据你使用的工具选择对应的配置方式：
-
-<Tabs>
-<TabItem value="claude-desktop" label="Claude Desktop">
-
-1. 打开 Claude Desktop 的配置文件：
-   - **macOS**：`~/Library/Application Support/Claude/claude_desktop_config.json`
-   - **Windows**：`%APPDATA%\Claude\claude_desktop_config.json`
-
-2. 在 `mcpServers` 部分添加以下配置：
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://sun-mcp-server.bankofai.io/mcp"]
-    }
-  }
-}
-```
-
-3. 保存文件并重启 Claude Desktop。
-
-</TabItem>
-
-<TabItem value="claude-code" label="Claude Code">
+## 安装
 
 在终端中运行以下命令添加 SUN MCP Server：
 
 ```bash
-claude mcp add --transport http sun-mcp-server https://sun-mcp-server.bankofai.io/mcp
+npx add-mcp @bankofai/sun-mcp-server
 ```
 
-</TabItem>
-
-<TabItem value="cursor" label="Cursor">
-
-1. 打开 Cursor 的配置文件：`.cursor/mcp.json`
-
-2. 在配置中添加：
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://sun-mcp-server.bankofai.io/mcp"]
-    }
-  }
-}
-```
-
-3. 保存文件并重启 Cursor。
-
-</TabItem>
-</Tabs>
+命令完成后，重启你的 MCP 客户端。
 
 ---
 

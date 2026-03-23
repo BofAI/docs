@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # 本地私有化部署
 
 ## 什么是本地私有化部署？
@@ -162,123 +159,8 @@ npm install -g @bankofai/sun-mcp-server
 sun-mcp-server
 ```
 
----
 
-### 第三步：客户端配置
-
-配置完成后，需要在 AI 客户端中添加 SUN MCP Server 的连接定义。
-
-#### 找到配置文件
-
-根据您使用的 AI 客户端，配置文件位置如下：
-
-| 客户端 | 配置文件路径 |
-|--------|-------------|
-| **Claude Desktop** | `~/.claude/resources/mcp/servers.json` |
-| **Cursor** | `~/.cursor/extensions/mcp/servers.json` |
-| **Claude Code (CLI)** | `~/.claude/mcp_servers.json` 或通过环境变量 |
-
-#### 添加服务器定义
-
-选择与您的部署方式对应的选项卡：
-
-<Tabs>
-<TabItem value="npx-recommended" label="方式 A：npx 运行（推荐）">
-
-**Claude Desktop 配置：**
-
-在 `~/.claude/resources/mcp/servers.json` 中添加：
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/sun-mcp-server"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "your_secure_password",
-        "AGENT_WALLET_DIR": "~/.agent-wallet",
-        "TRON_NETWORK": "nile"
-      }
-    }
-  }
-}
-```
-
-**Claude Code**
-
-```bash
-# 基础配置
-claude mcp add sun-mcp-server -- npx -y @bankofai/sun-mcp-server
-
-# 携带环境变量
-claude mcp add -e AGENT_WALLET_PASSWORD=xxx sun-mcp-server -- npx -y @bankofai/sun-mcp-server
-```
-
-**Cursor 配置：**
-
-在 `~/.cursor/extensions/mcp/servers.json` 中添加：
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/sun-mcp-server"],
-      "env": {
-        "TRON_NETWORK": "nile"
-      }
-    }
-  }
-}
-```
-
-</TabItem>
-
-<TabItem value="source-local" label="方式 B：本地源码">
-
-适用于从源码运行的情况。
-
-**Claude Desktop 配置：**
-
-在 `~/.claude/resources/mcp/servers.json` 中添加：
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "command": "npx",
-      "args": ["tsx", "/path/to/sun-mcp-server/src/index.ts"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "your_secure_password",
-        "TRON_NETWORK": "nile"
-      }
-    }
-  }
-}
-```
-
-**Cursor 配置：**
-
-在 `~/.cursor/extensions/mcp/servers.json` 中添加：
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "command": "npx",
-      "args": ["tsx", "/path/to/sun-mcp-server/src/index.ts"],
-      "env": {
-        "TRON_NETWORK": "nile"
-      }
-    }
-  }
-}
-```
-
-</TabItem>
-
-<TabItem value="http-mode" label="方式 C：HTTP 模式">
+#### 方式 C：HTTP 模式
 
 以 HTTP 服务器模式运行 SUN MCP Server，允许远程连接。
 
@@ -288,39 +170,12 @@ claude mcp add -e AGENT_WALLET_PASSWORD=xxx sun-mcp-server -- npx -y @bankofai/s
 sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
 ```
 
-**Claude Desktop 配置：**
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "url": "http://127.0.0.1:8080/mcp"
-    }
-  }
-}
-```
-
-**Cursor 配置：**
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "url": "http://127.0.0.1:8080/mcp"
-    }
-  }
-}
-```
-
 :::warning
 HTTP 模式适用于本地开发和测试。对于远程部署，请使用 HTTPS 和适当的身份验证。
 :::
 
-</TabItem>
-</Tabs>
-
-:::tip 关于环境变量部分
-- **npx 运行**：环境变量在配置文件的 `"env"` 字段中设置，或直接在终端导出后运行。
+:::tip 关于环境变量
+- **npx 运行**：在运行命令前直接在终端导出环境变量。
 - **HTTP 模式**：启动 HTTP 服务器时，环境变量应在启动命令前导出：
 
 ```bash
@@ -328,8 +183,17 @@ export TRON_NETWORK=nile
 sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
 ```
 
-- **重启生效**：修改配置后，需重启 AI 客户端使更改生效。
+- **客户端配置**：服务器运行后，配置你的 MCP 客户端以连接到它。
 :::
+
+---
+
+### 第三步：客户端配置
+
+服务器运行后，需要配置你的 MCP 客户端与其连接。请参考你的 MCP 客户端文档获取配置说明。服务器可通过以下方式访问：
+
+- **npx/本地构建**：通常作为客户端管理的子进程运行
+- **HTTP 模式**：`http://127.0.0.1:8080/mcp`（或你指定的主机/端口）
 
 ---
 

@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Official Cloud Service Access
 
 ## What is the Official Cloud Service?
@@ -40,69 +37,6 @@ Add the following MCP service endpoint to your AI client configuration:
 ---
 
 ## Client Configuration
-
-<Tabs>
-<TabItem value="Claude Desktop" label="Claude Desktop">
-
-Configuration file path:
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-**Basic Config**:
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp"
-      ]
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Claude Code" label="Claude Code">
-
-**Add via command line**:
-
-```bash
-claude mcp add --transport http sun-mcp-server https://sun-mcp-server.bankofai.io/mcp
-```
-
-**Or add `.mcp.json` to your project root**:
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "type": "http",
-      "url": "https://sun-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Cursor" label="Cursor">
-
-Add `.cursor/mcp.json` to your project root:
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "url": "https://sun-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Generic HTTP" label="Generic HTTP Call">
 
 If you want to integrate SUN MCP Server into your own application, you can call it via standard HTTP requests.
 
@@ -166,9 +100,6 @@ curl -X POST https://sun-mcp-server.bankofai.io/mcp \
 - Sessions automatically expire after 30 minutes of inactivity
 - Use `DELETE /mcp` (with `mcp-session-id` header) to explicitly close a session
 :::
-
-</TabItem>
-</Tabs>
 
 ---
 
