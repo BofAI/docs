@@ -5,12 +5,14 @@ on:
     branches:
       - main
       - master
+      - update-mcp-server
     tags:
       - 'test'
   pull_request:
     branches:
       - main
       - master
+      - update-mcp-server
   workflow_dispatch: # Intentionally unrestricted — allows manual builds from any branch for flexibility
 
 env:
