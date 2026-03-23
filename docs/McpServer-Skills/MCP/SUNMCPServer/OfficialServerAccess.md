@@ -4,19 +4,17 @@
 
 The official cloud service is a SUN MCP Server instance hosted by **BANK OF AI**, providing AI clients with **read-only query capabilities for SunSwap on-chain data**.
 
-If you want your AI assistant to query token prices, pool APYs, or protocol trading volume on SunSwap, or analyze a specific address's liquidity positions — these are all read-only operations that can be completed via the official cloud service, with no local installation required and no wallet credentials needed.
+If you want your AI assistant to query token prices, pool APYs, or protocol trading volume on SunSwap, or analyze a specific address's liquidity positions — these are all read-only operations that can be completed via the official cloud service, with no wallet credentials needed.
 
 **The core purpose of the official cloud service is to handle all infrastructure for you.** You only need to add a single service URL to your AI client's configuration to start interacting with SunSwap.
 
 ### Key Advantages
 
-**1. No local installation required** — No Node.js, no repository clone, no build commands. Just add a JSON snippet to your config file, restart your AI client, and you're ready in under 2 minutes.
+**1. No private key exposure risk** — Since the cloud service is read-only, you never need to provide a wallet private key or mnemonic. This eliminates key leakage risks and makes team sharing straightforward.
 
-**2. No private key exposure risk** — Since the cloud service is read-only, you never need to provide a wallet private key or mnemonic. This eliminates key leakage risks and makes team sharing straightforward.
+**2. Official maintenance and continuous updates** — The service always runs the latest stable version, including SunSwap protocol updates and SUN.IO API synchronization. No manual rebuilds needed.
 
-**3. Official maintenance and continuous updates** — The service always runs the latest stable version, including SunSwap protocol updates and SUN.IO API synchronization. No manual rebuilds needed.
-
-**4. Covers a large number of practical use cases** — Querying token prices and swap quotes, analyzing pool data and APYs, getting protocol statistics and historical metrics, viewing user liquidity positions — all the most commonly used DeFi data queries are fully supported. Only when you need to actually execute swaps or manage liquidity do you need to switch to [Local Private Deployment](./LocalPrivatizedDeployment.md).
+**3. Covers a large number of practical use cases** — Querying token prices and swap quotes, analyzing pool data and APYs, getting protocol statistics and historical metrics, viewing user liquidity positions — all the most commonly used DeFi data queries are fully supported. Only when you need to actually execute swaps or manage liquidity do you need to switch to [Local Private Deployment](./LocalPrivatizedDeployment.md).
 
 > In short: **The official cloud service acts as a "read-only data gateway" for SunSwap** — AI clients only need the service URL to query all public data on SunSwap.
 
@@ -28,84 +26,19 @@ The official cloud service only provides **read-only access**. It does **not sup
 
 ## How to Connect
 
-Add the following MCP service endpoint to your AI client configuration:
-
-**`https://sun-mcp-server.bankofai.io/mcp`**
-
-> Note: This is an MCP protocol endpoint, not a webpage. Opening it directly in a browser will not display anything.
-
----
-
-## Client Configuration
-
-If you want to integrate SUN MCP Server into your own application, you can call it via standard HTTP requests.
-
-**Step 1: Initialize Connection**
+Simply tell your AI Agent to execute the following command:
 
 ```bash
-curl -X POST https://sun-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "initialize",
-    "params": {
-      "protocolVersion": "2025-03-26",
-      "capabilities": {},
-      "clientInfo": {"name": "my-client", "version": "1.0"}
-    },
-    "id": 1
-  }'
+npx add-mcp https://sun-mcp-server.bankofai.io/mcp
 ```
 
-The response will include an `mcp-session-id` header — you will need it for subsequent requests.
-
-**Step 2: Call a Tool**
-
-Use the `mcp-session-id` from Step 1:
-
-```bash
-curl -X POST https://sun-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "getPrice",
-      "arguments": {"tokenAddress": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"}
-    },
-    "id": 2
-  }'
-```
-
-**Step 3: Discover Available Tools**
-
-```bash
-curl -X POST https://sun-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/list",
-    "params": {},
-    "id": 3
-  }'
-```
-
-:::info Session Management
-- Each `initialize` creates a new session
-- Sessions automatically expire after 30 minutes of inactivity
-- Use `DELETE /mcp` (with `mcp-session-id` header) to explicitly close a session
-:::
+Once the command completes, the MCP Server is ready to use — your AI Agent can immediately start interacting with SunSwap.
 
 ---
 
 ## Verify Connection
 
-After configuration, **fully quit and restart** your AI client, then enter the following test query:
+Once connected, you can test by asking your AI Agent the following question:
 
 ```
 Check the current prices of USDT and TRX on SunSwap

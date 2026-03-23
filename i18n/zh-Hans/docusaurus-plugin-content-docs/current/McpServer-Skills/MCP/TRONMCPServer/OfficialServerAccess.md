@@ -17,15 +17,11 @@
 
 ### 使用官方云服务的主要优点
 
-**1. 无需任何本地安装**
-
-不用安装 Node.js、不用克隆仓库、不用运行构建命令。只需在配置文件中添加一段 JSON，重启 AI 客户端，即可使用。整个过程通常不超过 2 分钟。
-
-**2. 无私钥暴露风险**
+**1. 无私钥暴露风险**
 
 由于云服务是只读的，你完全不需要提供任何钱包私钥或助记词。这从根本上消除了密钥泄露、配置文件被误提交到 Git 等安全隐患。在团队协作场景中尤为方便——任何成员都可以直接接入，不存在密钥分发和管理的问题。
 
-**3. 官方维护与持续升级**
+**2. 官方维护与持续升级**
 
 云服务由官方统一维护，始终运行最新稳定版本的 TRON MCP Server。包括：
 
@@ -35,7 +31,7 @@
 
 你无需关心版本号，也不需要手动执行 `npm install` 或重新构建。
 
-**4. 覆盖绝大部分真实场景**
+**3. 覆盖绝大部分真实场景**
 
 日常中最常用的操作——查地址余额、分析交易详情、读取合约状态、查看超级代表列表、监控链上事件——全部属于只读查询，通过云服务就能完整覆盖。只有当你需要实际转移资产（转账、质押、合约写入等）时，才需要切换到[本地私有化部署](./LocalPrivatizedDeployment.md)。
 
@@ -49,10 +45,13 @@
 
 ## 如何接入官方云服务？
 
-要接入官方云服务，只需要在 AI 客户端配置中添加官方提供的 **MCP 服务地址**：[https://tron-mcp-server.bankofai.io/mcp](https://tron-mcp-server.bankofai.io/mcp)
+只需告诉你的 AI Agent 执行以下命令：
 
+```bash
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp
+```
 
-> 注意：这是一个 MCP 协议端点，不是网页地址。在浏览器中直接打开不会显示任何内容。
+执行完成后，即可使用相关 MCP Server，你的 AI Agent 可以立即开始与 TRON 区块链交互。
 
 官方云服务支持 **两种使用模式**：
 
@@ -86,101 +85,15 @@
 1. 访问 [trongrid.io](https://www.trongrid.io/)
 2. 注册账号并创建项目
 3. 复制生成的 API Key
-4. 在配置中添加 API Key 请求头（见下方客户端配置示例）
+4. 在请求中添加 API Key 请求头
 
 配置 API Key 后，你的请求会通过 TronGrid 的认证通道，享受更稳定的性能和更高的吞吐量。
 
 ---
 
-## 客户端配置
-
-你可以通过 HTTP 请求连接到官方云服务。下面是具体步骤：
-
-**第一步：初始化连接**
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "initialize",
-    "params": {
-      "protocolVersion": "2025-03-26",
-      "capabilities": {},
-      "clientInfo": {"name": "my-client", "version": "1.0"}
-    },
-    "id": 1
-  }'
-```
-
-响应中会包含 `mcp-session-id` 请求头，后续请求需要用到它。
-
-**第二步：调用工具**
-
-使用第一步获得的 `mcp-session-id`：
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "get_chain_info",
-      "arguments": {"network": "mainnet"}
-    },
-    "id": 2
-  }'
-```
-
-要使用 TronGrid API Key，在请求头中添加：
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -H "TRONGRID-API-KEY:your-api-key" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "get_chain_info",
-      "arguments": {"network": "mainnet"}
-    },
-    "id": 2
-  }'
-```
-
-**第三步：查看可用工具列表**
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/list",
-    "params": {},
-    "id": 3
-  }'
-```
-
-:::info Session 管理
-- 每次 `initialize` 会创建一个新 Session
-- Session 在 30 分钟无活动后自动过期
-- 可用 `DELETE /mcp`（携带 `mcp-session-id` 请求头）显式关闭 Session
-:::
-
----
-
 ## 验证接入是否成功
 
-配置完成后，**完全退出并重启** AI 客户端，然后输入以下测试问法：
+接入完成后，你可以直接向 AI Agent 提出以下问题来测试：
 
 ```
 查询 TRON 主网当前的区块高度

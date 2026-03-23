@@ -17,15 +17,11 @@ This is far too much overhead for users who simply want to check a balance.
 
 ### Key Advantages
 
-**1. No local installation required**
-
-No Node.js, no repository clone, no build commands. Just add a JSON snippet to your config file, restart your AI client, and you're ready to use. The entire process usually takes no more than 2 minutes.
-
-**2. No private key exposure risk**
+**1. No private key exposure risk**
 
 Since the cloud service is read-only, you never need to provide a wallet private key or mnemonic. This fundamentally eliminates risks like key leakage and config files accidentally committed to Git. It's especially convenient for team collaboration — any member can connect directly without key distribution or management concerns.
 
-**3. Official maintenance and continuous updates**
+**2. Official maintenance and continuous updates**
 
 The cloud service is maintained by the official team and always runs the latest stable version of TRON MCP Server. This includes:
 
@@ -35,7 +31,7 @@ The cloud service is maintained by the official team and always runs the latest 
 
 You don't need to worry about version numbers or manually run `npm install` or rebuild.
 
-**4. Covers the vast majority of real-world use cases**
+**3. Covers the vast majority of real-world use cases**
 
 The most common daily operations — checking address balances, analyzing transaction details, reading contract state, viewing the Super Representative list, monitoring on-chain events — are all read-only queries, fully supported through the cloud service. Only when you need to actually move assets (transfers, staking, contract writes) do you need to switch to [Local Private Deployment](./LocalPrivatizedDeployment.md).
 
@@ -49,9 +45,13 @@ The official cloud service only provides **read-only access**. It does **not sup
 
 ## How to Connect
 
-To connect to the official cloud service, simply add the official **MCP service URL** to your AI client configuration: [https://tron-mcp-server.bankofai.io/mcp](https://tron-mcp-server.bankofai.io/mcp)
+Simply tell your AI Agent to execute the following command:
 
-> Note: This is an MCP protocol endpoint, not a webpage. Opening it directly in a browser will not display anything.
+```bash
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp
+```
+
+Once the command completes, the MCP Server is ready to use — your AI Agent can immediately start interacting with the TRON blockchain.
 
 The official cloud service supports **two usage modes**:
 
@@ -85,101 +85,15 @@ For frequent mainnet queries, apply for a free TronGrid API Key to get a higher 
 1. Visit [trongrid.io](https://www.trongrid.io/)
 2. Register an account and create a project
 3. Copy the generated API Key
-4. Add the API Key header in your configuration (see client configuration examples below)
+4. Add the API Key header in your requests
 
 After configuring the API Key, your requests will go through TronGrid's authenticated channel, with more stable performance and higher throughput.
 
 ---
 
-## Client Configuration
-
-You can connect to the official cloud service via HTTP requests. Here's how:
-
-**Step 1: Initialize Connection**
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "initialize",
-    "params": {
-      "protocolVersion": "2025-03-26",
-      "capabilities": {},
-      "clientInfo": {"name": "my-client", "version": "1.0"}
-    },
-    "id": 1
-  }'
-```
-
-The response will include a `mcp-session-id` header — you'll need it for subsequent requests.
-
-**Step 2: Call a Tool**
-
-Use the `mcp-session-id` from Step 1:
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "get_chain_info",
-      "arguments": {"network": "mainnet"}
-    },
-    "id": 2
-  }'
-```
-
-To use a TronGrid API Key with the cloud service, add the header:
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -H "TRONGRID-API-KEY:your-api-key" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "get_chain_info",
-      "arguments": {"network": "mainnet"}
-    },
-    "id": 2
-  }'
-```
-
-**Step 3: Discover Available Tools**
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/list",
-    "params": {},
-    "id": 3
-  }'
-```
-
-:::info Session Management
-- Each `initialize` creates a new session
-- Sessions automatically expire after 30 minutes of inactivity
-- Use `DELETE /mcp` (with `mcp-session-id` header) to explicitly close a session
-:::
-
----
-
 ## Verify Connection
 
-After completing configuration, **fully exit and restart** your AI client, then enter the following test prompt:
+Once connected, you can test by asking your AI Agent the following question:
 
 ```
 Query the current block height of TRON mainnet
