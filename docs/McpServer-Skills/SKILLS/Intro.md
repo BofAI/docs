@@ -8,31 +8,30 @@ In a nutshell, BANK OF AI SKILLS is a set of **"AI skill packs"** purpose-built 
 
 ---
 
-## 🌟 Why a "Toolbox" Alone Isn't Enough — You Need Skills
+## 🌟 Why You Need Professional Skills
 
-Some AI products on the market claim they can trade, but they typically just plug the AI into raw tool interfaces (i.e., MCP). If you've tried them, you'll know the result: give AI nothing but tools and it becomes a "kitchen maniac swinging a knife with no recipe."
+Today's AI chatbots are smart — if you push them to write a transfer script or hook them up to an API to try their luck on-chain, they can pull it off. But if you actually let them loose on your real money without guardrails, it often turns into a disaster.
 
-In the high-stakes reality of Web3 trading, an AI needs more than "the ability to call tools" — it must "understand the business workflow." The core edge of BANK OF AI SKILLS is that we upgraded a bare toolbox into a **standardized pipeline with built-in error prevention and risk control guardrails**.
+In the high-stakes reality of Web3 trading, an AI needs more than "smart and capable" — it must "know the business" and be "absolutely reliable." The core edge of BANK OF AI SKILLS is that we took a regular copy-paste AI and upgraded it into a **Web3 personal assistant** with built-in error prevention, deep business workflow expertise, and strict risk control guardrails.
 
-With Skills, your AI gains three decisive advantages:
+With Skills, your AI gains decisive advantages:
 
-| Real Trading Pain Point | 🛠️ Basic Toolbox Only (raw MCP) | 🦸‍♂️ With BANK OF AI SKILLS (full skill pack) |
+| Real Trading Pain Point | ❌ Regular AI Chatbot | 🦸‍♂️ With BANK OF AI SKILLS (personal assistant) |
 | :--- | :--- | :--- |
-| **Complex trade execution** (error prevention & SOP) | Gets lost easily, errors everywhere. For example, it might try to swap tokens without even approving the contract first — instant failure. | Built-in "veteran driver navigation." Enforces the perfect sequence: check balance → verify approval → get quote → confirm → execute. Never misses a step. |
-| **Fund safety & risk control** (blow-up prevention) | Blindly obedient, no guardrails. It just executes — if you casually say "open 100x leverage," it actually does it. | Built-in "business-level safety locks." Hard-coded risk limits (e.g., max 20x leverage, mandatory stop-loss), dangerous commands get blocked on the spot. |
-| **Daily communication barrier** (understands plain language) | Tedious, like filling out forms. You need to precisely input contract addresses, slippage percentages, and other complex parameters — one typo and it all falls apart. | Powerful "intent translation." Just say "swap all my USDT for TRX" and it looks up addresses, calculates slippage, and fetches quotes on its own — never bothers you. |
+| **Complex trade execution** (error prevention & SOP) | Guesses its way through, easily gets stuck. It can handle single-step commands, but for complex swaps, it often doesn't know you need to Approve first — leading to blind operations and error crashes. | Built-in "veteran driver navigation." Enforces the perfect sequence: check balance → verify approval → get quote → confirm → execute. Never misses a step. |
+| **Fund safety & risk control** (blow-up prevention) | Blindly obedient, no guardrails. It doesn't understand financial common sense — if you casually say "open 100x leverage," it will generate that dangerous command without hesitation. | Built-in "business-level safety locks." Hard-coded risk limits (e.g., max 20x leverage, mandatory stop-loss) — dangerous operations get blocked on the spot. |
 
-**In one sentence:** A regular AI toolbox just hands you a wrench — you still have to figure out how to turn it. BANK OF AI SKILLS is like having a Michelin chef who comes with the recipe book, never makes rookie mistakes, and proactively steers you away from pitfalls. You just order in plain language, and it handles everything.
+**In one sentence:** A regular AI is a straight-A "top student" on paper, but full of holes the moment it hits real operations. An AI with BANK OF AI SKILLS is like a Michelin chef with real battlefield experience — never makes rookie mistakes, and proactively steers you away from pitfalls. You just order in plain language, and it handles everything.
 
 ### 🎬 Real Scenario: You Want to "Buy Some TRX with 50 USDT"
 
 Let's say you give the AI the simplest possible command: "Buy some TRX with 50 USDT."
 
-**❌ With a regular AI toolbox (raw MCP):**
+**❌ With a regular AI:**
 
-It hears the command, grabs the "trade tool," and goes straight to the blockchain to execute the purchase. Result: **BOOM — transaction failed.** The AI throws a wall of incomprehensible error code at you (something like `transfer amount exceeds allowance`).
+It hears the command and might generate a chunk of buggy code, or blindly try its luck on-chain. The result is usually **BOOM — transaction failed.** Then it throws a wall of incomprehensible error messages at you (something like `transfer amount exceeds allowance`).
 
-Why? Because in the Web3 world, you must **"Approve"** a token before spending it. A regular AI has the tools but zero domain knowledge — it skips the prerequisite step, crashes, and leaves you staring at a screen full of gibberish.
+Why? Because in the Web3 world, you must **"Approve"** a token before spending it. A regular AI has plenty of IQ but zero "industry common sense" — it skips the prerequisite step, crashes, and leaves you staring at gibberish.
 
 **✅ With BANK OF AI SKILLS installed:**
 
@@ -42,7 +41,7 @@ After receiving your command, it doesn't just execute — it automatically runs 
 2. **Preemptive troubleshooting:** "I noticed you haven't approved USDT for SunSwap yet. I've prepared the Approve request — please confirm."
 3. **Precise quote:** "Approval successful! At the latest price, 50 USDT gets you roughly 350 TRX. I've automatically set 1% slippage protection. Ready to buy?"
 
-In this scenario, you said one sentence, and the Skill quietly handled 5 high-barrier steps behind the scenes: check balance → detect missing approval → submit approval → calculate slippage → fetch quote. That's the difference between a bare tool and a "pro butler with a brain."
+In this scenario, you said one sentence, and the Skill quietly handled 5 high-barrier steps behind the scenes: check balance → detect missing approval → submit approval → calculate slippage → fetch quote. That's the difference between a **"regular chatbot AI"** and a **"professional Web3 butler."**
 
 ---
 
@@ -107,7 +106,7 @@ Check your BANK OF AI balance and top up with a single sentence.
 
 **Ready? Just 2 steps, less than 1 minute.**
 
-<a href="./QuickStart" style={{display: 'inline-block', padding: '1rem 2.5rem', fontSize: '1.2rem', fontWeight: 'bold', color: '#fff', backgroundColor: '#25c2a0', borderRadius: '8px', textDecoration: 'none'}}>
+<a href="../QuickStart" style={{display: 'inline-block', padding: '1rem 2.5rem', fontSize: '1.2rem', fontWeight: 'bold', color: '#fff', backgroundColor: '#25c2a0', borderRadius: '8px', textDecoration: 'none'}}>
 Go to Quick Start
 </a>
 
