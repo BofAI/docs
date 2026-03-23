@@ -209,3 +209,4 @@ npm run build
 ### 支持哪个 MCP 协议版本？
 
 TRON MCP Server 支持 MCP 协议版本 **2025-11-25**，使用 `@modelcontextprotocol/sdk` 1.22.0 或更高版本。
+
