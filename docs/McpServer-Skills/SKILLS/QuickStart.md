@@ -6,8 +6,6 @@ Get your AI up and running with BANK OF AI SKILLS in **2 steps** and less than *
 
 ## Step 1: Install the Skills
 
-**If you are using OpenClaw (our top recommended AI client), just use the easiest, foolproof installation method below: Install via OpenClaw Extension**
-
 Open the "Terminal" on your computer (the black window where you type commands).
 
 :::tip Can't find Terminal? No worries
@@ -18,47 +16,18 @@ Open the "Terminal" on your computer (the black window where you type commands).
 **Copy this entire line**, paste it into the black window, and press Enter:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
+npx skills add https://github.com/BofAI/skills
 ```
 
-A bunch of text will scroll across the screen — **you can ignore it**. Just wait for it to stop. The installer will ask you which components to install; follow the prompts and confirm.
+A bunch of text will scroll across the screen — **you can ignore it**. Just wait for it to stop. This command will install all BANK OF AI skills at once.
 
-When it's done, verify by typing this into the terminal:
+When it's done, verify the installation was successful by asking your AI:
 
-```bash
-ls ~/.openclaw/skills
+```
+Read the sunswap skill and tell me what it can do.
 ```
 
-If you see directory names like `sunswap`, `tronscan-skill`, etc. — congratulations, installation is complete!
-
-<details>
-<summary>Not using OpenClaw? Click here for other installation methods</summary>
-
-**Claude Code:**
-
-```bash
-git clone https://github.com/BofAI/skills.git /tmp/bofai-skills
-mkdir -p ~/.config/claude-code/skills
-cp -r /tmp/bofai-skills/* ~/.config/claude-code/skills/
-```
-
-**Cursor:**
-
-```bash
-git clone https://github.com/BofAI/skills.git .cursor/skills
-```
-
-In Cursor Chat, use `@` to reference specific `SKILL.md` files.
-
-**Any AI tool (universal method):**
-
-```bash
-git clone https://github.com/BofAI/skills.git ~/bofai-skills
-```
-
-Then tell the AI directly: `Please read ~/bofai-skills/sunswap/SKILL.md and check the current price of TRX for me.`
-
-</details>
+If the AI accurately describes the skill's capabilities — congratulations, installation is complete!
 
 ---
 

@@ -19,7 +19,7 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | **sunswap** | Check prices, get quotes, swap tokens, manage liquidity pools | Read-only: none. Trading: wallet credentials |
 | **sunperp-skill** | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys |
 | **tronscan-skill** | Look up accounts, transactions, tokens, blocks, network stats | Recommended: TronScan API key (may throttle without one) |
-| **x402-payment** | Auto-pay for premium APIs and agents | Wallet credentials |
+| **x402-payment** | On-chain "pay-first" auto-settlement | Wallet credentials |
 | **recharge-skill** | Balance, order history, account top-up | BANK OF AI API key |
 
 ### 🔑 Where Do I Get These Keys? How Do I Set Them Up?
@@ -146,9 +146,9 @@ Want to know what's happening on-chain? This skill looks up accounts, transactio
 
 ---
 
-## x402-payment — Auto-Pay for Premium Services
+## x402-payment — On-Chain "Pay-First" Auto-Settlement
 
-Some APIs and AI agents charge a small fee to use. This skill handles the payment flow automatically — the AI detects the charge, pays it, gets the result, and reports back. It always asks for your confirmation before paying.
+Some APIs and AI agents require on-chain payment before use. This skill uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — the AI detects the charge, completes the on-chain payment, gets the result, and reports back. It always asks for your confirmation before paying.
 
 **Requires your confirmation:**
 

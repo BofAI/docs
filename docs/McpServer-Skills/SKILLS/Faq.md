@@ -147,7 +147,7 @@ export BANKOFAI_API_KEY="your_BANKOFAI_API_Key"
 
 ### Which AI tools support Skills?
 
-Currently: **OpenClaw** (most seamless), **Claude Code**, **Cursor**, and any AI assistant that can read local files.
+Currently: **OpenClaw** (most seamless), and any AI assistant that can read local files.
 
 ---
 
@@ -167,11 +167,10 @@ For example, if you think 20x leverage is still too risky for perpetual trading,
 rm -rf ~/.openclaw/skills/sunswap
 ```
 
-**Update:** Re-run the installer. It will ask if you want to overwrite existing skills.
+**Update:** Re-run the install command. It will update all skills to the latest version.
 
 ```bash
-cd openclaw-extension
-./install.sh
+npx skills add https://github.com/BofAI/skills
 ```
 
 ---

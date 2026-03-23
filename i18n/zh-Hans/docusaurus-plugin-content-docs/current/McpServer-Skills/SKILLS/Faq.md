@@ -147,7 +147,7 @@ export BANKOFAI_API_KEY="你的 BANK OF AI API Key"
 
 ### 哪些 AI 工具能用这些技能？
 
-目前支持：**OpenClaw**（最省心）、**Claude Code**、**Cursor**，以及任何能读取本地文件的 AI 助手。
+目前支持：**OpenClaw**（最省心），以及任何能读取本地文件的 AI 助手。
 
 ---
 
@@ -167,11 +167,10 @@ export BANKOFAI_API_KEY="你的 BANK OF AI API Key"
 rm -rf ~/.openclaw/skills/sunswap
 ```
 
-**更新：** 重新运行安装器，它会问你要不要覆盖旧版本。
+**更新：** 重新运行安装命令，会自动更新所有技能到最新版本。
 
 ```bash
-cd openclaw-extension
-./install.sh
+npx skills add https://github.com/BofAI/skills
 ```
 
 ---

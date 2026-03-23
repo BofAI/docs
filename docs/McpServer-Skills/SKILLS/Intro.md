@@ -4,7 +4,7 @@ Welcome to BANK OF AI SKILLS!
 
 In the past, exploring Web3 was a grind full of barriers: watching charts, calculating slippage, switching wallets, checking contracts... one wrong step and you'd hit an error. We decided to put an end to that hassle.
 
-In a nutshell, BANK OF AI SKILLS is a set of **"AI skill packs"** purpose-built for the TRON ecosystem. It upgrades traditional "manual operations" into an **intent-driven, conversational experience**. Just talk to the AI like you would a personal trader, and it handles all the dirty work, heavy lifting, and technical details for you.
+In a nutshell, BANK OF AI SKILLS is a set of **"AI skill packs"** purpose-built for the TRON ecosystem. Ordinary AI tends to fumble complex Web3 trades — blindly copying steps and riddled with errors. Our Skills provide the AI Agent with a set of **"standardized workflows"** — like having a personal trader who already comes with hands-on experience in DEX trading, contract lookup, and perpetual swaps. Just chat naturally, and from pre-flight checks and parameter calculations to transaction bundling — all the error-prone grunt work — Skills automatically orchestrate everything flawlessly behind the scenes.
 
 ---
 
@@ -21,7 +21,7 @@ With Skills, your AI gains decisive advantages:
 | **Complex trade execution** (error prevention & SOP) | Guesses its way through, easily gets stuck. It can handle single-step commands, but for complex swaps, it often doesn't know you need to Approve first — leading to blind operations and error crashes. | Built-in "veteran driver navigation." Enforces the perfect sequence: check balance → verify approval → get quote → confirm → execute. Never misses a step. |
 | **Fund safety & risk control** (blow-up prevention) | Blindly obedient, no guardrails. It doesn't understand financial common sense — if you casually say "open 100x leverage," it will generate that dangerous command without hesitation. | Built-in "business-level safety locks." Hard-coded risk limits (e.g., max 20x leverage, mandatory stop-loss) — dangerous operations get blocked on the spot. |
 
-**In one sentence:** A regular AI is a straight-A "top student" on paper, but full of holes the moment it hits real operations. An AI with BANK OF AI SKILLS is like a Michelin chef with real battlefield experience — never makes rookie mistakes, and proactively steers you away from pitfalls. You just order in plain language, and it handles everything.
+**In one sentence:** A regular AI is a straight-A "top student" on paper, but full of holes the moment it hits real operations. An AI with BANK OF AI SKILLS is like a seasoned pro who already comes with DEX trading, contract lookup, and perpetual swap skills — never makes rookie mistakes, and proactively steers you away from pitfalls. You just order in plain language, and it handles everything.
 
 ### 🎬 Real Scenario: You Want to "Buy Some TRX with 50 USDT"
 
@@ -45,22 +45,17 @@ In this scenario, you said one sentence, and the Skill quietly handled 5 high-ba
 
 ---
 
-## Trusting AI with Your Money? Three Reassurances
+## 🛡️ Your Assets Are Absolutely Safe with Skills
 
-The three questions you're most worried about — we've already thought of them:
+**"Can Skills spend my money without permission?"**
+No. Every operation that involves spending money has a built-in **intercept-confirm mechanism** — the AI pauses first and shows you the full "bill": how much, where to, which chain, estimated fees. **Nothing happens until you explicitly say "yes."** Think of it as a diligent assistant who needs your signature on every expense report.
 
-**"Will the AI secretly transfer my money?"**
-No. Every operation that involves spending money will pause first and show you the full details — how much, where to, which chain, estimated fees. **Nothing happens until you explicitly say "yes."** Think of it as a diligent assistant who needs your signature on every expense report.
-
-**"Will a ton of skills make the AI slow or confused?"**
-No. When the AI starts up, it only loads a "table of contents" (like glancing at labels on a bookshelf). It only reads the full skill content when you actually use it. Hundreds of skills? Still lightning fast.
-
-**"Is my private key safe?"**
-We recommend **Agent Wallet** — think of it as opening a dedicated "payment account" for your AI. You don't hand over your bank password (private key) directly. Instead, you give it an encrypted password. Even if someone peeks at your environment variables, they still need the encryption password to unlock anything — the odds of both locks being broken are extremely low.
+**"Will installing lots of Skills slow things down?"**
+No. Skills use an **on-demand, lightweight architecture** — the AI only loads a "table of contents" at startup (like glancing at labels on a bookshelf). It reads the full skill content only when you actually use it. Hundreds of Skills? Still lightning fast.
 
 ---
 
-## What Can It Do for You?
+## What Can Skills Do for You?
 
 Five core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
 
@@ -82,9 +77,11 @@ Look up accounts, transactions, and check if a new token is legit. Pure read-onl
 
 > 🗣️ "Check the holder distribution for that new token — is it controlled by a whale?"
 
-### ☕ Auto-Pay Runner
+### ☕ On-Chain "Pay-First" Auto-Settlement
 
-When the AI encounters a premium service (like a paid data API), it can automatically pay the small service fee for you — no need to switch apps or scan QR codes.
+When the AI needs to call a paid on-chain service or data API, it uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — no manual QR scanning or wallet switching needed.
+
+> 🗣️ "Use the x402 protocol to call this paid agent endpoint: https://api.example.com" (replace with the actual paid endpoint URL you want to call)
 
 ### 🏦 Account Manager
 
@@ -94,7 +91,7 @@ Check your BANK OF AI balance and top up with a single sentence.
 
 ---
 
-## 🎯 Is This Right for Me?
+## 🎯 Are These Skills Right for Me?
 
 - **👶 I'm a total beginner:** Perfect! No more wrestling with candlestick charts, slippage settings, or gas fee calculations. Just tell the AI what you want in plain language — it does the hard work and feeds you the results.
 - **🕴️ I'm an experienced trader:** Tired of staring at screens all day? Let the AI batch-monitor data and calculate yields, freeing up your time and energy. You focus on strategy — let the AI handle the tedious execution.

@@ -6,8 +6,6 @@
 
 ## 第 1 步：安装技能库
 
-**如果你正在使用 OpenClaw（我们最推荐的 AI 客户端），请直接使用下面这种最简单的傻瓜式安装：通过 OpenClaw Extension 安装**
-
 打开你电脑上的"终端"（就是那个黑框框）。
 
 :::tip 找不到终端？别慌
@@ -15,50 +13,21 @@
 **Windows 电脑：** 按 `Win + R`，在弹出的小窗口里输入 `cmd`，按回车。
 :::
 
-把下面这串长长的代码**整行复制**，粘贴到黑框框里，按回车：
+把下面这行代码**整行复制**，粘贴到黑框框里，按回车：
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
+npx skills add https://github.com/BofAI/skills
 ```
 
-屏幕上会跳出一堆英文字母——**不用管它们**，等它停下来就行。安装器会一步步问你要装哪些组件，跟着提示按回车确认即可。
+屏幕上会跳出一堆英文字母——**不用管它们**，等它停下来就行。这条命令会一次性安装所有 BANK OF AI 技能。
 
-装完后，黑框框里输入这行来验证：
+装完后，在 AI 对话中验证：
 
-```bash
-ls ~/.openclaw/skills
+```
+读一下 sunswap 技能，告诉我它能做什么。
 ```
 
-如果看到 `sunswap`、`tronscan-skill` 等目录名出现——恭喜，安装成功！
-
-<details>
-<summary>用的不是 OpenClaw？点这里看其他安装方式</summary>
-
-**Claude Code：**
-
-```bash
-git clone https://github.com/BofAI/skills.git /tmp/bofai-skills
-mkdir -p ~/.config/claude-code/skills
-cp -r /tmp/bofai-skills/* ~/.config/claude-code/skills/
-```
-
-**Cursor：**
-
-```bash
-git clone https://github.com/BofAI/skills.git .cursor/skills
-```
-
-在 Cursor Chat 中用 `@` 引用具体的 `SKILL.md` 文件即可。
-
-**任何 AI 工具（通用方式）：**
-
-```bash
-git clone https://github.com/BofAI/skills.git ~/bofai-skills
-```
-
-然后在对话中直接告诉 AI：`请读取 ~/bofai-skills/sunswap/SKILL.md，帮我查一下 TRX 当前的价格。`
-
-</details>
+AI 能准确描述功能——恭喜，安装成功！
 
 ---
 
