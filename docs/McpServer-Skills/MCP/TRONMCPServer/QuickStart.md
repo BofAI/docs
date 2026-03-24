@@ -21,7 +21,7 @@ node --version  # should output v20.x.x or higher
 
 ---
 
-## Add Configuration
+## Install
 
 Simply tell your AI Agent to execute the following command:
 
