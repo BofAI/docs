@@ -51,7 +51,70 @@ Simply tell your AI Agent to execute the following command:
 npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 ```
 
-Once the command completes, restart your AI Agent, and the MCP Server is ready to use — you can start interacting with the TRON blockchain.
+:::tip
+This guide demonstrates the installation process using terminal commands as an example.
+:::
+
+### Installation Walkthrough
+
+The installer will guide you through a few steps — just follow along:
+
+**1️⃣ Identify the service source**
+
+The installer automatically detects the remote MCP service URL and generates a server name:
+
+```
+◇  Source: https://tron-mcp-server.bankofai.io/mcp (remote)
+│
+●  Server name: tron-mcp-server
+```
+
+**2️⃣ Choose which AI tools to install to**
+
+The installer auto-detects AI tools on your computer (e.g., Claude Code, Cursor, Cline, etc.). Use Space to select the ones you want:
+
+```
+◇  Detected 1 agent
+│
+◇  Select agents to install to
+│  Claude Code
+```
+
+**3️⃣ Confirm installation details**
+
+The installer displays an installation summary. Review it and select `Yes` to proceed:
+
+```
+◇  Installation Summary ────╮
+│                           │
+│  Server: tron-mcp-server  │
+│  Type: remote             │
+│  Scope: Project           │
+│  Agents: Claude Code      │
+│                           │
+├───────────────────────────╯
+│
+◇  Proceed with installation?
+│  Yes
+```
+
+**4️⃣ Installation complete!**
+
+When you see output like this, TRON MCP Server has been successfully installed to your selected AI tools:
+
+```
+◇  Installation complete
+│
+◇  Installed to 1 agent ───────╮
+│                              │
+│  ✓ Claude Code: ~/.mcp.json  │
+│                              │
+├──────────────────────────────╯
+│
+└  Done!
+```
+
+Once installation is complete, restart your AI Agent, and you can start interacting with the TRON blockchain via TRON MCP Server.
 
 ---
 

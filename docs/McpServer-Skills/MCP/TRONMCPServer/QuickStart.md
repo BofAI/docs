@@ -23,10 +23,10 @@ node --version  # should output v20.x.x or higher
 
 ## Add Configuration
 
-Run the following command in your terminal:
+Simply tell your AI Agent to execute the following command:
 
 ```bash
-npx add-mcp @bankofai/mcp-server-tron
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 ```
 
 After the command completes, restart your MCP client.

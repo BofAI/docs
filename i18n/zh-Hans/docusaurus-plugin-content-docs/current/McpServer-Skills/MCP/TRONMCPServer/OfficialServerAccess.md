@@ -51,7 +51,70 @@
 npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 ```
 
-执行完成后，重启 AI Agent，即可使用相关 MCP Server，开始与 TRON 区块链交互。
+:::tip 提示
+本文档以在终端中运行命令为例展示安装过程。
+:::
+
+### 安装过程详解
+
+安装器会引导你完成以下几步，照着做就行：
+
+**1️⃣ 识别服务来源**
+
+安装器会自动识别远程 MCP 服务地址，并为其生成服务名称：
+
+```
+◇  Source: https://tron-mcp-server.bankofai.io/mcp (remote)
+│
+●  Server name: tron-mcp-server
+```
+
+**2️⃣ 选择要安装到哪些 AI 工具**
+
+安装器会自动检测你电脑上装了哪些 AI 工具（如 Claude Code、Cursor、Cline 等），用空格键勾选你要用的：
+
+```
+◇  Detected 1 agent
+│
+◇  Select agents to install to
+│  Claude Code
+```
+
+**3️⃣ 确认安装信息**
+
+安装器会展示安装摘要，确认无误后选择 `Yes` 开始安装：
+
+```
+◇  Installation Summary ────╮
+│                           │
+│  Server: tron-mcp-server  │
+│  Type: remote             │
+│  Scope: Project           │
+│  Agents: Claude Code      │
+│                           │
+├───────────────────────────╯
+│
+◇  Proceed with installation?
+│  Yes
+```
+
+**4️⃣ 安装完成！**
+
+看到类似以下输出，说明 TRON MCP Server 已经成功安装到你选择的 AI 工具中：
+
+```
+◇  Installation complete
+│
+◇  Installed to 1 agent ───────╮
+│                              │
+│  ✓ Claude Code: ~/.mcp.json  │
+│                              │
+├──────────────────────────────╯
+│
+└  Done!
+```
+
+安装完成后，重启 AI Agent，即可使用 TRON MCP Server 开始与 TRON 区块链交互。
 
 ---
 

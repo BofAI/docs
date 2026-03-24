@@ -17,10 +17,10 @@ Before you get started, make sure you have:
 
 ## Install
 
-Run the following command in the terminal to add SUN MCP Server:
+Simply tell your AI Agent to execute the following command:
 
 ```bash
-npx add-mcp @bankofai/sun-mcp-server
+npx add-mcp https://sun-mcp-server.bankofai.io/mcp
 ```
 
 After the command completes, restart your MCP client.

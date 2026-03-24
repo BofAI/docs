@@ -23,10 +23,10 @@ node --version  # 应输出 v20.x.x 或更高
 
 ## 添加配置
 
-在终端执行以下命令：
+只需告诉你的 AI Agent 执行以下命令：
 
 ```bash
-npx add-mcp @bankofai/mcp-server-tron
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 ```
 
 命令完成后，重启你的 MCP 客户端。

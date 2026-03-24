@@ -6,21 +6,114 @@ Get your AI up and running with BANK OF AI SKILLS in **2 steps** and less than *
 
 ## Step 1: Install the Skills
 
-Open the "Terminal" on your computer (the black window where you type commands).
-
-:::tip Can't find Terminal? No worries
-Press `Command + Space`, type `Terminal` in the search box, hit Enter. The black window appears.
-:::
-
-**Copy this entire line**, paste it into the black window, and press Enter:
+Simply tell your AI Agent to execute the following command:
 
 ```bash
 npx skills add https://github.com/BofAI/skills
 ```
 
-A bunch of text will scroll across the screen — **you can ignore it**. Just wait for it to stop. This command will install all BANK OF AI skills at once.
+:::tip
+This guide demonstrates the installation process using terminal commands as an example. If you prefer to install manually, open the Terminal on your computer (press `Command + Space`, type `Terminal`, hit Enter), paste the command above, and press Enter.
+:::
 
-When it's done, verify the installation was successful by asking your AI:
+### Installation Walkthrough
+
+The installer will guide you through a few steps — just follow along:
+
+**1️⃣ Confirm tool installation**
+
+Terminal will ask you to install the `skills` package. Type `y` and press Enter:
+
+```
+Need to install the following packages:
+  skills@1.4.6
+Ok to proceed? (y) y
+```
+
+**2️⃣ Select which Skills to install**
+
+The installer automatically fetches all available Skills from the repo and lists them for selection. Press **Space** to toggle each one — we recommend selecting all:
+
+```
+◇  Found 6 skills
+│
+◇  Select skills to install (space to toggle)
+│  Multi-Sig & Account Permissions, recharge-skill,
+│  SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
+│  TronScan Data Lookup, x402-payment
+```
+
+:::tip Select all
+Unless you're sure you only need specific skills, install them all. Skills use an on-demand architecture — unused skills consume zero resources.
+:::
+
+**3️⃣ Choose which AI tools to install to**
+
+The installer auto-detects AI tools on your computer (e.g., Cursor, Claude Code, Cline, etc.). Use Space to select the ones you want:
+
+```
+◇  43 agents
+◇  Which agents do you want to install to?
+│  Amp, Antigravity, Cline, Codex, Cursor, Deep Agents,
+│  Gemini CLI, GitHub Copilot, Kimi Code CLI, OpenCode, Warp
+```
+
+**4️⃣ Choose installation scope**
+
+Select `Project` (current project only) or `User` (globally available across all projects):
+
+```
+◇  Installation scope
+│  Project
+```
+
+**5️⃣ Review security assessment & confirm**
+
+The installer runs a security scan on each Skill and shows the results. Review them and select `Yes` to proceed:
+
+```
+◇  Security Risk Assessments ──────────────────────────────╮
+│                                                          │
+│                                    Gen    Socket   Snyk  │
+│  Multi-Sig & Account Permissions   --     --       --    │
+│  recharge-skill                    --     --       --    │
+│  SunPerp Perpetual Futures Trading --     --       --    │
+│  SunSwap DEX Trading               --     --       --    │
+│  TronScan Data Lookup              --     --       --    │
+│  x402-payment                      Med    1 alert  Med   │
+│                                                          │
+├──────────────────────────────────────────────────────────╯
+
+◇  Proceed with installation?
+│  Yes
+```
+
+**6️⃣ Installation complete!**
+
+When you see output like this, all Skills have been successfully installed to your selected AI tools:
+
+```
+◇  Installed 6 skills ────────────────────────╮
+│                                             │
+│  ✓ Multi-Sig & Account Permissions (copied) │
+│  ✓ recharge-skill (copied)                  │
+│  ✓ SunPerp Perpetual Futures Trading (copied)│
+│  ✓ SunSwap DEX Trading (copied)             │
+│  ✓ TronScan Data Lookup (copied)            │
+│  ✓ x402-payment (copied)                    │
+│                                             │
+├─────────────────────────────────────────────╯
+
+└  Done!
+```
+
+:::tip Optional: Install find-skills
+After installation, you may be prompted to install `find-skills` — a helper that lets your AI automatically discover and suggest new skills. We recommend selecting `Yes`.
+:::
+
+### Verify Installation
+
+Open your AI chat and type:
 
 ```
 Read the sunswap skill and tell me what it can do.

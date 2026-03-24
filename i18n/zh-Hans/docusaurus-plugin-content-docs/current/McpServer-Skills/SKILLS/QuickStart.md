@@ -6,21 +6,114 @@
 
 ## 第 1 步：安装技能库
 
-打开你电脑上的"终端"（就是那个黑框框）。
-
-:::tip 找不到终端？别慌
-按 `Command + 空格`，在弹出的搜索框里输入 `Terminal`，按回车，黑框框就出来了。
-:::
-
-把下面这行代码**整行复制**，粘贴到黑框框里，按回车：
+只需告诉你的 AI Agent 执行以下命令：
 
 ```bash
 npx skills add https://github.com/BofAI/skills
 ```
 
-屏幕上会跳出一堆英文字母——**不用管它们**，等它停下来就行。这条命令会一次性安装所有 BANK OF AI 技能。
+:::tip 提示
+本文档以在终端中运行命令为例展示安装过程。如果你想在终端中手动安装，打开你电脑上的"终端"（按 `Command + 空格`，输入 `Terminal`，按回车），将上面的命令粘贴进去并回车即可。
+:::
 
-装完后，在 AI 对话中验证：
+### 安装过程详解
+
+安装器会引导你完成以下几步，照着做就行：
+
+**1️⃣ 确认安装工具**
+
+终端会提示你需要安装 `skills` 工具包，输入 `y` 并回车即可：
+
+```
+Need to install the following packages:
+  skills@1.4.6
+Ok to proceed? (y) y
+```
+
+**2️⃣ 选择要安装的 Skills**
+
+安装器会自动从仓库拉取所有可用的 Skills，然后列出清单让你勾选。按**空格键**切换选中/取消，默认全选即可：
+
+```
+◇  Found 6 skills
+│
+◇  Select skills to install (space to toggle)
+│  Multi-Sig & Account Permissions, recharge-skill,
+│  SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
+│  TronScan Data Lookup, x402-payment
+```
+
+:::tip 建议全选
+除非你很明确只需要某几个技能，否则建议全部安装。Skills 采用按需唤醒架构，不用的技能不会占用任何资源。
+:::
+
+**3️⃣ 选择要安装到哪些 AI 工具**
+
+安装器会自动检测你电脑上装了哪些 AI 工具（如 Cursor、Claude Code、Cline 等），用空格键勾选你要用的：
+
+```
+◇  43 agents
+◇  Which agents do you want to install to?
+│  Amp, Antigravity, Cline, Codex, Cursor, Deep Agents,
+│  Gemini CLI, GitHub Copilot, Kimi Code CLI, OpenCode, Warp
+```
+
+**4️⃣ 选择安装范围**
+
+选择 `Project`（当前项目）或 `User`（所有项目全局可用），按需选择即可：
+
+```
+◇  Installation scope
+│  Project
+```
+
+**5️⃣ 查看安全评估 & 确认安装**
+
+安装器会对每个 Skill 进行安全风险扫描，并展示评估结果。确认无误后选择 `Yes` 开始安装：
+
+```
+◇  Security Risk Assessments ──────────────────────────────╮
+│                                                          │
+│                                    Gen    Socket   Snyk  │
+│  Multi-Sig & Account Permissions   --     --       --    │
+│  recharge-skill                    --     --       --    │
+│  SunPerp Perpetual Futures Trading --     --       --    │
+│  SunSwap DEX Trading               --     --       --    │
+│  TronScan Data Lookup              --     --       --    │
+│  x402-payment                      Med    1 alert  Med   │
+│                                                          │
+├──────────────────────────────────────────────────────────╯
+
+◇  Proceed with installation?
+│  Yes
+```
+
+**6️⃣ 安装完成！**
+
+看到类似以下输出，说明所有 Skills 已经成功安装到你选择的 AI 工具中：
+
+```
+◇  Installed 6 skills ────────────────────────╮
+│                                             │
+│  ✓ Multi-Sig & Account Permissions (copied) │
+│  ✓ recharge-skill (copied)                  │
+│  ✓ SunPerp Perpetual Futures Trading (copied)│
+│  ✓ SunSwap DEX Trading (copied)             │
+│  ✓ TronScan Data Lookup (copied)            │
+│  ✓ x402-payment (copied)                    │
+│                                             │
+├─────────────────────────────────────────────╯
+
+└  Done!
+```
+
+:::tip 可选：安装 find-skills
+安装完成后，工具可能会提示你是否安装 `find-skills`——这是一个帮 AI 自动发现和推荐新技能的辅助工具，建议选 `Yes`。
+:::
+
+### 验证安装
+
+打开你的 AI 对话框，输入：
 
 ```
 读一下 sunswap 技能，告诉我它能做什么。
