@@ -166,7 +166,7 @@ If you don't want to install another tool and just want to start trading right a
 1. In Terminal (the black window), type `open -e ~/.zshrc` and press Enter.
 2. A text editor window will pop up. Scroll to the very bottom, start a new line, and paste your TRON private key:
    ```bash
-   export TRON_PRIVATE_KEY="your_real_or_testnet_private_key"
+   export TRON_PRIVATE_KEY='your_real_or_testnet_private_key'
    ```
    ⚠️ Important: Don't forget the double quotes on both sides!
 3. Press `Command + S` to save, then close the editor.
