@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # 本地私有化部署
 
 ## 什么是本地私有化部署？
@@ -46,7 +43,7 @@ node --version  # 应输出 v20.x.x 或更高
 在配置钱包之前，请务必理解以下安全原则：
 
 :::danger 安全警告
-**切勿**将私钥或助记词直接保存在 MCP 配置文件（如 `claude_desktop_config.json` 或 `mcp.json`）中。这些文件通常未加密，可能被意外分享或提交到 Git。请务必使用系统环境变量或加密钱包。
+**切勿**将私钥或助记词直接保存在 MCP 配置文件中。这些文件通常未加密，可能被意外分享或提交到 Git。请务必使用系统环境变量或加密钱包。
 :::
 
 ---
@@ -67,29 +64,18 @@ node --version  # 应输出 v20.x.x 或更高
 
 #### 方式一：通过 Agent Wallet（推荐）创建钱包
 
-这是最安全的方式。私钥加密存储在本地磁盘，不会以明文形式暴露在环境变量中。即使环境变量被泄露，攻击者仍需要加密的密钥库文件才能访问资金。
+这是最安全的方式。私钥加密存储在本地磁盘，不会以明文形式暴露在环境变量中。即使环境变量被泄露，攻击者仍需要加密的密钥库文件才能访问资金。Agent Wallet 还支持**多钱包管理**和运行时通过 `select_wallet` 工具切换钱包。
 
-**安装并初始化 Agent Wallet：**
+> Agent Wallet 的安装、初始化及详细用法请参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro)。
 
-```bash
-# 安装
-npm install -g @bankofai/agent-wallet
-
-# 创建加密钱包
-agent-wallet start
-```
-Agent Wallet 还支持**多钱包管理**——你可以创建多个钱包，在运行时通过 `select_wallet` 工具随时切换，非常适合需要在不同账户间操作的场景。
-
-> 了解详细的安装和使用说明请参阅 [agent-wallet 文档](https://github.com/BofAI/agent-wallet/blob/main/doc/getting-started.md)。
-
-**设置环境变量：**
+**初始化 Agent Wallet 后设置环境变量：**
 
 ```bash
 # 添加到 ~/.zshrc 或 ~/.bashrc
-export AGENT_WALLET_PASSWORD="<你的主密码>"
+export AGENT_WALLET_PASSWORD='<你的主密码>'
 
 # 可选：指定自定义钱包目录（默认：~/.agent-wallet）
-export AGENT_WALLET_DIR="~/.agent-wallet"
+export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
 
 
@@ -178,149 +164,28 @@ npm install
 npm run build
 ```
 
----
+#### 方式 C：以 HTTP 模式运行
 
-### 第四步：客户端配置
-
-环境变量和安装都准备好了，现在把 AI 客户端指向本地服务器。
-
-#### 找到配置文件
-
-| 应用程序 | 操作系统 | 配置路径 |
-| :--- | :--- | :--- |
-| **Claude Desktop** | macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
-| **Cursor** | 所有 | 项目根目录：`.cursor/mcp.json` |
-| **Google Antigravity** | 所有 | `~/.config/antigravity/mcp.json` |
-| **Opencode** | 所有 | `~/.config/opencode/mcp.json` |
-
-#### 添加服务器定义
-
-<Tabs>
-<TabItem value="npx" label="方式 A：npx 运行（推荐）">
-
-直接从 npm 运行最新版本，无需克隆仓库。
-
-**Claude Desktop**（`claude_desktop_config.json`）：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/mcp-server-tron"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "YOUR_PASSWORD（或在系统环境变量中设置）",
-        "TRONGRID_API_KEY": "YOUR_KEY_HERE（或在系统环境变量中设置）"
-      }
-    }
-  }
-}
-```
-
-**Claude Code**：
+启动服务器的 HTTP 模式，然后通过 HTTP 端点连接你的 MCP 客户端：
 
 ```bash
-# 基础配置
-claude mcp add mcp-server-tron -- npx -y @bankofai/mcp-server-tron
-
-# 携带环境变量
-claude mcp add -e AGENT_WALLET_PASSWORD=xxx -e TRONGRID_API_KEY=xxx mcp-server-tron -- npx -y @bankofai/mcp-server-tron
+npm run start:http
 ```
 
-**Cursor**（`.cursor/mcp.json`）：
+这会启动一个本地 HTTP 服务器（默认：`http://localhost:3001/mcp`），你的 MCP 客户端可以连接到它。
 
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/mcp-server-tron"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "YOUR_PASSWORD（或在系统环境变量中设置）",
-        "TRONGRID_API_KEY": "YOUR_KEY_HERE（或在系统环境变量中设置）"
-      }
-    }
-  }
-}
-```
+#### 配置说明
 
-</TabItem>
-<TabItem value="local" label="方式 B：本地源码">
+如果你要配置 MCP 客户端指向本地服务器：
 
-适用于从克隆仓库运行的开发者。
+- **如果通过 npx 或源码运行**：在 MCP 客户端配置中使用相应的命令（例如 `command: npx` 加上 `args: ["-y", "@bankofai/mcp-server-tron"]`）
+- **如果以 HTTP 模式运行**：通过 HTTP URL 配置选项将客户端指向 `http://localhost:3001/mcp`
 
-**Claude Desktop**（`claude_desktop_config.json`）：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["tsx", "/mcp-server-tron 的绝对路径/src/index.ts"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "YOUR_PASSWORD（或在系统环境变量中设置）",
-        "TRONGRID_API_KEY": "YOUR_KEY_HERE（或在系统环境变量中设置）"
-      }
-    }
-  }
-}
-```
-
-将路径替换为你实际克隆的仓库路径。
-
-**Cursor**（`.cursor/mcp.json`）：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["tsx", "/mcp-server-tron 的绝对路径/src/index.ts"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "YOUR_PASSWORD（或在系统环境变量中设置）",
-        "TRONGRID_API_KEY": "YOUR_KEY_HERE（或在系统环境变量中设置）"
-      }
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="http" label="方式 C：连接本地 HTTP">
-
-如果你以 HTTP 模式启动了服务器（`npm run start:http`），通过 HTTP URL 连接：
-
-**Claude Code**：
-
-```bash
-claude mcp add --transport http mcp-server-tron http://localhost:3001/mcp
-```
-
-**Cursor**（`.cursor/mcp.json`）：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "url": "http://localhost:3001/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-</Tabs>
-
-:::tip 关于配置中的 `env` 部分
-如果你已经在系统中设置了环境变量（通过 `~/.zshrc` 或 `~/.bashrc`），可以完全省略配置中的 `env` 部分，服务器会自动读取系统环境变量。
-
-如果你的 MCP 客户端不继承系统环境变量，则需要在 `env` 部分中设置。此时**请确保该配置文件不会被分享或提交到版本控制系统**。
-:::
+如果你的 MCP 客户端不继承系统环境变量，则需要在客户端设置中显式配置它们。**请确保任何存储凭证的配置文件不会被分享或提交到版本控制系统**。
 
 ---
 
-### 第五步：验证接入是否成功
+### 第四步：验证接入是否成功
 
 完成配置后，**完全退出并重启** AI 客户端，然后尝试：
 

@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Official Cloud Service Access
 
 ## What is the Official Cloud Service?
@@ -20,15 +17,11 @@ This is far too much overhead for users who simply want to check a balance.
 
 ### Key Advantages
 
-**1. No local installation required**
-
-No Node.js, no repository clone, no build commands. Just add a JSON snippet to your config file, restart your AI client, and you're ready to use. The entire process usually takes no more than 2 minutes.
-
-**2. No private key exposure risk**
+**1. No private key exposure risk**
 
 Since the cloud service is read-only, you never need to provide a wallet private key or mnemonic. This fundamentally eliminates risks like key leakage and config files accidentally committed to Git. It's especially convenient for team collaboration — any member can connect directly without key distribution or management concerns.
 
-**3. Official maintenance and continuous updates**
+**2. Official maintenance and continuous updates**
 
 The cloud service is maintained by the official team and always runs the latest stable version of TRON MCP Server. This includes:
 
@@ -38,7 +31,7 @@ The cloud service is maintained by the official team and always runs the latest 
 
 You don't need to worry about version numbers or manually run `npm install` or rebuild.
 
-**4. Covers the vast majority of real-world use cases**
+**3. Covers the vast majority of real-world use cases**
 
 The most common daily operations — checking address balances, analyzing transaction details, reading contract state, viewing the Super Representative list, monitoring on-chain events — are all read-only queries, fully supported through the cloud service. Only when you need to actually move assets (transfers, staking, contract writes) do you need to switch to [Local Private Deployment](./LocalPrivatizedDeployment.md).
 
@@ -52,204 +45,96 @@ The official cloud service only provides **read-only access**. It does **not sup
 
 ## How to Connect
 
-To connect to the official cloud service, simply add the official **MCP service URL** to your AI client configuration: [https://tron-mcp-server.bankofai.io/mcp](https://tron-mcp-server.bankofai.io/mcp)
+### Quick Auto-Install
 
-> Note: This is an MCP protocol endpoint, not a webpage. Opening it directly in a browser will not display anything.
-
-The official cloud service supports **two usage modes**:
-
-| Mode | Rate Limit | Description |
-| :--- | :--- | :--- |
-| **Without TronGrid API Key (default)** | 100,000 requests / day | Ready to use immediately, suitable for getting started and low-frequency queries |
-| **With TronGrid API Key** | 500,000 requests / day | Higher request limit, suitable for frequent queries and production use |
-
-Both modes use the same connection method — the only difference is the request rate limit.
-
----
-
-### Without TronGrid API Key Mode (Default)
-
-No API Key configuration needed to get started. Best for:
-
-- First-time experience with TRON MCP Server
-- Occasional on-chain data queries
-- Teaching, demos, and feature verification
-
-In this mode, all tools are available, but mainnet queries under high-frequency usage may trigger TronGrid's public RPC rate limits.
-
----
-
-### With TronGrid API Key Mode (Recommended)
-
-For frequent mainnet queries, apply for a free TronGrid API Key to get a higher request rate limit.
-
-**How to apply:**
-
-1. Visit [trongrid.io](https://www.trongrid.io/)
-2. Register an account and create a project
-3. Copy the generated API Key
-4. Add the API Key header in your configuration (see client configuration examples below)
-
-After configuring the API Key, your requests will go through TronGrid's authenticated channel, with more stable performance and higher throughput.
-
----
-
-## Client Configuration
-
-<Tabs>
-<TabItem value="Claude Desktop" label="Claude Desktop">
-
-Configuration file path:
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-**Basic Config (No API Key)**:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://tron-mcp-server.bankofai.io/mcp"
-      ]
-    }
-  }
-}
-```
-
-**Config with TronGrid API Key**:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://tron-mcp-server.bankofai.io/mcp",
-        "--header",
-        "TRONGRID-API-KEY:<your-api-key>"
-      ]
-    }
-  }
-}
-```
-
-Replace `<your-api-key>` with your actual TronGrid API Key.
-
-</TabItem>
-<TabItem value="Claude Code" label="Claude Code">
-
-**Command line:**
+Simply tell your AI Agent to execute the following command:
 
 ```bash
-claude mcp add --transport http mcp-server-tron https://tron-mcp-server.bankofai.io/mcp
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
 ```
 
-**Or add `.mcp.json` to your project root**:
+The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
 
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "type": "http",
-      "url": "https://tron-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
+Once installation is complete, restart your AI Agent, and you can start interacting with the TRON blockchain via TRON MCP Server.
 
-</TabItem>
-<TabItem value="Cursor" label="Cursor">
+### Interactive Installation
 
-Add the following to your project root `.cursor/mcp.json`:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "url": "https://tron-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="通用 HTTP 调用" label="Generic HTTP Call">
-
-If you want to integrate TRON MCP Server into your own application, you can call it via standard HTTP requests.
-
-**Step 1: Initialize Connection**
+If you want to choose which AI tools to install to, remove the `-y` flag:
 
 ```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "initialize",
-    "params": {
-      "protocolVersion": "2025-03-26",
-      "capabilities": {},
-      "clientInfo": {"name": "my-client", "version": "1.0"}
-    },
-    "id": 1
-  }'
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 ```
 
-The response will include a `mcp-session-id` header — you'll need it for subsequent requests.
-
-**Step 2: Call a Tool**
-
-Use the `mcp-session-id` from Step 1:
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "get_chain_info",
-      "arguments": {"network": "mainnet"}
-    },
-    "id": 2
-  }'
-```
-
-**Step 3: Discover Available Tools**
-
-```bash
-curl -X POST https://tron-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/list",
-    "params": {},
-    "id": 3
-  }'
-```
-
-:::info Session Management
-- Each `initialize` creates a new session
-- Sessions automatically expire after 30 minutes of inactivity
-- Use `DELETE /mcp` (with `mcp-session-id` header) to explicitly close a session
+:::tip
+This guide demonstrates the installation process using terminal commands as an example.
 :::
 
-</TabItem>
-</Tabs>
+#### Installation Walkthrough
+
+The installer will guide you through a few steps — just follow along:
+
+**1️⃣ Identify the service source**
+
+The installer automatically detects the remote MCP service URL and generates a server name:
+
+```
+◇  Source: https://tron-mcp-server.bankofai.io/mcp (remote)
+│
+●  Server name: tron-mcp-server
+```
+
+**2️⃣ Choose which AI tools to install to**
+
+The installer auto-detects AI tools on your computer (e.g., Claude Code, Cursor, Cline, etc.). Use Space to select the ones you want:
+
+```
+◇  Detected 1 agent
+│
+◇  Select agents to install to
+│  Claude Code
+```
+
+**3️⃣ Confirm installation details**
+
+The installer displays an installation summary. Review it and select `Yes` to proceed:
+
+```
+◇  Installation Summary ────╮
+│                           │
+│  Server: tron-mcp-server  │
+│  Type: remote             │
+│  Scope: Project           │
+│  Agents: Claude Code      │
+│                           │
+├───────────────────────────╯
+│
+◇  Proceed with installation?
+│  Yes
+```
+
+**4️⃣ Installation complete!**
+
+When you see output like this, TRON MCP Server has been successfully installed to your selected AI tools:
+
+```
+◇  Installation complete
+│
+◇  Installed to 1 agent ───────╮
+│                              │
+│  ✓ Claude Code: ~/.mcp.json  │
+│                              │
+├──────────────────────────────╯
+│
+└  Done!
+```
+
+Once installation is complete, restart your AI Agent, and you can start interacting with the TRON blockchain via TRON MCP Server.
 
 ---
 
 ## Verify Connection
 
-After completing configuration, **fully exit and restart** your AI client, then enter the following test prompt:
+Once connected, you can test by asking your AI Agent the following question:
 
 ```
 Query the current block height of TRON mainnet

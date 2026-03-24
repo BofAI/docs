@@ -67,5 +67,9 @@
   "sidebar.docsSidebar.category.API": {
     "message": "API 参考",
     "description": "The label for category API in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Explore Further": {
+    "message": "进一步探索",
+    "description": "The label for category Explore Further in sidebar docsSidebar"
   }
 }

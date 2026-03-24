@@ -8,7 +8,7 @@ When you encounter problems, check here first. Organized by the order you're mos
 
 Connection issues usually occur during the initial configuration phase. If your AI client can't recognize the TRON tools, this is likely where the problem is.
 
-### "Failed to connect to MCP server" in Claude Desktop
+### "Failed to connect to MCP server" in your MCP client
 
 This is the most common issue. Troubleshoot in the following order:
 
@@ -20,15 +20,11 @@ This is the most common issue. Troubleshoot in the following order:
 
 2. **Check that npx is available**. Run `npx --version` in your terminal. If the command is not found, your Node.js installation is incomplete — reinstall it.
 
-3. **Verify config file format**. `claude_desktop_config.json` must be valid JSON. Common mistakes include trailing commas, missing quotes, or mismatched brackets. Quickly validate with:
-   ```bash
-   cat ~/Library/Application\ Support/Claude/claude_desktop_config.json | python3 -m json.tool
-   ```
-   If formatted JSON is printed, the format is fine. If there's an error, fix it according to the message.
+3. **Verify config file format**. Your MCP client configuration file must be valid JSON. Common mistakes include trailing commas, missing quotes, or mismatched brackets. Validate your configuration file using a JSON validator.
 
-4. **Fully quit and restart**. Closing the window is not the same as quitting — you need to fully exit Claude Desktop from the menu bar/system tray, then reopen it. On macOS, right-click the Dock icon and choose "Quit".
+4. **Fully quit and restart**. Closing the window is not the same as quitting — you need to fully exit your MCP client, then reopen it.
 
-5. **Check logs**. If none of the above resolves the issue, check Claude Desktop's log files. On macOS they're in `~/Library/Logs/Claude/` — search for entries containing "mcp" or "tron".
+5. **Check logs**. If none of the above resolves the issue, check your MCP client's log files for entries containing "mcp" or "tron".
 
 ### "Connection refused" in HTTP mode
 
@@ -57,7 +53,7 @@ This is not an error — it's by design. Write tools (transfers, staking, etc.) 
 
 To unlock write tools, configure one of the three wallet modes:
 
-- Set `AGENT_WALLET_PASSWORD` (Agent Wallet mode, recommended)
+- Set `AGENT_WALLET_PASSWORD` ([Agent Wallet](../../../Agent-Wallet/Intro) mode, recommended)
 - Set `TRON_PRIVATE_KEY` (Private Key mode)
 - Set `TRON_MNEMONIC` (Mnemonic mode)
 
@@ -91,18 +87,9 @@ If the server reports an invalid private key at startup, it's usually a format i
 
 ### "Agent wallet password incorrect" error
 
-`AGENT_WALLET_PASSWORD` must exactly match the master password set during `agent-wallet init`. If you're not sure:
+`AGENT_WALLET_PASSWORD` must exactly match the master password generated when you ran `agent-wallet start`. Verify that the wallet directory exists (`ls ~/.agent-wallet/`) and that `AGENT_WALLET_DIR` points to the correct path if you used a custom directory.
 
-1. **Check that the wallet directory exists**:
-   ```bash
-   ls ~/.agent-wallet/  # Default location
-   ```
-   If you used a custom directory, ensure `AGENT_WALLET_DIR` points to the correct path.
-
-2. **If the password is lost**, you'll need to re-initialize. Note: this creates a new wallet — funds in the old wallet must be recovered through other means.
-   ```bash
-   agent-wallet init
-   ```
+If the password is lost, you'll need to re-initialize. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
 
 ### TronGrid API Key not working
 
@@ -200,25 +187,7 @@ Always develop and test on Nile first, then execute on Mainnet after confirming 
 
 ### Can I use multiple TRON MCP Servers simultaneously?
 
-Yes. Define multiple MCP Server entries in your config — for example, one connecting to the mainnet cloud service (read-only) and another connecting to a local testnet deployment (with wallet). Just use different names:
-
-```json
-{
-  "mcpServers": {
-    "tron-mainnet": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://tron-mcp-server.bankofai.io/mcp"]
-    },
-    "tron-local": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/mcp-server-tron"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "your-password"
-      }
-    }
-  }
-}
-```
+Yes. Define multiple MCP Server entries in your MCP client configuration — for example, one connecting to the mainnet cloud service (read-only) and another connecting to a local testnet deployment (with wallet). Configure both servers with different names in your client's MCP configuration.
 
 ### How do I update to the latest version?
 

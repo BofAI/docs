@@ -5,15 +5,15 @@ on:
     branches:
       - main
       - master
-      - ai-bankofai-patch-1
+      - update-mcp-server
     tags:
       - 'test'
   pull_request:
     branches:
       - main
       - master
-      - ai-bankofai-patch-1
-  workflow_dispatch:
+      - update-mcp-server
+  workflow_dispatch: # Intentionally unrestricted — allows manual builds from any branch for flexibility
 
 env:
   IMAGE_NAME: bankofai/docs
@@ -30,15 +30,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-
-      - name: Debug Docker Hub secrets
-        if: github.event_name != 'pull_request'
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: |
-          echo "username=[$DOCKERHUB_USERNAME]"
-          echo "token_length=${#DOCKERHUB_TOKEN}"
 
       - name: Log in to Docker Hub
         if: github.event_name != 'pull_request'

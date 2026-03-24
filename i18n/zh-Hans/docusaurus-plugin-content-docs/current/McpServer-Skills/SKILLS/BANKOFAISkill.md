@@ -1,228 +1,191 @@
-# BANK OF AI Skills
+# 技能大全
 
-BANK OF AI Skills 是一组为 AI 智能体设计的现成技能包，覆盖 TRON 生态的各种场景——DEX 交易、永续合约、链上数据查询、支付协议。每个技能封装了完整的业务工作流：从如何调用 API、按什么顺序执行步骤，到如何处理授权、怎样保护用户资产，全部内置在 `SKILL.md` 和配套脚本中。
+你不需要写代码，不需要懂技术。只要把下面的"参考话术"复制到 AI 对话框里，回车，AI 就会自动帮你干活。
 
-你无需编写代码，只需用自然语言告诉 AI 你想做什么，AI 会自动找到对应的技能并执行。
+:::warning 三条铁律
+BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦上链**不可撤销**——没有"撤回"按钮，没有客服回滚。
 
-:::warning 使用任何 Skill 之前，请先阅读
-BANK OF AI Skills 可以操作**真实的链上资产**。区块链交易一旦上链**不可撤销**——没有"撤销"按钮，没有客服回滚，转错地址的资金无法追回。使用前请牢记三条规则：
-
-1. **私钥永远不要出现在聊天窗口或配置文件中。** 只通过环境变量传递（如 `TRON_PRIVATE_KEY`）。私钥一旦泄露，请立即将资产转移到新钱包。
-2. **先测试网，后主网。** 每一个新操作都必须先在 Nile 或 Shasta 测试网上验证，再切换到主网执行。
-3. **写操作必须人工确认。** AI 在执行任何链上交易前，应向你展示完整的操作详情并等待你的明确确认。
+1. **永远不要把私钥粘贴到聊天窗口里。** 请使用 [Agent Wallet](../../Agent-Wallet/Intro.md)（相当于给 AI 开了一个专用"支付宝"，你不需要把银行卡密码直接给它）。
+2. **先用假钱练手。** 每个新操作都先在 Nile 测试网上试——测试网用的是免费"游戏币"，怎么折腾都不亏。
+3. **仔细看确认弹窗。** 任何花钱操作执行前，AI 都会把账单摊开给你看，你不点头它绝不动手。
 :::
 
 ---
 
-## 可用技能一览
+## 技能一览表
 
-| Skill | 版本 | 功能概述 | 可选凭证 |
-| :--- | :--- | :--- | :--- |
-| **sunswap** | v2.0.0 | SunSwap DEX 交易——余额、报价、兑换、V2/V3 流动性 | `TRON_PRIVATE_KEY` |
-| **sunperp-skill** | v1.0.0 | SunPerp 永续合约——行情、下单、仓位、提现 | `SUNPERP_ACCESS_KEY` + `SUNPERP_SECRET_KEY` |
-| **tronscan-skill** | v1.0.0 | TronScan 链上数据查询——账户、交易、代币、区块 | `TRONSCAN_API_KEY` |
-| **x402-payment** | v1.4.0 | x402 协议支付——调用付费 API 和付费智能体 | `TRON_PRIVATE_KEY` 或 `EVM_PRIVATE_KEY` |
-| **recharge-skill** | v1.1.1 | BANK OF AI 余额查询、订单记录、通过 MCP 充值 | `BANKOFAI_API_KEY` |
+| 技能 | 能干什么 | 需要什么钥匙/密码？ |
+| :--- | :--- | :--- |
+| **sunswap** | 查价、报价、换币、管理流动性池 | 查询不需要；交易需要钱包凭证 |
+| **sunperp-skill** | 看行情、开仓、平仓、提现 | 看行情不需要；交易需要 SunPerp 密钥 |
+| **tronscan-skill** | 查账户、交易、代币、区块、全网数据 | 建议配置 TronScan API 密钥（不配可能卡顿） |
+| **x402-payment** | 链上"先付后用"自动结算 | 需要钱包凭证 |
+| **recharge-skill** | 查余额、看订单、充值 | 需要 BANK OF AI 密钥 |
 
----
+### 🔑 这些"钥匙"去哪领？怎么配？
 
-## 安装
+如果你只想让 AI 帮你查查公开数据（比如币价、区块高度），你可以什么都不配，直接去玩。
 
-最简单的安装方式是使用 **OpenClaw Extension**——一键安装所有组件，自动配置技能目录，AI 开箱即用：
+但如果你想解锁高级功能或交易，请根据需要去领取对应的"钥匙"：
 
-```bash
-# 方式一：直接运行（适合信任来源）
-curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
+**1. 钱包凭证（用来花钱、交易的密码）**
 
-# 方式二：先检查脚本再运行（推荐）
-git clone https://github.com/BofAI/openclaw-extension.git
-cd openclaw-extension
-./install.sh
-```
+- **去哪领：** 你不需要去别的地方申请，这就是你的波场钱包私钥。
+- **怎么配：** 我们在[《快速开始》](./QuickStart.md#-想让-ai-帮你交易)里准备了两种方案任你挑：
+  - **方案一（推荐）：** 用 [Agent Wallet](../../Agent-Wallet/QuickStart.md)，可视化界面，两分钟搞定，私钥加密存储不外露。
+  - **方案二：** 直接把私钥贴进系统配置文件（记事本大法），适合老手或快速测试。
 
-安装完成后，技能会被放置到 `~/.openclaw/skills/` 目录，OpenClaw 自动发现并加载。
+**2. TronScan API 密钥（查数据的 VIP 通行证）**
 
-安装后验证技能是否就绪：
+不填这个也能查数据，但查快了容易被系统拉黑限速。填了就能走 VIP 高速通道。
 
-```bash
-ls ~/.openclaw/skills
-```
+- **去哪领（完全免费）：** 去 [TronScan 官网](https://tronscan.org/) 注册个账号，点击生成即可。
+- **怎么配：** 请参考[《快速开始》里的"想让 AI 帮你交易？"](./QuickStart.md#-想让-ai-帮你交易)，用同样的记事本大法把 `TRONSCAN_API_KEY` 贴进去就行。
 
-你应该能看到 `sunswap`、`sunperp-skill`、`tronscan-skill`、`x402-payment`、`recharge-skill` 等目录。
+**3. SunPerp 密钥（专门用来玩永续合约）**
 
-### 其他平台安装
+- **去哪领：** 前往 [SunPerp 官网](https://sunperp.com/)，连接你的钱包后，在账户设置里生成 API Key 和 Secret。
+- **怎么配：** 同样使用记事本大法，把 `SUNPERP_ACCESS_KEY` 和 `SUNPERP_SECRET_KEY` 贴到系统配置文件里。
 
-如果你使用 Claude Code、Cursor 或其他支持 Skills 的 AI 工具，也可以手动安装：
+**4. BANK OF AI 密钥（用来给账户充值或查余额）**
 
-**Claude Code：**
-
-```bash
-git clone https://github.com/BofAI/skills.git /tmp/bofai-skills
-mkdir -p ~/.config/claude-code/skills
-cp -r /tmp/bofai-skills/* ~/.config/claude-code/skills/
-```
-
-Claude Code 启动时会自动加载这些技能。
-
-**Cursor：**
-
-```bash
-# 克隆到项目根目录
-git clone https://github.com/BofAI/skills.git .cursor/skills
-```
-
-在 Cursor Chat 中，使用 `@` 符号引用特定 `SKILL.md` 文件提供上下文，或将技能路径添加到 `.cursorrules`。
-
-**通用方式（任何 AI 工具）：**
-
-```bash
-git clone https://github.com/BofAI/skills.git ~/bofai-skills
-```
-
-然后在对话中显式告诉 AI 读取某个技能文件：
-
-```
-请阅读 ~/bofai-skills/sunswap/SKILL.md，帮我查询 TRX 当前价格。
-```
+- **去哪领：** 前往 [chat.bankofai.io/key](https://chat.bankofai.io/key)，登录后即可获取。
+- **怎么配：** 使用记事本大法，贴入 `BANKOFAI_API_KEY`。
 
 ---
 
-## 验证安装结果
+## 还没安装？
 
-安装完成后，从只读操作开始是最好的起点——不需要私钥，零风险，适合熟悉技能的工作方式。
-
-在客户端输入：
-
-```
-100 USDT 在 SunSwap 上能换多少 TRX？
-```
-
-```
-帮我查一下 BTC-USDT 永续合约的当前行情。
-```
+去 **[快速开始](./QuickStart.md)** 花 1 分钟装一下，装完再回来挑你想用的技能。
 
 ---
 
-## 各技能使用示例
+## sunswap — 换币、查价、管理池子 {#sunswap}
 
-每个示例标注了操作类型：
-- 🟢 **只读** — 不产生链上交易，不需要私钥
-- ⚠️ **写操作** — 会发起链上交易，执行前需要用户确认
+想在 SunSwap 上换币、查行情、管理流动性？对 AI 说下面的话就行。
 
-### sunswap
+**绝对安全，只看不花钱：**
 
-```
-# 🟢 查询余额
-帮我查看我的 TRX 和 USDT 余额。
+> TRX 现在值多少钱？
 
-# 🟢 查询价格
-TRX 现在的价格是多少？
+> 100 USDT 在 SunSwap 上能换多少 TRX？
 
-# 🟢 兑换报价
-100 USDT 在 SunSwap 上能兑换多少 TRX？
+> 帮我查看 SunSwap 上收益最高的 10 个池子。
 
-# ⚠️ 执行兑换
-在 SunSwap Nile 测试网上把 100 TRX 兑换成 USDT。
+> 帮我查看我当前所有的 SunSwap V3 流动性仓位。
 
-# ⚠️ 添加流动性
-在 SunSwap V2 的 TRX/USDT 池中添加 100 TRX 和 15 USDT 的流动性。
+**需要你确认才会执行（AI 会先把账单给你看）：**
 
-# 🟢 查看 V3 仓位
-帮我查看我当前所有的 SunSwap V3 流动性仓位。
+> 在 Nile 测试网上帮我把 100 TRX 兑换成 USDT。
 
-# ⚠️ 收取手续费
-帮我收取 V3 仓位 #12345 的手续费奖励。
-```
+> 在 SunSwap V2 的 TRX/USDT 池中添加 100 TRX 和 15 USDT 的流动性。
 
-### sunperp-skill
+> 帮我收取 V3 仓位 #12345 的手续费奖励。
 
-```
-# 🟢 查看行情
-BTC-USDT 永续合约的当前价格、24h 涨跌幅和资金费率是多少？
+**实战场景：**
 
-# 🟢 查看账户
-我的 SunPerp 账户余额和可用保证金是多少？
+> 想搬砖？ "帮我算算 100 U 在 SunSwap 换成 TRX 划不划算？"
 
-# 🟢 查看持仓
-我当前有哪些未平仓位？显示开仓均价、未实现盈亏和强平价。
+> 想挖矿？ "SunSwap 上哪个 V3 池子年化收益最高？帮我分析一下。"
 
-# ⚠️ 开仓
-以市价在 SunPerp 开 1 张 BTC-USDT 多单，10 倍杠杆，设置 5% 止损。
+> 想抄底？ "TRX 的价格现在处于什么位置？帮我查一下最近 7 天的走势。"
 
-# ⚠️ 平仓
-平掉我所有的 BTC-USDT 仓位。
+---
 
-# ⚠️ 提现
-从 SunPerp 提现 10 USDT 到我的链上地址。
-```
+## sunperp-skill — 永续合约交易 {#sunperp-skill}
 
-### tronscan-skill
+想做合约？这个技能帮你看行情、开仓、平仓、设止损。内置安全锁：最高 20 倍杠杆，开仓必须设止损——默认帮你守住底线，亏损超过 5% AI 会自动帮你跑路，防止爆仓。
 
-```
-# 🟢 账户查询
-帮我查询地址 TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf 的完整账户信息和持仓。
+**绝对安全，只看不花钱：**
 
-# 🟢 交易查询
-查询这笔交易哈希的详情：abc123...
+> BTC-USDT 永续合约现在什么价格？24h 涨跌和资金费率呢？
 
-# 🟢 代币信息
-显示市值排名前 10 的 TRC20 代币。
+> 我的 SunPerp 账户余额和可用保证金是多少？
 
-# 🟢 全网概览
-给我一份 TRON 全网概览：当前 TPS、超级代表数量、账户总数。
+> 我当前有哪些未平仓位？显示开仓均价、未实现盈亏和强平价。
 
-# 🟢 转账记录
-查询地址 TXX... 最近 20 笔 USDT 转账记录。
-```
+**需要你确认才会执行：**
 
-### x402-payment
+> 以市价在 SunPerp 开 1 张 BTC-USDT 多单，10 倍杠杆，设置 5% 止损。
 
-```
-# ⚠️ 调用付费端点
-使用 x402 协议调用这个付费智能体端点：https://api.example.com
-```
+> 平掉我所有的 BTC-USDT 仓位。
 
-### recharge-skill
+> 从 SunPerp 提现 10 USDT 到我的链上地址。
 
-```
-# 🟢 查询余额
-我的 BANK OF AI 账户还有多少余额？
+**实战场景：**
 
-# 🟢 查询订单
-显示我最近的 BANK OF AI 订单记录。
+> 被套牢了？ "帮我看看 BTC 现在的资金费率，建议做多还是做空？"
 
-# ⚠️ 充值
-给 BANK OF AI 充值 1 USDT。
+> 想控制风险？ "帮我把 BTC-USDT 的杠杆降到 5 倍，止损调到 3%。"
 
-# ⚠️ 充值（英文）
-Recharge 1 USDT to my BANK OF AI account.
-```
+> 想了解全局？ "帮我列出所有可交易的永续合约，按 24h 成交量排序。"
+
+---
+
+## tronscan-skill — 链上数据侦探 {#tronscan-skill}
+
+想查链上发生了什么？这个技能帮你查账户、交易、代币、区块和全网统计。**纯查询，绝对安全，不花一分钱，不需要任何密码。** 非常适合作为你的第一个技能来上手。
+
+> 帮我查询地址 TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf 的完整账户信息和持仓。
+
+> 查询这笔交易的详情：abc123...
+
+> 显示市值排名前 10 的 TRC20 代币。
+
+> 给我一份 TRON 全网概览：当前 TPS、超级代表数量、账户总数。
+
+> 查询地址 TXX... 最近 20 笔 USDT 转账记录。
+
+**实战场景：**
+
+> 发现了一个新币，想看靠不靠谱？ "帮我查一下代币 TXX... 的持仓分布和合约验证状态。"
+
+> 追踪鲸鱼动向？ "查一下地址 TXX... 最近 24 小时内超过 10 万 USDT 的所有交易。"
+
+> 核实一笔转账？ "帮我查一下这笔交易到底成功了没有：abc123..."
+
+---
+
+## x402-payment — 链上"先付后用"自动结算 {#x402-payment}
+
+有些高级 API 和 AI 智能体是收费的——需要你先完成链上付费才能使用。这个技能通过 x402 协议帮你自动完成"先付费、再获取"的链上结算流程：AI 发现对方要收费，自动帮你完成链上支付，拿到结果后汇报给你。每次付款前同样会先问你确认。
+
+**需要你确认才会执行：**
+
+> 使用 x402 协议调用这个付费智能体端点：https://api.example.com （请替换为你实际要调用的付费端点地址）
+
+---
+
+## recharge-skill — BANK OF AI 账户管理 {#recharge-skill}
+
+查余额、看订单、给 BANK OF AI 账户充值。
+
+**绝对安全，只看不花钱：**
+
+> 我的 BANK OF AI 账户还有多少余额？
+
+> 显示我最近的 BANK OF AI 订单记录。
+
+**需要你确认才会执行：**
+
+> 给 BANK OF AI 充值 1 USDT。
 
 ---
 
 ## 推荐学习路径
 
-如果你刚开始使用 BANK OF AI Skills，按这个顺序来会更顺畅：
+**从这里开始——零风险，零配置：** 用 tronscan-skill 查账户、看交易，用 sunswap 查价格和报价。纯查询，不花钱，不需要密码。
 
-第一步：只读查询
-  → 先用 tronscan-skill 查账户、看交易，熟悉技能的交互方式
-  → 用 sunswap 查价格和报价，不执行真实交易
+**接下来——用假钱练手：** 配置好钱包（见 [Agent Wallet 快速开始](../../Agent-Wallet/QuickStart.md)），然后在 Nile 测试网上试试换币和流动性操作。确认 AI 的表现完全符合预期。
 
-第二步：测试网写操作
-  → 在 Nile 测试网执行 swap、添加流动性、开合约
-  → 确认 AI 的行为符合预期，确认参数传递正确
+**然后——主网小额试水：** 用少量真实资金跑一遍完整流程，确保没有意外。
 
-第三步：主网小额操作
-  → 用少量资金验证完整流程
-
-第四步：主网正式使用
-  → 日常操作，根据需要调整参数和技能组合
-
+**最后——放心使用：** 日常操作，根据需要调整参数和技能组合。
 
 ---
 
 ## 下一步
 
-- 想深入了解 Skill 的工作原理？ → [Skills 是什么？](./Intro.md)
-- 遇到问题？ → [常见问题](./Faq.md)
-- 使用 OpenClaw Extension 安装？ → [OpenClaw Extension 文档](../../Openclaw-extension/Intro.md)
+- 想了解技能背后的工作原理？ → [什么是 Skills？](./Intro.md)
+- 遇到问题了？ → [常见问题](./Faq.md)
+- 在用 OpenClaw Extension？ → [OpenClaw Extension 文档](../../Openclaw-extension/Intro.md)

@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # 快速开始
 
 这个页面的目标很简单：**让你在 1 分钟内完成接入，发起第一次区块链查询。**
@@ -13,7 +10,7 @@ import TabItem from '@theme/TabItem';
 
 在开始之前，确保你已经安装了以下工具：
 
-- 所有支持 MCP 的 AI 客户端：例如 [Claude Desktop](https://claude.ai/download)、[Claude Code](https://docs.anthropic.com/en/docs/claude-code) 或 [Cursor](https://cursor.sh) 。
+- 所有支持 MCP 的 AI 客户端
 - **Node.js v20.0.0 或更高版本**（用于执行 `npx` 命令）（[Node.js 下载](https://nodejs.org/)）
 
 验证 Node.js 版本：
@@ -24,59 +21,21 @@ node --version  # 应输出 v20.x.x 或更高
 
 ---
 
-## 添加配置
+## 安装
 
-选择你使用的 AI 客户端，把对应的配置复制进去：
-
-<Tabs>
-<TabItem value="Claude Desktop" label="Claude Desktop">
-
-打开配置文件：
-- **macOS**：`~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**：`%APPDATA%\Claude\claude_desktop_config.json`
-
-添加以下内容：
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://tron-mcp-server.bankofai.io/mcp"
-      ]
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Claude Code" label="Claude Code">
-
-在终端执行：
+只需告诉你的 AI Agent 执行以下命令：
 
 ```bash
-claude mcp add --transport http mcp-server-tron https://tron-mcp-server.bankofai.io/mcp
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
 ```
 
-</TabItem>
-<TabItem value="Cursor" label="Cursor">
+`-y` 参数会跳过所有交互选择，自动安装到你电脑上检测到的所有 AI 工具中。安装完成后会显示 ✅ 安装完成！以及安装到了哪些 Agent。
 
-在项目根目录添加 `.cursor/mcp.json`：
+命令完成后，重启你的 MCP 客户端。
 
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "url": "https://tron-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-</Tabs>
+:::tip 想手动选择安装到哪些 AI 工具？
+去掉 `-y` 参数即可进入交互式安装，详见[官方云服务接入](./OfficialServerAccess.md)。
+:::
 
 ---
 
