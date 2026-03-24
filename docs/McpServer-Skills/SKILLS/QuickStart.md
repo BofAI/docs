@@ -6,17 +6,29 @@ Get your AI up and running with BANK OF AI SKILLS in **2 steps** and less than *
 
 ## Step 1: Install the Skills
 
+### Quick Auto-Install
+
 Simply tell your AI Agent to execute the following command:
+
+```bash
+npx skills add https://github.com/BofAI/skills -y -g
+```
+
+The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag enables global installation (available across all projects). Once complete, it will show ✅ Global installation complete! along with the full list of installed Skills.
+
+### Interactive Installation
+
+If you want to choose which Skills to install and the installation scope, remove the `-y -g` flags:
 
 ```bash
 npx skills add https://github.com/BofAI/skills
 ```
 
 :::tip
-This guide demonstrates the installation process using terminal commands as an example. If you prefer to install manually, open the Terminal on your computer (press `Command + Space`, type `Terminal`, hit Enter), paste the command above, and press Enter.
+This guide demonstrates the installation process using terminal commands as an example.
 :::
 
-### Installation Walkthrough
+#### Installation Walkthrough
 
 The installer will guide you through a few steps — just follow along:
 

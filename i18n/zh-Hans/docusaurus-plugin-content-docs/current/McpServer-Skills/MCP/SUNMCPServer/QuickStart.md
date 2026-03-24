@@ -20,10 +20,16 @@
 只需告诉你的 AI Agent 执行以下命令：
 
 ```bash
-npx add-mcp https://sun-mcp-server.bankofai.io/mcp
+npx add-mcp https://sun-mcp-server.bankofai.io/mcp -y
 ```
 
+`-y` 参数会跳过所有交互选择，自动安装到你电脑上检测到的所有 AI 工具中。安装完成后会显示 ✅ 安装完成！以及安装到了哪些 Agent。
+
 命令完成后，重启你的 MCP 客户端。
+
+:::tip 想手动选择安装到哪些 AI 工具？
+去掉 `-y` 参数即可进入交互式安装，详见[官方云服务接入](./OfficialServerAccess.md)。
+:::
 
 ---
 

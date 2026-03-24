@@ -20,10 +20,16 @@ Before you get started, make sure you have:
 Simply tell your AI Agent to execute the following command:
 
 ```bash
-npx add-mcp https://sun-mcp-server.bankofai.io/mcp
+npx add-mcp https://sun-mcp-server.bankofai.io/mcp -y
 ```
 
+The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
+
 After the command completes, restart your MCP client.
+
+:::tip Want to choose which AI tools to install to?
+Remove the `-y` flag to enter interactive installation mode. See [Official Cloud Service Access](./OfficialServerAccess.md) for details.
+:::
 
 ---
 

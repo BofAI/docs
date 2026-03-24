@@ -45,7 +45,21 @@ The official cloud service only provides **read-only access**. It does **not sup
 
 ## How to Connect
 
+### Quick Auto-Install
+
 Simply tell your AI Agent to execute the following command:
+
+```bash
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
+```
+
+The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
+
+Once installation is complete, restart your AI Agent, and you can start interacting with the TRON blockchain via TRON MCP Server.
+
+### Interactive Installation
+
+If you want to choose which AI tools to install to, remove the `-y` flag:
 
 ```bash
 npx add-mcp https://tron-mcp-server.bankofai.io/mcp
@@ -55,7 +69,7 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 This guide demonstrates the installation process using terminal commands as an example.
 :::
 
-### Installation Walkthrough
+#### Installation Walkthrough
 
 The installer will guide you through a few steps — just follow along:
 

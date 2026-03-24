@@ -45,7 +45,21 @@
 
 ## 如何接入官方云服务？
 
+### 一键自动安装
+
 只需告诉你的 AI Agent 执行以下命令：
+
+```bash
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
+```
+
+`-y` 参数会跳过所有交互选择，自动安装到你电脑上检测到的所有 AI 工具中。安装完成后会显示 ✅ 安装完成！以及安装到了哪些 Agent。
+
+安装完成后，重启 AI Agent，即可使用 TRON MCP Server 开始与 TRON 区块链交互。
+
+### 交互式安装
+
+如果你想手动选择安装到哪些 AI 工具，去掉 `-y` 参数即可：
 
 ```bash
 npx add-mcp https://tron-mcp-server.bankofai.io/mcp
@@ -55,7 +69,7 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 本文档以在终端中运行命令为例展示安装过程。
 :::
 
-### 安装过程详解
+#### 安装过程详解
 
 安装器会引导你完成以下几步，照着做就行：
 
