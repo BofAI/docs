@@ -9,9 +9,8 @@ Our goal: **Spend a few minutes following the wizard, clicking a few buttons, an
 Before you begin, make sure the following basic software is installed on your computer (if not, download and install them from their official websites just like any regular software):
 
 1. **OpenClaw**: Your AI assistant software.
-2. **Node.js** (must be v20 or above): The runtime environment for skill packs. *(Extremely important — older versions will definitely cause errors!)*
+2. **Node.js** (must be v18 or above): The runtime environment for skill packs and configuration. *(Extremely important — older versions will definitely cause errors!)*
 3. **Git**: A small tool used to download skill packs.
-4. **Python 3**: A helper used by the installation wizard to process configuration files.
 
 ---
 
@@ -27,38 +26,247 @@ Open the "Terminal" on your computer (that black window).
 curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
 ```
 
-🚑 **First Aid: Got an error right after pressing Enter?** If the screen says `command not found: node` or `python3`, it means your computer is missing the prerequisites mentioned above. 👉 [Click here to see how to fix it](./FAQ.md#error-says-command-not-found-node-or-npm-install-failed)
+🚑 **First Aid: Got an error right after pressing Enter?** If the screen says `command not found: node` or `command not found: git`, it means your computer is missing the prerequisites mentioned above. 👉 [Click here to see how to fix it](./FAQ.md#error-says-command-not-found-node-or-npm-install-failed)
 
 If there are no errors, an English wizard will appear on screen. Think of it as a text-based mini-game with 4 levels:
 
+```
+🦞 OpenClaw Extension Installer (by BANK OF AI)
+Smart contracts, smarter agent. No more manual ABI guessing.
+```
+
 ### 🟢 Level 1: Choose Installation Mode
 
-The screen will ask you which mode to use. Type `1` (normal installation) on your keyboard, then press Enter. This is the most hassle-free option and preserves your previous settings.
+The screen will ask you which mode to use:
+
+```
+Installation Mode
+  1) Normal install [Recommended]
+  2) Clean install (full cleanup: MCP/skills/local config files)
+
+? Enter choice (1-2, default: 1):
+```
+
+Type `1` (normal installation) on your keyboard, then press Enter. This is the most hassle-free option and preserves your previous settings.
+
+:::caution When should I choose Clean Install?
+Only choose `2` if you want to **completely start over from scratch**. Clean install permanently deletes all MCP configs, installed skills, API credentials, and wallet data. The installer will ask you to type `CLEAN` to confirm — think of it as the "are you really, really sure?" safety net:
+
+```
+? Continue with CLEAN install? (y/N): y
+? Type CLEAN to confirm permanent deletion: CLEAN
+```
+
+If you're installing for the first time or just upgrading — **always pick 1**.
+:::
 
 ### 🟢 Level 2: Configure "AI's Personal Vault" (AgentWallet)
 
-The wizard will automatically install a tool called AgentWallet, which securely stores your AI's wallet keys.
+The wizard will automatically install a tool called AgentWallet, which securely stores your AI's wallet keys — like a local encrypted bank vault that never sends your private keys anywhere.
 
-If you're a beginner, just close your eyes and press Enter all the way through — the default values are perfectly fine.
+```
+Step 0: AgentWallet Setup
+
+Launching: agent-wallet start --save-runtime-secrets
+Please complete initialization in the CLI prompts.
+```
+
+You'll walk through 3 quick choices:
+
+**① Choose wallet type** — Just press Enter to accept the default:
+
+```
+✔ Quick start type: local_secure — Encrypted key stored locally (recommended)
+```
+
+**② Set a master password** — You can type your own (must have uppercase + lowercase + digit + special character, 8+ chars), or just press Enter to auto-generate one:
+
+```
+✔ New Master Password (press Enter to auto-generate a strong password)
+```
+
+If you auto-generated, you'll see something like:
+
+```
+🔑 Your master password: GS%kE^^n3MVu03*i
+⚠️ Keep this password safe. You'll need it for signing and other operations.
+```
+
+:::caution Write down this password!
+This master password is the key to your AI's wallet. **Lose it and you lose access to the wallet.** Write it down on paper, save it in a password manager — anything but forgetting it.
+:::
+
+**③ Generate a wallet** — Press Enter to create a brand new wallet:
+
+```
+Wallet ID (e.g. my_wallet_1) (default_secure):
+✔ Import source: generate — Generate a new random private key
+```
+
+When you see the wallet table — your vault is ready!
+
+```
+Wallets:
+┌────────────────┬──────────────┐
+│ Wallet ID      │ Type         │
+├────────────────┼──────────────┤
+│ default_secure │ local_secure │
+└────────────────┴──────────────┘
+
+Active wallet: default_secure
+
+✓ AgentWallet setup completed
+```
 
 (🚑 Got stuck with an error? 👉 [Click here to see how to fix AgentWallet installation failures](./FAQ.md#agentwallet-ai-vault-installation-failed))
 
 ### 🟢 Level 3: Pick Your Toolbox (Give AI "Hands")
 
-The screen will list options like TRON (mcp-server-tron). Use the `↑` `↓` arrow keys to move, press **Space** to check, and press **Enter** to confirm.
+The screen will show a multi-select list of MCP servers. These are the "cables" that connect your AI to different blockchains:
 
-⚠️ **Heads up**: The wizard might suddenly ask you for an API Key!
+```
+? Select MCP Servers to install: (Space:toggle, Enter:confirm)
+❯ [x] mcp-server-tron
+      Interact with TRON blockchain (wallets, transactions, smart contracts).
+  [x] bnbchain-mcp
+      BNB Chain official MCP (BSC, opBNB, Ethereum, Greenfield).
+  [x] bankofai-recharge
+      BANK OF AI recharge MCP (remote recharge tools).
+```
 
-- **What's that?** It's a VIP pass — having one means data queries won't be throttled.
-- **I don't have one right now?** Just press Enter to skip! Leaving it blank is totally fine and won't affect your installation at all.
+Use `↑` `↓` arrow keys to move, press **Space** to toggle checkboxes, and press **Enter** to confirm. All three are checked by default — we recommend keeping them all.
+
+After confirming, the installer configures each server one by one. Here's what to expect:
+
+#### mcp-server-tron
+
+```
+Configuring mcp-server-tron...
+This step configures network access for TRON MCP.
+? Enter TRONGRID_API_KEY (optional):
+```
+
+⚠️ **API Key prompt!** This is a VIP pass — having one means data queries won't be throttled. **Don't have one? Just press Enter to skip!** It won't affect your installation at all. You can always add it later.
+
+When it succeeds, you'll see the `add-mcp` banner and:
+
+```
+✓ Configuration saved for mcp-server-tron.
+```
+
+#### bnbchain-mcp
+
+```
+Configuring bnbchain-mcp...
+bnbchain-mcp currently does not support AgentWallet.
+This server still uses PRIVATE_KEY configuration.
+
+⚠ Your PRIVATE_KEY will be stored in plaintext in: ~/.mcporter/mcporter.json
+
+? Enter BNB Chain PRIVATE_KEY (optional):
+? Enter LOG_LEVEL (optional):
+```
+
+:::caution BNB Chain Private Key
+Unlike TRON (which uses the encrypted AgentWallet), BNB Chain currently stores your private key in **plaintext** in the config file. The file permissions are set to 600 (only you can read it), but we strongly recommend using a **dedicated wallet with minimal funds**.
+
+**Don't have a BNB Chain key? No problem — press Enter to skip both prompts.** You can configure it later if needed.
+:::
+
+```
+✓ Configuration saved for bnbchain-mcp.
+```
+
+#### bankofai-recharge
+
+This one is fully automatic — no input needed! It connects to BANK OF AI's remote recharge service.
+
+```
+✓ Configuration saved for bankofai-recharge.
+```
 
 ### 🟢 Level 4: Pick Your Skill Packs (Give AI a "Brain")
 
-The screen will list skills like sunswap (token swapping), tronscan (data lookup), etc. Use **Space** to check and **Enter** to confirm.
+First, choose where to install the skills:
 
-If you see any prompts asking for keys that you don't understand, just press Enter to skip them all.
+```
+Select skills installation scope:
+  1) User-level (global) [Recommended]
+     Available to all OpenClaw workspaces
+  2) Workspace-level (project)
+     Only available in current workspace
+
+? Enter choice (1-2, default: 1):
+```
+
+Press Enter (or type `1`) to install globally — this way all your OpenClaw workspaces can use these skills.
+
+Then the skill picker launches:
+
+```
+◇  Found 5 skills
+│
+◇  Select skills to install (space to toggle)
+│  recharge-skill, SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
+│  TronScan Data Lookup, x402-payment
+```
+
+Here's what each skill does:
+
+| Skill | What It Does |
+| :--- | :--- |
+| **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
+| **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
+| **TronScan Data Lookup** | Query blockchain data via TronScan |
+| **x402-payment** | Agent-to-agent payments with Gasfree (zero gas) support |
+| **recharge-skill** | Check and top up your BANK OF AI balance |
+
+After selecting, the installer shows a security risk assessment:
+
+```
+◇  Security Risk Assessments
+│                                     Gen        Socket        Snyk
+│  recharge-skill                     Safe       1 alert       Med Risk
+│  SunPerp Perpetual Futures Trading  --         --            --
+│  SunSwap DEX Trading                --         --            --
+│  TronScan Data Lookup               --         --            --
+│  x402-payment                       Med Risk   1 alert       Med Risk
+```
+
+Review the report, then confirm to proceed. When installation completes:
+
+```
+◇  Installed 5 skills
+│
+│  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
+│  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
+│  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
+│  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
+│  ✓ x402-payment → ~/.openclaw/skills/x402-payment
+```
+
+After skills are installed, the installer automatically enters a configuration phase. If you installed recharge-skill, you'll see:
+
+```
+recharge-skill API Key Configuration
+recharge-skill uses your local BANK OF AI API key for balance and order queries.
+
+? Enter BANKOFAI_API_KEY (optional, hidden):
+```
+
+**Don't have this key yet? Just press Enter to skip.** Other features won't be affected. You can always configure it later by following the "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" section below.
 
 When `Installation Complete!` lights up at the bottom of the screen — congratulations, you've passed all levels!
+
+```
+═══════════════════════════════════════
+  Installation Complete!
+═══════════════════════════════════════
+
+✓ MCP Server configured
+  Config file: ~/.mcporter/mcporter.json
+    File permissions: 600 (owner read/write only)
+```
 
 ---
 
@@ -121,8 +329,32 @@ If you have this key, simply copy and run the following command in the terminal 
 **Configure BANK OF AI:**
 
 ```bash
-mkdir -p ~/.mcporter && echo '{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://api.bankofai.io/v1/"}' > ~/.mcporter/bankofai-config.json
+mkdir -p ~/.mcporter && echo '{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://chat.bankofai.io/"}' > ~/.mcporter/bankofai-config.json
 ```
+
+---
+
+## 📋 Configuration File Reference
+
+After installation, the following files are created on your machine. All sensitive files are set to `600` permissions (only you can read them):
+
+| File | What It Stores |
+| :--- | :--- |
+| `~/.mcporter/mcporter.json` | MCP server configurations (including BNB Chain private key if provided) |
+| `~/.x402-config.json` | Gasfree API credentials for x402-payment |
+| `~/.mcporter/bankofai-config.json` | BANK OF AI API key |
+| `~/.openclaw/skills/` | Globally installed skill packs |
+| `.openclaw/skills/` | Workspace-level skill packs (if you chose option 2) |
+| `~/.agent-wallet/` | AgentWallet encrypted wallet data |
+
+---
+
+## 🔒 Security Tips
+
+- **Use a dedicated agent wallet** with only small amounts of gas fees — never your personal main wallet.
+- **BNB Chain private key is stored in plaintext** in `mcporter.json`. Use a wallet with minimal funds for this.
+- **Test on testnets first** (Nile for TRON, BSC Testnet for BNB Chain) before using real money.
+- **Your master password is everything** — lose it and you lose access to the wallet. Write it down somewhere safe.
 
 ---
 

@@ -9,9 +9,8 @@
 在开始之前，请确保你的电脑上已经装好了这几样基础软件（如果没有，请像装普通软件一样去官网下载安装）：
 
 1. **OpenClaw**：你的 AI 助手软件。
-2. **Node.js**（请务必安装 v20 或以上版本）：这是技能包运行的基础环境。*（极其重要，版本太低一定会报错！）*
+2. **Node.js**（请务必安装 v18 或以上版本）：这是技能包和配置工具运行的基础环境。*（极其重要，版本太低一定会报错！）*
 3. **Git**：用来下载技能包的小工具。
-4. **Python 3**：安装向导用来处理配置文件的小帮手。
 
 ---
 
@@ -27,38 +26,247 @@
 curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
 ```
 
-🚑 **急救包：敲完回车就报错了？** 如果屏幕提示 `command not found: node` 或 `python3`，说明你的电脑缺少上面说的基础环境。👉 [点这里看怎么解决](./FAQ.md#报错里写着-command-not-found-node-或-npm-install-失败)
+🚑 **急救包：敲完回车就报错了？** 如果屏幕提示 `command not found: node` 或 `command not found: git`，说明你的电脑缺少上面说的基础环境。👉 [点这里看怎么解决](./FAQ.md#报错里写着-command-not-found-node-或-npm-install-失败)
 
-如果没有报错，屏幕上会跳出英文向导。请把它当成一个文字小游戏，整个流程分 4 关：
+如果没有报错，屏幕上会跳出安装向导。请把它当成一个文字小游戏，整个流程分 4 关：
+
+```
+🦞 OpenClaw Extension Installer (by BANK OF AI)
+Smart contracts, smarter agent. No more manual ABI guessing.
+```
 
 ### 🟢 第 1 关：选安装模式
 
-屏幕会问你选哪种方式。键盘输入 `1`（普通安装），然后按回车。 这种方式最省心，能保留你以前的设置。
+屏幕会问你选哪种方式：
 
-### 🟢 第 2 关：配置"AI 的专属保险柜"（AgentWallet）
+```
+Installation Mode
+  1) Normal install [Recommended]
+  2) Clean install (full cleanup: MCP/skills/local config files)
 
-向导会自动给你装一个叫 AgentWallet 的工具，用来安全存放 AI 的钱包钥匙。
+? Enter choice (1-2, default: 1):
+```
 
-如果你是新手，面对屏幕上的问题，闭着眼睛一路按回车，用默认值就足够了。
+键盘输入 `1`（普通安装），然后按回车。这种方式最省心，能保留你以前的设置。
+
+:::caution 什么时候选全新安装？
+只有当你想**彻底推倒重来**的时候才选 `2`。全新安装会永久删除所有 MCP 配置、已装技能、API 凭证和钱包数据。安装器会让你输入 `CLEAN` 来确认——这是"你真的真的确定吗？"安全关卡：
+
+```
+? Continue with CLEAN install? (y/N): y
+? Type CLEAN to confirm permanent deletion: CLEAN
+```
+
+如果你是第一次安装或只是升级——**永远选 1**。
+:::
+
+### 🟢 第 2 关：配置"AI 的专属保险柜 AgentWallet"
+
+向导会自动给你装一个叫 AgentWallet 的工具，用来安全存放 AI 的钱包钥匙——相当于一个本地加密的保险箱，私钥永远不会发送到任何服务器。
+
+```
+Step 0: AgentWallet Setup
+
+Launching: agent-wallet start --save-runtime-secrets
+Please complete initialization in the CLI prompts.
+```
+
+你需要做 3 个简单的选择：
+
+**① 选钱包类型** —— 直接按回车用默认值就好：
+
+```
+✔ Quick start type: local_secure — Encrypted key stored locally (recommended)
+```
+
+**② 设置主密码** —— 你可以自己输一个（需要大写+小写+数字+特殊字符，至少 8 位），也可以直接按回车自动生成：
+
+```
+✔ New Master Password (press Enter to auto-generate a strong password)
+```
+
+如果你选了自动生成，屏幕会显示类似这样的密码：
+
+```
+🔑 Your master password: GS%kE^^n3MVu03*i
+⚠️ Keep this password safe. You'll need it for signing and other operations.
+```
+
+:::caution 务必记下这个密码！
+主密码是打开你 AI 钱包的唯一钥匙。**丢了密码 = 丢了钱包的访问权限。** 拿笔写下来、存到密码管理器里——随便什么方式，千万别忘了。
+:::
+
+**③ 生成钱包** —— 按回车创建一个全新钱包：
+
+```
+Wallet ID (e.g. my_wallet_1) (default_secure):
+✔ Import source: generate — Generate a new random private key
+```
+
+当你看到钱包列表——保险柜就配好了！
+
+```
+Wallets:
+┌────────────────┬──────────────┐
+│ Wallet ID      │ Type         │
+├────────────────┼──────────────┤
+│ default_secure │ local_secure │
+└────────────────┴──────────────┘
+
+Active wallet: default_secure
+
+✓ AgentWallet setup completed
+```
 
 （🚑 报错卡住了？👉 [点这里看 AgentWallet 安装失败怎么救](./FAQ.md#agentwallet-ai-保险柜安装失败了)）
 
 ### 🟢 第 3 关：挑选工具箱（给 AI 装"手"）
 
-屏幕会列出波场 (mcp-server-tron) 等选项。按键盘 `↑` `↓` 方向键移动，按**空格键**打勾，选完后按**回车**确认。
+屏幕会显示一个多选列表，列出可安装的 MCP 服务器。它们是连接 AI 和区块链的"数据线"：
 
-⚠️ **前方高能**：向导可能会突然问你要 API Key！
+```
+? Select MCP Servers to install: (Space:toggle, Enter:confirm)
+❯ [x] mcp-server-tron
+      Interact with TRON blockchain (wallets, transactions, smart contracts).
+  [x] bnbchain-mcp
+      BNB Chain official MCP (BSC, opBNB, Ethereum, Greenfield).
+  [x] bankofai-recharge
+      BANK OF AI recharge MCP (remote recharge tools).
+```
 
-- **这是啥？** 它是 VIP 通行证，有了它查数据就不卡。
-- **我现在没有怎么办？** 直接按回车跳过！留空完全没关系！ 绝不影响你现在的安装。
+按键盘 `↑` `↓` 方向键移动，按**空格键**打勾或取消，选完后按**回车**确认。三个默认全选——建议保持全选。
+
+确认后，安装器会逐个配置每台服务器。下面是你会看到的具体画面：
+
+#### mcp-server-tron（波场工具箱）
+
+```
+Configuring mcp-server-tron...
+This step configures network access for TRON MCP.
+? Enter TRONGRID_API_KEY (optional):
+```
+
+⚠️ **前方高能：向导问你要 API Key 了！** 这是 VIP 通行证，有了它查数据就不卡。**现在没有？直接按回车跳过！** 完全不影响安装，以后随时补填。
+
+配置成功后你会看到 `add-mcp` 的安装横幅和：
+
+```
+✓ Configuration saved for mcp-server-tron.
+```
+
+#### bnbchain-mcp（BNB Chain 工具箱）
+
+```
+Configuring bnbchain-mcp...
+bnbchain-mcp currently does not support AgentWallet.
+This server still uses PRIVATE_KEY configuration.
+
+⚠ Your PRIVATE_KEY will be stored in plaintext in: ~/.mcporter/mcporter.json
+
+? Enter BNB Chain PRIVATE_KEY (optional):
+? Enter LOG_LEVEL (optional):
+```
+
+:::caution BNB Chain 私钥说明
+跟 TRON 不同（TRON 通过 AgentWallet 加密保护），BNB Chain 目前需要把私钥以**明文**存在配置文件里。虽然文件权限已设为 600（只有你自己能读），但我们强烈建议使用一个**专用钱包，只放小额资金**。
+
+**没有 BNB Chain 私钥？没事——两个问题都直接按回车跳过。** 以后需要时再配。
+:::
+
+```
+✓ Configuration saved for bnbchain-mcp.
+```
+
+#### bankofai-recharge（充值助手）
+
+这个全自动，不用输入任何东西！它会自动连接 BANK OF AI 的远程充值服务。
+
+```
+✓ Configuration saved for bankofai-recharge.
+```
 
 ### 🟢 第 4 关：挑选技能包（给 AI 装"脑子"）
 
-屏幕会列出 sunswap（换币）、tronscan（查数据）等技能。同样按**空格键**打勾，按**回车**确认。
+先选安装范围：
 
-遇到看不懂的密钥索要提示，统统直接按回车跳过。
+```
+Select skills installation scope:
+  1) User-level (global) [Recommended]
+     Available to all OpenClaw workspaces
+  2) Workspace-level (project)
+     Only available in current workspace
+
+? Enter choice (1-2, default: 1):
+```
+
+直接按回车（或输入 `1`）选全局安装——这样你所有 OpenClaw 工作区都能用这些技能。
+
+然后技能选择器启动：
+
+```
+◇  Found 5 skills
+│
+◇  Select skills to install (space to toggle)
+│  recharge-skill, SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
+│  TronScan Data Lookup, x402-payment
+```
+
+每个技能是干啥的：
+
+| 技能 | 功能 |
+| :--- | :--- |
+| **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
+| **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
+| **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
+| **x402-payment** | 代理之间的支付，支持 Gasfree（免 Gas）模式 |
+| **recharge-skill** | 查询和充值 BANK OF AI 余额 |
+
+选完后，安装器会显示安全风险评估：
+
+```
+◇  Security Risk Assessments
+│                                     Gen        Socket        Snyk
+│  recharge-skill                     Safe       1 alert       Med Risk
+│  SunPerp Perpetual Futures Trading  --         --            --
+│  SunSwap DEX Trading                --         --            --
+│  TronScan Data Lookup               --         --            --
+│  x402-payment                       Med Risk   1 alert       Med Risk
+```
+
+查看报告后确认继续。安装完成时：
+
+```
+◇  Installed 5 skills
+│
+│  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
+│  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
+│  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
+│  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
+│  ✓ x402-payment → ~/.openclaw/skills/x402-payment
+```
+
+技能装完后，安装器会自动进入配置环节。如果你安装了 recharge-skill，会看到：
+
+```
+recharge-skill API Key Configuration
+recharge-skill uses your local BANK OF AI API key for balance and order queries.
+
+? Enter BANKOFAI_API_KEY (optional, hidden):
+```
+
+**现在没有这个 Key？直接按回车跳过就好。** 不影响其他功能。以后拿到了 Key，可以随时通过下面「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」章节的方式手动配置。
 
 当屏幕底部亮起 `Installation Complete!` 时——恭喜，通关成功！
+
+```
+═══════════════════════════════════════
+  Installation Complete!
+═══════════════════════════════════════
+
+✓ MCP Server configured
+  Config file: ~/.mcporter/mcporter.json
+    File permissions: 600 (owner read/write only)
+```
 
 ---
 
@@ -121,8 +329,32 @@ curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads
 **配置 BANK OF AI：**
 
 ```bash
-mkdir -p ~/.mcporter && echo '{"api_key": "你的BANKOFAI_API_KEY填在这里", "base_url": "https://api.bankofai.io/v1/"}' > ~/.mcporter/bankofai-config.json
+mkdir -p ~/.mcporter && echo '{"api_key": "你的BANKOFAI_API_KEY填在这里", "base_url": "https://chat.bankofai.io/"}' > ~/.mcporter/bankofai-config.json
 ```
+
+---
+
+## 📋 配置文件速查表
+
+安装完成后，以下文件会被写入你的电脑。所有敏感文件的权限都设为 `600`（只有你自己能读写）：
+
+| 文件 | 存了什么 |
+| :--- | :--- |
+| `~/.mcporter/mcporter.json` | MCP 服务器配置（包括 BNB Chain 私钥，如果你填了的话） |
+| `~/.x402-config.json` | x402-payment 的 Gasfree API 凭证 |
+| `~/.mcporter/bankofai-config.json` | BANK OF AI 的 API Key |
+| `~/.openclaw/skills/` | 全局安装的技能包 |
+| `.openclaw/skills/` | 工作区级别的技能包（选了选项 2 才有） |
+| `~/.agent-wallet/` | AgentWallet 加密钱包数据 |
+
+---
+
+## 🔒 安全小贴士
+
+- **使用专用代理钱包**，只放小额 Gas 费——绝对不要用你的个人主钱包。
+- **BNB Chain 私钥是明文存储的**，放在 `mcporter.json` 里。请用只存少量资金的钱包。
+- **先在测试网试跑**（TRON 用 Nile 测试网，BNB Chain 用 BSC Testnet），确认没问题再上真钱。
+- **主密码就是一切**——丢了就等于丢了钱包访问权限。找个安全的地方记下来。
 
 ---
 

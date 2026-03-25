@@ -10,13 +10,13 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 **Plain English**: Your computer doesn't have Node.js installed, or the version is too old.
 
-**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v20 or higher recommended). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
+**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v18 or higher recommended). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
 
-### Error Says "command not found: python3"
+### Error Says "command not found: git"
 
-**Plain English**: Your computer is missing a basic runtime environment called Python.
+**Plain English**: Your computer is missing Git, a tool used to download skill packs.
 
-**How to fix**: Go to the [Python official website](https://www.python.org/downloads/) and download and install it.
+**How to fix**: Go to the [Git official website](https://git-scm.com/downloads) and download and install it.
 
 ### AgentWallet (AI Vault) Installation Failed
 

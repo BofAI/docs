@@ -28,7 +28,7 @@ Currently supported:
 
 Having hands isn't enough — AI needs to know how to handle tasks step by step. Skill packs are the pre-written "recipes" we've prepared.
 
-For example, the **"sunswap" skill** teaches AI: "When the user wants to swap tokens, first check the price, then calculate the fees, and finally send the bill to the user for confirmation — never spend money recklessly."
+For example, the **"sunswap" skill** teaches AI: "When the user wants to swap tokens, first check the price, then calculate the fees, and finally send the bill to the user for confirmation — never spend money recklessly." The **"sunperp" skill** teaches AI how to interact with SunPerp perpetual contracts on TRON.
 
 ---
 
