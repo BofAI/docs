@@ -362,4 +362,4 @@ After installation, the following files are created on your machine. All sensiti
 
 That's totally normal! Everyone's computer environment is different.
 
-Check out 👉 **[FAQ (Troubleshooting Guide)](./FAQ.md)** — we've already encountered and documented solutions for 99% of the weird issues out there.
+Check out 👉 **[FAQ](./FAQ.md)** — we've already encountered and documented solutions for 99% of the headache-inducing issues out there.

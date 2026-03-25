@@ -10,13 +10,13 @@
 
 **人话翻译**：你的电脑上没装 Node.js，或者版本太老了。
 
-**怎么解决**：去 [Node.js 官网](https://nodejs.org/) 下载最新的稳定版（LTS，建议 v20 或更高版本），像装普通软件一样一路点"下一步"装好。然后关掉终端里的黑框框，重新运行一次安装口令。
+**怎么解决**：去 [Node.js 官网](https://nodejs.org/) 下载最新的稳定版（LTS，建议 v18 或更高版本），像装普通软件一样一路点"下一步"装好。然后关掉终端里的黑框框，重新运行一次安装口令。
 
-### 报错里写着 "command not found: python3"
+### 报错里写着 "command not found: git"
 
-**人话翻译**：你的电脑缺少一个叫 Python 的基础运行环境。
+**人话翻译**：你的电脑缺少一个叫 Git 的小工具，安装技能包时需要用它来下载。
 
-**怎么解决**：去 [Python 官网](https://www.python.org/downloads/) 下载安装。
+**怎么解决**：去 [Git 官网](https://git-scm.com/downloads) 下载安装即可。
 
 ### AgentWallet（AI 保险柜）安装失败了
 
