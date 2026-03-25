@@ -60,7 +60,7 @@ Only choose `2` if you want to **completely start over from scratch**. Clean ins
 If you're installing for the first time or just upgrading — **always pick 1**.
 :::
 
-### 🟢 Level 2: Configure "AI's Personal Vault" (AgentWallet)
+### 🟢 Level 2: Configure "AI's Personal Vault AgentWallet"
 
 The wizard will automatically install a tool called AgentWallet, which securely stores your AI's wallet keys — like a local encrypted bank vault that never sends your private keys anywhere.
 
