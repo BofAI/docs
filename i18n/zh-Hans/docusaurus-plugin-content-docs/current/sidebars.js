@@ -176,6 +176,7 @@ const sidebars = {
             'llmservice/models/claude-opus-4-6',
             'llmservice/models/claude-sonnet-4-5',
             'llmservice/models/claude-sonnet-4-6',
+            'llmservice/models/deepseek-v3.2',
             'llmservice/models/gemini-3-1-pro',
             'llmservice/models/gemini-3-flash',
             'llmservice/models/glm-5',

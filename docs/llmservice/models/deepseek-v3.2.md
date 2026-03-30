@@ -1,4 +1,6 @@
-# DeepSeek-V3.2 Model Overview
+# DeepSeek-V3.2  
+
+## Overview
 
 **DeepSeek-V3.2** is a **reasoning-first** large language model launched by DeepSeek AI, specifically built for **Agentic scenarios**. By implementing the innovative **DeepSeek Sparse Attention (DSA)** mechanism, it achieves exceptional computational efficiency while demonstrating superior performance in complex tasks and autonomous agent capabilities.
 
