@@ -1,4 +1,4 @@
-# DeepSeek-V3.2 Model Overview
+# DeepSeek-V3.2 概览
 
 **DeepSeek-V3.2** 是由 DeepSeek AI 推出的**推理导向型 (Reasoning-first)** 大语言模型，专为 **智能体 (Agent)** 场景量身打造。该模型通过创新的 **DSA (DeepSeek Sparse Attention)** 稀疏注意力机制极大优化了计算效率，在复杂任务处理与自主代理能力上表现卓越。
 
