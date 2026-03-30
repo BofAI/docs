@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Local Privatized Deployment
 
 ## What is Local Privatized Deployment?
@@ -61,29 +58,18 @@ The wallet determines which identity the AI assistant uses to perform on-chain o
 
 #### Option 1: Agent Wallet (Recommended)
 
-This is the most secure option. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds.
+This is the most secure option. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
-**Install and initialize Agent Wallet:**
+> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
 
-```bash
-# Install
-npm install -g @bankofai/agent-wallet
-
-# Create encrypted wallet
-agent-wallet start
-```
-Agent Wallet also supports **multi-wallet management** — you can create multiple wallets and switch between them at runtime using the `select_wallet` tool, ideal for scenarios requiring operations across different accounts.
-
-> For detailed installation and usage instructions, see the [agent-wallet documentation](https://github.com/BofAI/agent-wallet/blob/main/doc/getting-started.md).
-
-**Set environment variables:**
+**Set environment variables after initializing Agent Wallet:**
 
 ```bash
 # Add to ~/.zshrc or ~/.bashrc
-export AGENT_WALLET_PASSWORD="<your-master-password>"
+export AGENT_WALLET_PASSWORD='<your-master-password>'
 
 # Optional: specify custom wallet directory (default: ~/.agent-wallet)
-export AGENT_WALLET_DIR="~/.agent-wallet"
+export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
 
 
@@ -177,121 +163,60 @@ sun-mcp-server
 
 ---
 
-### Step 3: Client Configuration
+### Step 3: Server Running Methods
 
-After configuration is complete, you need to add the connection definition of SUN MCP Server in your AI client.
+After wallet configuration is complete, you can run the server using one of the following methods:
 
-#### Find Configuration File
+### Option A: Run directly with npx (Recommended)
 
-Depending on your AI client, the configuration file location is as follows:
+The simplest and quickest method, no installation or cloning needed.
 
-| Client | Configuration File Path |
-|--------|-------------|
-| **Claude Desktop** | `~/.claude/resources/mcp/servers.json` |
-| **Cursor** | `~/.cursor/extensions/mcp/servers.json` |
-| **Claude Code (CLI)** | `~/.claude/mcp_servers.json` or via environment variable |
-
-#### Add Server Definition
-
-Choose the tab corresponding to your deployment method:
-
-<Tabs>
-<TabItem value="npx-recommended" label="Option A: npx Run (Recommended)">
-
-**Claude Desktop Configuration:**
-
-Add to `~/.claude/resources/mcp/servers.json`:
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/sun-mcp-server"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "your_secure_password",
-        "AGENT_WALLET_DIR": "~/.agent-wallet",
-        "TRON_NETWORK": "nile"
-      }
-    }
-  }
-}
-```
-
-**Claude Code**
+**Command:**
 
 ```bash
-# Basic
-claude mcp add sun-mcp-server -- npx -y @bankofai/sun-mcp-server
-
-# With environment variables
-claude mcp add -e AGENT_WALLET_PASSWORD=xxx sun-mcp-server -- npx -y @bankofai/sun-mcp-server
+npx -y @bankofai/sun-mcp-server
 ```
 
-**Cursor Configuration:**
+**Description:**
+- `npx` automatically downloads the latest version of `@bankofai/sun-mcp-server`
+- `-y` flag automatically confirms prompts
+- First run may take a few seconds to download
 
-Add to `~/.cursor/extensions/mcp/servers.json`:
+**Run with environment variables:**
 
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/sun-mcp-server"],
-      "env": {
-        "TRON_NETWORK": "nile"
-      }
-    }
-  }
-}
+```bash
+TRON_NETWORK=nile npx -y @bankofai/sun-mcp-server
 ```
 
-</TabItem>
+### Option B: Clone from Source
 
-<TabItem value="source-local" label="Option B: Local Source Code">
+Suitable for development and custom modifications.
 
-For running from source code.
+**Steps:**
 
-**Claude Desktop Configuration:**
+```bash
+# 1. Clone repository
+git clone https://github.com/BofAI/sun-mcp-server.git
+cd sun-mcp-server
 
-Add to `~/.claude/resources/mcp/servers.json`:
+# 2. Install dependencies
+npm install
 
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "command": "npx",
-      "args": ["tsx", "/path/to/sun-mcp-server/src/index.ts"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "your_secure_password",
-        "TRON_NETWORK": "nile"
-      }
-    }
-  }
-}
+# 3. Build project
+npm run build
+
+# 4. Run server
+npx tsx src/index.ts
 ```
 
-**Cursor Configuration:**
+**Or install globally:**
 
-Add to `~/.cursor/extensions/mcp/servers.json`:
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "command": "npx",
-      "args": ["tsx", "/path/to/sun-mcp-server/src/index.ts"],
-      "env": {
-        "TRON_NETWORK": "nile"
-      }
-    }
-  }
-}
+```bash
+npm install -g @bankofai/sun-mcp-server
+sun-mcp-server
 ```
 
-</TabItem>
-
-<TabItem value="http-mode" label="Option C: HTTP Mode">
+### Option C: HTTP Mode
 
 Run SUN MCP Server in HTTP server mode, allowing remote connections.
 
@@ -301,39 +226,12 @@ Run SUN MCP Server in HTTP server mode, allowing remote connections.
 sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
 ```
 
-**Claude Desktop Configuration:**
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "url": "http://127.0.0.1:8080/mcp"
-    }
-  }
-}
-```
-
-**Cursor Configuration:**
-
-```json
-{
-  "mcpServers": {
-    "sun": {
-      "url": "http://127.0.0.1:8080/mcp"
-    }
-  }
-}
-```
-
 :::warning
 HTTP mode is suitable for local development and testing. For remote deployment, use HTTPS and appropriate authentication.
 :::
 
-</TabItem>
-</Tabs>
-
 :::tip About Environment Variables
-- **npx Run**: Environment variables are set in the `"env"` field of the configuration file, or exported directly in the terminal before running.
+- **npx Run**: Export environment variables directly in the terminal before running the command.
 - **HTTP Mode**: When starting the HTTP server, environment variables should be exported before the startup command:
 
 ```bash
@@ -341,12 +239,21 @@ export TRON_NETWORK=nile
 sun-mcp-server --transport streamable-http --host 127.0.0.1 --port 8080 --mcpPath /mcp
 ```
 
-- **Restart Required**: After modifying configuration, you need to restart the AI client for changes to take effect.
+- **Server Configuration**: Once the server is running, configure your MCP client to connect to it.
 :::
 
 ---
 
-### Step 4: Verify Connection
+### Step 4: Client Configuration
+
+After the server is running, you need to configure your MCP client to connect to it. Refer to your MCP client's documentation for configuration instructions. The server will be accessible at one of the following:
+
+- **npx/Local Build**: Typically runs as a subprocess managed by your client
+- **HTTP Mode**: `http://127.0.0.1:8080/mcp` (or the host/port you specified)
+
+---
+
+### Step 5: Verify Connection
 
 After starting the AI client, you should be able to see the tool list of SUN MCP Server. Perform the following tests to confirm the configuration is correct:
 

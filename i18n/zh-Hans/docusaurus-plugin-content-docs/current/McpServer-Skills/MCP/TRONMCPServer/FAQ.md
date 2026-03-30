@@ -8,7 +8,7 @@
 
 连接问题通常发生在首次配置阶段。如果 AI 客户端无法识别 TRON 工具，多半是这里出了问题。
 
-### Claude Desktop 提示"无法连接到 MCP 服务器"
+### 你的 MCP 客户端提示"无法连接到 MCP 服务器"
 
 这是最常见的问题。按以下顺序逐一排查：
 
@@ -20,15 +20,11 @@
 
 2. **检查 npx 是否可用**。在终端运行 `npx --version`。如果找不到命令，说明 Node.js 安装不完整，需要重新安装。
 
-3. **验证配置文件格式**。`claude_desktop_config.json` 必须是合法的 JSON。常见错误包括多余的逗号、缺少引号或括号不匹配。可以用这个命令快速验证：
-   ```bash
-   cat ~/Library/Application\ Support/Claude/claude_desktop_config.json | python3 -m json.tool
-   ```
-   如果输出了格式化的 JSON，说明格式没问题。如果报错，按照错误提示修复。
+3. **验证配置文件格式**。你的 MCP 客户端配置文件必须是合法的 JSON。常见错误包括多余的逗号、缺少引号或括号不匹配。使用 JSON 校验工具验证你的配置文件。
 
-4. **完全重启**。关闭窗口不等于退出——你需要从菜单栏/系统托盘彻底退出 Claude Desktop，然后重新打开。macOS 上可以在 Dock 图标上右键选择"退出"。
+4. **完全重启**。关闭窗口不等于退出——你需要彻底退出你的 MCP 客户端，然后重新打开。
 
-5. **查看日志**。如果以上都没解决问题，查看 Claude Desktop 的日志文件。macOS 上在 `~/Library/Logs/Claude/` 目录下，搜索包含 "mcp" 或 "tron" 的条目。
+5. **查看日志**。如果以上都没解决问题，查看你的 MCP 客户端的日志文件，搜索包含 "mcp" 或 "tron" 的条目。
 
 ### HTTP 模式下"连接被拒绝"
 
@@ -57,7 +53,7 @@
 
 要解锁写入工具，配置以下三种钱包模式之一：
 
-- 设置 `AGENT_WALLET_PASSWORD`（Agent Wallet 模式，推荐）
+- 设置 `AGENT_WALLET_PASSWORD`（[Agent Wallet](../../../Agent-Wallet/Intro) 模式，推荐）
 - 设置 `TRON_PRIVATE_KEY`（私钥模式）
 - 设置 `TRON_MNEMONIC`（助记词模式）
 
@@ -91,18 +87,9 @@
 
 ### "Agent Wallet 密码错误"
 
-`AGENT_WALLET_PASSWORD` 必须与执行 `agent-wallet init` 时设置的主密码完全一致。如果你不确定：
+`AGENT_WALLET_PASSWORD` 必须与运行 `agent-wallet start` 时生成的主密码完全一致。请确认钱包目录存在（`ls ~/.agent-wallet/`），如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
 
-1. **检查钱包目录是否存在**：
-   ```bash
-   ls ~/.agent-wallet/  # 默认位置
-   ```
-   如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
-
-2. **密码丢失**时需要重新初始化。注意：这会创建一个新的钱包，旧钱包的资金需要通过其他方式恢复。
-   ```bash
-   agent-wallet init
-   ```
+如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。
 
 ### TronGrid API Key 不生效
 
@@ -200,25 +187,7 @@ AI 可能将 TRON MCP Server 的能力与其他区块链工具混淆。如果它
 
 ### 能否同时使用多个 TRON MCP Server 实例？
 
-可以。在配置中定义多个 MCP Server 条目即可——比如一个连接主网云服务（只读），另一个连接本地测试网部署（带钱包）。只需使用不同的名称：
-
-```json
-{
-  "mcpServers": {
-    "tron-mainnet": {
-      "command": "npx",
-      "args": ["mcp-remote", "https://tron-mcp-server.bankofai.io/mcp"]
-    },
-    "tron-local": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/mcp-server-tron"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "your-password"
-      }
-    }
-  }
-}
-```
+可以。在 MCP 客户端配置中定义多个 MCP Server 条目即可——比如一个连接主网云服务（只读），另一个连接本地测试网部署（带钱包）。在客户端的 MCP 配置中使用不同的名称配置这两个服务。
 
 ### 如何更新到最新版本？
 
@@ -240,3 +209,4 @@ npm run build
 ### 支持哪个 MCP 协议版本？
 
 TRON MCP Server 支持 MCP 协议版本 **2025-11-25**，使用 `@modelcontextprotocol/sdk` 1.22.0 或更高版本。
+

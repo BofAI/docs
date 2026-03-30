@@ -1,31 +1,24 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # 官方云服务接入
 
 ## 什么是官方云服务？
 
 官方云服务是由 **BANK OF AI** 托管的 SUN MCP Server 实例，用于为 AI 客户端提供 **SunSwap 链上数据的只读查询能力**。
 
-如果你想让 AI 助手查询 SunSwap 上的代币价格、池子 APY、协议交易量，或者分析某个地址的流动性持仓——这些都是只读操作，通过官方云服务即可完成，不需要在本地安装任何东西，也不需要提供任何钱包凭证。
+如果你想让 AI 助手查询 SunSwap 上的代币价格、池子 APY、协议交易量，或者分析某个地址的流动性持仓——这些都是只读操作，通过官方云服务即可完成，不需要提供任何钱包凭证。
 
 **官方云服务的核心作用，就是将基础设施工作全部托管。** 你只需要在 AI 客户端的配置中添加一行服务地址，即可开始与 SunSwap 对话。
 
 ### 使用官方云服务的主要优点
 
-**1. 无需任何本地安装**
-
-不用安装 Node.js、不用克隆仓库、不用运行构建命令。只需在配置文件中添加一段 JSON，重启 AI 客户端，即可使用。整个过程通常不超过 2 分钟。
-
-**2. 无私钥暴露风险**
+**1. 无私钥暴露风险**
 
 由于云服务是只读的，你完全不需要提供任何钱包私钥或助记词。这从根本上消除了密钥泄露的风险。在团队协作场景中尤为方便——任何成员都可以直接接入，不存在密钥分发和管理的问题。
 
-**3. 官方维护与持续升级**
+**2. 官方维护与持续升级**
 
 云服务始终运行最新稳定版本，包括 SunSwap 协议更新的适配和 SUN.IO API 的同步。你无需关心版本号，也不需要手动重新构建。
 
-**4. 覆盖大量实用场景**
+**3. 覆盖大量实用场景**
 
 查询代币价格和兑换报价、分析池子数据和 APY、获取协议统计和历史指标、查看用户流动性持仓——这些日常最常用的 DeFi 数据查询，通过云服务全部可以完成。只有当你需要实际执行兑换或管理流动性时，才需要切换到[本地私有化部署](./LocalPrivatizedDeployment.md)。
 
@@ -39,150 +32,96 @@ import TabItem from '@theme/TabItem';
 
 ## 如何接入官方云服务？
 
-要接入官方云服务，只需在 AI 客户端配置中添加以下 MCP 服务地址：
+### 一键自动安装
 
-**`https://sun-mcp-server.bankofai.io/mcp`**
-
-> 注意：这是一个 MCP 协议端点，不是网页地址。在浏览器中直接打开不会显示任何内容。
-
----
-
-## 客户端配置
-
-<Tabs>
-<TabItem value="Claude Desktop" label="Claude Desktop">
-
-配置文件路径：
-- **macOS**：`~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**：`%APPDATA%\Claude\claude_desktop_config.json`
-
-**基础配置**：
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://sun-mcp-server.bankofai.io/mcp"
-      ]
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Claude Code" label="Claude Code">
-
-**命令行添加**：
+只需告诉你的 AI Agent 执行以下命令：
 
 ```bash
-claude mcp add --transport http sun-mcp-server https://sun-mcp-server.bankofai.io/mcp
+npx add-mcp https://sun-mcp-server.bankofai.io/mcp -y
 ```
 
-**或在项目根目录添加 `.mcp.json`**：
+`-y` 参数会跳过所有交互选择，自动安装到你电脑上检测到的所有 AI 工具中。安装完成后会显示 ✅ 安装完成！以及安装到了哪些 Agent。
 
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "type": "http",
-      "url": "https://sun-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
+安装完成后，重启 AI Agent，即可使用 SUN MCP Server 开始与 SunSwap 交互。
 
-</TabItem>
-<TabItem value="Cursor" label="Cursor">
+### 交互式安装
 
-在项目根目录添加 `.cursor/mcp.json`：
-
-```json
-{
-  "mcpServers": {
-    "sun-mcp-server": {
-      "url": "https://sun-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="通用 HTTP 调用" label="通用 HTTP 调用">
-
-如果你想将 SUN MCP Server 集成到自己的应用中，可以通过标准 HTTP 请求调用。
-
-**第一步：初始化连接**
+如果你想手动选择安装到哪些 AI 工具，去掉 `-y` 参数即可：
 
 ```bash
-curl -X POST https://sun-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "initialize",
-    "params": {
-      "protocolVersion": "2025-03-26",
-      "capabilities": {},
-      "clientInfo": {"name": "my-client", "version": "1.0"}
-    },
-    "id": 1
-  }'
+npx add-mcp https://sun-mcp-server.bankofai.io/mcp
 ```
 
-响应中会包含 `mcp-session-id` 请求头，后续请求需要用到它。
-
-**第二步：调用工具**
-
-使用第一步获得的 `mcp-session-id`：
-
-```bash
-curl -X POST https://sun-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/call",
-    "params": {
-      "name": "getPrice",
-      "arguments": {"tokenAddress": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t"}
-    },
-    "id": 2
-  }'
-```
-
-**第三步：查看可用工具列表**
-
-```bash
-curl -X POST https://sun-mcp-server.bankofai.io/mcp \
-  -H "Content-Type: application/json" \
-  -H "Accept: application/json, text/event-stream" \
-  -H "mcp-session-id: <your-session-id>" \
-  -d '{
-    "jsonrpc": "2.0",
-    "method": "tools/list",
-    "params": {},
-    "id": 3
-  }'
-```
-
-:::info Session 管理
-- 每次 `initialize` 会创建一个新 Session
-- Session 在 30 分钟无活动后自动过期
-- 可用 `DELETE /mcp`（携带 `mcp-session-id` 请求头）显式关闭 Session
+:::tip 提示
+本文档以在终端中运行命令为例展示安装过程。
 :::
 
-</TabItem>
-</Tabs>
+#### 安装过程详解
+
+安装器会引导你完成以下几步，照着做就行：
+
+**1️⃣ 识别服务来源**
+
+安装器会自动识别远程 MCP 服务地址，并为其生成服务名称：
+
+```
+◇  Source: https://sun-mcp-server.bankofai.io/mcp (remote)
+│
+●  Server name: sun-mcp-server
+```
+
+**2️⃣ 选择要安装到哪些 AI 工具**
+
+安装器会自动检测你电脑上装了哪些 AI 工具（如 Claude Code、Cursor、Cline 等），用空格键勾选你要用的：
+
+```
+◇  Detected 1 agent
+│
+◇  Select agents to install to
+│  Claude Code
+```
+
+**3️⃣ 确认安装信息**
+
+安装器会展示安装摘要，确认无误后选择 `Yes` 开始安装：
+
+```
+◇  Installation Summary ───╮
+│                          │
+│  Server: sun-mcp-server  │
+│  Type: remote            │
+│  Scope: Project          │
+│  Agents: Claude Code     │
+│                          │
+├──────────────────────────╯
+│
+◇  Proceed with installation?
+│  Yes
+```
+
+**4️⃣ 安装完成！**
+
+看到类似以下输出，说明 SUN MCP Server 已经成功安装到你选择的 AI 工具中：
+
+```
+◇  Installation complete
+│
+◇  Installed to 1 agent ───────╮
+│                              │
+│  ✓ Claude Code: ~/.mcp.json  │
+│                              │
+├──────────────────────────────╯
+│
+└  Done!
+```
+
+安装完成后，重启 AI Agent，即可使用 SUN MCP Server 开始与 SunSwap 交互。
 
 ---
 
 ## 验证接入是否成功
 
-配置完成后，**完全退出并重启** AI 客户端，然后输入以下测试问法：
+接入完成后，你可以直接向 AI Agent 提出以下问题来测试：
 
 ```
 查一下 SunSwap 上 USDT 和 TRX 的当前价格

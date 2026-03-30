@@ -138,10 +138,31 @@ const sidebars = {
           collapsed: false,
           items: [
             'McpServer-Skills/SKILLS/Intro',
+            'McpServer-Skills/SKILLS/QuickStart',
             'McpServer-Skills/SKILLS/BANKOFAISkill',
             'McpServer-Skills/SKILLS/Faq',
           ],
         },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Agent Wallet',
+      collapsed: false,
+      items: [
+        'Agent-Wallet/Intro',
+        'Agent-Wallet/QuickStart',
+        {
+          type: 'category',
+          label: 'Explore Further',
+          collapsed: true,
+          items: [
+            'Agent-Wallet/Developer/CLI-Reference',
+            'Agent-Wallet/Developer/SDK-Guide',
+            'Agent-Wallet/Developer/SDK-Cookbook',
+          ],
+        },
+        'Agent-Wallet/FAQ',
       ],
     },
     {

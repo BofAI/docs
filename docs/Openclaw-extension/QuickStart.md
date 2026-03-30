@@ -1,146 +1,133 @@
 # Quick Start
 
-The goal of this page is: **Get you up and running with a complete installation and your first blockchain query in just a few minutes.**
-
-The installer is interactive, guiding you to select which MCP Servers and Skills to install, then automatically completing all configuration. You just need to follow the prompts.
+Our goal: **Spend a few minutes following the wizard, clicking a few buttons, and get your AI to successfully fetch its first piece of on-chain data.**
 
 ---
 
-## Prerequisites
+## 🕹️ Prerequisites
 
-Before running the installer, ensure the following tools are ready:
+Before you begin, make sure the following basic software is installed on your computer (if not, download and install them from their official websites just like any regular software):
 
-| Requirement | Description | Verification Command | Download |
-| :--- | :--- | :--- | :--- |
-| **OpenClaw** | Your open-source AI assistant | Check if `~/.openclaw` directory exists | [OpenClaw official repository](https://github.com/openclaw) |
-| **Node.js v18+** | Required to run MCP Servers | `node --version` | [Node.js official site](https://nodejs.org/) |
-| **Python 3** | Used by installer to handle JSON configuration | `python3 --version` | [Python official site](https://www.python.org/downloads/) |
-| **Git** | Clone Skills repository | `git --version` | [Git official site](https://git-scm.com/) |
+1. **OpenClaw**: Your AI assistant software.
+2. **Node.js** (must be v20 or above): The runtime environment for skill packs. *(Extremely important — older versions will definitely cause errors!)*
+3. **Git**: A small tool used to download skill packs.
+4. **Python 3**: A helper used by the installation wizard to process configuration files.
 
 ---
 
-## Running the Installer
+## 🚀 Step 1: One-Click Installation
 
-### Method 1: One-Click Install (Recommended)
+Open the "Terminal" on your computer (that black window).
+
+- **Mac:** Press `Command + Space`, type `Terminal` in the search box, and hit Enter.
+
+**Copy the entire line below**, paste it into the terminal, and press Enter:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
 ```
 
-### Method 2: Install from Source
+🚑 **First Aid: Got an error right after pressing Enter?** If the screen says `command not found: node` or `python3`, it means your computer is missing the prerequisites mentioned above. 👉 [Click here to see how to fix it](./FAQ.md#error-says-command-not-found-node-or-npm-install-failed)
+
+If there are no errors, an English wizard will appear on screen. Think of it as a text-based mini-game with 4 levels:
+
+### 🟢 Level 1: Choose Installation Mode
+
+The screen will ask you which mode to use. Type `1` (normal installation) on your keyboard, then press Enter. This is the most hassle-free option and preserves your previous settings.
+
+### 🟢 Level 2: Configure "AI's Personal Vault" (AgentWallet)
+
+The wizard will automatically install a tool called AgentWallet, which securely stores your AI's wallet keys.
+
+If you're a beginner, just close your eyes and press Enter all the way through — the default values are perfectly fine.
+
+(🚑 Got stuck with an error? 👉 [Click here to see how to fix AgentWallet installation failures](./FAQ.md#agentwallet-ai-vault-installation-failed))
+
+### 🟢 Level 3: Pick Your Toolbox (Give AI "Hands")
+
+The screen will list options like TRON (mcp-server-tron). Use the `↑` `↓` arrow keys to move, press **Space** to check, and press **Enter** to confirm.
+
+⚠️ **Heads up**: The wizard might suddenly ask you for an API Key!
+
+- **What's that?** It's a VIP pass — having one means data queries won't be throttled.
+- **I don't have one right now?** Just press Enter to skip! Leaving it blank is totally fine and won't affect your installation at all.
+
+### 🟢 Level 4: Pick Your Skill Packs (Give AI a "Brain")
+
+The screen will list skills like sunswap (token swapping), tronscan (data lookup), etc. Use **Space** to check and **Enter** to confirm.
+
+If you see any prompts asking for keys that you don't understand, just press Enter to skip them all.
+
+When `Installation Complete!` lights up at the bottom of the screen — congratulations, you've passed all levels!
+
+---
+
+## 🎉 Step 2: Restart and Witness the Magic
+
+After installation, there's one step you absolutely cannot skip: **Completely close your OpenClaw software, then reopen it.**
+
+🚑 **First Aid: AI acting clueless?** If it says "I don't know what SunSwap is," 99% of the time it's because you didn't restart. 👉 [Click here to see how to properly restart](./FAQ.md#ai-says-i-dont-have-blockchain-tools-or-i-dont-know-what-sunswap-is)
+
+Open the chat window and send your AI its first command:
+
+```
+Check the current block height on the TRON mainnet.
+```
+
+If it thinks for a few seconds and then reports back a number — awesome! Your AI has successfully connected to the blockchain!
+
+Try another one:
+
+```
+How much TRX can I get for 100 USDT on SunSwap right now?
+```
+
+---
+
+*(That covers the beginner essentials. If you've got the hang of it, keep reading below 👇)*
+
+---
+
+## 🛠️ How to Add API Keys (VIP Pass) After Installation?
+
+Totally get it! You were just browsing during installation and pressed Enter to skip everything. Now that you're comfortable, here's how to fill in your API Keys for the "VIP express lane":
+
+### Step 1: Figure Out Which "Key" You Need
+
+| Key Name | What's It For? | Where to Get It for Free? |
+| :--- | :--- | :--- |
+| `TRONGRID_API_KEY` | Express lane for the TRON toolbox — without it you'll be throttled | Register for free at [trongrid.io](https://www.trongrid.io/) |
+| `TRONSCAN_API_KEY` | Required for the TronScan data lookup skill | Apply for free at [tronscan.org](https://tronscan.org/#/myaccount/apiKeys) |
+| `BANKOFAI_API_KEY` | Used for topping up or checking balance on BANK OF AI | Get it after logging in at [chat.bankofai.io/key](https://chat.bankofai.io/key) |
+
+### Step 2: Enter Your Keys into the System
+
+Once you have the corresponding key, choose the simple method below based on its type. **Don't forget to restart OpenClaw after filling it in!**
+
+#### 🔧 Type A Keys: Add to "Hidden Notepad" (For TRONGRID and TRONSCAN)
+
+1. Type `open -e ~/.zshrc` in the terminal and press Enter.
+2. At the bottom of the text editor that opens, paste these lines (keep the double quotes `""`):
+   ```
+   export TRONGRID_API_KEY="paste_your_TronGrid_Key_here"
+   export TRONSCAN_API_KEY="paste_your_TronScan_Key_here"
+   ```
+3. Press `Command + S` to save and close, then reopen the terminal or restart OpenClaw for changes to take effect.
+
+#### 🔧 Type B Keys: One-Click Config File (For BANK OF AI)
+
+If you have this key, simply copy and run the following command in the terminal (remember to replace the placeholder with your actual key):
+
+**Configure BANK OF AI:**
 
 ```bash
-git clone https://github.com/BofAI/openclaw-extension.git
-cd openclaw-extension
-./install.sh
+mkdir -p ~/.mcporter && echo '{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://api.bankofai.io/v1/"}' > ~/.mcporter/bankofai-config.json
 ```
-
-Once started, the installer automatically checks environment dependencies (Node.js, npx, Git, Python). If any are missing, it will alert you immediately.
 
 ---
 
-## Installation Process Details
+## Still Stuck Somewhere?
 
-The installer consists of two main phases, each with interactive selection at every step.
+That's totally normal! Everyone's computer environment is different.
 
-### Phase 1: Select and Configure MCP Servers
-
-The installer displays all available MCP Servers and asks which ones you want to install:
-
-```
-📦 Available MCP Servers:
-  1) mcp-server-tron    - TRON blockchain interaction
-  2) bnbchain-mcp       - BNB Chain (BSC, opBNB, Ethereum) interaction
-  3) bankofai-recharge  - Remote BANK OF AI recharge MCP
-
-Select servers to install (e.g., 1,2,3 or 'all'):
-```
-
-> **Note on bankofai-recharge**: This is a remote MCP that connects directly to `https://recharge.bankofai.io/mcp`. No local credentials are needed — the installer configures the endpoint automatically.
-
-For each selected server, the installer continues by asking how you want to store credentials:
-
-- **Option 1: Save to Configuration File** — Keys stored in plaintext in `~/.mcporter/mcporter.json`. Convenient but lower security.
-- **Option 2: Use Environment Variables (Recommended)** — Keys read from system environment variables, not written to any files.
-
-If you choose to save to a configuration file, the installer will ask for specific key values (private keys, API Keys, etc.). If you choose environment variables, the installer will tell you which variables need to be set.
-
-> **Tip**: If you just want to quickly experience the features, you can skip key configuration for now (just press Enter to leave it empty). Without a private key, the MCP Server will run in read-only mode, and you can still query on-chain data.
-
-### Phase 2: Select and Install Skills
-
-The installer clones the [Skills repository](https://github.com/BofAI/skills) from GitHub, automatically discovers all available Skills, and asks you to select:
-
-```
-🔧 Available Skills:
-  1) recharge-skill   - BANK OF AI account query and recharge
-  2) sunperp-skill    - SunPerp perpetual futures trading (TRON)
-  3) sunswap          - SunSwap DEX trading skill
-  4) tronscan-skill   - TRON blockchain data lookup
-  5) x402-payment     - Agent payment protocol (x402)
-
-Select skills to install (e.g., 1,2,3 or 'all'):
-```
-
-Then choose the installation location:
-
-| Option | Path | Use Case |
-| :--- | :--- | :--- |
-| **User-level (Recommended)** | `~/.openclaw/skills/` | Shared across all projects |
-| **Workspace-level** | `.openclaw/skills/` | Used only by current project |
-| **Custom Path** | Directory you specify | Special requirements |
-
-Some Skills have additional credential requirements, which the installer will prompt you for during installation:
-
-- **recharge-skill** — Requires BANK OF AI API Key (`BANKOFAI_API_KEY`)
-- **sunperp-skill** — Requires SunPerp API keys (`SUNPERP_ACCESS_KEY` + `SUNPERP_SECRET_KEY`)
-- **tronscan-skill** — Prompts you to set `TRONSCAN_API_KEY` environment variable in your shell
-- **sunswap** — Prompts to configure TRON private key (if not configured earlier)
-
----
-
-## Verifying the Installation
-
-After installation completes, **restart OpenClaw**, then in your conversation, enter:
-
-```
-Check the current block height on TRON mainnet
-```
-
-If you receive a normal response showing the current block height, it means mcp-server-tron has been successfully connected.
-
-You can also try:
-
-```
-Check the TRX balance of TRON address TXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-```
-
-```
-What are the current energy and bandwidth prices on TRON mainnet?
-```
-
-If all these queries return results normally, you're all set.
-
-:::info About Read-Only Mode
-If you didn't configure a private key during installation, the MCP Server will run in read-only mode — all query operations (check balance, check transactions, check contract state, etc.) work normally, but transfer and contract write operations are unavailable. To unlock write capabilities, see [Configuration Reference](./Configuration.md).
-:::
-
----
-
-## Having Problems?
-
-If your AI assistant can't recognize blockchain tools after installation, common causes include:
-
-- **OpenClaw not restarted** — Configuration changes require a full restart
-- **Node.js version too old** — Ensure v18.0.0 or higher
-- **mcporter.json format error** — You can check with `python3 -m json.tool ~/.mcporter/mcporter.json`
-
-For more troubleshooting, see [FAQ & Troubleshooting](./FAQ.md).
-
----
-
-## Next Steps
-
-- Want to understand the detailed features of each MCP Server and Skill? → [Component Details](./Components.md)
-- Want to configure private keys, API Keys, or security options? → [Configuration Reference](./Configuration.md)
-- Having issues? → [FAQ & Troubleshooting](./FAQ.md)
+Check out 👉 **[FAQ (Troubleshooting Guide)](./FAQ.md)** — we've already encountered and documented solutions for 99% of the weird issues out there.

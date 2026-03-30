@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Local Private Deployment
 
 ## What is Local Private Deployment?
@@ -46,7 +43,7 @@ node --version  # Should output v20.x.x or higher
 Before configuring your wallet, make sure to understand the following security principles:
 
 :::danger Security Warning
-**Never** save private keys or mnemonic phrases directly in MCP configuration files (such as `claude_desktop_config.json` or `mcp.json`). These files are often unencrypted and could be accidentally shared or committed to Git. Always use system environment variables or encrypted wallets.
+**Never** save private keys or mnemonic phrases directly in MCP configuration files. These files are often unencrypted and could be accidentally shared or committed to Git. Always use system environment variables or encrypted wallets.
 :::
 
 ---
@@ -67,29 +64,18 @@ The wallet determines which identity the AI assistant uses to perform on-chain o
 
 #### Option 1: Agent Wallet (Recommended)
 
-This is the most secure option. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds.
+This is the most secure option. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
-**Install and initialize Agent Wallet:**
+> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
 
-```bash
-# Install
-npm install -g @bankofai/agent-wallet
-
-# Create encrypted wallet
-agent-wallet start
-```
-Agent Wallet also supports **multi-wallet management** — you can create multiple wallets and switch between them at runtime using the `select_wallet` tool, ideal for scenarios requiring operations across different accounts.
-
-> For detailed installation and usage instructions, see the [agent-wallet documentation](https://github.com/BofAI/agent-wallet/blob/main/doc/getting-started.md).
-
-**Set environment variables:**
+**Set environment variables after initializing Agent Wallet:**
 
 ```bash
 # Add to ~/.zshrc or ~/.bashrc
-export AGENT_WALLET_PASSWORD="<your-master-password>"
+export AGENT_WALLET_PASSWORD='<your-master-password>'
 
 # Optional: specify custom wallet directory (default: ~/.agent-wallet)
-export AGENT_WALLET_DIR="~/.agent-wallet"
+export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
 
 
@@ -169,149 +155,28 @@ npm install
 npm run build
 ```
 
----
+#### Option C: Run in HTTP Mode
 
-### Step 4: Client Configuration
-
-With environment variables set and installation done, now point your AI client to the local server.
-
-#### Find Your Configuration File
-
-| Application | Operating System | Configuration Path |
-| :--- | :--- | :--- |
-| **Claude Desktop** | macOS | `~/Library/Application Support/Claude/claude_desktop_config.json` |
-| | Windows | `%APPDATA%\Claude\claude_desktop_config.json` |
-| **Cursor** | All | Project root: `.cursor/mcp.json` |
-| **Google Antigravity** | All | `~/.config/antigravity/mcp.json` |
-| **Opencode** | All | `~/.config/opencode/mcp.json` |
-
-#### Add Server Definition
-
-<Tabs>
-<TabItem value="npx" label="Option A: npx Run (Recommended)">
-
-Run the latest version directly from npm. No need to clone any repository.
-
-**Claude Desktop** (`claude_desktop_config.json`):
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/mcp-server-tron"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "YOUR_PASSWORD (Or set in system env)",
-        "TRONGRID_API_KEY": "YOUR_KEY_HERE (Or set in system env)"
-      }
-    }
-  }
-}
-```
-
-**Claude Code**:
+Start the server in HTTP mode, then connect your MCP client via the HTTP endpoint:
 
 ```bash
-# Basic
-claude mcp add mcp-server-tron -- npx -y @bankofai/mcp-server-tron
-
-# With environment variables
-claude mcp add -e AGENT_WALLET_PASSWORD=xxx -e TRONGRID_API_KEY=xxx mcp-server-tron -- npx -y @bankofai/mcp-server-tron
+npm run start:http
 ```
 
-**Cursor** (`.cursor/mcp.json`):
+This will start a local HTTP server (default: `http://localhost:3001/mcp`) that your MCP client can connect to.
 
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["-y", "@bankofai/mcp-server-tron"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "YOUR_PASSWORD (Or set in system env)",
-        "TRONGRID_API_KEY": "YOUR_KEY_HERE (Or set in system env)"
-      }
-    }
-  }
-}
-```
+#### Configuration Notes
 
-</TabItem>
-<TabItem value="local" label="Option B: Local Source Code">
+If you're configuring an MCP client to point to your local server:
 
-For developers running from a cloned repository.
+- **If running via npx or source**: Use the appropriate command in your MCP client's configuration (e.g., `command: npx` with `args: ["-y", "@bankofai/mcp-server-tron"]`)
+- **If running in HTTP mode**: Point your client to `http://localhost:3001/mcp` via the HTTP URL configuration option
 
-**Claude Desktop** (`claude_desktop_config.json`):
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["tsx", "/absolute/path/to/mcp-server-tron/src/index.ts"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "YOUR_PASSWORD (Or set in system env)",
-        "TRONGRID_API_KEY": "YOUR_KEY_HERE (Or set in system env)"
-      }
-    }
-  }
-}
-```
-
-Replace the path with your actual cloned repository path.
-
-**Cursor** (`.cursor/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": ["tsx", "/absolute/path/to/mcp-server-tron/src/index.ts"],
-      "env": {
-        "AGENT_WALLET_PASSWORD": "YOUR_PASSWORD (Or set in system env)",
-        "TRONGRID_API_KEY": "YOUR_KEY_HERE (Or set in system env)"
-      }
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="http" label="Option C: Connect to Local HTTP">
-
-If you started the server in HTTP mode (`npm run start:http`), connect via HTTP URL:
-
-**Claude Code**:
-
-```bash
-claude mcp add --transport http mcp-server-tron http://localhost:3001/mcp
-```
-
-**Cursor** (`.cursor/mcp.json`):
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "url": "http://localhost:3001/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-</Tabs>
-
-:::tip About the `env` Section in Configuration
-If you have already set environment variables in your system (via `~/.zshrc` or `~/.bashrc`), you can omit the `env` section from the configuration entirely — the server will automatically read system environment variables.
-
-If your MCP client does not inherit system environment variables, you'll need to set them in the `env` section. In that case, **make sure the configuration file is never shared or committed to version control**.
-:::
+If your MCP client does not inherit system environment variables, you'll need to configure them explicitly in the client settings. **Make sure any configuration file storing credentials is never shared or committed to version control**.
 
 ---
 
-### Step 5: Verify Connection
+### Step 4: Verify Connection
 
 After completing configuration, **fully exit and restart** your AI client, then try:
 

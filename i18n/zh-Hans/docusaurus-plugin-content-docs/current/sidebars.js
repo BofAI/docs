@@ -150,6 +150,26 @@ const sidebars = {
     },
     {
       type: 'category',
+      label: 'Agent Wallet',
+      collapsed: false,
+      items: [
+        'Agent-Wallet/Intro',
+        'Agent-Wallet/QuickStart',
+        {
+          type: 'category',
+          label: '进一步探索',
+          collapsed: true,
+          items: [
+            'Agent-Wallet/Developer/CLI-Reference',
+            'Agent-Wallet/Developer/SDK-Guide',
+            'Agent-Wallet/Developer/SDK-Cookbook',
+          ],
+        },
+        'Agent-Wallet/FAQ',
+      ],
+    },
+    {
+      type: 'category',
       label: 'Openclaw 扩展插件',
       collapsed: false,
       items: ['Openclaw-extension/Intro', 'Openclaw-extension/QuickStart', 'Openclaw-extension/FAQ'],

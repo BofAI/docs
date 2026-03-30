@@ -1,219 +1,93 @@
-# FAQ & Troubleshooting
+# FAQ
 
-When you encounter problems, check here first. Organized by the most likely issues you'll encounter: installation problems, connection issues, credential problems, runtime problems, and finally some general questions.
-
----
-
-## Installation Problems
-
-### Installer reports error "command not found: node"
-
-The installer requires Node.js v18.0.0 or higher. Check if it's installed:
-
-```bash
-node --version
-```
-
-If not installed or version is too old, download and install the latest LTS version from [nodejs.org](https://nodejs.org/). After installing Node.js, the `npx` command will also be available.
-
-### Installer reports error "command not found: python3"
-
-The installer uses Python to process JSON configuration files. macOS typically comes with Python 3; on Linux, install via package manager:
-
-```bash
-# Ubuntu/Debian
-sudo apt install python3
-
-# macOS (via Homebrew)
-brew install python3
-```
-
-### Installer warning "OpenClaw not found"
-
-The installer detected that `~/.openclaw` directory doesn't exist. This means OpenClaw might not be installed or was installed in a non-standard location.
-
-The installer will ask if you want to continue — you can choose to proceed (MCP Servers and Skills will still be configured), but OpenClaw may not auto-load them on startup. Recommend first completing installation from the [OpenClaw official repository](https://github.com/openclaw).
-
-### Skills clone failed
-
-If `git clone` fails, common causes include:
-
-- **Network issues**: Check if you can access GitHub. Try `git clone https://github.com/BofAI/skills.git` to test manually.
-- **Git not installed**: Run `git --version` to confirm.
-- **Specified branch/tag doesn't exist**: If you set the `GITHUB_BRANCH` environment variable, confirm the branch or tag actually exists.
-
-Skills clone failure won't interrupt the entire installation — MCP Server configuration remains intact. You can install Skills manually later.
-
-### npm install failed
-
-When installing Skills, some Skills (like sunswap, x402-payment) need to run `npm install` to install dependencies. If it fails:
-
-- Check network connectivity (npm needs to access registry.npmjs.org)
-- Confirm Node.js version >= 18
-- Try running manually:
-  ```bash
-  cd ~/.openclaw/skills/sunswap   # or other Skill directory
-  npm install
-  ```
-
-npm install failure won't interrupt the installer — it will issue a warning but continue. That Skill's functionality may be limited until dependencies are successfully installed.
+Don't panic when you see an error — it's usually just a small setting that's not configured properly. We've listed the most common issues in order of frequency:
 
 ---
 
-## Connection Issues
+## Errors During Installation
 
-### Can't see blockchain tools in OpenClaw after startup
+### Error Says "command not found: node" or "npm install Failed"
 
-**Most common cause**: OpenClaw wasn't restarted. After modifying mcporter.json, you must completely exit and restart OpenClaw.
+**Plain English**: Your computer doesn't have Node.js installed, or the version is too old.
 
-If you still can't see them after restarting:
+**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v20 or higher recommended). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
 
-1. **Check mcporter.json format**:
-   ```bash
-   python3 -m json.tool ~/.mcporter/mcporter.json
-   ```
-   If there's a JSON syntax error, fix the format issues and restart.
+### Error Says "command not found: python3"
 
-2. **Check mcporter.json contents**: Confirm there are Server entries under `mcpServers` for what you installed.
+**Plain English**: Your computer is missing a basic runtime environment called Python.
 
-3. **Manually test MCP Server**:
-   ```bash
-   npx -y @bankofai/mcp-server-tron
-   ```
-   If this command starts normally (shows logging output), the MCP Server itself is fine; the issue is in OpenClaw's configuration reading.
+**How to fix**: Go to the [Python official website](https://www.python.org/downloads/) and download and install it.
 
-### Only query tools available, no write tools like transfers
+### AgentWallet (AI Vault) Installation Failed
 
-This is by design. Write tools only appear after wallet credentials are configured. Check if any of these are set:
+**How to fix**:
 
-- Environment variable `TRON_PRIVATE_KEY` (mcp-server-tron)
-- Environment variable `PRIVATE_KEY` (bnbchain-mcp)
-- `env.TRON_PRIVATE_KEY` or `env.PRIVATE_KEY` for corresponding Server in mcporter.json
-
-
-### MCP Server startup timeout
-
-If OpenClaw times out starting an MCP Server, it may be that npx is downloading packages too slowly. The first run downloads packages from npm, which can take tens of seconds.
-
-Speed this up by pre-downloading:
-
-```bash
-npx -y @bankofai/mcp-server-tron --help
-npx -y @bnb-chain/mcp@latest --help
-```
-
-After downloading completes, subsequent startups will use cache and be much faster.
+1. Double-check that your Node.js version is new enough.
+2. Sometimes it's simply a network timeout — wait a couple of minutes and run the installation command again.
+3. If it keeps getting stuck, try manually deleting the `~/.agent-wallet` folder and starting over from scratch.
 
 ---
 
-## Credential Issues
+## Installation Finished, But AI Acts Clueless
 
-### "Invalid private key" error
+### AI Says "I Don't Have Blockchain Tools" or "I Don't Know What SunSwap Is"
 
-**TRON private key** should be a 64-character hexadecimal string, with or without `0x` prefix.
+**Most likely cause**: You were too eager after installation and **didn't restart the OpenClaw software**.
 
-**EVM private key** should have `0x` prefix. The installer automatically adds `0x` to private keys without it, but if you manually edit config files, ensure the format is correct.
+**How to fix**: Completely quit OpenClaw (on Mac press `Command+Q`), then reopen it so the AI can reload its new brain.
 
-Common mistakes:
-- Extra spaces, newlines, or quote nesting
-- Invisible characters when copying from elsewhere
+### AI Can Fetch Data, But Answers Are Messy and Often Wrong?
 
-Validation: Import the private key into the appropriate wallet (TronLink or MetaMask) to confirm validity.
+**Most likely cause**: The underlying AI model version you're using is too weak. It's like asking a grade-schooler to do high school math — it's not that they're not trying, they just don't have the capacity.
 
-### TronGrid API Key not working
+**How to fix**: Open OpenClaw settings and upgrade to a more powerful model version. The stronger the model, the more accurately AI understands your commands and the fewer mistakes it makes when calling tools.
 
-1. **Is variable name correct?**: Must be `TRONGRID_API_KEY` (not `TRON_API_KEY`)
-2. **Is Key still valid?**: Log in to [trongrid.io](https://www.trongrid.io/) to check status
-3. **Is it properly loaded?**: If set in environment variables, confirm you ran `source ~/.zshrc`
+### Why Can Others Send Transfers While My AI Can Only Read Data?
 
+**Reason**: Your AI is currently in ultra-safe "read-only mode." This is because you skipped the AgentWallet configuration during installation and didn't provide it with wallet keys.
 
-### BANK OF AI API Key invalid
-
-Check contents of `~/.mcporter/bankofai-config.json` (or `~/.bankofai/config.json`):
-
-```bash
-cat ~/.mcporter/bankofai-config.json
-```
-
-Confirm the `api_key` field contains a valid Key. Note that recharge-skill has a credential priority order (CLI arguments > environment variables > `bankofai-config.json` in working directory > `~/.bankofai/config.json` > `~/.mcporter/bankofai-config.json`); if you set different values in multiple places, you might read the unexpected one.
+**How to fix**: Run the installation script again. At the AgentWallet setup level, follow the prompts carefully to properly configure your wallet. After configuring and restarting, transfer and trading functions will be activated.
 
 ---
 
-## Runtime Problems
+## Passwords and Security Concerns
 
-### Rate limiting (429 errors)
+### Private Key Was Entered Wrong or Error Says "Invalid Private Key"
 
-Mainnet's public RPC has strict rate limits. Solutions:
+**Reason**: The current installer uses AgentWallet to manage wallets, so you generally don't need to manually enter private keys anymore. However, if you're using the BNB Chain toolbox (bnbchain-mcp) and manually configuring a private key, you might have accidentally copied an extra space or line break.
 
-- **Configure TronGrid API Key**: After free registration, set `TRONGRID_API_KEY`, significantly increasing quota
-- **Use testnet**: Nile and Shasta testnets have fewer restrictions
-- **Reduce concurrent queries**: In prompts, avoid having the AI execute large numbers of queries simultaneously
+**How to fix**: Carefully copy it again. EVM (BNB/Ethereum) private keys should start with `0x` — if you're manually editing the file, make sure you don't miss that prefix.
 
-### Skill execution failed
+### AI Reports "Rate Limited" or "429 Error"
 
-If a Skill errors, troubleshoot in this order:
+**Plain English**: You're making AI query data too fast, and the free network channel thinks you're a bot and temporarily blocked you.
 
-1. **Check if dependencies are installed**:
-   ```bash
-   cd ~/.openclaw/skills/<skill-name>
-   npm install  # if there's package.json
-   ```
+**How to fix**:
 
-2. **Check Node.js version**: Some Skills require >= 18.0.0.
-
-### Transaction failed
-
-Common reasons for on-chain transaction failures:
-
-- **Insufficient balance**: TRX balance doesn't cover gas fees (bandwidth/energy)
-- **Insufficient energy**: Smart contract calls (including TRC20 transfers) consume energy
-- **Account not activated**: New TRON addresses need to receive one TRX first to activate
-- **Insufficient approval**: TRC20 token transfers may require prior approval
-
-Use mcp-server-tron's `get_transaction_info` tool to see the specific reason for transaction failure.
+1. **Quick fix**: Wait a few minutes before asking again.
+2. **Permanent fix**: Go to [TronGrid](https://www.trongrid.io/) and apply for a free dedicated API Key. Enter this key during installation, and AI will be able to use the VIP express lane.
 
 ---
 
-## General Questions
+## Tinkering Freely (Uninstall & Reinstall)
 
-### Can I install only some components?
+### Can I Install Just One Skill Without the Others?
 
-Yes. The installer lets you selectively install at each stage. For example, you can install only mcp-server-tron without other MCP Servers, or only sunswap Skill while skipping others.
+Absolutely! When the installation wizard reaches Level 4, it will list all skills. Just use the Space key to check only the ones you want, leave the rest unchecked, and press Enter to confirm.
 
-### Can I run the installer multiple times?
+### I'm Done With It — How Do I Uninstall?
 
-Yes. The installer uses deep merge strategy for mcporter.json and won't overwrite existing configurations. For Skills, if a Skill with the same name already exists at the target location, it will ask if you want to overwrite.
+The simplest brute-force method: Open your file manager, find the `~/.openclaw/skills/` directory, delete the skill folder(s) you no longer want, then restart the AI software — they'll be completely gone.
 
-### How do I completely uninstall?
+### I Messed Everything Up — Can I Reinstall?
 
-OpenClaw Extension has no automatic uninstaller. Manual uninstall steps:
+Reinstall anytime! Don't worry about breaking your computer.
 
-1. **Remove MCP Server configuration**: Edit `~/.mcporter/mcporter.json`, remove corresponding Server entries
-2. **Delete Skills**: Delete Skill folders in installation directory (default `~/.openclaw/skills/`)
-3. **Delete credential files**:
-   ```bash
-   rm -f ~/.x402-config.json
-   rm -f ~/.mcporter/bankofai-config.json
-   rm -f ~/.bankofai/config.json
-   rm -f ~/.clawdbot/wallets/.deployer_pk
-   ```
-4. **Clean environment variables**: Remove related export statements from `~/.zshrc` or `~/.bashrc`
-
-### Which operating systems are supported?
-
-The installer is a Bash script supporting:
-- **macOS** (Intel and Apple Silicon)
-- **Linux** (Ubuntu, Debian, CentOS, etc.)
-- **Windows**: Requires WSL (Windows Subsystem for Linux) to run
-
-### What's the difference from TRON MCP Server's official cloud service?
-
-The [official cloud service](../McpServer-Skills/MCP/TRONMCPServer/OfficialServerAccess.md) is a remote-hosted read-only MCP Server, requiring no local installation. OpenClaw Extension runs the MCP Server locally, and with private keys configured, unlocks full read-write capabilities.
-
-If you only need to query on-chain data, cloud service is simpler. If you need transfers, contract writes, or want to use Skills (like SunSwap trading), you need OpenClaw Extension.
+- **Option 1 (Normal installation)**: Run the script again and it will automatically patch whatever's missing.
+- **Option 2 (Clean install)**: If you want to start completely from scratch, choose this one. It will wipe all your old toolboxes, skills, and configurations clean, giving you a fresh new environment. To prevent accidental triggers, it will ask you to manually type `CLEAN` to confirm.
 
 ---
 
-## Next Steps
+## Still Can't Figure It Out?
 
-- Start fresh → [Quick Start](./QuickStart.md)
+👉 Go back to **[Quick Start](./QuickStart.md)** and follow along from step one again — that usually solves 99% of the problems.

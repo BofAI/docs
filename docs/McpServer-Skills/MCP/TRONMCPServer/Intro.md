@@ -8,7 +8,7 @@ For example: just tell Claude "Check how much USDT this address has", and the AI
 
 This means different things to different people:
 
-- If you are an **AI application user**, it lets you operate blockchain directly in Claude Desktop, Cursor, and other tools — as easy as everyday chat.
+- If you are an **AI application user**, it lets you operate blockchain directly in MCP-compatible AI tools — as easy as everyday chat.
 - If you are a **Web3 developer**, it's your rapid on-chain prototyping tool — debug contracts and query state in natural language, saving vast amounts of boilerplate code.
 - If you are an **AI Agent builder**, it provides 95 standardized on-chain tools that can be orchestrated directly into your automation workflows.
 - If you are a **data analyst**, it turns on-chain data queries into conversation — no more writing scripts to scrape and parse.
@@ -82,7 +82,7 @@ Specify the target network via the `network` parameter when calling tools, e.g.,
 :::warning
 Before getting started, keep these security principles in mind — especially for operations involving real assets:
 
-- **Never hardcode private keys**: Do not write private keys or mnemonic phrases directly in configuration files (such as `claude_desktop_config.json`). Use system environment variables or an encrypted wallet instead.
+- **Never hardcode private keys**: Do not write private keys or mnemonic phrases directly in configuration files. Use system environment variables or an encrypted wallet instead.
 - **Test on testnet first**: Always run through and verify on Nile or Shasta testnets before performing any operation on Mainnet.
 - **Minimum funds principle**: The wallet configured for AI agents should only hold the minimum funds required for the task.
 - **Pay attention to authorization risks**: Be especially cautious with token approval (`approve`) operations — avoid granting unlimited authorization.

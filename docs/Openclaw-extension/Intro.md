@@ -1,62 +1,60 @@
 # Introduction
 
-## What is OpenClaw Extension?
+Make your AI understand blockchain with one click.
 
-OpenClaw Extension is a toolkit developed by **BANK OF AI** that equips [OpenClaw](https://github.com/openclaw) (an open-source AI assistant) with **blockchain interaction capabilities**. Once installed, your AI assistant can directly manage on-chain assets — check balances, initiate transfers, invoke smart contracts, and swap tokens on DEXs — all through natural language conversation.
+Have you ever wished that checking on-chain data, swapping tokens, or viewing balances didn't require opening dozens of web pages or staring at complex apps?
 
-Traditionally, enabling an AI to interact with blockchain requires you to manually set up MCP Servers, manage configuration files, and install various tools individually. OpenClaw Extension packages all of this into an interactive installer — run one command, follow the prompts to select the components you need, and within minutes your AI assistant will have multi-chain operation capabilities.
+All you need to do is send a simple message — just like chatting with a friend — and let your AI assistant handle all the heavy lifting.
 
----
-
-## Core Vision
-
-OpenClaw Extension aims to build a financial infrastructure for the AI agent economy — enabling every AI agent with independent financial capabilities:
-
-- **Earn Revenue**: Receive payments for tasks and services through standard interfaces like the x402 protocol
-- **Autonomous Spending**: Independently pay for compute, data, and storage resources
-- **Agent Interconnection**: Facilitate direct financial transactions and settlements between agents (A2A)
-- **DeFi Interaction**: Seamlessly interact with decentralized finance protocols and smart contracts
+**OpenClaw Extension is the "one-click installer" that makes this magic happen.**
 
 ---
 
-## What Does It Include?
+## How Does the Magic Work?
 
-OpenClaw Extension consists of two main categories of components: **MCP Servers** and **Skills**. You can choose which components to enable at installation time.
+Previously, AI was just a "know-it-all" that could only talk the talk. To make it actually do things for you, our installer equips it with two core weapons:
 
-### MCP Server — On-Chain Operation Capabilities
+### 🛠️ 1. Toolbox (MCP Server) — Giving AI "Hands"
 
-MCP Servers are bridges between your AI assistant and the blockchain, providing on-chain operation capabilities through the [Model Context Protocol (MCP)](../McpServer-Skills/MCP/Intro.md) standard interface. Currently supports MCP Servers for two blockchain chains plus one remote recharge service:
+This is the cable that connects AI to the blockchain. Once installed, AI gains the ability to directly read from and write to the blockchain.
 
-| MCP Server | Target | Core Capabilities |
-| :--- | :--- | :--- |
-| **[mcp-server-tron](https://github.com/BofAI/mcp-server-tron)** | TRON | 95 tools covering wallets, transfers, contracts, staking, governance, and all operations |
-| **[bnbchain-mcp](https://github.com/bnb-chain/bnbchain-mcp)** | BSC / opBNB / Ethereum | Multi-chain EVM operations, wallets, contracts, cross-chain |
-| **bankofai-recharge** | BANK OF AI (Remote) | Remote recharge MCP — top up your BANK OF AI account via on-chain USDT. Default endpoint: `https://recharge.bankofai.io/mcp` |
+Currently supported:
 
-### Skills — Pre-built Workflows
+- **TRON Toolbox**: Check balances, send transfers, and interact with the TRON ecosystem.
+- **BNB Chain Toolbox**: Supports multi-chain operations on BSC, Ethereum, and more.
+- **Top-up Assistant**: Helps you remotely top up your BANK OF AI account.
 
-Skills are encapsulated business process templates. Unlike individual tools provided by MCP Servers, a single Skill can chain multiple operations together to complete complex tasks — for example, "swap tokens on SunSwap" involves checking prices, verifying balances, executing the swap, and confirming results, all handled by one Skill.
+### 🧠 2. Skill Packs (Skills) — Giving AI a "Brain"
 
-| Skill | Functionality |
-| :--- | :--- |
-| **sunswap** | SunSwap DEX trading including balance queries, quotes, swaps, and liquidity management |
-| **sunperp-skill** | SunPerp perpetual futures trading — market data, orders, positions, leverage, withdrawals |
-| **tronscan-skill** | Query on-chain data via TronScan API (accounts, transactions, tokens, blocks, network statistics) |
-| **x402-payment** | x402 payment skill for calling paid agents and APIs |
-| **recharge-skill** | BANK OF AI balance and order queries, plus TRC20 recharge via MCP |
+Having hands isn't enough — AI needs to know how to handle tasks step by step. Skill packs are the pre-written "recipes" we've prepared.
 
+For example, the **"sunswap" skill** teaches AI: "When the user wants to swap tokens, first check the price, then calculate the fees, and finally send the bill to the user for confirmation — never spend money recklessly."
 
 ---
 
-## Who Should Use This?
+## 🌟 How Great Is the Experience After Installation?
 
-- **OpenClaw Users**: Want your AI assistant to interact directly with blockchain without manually setting up MCP Servers
-- **Web3 Developers**: Need a quick on-chain development environment to debug contracts and query data using natural language
-- **AI Agent Builders**: Need to equip automation agents with multi-chain operation capabilities
-- **DeFi Users**: Want to use your AI assistant to trade on SunSwap or manage liquidity
+Once installed, your AI instantly transforms into an incredibly professional personal Web3 assistant. Try giving it commands like these:
+
+> **"Check if TRON energy fees are expensive right now."**
+>
+> **"How much TRX can I get for 100 USDT on SunSwap? Is it worth it after fees?"**
+>
+> **"How much balance is left in my wallet? Also check my holdings of that meme coin from yesterday."**
+
+It will chew through all the boring code and data and serve it up to you in plain language.
 
 ---
 
-## Next Steps
+## Is This for Me?
 
-- Want to get started immediately? → [Quick Start](./QuickStart.md)
+- **I'm a beginner**: Perfect! If you don't want to deal with code and just want to use plain language to have AI help you check data and make trades, this was tailor-made for you.
+- **I'm a Web3 veteran**: Tired of opening web pages and connecting wallets every day? Want a personal trading assistant on call 24/7? It can save you tons of time watching charts.
+
+---
+
+## Can't Wait?
+
+Don't hesitate — the entire installation process is as simple as microwaving a meal, taking just a few minutes.
+
+👉 **[Go to Quick Start and upgrade your AI!](./QuickStart.md)**

@@ -1,6 +1,3 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # Quick Start
 
 The goal of this page is simple: **get you connected in 1 minute and make your first blockchain query.**
@@ -13,7 +10,7 @@ We'll use the [official cloud service](./OfficialServerAccess.md) for this quick
 
 Before you begin, make sure you have the following installed:
 
-- Any AI client that supports MCP: for example [Claude Desktop](https://claude.ai/download), [Claude Code](https://docs.anthropic.com/en/docs/claude-code), or [Cursor](https://cursor.sh).
+- Any AI client that supports MCP
 - **Node.js v20.0.0 or higher** (needed for `npx` command execution) ([Node.js Download](https://nodejs.org/))
 
 Verify your Node.js version:
@@ -24,59 +21,21 @@ node --version  # should output v20.x.x or higher
 
 ---
 
-## Add Configuration
+## Install
 
-Choose your AI client and copy in the corresponding configuration:
-
-<Tabs>
-<TabItem value="Claude Desktop" label="Claude Desktop">
-
-Open your configuration file:
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-Add the following content:
-
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "https://tron-mcp-server.bankofai.io/mcp"
-      ]
-    }
-  }
-}
-```
-
-</TabItem>
-<TabItem value="Claude Code" label="Claude Code">
-
-Run the following command in your terminal:
+Simply tell your AI Agent to execute the following command:
 
 ```bash
-claude mcp add --transport http mcp-server-tron https://tron-mcp-server.bankofai.io/mcp
+npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
 ```
 
-</TabItem>
-<TabItem value="Cursor" label="Cursor">
+The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
 
-Add the following to your project root `.cursor/mcp.json`:
+After the command completes, restart your MCP client.
 
-```json
-{
-  "mcpServers": {
-    "mcp-server-tron": {
-      "url": "https://tron-mcp-server.bankofai.io/mcp"
-    }
-  }
-}
-```
-
-</TabItem>
-</Tabs>
+:::tip Want to choose which AI tools to install to?
+Remove the `-y` flag to enter interactive installation mode. See [Official Cloud Service Access](./OfficialServerAccess.md) for details.
+:::
 
 ---
 
