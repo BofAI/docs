@@ -128,7 +128,7 @@ Want to trade contracts? This skill handles market data, opening/closing positio
 
 Want to know what's happening on-chain? This skill looks up accounts, transactions, tokens, blocks, and network stats. **Pure read-only, completely safe, costs nothing, needs no credentials.** The perfect first skill to get started.
 
-> Look up the full account info and holdings for address TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf.
+> Look up the full account info and holdings for address TDqSq...xxxxx.
 
 > Show me the details of this transaction: abc123...
 
@@ -186,7 +186,7 @@ Want to add multi-signature protection to your TRON account? This skill manages 
 
 > Check my account's current permission setup.
 
-> Check the permission configuration for address TXk8rQSAvPvBBNtqSoY3UkFdpMTMbqRMKU.
+> Check the permission configuration for address TXk8r...xxxxx.
 
 > List all pending multi-sig proposals.
 

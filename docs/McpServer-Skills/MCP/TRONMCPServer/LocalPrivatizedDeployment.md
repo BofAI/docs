@@ -189,7 +189,7 @@ If everything is working, the AI will call the `get_wallet_address` tool and ret
 You can also try a testnet transfer (make sure you have test TRX on Nile):
 
 ```
-Transfer 1 TRX to address TNPeeaaFB7K9cmo4uQpcU32zGK8G1NYqeL on the Nile testnet
+Transfer 1 TRX to address TNPee...xxxxx on the Nile testnet
 ```
 
 :::info Getting Test TRX
