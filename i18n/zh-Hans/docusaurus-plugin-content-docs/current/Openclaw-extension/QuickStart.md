@@ -160,7 +160,7 @@ Active wallet: default_secure
 ✓ AgentWallet setup completed
 ```
 
-（🚑 报错卡住了？👉 [点这里看 AgentWallet 安装失败怎么救](./FAQ.md#agentwallet-ai-保险柜安装失败了)）
+（🚑 报错卡住了？👉 [点这里看 AgentWallet 安装失败怎么救](./FAQ.md#agentwallet-安装失败了)）
 
 ### 🟢 第 3 关：挑选工具箱（给 AI 装"手"）
 
@@ -188,7 +188,7 @@ This step configures network access for TRON MCP.
 ? Enter TRONGRID_API_KEY (optional):
 ```
 
-⚠️ **前方高能：向导问你要 API Key 了！** 这是 VIP 通行证，有了它查数据就不卡。**现在没有？直接按回车跳过！** 完全不影响安装，以后随时补填。
+⚠️ **这里安装器会问你要 `TRONGRID_API_KEY`。** 这是 TronGrid 的专属访问密钥，有了它查数据就不会被限速。**现在没有？直接按回车跳过！** 完全不影响安装，以后随时补填。
 
 配置成功后你会看到 `add-mcp` 的安装横幅和：
 

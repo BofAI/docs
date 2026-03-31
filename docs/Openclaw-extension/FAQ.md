@@ -8,17 +8,17 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 ### Error Says "command not found: node" or "npm install Failed"
 
-**Plain English**: Your computer doesn't have Node.js installed, or the version is too old.
+**In short**: Your computer doesn't have Node.js installed, or the version is too old.
 
 **How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v18 or higher recommended). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
 
 ### Error Says "command not found: git"
 
-**Plain English**: Your computer is missing Git, a tool used to download skill packs.
+**In short**: Your computer is missing Git, a tool used to download skill packs.
 
 **How to fix**: Go to the [Git official website](https://git-scm.com/downloads) and download and install it.
 
-### AgentWallet (AI Vault) Installation Failed
+### AgentWallet Installation Failed
 
 **How to fix**:
 
@@ -78,7 +78,7 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 ### AI Reports "Rate Limited" or "429 Error"
 
-**Plain English**: You're making AI query data too fast, and the free network channel thinks you're a bot and temporarily blocked you.
+**In short**: You're making AI query data too fast, and the free network channel thinks you're a bot and temporarily blocked you.
 
 **How to fix**:
 

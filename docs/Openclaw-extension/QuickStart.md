@@ -160,7 +160,7 @@ Active wallet: default_secure
 ✓ AgentWallet setup completed
 ```
 
-(🚑 Got stuck with an error? 👉 [Click here to see how to fix AgentWallet installation failures](./FAQ.md#agentwallet-ai-vault-installation-failed))
+(🚑 Got stuck with an error? 👉 [Click here to see how to fix AgentWallet installation failures](./FAQ.md#agentwallet-installation-failed))
 
 ### 🟢 Level 3: Pick Your Toolbox (Give AI "Hands")
 
@@ -188,7 +188,7 @@ This step configures network access for TRON MCP.
 ? Enter TRONGRID_API_KEY (optional):
 ```
 
-⚠️ **API Key prompt!** This is a VIP pass — having one means data queries won't be throttled. **Don't have one? Just press Enter to skip!** It won't affect your installation at all. You can always add it later.
+⚠️ **The installer is asking for your `TRONGRID_API_KEY`.** This is your dedicated TronGrid access key — having one means data queries won't be throttled. **Don't have one? Just press Enter to skip!** It won't affect your installation at all. You can always add it later.
 
 When it succeeds, you'll see the `add-mcp` banner and:
 

@@ -1,14 +1,13 @@
 # Introduction
 
-## One Click to Evolve Your AI into a Web3 Power Butler
+## 💡 Why OpenClaw Extension?
 
-Ever had one of those meltdown moments: just to check a single on-chain transaction, swap a token, or glance at your balance, you had to open a dozen web pages and stare at cluttered App interfaces that look like ancient hieroglyphics? Or that sinking feeling every time you click "Authorize Transaction," terrified that one wrong tap and your money is gone?
+In a multi-chain Web3 world, managing assets often means constant "context switching" and repetition:
 
-Now, leave all that anxiety behind.
+- **Fragmented workflows**: Want to swap tokens or check balances across different chains? You have to keep switching wallet networks, find the right DEX for each ecosystem, and verify contract addresses. All this jumping between tools drains your energy.
+- **Mental pressure of execution**: Every transaction requires you to manually adjust slippage and calculate gas fees. Facing authorization code you can't fully understand, the anxiety of "what if I click wrong" adds unnecessary mental burden to every operation.
 
-Imagine this — you just say something like you normally would in a chat, and all the tedious steps (calculating fees, checking contracts) are handled by your AI assistant.
-
-**OpenClaw Extension is the "one-click installer" that makes this magic happen.** Whether you're on macOS, Linux, or Windows — one command, all platforms covered.
+OpenClaw Extension exists to shift your Web3 experience from "doing everything manually" to "just say the word." Instead of drowning you in tedious configuration, it uses an automated flow to install AgentWallet, MCP services (execution tools), and pre-built skills (trading brain) in one go — giving your AI assistant the ability to deeply participate in on-chain operations. Whether you're on macOS, Linux, or Windows, just one simple command launches a guided wizard that sets up your entire environment.
 
 ---
 
