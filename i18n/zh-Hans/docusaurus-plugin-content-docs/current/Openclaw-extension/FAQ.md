@@ -24,7 +24,25 @@
 
 1. 再次确认你的 Node.js 版本是否足够新。
 2. 有时候纯粹是网络太卡下载超时了，喝口水等两分钟重新运行一次安装代码即可。
-3. 如果一直卡住，可以试着手动把旧的 `~/.agent-wallet` 文件夹删掉，从头再来。
+3. 如果一直卡住，可以试着手动把旧的 `~/.agent-wallet`（Mac/Linux）或 `%USERPROFILE%\.agent-wallet`（Windows）文件夹删掉，从头再来。
+
+### Windows 上报错 "无法加载文件，因为在此系统上禁止运行脚本"
+
+**原因**：你的 PowerShell 执行策略比较严格，不允许运行脚本。
+
+**怎么解决**：不要直接双击 `install.ps1`，请用以下两种方式之一：
+
+1. **推荐**：双击 `install.bat`——它会自动绕过执行策略。
+2. 或者在 PowerShell 中手动运行：`powershell -ExecutionPolicy Bypass -File install.ps1`
+
+### Windows 上终端显示乱码（奇怪的方块或问号）
+
+**原因**：你的终端不支持 ANSI 颜色转义码。
+
+**怎么解决**：安装器会自动尝试启用虚拟终端处理。如果仍有问题：
+
+1. 确认你的系统是 **Windows 10 build 1511** 以上版本。
+2. 推荐使用 **Windows Terminal**（在 Microsoft Store 免费下载）替代默认的 cmd.exe 或旧版 PowerShell 窗口。
 
 ---
 
@@ -34,7 +52,7 @@
 
 **最可能的原因**：你装完之后太心急，**没有重启 OpenClaw 软件**。
 
-**怎么解决**：把 OpenClaw 彻底退出（苹果电脑按 `Command+Q`），重新打开，让 AI 重新读取一下它的新脑子。
+**怎么解决**：把 OpenClaw 彻底退出（苹果电脑按 `Command+Q`，Windows 在任务栏右键退出或按 `Alt+F4`），重新打开，让 AI 重新读取一下它的新脑子。
 
 ### AI 能查到数据，但回答乱七八糟、经常出错？
 
@@ -77,7 +95,7 @@
 
 ### 玩腻了，怎么卸载它们？
 
-最简单粗暴的方法：打开电脑的文件夹，找到 `~/.openclaw/skills/` 目录，把你不想用的技能文件夹直接删掉，然后重启 AI 软件，它就彻底消失了。
+最简单粗暴的方法：打开电脑的文件夹，找到 `~/.openclaw/skills/`（Mac/Linux）或 `%USERPROFILE%\.openclaw\skills\`（Windows）目录，把你不想用的技能文件夹直接删掉，然后重启 AI 软件，它就彻底消失了。
 
 ### 我瞎填了一通装坏了，能重新装吗？
 
@@ -85,6 +103,22 @@
 
 - **选 1（普通安装）**：重新跑一次脚本，它会自动修补你缺的东西。
 - **选 2（全新安装 - Clean install）**：如果你想彻底从头来过，选这个。它会把你旧的工具箱、技能、配置全部格式化清空，给你一个干干净净的新环境。为了防止你误触，它还会要求你手动输入 `CLEAN` 这几个字母来确认。
+
+---
+
+## Windows 专区
+
+### 安装需要管理员权限吗？
+
+不需要。安装器只写入当前用户目录下的配置文件，不会修改系统文件、注册表或 Program Files 目录。
+
+### Windows 和 Mac/Linux 的安装体验一样吗？
+
+一模一样。Windows 安装器 (`install.ps1`) 是 Linux/macOS 版本 (`install.sh`) 的完整移植——相同的安装流程、相同的多选菜单、相同的配置文件结构。唯一的区别是文件路径从 `~/` 变成了 `%USERPROFILE%\`，文件权限从 `chmod 600` 变成了 `icacls` ACL。
+
+### 可以用 WSL (Windows Subsystem for Linux) 安装吗？
+
+可以，但不推荐。如果你在 WSL 中安装，配置文件会写入 WSL 的 Linux 文件系统，而不是 Windows 的 `%USERPROFILE%`。这意味着 Windows 原生的 OpenClaw 可能读不到这些配置。如果你的 OpenClaw 是 Windows 原生版本，请直接用 `install.bat` 或 `irm | iex` 安装。
 
 ---
 

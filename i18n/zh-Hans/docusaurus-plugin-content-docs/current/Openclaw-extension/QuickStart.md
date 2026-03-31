@@ -12,21 +12,63 @@
 2. **Node.js**（请务必安装 v18 或以上版本）：这是技能包和配置工具运行的基础环境。*（极其重要，版本太低一定会报错！）*
 3. **Git**：用来下载技能包的小工具。
 
+**Windows 用户额外注意：**
+- 需要 **Windows 10**（1511 以上版本）或 **Windows 11**
+- **PowerShell 5.1+**（Win10/11 自带，无需额外安装）
+- 在 PowerShell 中输入 `$PSVersionTable.PSVersion` 可确认版本
+
 ---
 
 ## 🚀 第一步：一键通关安装
 
 打开你电脑上的"终端"（也就是那个黑框框）。
 
-- **苹果电脑：** 按 `Command + 空格`，在弹出的搜索框里输入 `Terminal`，按回车。
+- **苹果电脑 / Linux：** 按 `Command + 空格`（Mac）或在应用菜单中搜索 `Terminal`，按回车打开。
+- **Windows：** 按 `Win + X`，选择 **Windows PowerShell** 或 **终端**；或者在开始菜单搜索 `PowerShell`。
 
-把下面这行神奇的代码**完整复制**，粘贴进去，按回车：
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+<TabItem value="mac" label="Linux / macOS" default>
+
+把下面这行代码**完整复制**，粘贴进终端，按回车：
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
 ```
 
-🚑 **急救包：敲完回车就报错了？** 如果屏幕提示 `command not found: node` 或 `command not found: git`，说明你的电脑缺少上面说的基础环境。👉 [点这里看怎么解决](./FAQ.md#报错里写着-command-not-found-node-或-npm-install-失败)
+或者从源码安装：
+
+```bash
+git clone https://github.com/BofAI/openclaw-extension.git
+cd openclaw-extension
+./install.sh
+```
+
+</TabItem>
+<TabItem value="win" label="Windows">
+
+把下面这行代码**完整复制**，粘贴进 PowerShell，按回车：
+
+```powershell
+irm https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.ps1 | iex
+```
+
+或者从源码安装：
+
+```cmd
+git clone https://github.com/BofAI/openclaw-extension.git
+cd openclaw-extension
+install.bat
+```
+
+> `install.bat` 是一个 6 行的启动器，会自动以正确的执行策略调用 `install.ps1`——你不需要手动配置任何 PowerShell 策略。
+
+</TabItem>
+</Tabs>
+
+🚑 **急救包：敲完回车就报错了？** 如果屏幕提示 `command not found: node`（Mac/Linux）或 `node 不是内部命令`（Windows），说明你的电脑缺少上面说的基础环境。👉 [点这里看怎么解决](./FAQ.md#报错里写着-command-not-found-node-或-npm-install-失败)
 
 如果没有报错，屏幕上会跳出安装向导。请把它当成一个文字小游戏，整个流程分 4 关：
 
@@ -218,7 +260,7 @@ Select skills installation scope:
 | **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
 | **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
 | **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
-| **x402-payment** | 代理之间的支付，支持 Gasfree（免 Gas）模式 |
+| **x402-payment** | x402 协议支付（Agent 间付款） |
 | **recharge-skill** | 查询和充值 BANK OF AI 余额 |
 
 选完后，安装器会显示安全风险评估：
@@ -274,7 +316,7 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
 
 安装完成后，有一步绝对不能漏：**彻底关掉你的 OpenClaw 软件，然后重新打开它。**
 
-🚑 **急救包：AI 像个傻子？** 如果它回答"我不知道什么是 SunSwap"，99% 是因为你刚才没重启。👉 [点这里看怎么彻底重启](./FAQ.md#ai-委屈地说我没有查区块链的工具-或-我不知道什么是-sunswap)
+🚑 **急救包：AI 像个傻子？** 如果它回答"我不知道什么是 SunSwap"，99% 是因为你刚才没重启。Mac 按 `Command+Q`，Windows 在任务栏右键退出或按 `Alt+F4`。👉 [点这里看怎么彻底重启](./FAQ.md#ai-委屈地说我没有查区块链的工具-或-我不知道什么是-sunswap)
 
 打开对话框，对你的 AI 发出第一个指令：
 
@@ -314,6 +356,9 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
 
 #### 🔧 A 类钥匙：填入"隐形便签"（适用于 TRONGRID 和 TRONSCAN）
 
+<Tabs>
+<TabItem value="mac" label="Linux / macOS" default>
+
 1. 在终端输入 `open -e ~/.zshrc` 并回车。
 2. 在弹出的记事本最下方，粘贴这行代码（注意保留双引号 `""`）：
    ```
@@ -322,30 +367,82 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
    ```
 3. 按 `Command + S` 保存关闭，然后重新打开终端或重启 OpenClaw 即可生效。
 
+</TabItem>
+<TabItem value="win" label="Windows">
+
+1. 按 `Win + R`，输入 `sysdm.cpl`，回车打开系统属性。
+2. 点 **高级** 选项卡 → **环境变量**。
+3. 在"用户变量"中点 **新建**，分别添加：
+   - 变量名：`TRONGRID_API_KEY`，变量值：你的 TronGrid Key
+   - 变量名：`TRONSCAN_API_KEY`，变量值：你的 TronScan Key
+4. 确定保存，然后重启 OpenClaw 即可生效。
+
+或者直接在 PowerShell 中运行（永久写入用户环境变量）：
+
+```powershell
+[Environment]::SetEnvironmentVariable("TRONGRID_API_KEY", "你的TronGrid_Key填在这里", "User")
+[Environment]::SetEnvironmentVariable("TRONSCAN_API_KEY", "你的TronScan_Key填在这里", "User")
+```
+
+</TabItem>
+</Tabs>
+
 #### 🔧 B 类钥匙：一键生成配置文件（适用于 BANK OF AI）
 
-如果你拿到了这把钥匙，直接在终端（黑框框）里复制并运行下面的整段代码即可（记得把中文部分替换成你的真实 Key）：
+如果你拿到了这把钥匙，直接在终端里复制并运行下面的代码即可（记得把中文部分替换成你的真实 Key）：
 
 **配置 BANK OF AI：**
+
+<Tabs>
+<TabItem value="mac" label="Linux / macOS" default>
 
 ```bash
 mkdir -p ~/.mcporter && echo '{"api_key": "你的BANKOFAI_API_KEY填在这里", "base_url": "https://chat.bankofai.io/"}' > ~/.mcporter/bankofai-config.json
 ```
 
+</TabItem>
+<TabItem value="win" label="Windows">
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.mcporter" | Out-Null
+'{"api_key": "你的BANKOFAI_API_KEY填在这里", "base_url": "https://chat.bankofai.io/"}' | Out-File -Encoding utf8 "$env:USERPROFILE\.mcporter\bankofai-config.json"
+```
+
+</TabItem>
+</Tabs>
+
 ---
 
 ## 📋 配置文件速查表
 
-安装完成后，以下文件会被写入你的电脑。所有敏感文件的权限都设为 `600`（只有你自己能读写）：
+安装完成后，以下文件会被写入你的电脑。所有敏感文件的权限都设为 `600`（Mac/Linux）或仅限当前用户访问的 ACL（Windows）：
+
+<Tabs>
+<TabItem value="mac" label="Linux / macOS" default>
 
 | 文件 | 存了什么 |
 | :--- | :--- |
 | `~/.mcporter/mcporter.json` | MCP 服务器配置（包括 BNB Chain 私钥，如果你填了的话） |
-| `~/.x402-config.json` | x402-payment 的 Gasfree API 凭证 |
+| `~/.x402-config.json` | x402-payment 的 API 凭证 |
 | `~/.mcporter/bankofai-config.json` | BANK OF AI 的 API Key |
 | `~/.openclaw/skills/` | 全局安装的技能包 |
 | `.openclaw/skills/` | 工作区级别的技能包（选了选项 2 才有） |
 | `~/.agent-wallet/` | AgentWallet 加密钱包数据 |
+
+</TabItem>
+<TabItem value="win" label="Windows">
+
+| 文件 | 存了什么 |
+| :--- | :--- |
+| `%USERPROFILE%\.mcporter\mcporter.json` | MCP 服务器配置（包括 BNB Chain 私钥，如果你填了的话） |
+| `%USERPROFILE%\.x402-config.json` | x402-payment 的 API 凭证 |
+| `%USERPROFILE%\.mcporter\bankofai-config.json` | BANK OF AI 的 API Key |
+| `%USERPROFILE%\.openclaw\skills\` | 全局安装的技能包 |
+| `.openclaw\skills\` | 工作区级别的技能包（选了选项 2 才有） |
+| `%USERPROFILE%\.agent-wallet\` | AgentWallet 加密钱包数据 |
+
+</TabItem>
+</Tabs>
 
 ---
 
@@ -355,6 +452,7 @@ mkdir -p ~/.mcporter && echo '{"api_key": "你的BANKOFAI_API_KEY填在这里", 
 - **BNB Chain 私钥是明文存储的**，放在 `mcporter.json` 里。请用只存少量资金的钱包。
 - **先在测试网试跑**（TRON 用 Nile 测试网，BNB Chain 用 BSC Testnet），确认没问题再上真钱。
 - **主密码就是一切**——丢了就等于丢了钱包访问权限。找个安全的地方记下来。
+- **Windows 用户**：安装器会自动通过 `icacls` 将敏感配置文件设为仅当前用户可读写（等同于 Mac/Linux 的 `chmod 600`）。不需要管理员权限，也不会修改系统文件。
 
 ---
 

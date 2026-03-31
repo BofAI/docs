@@ -8,7 +8,7 @@ Now, leave all that anxiety behind.
 
 Imagine this — you just say something like you normally would in a chat, and all the tedious steps (calculating fees, checking contracts) are handled by your AI assistant.
 
-**OpenClaw Extension is the "one-click installer" that makes this magic happen.**
+**OpenClaw Extension is the "one-click installer" that makes this magic happen.** Whether you're on macOS, Linux, or Windows — one command, all platforms covered.
 
 ---
 
@@ -52,6 +52,7 @@ It will digest all the boring code and data for you, and report back in the clea
 
 - **I'm a total beginner**: Perfect! Don't want to deal with code, get dizzy looking at charts, and just want to chat with AI to help you check data and make trades? This was tailor-made for you.
 - **I'm a Web3 veteran**: Tired of opening web pages and connecting wallets every day? Want a personal trading assistant on call 24/7? It can save you tons of time watching charts and checking contracts.
+- **I'm a Windows user**: No problem at all! Since v1.4.5, OpenClaw Extension natively supports Windows 10/11. One PowerShell command and you're set — the experience is identical to Mac/Linux.
 
 ---
 

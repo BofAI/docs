@@ -12,13 +12,25 @@ Before you begin, make sure the following basic software is installed on your co
 2. **Node.js** (must be v18 or above): The runtime environment for skill packs and configuration. *(Extremely important — older versions will definitely cause errors!)*
 3. **Git**: A small tool used to download skill packs.
 
+**Windows users, additional requirements:**
+- **Windows 10** (build 1511+) or **Windows 11**
+- **PowerShell 5.1+** (comes pre-installed with Win10/11, no extra setup needed)
+- Run `$PSVersionTable.PSVersion` in PowerShell to confirm your version
+
 ---
 
 ## 🚀 Step 1: One-Click Installation
 
 Open the "Terminal" on your computer (that black window).
 
-- **Mac:** Press `Command + Space`, type `Terminal` in the search box, and hit Enter.
+- **Mac / Linux:** Press `Command + Space` (Mac) or search `Terminal` in the app menu, and hit Enter.
+- **Windows:** Press `Win + X` and select **Windows PowerShell** or **Terminal**; or search `PowerShell` in the Start menu.
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+<Tabs>
+<TabItem value="mac" label="Linux / macOS" default>
 
 **Copy the entire line below**, paste it into the terminal, and press Enter:
 
@@ -26,7 +38,37 @@ Open the "Terminal" on your computer (that black window).
 curl -fsSL https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.sh | bash
 ```
 
-🚑 **First Aid: Got an error right after pressing Enter?** If the screen says `command not found: node` or `command not found: git`, it means your computer is missing the prerequisites mentioned above. 👉 [Click here to see how to fix it](./FAQ.md#error-says-command-not-found-node-or-npm-install-failed)
+Or install from source:
+
+```bash
+git clone https://github.com/BofAI/openclaw-extension.git
+cd openclaw-extension
+./install.sh
+```
+
+</TabItem>
+<TabItem value="win" label="Windows">
+
+**Copy the entire line below**, paste it into PowerShell, and press Enter:
+
+```powershell
+irm https://raw.githubusercontent.com/BofAI/openclaw-extension/refs/heads/main/install.ps1 | iex
+```
+
+Or install from source:
+
+```cmd
+git clone https://github.com/BofAI/openclaw-extension.git
+cd openclaw-extension
+install.bat
+```
+
+> `install.bat` is a tiny 6-line launcher that automatically invokes `install.ps1` with the correct execution policy — no manual PowerShell configuration needed.
+
+</TabItem>
+</Tabs>
+
+🚑 **First Aid: Got an error right after pressing Enter?** If the screen says `command not found: node` (Mac/Linux) or `node is not recognized` (Windows), it means your computer is missing the prerequisites mentioned above. 👉 [Click here to see how to fix it](./FAQ.md#error-says-command-not-found-node-or-npm-install-failed)
 
 If there are no errors, an English wizard will appear on screen. Think of it as a text-based mini-game with 4 levels:
 
@@ -218,7 +260,7 @@ Here's what each skill does:
 | **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
 | **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
 | **TronScan Data Lookup** | Query blockchain data via TronScan |
-| **x402-payment** | Agent-to-agent payments with Gasfree (zero gas) support |
+| **x402-payment** | x402 protocol payments (agent-to-agent) |
 | **recharge-skill** | Check and top up your BANK OF AI balance |
 
 After selecting, the installer shows a security risk assessment:
@@ -274,7 +316,7 @@ When `Installation Complete!` lights up at the bottom of the screen — congratu
 
 After installation, there's one step you absolutely cannot skip: **Completely close your OpenClaw software, then reopen it.**
 
-🚑 **First Aid: AI acting clueless?** If it says "I don't know what SunSwap is," 99% of the time it's because you didn't restart. 👉 [Click here to see how to properly restart](./FAQ.md#ai-says-i-dont-have-blockchain-tools-or-i-dont-know-what-sunswap-is)
+🚑 **First Aid: AI acting clueless?** If it says "I don't know what SunSwap is," 99% of the time it's because you didn't restart. On Mac press `Command+Q`, on Windows right-click the taskbar icon and quit or press `Alt+F4`. 👉 [Click here to see how to properly restart](./FAQ.md#ai-says-i-dont-have-blockchain-tools-or-i-dont-know-what-sunswap-is)
 
 Open the chat window and send your AI its first command:
 
@@ -314,6 +356,9 @@ Once you have the corresponding key, choose the simple method below based on its
 
 #### 🔧 Type A Keys: Add to "Hidden Notepad" (For TRONGRID and TRONSCAN)
 
+<Tabs>
+<TabItem value="mac" label="Linux / macOS" default>
+
 1. Type `open -e ~/.zshrc` in the terminal and press Enter.
 2. At the bottom of the text editor that opens, paste these lines (keep the double quotes `""`):
    ```
@@ -322,30 +367,82 @@ Once you have the corresponding key, choose the simple method below based on its
    ```
 3. Press `Command + S` to save and close, then reopen the terminal or restart OpenClaw for changes to take effect.
 
+</TabItem>
+<TabItem value="win" label="Windows">
+
+1. Press `Win + R`, type `sysdm.cpl`, and press Enter to open System Properties.
+2. Click the **Advanced** tab → **Environment Variables**.
+3. Under "User variables", click **New** and add each key:
+   - Variable name: `TRONGRID_API_KEY`, Variable value: your TronGrid Key
+   - Variable name: `TRONSCAN_API_KEY`, Variable value: your TronScan Key
+4. Click OK to save, then restart OpenClaw for changes to take effect.
+
+Or run this in PowerShell (permanently sets user environment variables):
+
+```powershell
+[Environment]::SetEnvironmentVariable("TRONGRID_API_KEY", "paste_your_TronGrid_Key_here", "User")
+[Environment]::SetEnvironmentVariable("TRONSCAN_API_KEY", "paste_your_TronScan_Key_here", "User")
+```
+
+</TabItem>
+</Tabs>
+
 #### 🔧 Type B Keys: One-Click Config File (For BANK OF AI)
 
 If you have this key, simply copy and run the following command in the terminal (remember to replace the placeholder with your actual key):
 
 **Configure BANK OF AI:**
 
+<Tabs>
+<TabItem value="mac" label="Linux / macOS" default>
+
 ```bash
 mkdir -p ~/.mcporter && echo '{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://chat.bankofai.io/"}' > ~/.mcporter/bankofai-config.json
 ```
+
+</TabItem>
+<TabItem value="win" label="Windows">
+
+```powershell
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.mcporter" | Out-Null
+'{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://chat.bankofai.io/"}' | Out-File -Encoding utf8 "$env:USERPROFILE\.mcporter\bankofai-config.json"
+```
+
+</TabItem>
+</Tabs>
 
 ---
 
 ## 📋 Configuration File Reference
 
-After installation, the following files are created on your machine. All sensitive files are set to `600` permissions (only you can read them):
+After installation, the following files are created on your machine. All sensitive files are set to `600` permissions (Mac/Linux) or owner-only ACL via `icacls` (Windows):
+
+<Tabs>
+<TabItem value="mac" label="Linux / macOS" default>
 
 | File | What It Stores |
 | :--- | :--- |
 | `~/.mcporter/mcporter.json` | MCP server configurations (including BNB Chain private key if provided) |
-| `~/.x402-config.json` | Gasfree API credentials for x402-payment |
+| `~/.x402-config.json` | API credentials for x402-payment |
 | `~/.mcporter/bankofai-config.json` | BANK OF AI API key |
 | `~/.openclaw/skills/` | Globally installed skill packs |
 | `.openclaw/skills/` | Workspace-level skill packs (if you chose option 2) |
 | `~/.agent-wallet/` | AgentWallet encrypted wallet data |
+
+</TabItem>
+<TabItem value="win" label="Windows">
+
+| File | What It Stores |
+| :--- | :--- |
+| `%USERPROFILE%\.mcporter\mcporter.json` | MCP server configurations (including BNB Chain private key if provided) |
+| `%USERPROFILE%\.x402-config.json` | API credentials for x402-payment |
+| `%USERPROFILE%\.mcporter\bankofai-config.json` | BANK OF AI API key |
+| `%USERPROFILE%\.openclaw\skills\` | Globally installed skill packs |
+| `.openclaw\skills\` | Workspace-level skill packs (if you chose option 2) |
+| `%USERPROFILE%\.agent-wallet\` | AgentWallet encrypted wallet data |
+
+</TabItem>
+</Tabs>
 
 ---
 
@@ -355,6 +452,7 @@ After installation, the following files are created on your machine. All sensiti
 - **BNB Chain private key is stored in plaintext** in `mcporter.json`. Use a wallet with minimal funds for this.
 - **Test on testnets first** (Nile for TRON, BSC Testnet for BNB Chain) before using real money.
 - **Your master password is everything** — lose it and you lose access to the wallet. Write it down somewhere safe.
+- **Windows users**: The installer automatically sets owner-only ACL on sensitive config files via `icacls` (equivalent to `chmod 600` on Mac/Linux). No admin privileges are needed and no system files are modified.
 
 ---
 
