@@ -11,7 +11,7 @@ OpenClaw Extension exists to shift your Web3 experience from "doing everything m
 
 ---
 
-## 🪄 How Does the Magic Work?
+## 🧩 How Does It Work?
 
 Previously, AI was just a "know-it-all" that could only talk the talk — ask it how to buy tokens and it'd dump a wall of tutorials on you. To make it actually do things for you, our installer equips it with three core weapons:
 
