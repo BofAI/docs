@@ -89,31 +89,73 @@ Installation Mode
 ? Enter choice (1-2, default: 1):
 ```
 
-Type `1` (normal installation) on your keyboard, then press Enter. This is the most hassle-free option and preserves your previous settings.
+- **Normal install (1)**: Preserves your previous settings. Best for first-time installs or upgrades.
+- **Clean install (2)**: Completely starts over — deletes all MCP configs, installed skills, API credentials, and wallet data.
 
-:::caution When should I choose Clean Install?
-Only choose `2` if you want to **completely start over from scratch**. Clean install permanently deletes all MCP configs, installed skills, API credentials, and wallet data. The installer will ask you to type `CLEAN` to confirm — think of it as the "are you really, really sure?" safety net:
+:::tip First time installing? Which should I pick?
+For a first-time install, both `1` and `2` produce the same result. Choose `2` only if you've installed before and want a fresh start.
+:::
+
+If you chose `2` (Clean install), the installer lists everything that will be deleted, then asks you to confirm twice:
 
 ```
+The following data will be permanently deleted:
+  • ALL MCP entries in: ~/.mcporter/mcporter.json
+  • ALL installed skills (global and workspace)
+
+  • BANK OF AI local config: ~/.mcporter/bankofai-config.json
+  • AgentWallet config will be overwritten by: agent-wallet start --override --save-runtime-secrets
+
 ? Continue with CLEAN install? (y/N): y
 ? Type CLEAN to confirm permanent deletion: CLEAN
 ```
 
-If you're installing for the first time or just upgrading — **always pick 1**.
-:::
+After confirming, the installer automatically removes old skills:
 
-### 🟢 Level 2: Configure "AI's Personal Vault AgentWallet"
+```
+Running cleanup...
+
+◇  Found 11 unique installed skill(s)
+◇  Removal process complete
+◆  Successfully removed 11 skill(s)
+
+✓ Clean install cleanup completed.
+
+Clean complete — proceeding with fresh setup...
+```
+
+Then runs `agent-wallet reset` to completely wipe old wallet data:
+
+```
+Step 0: AgentWallet Setup
+
+Launching: agent-wallet reset
+This will delete ALL wallet data in: ~/.agent-wallet
+
+✔ Are you sure you want to reset? This cannot be undone. Yes
+✔ Really delete everything? Last chance! Yes
+  Deleted: master.json
+  Deleted: wallets_config.json
+  Deleted: runtime_secrets.json
+  ...
+
+Wallet data reset complete.
+```
+
+Once cleanup is done, the installer proceeds to the next step — wallet initialization.
+
+If you chose `1` (Normal install), it skips straight to the next step.
+
+### 🟢 Level 2: Configure AgentWallet (AI's Personal Wallet Vault)
 
 The wizard will automatically install a tool called AgentWallet, which securely stores your AI's wallet keys — like a local encrypted bank vault that never sends your private keys anywhere.
 
 ```
 Step 0: AgentWallet Setup
 
-Launching: agent-wallet start --save-runtime-secrets
+Launching: agent-wallet start --override --save-runtime-secrets
 Please complete initialization in the CLI prompts.
 ```
-
-You'll walk through 3 quick choices:
 
 **① Choose wallet type** — Just press Enter to accept the default:
 
@@ -125,12 +167,14 @@ You'll walk through 3 quick choices:
 
 ```
 ✔ New Master Password (press Enter to auto-generate a strong password)
+
+Wallet initialized!
 ```
 
 If you auto-generated, you'll see something like:
 
 ```
-🔑 Your master password: GS%kE^^n3MVu03*i
+🔑 Your master password: 7#KQoc&%m4S7$Dhk
 ⚠️ Keep this password safe. You'll need it for signing and other operations.
 ```
 
@@ -138,10 +182,15 @@ If you auto-generated, you'll see something like:
 This master password is the key to your AI's wallet. **Lose it and you lose access to the wallet.** Write it down on paper, save it in a password manager — anything but forgetting it.
 :::
 
-**③ Generate a wallet** — Press Enter to create a brand new wallet:
+**③ Name your wallet** — Enter a Wallet ID (e.g. `my_wallet_1`), or just press Enter to use the default name `default_secure`:
 
 ```
-Wallet ID (e.g. my_wallet_1) (default_secure):
+Wallet ID (e.g. my_wallet_1) (default_secure): my_wallet_1
+```
+
+**④ Generate a wallet** — Press Enter to create a brand new wallet:
+
+```
 ✔ Import source: generate — Generate a new random private key
 ```
 
@@ -149,16 +198,23 @@ When you see the wallet table — your vault is ready!
 
 ```
 Wallets:
-┌────────────────┬──────────────┐
-│ Wallet ID      │ Type         │
-├────────────────┼──────────────┤
-│ default_secure │ local_secure │
-└────────────────┴──────────────┘
+┌─────────────┬──────────────┐
+│ Wallet ID   │ Type         │
+├─────────────┼──────────────┤
+│ my_wallet_1 │ local_secure │
+└─────────────┴──────────────┘
 
-Active wallet: default_secure
+🔑 Your master password: 7#KQoc&%m4S7$Dhk
+⚠️ Keep this password safe. You'll need it for signing and other operations.
+
+Active wallet: my_wallet_1
 
 ✓ AgentWallet setup completed
 ```
+
+:::tip See "Wallet already initialized." during a Normal install upgrade?
+If you've previously installed AgentWallet and chose Normal install, the wizard skips the password setup and lets you enter a Wallet ID and generate a wallet directly. Your previous master password and existing wallets are preserved.
+:::
 
 (🚑 Got stuck with an error? 👉 [Click here to see how to fix AgentWallet installation failures](./FAQ.md#agentwallet-installation-failed))
 
@@ -246,11 +302,11 @@ Press Enter (or type `1`) to install globally — this way all your OpenClaw wor
 Then the skill picker launches:
 
 ```
-◇  Found 5 skills
+◇  Found 7 skills
 │
 ◇  Select skills to install (space to toggle)
-│  recharge-skill, SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
-│  TronScan Data Lookup, x402-payment
+│  Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
+│  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
 Here's what each skill does:
@@ -260,6 +316,8 @@ Here's what each skill does:
 | **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
 | **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
 | **TronScan Data Lookup** | Query blockchain data via TronScan |
+| **Multi-Sig & Account Permissions** | Multi-signature wallet and account permission management |
+| **TRC20 Token Toolkit** | Common TRC20 token operations like sending tokens |
 | **x402-payment** | x402 protocol payments (agent-to-agent) |
 | **recharge-skill** | Check and top up your BANK OF AI balance |
 
@@ -268,26 +326,32 @@ After selecting, the installer shows a security risk assessment:
 ```
 ◇  Security Risk Assessments
 │                                     Gen        Socket        Snyk
+│  Multi-Sig & Account Permissions    --         --            --
 │  recharge-skill                     Safe       1 alert       Med Risk
 │  SunPerp Perpetual Futures Trading  --         --            --
 │  SunSwap DEX Trading                --         --            --
+│  TRC20 Token Toolkit                --         --            --
 │  TronScan Data Lookup               --         --            --
-│  x402-payment                       Med Risk   1 alert       Med Risk
+│  x402-payment                       Safe       0 alerts      Med Risk
 ```
 
 Review the report, then confirm to proceed. When installation completes:
 
 ```
-◇  Installed 5 skills
+◇  Installed 7 skills
 │
+│  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
 │  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
+│  ✓ TRC20 Token Toolkit → ~/.openclaw/skills/trc20-token-toolkit
 │  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
-After skills are installed, the installer automatically enters a configuration phase. If you installed recharge-skill, you'll see:
+After skills are installed, the installer enters a configuration phase, asking for one API Key:
+
+#### recharge-skill API Key Configuration
 
 ```
 recharge-skill API Key Configuration
@@ -296,7 +360,7 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
 
-**Don't have this key yet? Just press Enter to skip.** Other features won't be affected. You can always configure it later by following the "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" section below.
+**Don't have one? Just press Enter to skip.** You can always create the config file later — see "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" below.
 
 When `Installation Complete!` lights up at the bottom of the screen — congratulations, you've passed all levels!
 
@@ -308,6 +372,22 @@ When `Installation Complete!` lights up at the bottom of the screen — congratu
 ✓ MCP Server configured
   Config file: ~/.mcporter/mcporter.json
     File permissions: 600 (owner read/write only)
+
+✓ Installed skills:
+  • Multi-Sig & Account Permissions
+  • recharge-skill
+  • TRC20 Token Toolkit
+  • x402-payment
+  Verify with: npx skills list -g
+
+Next steps:
+  1. Restart OpenClaw and start a new session to load new skills
+  2. Test the skills:
+     "Read the recharge-skill and recharge my BANK OF AI account with 1 USDT"
+     "Read the x402-payment skill and explain how it works"
+
+Repository: https://github.com/BofAI/openclaw-extension
+Skills: https://github.com/BofAI/skills
 ```
 
 ---
@@ -349,6 +429,7 @@ Totally get it! You were just browsing during installation and pressed Enter to 
 | `TRONGRID_API_KEY` | Express lane for the TRON toolbox — without it you'll be throttled | Register for free at [trongrid.io](https://www.trongrid.io/) |
 | `TRONSCAN_API_KEY` | Required for the TronScan data lookup skill | Apply for free at [tronscan.org](https://tronscan.org/#/myaccount/apiKeys) |
 | `BANKOFAI_API_KEY` | Used for topping up or checking balance on BANK OF AI | Get it after logging in at [chat.bankofai.io/key](https://chat.bankofai.io/key) |
+
 
 ### Step 2: Enter Your Keys into the System
 
@@ -423,7 +504,6 @@ After installation, the following files are created on your machine. All sensiti
 | File | What It Stores |
 | :--- | :--- |
 | `~/.mcporter/mcporter.json` | MCP server configurations (including BNB Chain private key if provided) |
-| `~/.x402-config.json` | API credentials for x402-payment |
 | `~/.mcporter/bankofai-config.json` | BANK OF AI API key |
 | `~/.openclaw/skills/` | Globally installed skill packs |
 | `.openclaw/skills/` | Workspace-level skill packs (if you chose option 2) |
@@ -435,7 +515,6 @@ After installation, the following files are created on your machine. All sensiti
 | File | What It Stores |
 | :--- | :--- |
 | `%USERPROFILE%\.mcporter\mcporter.json` | MCP server configurations (including BNB Chain private key if provided) |
-| `%USERPROFILE%\.x402-config.json` | API credentials for x402-payment |
 | `%USERPROFILE%\.mcporter\bankofai-config.json` | BANK OF AI API key |
 | `%USERPROFILE%\.openclaw\skills\` | Globally installed skill packs |
 | `.openclaw\skills\` | Workspace-level skill packs (if you chose option 2) |

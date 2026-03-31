@@ -89,31 +89,73 @@ Installation Mode
 ? Enter choice (1-2, default: 1):
 ```
 
-键盘输入 `1`（普通安装），然后按回车。这种方式最省心，能保留你以前的设置。
+- **普通安装（1）**：保留你以前的设置，适合首次安装或升级。
+- **全新安装（2）**：彻底推倒重来，删除所有 MCP 配置、已装技能、API 凭证和钱包数据。
 
-:::caution 什么时候选全新安装？
-只有当你想**彻底推倒重来**的时候才选 `2`。全新安装会永久删除所有 MCP 配置、已装技能、API 凭证和钱包数据。安装器会让你输入 `CLEAN` 来确认——这是"你真的真的确定吗？"安全关卡：
+:::tip 第一次安装选哪个？
+第一次安装选 `1` 或 `2` 效果一样。如果你之前装过想重新来过，选 `2`。
+:::
+
+如果你选了 `2`（全新安装），安装器会先列出将被删除的内容，然后要求你两次确认：
 
 ```
+The following data will be permanently deleted:
+  • ALL MCP entries in: ~/.mcporter/mcporter.json
+  • ALL installed skills (global and workspace)
+
+  • BANK OF AI local config: ~/.mcporter/bankofai-config.json
+  • AgentWallet config will be overwritten by: agent-wallet start --override --save-runtime-secrets
+
 ? Continue with CLEAN install? (y/N): y
 ? Type CLEAN to confirm permanent deletion: CLEAN
 ```
 
-如果你是第一次安装或只是升级——**永远选 1**。
-:::
+确认后，安装器会自动清理旧技能：
 
-### 🟢 第 2 关：配置"AI 的专属保险柜 AgentWallet"
+```
+Running cleanup...
+
+◇  Found 11 unique installed skill(s)
+◇  Removal process complete
+◆  Successfully removed 11 skill(s)
+
+✓ Clean install cleanup completed.
+
+Clean complete — proceeding with fresh setup...
+```
+
+然后运行 `agent-wallet reset` 彻底删除旧的钱包数据：
+
+```
+Step 0: AgentWallet Setup
+
+Launching: agent-wallet reset
+This will delete ALL wallet data in: ~/.agent-wallet
+
+✔ Are you sure you want to reset? This cannot be undone. Yes
+✔ Really delete everything? Last chance! Yes
+  Deleted: master.json
+  Deleted: wallets_config.json
+  Deleted: runtime_secrets.json
+  ...
+
+Wallet data reset complete.
+```
+
+清理完成后，自动进入下一步——钱包初始化。
+
+如果你选了 `1`（普通安装），则直接跳到下一步。
+
+### 🟢 第 2 关：配置 AgentWallet（AI 的专属钱包保险柜）
 
 向导会自动给你装一个叫 AgentWallet 的工具，用来安全存放 AI 的钱包钥匙——相当于一个本地加密的保险箱，私钥永远不会发送到任何服务器。
 
 ```
 Step 0: AgentWallet Setup
 
-Launching: agent-wallet start --save-runtime-secrets
+Launching: agent-wallet start --override --save-runtime-secrets
 Please complete initialization in the CLI prompts.
 ```
-
-你需要做 3 个简单的选择：
 
 **① 选钱包类型** —— 直接按回车用默认值就好：
 
@@ -125,12 +167,14 @@ Please complete initialization in the CLI prompts.
 
 ```
 ✔ New Master Password (press Enter to auto-generate a strong password)
+
+Wallet initialized!
 ```
 
 如果你选了自动生成，屏幕会显示类似这样的密码：
 
 ```
-🔑 Your master password: GS%kE^^n3MVu03*i
+🔑 Your master password: 7#KQoc&%m4S7$Dhk
 ⚠️ Keep this password safe. You'll need it for signing and other operations.
 ```
 
@@ -138,10 +182,15 @@ Please complete initialization in the CLI prompts.
 主密码是打开你 AI 钱包的唯一钥匙。**丢了密码 = 丢了钱包的访问权限。** 拿笔写下来、存到密码管理器里——随便什么方式，千万别忘了。
 :::
 
-**③ 生成钱包** —— 按回车创建一个全新钱包：
+**③ 给钱包起个名字** —— 输入一个 Wallet ID（比如 `my_wallet_1`），或者直接按回车使用默认名称 `default_secure`：
 
 ```
-Wallet ID (e.g. my_wallet_1) (default_secure):
+Wallet ID (e.g. my_wallet_1) (default_secure): my_wallet_1
+```
+
+**④ 生成钱包** —— 按回车创建一个全新钱包：
+
+```
 ✔ Import source: generate — Generate a new random private key
 ```
 
@@ -149,16 +198,23 @@ Wallet ID (e.g. my_wallet_1) (default_secure):
 
 ```
 Wallets:
-┌────────────────┬──────────────┐
-│ Wallet ID      │ Type         │
-├────────────────┼──────────────┤
-│ default_secure │ local_secure │
-└────────────────┴──────────────┘
+┌─────────────┬──────────────┐
+│ Wallet ID   │ Type         │
+├─────────────┼──────────────┤
+│ my_wallet_1 │ local_secure │
+└─────────────┴──────────────┘
 
-Active wallet: default_secure
+🔑 Your master password: 7#KQoc&%m4S7$Dhk
+⚠️ Keep this password safe. You'll need it for signing and other operations.
+
+Active wallet: my_wallet_1
 
 ✓ AgentWallet setup completed
 ```
+
+:::tip 升级安装时看到 "Wallet already initialized."？
+如果你之前已经装过 AgentWallet，选普通安装后向导会跳过密码设置，直接让你输入 Wallet ID 并生成钱包。之前的主密码和已有钱包都会保留。
+:::
 
 （🚑 报错卡住了？👉 [点这里看 AgentWallet 安装失败怎么救](./FAQ.md#agentwallet-安装失败了)）
 
@@ -246,11 +302,11 @@ Select skills installation scope:
 然后技能选择器启动：
 
 ```
-◇  Found 5 skills
+◇  Found 7 skills
 │
 ◇  Select skills to install (space to toggle)
-│  recharge-skill, SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
-│  TronScan Data Lookup, x402-payment
+│  Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
+│  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
 每个技能是干啥的：
@@ -260,6 +316,8 @@ Select skills installation scope:
 | **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
 | **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
 | **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
+| **Multi-Sig & Account Permissions** | 多签钱包与账户权限管理 |
+| **TRC20 Token Toolkit** | TRC20 代币发送等常用操作 |
 | **x402-payment** | x402 协议支付（Agent 间付款） |
 | **recharge-skill** | 查询和充值 BANK OF AI 余额 |
 
@@ -268,26 +326,32 @@ Select skills installation scope:
 ```
 ◇  Security Risk Assessments
 │                                     Gen        Socket        Snyk
+│  Multi-Sig & Account Permissions    --         --            --
 │  recharge-skill                     Safe       1 alert       Med Risk
 │  SunPerp Perpetual Futures Trading  --         --            --
 │  SunSwap DEX Trading                --         --            --
+│  TRC20 Token Toolkit                --         --            --
 │  TronScan Data Lookup               --         --            --
-│  x402-payment                       Med Risk   1 alert       Med Risk
+│  x402-payment                       Safe       0 alerts      Med Risk
 ```
 
 查看报告后确认继续。安装完成时：
 
 ```
-◇  Installed 5 skills
+◇  Installed 7 skills
 │
+│  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
 │  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
+│  ✓ TRC20 Token Toolkit → ~/.openclaw/skills/trc20-token-toolkit
 │  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
-技能装完后，安装器会自动进入配置环节。如果你安装了 recharge-skill，会看到：
+技能装完后，安装器会自动进入配置环节，询问一组 API Key：
+
+#### recharge-skill API Key 配置
 
 ```
 recharge-skill API Key Configuration
@@ -296,7 +360,7 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
 
-**现在没有这个 Key？直接按回车跳过就好。** 不影响其他功能。以后拿到了 Key，可以随时通过下面「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」章节的方式手动配置。
+**现在没有？直接按回车跳过。** 以后拿到了 Key 可以手动创建配置文件，详见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
 
 当屏幕底部亮起 `Installation Complete!` 时——恭喜，通关成功！
 
@@ -308,6 +372,22 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
 ✓ MCP Server configured
   Config file: ~/.mcporter/mcporter.json
     File permissions: 600 (owner read/write only)
+
+✓ Installed skills:
+  • Multi-Sig & Account Permissions
+  • recharge-skill
+  • TRC20 Token Toolkit
+  • x402-payment
+  Verify with: npx skills list -g
+
+Next steps:
+  1. Restart OpenClaw and start a new session to load new skills
+  2. Test the skills:
+     "Read the recharge-skill and recharge my BANK OF AI account with 1 USDT"
+     "Read the x402-payment skill and explain how it works"
+
+Repository: https://github.com/BofAI/openclaw-extension
+Skills: https://github.com/BofAI/skills
 ```
 
 ---
@@ -349,6 +429,7 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
 | `TRONGRID_API_KEY` | 波场工具箱的高速通道，不填会被限速 | [trongrid.io](https://www.trongrid.io/) 免费注册获取 |
 | `TRONSCAN_API_KEY` | TronScan 查数据技能必须用到 | [tronscan.org](https://tronscan.org/#/myaccount/apiKeys) 免费申请 |
 | `BANKOFAI_API_KEY` | 给 BANK OF AI 充值或查余额用 | [chat.bankofai.io/key](https://chat.bankofai.io/key) 登录后获取 |
+
 
 ### 第二步：把钥匙填进系统里
 
@@ -423,7 +504,6 @@ New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.mcporter" | Out-Nul
 | 文件 | 存了什么 |
 | :--- | :--- |
 | `~/.mcporter/mcporter.json` | MCP 服务器配置（包括 BNB Chain 私钥，如果你填了的话） |
-| `~/.x402-config.json` | x402-payment 的 API 凭证 |
 | `~/.mcporter/bankofai-config.json` | BANK OF AI 的 API Key |
 | `~/.openclaw/skills/` | 全局安装的技能包 |
 | `.openclaw/skills/` | 工作区级别的技能包（选了选项 2 才有） |
@@ -435,7 +515,6 @@ New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.mcporter" | Out-Nul
 | 文件 | 存了什么 |
 | :--- | :--- |
 | `%USERPROFILE%\.mcporter\mcporter.json` | MCP 服务器配置（包括 BNB Chain 私钥，如果你填了的话） |
-| `%USERPROFILE%\.x402-config.json` | x402-payment 的 API 凭证 |
 | `%USERPROFILE%\.mcporter\bankofai-config.json` | BANK OF AI 的 API Key |
 | `%USERPROFILE%\.openclaw\skills\` | 全局安装的技能包 |
 | `.openclaw\skills\` | 工作区级别的技能包（选了选项 2 才有） |
