@@ -8,7 +8,7 @@ Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. St
 
 | URL | Description |
 |-----|-------------|
-| `https://api.bankofai.com` | Production |
+| `https://api.bankofai.io` | Production |
 
 ## Authentication
 
