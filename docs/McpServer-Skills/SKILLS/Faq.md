@@ -40,7 +40,7 @@ Run this in your terminal:
 ls ~/.openclaw/skills
 ```
 
-You should see directory names like `sunswap`, `sunperp-skill`, `tronscan-skill`, `x402-payment`, `recharge-skill`.
+You should see directory names like `sunswap`, `sunperp-skill`, `tronscan-skill`, `trc20-toolkit-skill`, `multisig-permissions`, `x402-payment`, `recharge-skill`.
 
 Then verify in your AI chat:
 

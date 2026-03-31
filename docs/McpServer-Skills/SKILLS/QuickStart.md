@@ -47,12 +47,12 @@ Ok to proceed? (y) y
 The installer automatically fetches all available Skills from the repo and lists them for selection. Press **Space** to toggle each one — we recommend selecting all:
 
 ```
-◇  Found 6 skills
+◇  Found 7 skills
 │
 ◇  Select skills to install (space to toggle)
 │  Multi-Sig & Account Permissions, recharge-skill,
 │  SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
-│  TronScan Data Lookup, x402-payment
+│  TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
 :::tip Select all
@@ -91,6 +91,7 @@ The installer runs a security scan on each Skill and shows the results. Review t
 │  recharge-skill                    --     --       --    │
 │  SunPerp Perpetual Futures Trading --     --       --    │
 │  SunSwap DEX Trading               --     --       --    │
+│  TRC20 Token Toolkit               --     --       --    │
 │  TronScan Data Lookup              --     --       --    │
 │  x402-payment                      Med    1 alert  Med   │
 │                                                          │
@@ -105,12 +106,13 @@ The installer runs a security scan on each Skill and shows the results. Review t
 When you see output like this, all Skills have been successfully installed to your selected AI tools:
 
 ```
-◇  Installed 6 skills ────────────────────────╮
+◇  Installed 7 skills ────────────────────────╮
 │                                             │
 │  ✓ Multi-Sig & Account Permissions (copied) │
 │  ✓ recharge-skill (copied)                  │
 │  ✓ SunPerp Perpetual Futures Trading (copied)│
 │  ✓ SunSwap DEX Trading (copied)             │
+│  ✓ TRC20 Token Toolkit (copied)             │
 │  ✓ TronScan Data Lookup (copied)            │
 │  ✓ x402-payment (copied)                    │
 │                                             │

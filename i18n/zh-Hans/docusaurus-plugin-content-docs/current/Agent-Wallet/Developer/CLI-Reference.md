@@ -28,7 +28,11 @@ agent-wallet start
 ```bash
 agent-wallet start -p Abc12345!
 ```
-密码要求：至少 8 位，包含大写、小写、数字和特殊字符。
+密码要求：至少 8 位，包含大写、小写、数字和特殊字符。如果密码不满足要求，CLI 会持续提示你重新输入更强的密码，直到通过验证。
+
+交互式创建新密码时，需要输入两次进行确认。如果两次输入不一致，系统会要求你重新输入。
+
+**默认钱包 ID：** 如果不指定钱包 ID，系统默认为 `local_secure` 钱包使用 `default_secure`，为 `raw_secret` 钱包使用 `default_raw`。
 
 :::caution Shell 历史记录风险
 使用 `-p` 内联传递密码会将密码记录在终端的历史文件中。生产钱包建议使用交互式模式（不带 `-p` 的 `agent-wallet start`）或通过环境变量设置 `AGENT_WALLET_PASSWORD`——详见[非交互式执行](#非交互式执行专为自动化与后台设计)。
@@ -47,6 +51,10 @@ agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 ### `agent-wallet sign`（核心签名操作）
 
 每条 `sign` 子命令都需要 `--network` / `-n` 来指定链。
+
+:::info 密码重试机制
+使用 `local_secure` 钱包签名时，如果未通过 `-p` 或 `AGENT_WALLET_PASSWORD` 提供密码，CLI 会交互式提示输入主密码。如果密码输入错误，你有 **2 次重试机会**（共 3 次），超过后命令将以"Wrong password. 3 attempts failed."失败退出。
+:::
 
 **签名消息：**
 ```bash

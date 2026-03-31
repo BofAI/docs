@@ -66,22 +66,22 @@ agent-wallet start
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
-Wallet ID (e.g. my_wallet_1) (default):
+Wallet ID (e.g. my_wallet_1) (default_secure):
 
 Wallet initialized!
 ? Import source: generate  — Generate a new random private key
 
 Wallets:
-┌───────────┬──────────────┐
-│ Wallet ID │ Type         │
-├───────────┼──────────────┤
-│ default   │ local_secure │
-└───────────┴──────────────┘
+┌────────────────┬──────────────┐
+│ Wallet ID      │ Type         │
+├────────────────┼──────────────┤
+│ default_secure │ local_secure │
+└────────────────┴──────────────┘
 
 Your master password: <此处会显示你的专属密码>
    Save this password! You'll need it for signing and other operations.
 
-Active wallet: default
+Active wallet: default_secure
 ```
 
 :::caution 主密码 = 你所有资产的唯一钥匙
