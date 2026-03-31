@@ -144,7 +144,7 @@ Accepts a list of messages and returns a model-generated response. Supports both
 
 | Field | Type | Example | Description |
 |-------|------|---------|-------------|
-| `id` | string | `"gpt-4"` | |
+| `id` | string | `"gpt-5.2"` | |
 | `object` | string | `"model"` | |
 | `created` | integer | `1626777600` | |
 | `owned_by` | string | `"openai"` | |
@@ -157,7 +157,7 @@ Accepts a list of messages and returns a model-generated response. Supports both
 
 | Field | Type | Description | Example |
 |-------|------|-------------|---------|
-| `model` | string | ID of the model to use (e.g. gpt-4). | `"gpt-4"` |
+| `model` | string | ID of the model to use (e.g. gpt-5.2). | `"gpt-5.2"` |
 | `messages` | array | List of messages in the conversation. Array of [ChatMessage](#chatmessage). | |
 | `stream` | boolean | If true, partial message deltas will be sent as server-sent events. Default false. | |
 | `max_tokens` | integer | Maximum number of tokens that can be generated in the completion. | |
@@ -280,7 +280,7 @@ Non-stream: object=chat.completion, choices[].message, usage. Stream: object=cha
 | `id` | string | | `"chatcmpl-xxx"` |
 | `object` | string | `"chat.completion"` (non-stream) or `"chat.completion.chunk"` (stream). | |
 | `created` | integer | | `1677652288` |
-| `model` | string | | `"gpt-4"` |
+| `model` | string | | `"gpt-5.2"` |
 | `service_tier` | string | | `"default"` |
 | `system_fingerprint` | string \| null | | |
 | `choices` | array | Empty in final usage chunk. Array of [ChatChoice](#chatchoice). | |
