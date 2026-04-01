@@ -227,7 +227,7 @@ The screen will show a multi-select list of MCP servers. These are the "cables" 
       BANK OF AI recharge MCP (remote recharge tools).
 ```
 
-Use `↑` `↓` arrow keys to move, press **Space** to toggle checkboxes, and press **Enter** to confirm. All three are checked by default — we recommend keeping them all.
+Use `↑` `↓` arrow keys to move, press **Space** to select (shows X) or deselect, and press **Enter** to confirm. All three are selected by default — we recommend keeping them all.
 
 After confirming, the installer configures each server one by one. Here's what to expect:
 

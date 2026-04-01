@@ -172,7 +172,7 @@ Need to check balances, transfer tokens, or manage approvals for any TRC20 token
 
 > Quick portfolio check? Try: "Show my balances for USDT, USDD, SUN, JST, and BTT."
 
-> Sending tokens to a friend? Try: "Transfer 50 USDT to TFriendAddress."
+> Sending tokens to a friend? Try: "Transfer 50 USDT to TXX...."
 
 > Preparing for a DeFi operation? Try: "Approve 200 USDT for the SunSwap router, then check the allowance."
 
