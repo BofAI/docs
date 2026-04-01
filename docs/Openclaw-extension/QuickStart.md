@@ -19,7 +19,7 @@ Before you begin, make sure the following basic software is installed on your co
 
 ---
 
-## 🚀 Step 1: One-Click Installation
+## 🚀 Step 1: Run the Smart Installation Wizard
 
 Open the "Terminal" on your computer (that black window).
 
@@ -171,17 +171,6 @@ Please complete initialization in the CLI prompts.
 Wallet initialized!
 ```
 
-If you auto-generated, you'll see something like:
-
-```
-🔑 Your master password: 7#KQoc&%m4S7$Dhk
-⚠️ Keep this password safe. You'll need it for signing and other operations.
-```
-
-:::caution Write down this password!
-This master password is the key to your AI's wallet. **Lose it and you lose access to the wallet.** Write it down on paper, save it in a password manager — anything but forgetting it.
-:::
-
 **③ Name your wallet** — Enter a Wallet ID (e.g. `my_wallet_1`), or just press Enter to use the default name `default_secure`:
 
 ```
@@ -212,6 +201,12 @@ Active wallet: my_wallet_1
 ✓ AgentWallet setup completed
 ```
 
+If you chose auto-generate in step ②, the master password generated for you will be displayed here.
+
+:::caution Write down this password!
+This master password is the key to your AI's wallet. **Lose it and you lose access to the wallet.** Write it down on paper, save it in a password manager — anything but forgetting it.
+:::
+
 :::tip See "Wallet already initialized." during a Normal install upgrade?
 If you've previously installed AgentWallet and chose Normal install, the wizard skips the password setup and lets you enter a Wallet ID and generate a wallet directly. Your previous master password and existing wallets are preserved.
 :::
@@ -236,7 +231,7 @@ Use `↑` `↓` arrow keys to move, press **Space** to toggle checkboxes, and pr
 
 After confirming, the installer configures each server one by one. Here's what to expect:
 
-#### mcp-server-tron
+#### mcp-server-tron (TRON Toolbox)
 
 ```
 Configuring mcp-server-tron...
@@ -252,7 +247,7 @@ When it succeeds, you'll see the `add-mcp` banner and:
 ✓ Configuration saved for mcp-server-tron.
 ```
 
-#### bnbchain-mcp
+#### bnbchain-mcp (BNB Chain Toolbox)
 
 ```
 Configuring bnbchain-mcp...
@@ -275,7 +270,7 @@ Unlike TRON (which uses the encrypted AgentWallet), BNB Chain currently stores y
 ✓ Configuration saved for bnbchain-mcp.
 ```
 
-#### bankofai-recharge
+#### bankofai-recharge (Recharge Assistant)
 
 This one is fully automatic — no input needed! It connects to BANK OF AI's remote recharge service.
 

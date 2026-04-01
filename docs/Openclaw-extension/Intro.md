@@ -7,7 +7,7 @@ In a multi-chain Web3 world, managing assets often means constant "context switc
 - **Fragmented workflows**: Want to swap tokens or check balances across different chains? You have to keep switching wallet networks, find the right DEX for each ecosystem, and verify contract addresses. All this jumping between tools drains your energy.
 - **Mental pressure of execution**: Every transaction requires you to manually adjust slippage and calculate gas fees. Facing authorization code you can't fully understand, the anxiety of "what if I click wrong" adds unnecessary mental burden to every operation.
 
-OpenClaw Extension exists to shift your Web3 experience from "doing everything manually" to "just say the word." Instead of drowning you in tedious configuration, it uses an automated flow to install AgentWallet, MCP services (execution tools), and pre-built skills (trading brain) in one go — giving your AI assistant the ability to deeply participate in on-chain operations. Whether you're on macOS, Linux, or Windows, just one simple command launches a guided wizard that sets up your entire environment.
+OpenClaw Extension exists to shift your Web3 experience from "doing everything manually" to "just say the word." Instead of drowning you in tedious configuration, it uses an automated flow to install AgentWallet, MCP services (execution tools), and pre-built skills (trading brain) — giving your AI assistant the ability to deeply participate in on-chain operations. Whether you're on macOS, Linux, or Windows, just one simple command launches a guided wizard that sets up your entire environment.
 
 ---
 
@@ -15,7 +15,7 @@ OpenClaw Extension exists to shift your Web3 experience from "doing everything m
 
 Previously, AI was just a "know-it-all" that could only talk the talk — ask it how to buy tokens and it'd dump a wall of tutorials on you. To make it actually do things for you, our installer equips it with three core weapons:
 
-### 🔐 1. Vault (AgentWallet) — Giving AI an "Absolutely Secure Safe"
+### 🔐 1. AgentWallet — A Dedicated Encrypted Wallet for AI Agents
 
 What scares beginners the most? Getting their private keys stolen! This is your AI agent's own encrypted wallet. Your private keys are locked down with encryption on your local machine and never sent to any external server — like giving your AI a safe that stays secure even offline. With it, your AI can sign transactions on your behalf safely, instead of leaving private keys dangerously exposed in plaintext config files.
 

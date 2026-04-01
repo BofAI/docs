@@ -6,7 +6,7 @@
 
 ## 🕹️ 准备工作
 
-在开始之前，请确保你的电脑上已经装好了这几样基础软件（如果没有，请像装普通软件一样去官网下载安装）：
+在开始之前，请确保你的电脑上已经装好了以下几种基础软件（如果没有，请像装普通软件一样去官网下载安装）：
 
 1. **OpenClaw**：你的 AI 助手软件。
 2. **Node.js**（请务必安装 v18 或以上版本）：这是技能包和配置工具运行的基础环境。*（极其重要，版本太低一定会报错！）*
@@ -19,7 +19,7 @@
 
 ---
 
-## 🚀 第一步：一键通关安装
+## 🚀 第一步：运行智能安装向导
 
 打开你电脑上的"终端"（也就是那个黑框框）。
 
@@ -171,17 +171,6 @@ Please complete initialization in the CLI prompts.
 Wallet initialized!
 ```
 
-如果你选了自动生成，屏幕会显示类似这样的密码：
-
-```
-🔑 Your master password: 7#KQoc&%m4S7$Dhk
-⚠️ Keep this password safe. You'll need it for signing and other operations.
-```
-
-:::caution 务必记下这个密码！
-主密码是打开你 AI 钱包的唯一钥匙。**丢了密码 = 丢了钱包的访问权限。** 拿笔写下来、存到密码管理器里——随便什么方式，千万别忘了。
-:::
-
 **③ 给钱包起个名字** —— 输入一个 Wallet ID（比如 `my_wallet_1`），或者直接按回车使用默认名称 `default_secure`：
 
 ```
@@ -212,11 +201,17 @@ Active wallet: my_wallet_1
 ✓ AgentWallet setup completed
 ```
 
+如果你在第 ② 步选了自动生成密码，这里会显示系统为你生成的主密码。
+
+:::caution 务必记下这个密码！
+主密码是打开你 AI 钱包的唯一钥匙。**丢了密码 = 丢了钱包的访问权限。** 拿笔写下来、存到密码管理器里——随便什么方式，千万别忘了。
+:::
+
 :::tip 升级安装时看到 "Wallet already initialized."？
 如果你之前已经装过 AgentWallet，选普通安装后向导会跳过密码设置，直接让你输入 Wallet ID 并生成钱包。之前的主密码和已有钱包都会保留。
 :::
 
-（🚑 报错卡住了？👉 [点这里看 AgentWallet 安装失败怎么救](./FAQ.md#agentwallet-安装失败了)）
+（🚑 报错卡住了？👉 [点这里看 AgentWallet 安装失败怎么解决](./FAQ.md#agentwallet-安装失败了)）
 
 ### 🟢 第 3 关：挑选工具箱（给 AI 装"手"）
 
