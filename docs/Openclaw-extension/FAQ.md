@@ -8,23 +8,41 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 ### Error Says "command not found: node" or "npm install Failed"
 
-**Plain English**: Your computer doesn't have Node.js installed, or the version is too old.
+**In short**: Your computer doesn't have Node.js installed, or the version is too old.
 
-**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v20 or higher recommended). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
+**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v18 or higher recommended). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
 
-### Error Says "command not found: python3"
+### Error Says "command not found: git"
 
-**Plain English**: Your computer is missing a basic runtime environment called Python.
+**In short**: Your computer is missing Git, a tool used to download skill packs.
 
-**How to fix**: Go to the [Python official website](https://www.python.org/downloads/) and download and install it.
+**How to fix**: Go to the [Git official website](https://git-scm.com/downloads) and download and install it.
 
-### AgentWallet (AI Vault) Installation Failed
+### AgentWallet Installation Failed
 
 **How to fix**:
 
 1. Double-check that your Node.js version is new enough.
 2. Sometimes it's simply a network timeout — wait a couple of minutes and run the installation command again.
-3. If it keeps getting stuck, try manually deleting the `~/.agent-wallet` folder and starting over from scratch.
+3. If it keeps getting stuck, try manually deleting the `~/.agent-wallet` (Mac/Linux) or `%USERPROFILE%\.agent-wallet` (Windows) folder and starting over from scratch.
+
+### Error Says "Running Scripts Is Disabled on This System" (Windows)
+
+**Reason**: Your PowerShell execution policy is too strict to run scripts.
+
+**How to fix**: Don't double-click `install.ps1` directly. Use one of these two methods instead:
+
+1. **Recommended**: Double-click `install.bat` — it automatically bypasses the execution policy.
+2. Or manually run in PowerShell: `powershell -ExecutionPolicy Bypass -File install.ps1`
+
+### Terminal Shows Garbled Characters or Boxes (Windows)
+
+**Reason**: Your terminal doesn't support ANSI color escape codes.
+
+**How to fix**: The installer automatically tries to enable virtual terminal processing. If you still see garbled output:
+
+1. Make sure your system is **Windows 10 build 1511** or later.
+2. We recommend using **Windows Terminal** (free from the Microsoft Store) instead of the default cmd.exe or legacy PowerShell window.
 
 ---
 
@@ -34,7 +52,7 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 **Most likely cause**: You were too eager after installation and **didn't restart the OpenClaw software**.
 
-**How to fix**: Completely quit OpenClaw (on Mac press `Command+Q`), then reopen it so the AI can reload its new brain.
+**How to fix**: Completely quit OpenClaw (on Mac press `Command+Q`, on Windows right-click the taskbar icon and quit or press `Alt+F4`), then reopen it so the AI can reload its new brain.
 
 ### AI Can Fetch Data, But Answers Are Messy and Often Wrong?
 
@@ -60,7 +78,7 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 ### AI Reports "Rate Limited" or "429 Error"
 
-**Plain English**: You're making AI query data too fast, and the free network channel thinks you're a bot and temporarily blocked you.
+**In short**: You're making AI query data too fast, and the free network channel thinks you're a bot and temporarily blocked you.
 
 **How to fix**:
 
@@ -77,7 +95,7 @@ Absolutely! When the installation wizard reaches Level 4, it will list all skill
 
 ### I'm Done With It — How Do I Uninstall?
 
-The simplest brute-force method: Open your file manager, find the `~/.openclaw/skills/` directory, delete the skill folder(s) you no longer want, then restart the AI software — they'll be completely gone.
+The simplest brute-force method: Open your file manager, find the `~/.openclaw/skills/` (Mac/Linux) or `%USERPROFILE%\.openclaw\skills\` (Windows) directory, delete the skill folder(s) you no longer want, then restart the AI software — they'll be completely gone.
 
 ### I Messed Everything Up — Can I Reinstall?
 
@@ -85,6 +103,22 @@ Reinstall anytime! Don't worry about breaking your computer.
 
 - **Option 1 (Normal installation)**: Run the script again and it will automatically patch whatever's missing.
 - **Option 2 (Clean install)**: If you want to start completely from scratch, choose this one. It will wipe all your old toolboxes, skills, and configurations clean, giving you a fresh new environment. To prevent accidental triggers, it will ask you to manually type `CLEAN` to confirm.
+
+---
+
+## Windows-Specific Questions
+
+### Does the Installer Need Admin Privileges?
+
+Nope. The installer only writes to config files under your user directory. It doesn't modify system files, the registry, or Program Files.
+
+### Is the Windows Experience the Same as Mac/Linux?
+
+Identical. The Windows installer (`install.ps1`) is a full port of the Linux/macOS version (`install.sh`) — same installation flow, same multi-select menus, same config file structure. The only differences are file paths (`~/` becomes `%USERPROFILE%\`) and file permissions (`chmod 600` becomes `icacls` ACL).
+
+### Can I Use WSL (Windows Subsystem for Linux)?
+
+Yes, but not recommended. If you install inside WSL, config files are written to the WSL Linux filesystem, not Windows `%USERPROFILE%`. This means a native Windows OpenClaw won't be able to read those configs. If your OpenClaw is the native Windows version, use `install.bat` or the `irm | iex` command instead.
 
 ---
 

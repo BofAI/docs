@@ -198,7 +198,7 @@ npm run start:http
 你也可以在测试网上尝试转账（确保 Nile 测试网上有测试 TRX）：
 
 ```
-在 Nile 测试网上向地址 TNPeeaaFB7K9cmo4uQpcU32zGK8G1NYqeL 转 1 TRX
+在 Nile 测试网上向地址 TNPee...xxxxx 转 1 TRX
 ```
 
 :::info 获取测试 TRX

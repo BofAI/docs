@@ -66,22 +66,22 @@ The system will guide you through initializing your **Agent-wallet wallet**. The
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
-Wallet ID (e.g. my_wallet_1) (default):
+Wallet ID (e.g. my_wallet_1) (default_secure):
 
 Wallet initialized!
 ? Import source: generate  — Generate a new random private key
 
 Wallets:
-┌───────────┬──────────────┐
-│ Wallet ID │ Type         │
-├───────────┼──────────────┤
-│ default   │ local_secure │
-└───────────┴──────────────┘
+┌────────────────┬──────────────┐
+│ Wallet ID      │ Type         │
+├────────────────┼──────────────┤
+│ default_secure │ local_secure │
+└────────────────┴──────────────┘
 
 Your master password: <your-unique-password-will-appear-here>
    Save this password! You'll need it for signing and other operations.
 
-Active wallet: default
+Active wallet: default_secure
 ```
 
 :::caution Master password = the only key to all your assets

@@ -47,12 +47,12 @@ Ok to proceed? (y) y
 安装器会自动从仓库拉取所有可用的 Skills，然后列出清单让你勾选。按**空格键**切换选中/取消，默认全选即可：
 
 ```
-◇  Found 6 skills
+◇  Found 7 skills
 │
 ◇  Select skills to install (space to toggle)
 │  Multi-Sig & Account Permissions, recharge-skill,
 │  SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
-│  TronScan Data Lookup, x402-payment
+│  TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
 :::tip 建议全选
@@ -91,6 +91,7 @@ Ok to proceed? (y) y
 │  recharge-skill                    --     --       --    │
 │  SunPerp Perpetual Futures Trading --     --       --    │
 │  SunSwap DEX Trading               --     --       --    │
+│  TRC20 Token Toolkit               --     --       --    │
 │  TronScan Data Lookup              --     --       --    │
 │  x402-payment                      Med    1 alert  Med   │
 │                                                          │
@@ -105,12 +106,13 @@ Ok to proceed? (y) y
 看到类似以下输出，说明所有 Skills 已经成功安装到你选择的 AI 工具中：
 
 ```
-◇  Installed 6 skills ────────────────────────╮
+◇  Installed 7 skills ────────────────────────╮
 │                                             │
 │  ✓ Multi-Sig & Account Permissions (copied) │
 │  ✓ recharge-skill (copied)                  │
 │  ✓ SunPerp Perpetual Futures Trading (copied)│
 │  ✓ SunSwap DEX Trading (copied)             │
+│  ✓ TRC20 Token Toolkit (copied)             │
 │  ✓ TronScan Data Lookup (copied)            │
 │  ✓ x402-payment (copied)                    │
 │                                             │

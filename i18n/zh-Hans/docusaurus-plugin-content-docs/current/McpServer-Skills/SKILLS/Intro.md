@@ -57,7 +57,7 @@
 
 ## 目前 Skills 能帮你干什么？
 
-五大核心技能，覆盖 TRON 生态最常用的场景。每个技能都配了一句"参考话术"——复制到 AI 对话框里回车就能体验。
+七大核心技能，覆盖 TRON 生态最常用的场景。每个技能都配了一句"参考话术"——复制到 AI 对话框里回车就能体验。
 
 ### 💱 执行 DEX 交易
 
@@ -65,7 +65,7 @@
 
 > 🗣️ "帮我算算现在 100 USDT 在 SunSwap 上能换多少 TRX？"
 
-💡 如需了解更多进阶玩法，请查看：[**sunswap**（DEX 交易向导）](./BANKOFAISkill.md#sunswap)
+💡 如需了解更多进阶玩法，请查看：[**sunswap**](./BANKOFAISkill.md#sunswap)
 
 ### 📈 进行永续合约交易
 
@@ -73,7 +73,7 @@
 
 > 🗣️ "现在 BTC 资金费率是多少？帮我开一张 5 倍杠杆的多单，亏损 5% 自动止损。"
 
-💡 如需了解更多参数设置，请查看：[**sunperp-skill**（永续合约安全员）](./BANKOFAISkill.md#sunperp-skill)
+💡 如需了解更多参数设置，请查看：[**sunperp-skill**](./BANKOFAISkill.md#sunperp-skill)
 
 ### 🕵️ 查询链上数据
 
@@ -81,7 +81,23 @@
 
 > 🗣️ "帮我查一下昨天那个土狗币现在的持仓分布，有没有被庄家控盘？"
 
-💡 如需了解更多查询维度，请查看：[**tronscan-skill**（链上数据侦探）](./BANKOFAISkill.md#tronscan-skill)
+💡 如需了解更多查询维度，请查看：[**tronscan-skill**](./BANKOFAISkill.md#tronscan-skill)
+
+### 💸 转账与管理 TRC20 代币
+
+查余额、转代币、管理授权——支持 USDT、USDD、SUN 等常见代币，也能通过合约地址操作任意 TRC20 代币。支持批量查余额。
+
+> 🗣️ "帮我查一下 USDT、USDD 和 SUN 的余额，然后转 10 USDT 到 TRecipientAddress。"
+
+💡 如需了解更多代币操作，请查看：[**trc20-toolkit-skill**](./BANKOFAISkill.md#trc20-toolkit-skill)
+
+### 🔐 多签与账户权限管理
+
+给你的 TRON 账户加上多重签名保护——配置密钥、设定阈值、协调多方共签。非常适合团队钱包，或者限制 AI 只能执行 DeFi 操作。
+
+> 🗣️ "帮我查一下账户当前的权限配置，然后给 owner 权限设置 2-of-3 多签。"
+
+💡 如需了解权限模板和多签流程，请查看：[**multisig-permissions**](./BANKOFAISkill.md#multisig-permissions)
 
 ### ☕ 自动结算链上付费服务
 
@@ -89,7 +105,7 @@
 
 > 🗣️ "使用 x402 协议调用这个付费智能体端点：https://api.example.com"（请替换为你实际要调用的付费端点地址）
 
-💡 如需了解支付与授权细节，请查看：[**x402-payment**（链上自动结算）](./BANKOFAISkill.md#x402-payment)
+💡 如需了解支付与授权细节，请查看：[**x402-payment**](./BANKOFAISkill.md#x402-payment)
 
 ### 🏦 管理 BANK OF AI 账户
 
@@ -97,7 +113,7 @@
 
 > 🗣️ "帮我看看我的账户还有多少余额，顺便再充 5 个 U 进去。"
 
-💡 如需了解充值与提现规则，请查看：[**recharge-skill**（账户大管家）](./BANKOFAISkill.md#recharge-skill)
+💡 如需了解充值与提现规则，请查看：[**recharge-skill**](./BANKOFAISkill.md#recharge-skill)
 
 ---
 

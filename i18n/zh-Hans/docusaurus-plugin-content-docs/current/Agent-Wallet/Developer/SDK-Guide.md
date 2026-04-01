@@ -517,9 +517,13 @@ WalletError
 ├── DecryptionError          # 密码错误或密钥文件损坏
 ├── SigningError              # 签名操作失败
 ├── NetworkError             # 网络标识符不匹配
-├── InsufficientBalanceError # 余额不足（由调用方抛出）
+├── InsufficientBalanceError # 余额不足
 └── UnsupportedOperationError # 该钱包类型不支持此操作
 ```
+
+:::tip 关于 InsufficientBalanceError
+`InsufficientBalanceError` **不会**由 SDK 自动抛出——Agent-wallet 是纯签名工具，不会检查余额。这个错误类型是为你的应用代码准备的便捷类型，当你在发起交易前检测到余额不足时，可以抛出此异常。
+:::
 
 ---
 

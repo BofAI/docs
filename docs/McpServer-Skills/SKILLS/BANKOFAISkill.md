@@ -19,6 +19,8 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | **sunswap** | Check prices, get quotes, swap tokens, manage liquidity pools | Read-only: none. Trading: wallet credentials |
 | **sunperp-skill** | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys |
 | **tronscan-skill** | Look up accounts, transactions, tokens, blocks, network stats | Recommended: TronScan API key (may throttle without one) |
+| **trc20-toolkit-skill** | Transfer tokens, check balances, manage approvals for any TRC20 token | Read-only: none. Transfers/approvals: wallet credentials |
+| **multisig-permissions** | Multi-sig permission setup, key management, co-signed proposals | Wallet credentials (owner key for permission changes) |
 | **x402-payment** | On-chain "pay-first" auto-settlement | Wallet credentials |
 | **recharge-skill** | Balance, order history, account top-up | BANK OF AI API key |
 
@@ -60,7 +62,7 @@ Head over to **[Quick Start](./QuickStart.md)** — it takes about 1 minute. Com
 
 ---
 
-## sunswap — Swap Tokens, Check Prices, Manage Pools {#sunswap}
+## sunswap {#sunswap}
 
 Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the AI.
 
@@ -92,7 +94,7 @@ Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the 
 
 ---
 
-## sunperp-skill — Perpetual Contract Trading {#sunperp-skill}
+## sunperp-skill {#sunperp-skill}
 
 Want to trade contracts? This skill handles market data, opening/closing positions, stop-loss, and withdrawals. Built-in safety: max 20x leverage, mandatory stop-loss — if losses exceed 5%, the AI automatically closes your position to prevent liquidation.
 
@@ -122,11 +124,11 @@ Want to trade contracts? This skill handles market data, opening/closing positio
 
 ---
 
-## tronscan-skill — On-Chain Data Detective {#tronscan-skill}
+## tronscan-skill {#tronscan-skill}
 
 Want to know what's happening on-chain? This skill looks up accounts, transactions, tokens, blocks, and network stats. **Pure read-only, completely safe, costs nothing, needs no credentials.** The perfect first skill to get started.
 
-> Look up the full account info and holdings for address TDqSquXBgUCLYvYC4XZgrprLK589dkhSCf.
+> Look up the full account info and holdings for address TDqSq...xxxxx.
 
 > Show me the details of this transaction: abc123...
 
@@ -146,7 +148,71 @@ Want to know what's happening on-chain? This skill looks up accounts, transactio
 
 ---
 
-## x402-payment — On-Chain "Pay-First" Auto-Settlement {#x402-payment}
+## trc20-toolkit-skill {#trc20-toolkit-skill}
+
+Need to check balances, transfer tokens, or manage approvals for any TRC20 token? This skill handles it all — supports common tokens by symbol (USDT, USDD, SUN, JST, BTT, WIN, etc.) and any TRC20 token by contract address.
+
+**Completely safe — looking only, no spending:**
+
+> Show my USDT balance.
+
+> Check my USDT, USDD, and SUN balances all at once.
+
+> What's the token info (name, symbol, decimals, total supply) for USDT?
+
+> Check the current USDT approval allowance for spender address TSpender...
+
+**Requires your confirmation (AI shows the bill first):**
+
+> Transfer 10 USDT to TRecipientAddress on the Nile testnet.
+
+> Approve 100 USDT for spender TSpenderAddress.
+
+**Real-world scenarios:**
+
+> Quick portfolio check? Try: "Show my balances for USDT, USDD, SUN, JST, and BTT."
+
+> Sending tokens to a friend? Try: "Transfer 50 USDT to TXX...."
+
+> Preparing for a DeFi operation? Try: "Approve 200 USDT for the SunSwap router, then check the allowance."
+
+---
+
+## multisig-permissions {#multisig-permissions}
+
+Want to add multi-signature protection to your TRON account? This skill manages TRON's native three-tier permission model (Owner, Active, Witness) — configure keys, set thresholds, scope operation permissions, and coordinate multi-party co-signing. Perfect for team wallets or restricting your AI agent to DeFi-only operations.
+
+**Completely safe — looking only, no spending:**
+
+> Check my account's current permission setup.
+
+> Check the permission configuration for address TXk8r...xxxxx.
+
+> List all pending multi-sig proposals.
+
+**Requires your confirmation:**
+
+> Set up a 2-of-3 multi-sig on my account's owner permission with these three keys.
+
+> Restrict the active permission so the AI agent can only call smart contracts (no direct TRX transfers).
+
+> Propose a transfer of 500 USDT to TRecipient and wait for the co-signer to approve.
+
+**Real-world scenarios:**
+
+> Want team approval for large transfers? Try: "Set up 2-of-3 multi-sig, then propose a 10,000 TRX transfer to TVendor... with memo 'Q1 budget'."
+
+> Want to sandbox your AI agent? Try: "Use the agent-restricted template — let the AI only call smart contracts, but require 2 human keys for permission changes."
+
+> Co-signing a pending proposal? Try: "Review all pending proposals and co-sign proposal prop_xxx."
+
+:::tip Templates make it easy
+You don't need to configure every key and threshold manually. Built-in templates like `basic-2of3`, `agent-restricted`, `team-tiered`, and `weighted-authority` handle the common setups — just provide the key addresses.
+:::
+
+---
+
+## x402-payment {#x402-payment}
 
 Some APIs and AI agents require on-chain payment before use. This skill uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — the AI detects the charge, completes the on-chain payment, gets the result, and reports back. It always asks for your confirmation before paying.
 
@@ -156,7 +222,7 @@ Some APIs and AI agents require on-chain payment before use. This skill uses the
 
 ---
 
-## recharge-skill — BANK OF AI Account Management {#recharge-skill}
+## recharge-skill {#recharge-skill}
 
 Check your balance, view order history, or top up your account.
 

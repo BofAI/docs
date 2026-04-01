@@ -28,7 +28,11 @@ The interactive wizard may offer a `raw_secret` option. This type stores your pr
 ```bash
 agent-wallet start -p Abc12345!
 ```
-Password requirements: at least 8 characters, including uppercase, lowercase, numbers, and special characters.
+Password requirements: at least 8 characters, including uppercase, lowercase, numbers, and special characters. If the password doesn't meet these requirements, the CLI will keep prompting you to enter a stronger one until it passes validation.
+
+When creating a new password interactively, you must enter it twice for confirmation. If the two entries don't match, the CLI will ask you to try again.
+
+**Default wallet IDs:** If you don't specify a wallet ID, the system defaults to `default_secure` for `local_secure` wallets and `default_raw` for `raw_secret` wallets.
 
 :::caution Shell history risk
 Passing `-p` inline records the password in your terminal's history file. For production wallets, prefer interactive mode (`agent-wallet start` without `-p`) or set `AGENT_WALLET_PASSWORD` as an environment variable — see [Non-Interactive Execution](#non-interactive-execution-for-automation--background-services).
@@ -47,6 +51,10 @@ agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 ### `agent-wallet sign` (Core Signing Operations)
 
 Every `sign` subcommand requires `--network` / `-n` to specify the chain.
+
+:::info Password retry behavior
+When signing with a `local_secure` wallet, the CLI will prompt for the master password if it's not provided via `-p` or `AGENT_WALLET_PASSWORD`. If you enter the wrong password, you get **2 retry attempts** (3 total) before the command fails with "Wrong password. 3 attempts failed."
+:::
 
 **Sign a message:**
 ```bash

@@ -517,9 +517,13 @@ WalletError
 ├── DecryptionError          # Wrong password or corrupted key file
 ├── SigningError              # Signing operation failed
 ├── NetworkError             # Network identifier mismatch
-├── InsufficientBalanceError # Insufficient balance (thrown by caller)
+├── InsufficientBalanceError # Insufficient balance
 └── UnsupportedOperationError # Operation not supported by this wallet type
 ```
+
+:::tip About InsufficientBalanceError
+`InsufficientBalanceError` is **not** thrown by the SDK itself — Agent-wallet is a sign-only tool and does not check balances. This error type is provided as a convenience for your application code to throw when you detect insufficient funds before initiating a transaction.
+:::
 
 ---
 
