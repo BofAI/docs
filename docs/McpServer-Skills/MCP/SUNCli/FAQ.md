@@ -112,6 +112,9 @@ Use the token's full TRON contract address instead of a symbol:
 
 ```bash
 sun price --address TYourTokenAddress
+```
+
+```bash
 sun swap TYourTokenAddress TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t 1000000
 ```
 
