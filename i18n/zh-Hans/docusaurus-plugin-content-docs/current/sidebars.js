@@ -134,6 +134,17 @@ const sidebars = {
                 'McpServer-Skills/MCP/BSCMCPServer/Installation',
               ],
             },
+            {
+              type: 'category',
+              label: 'SUN CLI',
+              collapsed: true,
+              items: [
+                'McpServer-Skills/MCP/SUNCli/Intro',
+                'McpServer-Skills/MCP/SUNCli/QuickStart',
+                'McpServer-Skills/MCP/SUNCli/CommandGuide',
+                'McpServer-Skills/MCP/SUNCli/FAQ',
+              ],
+            },
           ],
         },
         {
