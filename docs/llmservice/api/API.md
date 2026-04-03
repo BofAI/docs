@@ -3,7 +3,7 @@
 Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. Stream: SSE chunks with choices[].delta.content.
 
 - **Version:** 1.0
-- **Base URL:** `https://api.ainft.com`
+- **Base URL:** `https://api.bankofai.io`
 - **OpenAPI:** 3.1.0
 
 ---
