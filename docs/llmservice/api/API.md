@@ -1,4 +1,4 @@
-# AI API (OpenAI Compatible)
+# AI API
 
 Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. Stream: SSE chunks with choices[].delta.content.
 
