@@ -1,4 +1,4 @@
-# ChatGPT-5-nano
+# GPT-5-nano
 
 ## Overview
 ChatGPT-5-nano is an advanced language model that strikes an excellent balance between performance, speed, and cost. It is designed to provide near-professional AI capabilities at a moderate cost within the Bank of AI ecosystem.
