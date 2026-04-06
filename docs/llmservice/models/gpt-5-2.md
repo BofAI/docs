@@ -27,4 +27,4 @@ GPT-5.2 is the latest generation of the flagship large language model developed 
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **ChatGPT-5.2** | 1.75 | 14.00 |
+| **GPT-5.2** | 1.75 | 14.00 |
