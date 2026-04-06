@@ -1,4 +1,4 @@
-# GPT-5.2
+
 
 ## Overview
 GPT-5.2 is the latest generation of the flagship large language model developed by OpenAI. Building upon the powerful capabilities of the 5.1 version, it further optimizes the speed of multimodal processing and the execution efficiency of complex tasks, making it the ideal choice for professional users seeking ultimate performance and efficiency.

@@ -185,9 +185,12 @@ const sidebars = {
           label: 'Models',
           collapsed: true,
           items: [
-            'llmservice/models/chatgpt-5-2',
-            'llmservice/models/chatgpt-5-mini',
-            'llmservice/models/chatgpt-5-nano',
+            'llmservice/models/gpt-5-mini',
+            'llmservice/models/gpt-5-nano',
+            'llmservice/models/gpt-5-2',
+            'llmservice/models/gpt-5-4',
+            'llmservice/models/gpt-5-4-mini',
+            'llmservice/models/gpt-5-4-nano',  
             'llmservice/models/claude-haiku-4-5',
             'llmservice/models/claude-opus-4-5',
             'llmservice/models/claude-opus-4-6',
@@ -201,6 +204,7 @@ const sidebars = {
             'llmservice/models/minimax-m2.5',
           ],
         },
+        { type: 'doc', id: 'llmservice/memory', label: 'Memory' },
         {
           type: 'category',
           label: 'OpenClaw',

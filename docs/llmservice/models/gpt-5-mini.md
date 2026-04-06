@@ -1,4 +1,4 @@
-# GPT-5-mini
+
 
 ## Overview
 ChatGPT-5-mini is an efficient and economical lightweight language model. It is optimized for fast, smooth daily conversations and general tasks, making it a premier choice for cost-effective AI interaction within the Bank of AI ecosystem.
