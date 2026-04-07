@@ -35,7 +35,7 @@ SUN CLI covers the full range of SunSwap DEX interactions, from real-time market
 | **Pool Data** | Pool lists, APY rankings, volume and liquidity history | `sun pool top-apy --page-size 5` |
 | **Position Query** | View liquidity positions for any address | `sun position list --owner TYourAddress` |
 | **Protocol Stats** | SunSwap-wide volume, users, pools, and liquidity history | `sun protocol info` |
-| **Farm Info** | Yield farm lists and user mining positions | `sun farm list` |
+| **Farm Info** | Yield farm lists, mining positions, and farming transactions | `sun farm list` |
 | **Token Discovery** | Search tokens, list by protocol version | `sun token search USDT` |
 
 **DeFi Operations (write, requires wallet):**
