@@ -230,9 +230,19 @@ sun swap:exact-input --router <routerAddress> --args '[...]' --value 1000000
 
 ### V2
 
+创建流动性池（需要输入两个代币数量）：
+
 ```bash
 sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000 --amount-b 290000
 ```
+
+向已有池子添加流动性（另一个代币数量会根据输入的第一个代币数量自动计算）：
+
+```bash
+sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000
+```
+
+移除流动性：
 
 ```bash
 sun liquidity v2:remove --token-a TRX --token-b USDT --liquidity 500000
@@ -240,17 +250,25 @@ sun liquidity v2:remove --token-a TRX --token-b USDT --liquidity 500000
 
 ### V3
 
+创建集中流动性仓位：
+
 ```bash
 sun liquidity v3:mint --token0 TRX --token1 USDT --amount0 1000000
 ```
+
+增加已有仓位的流动性：
 
 ```bash
 sun liquidity v3:increase --token-id 123 --amount0 500000
 ```
 
+移除已有仓位的流动性：
+
 ```bash
 sun liquidity v3:decrease --token-id 123 --liquidity 1000
 ```
+
+领取累积的手续费奖励：
 
 ```bash
 sun liquidity v3:collect --token-id 123
@@ -258,25 +276,31 @@ sun liquidity v3:collect --token-id 123
 
 ### V4
 
-```bash
-sun liquidity v4:mint --token0 TRX --token1 USDT --amount0 1000000
-```
+创建集中流动性仓位（`--create-pool` 会在池子不存在时自动创建）：
 
 ```bash
 sun liquidity v4:mint --token0 TRX --token1 USDT --amount0 1000000 --create-pool
 ```
 
+增加已有仓位的流动性：
+
 ```bash
 sun liquidity v4:increase --token-id 123 --token0 TRX --token1 USDT --amount0 500000
 ```
+
+移除已有仓位的流动性：
 
 ```bash
 sun liquidity v4:decrease --token-id 123 --liquidity 1000 --token0 TRX --token1 USDT
 ```
 
+领取累积的手续费奖励：
+
 ```bash
 sun liquidity v4:collect --token-id 123
 ```
+
+查询仓位信息：
 
 ```bash
 sun liquidity v4:info --pm <positionManager> --token-id 123

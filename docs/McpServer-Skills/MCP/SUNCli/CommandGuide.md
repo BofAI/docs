@@ -230,9 +230,19 @@ sun swap:exact-input --router <routerAddress> --args '[...]' --value 1000000
 
 ### V2
 
+Create a new liquidity pool (both token amounts required):
+
 ```bash
 sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000 --amount-b 290000
 ```
+
+Add liquidity to an existing pool (the other token amount is calculated automatically):
+
+```bash
+sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000
+```
+
+Remove liquidity:
 
 ```bash
 sun liquidity v2:remove --token-a TRX --token-b USDT --liquidity 500000
@@ -240,17 +250,25 @@ sun liquidity v2:remove --token-a TRX --token-b USDT --liquidity 500000
 
 ### V3
 
+Mint a new concentrated liquidity position:
+
 ```bash
 sun liquidity v3:mint --token0 TRX --token1 USDT --amount0 1000000
 ```
+
+Increase liquidity of an existing position:
 
 ```bash
 sun liquidity v3:increase --token-id 123 --amount0 500000
 ```
 
+Decrease liquidity of an existing position:
+
 ```bash
 sun liquidity v3:decrease --token-id 123 --liquidity 1000
 ```
+
+Collect accrued fees:
 
 ```bash
 sun liquidity v3:collect --token-id 123
@@ -258,25 +276,31 @@ sun liquidity v3:collect --token-id 123
 
 ### V4
 
-```bash
-sun liquidity v4:mint --token0 TRX --token1 USDT --amount0 1000000
-```
+Mint a new concentrated liquidity position (`--create-pool` creates the pool automatically if it does not exist):
 
 ```bash
 sun liquidity v4:mint --token0 TRX --token1 USDT --amount0 1000000 --create-pool
 ```
 
+Increase liquidity of an existing position:
+
 ```bash
 sun liquidity v4:increase --token-id 123 --token0 TRX --token1 USDT --amount0 500000
 ```
+
+Decrease liquidity of an existing position:
 
 ```bash
 sun liquidity v4:decrease --token-id 123 --liquidity 1000 --token0 TRX --token1 USDT
 ```
 
+Collect accrued fees:
+
 ```bash
 sun liquidity v4:collect --token-id 123
 ```
+
+Query position info:
 
 ```bash
 sun liquidity v4:info --pm <positionManager> --token-id 123

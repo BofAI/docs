@@ -43,7 +43,7 @@ SUN CLI covers the full range of SunSwap DEX interactions, from real-time market
 | Capability | Description | Example Command |
 | :--- | :--- | :--- |
 | **Token Swap** | Execute optimal-route swaps via the Universal Router | `sun swap TRX USDT 1000000` |
-| **V2 Liquidity** | Add/remove V2 pool liquidity | `sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000 --amount-b 290000` |
+| **V2 Liquidity** | Create pools or add/remove V2 pool liquidity | `sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000` |
 | **V3 Liquidity** | Mint, increase, decrease concentrated positions, collect fees | `sun liquidity v3:mint --token0 TRX --token1 USDT --amount0 1000000` |
 | **V4 Liquidity** | V4 concentrated liquidity with Permit2 authorization | `sun liquidity v4:mint --token0 TRX --token1 USDT --amount0 1000000` |
 | **Contract Interaction** | Read or write to any TRON smart contract | `sun contract read <address> balanceOf --args '[...]'` |

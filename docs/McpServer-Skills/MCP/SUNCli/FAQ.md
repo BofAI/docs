@@ -130,4 +130,4 @@ export TRON_RPC_URL=https://your-tron-rpc.example
 
 ## Still Need Help?
 
-If your question isn't covered here, check the [Command Guide](./CommandGuide.md) for detailed usage, or file an issue on the [GitHub repository](https://github.com/nicholaskarlson/sun-cli).
+If your question isn't covered here, check the [Command Guide](./CommandGuide.md) for detailed usage, or file an issue on the [GitHub repository](https://github.com/BofAI/sun-cli).
