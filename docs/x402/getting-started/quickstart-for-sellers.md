@@ -396,7 +396,7 @@ Open the `.env` file in the `x402-demo` directory with a text editor and fill in
 # How to get it: TronLink → Settings → Account Management → Export Private Key
 TRON_PRIVATE_KEY=paste_your_facilitator_private_key_here
 
-# TronGrid API Key (required for mainnet, can be left blank for testnet)
+# TronGrid API Key (recommended for production; when not set, a BankOfAI fallback endpoint is used automatically)
 # Apply at: https://www.trongrid.io/
 TRON_GRID_API_KEY=
 ```
@@ -545,7 +545,7 @@ Modify the `network` parameter in the `@x402_protected` decorator in `server.py`
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
-1. **Apply for a TronGrid API Key**: go to [TronGrid](https://www.trongrid.io/) to register and create an API Key, then fill it into the `TRON_GRID_API_KEY` field in `.env` (required for mainnet)
+1. **Apply for a TronGrid API Key**: go to [TronGrid](https://www.trongrid.io/) to register and create an API Key, then fill it into the `TRON_GRID_API_KEY` field in `.env` (recommended for production; a BankOfAI fallback endpoint is used automatically when not set)
 2. **Replace the private key**: update the private key in `.env` to the mainnet Facilitator wallet's private key
 3. **Fund the fee wallet**: transfer sufficient real TRX to the Facilitator mainnet wallet (to pay Energy and Bandwidth fees)
 4. **Update the network config**: change the network configuration in the Facilitator code to `NetworkConfig.TRON_MAINNET`

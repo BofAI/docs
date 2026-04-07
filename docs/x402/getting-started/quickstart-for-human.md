@@ -212,7 +212,10 @@ import httpx
 
 from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
 from bankofai.x402.mechanisms.tron.exact_permit import ExactPermitTronClientMechanism
+from bankofai.x402.mechanisms.tron.exact_gasfree.client import ExactGasFreeClientMechanism
 from bankofai.x402.signers.client import TronClientSigner
+from bankofai.x402.utils.gasfree import GasFreeAPIClient
+from bankofai.x402.config import NetworkConfig
 
 
 # ========== Configuration ==========
@@ -221,14 +224,21 @@ from bankofai.x402.signers.client import TronClientSigner
 SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"
 # ====================================
 
+# GasFree API clients (routed through BankOfAI proxy — no API keys needed)
+gasfree_clients = {
+    "tron:nile": GasFreeAPIClient(NetworkConfig.get_gasfree_api_base_url("tron:nile")),
+    "tron:mainnet": GasFreeAPIClient(NetworkConfig.get_gasfree_api_base_url("tron:mainnet")),
+}
+
 
 async def main():
     # Initialize signer with your private key (network is resolved dynamically)
     signer = TronClientSigner.from_private_key(os.getenv("TRON_PRIVATE_KEY"))
 
-    # Create x402 client and register the payment mechanism and balance policy
+    # Create x402 client and register payment mechanisms and balance policy
     x402_client = X402Client()
     x402_client.register("tron:*", ExactPermitTronClientMechanism(signer))
+    x402_client.register("tron:*", ExactGasFreeClientMechanism(signer, clients=gasfree_clients))
     x402_client.register_policy(SufficientBalancePolicy)
 
     async with httpx.AsyncClient(timeout=60.0) as http_client:
@@ -264,8 +274,9 @@ Response: {"data": "This is premium content!"}
 import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
-  ExactPermitTronClientMechanism, TronClientSigner,
-  SufficientBalancePolicy,
+  ExactPermitTronClientMechanism, ExactGasFreeClientMechanism,
+  TronClientSigner, SufficientBalancePolicy,
+  GasFreeAPIClient, getGasFreeApiBaseUrl,
 } from '@bankofai/x402'
 
 const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
@@ -280,9 +291,13 @@ async function main(): Promise<void> {
   // Initialize signer with your private key
   const signer = new TronClientSigner(TRON_PRIVATE_KEY)
 
-  // Create x402 client and register the payment mechanism and balance policy
+  // Create x402 client and register payment mechanisms and balance policy
   const x402 = new X402Client()
   x402.register('tron:*', new ExactPermitTronClientMechanism(signer))
+  x402.register('tron:*', new ExactGasFreeClientMechanism(signer, {
+    'tron:nile': new GasFreeAPIClient(getGasFreeApiBaseUrl('tron:nile')),
+    'tron:mainnet': new GasFreeAPIClient(getGasFreeApiBaseUrl('tron:mainnet')),
+  }))
   x402.registerPolicy(SufficientBalancePolicy)
 
   const client = new X402FetchClient(x402)

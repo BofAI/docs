@@ -40,6 +40,7 @@ x402 专为区块链生态设计，实现了原生的链上支付验证与结算
 | **TRON Shasta**  | **Testnet**   | **备用测试网**：长期稳定的测试环境。   |
 | **BSC Mainnet**        | **Mainnet**   | **生产网络**：用于处理真实价值资产。   |
 | **BSC Testnet**         | **Testnet**   | **推荐测试网**：BSC 首选的开发与调试环境。 |
+
 ### 支持的代币
 
 x402 协议全面支持 **TRC-20/BEP-20** 标准代币，并默认将 **USDT** 和 **USDD** 作为主要结算货币。
@@ -81,7 +82,7 @@ x402 采用类型化数据签名来处理所有支付相关的签名授权。
 
 ### 支付方案
 
-x402 支持两种支付方案：`exact_permit` 和 `exact`。
+x402 支持三种支付方案：`exact_permit`、`exact` 和 `exact_gasfree`。
 
 #### `exact_permit` 方案
 
@@ -94,6 +95,16 @@ x402 支持两种支付方案：`exact_permit` 和 `exact`。
 #### `exact` 方案
 
 `exact` 方案适用于原生支持 `transferWithAuthorization` 的代币，无需 `PaymentPermit` 合约。
+
+#### `exact_gasfree` 方案
+
+`exact_gasfree` 是 TRON 专属的支付机制，允许用户使用 USDT/USDD 付款而**无需持有 TRX 来支付 gas 费用**。结算通过 BankOfAI Facilitator 端点的官方 GasFree 代理完成。
+
+核心特性：
+
+- **买家零 gas 成本**：买家无需持有 TRX，gas 费用由 GasFree 基础设施承担
+- **无需 API 密钥**：所有 GasFree API 调用通过 BankOfAI 代理路由至 `https://facilitator.bankofai.io/{mainnet,nile}`，客户端无需配置 `GASFREE_API_KEY` 或 `GASFREE_API_SECRET`
+- **仅限 TRON**：支持 `tron:mainnet` 和 `tron:nile`
 
 #### 工作原理
 
@@ -123,10 +134,10 @@ Facilitator 作为协议的中间件，承担以下核心职责：
 
 | 核心组件     | TRON/BSC 实现详情                              |
 | :----------- | :----------------------------------------- |
-| **网络环境** | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97`|
+| **网络环境** | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97` |
 | **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）,BEP-20 代币 |
 | **签名机制** | 类型化数据签名                     |
-| **支付方案** | `exact_permit`, `exact`                    |
+| **支付方案** | `exact_permit`, `exact`, `exact_gasfree`（仅限 TRON） |
 
 ### 添加自定义代币
 

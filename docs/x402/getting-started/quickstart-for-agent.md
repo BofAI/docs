@@ -60,10 +60,10 @@ Set your agent wallet's private key as environment variables so the x402-payment
 
 ```bash
 export TRON_PRIVATE_KEY="your_agent_wallet_private_key_here"
-export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RPC rate limits
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended for production workloads
 ```
 
-> 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above. You can leave this blank during testnet testing, but it is required for mainnet.
+> 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above. When `TRON_GRID_API_KEY` is not set, mainnet RPC calls are automatically routed to a BankOfAI-operated fallback endpoint. Setting this key is recommended for production workloads to ensure optimal performance.
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
@@ -194,7 +194,7 @@ Before deploying your agent to production, make sure to review the following:
 | Agent doesn't initiate payment, errors immediately | Skill not installed correctly | Re-run the installation command in Step 2 |
 | `Private key not found` or signing fails | Environment variable not set or misconfigured | Re-run Step 1, and make sure you run the agent **in the same terminal session** |
 | Insufficient balance error | No test tokens in the agent wallet | Go back to Prerequisites and claim test tokens from the faucet |
-| Request times out | Network issue or RPC rate limiting | Configure `TRON_GRID_API_KEY` to avoid rate limits |
+| Request times out | Network issue or RPC rate limiting | Configure `TRON_GRID_API_KEY` for better performance (a fallback endpoint is used automatically when not set) |
 | Agent accesses successfully but balance doesn't change | May have accessed a free endpoint | Confirm the URL path is `/protected-nile`, not another path |
 
 ---

@@ -100,29 +100,39 @@ When configuring an `HTTP 402` payment request on the server side, you must expl
 
 ## Payment Scheme
 
-x402 supports two payment schemes: `exact_permit` and `exact`.
+x402 supports three payment schemes: `exact_permit`, `exact`, and `exact_gasfree`.
 
 ### `exact_permit` Scheme
 
 The `exact_permit` scheme transfers tokens via the `PaymentPermit` contract, suitable for:
 
-- **Pay-per-use APIs** (e.g., LLM token generation, image generation services)  
-- **Metered resources** (cloud compute time, storage usage, bandwidth consumption)  
-- **Dynamic pricing services** based on actual usage  
+- **Pay-per-use APIs** (e.g., LLM token generation, image generation services)
+- **Metered resources** (cloud compute time, storage usage, bandwidth consumption)
+- **Dynamic pricing services** based on actual usage
 
 ### `exact` Scheme
 
 The `exact` scheme is for tokens that natively support `transferWithAuthorization`. It does not require the `PaymentPermit` contract.
 
+### `exact_gasfree` Scheme
+
+The `exact_gasfree` scheme is a TRON-specific payment mechanism that allows users to pay with USDT/USDD **without holding TRX for gas fees**. Settlement is handled via the official GasFree Proxy through the BankOfAI facilitator endpoint.
+
+Key characteristics:
+
+- **Zero gas cost for buyers**: Buyers do not need to hold TRX — gas is covered by the GasFree infrastructure
+- **No API keys required**: All GasFree API calls route through the BankOfAI proxy at `https://facilitator.bankofai.io/{mainnet,nile}`, so clients do not need to configure `GASFREE_API_KEY` or `GASFREE_API_SECRET`
+- **TRON only**: Available on `tron:mainnet` and `tron:nile`
+
 ### How Payment Schemes Work
 
-1. **Authorize**  
+1. **Authorize**
    The client signs a message authorizing a **maximum amount**.
 
-2. **Execute**  
+2. **Execute**
    The server performs the requested task and calculates the **actual cost**.
 
-3. **Settle**  
+3. **Settle**
    The Facilitator submits the on-chain transaction based on the actual cost.
 
 ---
@@ -154,7 +164,7 @@ You may deploy your own Facilitator node to gain full control over payment verif
 | **Networks**   | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97` |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20 |
 | **Signing Mechanism** | Typed data signing |
-| **Payment Scheme** | `exact_permit`, `exact` |
+| **Payment Scheme** | `exact_permit`, `exact`, `exact_gasfree` (TRON only) |
 
 ---
 
