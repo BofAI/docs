@@ -131,7 +131,7 @@ export TRON_NETWORK=mainnet
 ```
 
 ```bash
-export TRONGRID_API_KEY="<YOUR_KEY>"
+export TRON_GRID_API_KEY="<YOUR_KEY>"
 ```
 
 ```bash

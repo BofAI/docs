@@ -63,7 +63,14 @@ export TRON_PRIVATE_KEY="在此填入代理钱包私钥"
 export TRON_GRID_API_KEY="在此填入TronGrid API Key"  # 生产环境推荐配置
 ```
 
-> 💡 **如何获取 TronGrid API Key：** 前往 [TronGrid 官网](https://www.trongrid.io/) 免费注册，创建 API Key 后粘贴到上方。未配置 `TRON_GRID_API_KEY` 时，主网 RPC 调用会自动路由至 BankOfAI 运营的备用 RPC 端点。生产环境建议配置此 Key 以获得最佳性能。
+> 💡 **如何获取 TronGrid API Key：** 前往 [TronGrid 官网](https://www.trongrid.io/) 免费注册，创建 API Key 后粘贴到上方。
+
+:::note 备用 RPC 端点
+未配置 `TRON_GRID_API_KEY` 时，主网 RPC 调用会自动通过 BankOfAI 运营的公共端点
+（`https://api.trongrid.io` 经由 BankOfAI 代理）路由。该端点无保证的 SLA，
+在高负载下可能会被限速。生产环境请配置您自己的 `TRON_GRID_API_KEY`，
+以确保可靠性并独立于 BankOfAI 基础设施。
+:::
 
 </TabItem>
 <TabItem value="BSC" label="BSC">

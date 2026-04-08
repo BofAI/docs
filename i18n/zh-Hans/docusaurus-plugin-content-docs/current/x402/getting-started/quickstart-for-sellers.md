@@ -397,7 +397,7 @@ cp .env.sample .env
 # 获取方式：TronLink → 设置 → 账户管理 → 导出私钥
 TRON_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
 
-# TronGrid API Key（生产环境推荐配置；未配置时会自动使用 BankOfAI 备用 RPC 端点）
+# TronGrid API Key（主网必需；生产环境推荐配置）
 # 申请地址：https://www.trongrid.io/
 TRON_GRID_API_KEY=
 ```
@@ -546,7 +546,14 @@ curl http://localhost:8000/protected
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
-1. **申请 TronGrid API Key**：前往 [TronGrid](https://www.trongrid.io/) 注册并创建 API Key，填入 `.env` 的 `TRON_GRID_API_KEY` 字段（生产环境推荐；未配置时会自动使用 BankOfAI 备用 RPC 端点）
+1. **申请 TronGrid API Key**：前往 [TronGrid](https://www.trongrid.io/) 注册并创建 API Key，填入 `.env` 的 `TRON_GRID_API_KEY` 字段
+
+   :::note 备用 RPC 端点
+   未配置 `TRON_GRID_API_KEY` 时，主网 RPC 调用会自动通过 BankOfAI 运营的公共端点
+   （`https://api.trongrid.io` 经由 BankOfAI 代理）路由。该端点无保证的 SLA，
+   在高负载下可能会被限速。生产环境请配置您自己的 `TRON_GRID_API_KEY`，
+   以确保可靠性并独立于 BankOfAI 基础设施。
+   :::
 2. **替换私钥**：将 `.env` 中的私钥替换为主网 Facilitator 钱包的私钥
 3. **充值手续费**：向 Facilitator 主网钱包转入足够的真实 TRX（用于支付 Energy 和 Bandwidth 费用）
 4. **更新网络配置**：将 Facilitator 代码中的网络配置改为 `NetworkConfig.TRON_MAINNET`

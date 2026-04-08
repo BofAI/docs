@@ -25,6 +25,14 @@ All commands inherit these root-level flags. **Root flags must be placed before 
 | `-y, --yes` | Skip confirmation prompts |
 | `--dry-run` | Print intent without sending the write action |
 
+:::caution Private Key Security
+The `-k` / `--private-key` and `-m` / `--mnemonic` flags pass sensitive
+material as command-line arguments, which may be recorded in shell history
+and process listings. Prefer environment variables (`AGENT_WALLET_PRIVATE_KEY`,
+`AGENT_WALLET_MNEMONIC`) or [agent-wallet](https://github.com/ABlockofAI/agent-wallet)
+encrypted storage for all non-throwaway keys.
+:::
+
 **Examples:**
 
 ```bash
