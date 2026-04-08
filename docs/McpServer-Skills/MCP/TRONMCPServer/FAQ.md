@@ -47,49 +47,45 @@ When using HTTP mode (`npm run start:http`) and clients cannot connect, the usua
 
 3. **Firewall blocking**. If you're accessing the local HTTP service from another machine, check whether the firewall allows inbound connections on that port.
 
-### Only read tools in the tool list, no write tools
+### Write tools appear but return "Wallet not configured" error
 
-This is not an error — it's by design. Write tools (transfers, staking, etc.) are only registered into the AI's tool list after a wallet is configured. If you haven't set any wallet environment variables, the server automatically runs in read-only mode.
+As of v1.1.7, write tools (transfers, staking, etc.) are always visible in the AI's tool list, but wallet availability is checked at execution time. If you call a write tool without a configured wallet, it will return an error prompting you to set up a wallet.
 
-To unlock write tools, configure one of the three wallet modes:
+To enable write operations, configure [Agent Wallet](../../../Agent-Wallet/Intro):
 
-- Set `AGENT_WALLET_PASSWORD` ([Agent Wallet](../../../Agent-Wallet/Intro) mode, recommended)
-- Set `TRON_PRIVATE_KEY` (Private Key mode)
-- Set `TRON_MNEMONIC` (Mnemonic mode)
+- Set `AGENT_WALLET_PASSWORD` environment variable with your master password
+- Optionally set `AGENT_WALLET_DIR` if using a custom wallet directory
 
 After configuring, restart your AI client. For detailed instructions, see [Local Private Deployment](./LocalPrivatizedDeployment.md).
+
+:::info
+If you're connected via the official cloud service or using `--readonly` mode, write tools will not appear at all — this is expected behavior.
+:::
 
 ---
 
 ## Authentication & Key Issues
 
-### "Invalid private key" error
+### "Wallet not configured" error
 
-If the server reports an invalid private key at startup, it's usually a format issue:
+This means no wallet has been set up for signing transactions. TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for all wallet management. To resolve:
 
-1. **Check key format**. The private key should be a 64-character hex string, with or without the `0x` prefix:
-   ```
-   # Valid formats:
-   abc123def456...       (64 hex characters)
-   0xabc123def456...    (0x + 64 hex characters)
-   ```
-
-2. **Avoid extra spaces or quotes**. Environment variable values must not contain extra spaces, nested quotes, or newline characters:
+1. **Install and initialize Agent Wallet** following the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
+2. **Set the environment variable**:
    ```bash
-   # Correct
-   export TRON_PRIVATE_KEY=abc123def456...
-
-   # Wrong (quotes become part of the value)
-   export TRON_PRIVATE_KEY="'abc123def456...'"
+   export AGENT_WALLET_PASSWORD='<your-master-password>'
    ```
-
-3. **Verify the key is valid**. Import the same private key into a TRON wallet (like TronLink) to confirm it works.
+3. **Restart your AI client** for the changes to take effect.
 
 ### "Agent wallet password incorrect" error
 
 `AGENT_WALLET_PASSWORD` must exactly match the master password generated when you ran `agent-wallet start`. Verify that the wallet directory exists (`ls ~/.agent-wallet/`) and that `AGENT_WALLET_DIR` points to the correct path if you used a custom directory.
 
 If the password is lost, you'll need to re-initialize. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
+
+:::caution Migrating from legacy wallet modes
+If you were previously using `TRON_PRIVATE_KEY` or `TRON_MNEMONIC` environment variables, these are no longer supported as of v1.1.7. Please migrate to Agent Wallet. You can import your existing private key into Agent Wallet — see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro) for details.
+:::
 
 ### TronGrid API Key not working
 
@@ -209,3 +205,11 @@ npm run build
 ### What MCP protocol version is supported?
 
 TRON MCP Server supports MCP protocol version **2025-11-25**, using `@modelcontextprotocol/sdk` 1.22.0 or higher.
+
+### What changed in v1.1.7?
+
+Key changes in v1.1.7:
+
+- **Legacy wallet modes removed**: `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management now goes through [Agent Wallet](../../../Agent-Wallet/Intro).
+- **Write tools always visible**: Write tools are now registered up front and visible in the tool list even without a wallet configured. Wallet availability is checked at execution time — if no wallet is found, a clear error message is returned.
+- **Docker support** (added in v1.1.6): Run TRON MCP Server in a Docker container for isolated deployments.

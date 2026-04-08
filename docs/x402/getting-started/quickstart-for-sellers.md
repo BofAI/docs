@@ -407,7 +407,7 @@ TRON_GRID_API_KEY=
 ```bash
 # Private key of the dedicated Facilitator wallet (NOT your receiving wallet!)
 # How to get it: MetaMask → Account Details → Export Private Key
-BSC_PRIVATE_KEY=paste_your_facilitator_private_key_here
+AGENT_WALLET_PRIVATE_KEY=paste_your_facilitator_private_key_here
 ```
 
 </TabItem>

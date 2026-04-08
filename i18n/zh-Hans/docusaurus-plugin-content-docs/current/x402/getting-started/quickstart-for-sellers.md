@@ -408,7 +408,7 @@ TRON_GRID_API_KEY=
 ```bash
 # Facilitator 专用钱包的私钥（不是收款钱包！）
 # 获取方式：MetaMask → 账户详情 → 导出私钥
-BSC_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
+AGENT_WALLET_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
 ```
 
 </TabItem>

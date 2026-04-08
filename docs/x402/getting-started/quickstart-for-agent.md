@@ -53,14 +53,26 @@ Before continuing, confirm that you are using one of the supported platforms abo
 
 ## Step 1: Configure Wallet Credentials
 
-Set your agent wallet's private key as environment variables so the x402-payment skill can read them:
+Configure wallet credentials so the x402-payment skill can sign payments. There are two modes:
+
+**Option A: Agent Wallet (Recommended)** — Private key encrypted locally, more secure:
+
+```bash
+export AGENT_WALLET_PASSWORD="your_master_password_here"
+# Optional: custom wallet directory
+# export AGENT_WALLET_DIR="$HOME/.agent-wallet"
+```
+
+> 💡 If you haven't set up Agent Wallet yet, see [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md).
+
+**Option B: Static Private Key** — Simpler but less secure (test environments only):
 
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
 ```bash
 export TRON_PRIVATE_KEY="your_agent_wallet_private_key_here"
-export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended for production workloads
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Optional, recommended for production
 ```
 
 > 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above.
@@ -78,7 +90,7 @@ independence from BankOfAI's infrastructure.
 <TabItem value="BSC" label="BSC">
 
 ```bash
-export BSC_PRIVATE_KEY="your_agent_wallet_private_key_here"
+export AGENT_WALLET_PRIVATE_KEY="your_agent_wallet_private_key_here"
 ```
 
 </TabItem>
@@ -97,7 +109,7 @@ echo $TRON_PRIVATE_KEY
 <TabItem value="BSC" label="BSC">
 
 ```bash
-echo $BSC_PRIVATE_KEY
+echo $AGENT_WALLET_PRIVATE_KEY
 ```
 
 </TabItem>

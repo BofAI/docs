@@ -106,6 +106,26 @@ x402 支持三种支付方案：`exact_permit`、`exact` 和 `exact_gasfree`。
 - **无需 API 密钥**：所有 GasFree API 调用通过 BankOfAI 代理路由至 `https://facilitator.bankofai.io/{mainnet,nile}`，客户端无需配置 `GASFREE_API_KEY` 或 `GASFREE_API_SECRET`
 - **仅限 TRON**：支持 `tron:mainnet` 和 `tron:nile`
 
+#### GasFree 账户管理（通过 x402-payment skill）
+
+使用 `x402-payment` skill 时，可直接通过 CLI 管理 GasFree 账户：
+
+**查询 GasFree 钱包信息**（地址、激活状态、余额、nonce）：
+```bash
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --network nile
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --wallet <YOUR_WALLET_ADDRESS>
+```
+
+**激活 GasFree 账户**（首次使用前需要激活）：
+```bash
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network mainnet
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --token USDT
+```
+
+激活过程会向 GasFree 钱包存入少量代币（nile 约 3.05 USDT）以完成资金注入，然后提交 GasFree 交易触发激活。建议先使用 `--gasfree-info` 检查账户是否已激活。
+
 #### 工作原理
 
 1.  **预授权 (Authorize)**：客户端签署消息，授权支付**最大金额** (Max Amount)。

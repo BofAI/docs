@@ -22,13 +22,13 @@ Both installation instructions and code examples are provided for TypeScript and
 
 **Check Your Node.js Version**
 
-Requires Node.js ≥ 18. Check your current version:
+Requires Node.js ≥ 20. Check your current version:
 
 ```bash
 node -v
 ```
 
-If the output is `v18.0.0` or higher, you can proceed directly to installation. Otherwise, follow the instructions below.
+If the output is `v20.0.0` or higher, you can proceed directly to installation. Otherwise, follow the instructions below.
 
 :::tip Install / Upgrade Node.js
 
@@ -41,9 +41,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 # Reload shell config
 source ~/.bashrc   # or source ~/.zshrc
 
-# Install and switch to Node.js 18 LTS
-nvm install 18
-nvm use 18
+# Install and switch to Node.js 20 LTS
+nvm install 20
+nvm use 20
 ```
 
 You can also download the **LTS** installer directly from [nodejs.org](https://nodejs.org).
@@ -513,12 +513,16 @@ Error type hierarchy:
 
 ```
 WalletError
-├── WalletNotFoundError      # Specified wallet not found
-├── DecryptionError          # Wrong password or corrupted key file
-├── SigningError              # Signing operation failed
-├── NetworkError             # Network identifier mismatch
-├── InsufficientBalanceError # Insufficient balance
-└── UnsupportedOperationError # Operation not supported by this wallet type
+├── WalletNotFoundError        # Specified wallet not found
+├── DecryptionError            # Wrong password or corrupted key file
+├── SigningError                # Signing operation failed
+├── NetworkError               # Network identifier mismatch
+├── InsufficientBalanceError   # Insufficient balance
+├── UnsupportedOperationError  # Operation not supported by this wallet type
+├── PrivyConfigError           # Privy wallet configuration error
+├── PrivyRequestError          # Privy API request failed
+├── PrivyRateLimitError        # Privy API rate limit exceeded
+└── PrivyAuthError             # Privy authentication failed
 ```
 
 :::tip About InsufficientBalanceError

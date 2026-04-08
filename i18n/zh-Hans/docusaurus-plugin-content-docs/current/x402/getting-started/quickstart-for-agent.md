@@ -76,7 +76,7 @@ export TRON_GRID_API_KEY="在此填入TronGrid API Key"  # 生产环境推荐配
 <TabItem value="BSC" label="BSC">
 
 ```bash
-export BSC_PRIVATE_KEY="在此填入代理钱包私钥"
+export AGENT_WALLET_PRIVATE_KEY="在此填入代理钱包私钥"
 ```
 
 </TabItem>
@@ -95,7 +95,7 @@ echo $TRON_PRIVATE_KEY
 <TabItem value="BSC" label="BSC">
 
 ```bash
-echo $BSC_PRIVATE_KEY
+echo $AGENT_WALLET_PRIVATE_KEY
 ```
 
 </TabItem>

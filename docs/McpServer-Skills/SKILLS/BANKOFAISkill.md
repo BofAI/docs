@@ -168,6 +168,21 @@ Need to check balances, transfer tokens, or manage approvals for any TRC20 token
 
 > Approve 100 USDT for spender TSpenderAddress.
 
+**Advanced features:**
+
+> Check all my token balances at once: "Show my balances for USDT, USDD, SUN, JST, and BTT." (uses batch mode — invalid tokens won't abort the entire query)
+
+> Test before sending: "Do a dry-run transfer of 50 USDT to TXX...." (validates everything without broadcasting)
+
+> Fetch token metadata: "What are the name, symbol, decimals, and total supply of token TXX...?"
+
+**Safety built in:**
+
+- Self-transfers are automatically rejected
+- Unlimited (MAX_UINT256) approvals are blocked — only exact amounts allowed
+- Recipient and spender addresses are validated as proper TRON addresses
+- Amounts must be greater than 0, even in dry-run mode
+
 **Real-world scenarios:**
 
 > Quick portfolio check? Try: "Show my balances for USDT, USDD, SUN, JST, and BTT."
@@ -206,8 +221,19 @@ Want to add multi-signature protection to your TRON account? This skill manages 
 
 > Co-signing a pending proposal? Try: "Review all pending proposals and co-sign proposal prop_xxx."
 
+**Key details:**
+
+- Proposals expire after **24 hours** by default — co-signers must approve within this window
+- Active permission operations can be scoped to specific transaction types: TransferContract, TriggerSmartContract, FreezeBalanceV2Contract, DelegateResourceContract, VoteWitnessContract, and more
+- Supports **hybrid signature workflows** — combine human approval keys with an agent signing key for co-signing
+- Pending proposals are stored locally at `~/.clawdbot/multisig/pending/` and can be shared for distributed signing
+
 :::tip Templates make it easy
 You don't need to configure every key and threshold manually. Built-in templates like `basic-2of3`, `agent-restricted`, `team-tiered`, and `weighted-authority` handle the common setups — just provide the key addresses.
+:::
+
+:::danger Lockout warning
+Changing Owner permissions is **irreversible** without the new keys. The skill validates thresholds to prevent lockout, but always double-check key addresses before confirming Owner permission changes.
 :::
 
 ---

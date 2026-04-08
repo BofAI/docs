@@ -169,10 +169,12 @@ export TRON_PRIVATE_KEY=your_private_key_here
 在终端中执行（将 `your_private_key_here` 替换为您在前置准备中导出的私钥）：
 
 ```bash
-export BSC_PRIVATE_KEY=your_private_key_here
+export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-> 💡 **更推荐的方式：** 在项目目录创建 `.env` 文件，写入 `BSC_PRIVATE_KEY=你的私钥`，然后在 `.gitignore` 中添加 `.env`，防止意外提交到 Git。
+> 💡 **更推荐的方式：** 在项目目录创建 `.env` 文件，写入 `AGENT_WALLET_PRIVATE_KEY=你的私钥`，然后在 `.gitignore` 中添加 `.env`，防止意外提交到 Git。
+>
+> 💡 如果您已在 TRON 标签页中配置了 `TRON_PRIVATE_KEY`，同一个密钥同样适用于 BSC，无需重复设置。
 
 </TabItem>
 </Tabs>
@@ -190,7 +192,7 @@ echo $TRON_PRIVATE_KEY
 <TabItem value="BSC" label="BSC">
 
 ```bash
-echo $BSC_PRIVATE_KEY
+echo $AGENT_WALLET_PRIVATE_KEY
 ```
 
 </TabItem>
@@ -211,7 +213,6 @@ echo $BSC_PRIVATE_KEY
 
 ```python
 import asyncio
-import os
 import httpx
 
 from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
@@ -236,8 +237,8 @@ gasfree_clients = {
 
 
 async def main():
-    # 用私钥初始化签名器（网络由服务器响应动态确定）
-    signer = TronClientSigner.from_private_key(os.getenv("TRON_PRIVATE_KEY"))
+    # 通过 agent-wallet 初始化签名器（自动从环境变量解析钱包）
+    signer = await TronClientSigner.create()
 
     # 创建 x402 客户端，注册付款机制和余额检查策略
     x402_client = X402Client()
@@ -245,7 +246,7 @@ async def main():
     x402_client.register("tron:*", ExactGasFreeClientMechanism(signer, clients=gasfree_clients))
     x402_client.register_policy(SufficientBalancePolicy)
 
-    async with httpx.AsyncClient(timeout=60.0) as http_client:
+    async with httpx.AsyncClient(timeout=120) as http_client:
         client = X402HttpClient(http_client, x402_client)
 
         # 发起请求——SDK 会自动处理付款，您无需手动操作
@@ -283,8 +284,6 @@ import {
   GasFreeAPIClient, getGasFreeApiBaseUrl,
 } from '@bankofai/x402'
 
-const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
-
 // ========== 配置项 ==========
 // 您要访问的 x402 付费 API 地址
 // 下方是我们提供的测试地址，您可以先用它验证流程是否通畅
@@ -292,8 +291,8 @@ const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile'
 // ===========================
 
 async function main(): Promise<void> {
-  // 用私钥初始化签名器
-  const signer = new TronClientSigner(TRON_PRIVATE_KEY)
+  // 通过 agent-wallet 初始化签名器（自动从环境变量解析钱包）
+  const signer = await TronClientSigner.create()
 
   // 创建 x402 客户端，注册付款机制和余额检查策略
   const x402 = new X402Client()
@@ -353,7 +352,6 @@ npx tsx client.ts
 
 ```python
 import asyncio
-import os
 import httpx
 
 from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
@@ -369,8 +367,8 @@ SERVER_URL = "https://x402-demo.bankofai.io/protected-bsc-testnet"
 
 
 async def main():
-    # 用私钥初始化签名器
-    signer = EvmClientSigner.from_private_key(os.getenv("BSC_PRIVATE_KEY"))
+    # 通过 agent-wallet 初始化签名器（自动从环境变量解析钱包）
+    signer = await EvmClientSigner.create()
 
     # 创建 x402 客户端，注册付款机制和余额检查策略
     x402_client = X402Client()
@@ -378,7 +376,7 @@ async def main():
     x402_client.register("eip155:*", ExactEvmClientMechanism(signer))
     x402_client.register_policy(SufficientBalancePolicy)
 
-    async with httpx.AsyncClient(timeout=60.0) as http_client:
+    async with httpx.AsyncClient(timeout=120) as http_client:
         client = X402HttpClient(http_client, x402_client)
 
         # 发起请求——SDK 会自动处理付款，您无需手动操作
@@ -415,16 +413,14 @@ import {
   EvmClientSigner, SufficientBalancePolicy,
 } from '@bankofai/x402'
 
-const BSC_PRIVATE_KEY = process.env.BSC_PRIVATE_KEY!
-
 // ========== 配置项 ==========
 // 您要访问的 x402 付费 API 地址
 const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet'
 // ===========================
 
 async function main(): Promise<void> {
-  // 用私钥初始化签名器
-  const signer = new EvmClientSigner(BSC_PRIVATE_KEY)
+  // 通过 agent-wallet 初始化签名器（自动从环境变量解析钱包）
+  const signer = await EvmClientSigner.create()
 
   // 创建 x402 客户端，注册付款机制和余额检查策略
   const x402 = new X402Client()

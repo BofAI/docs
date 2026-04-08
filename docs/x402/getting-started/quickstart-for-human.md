@@ -165,10 +165,12 @@ export TRON_PRIVATE_KEY=your_private_key_here
 In your terminal, run (replace `your_private_key_here` with the key you exported):
 
 ```bash
-export BSC_PRIVATE_KEY=your_private_key_here
+export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-> 💡 **Recommended:** Create a `.env` file in your project directory containing `BSC_PRIVATE_KEY=your_key`, then add `.env` to `.gitignore` to prevent accidental commits.
+> 💡 **Recommended:** Create a `.env` file in your project directory containing `AGENT_WALLET_PRIVATE_KEY=your_key`, then add `.env` to `.gitignore` to prevent accidental commits.
+>
+> 💡 If you already set `TRON_PRIVATE_KEY` in the TRON tab, the same key works for BSC — no need to set it again.
 
 </TabItem>
 </Tabs>
@@ -186,7 +188,7 @@ echo $TRON_PRIVATE_KEY
 <TabItem value="BSC" label="BSC">
 
 ```bash
-echo $BSC_PRIVATE_KEY
+echo $AGENT_WALLET_PRIVATE_KEY
 ```
 
 </TabItem>
@@ -207,7 +209,6 @@ Create a new file (e.g. `client.py` or `client.ts`) and paste the code for your 
 
 ```python
 import asyncio
-import os
 import httpx
 
 from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
@@ -232,8 +233,8 @@ gasfree_clients = {
 
 
 async def main():
-    # Initialize signer with your private key (network is resolved dynamically)
-    signer = TronClientSigner.from_private_key(os.getenv("TRON_PRIVATE_KEY"))
+    # Initialize signer via agent-wallet (resolves wallet from environment automatically)
+    signer = await TronClientSigner.create()
 
     # Create x402 client and register payment mechanisms and balance policy
     x402_client = X402Client()
@@ -241,7 +242,7 @@ async def main():
     x402_client.register("tron:*", ExactGasFreeClientMechanism(signer, clients=gasfree_clients))
     x402_client.register_policy(SufficientBalancePolicy)
 
-    async with httpx.AsyncClient(timeout=60.0) as http_client:
+    async with httpx.AsyncClient(timeout=120) as http_client:
         client = X402HttpClient(http_client, x402_client)
 
         # Make the request — the SDK handles payment automatically
@@ -279,8 +280,6 @@ import {
   GasFreeAPIClient, getGasFreeApiBaseUrl,
 } from '@bankofai/x402'
 
-const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
-
 // ========== Configuration ==========
 // The x402-protected API you want to call.
 // The URL below is our demo endpoint — use it to verify your setup works end-to-end.
@@ -288,8 +287,8 @@ const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile'
 // ====================================
 
 async function main(): Promise<void> {
-  // Initialize signer with your private key
-  const signer = new TronClientSigner(TRON_PRIVATE_KEY)
+  // Initialize signer via agent-wallet (resolves wallet from environment automatically)
+  const signer = await TronClientSigner.create()
 
   // Create x402 client and register payment mechanisms and balance policy
   const x402 = new X402Client()
@@ -349,7 +348,6 @@ Response: { data: 'This is premium content!' }
 
 ```python
 import asyncio
-import os
 import httpx
 
 from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
@@ -364,8 +362,8 @@ SERVER_URL = "https://x402-demo.bankofai.io/protected-bsc-testnet"
 
 
 async def main():
-    # Initialize signer with your private key
-    signer = EvmClientSigner.from_private_key(os.getenv("BSC_PRIVATE_KEY"))
+    # Initialize signer via agent-wallet (resolves wallet from environment automatically)
+    signer = await EvmClientSigner.create()
 
     # Create x402 client and register BSC mechanisms and balance policy
     x402_client = X402Client()
@@ -373,7 +371,7 @@ async def main():
     x402_client.register("eip155:*", ExactEvmClientMechanism(signer))
     x402_client.register_policy(SufficientBalancePolicy)
 
-    async with httpx.AsyncClient(timeout=60.0) as http_client:
+    async with httpx.AsyncClient(timeout=120) as http_client:
         client = X402HttpClient(http_client, x402_client)
 
         # Make the request — the SDK handles payment automatically
@@ -410,15 +408,13 @@ import {
   EvmClientSigner, SufficientBalancePolicy,
 } from '@bankofai/x402'
 
-const BSC_PRIVATE_KEY = process.env.BSC_PRIVATE_KEY!
-
 // ========== Configuration ==========
 const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet'
 // ====================================
 
 async function main(): Promise<void> {
-  // Initialize signer with your private key
-  const signer = new EvmClientSigner(BSC_PRIVATE_KEY)
+  // Initialize signer via agent-wallet (resolves wallet from environment automatically)
+  const signer = await EvmClientSigner.create()
 
   // Create x402 client and register BSC mechanisms and balance policy
   const x402 = new X402Client()

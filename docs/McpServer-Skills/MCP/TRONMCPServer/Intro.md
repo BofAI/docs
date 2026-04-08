@@ -10,14 +10,14 @@ This means different things to different people:
 
 - If you are an **AI application user**, it lets you operate blockchain directly in MCP-compatible AI tools — as easy as everyday chat.
 - If you are a **Web3 developer**, it's your rapid on-chain prototyping tool — debug contracts and query state in natural language, saving vast amounts of boilerplate code.
-- If you are an **AI Agent builder**, it provides 95 standardized on-chain tools that can be orchestrated directly into your automation workflows.
+- If you are an **AI Agent builder**, it provides 97 standardized on-chain tools that can be orchestrated directly into your automation workflows.
 - If you are a **data analyst**, it turns on-chain data queries into conversation — no more writing scripts to scrape and parse.
 
 ---
 
 ## What Can It Do?
 
-TRON MCP Server covers almost all common TRON blockchain operations, from read-only queries to asset management, providing **95 tools**, **6 prompt templates**, and **1 resource definition**.
+TRON MCP Server covers almost all common TRON blockchain operations, from read-only queries to asset management, providing **97 tools**, **6 prompt templates**, and **1 resource definition**.
 
 Here is an overview of core capabilities — each one can be triggered via natural language:
 
@@ -51,8 +51,8 @@ The core distinction comes down to one point: **whether you need to sign transac
 | Comparison Item | Official Cloud Service | Local Private Deployment |
 | :--- | :--- | :--- |
 | **Feature Scope** | Read-only (queries only) | Full features (read + write) |
-| **Setup Difficulty** | Just add one config line | Requires local installation and build |
-| **Private Key Required** | No | Yes (for write operations) |
+| **Setup Difficulty** | Just add one config line | Requires Agent Wallet setup |
+| **Wallet Required** | No | Yes (Agent Wallet for write operations) |
 | **Transfer/Contract Writing** | Not supported | Supported |
 | **Suitable For** | Quick queries, getting started | Development, debugging, automated trading |
 | **Security** | High (no private key exposure) | Depends on your key management |
@@ -95,4 +95,4 @@ Before getting started, keep these security principles in mind — especially fo
 - Want the fastest way to get started? → [Quick Start](./QuickStart.md)
 - Only need to query on-chain data? → [Official Cloud Service Access](./OfficialServerAccess.md)
 - Need transfers, contract calls, and full functionality? → [Local Private Deployment](./LocalPrivatizedDeployment.md)
-- Want to see all 95 tools? → [Full Capability List](./ToolList.md)
+- Want to see all 97 tools? → [Full Capability List](./ToolList.md)

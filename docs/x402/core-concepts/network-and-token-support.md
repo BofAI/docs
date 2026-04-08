@@ -124,6 +124,26 @@ Key characteristics:
 - **No API keys required**: All GasFree API calls route through the BankOfAI proxy at `https://facilitator.bankofai.io/{mainnet,nile}`, so clients do not need to configure `GASFREE_API_KEY` or `GASFREE_API_SECRET`
 - **TRON only**: Available on `tron:mainnet` and `tron:nile`
 
+#### GasFree Account Management (via x402-payment skill)
+
+When using the `x402-payment` skill, you can manage GasFree accounts directly from the CLI:
+
+**Query GasFree wallet info** (address, activation status, balance, nonce):
+```bash
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --network nile
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --wallet <YOUR_WALLET_ADDRESS>
+```
+
+**Activate a GasFree account** (required before first use):
+```bash
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network mainnet
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --token USDT
+```
+
+The activation process deposits a small amount of tokens (~3.05 USDT on nile) to fund the GasFree wallet, then submits a GasFree transaction to trigger activation. Use `--gasfree-info` first to check whether your account is already active.
+
 ### How Payment Schemes Work
 
 1. **Authorize**

@@ -102,7 +102,7 @@ If you chose `2` (Clean install), the installer lists everything that will be de
 The following data will be permanently deleted:
   • ALL MCP entries in: ~/.mcporter/mcporter.json
   • ALL installed skills (global and workspace)
-
+  • x402 config file: ~/.x402-config.json
   • BANK OF AI local config: ~/.mcporter/bankofai-config.json
   • AgentWallet config will be overwritten by: agent-wallet start --override --save-runtime-secrets
 
@@ -233,19 +233,17 @@ After confirming, the installer configures each server one by one. Here's what t
 
 #### mcp-server-tron (TRON Toolbox)
 
+This one is fully automatic — no input needed! The installer adds the TRON MCP server directly:
+
 ```
 Configuring mcp-server-tron...
-This step configures network access for TRON MCP.
-? Enter TRONGRID_API_KEY (optional):
-```
-
-⚠️ **The installer is asking for your `TRONGRID_API_KEY`.** This is your dedicated TronGrid access key — having one means data queries won't be throttled. **Don't have one? Just press Enter to skip!** It won't affect your installation at all. You can always add it later.
-
-When it succeeds, you'll see the `add-mcp` banner and:
-
-```
+Adding MCP server...
 ✓ Configuration saved for mcp-server-tron.
 ```
+
+:::tip Want faster queries?
+You can optionally configure a `TRONGRID_API_KEY` after installation for dedicated TronGrid access — without it, high-frequency queries may be throttled. See "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" below for setup instructions.
+:::
 
 #### bnbchain-mcp (BNB Chain Toolbox)
 
@@ -344,7 +342,7 @@ Review the report, then confirm to proceed. When installation completes:
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
-After skills are installed, the installer enters a configuration phase, asking for one API Key:
+After skills are installed, the installer enters a configuration phase for skills that need API keys:
 
 #### recharge-skill API Key Configuration
 
@@ -356,6 +354,21 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
 ```
 
 **Don't have one? Just press Enter to skip.** You can always create the config file later — see "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" below.
+
+#### TronScan API Key Configuration
+
+If you installed the TronScan Data Lookup skill, the installer will also show a reminder about configuring the TronScan API key:
+
+```
+TronScan API Key Configuration
+tronscan-skill requires TRONSCAN_API_KEY in the shell environment.
+
+Add this to your shell profile (~/.zshrc or ~/.bashrc):
+export TRONSCAN_API_KEY="your-api-key-here"
+Get a free key at: https://tronscan.org/#/myaccount/apiKeys
+```
+
+This key is configured as an environment variable (not a file). See "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" below for detailed instructions.
 
 When `Installation Complete!` lights up at the bottom of the screen — congratulations, you've passed all levels!
 

@@ -102,7 +102,7 @@ Installation Mode
 The following data will be permanently deleted:
   • ALL MCP entries in: ~/.mcporter/mcporter.json
   • ALL installed skills (global and workspace)
-
+  • x402 config file: ~/.x402-config.json
   • BANK OF AI local config: ~/.mcporter/bankofai-config.json
   • AgentWallet config will be overwritten by: agent-wallet start --override --save-runtime-secrets
 
@@ -233,19 +233,17 @@ Active wallet: my_wallet_1
 
 #### mcp-server-tron（波场工具箱）
 
+这个全自动，不需要输入任何信息！安装器会直接添加 TRON MCP 服务器：
+
 ```
 Configuring mcp-server-tron...
-This step configures network access for TRON MCP.
-? Enter TRONGRID_API_KEY (optional):
-```
-
-⚠️ **这里安装器会问你要 `TRONGRID_API_KEY`。** 这是 TronGrid 的专属访问密钥，有了它查数据就不会被限速。**现在没有？直接按回车跳过！** 完全不影响安装，以后随时补填。
-
-配置成功后你会看到 `add-mcp` 的安装横幅和：
-
-```
+Adding MCP server...
 ✓ Configuration saved for mcp-server-tron.
 ```
+
+:::tip 想要更快的查询速度？
+安装后你可以自行配置 `TRONGRID_API_KEY` 来获取 TronGrid 专属访问通道——没有它的话，高频查询可能会被限速。配置方法见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
+:::
 
 #### bnbchain-mcp（BNB Chain 工具箱）
 
@@ -344,7 +342,7 @@ Select skills installation scope:
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
-技能装完后，安装器会自动进入配置环节，询问一组 API Key：
+技能装完后，安装器会自动进入配置环节，为需要 API Key 的技能进行配置：
 
 #### recharge-skill API Key 配置
 
@@ -356,6 +354,21 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
 ```
 
 **现在没有？直接按回车跳过。** 以后拿到了 Key 可以手动创建配置文件，详见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
+
+#### TronScan API Key 配置
+
+如果你安装了 TronScan Data Lookup 技能，安装器还会显示一条关于配置 TronScan API Key 的提示：
+
+```
+TronScan API Key Configuration
+tronscan-skill requires TRONSCAN_API_KEY in the shell environment.
+
+Add this to your shell profile (~/.zshrc or ~/.bashrc):
+export TRONSCAN_API_KEY="your-api-key-here"
+Get a free key at: https://tronscan.org/#/myaccount/apiKeys
+```
+
+这个 Key 需要配置为环境变量（而非文件）。详细操作见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
 
 当屏幕底部亮起 `Installation Complete!` 时——恭喜，通关成功！
 
