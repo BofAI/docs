@@ -123,5 +123,5 @@ DeFi operations involve on-chain assets and mistakes cannot be reversed. Keep th
 ## Next Steps
 
 - Want to get up and running fast? &rarr; [Quick Start](./QuickStart.md)
-- Need the full command reference? &rarr; [Command Guide](./CommandGuide.md)
-- Have questions or running into issues? &rarr; [FAQ](./FAQ.md)
+- Need the full command reference? &rarr; [Complete Capabilities](./CommandGuide.md)
+- Have questions or running into issues? &rarr; [FAQ & Troubleshooting](./FAQ.md)

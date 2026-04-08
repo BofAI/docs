@@ -1,6 +1,6 @@
-# 常见问题
+# 常见问题与排查
 
-SUN CLI 常见问题和故障排查。
+SUN CLI 常见问题与故障排查。
 
 ---
 
@@ -130,4 +130,4 @@ export TRON_RPC_URL=https://your-tron-rpc.example
 
 ## 还有其他问题？
 
-如果这里没有覆盖你的问题，查看 [命令指南](./CommandGuide.md) 了解详细用法，或在 [GitHub 仓库](https://github.com/BofAI/sun-cli) 提交 Issue。
+如果这里没有覆盖你的问题，查看 [完整能力清单](./CommandGuide.md) 了解详细用法，或在 [GitHub 仓库](https://github.com/BofAI/sun-cli) 提交 Issue。

@@ -1,4 +1,4 @@
-# Command Guide
+# Complete Capabilities
 
 This page is the complete reference for all SUN CLI commands. Commands are organized by category: wallet management, price, token, swap, pool, liquidity, position, pair, farm, protocol, transaction, and contract.
 

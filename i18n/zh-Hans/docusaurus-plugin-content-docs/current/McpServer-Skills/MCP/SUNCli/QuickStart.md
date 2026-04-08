@@ -142,6 +142,6 @@ export TRON_RPC_URL=https://your-rpc
 
 ## 下一步
 
-- **[命令指南](./CommandGuide.md)** — 所有命令的完整参考：钱包、价格、兑换、流动性、协议、合约操作
-- **[常见问题](./FAQ.md)** — 常见问题排查
+- **[完整能力清单](./CommandGuide.md)** — 所有命令的完整参考：钱包、价格、兑换、流动性、协议、合约操作
+- **[常见问题与排查](./FAQ.md)** — 常见问题与故障排查
 - **[SUN MCP Server](../SUNMCPServer/Intro.md)** — 更喜欢 AI 驱动的 DeFi？用 SUN MCP Server 实现自然语言交互
