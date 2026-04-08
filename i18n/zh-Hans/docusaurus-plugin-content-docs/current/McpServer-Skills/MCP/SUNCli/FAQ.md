@@ -30,7 +30,7 @@ npm update -g @bankofai/sun-cli
 - `AGENT_WALLET_MNEMONIC` — 助记词
 - `AGENT_WALLET_PASSWORD` — 通过 agent-wallet 的加密钱包
 
-或者使用根级标志（`-k`、`-m`、`-p`）为单次调用提供钱包。详见 [agent-wallet 快速开始](https://github.com/BofAI/agent-wallet?tab=readme-ov-file#quick-start)。
+或者使用根级标志（`-k`、`-m`、`-p`）为单次调用提供钱包。详见 [agent-wallet 快速开始](../../../Agent-Wallet/QuickStart.md)。
 
 ### 不配置钱包能用吗？
 

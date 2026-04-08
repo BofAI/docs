@@ -80,13 +80,13 @@ sun --json price USDT
 
 Read-only commands work out of the box. To execute swaps, manage liquidity, or send contract transactions, you need to configure a wallet.
 
-SUN CLI uses [`agent-wallet`](https://github.com/BofAI/agent-wallet) for wallet management. Install and configure it:
+SUN CLI uses [`agent-wallet`](../../../Agent-Wallet/Intro.md) for wallet management. Install and configure it:
 
 ```bash
 npm install -g @bankofai/agent-wallet
 ```
 
-Then set up your wallet following the [agent-wallet Quick Start guide](https://github.com/BofAI/agent-wallet?tab=readme-ov-file#quick-start).
+Then set up your wallet following the [agent-wallet Quick Start guide](../../../Agent-Wallet/QuickStart.md).
 
 :::caution Keep your keys safe
 Never hardcode private keys or mnemonics in config files or shell history. Use environment variables or agent-wallet's encrypted storage. For testing, always start with the Nile testnet.

@@ -80,13 +80,13 @@ sun --json price USDT
 
 只读命令开箱即用。要执行兑换、管理流动性或发送合约交易，需要配置钱包。
 
-SUN CLI 使用 [`agent-wallet`](https://github.com/BofAI/agent-wallet) 进行钱包管理。先安装：
+SUN CLI 使用 [`agent-wallet`](../../../Agent-Wallet/Intro.md) 进行钱包管理。先安装：
 
 ```bash
 npm install -g @bankofai/agent-wallet
 ```
 
-然后按照 [agent-wallet 快速开始指南](https://github.com/BofAI/agent-wallet?tab=readme-ov-file#quick-start) 配置你的钱包。
+然后按照 [agent-wallet 快速开始指南](../../../Agent-Wallet/QuickStart.md) 配置你的钱包。
 
 :::caution 保管好你的密钥
 切勿将私钥或助记词硬编码在配置文件或 Shell 历史记录中。使用环境变量或 agent-wallet 的加密存储。测试时请始终使用 Nile 测试网。

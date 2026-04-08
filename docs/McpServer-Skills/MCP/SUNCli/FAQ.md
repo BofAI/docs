@@ -30,7 +30,7 @@ Write operations (swap, liquidity, contract send) require a wallet. Set exactly 
 - `AGENT_WALLET_MNEMONIC` — mnemonic phrase
 - `AGENT_WALLET_PASSWORD` — encrypted wallet via agent-wallet
 
-Or provide the equivalent root-level flag (`-k`, `-m`, `-p`) for a single invocation. See the [agent-wallet Quick Start](https://github.com/BofAI/agent-wallet?tab=readme-ov-file#quick-start) for full setup instructions.
+Or provide the equivalent root-level flag (`-k`, `-m`, `-p`) for a single invocation. See the [agent-wallet Quick Start](../../../Agent-Wallet/QuickStart.md).
 
 ### Can I use SUN CLI without a wallet?
 

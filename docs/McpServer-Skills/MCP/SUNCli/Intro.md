@@ -4,7 +4,7 @@
 
 SUN CLI (`@bankofai/sun-cli`) is a command-line tool that brings the full power of [SUN.IO (SunSwap)](https://sun.io) to your terminal. Whether you're a human operator or an AI agent, SUN CLI lets you query DeFi data, execute token swaps, and manage liquidity positions on the TRON network through a single command-line interface.
 
-Think of it this way: SUN MCP Server lets AI assistants talk to SunSwap through natural language. SUN CLI lets you—or your scripts and automation pipelines—talk to SunSwap through structured commands. Same DeFi capabilities, different interface.
+Think of it this way: SUN MCP Server exposes DeFi capabilities as standard tool interfaces via the MCP protocol—AI assistants call them directly without assembling commands or parsing text output. SUN CLI provides a structured command-line interface for manual operation and scripting, and can also be invoked by AI agents through the shell. Both share the same underlying DeFi capabilities; the difference is the integration method: MCP is native protocol integration, CLI is command-line invocation.
 
 For example, checking the price of TRX is as simple as:
 
@@ -56,15 +56,15 @@ Both tools connect you to the same SunSwap ecosystem, but serve different use ca
 
 | Comparison | SUN CLI | SUN MCP Server |
 | :--- | :--- | :--- |
-| **Interface** | Terminal commands | AI natural language |
-| **Best for** | Scripts, automation, developers | AI-assisted DeFi interaction |
-| **Invocation** | Direct CLI commands with flags | AI client sends MCP tool calls |
+| **Integration** | Command line (shell invocation) | MCP protocol (native tool interface) |
+| **Best for** | Manual operation, scripts, CI/CD, AI agents via shell | AI assistants calling tools directly via MCP |
+| **Invocation** | Assemble command + flags, parse text/JSON output | AI client sends structured tool calls—no command assembly needed |
 | **Output formats** | Table, JSON, TSV | Structured MCP responses |
 | **Write operations** | Supported (with wallet) | Supported (local deployment) |
 | **No-prompt mode** | `--yes` flag for unattended execution | AI handles confirmation flow |
 
-:::tip When to choose SUN CLI?
-Choose SUN CLI when you need programmatic access—shell scripts, cron jobs, CI/CD pipelines, or when you prefer explicit commands over natural language. Choose SUN MCP Server when you want an AI assistant to handle DeFi operations conversationally.
+:::tip When to choose which?
+If your AI assistant supports the MCP protocol (e.g. Claude), prefer SUN MCP Server—the integration is cleaner with no command assembly or output parsing. If you need shell scripts, cron jobs, CI/CD pipelines, or your AI agent doesn't support MCP, choose SUN CLI.
 :::
 
 ---
