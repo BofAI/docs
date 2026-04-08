@@ -112,8 +112,8 @@ agent-wallet init -p 'Abc12345!'
 | `--password, -p <pw>` | 主密码（跳过交互输入） |
 | `--save-runtime-secrets` | 将密码持久化保存到  `runtime_secrets.json` |
 
-:::tip 什么时候使用 `init` 和 `start` `start` = `init` +
-创建钱包（一步完成）。如果你只需要先设置目录和密码（例如用于 CI
+:::tip 什么时候使用 `init` 和 `start` 
+`start` = `init` + 创建钱包（一步完成）。如果你只需要先设置目录和密码（例如用于 CI
 流程，或稍后再导入私钥），可以单独使用 `init`。 
 :::
 
