@@ -1,7 +1,7 @@
-# ChatGPT-5-nano
+
 
 ## Overview
-ChatGPT-5-nano is an advanced language model that strikes an excellent balance between performance, speed, and cost. It is designed to provide near-professional AI capabilities at a moderate cost within the Bank of AI ecosystem.
+GPT-5-nano is an advanced language model that strikes an excellent balance between performance, speed, and cost. It is designed to provide near-professional AI capabilities at a moderate cost within the Bank of AI ecosystem.
 
 ## Key Features
 * **Enhanced Reasoning Ability:** Nano shows significant improvements in logical reasoning, code generation, and multilingual processing compared to lighter models.
@@ -27,4 +27,4 @@ ChatGPT-5-nano is an advanced language model that strikes an excellent balance b
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **ChatGPT-5-nano** | 0.05 | 0.40 |
+| **GPT-5-nano** | 0.05 | 0.40 |
