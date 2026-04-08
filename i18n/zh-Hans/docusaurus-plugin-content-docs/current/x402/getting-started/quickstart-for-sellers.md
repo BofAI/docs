@@ -1,6 +1,7 @@
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
+
 # 卖家快速入门
 
 > **测试网优先：** 本指南默认使用测试网，所有操作均使用免费测试代币，**不会涉及任何真实资金**。待测试通过后，再参考文末的[切换到主网](#在主网运行)章节进行上线。
