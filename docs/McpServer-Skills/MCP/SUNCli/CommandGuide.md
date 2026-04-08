@@ -334,7 +334,7 @@ sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000 --amount-b 
 Add liquidity to an existing pool (the other token amount is calculated automatically):
 
 ```bash
-sun liquidity v2:add --token-a TRX --token-b USDT --amount0 1000000
+sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000
 ```
 
 ### `liquidity v2:remove` (write)

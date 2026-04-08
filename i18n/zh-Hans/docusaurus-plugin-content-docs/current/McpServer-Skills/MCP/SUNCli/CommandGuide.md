@@ -334,7 +334,7 @@ sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000 --amount-b 
 向已有池子添加流动性（另一个代币数量会自动计算）：
 
 ```bash
-sun liquidity v2:add --token-a TRX --token-b USDT --amount0 1000000
+sun liquidity v2:add --token-a TRX --token-b USDT --amount-a 1000000
 ```
 
 ### `liquidity v2:remove`（写入）
