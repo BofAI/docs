@@ -3,72 +3,239 @@
 Chat completion. Auth: Bearer token. Non-stream: JSON with choices[].content. Stream: SSE chunks with choices[].delta.content.
 
 - **Version:** 1.0
+- **Base URL:** `https://api.bankofai.io`
+- **OpenAPI:** 3.1.0
 
-## Servers
-
-| URL | Description |
-|-----|-------------|
-| `https://api.bankofai.com` | Production |
+---
 
 ## Authentication
 
-### Bearer Auth
+### Bearer Token
 
-- **Type:** HTTP Bearer
-- **Format:** JWT
-- **Description:** Bearer \<token\>, e.g. `Bearer sk-xxx`
+- **Type:** HTTP Bearer (JWT)
+- **Header:** `Authorization: Bearer <token>`
+- **Example:** `Bearer sk-xxx`
 
-### API Key Auth
+### API Key (Messages endpoint only)
 
 - **Type:** API Key
-- **In:** Header
-- **Name:** `x-api-key`
-- **Description:** API Key authentication, e.g. `x-api-key: your-api-key`
+- **Header:** `x-api-key: <your-api-key>`
 
 ---
 
 ## Endpoints
 
-### Model List
+### 1. List Models
 
-#### `GET /v1/models` - List models (OpenAI compatible)
+`GET /v1/models`
 
-List available models. Auth: Bearer token. Response: object, success, data.
+List available models. Auth: Bearer token.
 
-**Authentication:** Bearer Auth
+**Auth:** Bearer Token
 
-**Responses:**
+**Response 200:**
 
-| Status Code | Description |
-|-------------|-------------|
-| 200 | object: list; success: true; data: array of { id, object, created, owned_by } |
+```json
+{
+  "object": "list",
+  "success": true,
+  "data": [
+    {
+      "id": "gpt-5.2",
+      "object": "model",
+      "created": 1626777600,
+      "owned_by": "openai",
+      "supported_endpoint_types": ["openai", "anthropic"]
+    }
+  ]
+}
+```
+
+| Status | Description |
+|--------|-------------|
+| 200 | Success - list of models |
 | 400 | Bad Request - invalid parameters or malformed body |
 | 401 | Unauthorized - invalid or missing authentication |
 | 403 | Forbidden - access denied, insufficient quota, or banned |
 | 429 | Too Many Requests - rate limit exceeded |
 | 500 | Internal Server Error |
 
-**200 Response Schema:** [V1ModelsResponse](#v1modelsresponse)
+---
 
-**Error Response Schema:** [ErrorResponse](#errorresponse)
+### 2. Chat Completions (OpenAI Compatible)
+
+`POST /v1/chat/completions`
+
+Accepts a list of messages and returns a model-generated response. Supports both single-turn and multi-turn conversations. Responses can be streamed (SSE) or returned as a single JSON object.
+
+**Auth:** Bearer Token
+
+#### Request Body
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `model` | string | **Yes** | ID of the model to use (e.g. `gpt-5.2`). |
+| `messages` | array | **Yes** | List of messages in the conversation. See [ChatMessage](#chatmessage). |
+| `stream` | boolean | No | If true, partial message deltas will be sent as server-sent events. Default `false`. |
+| `max_tokens` | integer | No | Maximum number of tokens that can be generated in the completion. |
+| `temperature` | number | No | Sampling temperature between 0 and 2. Higher = more random. Default `1`. |
+| `top_p` | number | No | Nucleus sampling: consider tokens with top_p probability mass. Default `1`. |
+| `stop` | string \| string[] | No | Up to 4 sequences where the API will stop generating. |
+| `n` | integer | No | How many chat completion choices to generate. Default `1`. |
+| `frequency_penalty` | number | No | -2.0 to 2.0. Penalize repeated tokens. Default `0`. |
+| `presence_penalty` | number | No | -2.0 to 2.0. Penalize tokens that appear in the text so far. Default `0`. |
+| `seed` | integer | No | Random seed for deterministic sampling (if supported by model). |
+| `response_format` | object | No | Specify output format: `{ "type": "text" }` or `{ "type": "json_object" }` or `json_schema`. |
+| `tools` | array | No | List of tools the model may call. See [ChatTool](#chattool). |
+| `tool_choice` | string \| object | No | `"auto"`, `"none"`, `"required"`, or `{ "type": "function", "function": { "name": "..." } }`. |
+| `user` | string | No | Optional end-user identifier for abuse monitoring. |
+| `web_search_options` | object | No | Enables web search for supported models. See [WebSearchOptions](#websearchoptions). |
+
+#### Request Example
+
+```json
+{
+  "model": "gpt-5.2",
+  "messages": [
+    { "role": "system", "content": "You are a helpful assistant." },
+    { "role": "user", "content": "Hello" }
+  ],
+  "stream": false,
+  "max_tokens": 1024,
+  "temperature": 1
+}
+```
+
+#### Response (Non-stream)
+
+```json
+{
+  "id": "chatcmpl-xxx",
+  "object": "chat.completion",
+  "created": 1677652288,
+  "model": "gpt-5.2",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "Hello! How can I help you?",
+        "refusal": null,
+        "annotations": []
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 12,
+    "completion_tokens": 8,
+    "total_tokens": 20,
+    "prompt_tokens_details": { "cached_tokens": 0, "audio_tokens": 0 },
+    "completion_tokens_details": {
+      "reasoning_tokens": 0,
+      "audio_tokens": 0,
+      "accepted_prediction_tokens": 0,
+      "rejected_prediction_tokens": 0
+    }
+  }
+}
+```
+
+#### Response (Stream)
+
+Each SSE chunk has `object: "chat.completion.chunk"` with `choices[].delta.content` containing incremental text. The final chunk includes `usage` and `finish_reason`.
+
+| Status | Description |
+|--------|-------------|
+| 200 | Success |
+| 400 | Bad Request - invalid parameters, malformed body, or invalid request |
+| 401 | Unauthorized - invalid or missing authentication |
+| 403 | Forbidden - access denied, insufficient quota, or model access restricted |
+| 429 | Too Many Requests - rate limit exceeded |
+| 500 | Internal Server Error |
+| 502 | Bad Gateway - upstream service error |
+| 503 | Service Unavailable - overloaded or no available channel |
 
 ---
 
-### Messages
+### 3. Messages (Claude Compatible)
 
-#### `POST /v1/messages` - Send a message (Claude compatible)
+`POST /v1/messages`
 
-Accepts a list of messages and returns a model-generated response. Supports both single-turn and multi-turn conversations. Authenticate via x-api-key header. Responses can be streamed (SSE) or returned as a single JSON object.
+Accepts a list of messages and returns a model-generated response. Supports both single-turn and multi-turn conversations. Authenticate via `x-api-key` header or Bearer token. Responses can be streamed (SSE) or returned as a single JSON object.
 
-**Authentication:** API Key Auth (`x-api-key`)
+**Auth:** API Key (`x-api-key`) or Bearer Token
 
-**Request Body:** [ChatCompletionsRequest](#chatcompletionsrequest) (required, `application/json`)
+#### Request Body
 
-**Responses:**
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `model` | string | **Yes** | ID of the model (e.g. `claude-sonnet-4-6`, `claude-opus-4-6`, `claude-haiku-4-5`). |
+| `max_tokens` | integer | **Yes** | Maximum number of tokens to generate. Different models have different maximum values. |
+| `messages` | array | **Yes** | Input messages. Alternating user/assistant turns. Limit: 100,000 messages. See [MessagesMessageItem](#messagesmessageitem). |
+| `system` | string \| array | No | System prompt. Can be a plain string or an array of text blocks (for `cache_control`). |
+| `stream` | boolean | No | Whether to stream the response using SSE. Default `false`. |
+| `temperature` | number | No | Randomness (0.0 - 1.0). Use ~0.0 for analytical tasks, ~1.0 for creative tasks. Default `1`. |
+| `top_p` | number | No | Nucleus sampling. Default `1`. |
+| `top_k` | integer | No | Only sample from the top K options. Default disabled. |
+| `stop_sequences` | string[] | No | Custom text sequences that cause the model to stop generating. |
+| `metadata` | object | No | Request metadata. Supports `user_id` (opaque identifier). |
+| `thinking` | object | No | Extended thinking config. See [ThinkingConfig](#thinkingconfig). |
+| `tools` | array | No | Tool definitions the model may use. See [Tool](#tool-anthropic). |
+| `tool_choice` | object | No | How the model should use tools: `auto`, `any`, `tool`, or `none`. |
 
-| Status Code | Description |
-|-------------|-------------|
-| 200 | Success. Schema differs by stream mode. |
+#### Request Example
+
+```json
+{
+  "model": "claude-sonnet-4-6",
+  "max_tokens": 1024,
+  "messages": [
+    { "role": "user", "content": "Hello, Claude!" }
+  ],
+  "system": "You are a helpful assistant.",
+  "temperature": 1.0
+}
+```
+
+#### Response (Non-stream)
+
+```json
+{
+  "id": "chatcmpl-xxx",
+  "type": "message",
+  "role": "assistant",
+  "content": [
+    { "type": "text", "text": "Hello! How can I help you?" }
+  ],
+  "stop_reason": "end_turn",
+  "model": "gpt-5",
+  "usage": {
+    "input_tokens": 4,
+    "cache_creation_input_tokens": 0,
+    "cache_read_input_tokens": 0,
+    "output_tokens": 12,
+    "claude_cache_creation_5_m_tokens": 0,
+    "claude_cache_creation_1_h_tokens": 0
+  }
+}
+```
+
+#### Response (Stream - SSE Events)
+
+Stream responses emit the following event types:
+
+| Event Type | Description | Key Fields |
+|------------|-------------|------------|
+| `message_start` | Initial message metadata | `message` (id, model, role, usage) |
+| `content_block_start` | New content block begins | `index`, `content_block` (type, text) |
+| `content_block_delta` | Incremental content | `index`, `delta` (type: `text_delta`, text) |
+| `content_block_stop` | Content block ends | `index` |
+| `message_stop` | Message complete | - |
+
+| Status | Description |
+|--------|-------------|
+| 200 | Success |
 | 400 | Bad Request - invalid parameters, malformed body, or invalid request |
 | 401 | Unauthorized - invalid or missing API key |
 | 403 | Forbidden - access denied, insufficient quota, or model access restricted |
@@ -77,266 +244,177 @@ Accepts a list of messages and returns a model-generated response. Supports both
 | 502 | Bad Gateway - upstream service error |
 | 503 | Service Unavailable - overloaded or no available channel |
 
-**200 Response Content Types:**
-- `application/json`: [ChatCompletionsResponse](#chatcompletionsresponse)
-- `text/event-stream`: [ChatCompletionsResponse](#chatcompletionsresponse)
-
-**Error Response Schema:** [ErrorResponse](#errorresponse)
-
 ---
 
-### Chat Completions
-
-#### `POST /v1/chat/completions` - Create a chat completion (OpenAI compatible)
-
-Accepts a list of messages and returns a model-generated response. Supports both single-turn and multi-turn conversations. Authenticate via Bearer token. Responses can be streamed (SSE) or returned as a single JSON object.
-
-**Authentication:** Bearer Auth
-
-**Request Body:** [ChatCompletionsRequest](#chatcompletionsrequest) (required, `application/json`)
-
-**Responses:**
-
-| Status Code | Description |
-|-------------|-------------|
-| 200 | Success. Schema differs by stream mode. |
-| 400 | Bad Request - invalid parameters, malformed body, or invalid request |
-| 401 | Unauthorized - invalid or missing authentication |
-| 403 | Forbidden - access denied, insufficient quota, or model access restricted |
-| 429 | Too Many Requests - rate limit exceeded |
-| 500 | Internal Server Error |
-| 502 | Bad Gateway - upstream service error |
-| 503 | Service Unavailable - overloaded or no available channel |
-
-**200 Response Content Types:**
-- `application/json`: [ChatCompletionsResponse](#chatcompletionsresponse)
-- `text/event-stream`: [ChatCompletionsResponse](#chatcompletionsresponse)
-
-**Error Response Schema:** [ErrorResponse](#errorresponse)
-
----
-
-## Schemas
-
-### ErrorResponse
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `error` | object | Error details |
-| `error.message` | string | Error message |
-| `error.type` | string | Error type (e.g. invalid_request_error) |
-| `error.param` | string \| null | Related parameter |
-| `error.code` | string \| null | Error code |
-
----
-
-### V1ModelsResponse
-
-| Field | Type | Example | Description |
-|-------|------|---------|-------------|
-| `object` | string | `"list"` | |
-| `success` | boolean | `true` | |
-| `data` | array | | Array of [V1ModelItem](#v1modelitem) |
-
----
-
-### V1ModelItem
-
-| Field | Type | Example | Description |
-|-------|------|---------|-------------|
-| `id` | string | `"gpt-5.2"` | |
-| `object` | string | `"model"` | |
-| `created` | integer | `1626777600` | |
-| `owned_by` | string | `"openai"` | |
-
----
-
-### ChatCompletionsRequest
-
-**Required fields:** `model`, `messages`
-
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `model` | string | ID of the model to use (e.g. gpt-5.2). | `"gpt-5.2"` |
-| `messages` | array | List of messages in the conversation. Array of [ChatMessage](#chatmessage). | |
-| `stream` | boolean | If true, partial message deltas will be sent as server-sent events. Default false. | |
-| `max_tokens` | integer | Maximum number of tokens that can be generated in the completion. | |
-| `temperature` | number | Sampling temperature between 0 and 2. Higher = more random. Default 1. | |
-| `top_p` | number | Nucleus sampling: consider tokens with top_p probability mass. Default 1. | |
-| `stop` | string \| string[] | Up to 4 sequences where the API will stop generating. String or array of strings. | |
-| `n` | integer | How many chat completion choices to generate. Default 1. | |
-| `frequency_penalty` | number | -2.0 to 2.0. Penalize repeated tokens. Default 0. | |
-| `presence_penalty` | number | -2.0 to 2.0. Penalize tokens that appear in the text so far. Default 0. | |
-| `seed` | integer | Random seed for deterministic sampling (if supported by model). | |
-| `response_format` | object | [ChatResponseFormat](#chatresponseformat). Specify output format. | |
-| `tools` | array | List of tools the model may call. Array of [ChatTool](#chattool). Each has type "function" and function { name, description?, parameters? }. | |
-| `tool_choice` | string \| object | `"auto"` \| `"none"` \| `"required"` \| [ToolChoiceObject](#toolchoiceobject). | |
-| `user` | string | Optional end-user identifier for abuse monitoring. | |
-| `web_search_options` | object | [WebSearchOptions](#websearchoptions). Optional web search configuration. | |
-
----
-
-### WebSearchOptions
-
-Optional. Enables web search for models that support it (OpenAI Chat Completions). When present, this gateway treats the request as web-search-enabled; model allowlists may apply. Field names align with OpenAI `web_search_options`.
-
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `search_context_size` | string | Guidance for how much context window space to use for web search results. Enum: `"low"`, `"medium"`, `"high"`. | `"medium"` |
-| `user_location` | object | Approximate user location to refine search results (e.g. country as ISO 3166-1 alpha-2, city, region, timezone). Structure follows OpenAI documentation. | |
-
----
+## Data Models
 
 ### ChatMessage
 
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `role` | string | `"system"` \| `"user"` \| `"assistant"` \| `"tool"`. System sets behavior; user/assistant are conversation; tool is tool result. | `"user"` |
-| `content` | string | Message content. For tool role, the result of the tool call. | `"Hello"` |
-| `name` | string | Optional name for the message author (e.g. to disambiguate multiple users). | |
-| `tool_call_id` | string | When role is "tool", the id of the tool call this result is for. Required for tool messages. | |
-| `tool_calls` | array | When role is "assistant" and the model called tools, array of [ChatToolCallItem](#chattoolcallitem). | |
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `role` | string | **Yes** | `"system"`, `"user"`, `"assistant"`, or `"tool"` |
+| `content` | string | **Yes** | Message content. For tool role, the result of the tool call. |
+| `name` | string | No | Optional name for the message author. |
+| `tool_call_id` | string | No | When role is `"tool"`, the ID of the tool call this result is for. |
+| `tool_calls` | array | No | When role is `"assistant"` and the model called tools. Array of `{ id, type, function: { name, arguments } }`. |
 
----
+### MessagesMessageItem
 
-### ChatResponseFormat
+| Field | Type | Required | Description |
+|-------|------|----------|-------------|
+| `role` | string | **Yes** | `"user"` or `"assistant"` (no `"system"` - use top-level `system` parameter). |
+| `content` | string \| array | **Yes** | Text string or array of content blocks (text, image, tool_use, tool_result). |
 
-Specify output format: `{ "type": "text" }` or `{ "type": "json_object" }` or json_schema.
+### Content Block Types (Messages API)
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `type` | string | `"text"` or `"json_object"`. |
-| `json_schema` | any | When type is json_schema, optional schema for the output. |
+#### TextBlockParam
 
----
+```json
+{ "type": "text", "text": "Hello, Claude!", "cache_control": { "type": "ephemeral" } }
+```
+
+#### ImageBlockParam
+
+Base64 source:
+```json
+{
+  "type": "image",
+  "source": {
+    "type": "base64",
+    "media_type": "image/jpeg",
+    "data": "/9j/4AAQSkZJRg..."
+  }
+}
+```
+
+URL source:
+```json
+{
+  "type": "image",
+  "source": {
+    "type": "url",
+    "url": "https://example.com/image.jpg"
+  }
+}
+```
+
+Supported media types: `image/jpeg`, `image/png`, `image/gif`, `image/webp`
+
+#### ToolUseBlockParam (from assistant)
+
+```json
+{
+  "type": "tool_use",
+  "id": "toolu_01D7FLrfh4GYq7yT1ULFeyMV",
+  "name": "get_stock_price",
+  "input": { "ticker": "AAPL" }
+}
+```
+
+#### ToolResultBlockParam (from user)
+
+```json
+{
+  "type": "tool_result",
+  "tool_use_id": "toolu_01D7FLrfh4GYq7yT1ULFeyMV",
+  "content": "259.75 USD",
+  "is_error": false
+}
+```
+
+### ThinkingConfig
+
+Enable extended thinking to let Claude show its reasoning process.
+
+**Enabled:**
+```json
+{ "type": "enabled", "budget_tokens": 1024 }
+```
+- `budget_tokens`: Must be >= 1024 and less than `max_tokens`.
+
+**Disabled:**
+```json
+{ "type": "disabled" }
+```
+
+### Tool (Anthropic)
+
+```json
+{
+  "name": "get_stock_price",
+  "description": "Get the current stock price for a given ticker symbol.",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "ticker": { "type": "string" }
+    },
+    "required": ["ticker"]
+  }
+}
+```
+
+### ToolChoice (Anthropic)
+
+| Type | Description |
+|------|-------------|
+| `{ "type": "auto" }` | Model decides whether to use tools. Supports `disable_parallel_tool_use`. |
+| `{ "type": "any" }` | Model will use any available tool. Supports `disable_parallel_tool_use`. |
+| `{ "type": "tool", "name": "..." }` | Model will use the specified tool. Supports `disable_parallel_tool_use`. |
+| `{ "type": "none" }` | Model will not use tools. |
 
 ### ChatTool
 
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `type` | string | Must be `"function"`. | `"function"` |
-| `function` | object | [ChatToolFunction](#chattoolfunction). Function definition (name, description, parameters). | |
+```json
+{
+  "type": "function",
+  "function": {
+    "name": "get_weather",
+    "description": "Get weather for a location",
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "location": { "type": "string" }
+      },
+      "required": ["location"]
+    }
+  }
+}
+```
 
----
-
-### ChatToolFunction
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `name` | string | Name of the function. |
-| `description` | string | Optional description for the model. |
-| `parameters` | any | Optional JSON schema for the function arguments. |
-
----
-
-### ChatToolCallItem
-
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `id` | string | ID of the tool call. | |
-| `type` | string | `"function"`. | `"function"` |
-| `function` | object | [ChatToolCallFunction](#chattoolcallfunction). Name and arguments of the call. | |
-
----
-
-### ChatToolCallFunction
+### WebSearchOptions
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `name` | string | Name of the function to call. |
-| `arguments` | string | JSON string of the arguments. |
+| `search_context_size` | string | `"low"`, `"medium"`, or `"high"` - how much context window for web search results. |
+| `user_location` | object | Approximate user location (country ISO 3166-1 alpha-2, city, region, timezone). |
 
----
-
-### ToolChoiceObject
-
-Precise mode: specifies the particular function to call.
-
-**Required fields:** `type`, `function`
-
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `type` | string | Must be `"function"`. Enum: `"function"`. | `"function"` |
-| `function` | object | [ToolChoiceFunction](#toolchoicefunction). Function definition to call. | |
-
----
-
-### ToolChoiceFunction
-
-**Required fields:** `name`
+### ChatResponseFormat
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `name` | string | Name of the function to call. |
+| `type` | string | `"text"` or `"json_object"` |
+| `json_schema` | object | When type is `json_schema`, optional schema for the output. |
 
 ---
 
-### ChatCompletionsResponse
+## Error Response
 
-Non-stream: object=chat.completion, choices[].message, usage. Stream: object=chat.completion.chunk, choices[].delta; final chunk has usage.
+All error responses follow this format:
 
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `id` | string | | `"chatcmpl-xxx"` |
-| `object` | string | `"chat.completion"` (non-stream) or `"chat.completion.chunk"` (stream). | |
-| `created` | integer | | `1677652288` |
-| `model` | string | | `"gpt-5.2"` |
-| `service_tier` | string | | `"default"` |
-| `system_fingerprint` | string \| null | | |
-| `choices` | array | Empty in final usage chunk. Array of [ChatChoice](#chatchoice). | |
-| `usage` | null \| object | [ChatUsage](#chatusage). Non-stream: always present. Stream: null until final chunk. | |
-| `obfuscation` | string | | |
-
----
-
-### ChatMessageContent
-
-Non-stream choices[].message. Full assistant message with role, content, refusal, annotations.
-
-| Field | Type | Description | Example |
-|-------|------|-------------|---------|
-| `role` | string | | `"assistant"` |
-| `content` | string | Assistant reply text. | |
-| `refusal` | string \| null | Refusal reason when model declines; null otherwise. | |
-| `annotations` | array | Citations, references, etc. | |
-
----
-
-### ChatChoice
-
-Non-stream: message. Stream: delta. finish_reason null until last content chunk.
+```json
+{
+  "error": {
+    "message": "Error message",
+    "type": "invalid_request_error",
+    "param": null,
+    "code": null
+  }
+}
+```
 
 | Field | Type | Description |
 |-------|------|-------------|
-| `index` | integer | |
-| `message` | object | [ChatMessageContent](#chatmessagecontent). Non-stream only. Full assistant message. |
-| `delta` | object | [ChatChoiceDelta](#chatchoicedelta). Stream only. Incremental content; empty {} on stop. |
-| `finish_reason` | string \| null | Null until done; e.g. `"stop"`, `"length"`, `"tool_calls"`. |
-
----
-
-### ChatChoiceDelta
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `content` | string | |
-| `role` | string | |
-| `tool_calls` | array | Array of [ChatToolCallItem](#chattoolcallitem). |
-
----
-
-### ChatUsage
-
-| Field | Type | Description |
-|-------|------|-------------|
-| `prompt_tokens` | integer | Number of tokens in the prompt. |
-| `completion_tokens` | integer | Number of tokens in the completion. |
-| `total_tokens` | integer | Total tokens (prompt + completion). |
-| `prompt_tokens_details` | object | See below. |
-| `prompt_tokens_details.cached_tokens` | integer | |
-| `prompt_tokens_details.audio_tokens` | integer | |
-| `completion_tokens_details` | object | See below. |
-| `completion_tokens_details.reasoning_tokens` | integer | |
-| `completion_tokens_details.audio_tokens` | integer | |
-| `completion_tokens_details.accepted_prediction_tokens` | integer | |
-| `completion_tokens_details.rejected_prediction_tokens` | integer | |
+| `message` | string | Error message |
+| `type` | string | Error type (e.g. `invalid_request_error`) |
+| `param` | string \| null | Related parameter |
+| `code` | string \| null | Error code |
