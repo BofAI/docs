@@ -98,12 +98,12 @@ x402 支持三种支付方案：`exact_permit`、`exact` 和 `exact_gasfree`。
 
 #### `exact_gasfree` 方案
 
-`exact_gasfree` 是 TRON 专属的支付机制，允许用户使用 USDT/USDD 付款而**无需持有 TRX 来支付 gas 费用**。结算通过 BankOfAI Facilitator 端点的官方 GasFree 代理完成。
+`exact_gasfree` 是 TRON 专属的支付机制，允许用户使用 USDT/USDD 付款而**无需持有 TRX 来支付 gas 费用**。结算通过 BANK OF AI Facilitator 端点的官方 GasFree 代理完成。
 
 核心特性：
 
 - **买家零 gas 成本**：买家无需持有 TRX，gas 费用由 GasFree 基础设施承担
-- **无需 API 密钥**：所有 GasFree API 调用通过 BankOfAI 代理路由至 `https://facilitator.bankofai.io/{mainnet,nile}`，客户端无需配置 `GASFREE_API_KEY` 或 `GASFREE_API_SECRET`
+- **无需 API 密钥**：所有 GasFree API 调用通过 BANK OF AI 代理路由至 `https://facilitator.bankofai.io/{mainnet,nile}`，客户端无需配置 `GASFREE_API_KEY` 或 `GASFREE_API_SECRET`
 - **仅限 TRON**：支持 `tron:mainnet` 和 `tron:nile`
 
 #### GasFree 账户管理（通过 x402-payment skill）

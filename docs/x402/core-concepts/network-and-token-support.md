@@ -116,12 +116,12 @@ The `exact` scheme is for tokens that natively support `transferWithAuthorizatio
 
 ### `exact_gasfree` Scheme
 
-The `exact_gasfree` scheme is a TRON-specific payment mechanism that allows users to pay with USDT/USDD **without holding TRX for gas fees**. Settlement is handled via the official GasFree Proxy through the BankOfAI facilitator endpoint.
+The `exact_gasfree` scheme is a TRON-specific payment mechanism that allows users to pay with USDT/USDD **without holding TRX for gas fees**. Settlement is handled via the official GasFree Proxy through the BANK OF AI facilitator endpoint.
 
 Key characteristics:
 
 - **Zero gas cost for buyers**: Buyers do not need to hold TRX — gas is covered by the GasFree infrastructure
-- **No API keys required**: All GasFree API calls route through the BankOfAI proxy at `https://facilitator.bankofai.io/{mainnet,nile}`, so clients do not need to configure `GASFREE_API_KEY` or `GASFREE_API_SECRET`
+- **No API keys required**: All GasFree API calls route through the BANK OF AI proxy at `https://facilitator.bankofai.io/{mainnet,nile}`, so clients do not need to configure `GASFREE_API_KEY` or `GASFREE_API_SECRET`
 - **TRON only**: Available on `tron:mainnet` and `tron:nile`
 
 #### GasFree Account Management (via x402-payment skill)

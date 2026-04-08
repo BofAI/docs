@@ -79,11 +79,11 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Optional, recommended f
 
 :::note Fallback RPC Endpoint
 When `TRON_GRID_API_KEY` is not set, mainnet RPC calls are automatically
-routed through a BankOfAI-operated public endpoint
-(`https://api.trongrid.io` proxied via BankOfAI). This endpoint has no
+routed through a BANK OF AI-operated public endpoint
+(`https://api.trongrid.io` proxied via BANK OF AI). This endpoint has no
 guaranteed SLA and may be rate-limited under high load. For production
 workloads, set your own `TRON_GRID_API_KEY` to ensure reliability and
-independence from BankOfAI's infrastructure.
+independence from BANK OF AI's infrastructure.
 :::
 
 </TabItem>

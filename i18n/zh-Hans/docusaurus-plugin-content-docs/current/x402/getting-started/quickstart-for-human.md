@@ -229,7 +229,7 @@ from bankofai.x402.config import NetworkConfig
 SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"
 # ===========================
 
-# GasFree API 客户端（通过 BankOfAI 代理路由，无需 API 密钥）
+# GasFree API 客户端（通过 BANK OF AI 代理路由，无需 API 密钥）
 gasfree_clients = {
     "tron:nile": GasFreeAPIClient(NetworkConfig.get_gasfree_api_base_url("tron:nile")),
     "tron:mainnet": GasFreeAPIClient(NetworkConfig.get_gasfree_api_base_url("tron:mainnet")),
