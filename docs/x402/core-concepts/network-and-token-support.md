@@ -142,8 +142,6 @@ npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network mainnet
 npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --token USDT
 ```
 
-The activation process deposits a small amount of tokens (~3.05 USDT on nile) to fund the GasFree wallet, then submits a GasFree transaction to trigger activation. Use `--gasfree-info` first to check whether your account is already active.
-
 ### How Payment Schemes Work
 
 1. **Authorize**

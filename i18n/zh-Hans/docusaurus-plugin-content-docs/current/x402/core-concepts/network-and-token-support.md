@@ -124,8 +124,6 @@ npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network mainnet
 npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --token USDT
 ```
 
-激活过程会向 GasFree 钱包存入少量代币（nile 约 3.05 USDT）以完成资金注入，然后提交 GasFree 交易触发激活。建议先使用 `--gasfree-info` 检查账户是否已激活。
-
 #### 工作原理
 
 1.  **预授权 (Authorize)**：客户端签署消息，授权支付**最大金额** (Max Amount)。
