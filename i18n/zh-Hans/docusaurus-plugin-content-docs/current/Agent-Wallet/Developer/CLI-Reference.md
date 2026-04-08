@@ -63,7 +63,7 @@ agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 每条 `sign` 子命令都需要 `--network` / `-n` 来指定链。
 
 :::info 密码重试机制
-使用 `local_secure` 钱包签名时，如果未通过 `-p` 或 `AGENT_WALLET_PASSWORD` 提供密码，CLI 会交互式提示输入主密码。如果密码输入错误，你有 **2 次重试机会**（共 3 次），超过后命令将以"Wrong password. 3 attempts failed."失败退出。
+使用 `local_secure` 钱包签名时，如果未通过 `-p` 或 `AGENT_WALLET_PASSWORD` 提供密码，CLI 会交互式提示输入主密码。如果密码输入错误，你有 **2 次重试机会**（共 3 次），超过后命令将以"密码错误，已失败 3 次。"（`Wrong password. 3 attempts failed.`）失败退出。
 :::
 
 **签名消息：**
