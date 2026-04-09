@@ -148,6 +148,14 @@ npm install @bankofai/x402 tronweb dotenv
 
 ---
 
+:::info 钱包管理
+x402 SDK 通过 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 来解析和管理钱包凭证，安装 x402 时会自动安装 agent-wallet 作为依赖。私钥解析优先级为：
+1. 加密钱包文件（通过 Agent Wallet CLI 导入）
+2. 环境变量 `AGENT_WALLET_PRIVATE_KEY`
+
+本文使用环境变量方式。
+:::
+
 ## 第二步：配置私钥
 
 **不要将私钥写进代码！** 请将私钥存储为环境变量，这样代码从环境中读取，私钥不会出现在代码文件里。将 `your_private_key_here` 替换为前置准备中导出的私钥。

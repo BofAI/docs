@@ -40,7 +40,15 @@ This guide walks you through: setting up a dedicated agent wallet, configuring c
 
 ---
 
-## Step 1: Configure Wallet Credentials
+:::info Wallet Management
+x402 SDK uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet is automatically installed as a dependency of x402. Private key resolution priority:
+1. Encrypted wallet file (imported via the Agent Wallet CLI)
+2. Environment variable `AGENT_WALLET_PRIVATE_KEY`
+
+This guide uses the environment variable method.
+:::
+
+## Step 1: Configure Your Private Key
 
 Configure your private key as an environment variable so the x402-payment skill can sign payments. Replace `your_agent_wallet_private_key_here` with the private key you exported in the Prerequisites step.
 

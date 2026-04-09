@@ -144,6 +144,14 @@ Since `@bankofai/x402` is an ESM module, add the following to your `package.json
 
 ---
 
+:::info Wallet Management
+x402 SDK uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet is automatically installed as a dependency of x402. Private key resolution priority:
+1. Encrypted wallet file (imported via the Agent Wallet CLI)
+2. Environment variable `AGENT_WALLET_PRIVATE_KEY`
+
+This guide uses the environment variable method.
+:::
+
 ## Step Two: Configure Your Private Key
 
 **Never put your private key in code.** Store it as an environment variable so it stays out of your source files. Replace `your_private_key_here` with the private key you exported in the Prerequisites step.
