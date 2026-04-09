@@ -2,18 +2,18 @@
 
 ## About LLM Service
 
-LLM Service is a professional AI service module within the Bank of AI ecosystem, built on top-tier blockchain infrastructure. It is dedicated to providing users with an efficient, user-friendly, and creative AI interaction experience. As a core AI service infrastructure of Bank of AI, this service leverages the decentralization, security, and high efficiency of blockchain technology to introduce a brand-new AI service model.
+LLM Service is a professional AI service module within the [**B.AI**](https://b.ai/) ecosystem. Built on top-tier blockchain infrastructure, it is dedicated to providing users with an efficient, user-friendly, and creative AI interaction experience. As the core AI infrastructure of [**B.AI**](https://b.ai/), this service combines the decentralization, security, and efficiency of blockchain to create a brand-new AI service model.
 
-The service's core features include:
+Core features include:
 
-* **Multi-Model AI Chat:** We integrate various industry-leading Large Language Models (LLMs), allowing users to select the most suitable model based on their specific needs.
-* **Powerful Integrated AI Services:** We offer comprehensive AI-related API services, enabling users to access and integrate them rapidly and easily within the Bank of AI framework.
-* **Web3 Native Experience:** Through seamless integration with mainstream Web3 wallets, we provide an end-to-end native experience, from login to payment.
+- **Multi-model AI Chat:** Integrated with multiple industry-leading Large Language Models (LLMs), allowing users to freely choose the most suitable model based on their needs.
+- **Powerful AI Service Capabilities:** Provides complete AI API services, supporting rapid access and integration within the [**B.AI**](https://b.ai/) framework.
+- **Native Web3 Experience:** Seamlessly integrates mainstream Web3 wallets to achieve a unified native experience from login to payment.
 
 ## Why Choose LLM Service?
 
-Choosing our LLM Service means enjoying the unique advantages of a secure blockchain ecosystem alongside meticulously designed features.
+By choosing LLM Service, you can simultaneously enjoy the advantages of the blockchain ecosystem and a high-quality AI service experience:
 
-* **Multi-chain Ecosystem Advantages:** As part of the Bank of AI ecosystem, users can make payments using mainstream tokens on supported chains, benefiting from fast transaction confirmations and low fees.
-* **Low Cost & High Efficiency:** By optimizing resources and ensuring efficient on-chain interactions, we deliver highly cost-effective AI services to users.
-* **Security & Privacy Protection:** We utilize a decentralized login method. Users can complete authentication simply by signing with their Web3 wallet, ensuring greater security and privacy for all AI interactions.
+- **Multi-chain Ecosystem Advantage:** Supports mainstream token payments across multiple chains, offering the benefits of fast confirmation and low transaction fees.
+- **Low Cost and High Efficiency:** Achieves more cost-effective AI services through resource optimization and efficient on-chain interaction.
+- **Security and Privacy Protection:** Based on a decentralized login mechanism, users only need to complete authentication via Web3 wallet signatures, ensuring security and privacy throughout the interaction process.
