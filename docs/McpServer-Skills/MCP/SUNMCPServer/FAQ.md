@@ -85,7 +85,7 @@ This page collects frequently asked questions when using SUN MCP Server and thei
 
 **Solution:**
 
-1. **Configure [Agent Wallet](../../../Agent-Wallet/Intro)** — set `AGENT_WALLET_PASSWORD`
+1. **Configure [Agent Wallet](../../../Agent-Wallet/Intro.md)** — set `AGENT_WALLET_PASSWORD`
    ```bash
    export AGENT_WALLET_PASSWORD='your_password'
    ```
@@ -132,7 +132,7 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 1. **Verify password is set**: Run `[[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "Password is set" || echo "Password NOT set"` to confirm the variable is set without revealing the value.
 2. **Check wallet directory**: Verify `~/.agent-wallet/` exists and contains wallet files. If you used a custom directory, ensure `AGENT_WALLET_DIR` points to the correct path.
-3. **If password is lost**: You'll need to re-initialize the wallet. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details. Passwords with special characters are supported — use single quotes when setting the environment variable.
+3. **If password is lost**: You'll need to re-initialize the wallet. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ.md) for details. Passwords with special characters are supported — use single quotes when setting the environment variable.
 
 
 ### "Wallet Not Found" or Initialization Error
@@ -157,7 +157,7 @@ unset TRON_PRIVATE_KEY TRON_MNEMONIC
 sun-mcp-server
 ```
 
-If you haven't initialized Agent Wallet yet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro) for setup instructions.
+If you haven't initialized Agent Wallet yet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md) for setup instructions.
 
 ## DeFi Operation Errors
 
@@ -255,7 +255,7 @@ If you haven't initialized Agent Wallet yet, see the [Agent-Wallet documentation
    - Check Permit2 request structured data
    - Confirm chain ID, token address, deadline correct
 
-3. **Reinitialize Wallet** — run `agent-wallet reset` to wipe and start over. See [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) for details.
+3. **Reinitialize Wallet** — run `agent-wallet reset` to wipe and start over. See [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data) for details.
 
 4. **Use Alternate Authorization Method**
    ```

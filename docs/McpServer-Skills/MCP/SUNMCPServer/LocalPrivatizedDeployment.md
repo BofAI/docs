@@ -44,11 +44,11 @@ Without wallet configuration, SUN MCP Server will run in **read-only mode**, all
 ## Installation Steps
 ### Step 1: Configure Wallet
 
-The wallet determines which identity the AI assistant uses to perform on-chain operations. SUN MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for secure wallet management. If no wallet is configured, the server automatically runs in read-only mode.
+The wallet determines which identity the AI assistant uses to perform on-chain operations. SUN MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for secure wallet management. If no wallet is configured, the server automatically runs in read-only mode.
 
 #### Agent Wallet
 
-SUN MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
+SUN MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
 | Feature | Description |
 | :--- | :--- |
@@ -57,7 +57,7 @@ SUN MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for wallet manag
 | Runtime Wallet Switching | Yes |
 | Recommended For | All use cases |
 
-> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
+> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md).
 
 **Set environment variables after initializing Agent Wallet:**
 

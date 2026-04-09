@@ -51,7 +51,7 @@ When using HTTP mode (`npm run start:http`) and clients cannot connect, the usua
 
 As of v1.1.7, write tools (transfers, staking, etc.) are always visible in the AI's tool list, but wallet availability is checked at execution time. If you call a write tool without a configured wallet, it will return an error prompting you to set up a wallet.
 
-To enable write operations, configure [Agent Wallet](../../../Agent-Wallet/Intro):
+To enable write operations, configure [Agent Wallet](../../../Agent-Wallet/Intro.md):
 
 - Set `AGENT_WALLET_PASSWORD` environment variable with your master password
 - Optionally set `AGENT_WALLET_DIR` if using a custom wallet directory
@@ -68,9 +68,9 @@ If you're connected via the official cloud service or using `--readonly` mode, w
 
 ### "Wallet not configured" error
 
-This means no wallet has been set up for signing transactions. TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for all wallet management. To resolve:
+This means no wallet has been set up for signing transactions. TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for all wallet management. To resolve:
 
-1. **Install and initialize Agent Wallet** following the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
+1. **Install and initialize Agent Wallet** following the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md).
 2. **Set the environment variable**:
    ```bash
    export AGENT_WALLET_PASSWORD='<your-master-password>'
@@ -81,10 +81,10 @@ This means no wallet has been set up for signing transactions. TRON MCP Server u
 
 `AGENT_WALLET_PASSWORD` must exactly match the master password generated when you ran `agent-wallet start`. Verify that the wallet directory exists (`ls ~/.agent-wallet/`) and that `AGENT_WALLET_DIR` points to the correct path if you used a custom directory.
 
-If the password is lost, you'll need to re-initialize. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details.
+If the password is lost, you'll need to re-initialize. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ.md) for details.
 
 :::caution Migrating from legacy wallet modes
-If you were previously using `TRON_PRIVATE_KEY` or `TRON_MNEMONIC` environment variables, these are no longer supported as of v1.1.7. Please migrate to Agent Wallet. You can import your existing private key into Agent Wallet — see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro) for details.
+If you were previously using `TRON_PRIVATE_KEY` or `TRON_MNEMONIC` environment variables, these are no longer supported as of v1.1.7. Please migrate to Agent Wallet. You can import your existing private key into Agent Wallet — see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md) for details.
 :::
 
 ### TronGrid API Key not working
@@ -210,6 +210,6 @@ TRON MCP Server supports MCP protocol version **2025-11-25**, using `@modelconte
 
 Key changes in v1.1.7:
 
-- **Legacy wallet modes removed**: `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management now goes through [Agent Wallet](../../../Agent-Wallet/Intro).
+- **Legacy wallet modes removed**: `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management now goes through [Agent Wallet](../../../Agent-Wallet/Intro.md).
 - **Write tools always visible**: Write tools are now registered up front and visible in the tool list even without a wallet configured. Wallet availability is checked at execution time — if no wallet is found, a clear error message is returned.
 - **Docker support** (added in v1.1.6): Run TRON MCP Server in a Docker container for isolated deployments.

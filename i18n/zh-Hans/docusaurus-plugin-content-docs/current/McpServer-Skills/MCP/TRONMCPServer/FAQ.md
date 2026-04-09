@@ -51,7 +51,7 @@
 
 从 v1.1.7 起，写入工具（转账、质押等）始终出现在 AI 的工具列表中，但会在执行时检查钱包是否已配置。如果没有配置钱包就调用写入工具，会返回错误提示你设置钱包。
 
-要启用写入操作，请配置 [Agent Wallet](../../../Agent-Wallet/Intro)：
+要启用写入操作，请配置 [Agent Wallet](../../../Agent-Wallet/Intro.md)：
 
 - 设置 `AGENT_WALLET_PASSWORD` 环境变量为你的主密码
 - 可选设置 `AGENT_WALLET_DIR`（如使用自定义钱包目录）
@@ -68,9 +68,9 @@
 
 ### "钱包未配置"错误
 
-这表示尚未设置用于签名交易的钱包。TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro) 进行所有钱包管理。解决方法：
+这表示尚未设置用于签名交易的钱包。TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行所有钱包管理。解决方法：
 
-1. **安装并初始化 Agent Wallet**，参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro)。
+1. **安装并初始化 Agent Wallet**，参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)。
 2. **设置环境变量**：
    ```bash
    export AGENT_WALLET_PASSWORD='<你的主密码>'
@@ -81,10 +81,10 @@
 
 `AGENT_WALLET_PASSWORD` 必须与运行 `agent-wallet start` 时生成的主密码完全一致。请确认钱包目录存在（`ls ~/.agent-wallet/`），如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
 
-如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。
+如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ.md)。
 
 :::caution 从旧版钱包模式迁移
-如果你之前使用 `TRON_PRIVATE_KEY` 或 `TRON_MNEMONIC` 环境变量，这些从 v1.1.7 起不再受支持。请迁移到 Agent Wallet。你可以将现有私钥导入 Agent Wallet——详见 [Agent-Wallet 文档](../../../Agent-Wallet/Intro)。
+如果你之前使用 `TRON_PRIVATE_KEY` 或 `TRON_MNEMONIC` 环境变量，这些从 v1.1.7 起不再受支持。请迁移到 Agent Wallet。你可以将现有私钥导入 Agent Wallet——详见 [Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)。
 :::
 
 ### TronGrid API Key 不生效
@@ -210,7 +210,7 @@ TRON MCP Server 支持 MCP 协议版本 **2025-11-25**，使用 `@modelcontextpr
 
 v1.1.7 的主要变更：
 
-- **旧版钱包模式移除**：`TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC` 环境变量不再受支持。所有钱包管理现在统一通过 [Agent Wallet](../../../Agent-Wallet/Intro) 进行。
+- **旧版钱包模式移除**：`TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC` 环境变量不再受支持。所有钱包管理现在统一通过 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行。
 - **写入工具始终可见**：写入工具现在预先注册并始终显示在工具列表中，即使没有配置钱包。钱包可用性在执行时检查——如果没有找到钱包，会返回明确的错误信息。
 - **Docker 支持**（v1.1.6 新增）：可以在 Docker 容器中运行 TRON MCP Server 进行隔离部署。
 

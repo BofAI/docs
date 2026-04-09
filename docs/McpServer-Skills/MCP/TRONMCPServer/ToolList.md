@@ -10,7 +10,7 @@ Before exploring the tool list, there are two important things you should know:
 Each tool is labeled with a **mode** — "read" or "write":
 
 - **Read tools**: Only query on-chain data and do not affect any state. They can be used in both cloud services and local deployments.
-- **Write tools**: Modify blockchain state (e.g., transfers, staking, contract interactions). These require a configured wallet (via [Agent Wallet](../../../Agent-Wallet/Intro)) to execute.
+- **Write tools**: Modify blockchain state (e.g., transfers, staking, contract interactions). These require a configured wallet (via [Agent Wallet](../../../Agent-Wallet/Intro.md)) to execute.
 
 Write tools are always visible in the AI’s tool list, but wallet availability is checked at execution time. If no wallet is configured, calling a write tool will return an error prompting you to set up a wallet. In **read-only mode** (cloud service or `--readonly` flag), write tools are not registered.
 :::
@@ -29,8 +29,8 @@ During testing, it is recommended to explicitly set `nile` each time to avoid un
 | Tool Name | Description | Key Parameters | Mode |
 | :--- | :--- | :--- | :--- |
 | `get_wallet_address` | Get the address (Base58 & Hex) of the currently configured wallet. | - | Read |
-| `list_wallets` | List all available wallets with IDs and addresses ([Agent Wallet](../../../Agent-Wallet/Intro) mode). | - | Read |
-| `select_wallet` | Switch the active wallet at runtime ([Agent Wallet](../../../Agent-Wallet/Intro) mode). | `walletId` | Write |
+| `list_wallets` | List all available wallets with IDs and addresses ([Agent Wallet](../../../Agent-Wallet/Intro.md) mode). | - | Read |
+| `select_wallet` | Switch the active wallet at runtime ([Agent Wallet](../../../Agent-Wallet/Intro.md) mode). | `walletId` | Write |
 | `sign_message` | Sign an arbitrary message using the configured wallet. | `message` | Write |
 | `convert_address` | Convert addresses between Hex (`41...`/`0x...`) and Base58 (`T...`) formats. | `address` | Read |
 

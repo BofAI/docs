@@ -50,11 +50,11 @@ Before configuring your wallet, make sure to understand the following security p
 ## Installation Steps
 ### Step 1: Configure Wallet
 
-The wallet determines which identity the AI assistant uses to perform on-chain operations. TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for secure wallet management. If no wallet is configured, write tools will return an error prompting you to set up a wallet.
+The wallet determines which identity the AI assistant uses to perform on-chain operations. TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for secure wallet management. If no wallet is configured, write tools will return an error prompting you to set up a wallet.
 
 #### Agent Wallet
 
-TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
+TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
 | Feature | Description |
 | :--- | :--- |
@@ -63,7 +63,7 @@ TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for wallet mana
 | Runtime Wallet Switching | Yes |
 | Recommended For | All use cases |
 
-> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
+> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md).
 
 **Set environment variables after initializing Agent Wallet:**
 

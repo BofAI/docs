@@ -10,7 +10,7 @@ TRON MCP Server 提供 **97 个工具**、**6 个提示词模板**和 **1 个资
 每个工具都标记了**模式**——"读取"或"写入"：
 
 - **读取工具**：只查询链上数据，不影响任何状态。在云服务和本地部署中均可使用。
-- **写入工具**：会修改区块链状态（转账、质押、合约调用等）。执行时需要已配置的钱包（通过 [Agent Wallet](../../../Agent-Wallet/Intro)）。
+- **写入工具**：会修改区块链状态（转账、质押、合约调用等）。执行时需要已配置的钱包（通过 [Agent Wallet](../../../Agent-Wallet/Intro.md)）。
 
 写入工具始终会出现在 AI 的可用工具列表中，但会在执行时检查钱包是否已配置。如果没有配置钱包，调用写入工具会返回错误提示你设置钱包。在**只读模式**（云服务或 `--readonly` 标志）下，写入工具不会被注册。
 :::
@@ -30,8 +30,8 @@ TRON MCP Server 提供 **97 个工具**、**6 个提示词模板**和 **1 个资
 | 工具名称 | 描述 | 关键参数 | 模式 |
 | :--- | :--- | :--- | :--- |
 | `get_wallet_address` | 获取当前已配置钱包的地址（Base58 和 Hex 格式） | - | 读取 |
-| `list_wallets` | 列出所有可用钱包的 ID 和地址（[Agent Wallet](../../../Agent-Wallet/Intro) 模式） | - | 读取 |
-| `select_wallet` | 在运行时切换活跃钱包（[Agent Wallet](../../../Agent-Wallet/Intro) 模式） | `walletId` | 写入 |
+| `list_wallets` | 列出所有可用钱包的 ID 和地址（[Agent Wallet](../../../Agent-Wallet/Intro.md) 模式） | - | 读取 |
+| `select_wallet` | 在运行时切换活跃钱包（[Agent Wallet](../../../Agent-Wallet/Intro.md) 模式） | `walletId` | 写入 |
 | `sign_message` | 使用已配置的钱包对任意消息进行签名 | `message` | 写入 |
 | `convert_address` | 在 Hex（`41...`/`0x...`）和 Base58（`T...`）格式之间转换地址 | `address` | 读取 |
 
