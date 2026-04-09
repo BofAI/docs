@@ -11,18 +11,7 @@ This guide walks you through: setting up a dedicated agent wallet, configuring c
 
 ## Prerequisites
 
-### 1. Confirm Platform Support
-
-The `x402-payment` skill currently supports the following platforms:
-
-| Platform | Installation Method |
-|----------|---------------------|
-| **OpenClaw** | Manually copy skill files into the `.openclaw/skills` directory |
-| **opencode** | Manually copy skill files into the `.opencode/skill/` directory |
-
-Before continuing, confirm that you are using one of the supported platforms above.
-
-### 2. Create a Dedicated Agent Wallet
+### 1. Create a Dedicated Agent Wallet
 
 > ⚠️ **Important: Create a separate, dedicated wallet for your AI agent — do not use your personal main wallet.**
 >
@@ -53,26 +42,34 @@ Before continuing, confirm that you are using one of the supported platforms abo
 
 ## Step 1: Configure Wallet Credentials
 
-Configure wallet credentials so the x402-payment skill can sign payments. There are two modes:
-
-**Option A: Agent Wallet (Recommended)** — Private key encrypted locally, more secure:
+Configure your private key as an environment variable so the x402-payment skill can sign payments. Replace `your_agent_wallet_private_key_here` with the private key you exported in the Prerequisites step.
 
 ```bash
-export AGENT_WALLET_PASSWORD="your_master_password_here"
-# Optional: custom wallet directory
-# export AGENT_WALLET_DIR="$HOME/.agent-wallet"
+export AGENT_WALLET_PRIVATE_KEY="your_agent_wallet_private_key_here"
 ```
 
-> 💡 If you haven't set up Agent Wallet yet, see [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md).
+> 💡 **Tip:** To make this permanent across terminal sessions, add the line to your shell profile:
+> ```bash
+> echo 'export AGENT_WALLET_PRIVATE_KEY=your_key' >> ~/.zshrc   # for zsh (macOS default)
+> echo 'export AGENT_WALLET_PRIVATE_KEY=your_key' >> ~/.bashrc  # for bash (Linux default)
+> source ~/.zshrc   # or source ~/.bashrc — apply immediately without restarting the terminal
+> ```
 
-**Option B: Static Private Key** — Simpler but less secure (test environments only):
+Verify the environment variable is set correctly:
+
+```bash
+echo $AGENT_WALLET_PRIVATE_KEY
+```
+
+> ✅ **Success indicator:** The terminal prints your private key string (not blank)
 
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
+**Optional:** For production TRON workloads, configure a TronGrid API Key:
+
 ```bash
-export TRON_PRIVATE_KEY="your_agent_wallet_private_key_here"
-export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Optional, recommended for production
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 ```
 
 > 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above.
@@ -89,33 +86,10 @@ independence from BANK OF AI's infrastructure.
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-```bash
-export AGENT_WALLET_PRIVATE_KEY="your_agent_wallet_private_key_here"
-```
+No additional configuration needed for BSC.
 
 </TabItem>
 </Tabs>
-
-Verify the environment variables are set correctly:
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```bash
-echo $TRON_PRIVATE_KEY
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-echo $AGENT_WALLET_PRIVATE_KEY
-```
-
-</TabItem>
-</Tabs>
-
-> ✅ **Success indicator:** The terminal prints your private key string (not blank)
 
 > ⚠️ **Security reminder:** Keep your private key only in local environment variables or a `.env` file. **Never commit files containing private keys to Git or share them with anyone.**
 
@@ -123,34 +97,27 @@ echo $AGENT_WALLET_PRIVATE_KEY
 
 ## Step 2: Install the x402-payment Skill
 
-Choose the installation method for your platform:
+### Quick Auto-Install (Recommended)
 
-<Tabs>
-<TabItem value="openclaw" label="OpenClaw">
+Run the following command to install all BANK OF AI Skills (including x402-payment) at once:
 
-1. Download the skill files from the [x402-payment skill repository](https://github.com/BofAI/skills/tree/main/x402-payment)
-2. In your project root, confirm the `.openclaw/skills/` directory exists (create it if not):
-   ```bash
-   mkdir -p .openclaw/skills/x402-payment
-   ```
-3. Copy the downloaded skill files into that directory
+```bash
+npx skills add https://github.com/BofAI/skills -y -g
+```
 
-> ✅ **Success indicator:** The `.openclaw/skills/x402-payment/` directory contains the skill files
+The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag enables global installation (available across all projects). The installer auto-detects AI tools on your computer (Cursor, Claude Code, Cline, OpenCode, etc.) and copies the skills into the correct directories.
 
-</TabItem>
-<TabItem value="opencode" label="opencode">
+> ✅ **Success indicator:** Terminal shows `✓ x402-payment (copied)` along with other installed skills
 
-1. Download the skill files from the [x402-payment skill repository](https://github.com/BofAI/skills/tree/main/x402-payment)
-2. In your project root, confirm the `.opencode/skill/` directory exists (create it if not):
-   ```bash
-   mkdir -p .opencode/skill/x402-payment
-   ```
-3. Copy the downloaded skill files into that directory
+### Interactive Installation
 
-> ✅ **Success indicator:** The `.opencode/skill/x402-payment/` directory contains the skill files
+If you prefer to select specific skills or choose the installation scope:
 
-</TabItem>
-</Tabs>
+```bash
+npx skills add https://github.com/BofAI/skills
+```
+
+For a detailed walkthrough of the interactive installation process, see the [Skills Quick Start](../../McpServer-Skills/SKILLS/QuickStart.md).
 
 ---
 

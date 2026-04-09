@@ -295,10 +295,10 @@ Press Enter (or type `1`) to install globally — this way all your OpenClaw wor
 Then the skill picker launches:
 
 ```
-◇  Found 7 skills
+◇  Found 8 skills
 │
 ◇  Select skills to install (space to toggle)
-│  Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
+│  agent-wallet, Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
 │  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
@@ -306,6 +306,7 @@ Here's what each skill does:
 
 | Skill | What It Does |
 | :--- | :--- |
+| **agent-wallet** | AgentWallet management operations (view wallets, sign transactions) |
 | **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
 | **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
 | **TronScan Data Lookup** | Query blockchain data via TronScan |
@@ -318,21 +319,23 @@ After selecting, the installer shows a security risk assessment:
 
 ```
 ◇  Security Risk Assessments
-│                                     Gen        Socket        Snyk
-│  Multi-Sig & Account Permissions    --         --            --
-│  recharge-skill                     Safe       1 alert       Med Risk
-│  SunPerp Perpetual Futures Trading  --         --            --
-│  SunSwap DEX Trading                --         --            --
-│  TRC20 Token Toolkit                --         --            --
-│  TronScan Data Lookup               --         --            --
-│  x402-payment                       Safe       0 alerts      Med Risk
+│                                     Gen               Socket            Snyk
+│  agent-wallet                       Med Risk          1 alert           High Risk
+│  Multi-Sig & Account Permissions    --                --                --
+│  recharge-skill                     Safe              1 alert           Med Risk
+│  SunPerp Perpetual Futures Trading  --                --                --
+│  SunSwap DEX Trading                --                --                --
+│  TRC20 Token Toolkit                --                --                --
+│  TronScan Data Lookup               --                --                --
+│  x402-payment                       Safe              1 alert           Med Risk
 ```
 
 Review the report, then confirm to proceed. When installation completes:
 
 ```
-◇  Installed 7 skills
+◇  Installed 8 skills
 │
+│  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
 │  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
@@ -342,33 +345,19 @@ Review the report, then confirm to proceed. When installation completes:
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
-After skills are installed, the installer enters a configuration phase for skills that need API keys:
+After skills are installed, the installer enters a configuration phase:
 
 #### recharge-skill API Key Configuration
 
 ```
 recharge-skill API Key Configuration
 recharge-skill uses your local BANK OF AI API key for balance and order queries.
+Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
 
 **Don't have one? Just press Enter to skip.** You can always create the config file later — see "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" below.
-
-#### TronScan API Key Configuration
-
-If you installed the TronScan Data Lookup skill, the installer will also show a reminder about configuring the TronScan API key:
-
-```
-TronScan API Key Configuration
-tronscan-skill requires TRONSCAN_API_KEY in the shell environment.
-
-Add this to your shell profile (~/.zshrc or ~/.bashrc):
-export TRONSCAN_API_KEY="your-api-key-here"
-Get a free key at: https://tronscan.org/#/myaccount/apiKeys
-```
-
-This key is configured as an environment variable (not a file). See "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" below for detailed instructions.
 
 When `Installation Complete!` lights up at the bottom of the screen — congratulations, you've passed all levels!
 
@@ -382,6 +371,7 @@ When `Installation Complete!` lights up at the bottom of the screen — congratu
     File permissions: 600 (owner read/write only)
 
 ✓ Installed skills:
+  • agent-wallet
   • Multi-Sig & Account Permissions
   • recharge-skill
   • TRC20 Token Toolkit

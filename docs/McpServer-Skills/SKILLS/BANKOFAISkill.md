@@ -16,6 +16,7 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 
 | Skill | What It Does | What Key/Credential Do I Need? |
 | :--- | :--- | :--- |
+| **agent-wallet** | Create wallets, sign transactions/messages, manage multiple wallets — supports EVM and TRON | `AGENT_WALLET_PASSWORD` (encrypted mode) or none (interactive) |
 | **sunswap** | Check prices, get quotes, swap tokens, manage liquidity pools | Read-only: none. Trading: wallet credentials |
 | **sunperp-skill** | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys |
 | **tronscan-skill** | Look up accounts, transactions, tokens, blocks, network stats | Recommended: TronScan API key (may throttle without one) |
@@ -59,6 +60,46 @@ You can query data without this, but if you query too fast, the system may rate-
 ## Haven't Installed Yet?
 
 Head over to **[Quick Start](./QuickStart.md)** — it takes about 1 minute. Come back here to pick your skills once you're set up.
+
+---
+
+## agent-wallet {#agent-wallet}
+
+Your AI's secure signing engine. This skill creates and manages encrypted wallets for your AI agent, letting it sign transactions and messages on both EVM (BSC, Ethereum, Polygon, etc.) and TRON networks — without ever exposing your private key. Think of it as the "keychain" that all other trading and payment skills rely on.
+
+**Completely safe — looking only, no spending:**
+
+> List all my agent wallets.
+
+> Show the EVM and TRON addresses for my wallet.
+
+> What wallet is currently active?
+
+**Requires your confirmation:**
+
+> Create a new encrypted wallet for me.
+
+> Switch to my BSC wallet.
+
+> Sign this message: "Hello World" on TRON mainnet.
+
+**Real-world scenarios:**
+
+> Setting up for the first time? Try: "Create a new agent wallet" — the AI walks you through choosing a wallet type, generating keys, and saving your master password.
+
+> Managing multiple chains? Try: "Show me all my wallets and their addresses" — one wallet derives both EVM and TRON addresses from the same key.
+
+> Need to sign something? Try: "Sign this transaction on BSC" — the AI handles the signing locally without broadcasting.
+
+:::tip Why use Agent Wallet instead of raw private keys?
+Agent Wallet encrypts your private key with a master password. Even if someone accesses your files, they can't use the key without the master password. This is the recommended way to configure wallet credentials for all other skills (sunswap, x402-payment, etc.).
+:::
+
+:::caution Dangerous operations are agent-restricted
+`remove`, `reset`, and `change-password` cannot be executed by the AI — you must run these commands yourself in the terminal. This protects against accidental or irreversible loss of wallet access.
+:::
+
+For detailed setup instructions, see [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md).
 
 ---
 

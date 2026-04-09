@@ -146,55 +146,54 @@ Since `@bankofai/x402` is an ESM module, add the following to your `package.json
 
 ## Step Two: Configure Your Private Key
 
-**Never put your private key in code.** Store it as an environment variable so it stays out of your source files.
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-In your terminal, run (replace `your_private_key_here` with the key you exported):
-
-```bash
-export TRON_PRIVATE_KEY=your_private_key_here
-```
-
-> 💡 **Recommended:** Create a `.env` file in your project directory containing `TRON_PRIVATE_KEY=your_key`, then add `.env` to `.gitignore` to prevent accidental commits.
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-In your terminal, run (replace `your_private_key_here` with the key you exported):
+**Never put your private key in code.** Store it as an environment variable so it stays out of your source files. Replace `your_private_key_here` with the private key you exported in the Prerequisites step.
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-> 💡 **Recommended:** Create a `.env` file in your project directory containing `AGENT_WALLET_PRIVATE_KEY=your_key`, then add `.env` to `.gitignore` to prevent accidental commits.
->
-> 💡 If you already set `TRON_PRIVATE_KEY` in the TRON tab, the same key works for BSC — no need to set it again.
-
-</TabItem>
-</Tabs>
+> 💡 **Tip:** To make this permanent across terminal sessions, add the line to your shell profile:
+> ```bash
+> echo 'export AGENT_WALLET_PRIVATE_KEY=your_key' >> ~/.zshrc   # for zsh (macOS default)
+> echo 'export AGENT_WALLET_PRIVATE_KEY=your_key' >> ~/.bashrc  # for bash (Linux default)
+> source ~/.zshrc   # or source ~/.bashrc — apply immediately without restarting the terminal
+> ```
 
 Verify the variable was set:
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```bash
-echo $TRON_PRIVATE_KEY
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
 
 ```bash
 echo $AGENT_WALLET_PRIVATE_KEY
 ```
 
+> ✅ **Success check:** Terminal prints your private key string (not blank)
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
+**Optional:** For production TRON workloads, configure a TronGrid API Key for better RPC reliability:
+
+```bash
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"
+```
+
+> 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above.
+
+:::note Fallback RPC Endpoint
+When `TRON_GRID_API_KEY` is not set, mainnet RPC calls are automatically
+routed through a BANK OF AI-operated public endpoint
+(`https://api.trongrid.io` proxied via BANK OF AI). This endpoint has no
+guaranteed SLA and may be rate-limited under high load. For production
+workloads, set your own `TRON_GRID_API_KEY` to ensure reliability and
+independence from BANK OF AI's infrastructure.
+:::
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+No additional configuration needed for BSC.
+
 </TabItem>
 </Tabs>
-
-> ✅ **Success check:** Terminal prints your private key string (not blank)
 
 ---
 

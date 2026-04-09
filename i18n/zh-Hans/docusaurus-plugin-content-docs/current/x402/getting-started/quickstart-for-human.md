@@ -148,57 +148,54 @@ npm install @bankofai/x402 tronweb dotenv
 
 ---
 
-## 第二步：配置私钥环境变量
+## 第二步：配置私钥
 
-**不要将私钥写进代码！** 请将私钥存储为环境变量，这样代码从环境中读取，私钥不会出现在代码文件里。
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-在终端中执行（将 `your_private_key_here` 替换为您在前置准备中导出的私钥）：
-
-```bash
-export TRON_PRIVATE_KEY=your_private_key_here
-```
-
-> 💡 **更推荐的方式：** 在项目目录创建 `.env` 文件，写入 `TRON_PRIVATE_KEY=你的私钥`，然后在 `.gitignore` 中添加 `.env`，防止意外提交到 Git。
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-在终端中执行（将 `your_private_key_here` 替换为您在前置准备中导出的私钥）：
+**不要将私钥写进代码！** 请将私钥存储为环境变量，这样代码从环境中读取，私钥不会出现在代码文件里。将 `your_private_key_here` 替换为前置准备中导出的私钥。
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-> 💡 **更推荐的方式：** 在项目目录创建 `.env` 文件，写入 `AGENT_WALLET_PRIVATE_KEY=你的私钥`，然后在 `.gitignore` 中添加 `.env`，防止意外提交到 Git。
->
-> 💡 如果您已在 TRON 标签页中配置了 `TRON_PRIVATE_KEY`，同一个密钥同样适用于 BSC，无需重复设置。
-
-</TabItem>
-</Tabs>
+> 💡 **提示：** 如需在每次打开终端时自动生效，可将其写入 shell 配置文件：
+> ```bash
+> echo 'export AGENT_WALLET_PRIVATE_KEY=你的私钥' >> ~/.zshrc   # zsh（macOS 默认）
+> echo 'export AGENT_WALLET_PRIVATE_KEY=你的私钥' >> ~/.bashrc  # bash（Linux 默认）
+> source ~/.zshrc   # 或 source ~/.bashrc — 无需重启终端即可立即生效
+> ```
 
 验证环境变量已生效：
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```bash
-echo $TRON_PRIVATE_KEY
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
 
 ```bash
 echo $AGENT_WALLET_PRIVATE_KEY
 ```
 
+> ✅ **成功标志：** 终端输出您的私钥字符串（不是空白）
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
+**可选：** 生产环境的 TRON 项目建议配置 TronGrid API Key 以获得更稳定的 RPC 服务：
+
+```bash
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"
+```
+
+> 💡 **如何获取 TronGrid API Key：** 前往 [TronGrid 官网](https://www.trongrid.io/) 免费注册，创建 API Key 后粘贴到上方。
+
+:::note 备用 RPC 端点
+未配置 `TRON_GRID_API_KEY` 时，主网 RPC 调用会自动通过 BANK OF AI 运营的公共端点
+（`https://api.trongrid.io` 经由 BANK OF AI 代理）路由。该端点无保证的 SLA，
+在高负载下可能会被限速。生产环境请配置您自己的 `TRON_GRID_API_KEY`，
+以确保可靠性并独立于 BANK OF AI 基础设施。
+:::
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+BSC 无需额外配置。
+
 </TabItem>
 </Tabs>
-
-> ✅ **成功标志：** 终端输出您的私钥字符串（不是空白）
 
 ---
 

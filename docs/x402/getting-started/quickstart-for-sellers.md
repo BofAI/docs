@@ -394,7 +394,7 @@ Open the `.env` file in the `x402-demo` directory with a text editor and fill in
 ```bash
 # Private key of the dedicated Facilitator wallet (NOT your receiving wallet!)
 # How to get it: TronLink → Settings → Account Management → Export Private Key
-TRON_PRIVATE_KEY=paste_your_facilitator_private_key_here
+AGENT_WALLET_PRIVATE_KEY=paste_your_facilitator_private_key_here
 
 # TronGrid API Key (required for mainnet; recommended for production workloads)
 # Apply at: https://www.trongrid.io/

@@ -295,10 +295,10 @@ Select skills installation scope:
 然后技能选择器启动：
 
 ```
-◇  Found 7 skills
+◇  Found 8 skills
 │
 ◇  Select skills to install (space to toggle)
-│  Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
+│  agent-wallet, Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
 │  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
@@ -306,6 +306,7 @@ Select skills installation scope:
 
 | 技能 | 功能 |
 | :--- | :--- |
+| **agent-wallet** | AgentWallet 钱包管理操作（查看钱包、签署交易） |
 | **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
 | **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
 | **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
@@ -318,21 +319,23 @@ Select skills installation scope:
 
 ```
 ◇  Security Risk Assessments
-│                                     Gen        Socket        Snyk
-│  Multi-Sig & Account Permissions    --         --            --
-│  recharge-skill                     Safe       1 alert       Med Risk
-│  SunPerp Perpetual Futures Trading  --         --            --
-│  SunSwap DEX Trading                --         --            --
-│  TRC20 Token Toolkit                --         --            --
-│  TronScan Data Lookup               --         --            --
-│  x402-payment                       Safe       0 alerts      Med Risk
+│                                     Gen               Socket            Snyk
+│  agent-wallet                       Med Risk          1 alert           High Risk
+│  Multi-Sig & Account Permissions    --                --                --
+│  recharge-skill                     Safe              1 alert           Med Risk
+│  SunPerp Perpetual Futures Trading  --                --                --
+│  SunSwap DEX Trading                --                --                --
+│  TRC20 Token Toolkit                --                --                --
+│  TronScan Data Lookup               --                --                --
+│  x402-payment                       Safe              1 alert           Med Risk
 ```
 
 查看报告后确认继续。安装完成时：
 
 ```
-◇  Installed 7 skills
+◇  Installed 8 skills
 │
+│  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
 │  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
@@ -342,33 +345,19 @@ Select skills installation scope:
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
-技能装完后，安装器会自动进入配置环节，为需要 API Key 的技能进行配置：
+技能装完后，安装器会自动进入配置环节：
 
 #### recharge-skill API Key 配置
 
 ```
 recharge-skill API Key Configuration
 recharge-skill uses your local BANK OF AI API key for balance and order queries.
+Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
 
 **现在没有？直接按回车跳过。** 以后拿到了 Key 可以手动创建配置文件，详见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
-
-#### TronScan API Key 配置
-
-如果你安装了 TronScan Data Lookup 技能，安装器还会显示一条关于配置 TronScan API Key 的提示：
-
-```
-TronScan API Key Configuration
-tronscan-skill requires TRONSCAN_API_KEY in the shell environment.
-
-Add this to your shell profile (~/.zshrc or ~/.bashrc):
-export TRONSCAN_API_KEY="your-api-key-here"
-Get a free key at: https://tronscan.org/#/myaccount/apiKeys
-```
-
-这个 Key 需要配置为环境变量（而非文件）。详细操作见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
 
 当屏幕底部亮起 `Installation Complete!` 时——恭喜，通关成功！
 
@@ -382,6 +371,7 @@ Get a free key at: https://tronscan.org/#/myaccount/apiKeys
     File permissions: 600 (owner read/write only)
 
 ✓ Installed skills:
+  • agent-wallet
   • Multi-Sig & Account Permissions
   • recharge-skill
   • TRC20 Token Toolkit

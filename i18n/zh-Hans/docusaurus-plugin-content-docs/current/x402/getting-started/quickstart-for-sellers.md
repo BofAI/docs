@@ -395,7 +395,7 @@ cp .env.sample .env
 ```bash
 # Facilitator 专用钱包的私钥（不是收款钱包！）
 # 获取方式：TronLink → 设置 → 账户管理 → 导出私钥
-TRON_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
+AGENT_WALLET_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
 
 # TronGrid API Key（主网必需；生产环境推荐配置）
 # 申请地址：https://www.trongrid.io/
