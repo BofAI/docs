@@ -1,5 +1,9 @@
 # Quick Start
 
+:::warning Upgrading from v1.1.6 or earlier?
+As of **v1.1.7**, the `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management now uses **Agent Wallet**. If you had either variable set, write operations will fail until you migrate. See [Migrating to Agent Wallet](./LocalPrivatizedDeployment.md#agent-wallet) for step-by-step instructions.
+:::
+
 The goal of this page is simple: **get you connected in 1 minute and make your first blockchain query.**
 
 We'll use the [official cloud service](./OfficialServerAccess.md) for this quick start. The cloud service is read-only — no dependencies to install, no wallet to configure, no API Key required. Just copy a config snippet into your AI client, restart, and start asking questions.

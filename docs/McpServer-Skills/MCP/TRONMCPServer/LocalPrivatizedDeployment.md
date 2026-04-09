@@ -54,7 +54,7 @@ The wallet determines which identity the AI assistant uses to perform on-chain o
 
 #### Agent Wallet
 
-TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
+TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
 | Feature | Description |
 | :--- | :--- |
@@ -63,17 +63,49 @@ TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for wallet m
 | Runtime Wallet Switching | Yes |
 | Recommended For | All use cases |
 
-> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md).
+> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
 
-**Set environment variables after initializing Agent Wallet:**
+First, install Agent Wallet:
 
 ```bash
-# Add to ~/.zshrc or ~/.bashrc
-export AGENT_WALLET_PASSWORD='<your-master-password>'
-
-# Optional: specify custom wallet directory (default: ~/.agent-wallet)
-export AGENT_WALLET_DIR="$HOME/.agent-wallet"
+npm install -g @bankofai/agent-wallet
 ```
+
+Then, choose one of the following two options depending on your situation:
+
+#### Option A: Generate a New Wallet (Recommended for New Users)
+
+If you don't have an existing private key, use `agent-wallet start` to generate a new wallet with an encrypted keystore and master password:
+
+```bash
+agent-wallet start
+```
+
+Follow the interactive prompts to set your master password and generate a wallet. Once complete, the wallet is ready to use — **no additional environment variables are needed**. Agent Wallet will automatically manage the encrypted keystore.
+
+#### Option B: Import an Existing Private Key
+
+If you already have a private key you want to use, set it via the `AGENT_WALLET_PRIVATE_KEY` environment variable:
+
+```bash
+export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
+```
+
+:::tip
+To make this persist across terminal sessions, add it to your shell configuration file:
+
+```bash
+echo 'export AGENT_WALLET_PRIVATE_KEY=your_private_key' >> ~/.zshrc   # zsh (macOS default)
+echo 'export AGENT_WALLET_PRIVATE_KEY=your_private_key' >> ~/.bashrc  # bash (Linux default)
+source ~/.zshrc   # or source ~/.bashrc — takes effect immediately without restarting the terminal
+```
+
+Verify the environment variable is set:
+
+```bash
+echo $AGENT_WALLET_PRIVATE_KEY
+```
+:::
 
 :::caution Legacy wallet options removed
 As of v1.1.7, the legacy `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management is now handled through Agent Wallet. If you were previously using plaintext private keys or mnemonics, please migrate to Agent Wallet for improved security.
@@ -144,16 +176,25 @@ export MCP_HOST=0.0.0.0   # default: 0.0.0.0
 Run TRON MCP Server in a Docker container for isolated, reproducible environments. The Docker image runs in **read-only HTTP mode** by default.
 
 ```bash
-# Build the image
+# 1. Create a .env file for sensitive variables (never commit this file)
+cat > .env.docker << 'EOF'
+TRONGRID_API_KEY=your-key-here
+EOF
+
+# 2. Build the image
 docker build -t mcp-server-tron .
 
-# Run the container
+# 3. Run the container with --env-file
 docker run -d \
   -p 3001:3001 \
   -v $(pwd)/logs:/app/logs \
-  -e TRONGRID_API_KEY="<your-key>" \
+  --env-file .env.docker \
   mcp-server-tron
 ```
+
+:::warning
+Never pass API keys with `-e KEY=value` on the command line — the value will appear in shell history and `docker inspect` output. Always use `--env-file` with a file excluded from version control (add `.env.docker` to your `.gitignore`).
+:::
 
 The container exposes port 3001 and writes date-stamped logs to the mounted `logs/` directory. A health check endpoint is available at `http://localhost:3001/health`.
 
