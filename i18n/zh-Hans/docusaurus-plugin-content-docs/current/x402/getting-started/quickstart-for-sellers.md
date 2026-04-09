@@ -151,7 +151,7 @@ pip install -e ".[fastapi]"
 <TabItem value="TRON" label="TRON">
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from bankofai.x402.server import X402Server
 from bankofai.x402.fastapi import x402_protected
 from bankofai.x402.facilitator import FacilitatorClient
@@ -180,7 +180,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
     network=NetworkConfig.TRON_NILE, # 当前使用测试网（上线时改为 TRON_MAINNET）
     pay_to=PAY_TO_ADDRESS,           # 您的收款钱包地址
 )
-async def protected_endpoint():
+async def protected_endpoint(request: Request):
     return {"data": "这是需要付款才能获取的内容！"}
 
 
@@ -193,7 +193,7 @@ if __name__ == "__main__":
 <TabItem value="BSC" label="BSC">
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from bankofai.x402.server import X402Server
 from bankofai.x402.fastapi import x402_protected
 from bankofai.x402.facilitator import FacilitatorClient
@@ -226,7 +226,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
     pay_to=PAY_TO_ADDRESS,             # 您的收款钱包地址
     schemes=["exact_permit"],
 )
-async def protected_endpoint():
+async def protected_endpoint(request: Request):
     return {"data": "这是需要付款才能获取的内容！"}
 
 

@@ -150,7 +150,7 @@ In your project directory, create a new file named `server.py` and paste in the 
 <TabItem value="TRON" label="TRON">
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from bankofai.x402.server import X402Server
 from bankofai.x402.fastapi import x402_protected
 from bankofai.x402.facilitator import FacilitatorClient
@@ -179,7 +179,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
     network=NetworkConfig.TRON_NILE, # Using testnet now (change to TRON_MAINNET when going live)
     pay_to=PAY_TO_ADDRESS,           # Your receiving wallet address
 )
-async def protected_endpoint():
+async def protected_endpoint(request: Request):
     return {"data": "This is premium content!"}
 
 
@@ -192,7 +192,7 @@ if __name__ == "__main__":
 <TabItem value="BSC" label="BSC">
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from bankofai.x402.server import X402Server
 from bankofai.x402.fastapi import x402_protected
 from bankofai.x402.facilitator import FacilitatorClient
@@ -225,7 +225,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
     pay_to=PAY_TO_ADDRESS,             # Your receiving wallet address
     schemes=["exact_permit"],
 )
-async def protected_endpoint():
+async def protected_endpoint(request: Request):
     return {"data": "This is premium content!"}
 
 

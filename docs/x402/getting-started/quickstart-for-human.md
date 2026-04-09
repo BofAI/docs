@@ -27,7 +27,7 @@ This guide is for developers who want to **call an x402-protected API from code*
 
 ### Checklist Before You Start
 
-- [ ] **Python 3.10+** or **Node.js 18+** installed (depending on your chosen language)
+- [ ] **Python 3.11+** or **Node.js 18+** installed (depending on your chosen language)
 - [ ] A dedicated **test wallet** created (see below)
 - [ ] Test tokens claimed (free)
 - [ ] A target x402-protected API URL (or use our demo endpoint)
