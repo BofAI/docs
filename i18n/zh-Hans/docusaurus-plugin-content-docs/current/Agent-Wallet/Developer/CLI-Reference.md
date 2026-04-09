@@ -144,6 +144,15 @@ agent-wallet use my-bsc-wallet
 agent-wallet inspect my-bsc-wallet
 ```
 
+查看钱包元数据及派生地址：
+```bash
+agent-wallet inspect my-bsc-wallet --show-address
+```
+
+| Flag | 说明 |
+| :--- | :--- |
+| `--show-address` | 派生并显示 EVM + TRON 地址（`local_secure` 钱包需要输入密码） |
+
 **用指定钱包签名**（不切换活跃钱包）：
 ```bash
 agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
