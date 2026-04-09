@@ -44,21 +44,18 @@ Without wallet configuration, SUN MCP Server will run in **read-only mode**, all
 ## Installation Steps
 ### Step 1: Configure Wallet
 
-The wallet determines which identity the AI assistant uses to perform on-chain operations. SUN MCP Server supports three wallet modes; if no wallet is configured, the server automatically runs in read-only mode.
+The wallet determines which identity the AI assistant uses to perform on-chain operations. SUN MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for secure wallet management. If no wallet is configured, the server automatically runs in read-only mode.
 
-#### There are three wallet options — choose based on your needs
+#### Agent Wallet
 
-| Feature | Agent Wallet | Private Key | Mnemonic |
-| :--- | :--- | :--- | :--- |
-| Security Level | High (encrypted storage) | Low (plaintext) | Low (plaintext) |
-| Multi-Wallet Support | Yes | No | No |
-| Runtime Wallet Switching | Yes | No | No |
-| Setup Complexity | Medium | Simple | Simple |
-| Recommended For | Production, significant funds | Development, small amounts | Development, small amounts |
+SUN MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
-#### Option 1: Agent Wallet (Recommended)
-
-This is the most secure option. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
+| Feature | Description |
+| :--- | :--- |
+| Security Level | High (encrypted storage) |
+| Multi-Wallet Support | Yes |
+| Runtime Wallet Switching | Yes |
+| Recommended For | All use cases |
 
 > For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
 
@@ -72,38 +69,8 @@ export AGENT_WALLET_PASSWORD='<your-master-password>'
 export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 ```
 
-
-
-#### Option 2: Private Key
-
-Provide the private key directly via environment variable. Simplest setup, but lower security.
-
-```bash
-# Add to ~/.zshrc or ~/.bashrc
-export TRON_PRIVATE_KEY="<your-private-key-hex>"
-```
-
-The private key can be in hex format with or without the `0x` prefix.
-
-:::warning
-Using a plaintext private key in environment variables carries a **real risk of fund theft** — environment variables can be leaked via shell history, process listings (`ps aux`), or log files. **Only keep small amounts of funds** in wallets configured this way.
-:::
-
-#### Option 3: Mnemonic Phrase
-
-Use a BIP-39 mnemonic phrase for HD wallet derivation.
-
-```bash
-# Add to ~/.zshrc or ~/.bashrc
-export TRON_MNEMONIC="word1 word2 word3 ... word12"
-
-# Optional: specify HD wallet derivation index (default: 0)
-# Derivation path: m/44'/195'/0'/0/{index}
-export TRON_ACCOUNT_INDEX="0"
-```
-
-:::warning
-Same security risks as the private key option. Mnemonic phrases stored in plaintext are vulnerable to exposure. Use this only for development/testing wallets with small balances.
+:::caution Legacy wallet options removed
+The legacy `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management is now handled through Agent Wallet. If you were previously using plaintext private keys or mnemonics, please migrate to Agent Wallet for improved security.
 :::
 
 

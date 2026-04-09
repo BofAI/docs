@@ -85,21 +85,18 @@ description: SUN MCP Server 的常见问题解答，涵盖连接、认证、DeFi
 
 **解决方案：**
 
-1. **配置 [Agent Wallet](../../../Agent-Wallet/Intro)**（推荐）— 设置 `AGENT_WALLET_PASSWORD`
-
-2. **或配置私钥（仅测试网）**
+1. **配置 [Agent Wallet](../../../Agent-Wallet/Intro)** — 设置 `AGENT_WALLET_PASSWORD`
    ```bash
-   export TRON_PRIVATE_KEY="your_64_hex_char_private_key"
+   export AGENT_WALLET_PASSWORD='your_password'
    ```
 
-3. **或配置助记词**
-   ```bash
-   export TRON_MNEMONIC="word1 word2 ... word12"
-   ```
-
-4. **重新启动服务器**并重新连接 MCP 客户端
+2. **重新启动服务器**并重新连接 MCP 客户端
 
 验证配置成功的方式：查看 [完整能力清单](ToolList.md) 中的完整能力清单。
+
+:::caution
+`TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC` 环境变量已不再支持。所有钱包管理现在统一通过 Agent Wallet 处理。
+:::
 
 ## 认证与密钥问题
 
@@ -138,42 +135,29 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 3. **密码丢失**：需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。含有特殊字符的密码是受支持的——设置环境变量时请使用单引号。
 
 
-### "Conflicting wallet modes"
+### 钱包未找到或初始化错误
 
-**症状：** 错误 "检测到冲突的钱包模式"。
+**症状：** 服务器无法找到或初始化钱包。
 
-**原因：** 同时设置了多个钱包环境变量。
+**原因：** Agent Wallet 未正确配置。
 
-**解决方案：** 仅设置以下之一：
+**解决方案：** 确保 Agent Wallet 已安装并配置：
 
 ```bash
-# 选项 1：Agent Wallet（推荐用于生产）
+# 设置 Agent Wallet 密码
 export AGENT_WALLET_PASSWORD='your_password'
-unset TRON_PRIVATE_KEY
-unset TRON_MNEMONIC
 
-# 选项 2：私钥（仅限测试网）
-export TRON_PRIVATE_KEY='your_64_hex_chars'
-unset AGENT_WALLET_PASSWORD
-unset TRON_MNEMONIC
+# 可选：指定自定义钱包目录
+export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 
-# 选项 3：助记词
-export TRON_MNEMONIC='word1 word2 ... word12'
-unset AGENT_WALLET_PASSWORD
-unset TRON_PRIVATE_KEY
-```
-
-**验证配置：**
-```bash
-# 清除所有钱包相关环境变量
-unset AGENT_WALLET_PASSWORD TRON_PRIVATE_KEY TRON_MNEMONIC
-
-# 只设置一个
-export AGENT_WALLET_PASSWORD='your_password'
+# 清除可能引起混淆的旧环境变量
+unset TRON_PRIVATE_KEY TRON_MNEMONIC
 
 # 重启服务器
 sun-mcp-server
 ```
+
+如果尚未初始化 Agent Wallet，请参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro) 了解设置步骤。
 
 ## DeFi 操作错误
 
@@ -414,7 +398,7 @@ sun-mcp-server
       "args": ["--port", "8081"],
       "env": {
         "TRON_NETWORK": "nile",
-        "TRON_PRIVATE_KEY": "your_testnet_private_key"
+        "AGENT_WALLET_PASSWORD": "your_testnet_password"
       }
     }
   }
