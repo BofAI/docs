@@ -19,12 +19,14 @@ x402 采用标准化的网络标识符格式：`tron:<network_name>`。
 
 ## BSC 网络标识符
 
-对于 BSC，x402 采用 EIP-155 链 ID 格式：
+在 x402 协议层（链路传输），BSC 采用 EIP-155 链 ID 格式：
 
-| 网络名称 (Network Name) | 网络 (Network)      | 描述 (Description)   |
+| 网络名称 (Network Name) | 协议标识符 (Protocol ID) | 描述 (Description)   |
 | :---------------------- | :------------- | :------------------- |
 | **BSC Mainnet**        | `eip155:56` | BSC 主网 (生产环境) |
 | **BSC Testnet**         | `eip155:97`  | BSC 测试网   |
+
+> **注意**：在自托管 Facilitator 的 YAML 配置文件中，使用更易读的格式：`bsc:mainnet` 和 `bsc:testnet`。Facilitator 启动时会自动将其映射为协议层对应的 EIP-155 链 ID。
 
 
 ## 概览

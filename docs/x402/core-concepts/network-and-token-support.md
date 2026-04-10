@@ -20,12 +20,14 @@ The `<network_name>` can be `mainnet`, `shasta`, or `nile`.
 
 ## BSC Network Identifiers
 
-For BSC, x402 uses the EIP-155 chain ID format:
+In the x402 protocol (on-the-wire), BSC uses the EIP-155 chain ID format:
 
-| Network Name     | Network       | Description                    |
+| Network Name     | Protocol ID   | Description                    |
 | :--------------- | :------------ | :----------------------------- |
 | **BSC Mainnet**  | `eip155:56`   | BSC Mainnet (Production)      |
 | **BSC Testnet**  | `eip155:97`   | BSC Testnet (Chapel)          |
+
+> **Note**: When configuring a self-hosted Facilitator, the YAML config file uses a human-readable format: `bsc:mainnet` and `bsc:testnet`. The Facilitator automatically maps these to the corresponding EIP-155 chain IDs used in the protocol.
 
 ---
 

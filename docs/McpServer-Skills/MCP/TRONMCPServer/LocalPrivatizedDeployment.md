@@ -54,7 +54,7 @@ The wallet determines which identity the AI assistant uses to perform on-chain o
 
 #### Agent Wallet
 
-TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
+TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
 | Feature | Description |
 | :--- | :--- |
@@ -63,7 +63,7 @@ TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro) for wallet mana
 | Runtime Wallet Switching | Yes |
 | Recommended For | All use cases |
 
-> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
+> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md).
 
 First, install Agent Wallet:
 
@@ -71,9 +71,9 @@ First, install Agent Wallet:
 npm install -g @bankofai/agent-wallet
 ```
 
-Then, choose one of the following two options depending on your situation:
+Then, choose one of the following two paths depending on your situation:
 
-#### Option A: Generate a New Wallet (Recommended for New Users)
+#### Path 1: Generate a New Wallet (Recommended for New Users)
 
 If you don't have an existing private key, use `agent-wallet start` to generate a new wallet with an encrypted keystore and master password:
 
@@ -83,7 +83,7 @@ agent-wallet start
 
 Follow the interactive prompts to set your master password and generate a wallet. Once complete, the wallet is ready to use — **no additional environment variables are needed**. Agent Wallet will automatically manage the encrypted keystore.
 
-#### Option B: Import an Existing Private Key
+#### Path 2: Import an Existing Private Key
 
 If you already have a private key you want to use, set it via the `AGENT_WALLET_PRIVATE_KEY` environment variable:
 
@@ -199,7 +199,7 @@ Never pass API keys with `-e KEY=value` on the command line — the value will a
 The container exposes port 3001 and writes date-stamped logs to the mounted `logs/` directory. A health check endpoint is available at `http://localhost:3001/health`.
 
 :::tip
-The Docker image is designed for read-only cloud deployments. For local write operations (transfers, staking, etc.), use Option A or B with a configured Agent Wallet.
+The Docker image is designed for read-only cloud deployments. For local write operations (transfers, staking, etc.), use Option A, B, or C with a configured Agent Wallet.
 :::
 
 #### Configuration Notes

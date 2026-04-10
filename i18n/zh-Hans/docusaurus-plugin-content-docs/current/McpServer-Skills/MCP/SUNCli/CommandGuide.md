@@ -28,7 +28,7 @@
 :::caution 私钥安全
 `-k` / `--private-key` 和 `-m` / `--mnemonic` 标志会将敏感信息作为命令行参数传递，
 可能被记录在 shell 历史和进程列表中。请优先使用环境变量（`AGENT_WALLET_PRIVATE_KEY`、
-`AGENT_WALLET_MNEMONIC`）或 [agent-wallet](https://github.com/ABlockofAI/agent-wallet)
+`AGENT_WALLET_MNEMONIC`）或 [agent-wallet](https://github.com/BofAI/agent-wallet)
 加密存储来管理所有非临时密钥。
 :::
 
