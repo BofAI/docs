@@ -483,6 +483,7 @@ If your script throws an error, refer to the table below:
 | Error | Cause | Fix |
 |-------|-------|-----|
 | Environment variable is `None` or not set | Private key env var not configured | Re-run the `export` command in **the same terminal window** where you run the script |
+| `WalletNotFoundError: No active wallet set` | agent-wallet has no wallet configured | Run `agent-wallet start` and follow the prompts to import your private key |
 | `Insufficient balance` / balance error | Test wallet doesn't have enough USDT/USDD | Go back to Prerequisites and claim test tokens from the faucet |
 | `UnsupportedNetworkError` | Registered network doesn't match the server | Confirm `SERVER_URL` network matches your registered mechanism (`tron:*` for TRON, `eip155:*` for BSC) |
 | `InsufficientAllowanceError` | Token allowance too low | The SDK usually handles this automatically; if it persists, check your wallet balance |

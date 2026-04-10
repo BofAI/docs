@@ -487,6 +487,7 @@ npx tsx client.ts
 | 错误信息 | 原因 | 解决方法 |
 |----------|------|----------|
 | `环境变量未设置` 或 `None` | 私钥环境变量没有正确设置 | 重新执行第二步的 `export` 命令，注意是在**同一个终端窗口**中运行 |
+| `WalletNotFoundError: No active wallet set` | agent-wallet 未配置钱包 | 运行 `agent-wallet start`，按提示导入您的私钥 |
 | `Insufficient balance` / 余额不足 | 测试钱包里没有足够的测试 USDT/USDD | 回到前置准备，从水龙头重新领取测试代币 |
 | `UnsupportedNetworkError` | 代码中注册的网络与服务器不匹配 | 确认 `SERVER_URL` 对应的网络与您注册的 mechanism 一致（TRON 对应 `tron:*`，BSC 对应 `eip155:*`） |
 | `InsufficientAllowanceError` | 代币授权额度不足 | SDK 通常会自动处理授权，如持续出现请检查钱包余额 |
