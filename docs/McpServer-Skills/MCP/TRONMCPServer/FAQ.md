@@ -83,10 +83,6 @@ This means no wallet has been set up for signing transactions. TRON MCP Server u
 
 If the password is lost, you'll need to re-initialize. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ.md) for details.
 
-:::caution Migrating from legacy wallet modes
-If you were previously using `TRON_PRIVATE_KEY` or `TRON_MNEMONIC` environment variables, these are no longer supported as of v1.1.7. Please migrate to Agent Wallet. You can import your existing private key into Agent Wallet — see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md) for details.
-:::
-
 ### TronGrid API Key not working
 
 The API Key is configured but requests are still rate-limited — check the following:
@@ -206,10 +202,3 @@ npm run build
 
 TRON MCP Server supports MCP protocol version **2025-11-25**, using `@modelcontextprotocol/sdk` 1.22.0 or higher.
 
-### What changed in v1.1.7?
-
-Key changes in v1.1.7:
-
-- **Legacy wallet modes removed**: `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management now goes through [Agent Wallet](../../../Agent-Wallet/Intro.md).
-- **Write tools always visible**: Write tools are now registered up front and visible in the tool list even without a wallet configured. Wallet availability is checked at execution time — if no wallet is found, a clear error message is returned.
-- **Docker support** (added in v1.1.6): Run TRON MCP Server in a Docker container for isolated deployments.

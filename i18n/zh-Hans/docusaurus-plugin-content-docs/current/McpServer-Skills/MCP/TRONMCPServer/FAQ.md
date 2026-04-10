@@ -83,10 +83,6 @@
 
 如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ.md)。
 
-:::caution 从旧版钱包模式迁移
-如果你之前使用 `TRON_PRIVATE_KEY` 或 `TRON_MNEMONIC` 环境变量，这些从 v1.1.7 起不再受支持。请迁移到 Agent Wallet。你可以将现有私钥导入 Agent Wallet——详见 [Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)。
-:::
-
 ### TronGrid API Key 不生效
 
 已配置了 API Key 但请求仍然受到限速，检查以下几点：
@@ -206,11 +202,4 @@ npm run build
 
 TRON MCP Server 支持 MCP 协议版本 **2025-11-25**，使用 `@modelcontextprotocol/sdk` 1.22.0 或更高版本。
 
-### v1.1.7 有哪些变化？
-
-v1.1.7 的主要变更：
-
-- **旧版钱包模式移除**：`TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC` 环境变量不再受支持。所有钱包管理现在统一通过 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行。
-- **写入工具始终可见**：写入工具现在预先注册并始终显示在工具列表中，即使没有配置钱包。钱包可用性在执行时检查——如果没有找到钱包，会返回明确的错误信息。
-- **Docker 支持**（v1.1.6 新增）：可以在 Docker 容器中运行 TRON MCP Server 进行隔离部署。
 
