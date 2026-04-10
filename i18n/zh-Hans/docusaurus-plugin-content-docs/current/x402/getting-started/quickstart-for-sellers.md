@@ -24,7 +24,7 @@ import TabItem from '@theme/TabItem';
 请在终端（macOS/Linux 的 Terminal，或 Windows 的 PowerShell/命令提示符）中依次运行以下命令，确认相关工具已安装：
 
 ```bash
-python --version   # 需要 3.10 或以上版本
+python --version   # 需要 3.11 或以上版本
 pip --version      # 随 Python 一起安装
 git --version      # 版本控制工具
 ```
@@ -371,7 +371,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 
 启动前，请确认以下条件已就绪：
 
-- **Python 3.10+** 和 **Git**（前置准备中已确认）
+- **Python 3.11+** 和 **Git**（前置准备中已确认）
 - **PostgreSQL** — Facilitator 使用数据库持久化支付记录。根据您的环境选择最方便的方式：
 
   **方式 A — 直接安装（无需额外工具）：**

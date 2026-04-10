@@ -24,7 +24,7 @@ The entire flow takes **4 steps**, estimated time: **15–20 minutes**.
 In your terminal (Terminal on macOS/Linux, or PowerShell/Command Prompt on Windows), run the following commands to confirm the required tools are installed:
 
 ```bash
-python --version   # Requires 3.10 or higher
+python --version   # Requires 3.11 or higher
 pip --version      # Installed alongside Python
 git --version      # Version control tool
 ```
@@ -370,7 +370,7 @@ The self-hosted option gives you full control over fee strategy and network conf
 
 Before starting, make sure you have:
 
-- **Python 3.10+** and **Git** (confirmed in the Prerequisites section above)
+- **Python 3.11+** and **Git** (confirmed in the Prerequisites section above)
 - **PostgreSQL** — the Facilitator stores payment records in a database. Pick whichever option suits you:
 
   **Option A — Install directly (no extra tools required):**
