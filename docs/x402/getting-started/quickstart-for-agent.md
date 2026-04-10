@@ -82,13 +82,8 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 
 > 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above.
 
-:::note Fallback RPC Endpoint
-When `TRON_GRID_API_KEY` is not set, mainnet RPC calls are automatically
-routed through a BANK OF AI-operated public endpoint
-(`https://api.trongrid.io` proxied via BANK OF AI). This endpoint has no
-guaranteed SLA and may be rate-limited under high load. For production
-workloads, set your own `TRON_GRID_API_KEY` to ensure reliability and
-independence from BANK OF AI's infrastructure.
+:::note
+When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy workloads. For production, set your own `TRON_GRID_API_KEY` to ensure reliability.
 :::
 
 </TabItem>
@@ -190,7 +185,7 @@ Before deploying your agent to production, make sure to review the following:
 | Agent doesn't initiate payment, errors immediately | Skill not installed correctly | Re-run the installation command in Step 2 |
 | `Private key not found` or signing fails | Environment variable not set or misconfigured | Re-run Step 1, and make sure you run the agent **in the same terminal session** |
 | Insufficient balance error | No test tokens in the agent wallet | Go back to Prerequisites and claim test tokens from the faucet |
-| Request times out | Network issue or RPC rate limiting | Configure `TRON_GRID_API_KEY` for better performance (a fallback endpoint is used automatically when not set) |
+| Request times out | Network issue or RPC rate limiting | Configure `TRON_GRID_API_KEY` for better performance |
 | Agent accesses successfully but balance doesn't change | May have accessed a free endpoint | Confirm the URL path is `/protected-nile`, not another path |
 
 ---

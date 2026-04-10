@@ -186,13 +186,8 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 
 > 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above.
 
-:::note Fallback RPC Endpoint
-When `TRON_GRID_API_KEY` is not set, mainnet RPC calls are automatically
-routed through a BANK OF AI-operated public endpoint
-(`https://api.trongrid.io` proxied via BANK OF AI). This endpoint has no
-guaranteed SLA and may be rate-limited under high load. For production
-workloads, set your own `TRON_GRID_API_KEY` to ensure reliability and
-independence from BANK OF AI's infrastructure.
+:::note
+When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy workloads. For production, set your own `TRON_GRID_API_KEY` to ensure reliability.
 :::
 
 </TabItem>

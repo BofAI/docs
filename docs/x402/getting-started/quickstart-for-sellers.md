@@ -371,9 +371,7 @@ The self-hosted option gives you full control over fee strategy and network conf
 Before starting, make sure you have:
 
 - **Python 3.11+** and **Git** (confirmed in the Prerequisites section above)
-- **PostgreSQL** — the Facilitator stores payment records in a database. Pick whichever option suits you:
-
-  **Option A — Install directly (no extra tools required):**
+- **PostgreSQL** — the Facilitator stores payment records in a database.
 
   <Tabs>
   <TabItem value="mac" label="macOS">
@@ -455,12 +453,6 @@ Before starting, make sure you have:
 
   Connection string: `postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
 
-  **Option B — Use a free cloud database (zero local install):**
-
-  Sign up at [Railway](https://railway.app/), create a PostgreSQL instance, and copy the connection string it provides. Replace the `postgresql://` prefix with `postgresql+asyncpg://`.
-
-  Note down your connection string — you'll need it shortly.
-
 - **A dedicated Facilitator wallet** — create a new wallet (separate from your receiving wallet, following the same steps in Prerequisites), and claim testnet tokens from the faucet to cover transaction fees.
 
 #### 3.2 Clone and Install
@@ -498,7 +490,7 @@ facilitator:
     tron:nile:                   # Use tron:mainnet when going live
       base_fee:
         USDT: 100                # 0.0001 USDT per settlement (adjust as needed)
-        USDD: 100000000000000
+        USDD: 100000000000000  # 0.0001 USDD (18 decimals; adjust as needed)
 ```
 
 </TabItem>
@@ -694,13 +686,8 @@ Modify the `network` parameter in the `@x402_protected` decorator in `server.py`
    export TRON_GRID_API_KEY=your_trongrid_api_key
    ```
 
-   :::note Fallback RPC Endpoint
-   When `TRON_GRID_API_KEY` is not set, mainnet RPC calls are automatically
-   routed through a BANK OF AI-operated public endpoint
-   (`https://api.trongrid.io` proxied via BANK OF AI). This endpoint has no
-   guaranteed SLA and may be rate-limited under high load. For production
-   workloads, set your own `TRON_GRID_API_KEY` to ensure reliability and
-   independence from BANK OF AI's infrastructure.
+   :::note
+   When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy workloads. For production, set your own `TRON_GRID_API_KEY` to ensure reliability.
    :::
 
 2. **Replace the private key**: update `AGENT_WALLET_PRIVATE_KEY` to the mainnet Facilitator wallet's private key:
@@ -719,7 +706,7 @@ Modify the `network` parameter in the `@x402_protected` decorator in `server.py`
        tron:mainnet:              # Changed from tron:nile
          base_fee:
            USDT: 100
-           USDD: 100000000000000
+           USDD: 100000000000000  # 0.0001 USDD (18 decimals; adjust as needed)
    ```
 
 5. **Restart the service**: `python src/main.py`

@@ -190,11 +190,8 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 
 > 💡 **如何获取 TronGrid API Key：** 前往 [TronGrid 官网](https://www.trongrid.io/) 免费注册，创建 API Key 后粘贴到上方。
 
-:::note 备用 RPC 端点
-未配置 `TRON_GRID_API_KEY` 时，主网 RPC 调用会自动通过 BANK OF AI 运营的公共端点
-（`https://api.trongrid.io` 经由 BANK OF AI 代理）路由。该端点无保证的 SLA，
-在高负载下可能会被限速。生产环境请配置您自己的 `TRON_GRID_API_KEY`，
-以确保可靠性并独立于 BANK OF AI 基础设施。
+:::note
+未配置 `TRON_GRID_API_KEY` 时，在高负载下可能会被限速。生产环境请配置 `TRON_GRID_API_KEY`，以确保可靠性。
 :::
 
 </TabItem>

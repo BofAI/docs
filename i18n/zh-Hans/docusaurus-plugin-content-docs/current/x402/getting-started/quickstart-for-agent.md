@@ -82,11 +82,8 @@ export TRON_GRID_API_KEY="在此填入TronGrid API Key"
 
 > 💡 **如何获取 TronGrid API Key：** 前往 [TronGrid 官网](https://www.trongrid.io/) 免费注册，创建 API Key 后粘贴到上方。
 
-:::note 备用 RPC 端点
-未配置 `TRON_GRID_API_KEY` 时，主网 RPC 调用会自动通过 BANK OF AI 运营的公共端点
-（`https://api.trongrid.io` 经由 BANK OF AI 代理）路由。该端点无保证的 SLA，
-在高负载下可能会被限速。生产环境请配置您自己的 `TRON_GRID_API_KEY`，
-以确保可靠性并独立于 BANK OF AI 基础设施。
+:::note
+未配置 `TRON_GRID_API_KEY` 时，在高负载下可能会被限速。生产环境请配置 `TRON_GRID_API_KEY`，以确保可靠性。
 :::
 
 </TabItem>
@@ -188,7 +185,7 @@ https://x402-demo.bankofai.io/protected-nile
 | 代理未发起付款，直接报错 | 技能未正确安装 | 重新执行第二步的安装命令 |
 | `私钥未找到` 或签名失败 | 环境变量未配置或配置错误 | 重新执行第一步，在**同一终端**中运行代理 |
 | 余额不足错误 | 测试钱包中没有测试代币 | 回到前置准备，从水龙头领取测试代币 |
-| 请求超时 | 网络问题或 RPC 限速 | 配置 `TRON_GRID_API_KEY` 以获得更好的性能（未配置时会自动使用备用 RPC 端点） |
+| 请求超时 | 网络问题或 RPC 限速 | 配置 `TRON_GRID_API_KEY` 以获得更好的性能 |
 | 代理访问成功但余额没有变化 | 可能访问的是免费接口 | 确认 URL 是 `/protected-nile` 而非其他路径 |
 
 ---

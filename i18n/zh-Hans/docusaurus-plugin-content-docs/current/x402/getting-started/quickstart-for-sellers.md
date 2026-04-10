@@ -372,9 +372,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 启动前，请确认以下条件已就绪：
 
 - **Python 3.11+** 和 **Git**（前置准备中已确认）
-- **PostgreSQL** — Facilitator 使用数据库持久化支付记录。根据您的环境选择最方便的方式：
-
-  **方式 A — 直接安装（无需额外工具）：**
+- **PostgreSQL** — Facilitator 使用数据库持久化支付记录。
 
   <Tabs>
   <TabItem value="mac" label="macOS">
@@ -456,11 +454,6 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 
   连接字符串：`postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
 
-  **方式 B — 使用免费云数据库（本地零安装）：**
-
-  在 [Railway](https://railway.app/) 注册并创建一个 PostgreSQL 实例，复制它提供的连接字符串，将前缀 `postgresql://` 替换为 `postgresql+asyncpg://` 即可直接使用。
-
-  记录好连接字符串，后面配置会用到。
 
 - **Facilitator 专用钱包** — 单独创建一个新钱包（与收款钱包隔离，步骤与前置准备相同），并从水龙头领取测试代币用于支付手续费。
 
@@ -499,7 +492,7 @@ facilitator:
     tron:nile:                   # 上线时改为 tron:mainnet
       base_fee:
         USDT: 100                # 每笔结算收 0.0001 USDT（可按需调整）
-        USDD: 100000000000000
+        USDD: 100000000000000  # 0.0001 USDD（18位精度；按需调整）
 ```
 
 </TabItem>
@@ -695,11 +688,8 @@ curl http://localhost:8000/protected
    export TRON_GRID_API_KEY=your_trongrid_api_key
    ```
 
-   :::note 备用 RPC 端点
-   未配置 `TRON_GRID_API_KEY` 时，主网 RPC 调用会自动通过 BANK OF AI 运营的公共端点
-   （`https://api.trongrid.io` 经由 BANK OF AI 代理）路由。该端点无保证的 SLA，
-   在高负载下可能会被限速。生产环境请配置您自己的 `TRON_GRID_API_KEY`，
-   以确保可靠性并独立于 BANK OF AI 基础设施。
+   :::note
+   未配置 `TRON_GRID_API_KEY` 时，在高负载下可能会被限速。生产环境请配置 `TRON_GRID_API_KEY`，以确保可靠性。
    :::
 
 2. **替换私钥**：将环境变量更新为主网 Facilitator 钱包的私钥：
@@ -718,7 +708,7 @@ curl http://localhost:8000/protected
        tron:mainnet:              # 从 tron:nile 改为 tron:mainnet
          base_fee:
            USDT: 100
-           USDD: 100000000000000
+           USDD: 100000000000000  # 0.0001 USDD（18位精度；按需调整）
    ```
 
 5. **重启服务**：`python src/main.py`
