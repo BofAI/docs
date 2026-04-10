@@ -143,6 +143,24 @@ const sidebars = {
             'McpServer-Skills/SKILLS/Faq',
           ],
         },
+        {
+          type: 'category',
+          label: 'TOOLS',
+          collapsed: false,
+          items: [
+            {
+              type: 'category',
+              label: 'SUN CLI',
+              collapsed: true,
+              items: [
+                'McpServer-Skills/Tools/SUNCli/Intro',
+                'McpServer-Skills/Tools/SUNCli/QuickStart',
+                'McpServer-Skills/Tools/SUNCli/CommandGuide',
+                'McpServer-Skills/Tools/SUNCli/FAQ',
+              ],
+            },
+          ],
+        },
       ],
     },
     {

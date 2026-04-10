@@ -102,7 +102,7 @@ If you chose `2` (Clean install), the installer lists everything that will be de
 The following data will be permanently deleted:
   • ALL MCP entries in: ~/.mcporter/mcporter.json
   • ALL installed skills (global and workspace)
-
+  • x402 config file: ~/.x402-config.json
   • BANK OF AI local config: ~/.mcporter/bankofai-config.json
   • AgentWallet config will be overwritten by: agent-wallet start --override --save-runtime-secrets
 
@@ -233,19 +233,17 @@ After confirming, the installer configures each server one by one. Here's what t
 
 #### mcp-server-tron (TRON Toolbox)
 
+This one is fully automatic — no input needed! The installer adds the TRON MCP server directly:
+
 ```
 Configuring mcp-server-tron...
-This step configures network access for TRON MCP.
-? Enter TRONGRID_API_KEY (optional):
-```
-
-⚠️ **The installer is asking for your `TRONGRID_API_KEY`.** This is your dedicated TronGrid access key — having one means data queries won't be throttled. **Don't have one? Just press Enter to skip!** It won't affect your installation at all. You can always add it later.
-
-When it succeeds, you'll see the `add-mcp` banner and:
-
-```
+Adding MCP server...
 ✓ Configuration saved for mcp-server-tron.
 ```
+
+:::tip Want faster queries?
+You can optionally configure a `TRONGRID_API_KEY` after installation for dedicated TronGrid access — without it, high-frequency queries may be throttled. See "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" below for setup instructions.
+:::
 
 #### bnbchain-mcp (BNB Chain Toolbox)
 
@@ -297,10 +295,10 @@ Press Enter (or type `1`) to install globally — this way all your OpenClaw wor
 Then the skill picker launches:
 
 ```
-◇  Found 7 skills
+◇  Found 8 skills
 │
 ◇  Select skills to install (space to toggle)
-│  Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
+│  agent-wallet, Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
 │  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
@@ -308,6 +306,7 @@ Here's what each skill does:
 
 | Skill | What It Does |
 | :--- | :--- |
+| **agent-wallet** | AgentWallet management operations (view wallets, sign transactions) |
 | **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
 | **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
 | **TronScan Data Lookup** | Query blockchain data via TronScan |
@@ -320,21 +319,23 @@ After selecting, the installer shows a security risk assessment:
 
 ```
 ◇  Security Risk Assessments
-│                                     Gen        Socket        Snyk
-│  Multi-Sig & Account Permissions    --         --            --
-│  recharge-skill                     Safe       1 alert       Med Risk
-│  SunPerp Perpetual Futures Trading  --         --            --
-│  SunSwap DEX Trading                --         --            --
-│  TRC20 Token Toolkit                --         --            --
-│  TronScan Data Lookup               --         --            --
-│  x402-payment                       Safe       0 alerts      Med Risk
+│                                     Gen               Socket            Snyk
+│  agent-wallet                       Med Risk          1 alert           High Risk
+│  Multi-Sig & Account Permissions    --                --                --
+│  recharge-skill                     Safe              1 alert           Med Risk
+│  SunPerp Perpetual Futures Trading  --                --                --
+│  SunSwap DEX Trading                --                --                --
+│  TRC20 Token Toolkit                --                --                --
+│  TronScan Data Lookup               --                --                --
+│  x402-payment                       Safe              1 alert           Med Risk
 ```
 
 Review the report, then confirm to proceed. When installation completes:
 
 ```
-◇  Installed 7 skills
+◇  Installed 8 skills
 │
+│  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
 │  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
@@ -344,13 +345,14 @@ Review the report, then confirm to proceed. When installation completes:
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
-After skills are installed, the installer enters a configuration phase, asking for one API Key:
+After skills are installed, the installer enters a configuration phase:
 
 #### recharge-skill API Key Configuration
 
 ```
 recharge-skill API Key Configuration
 recharge-skill uses your local BANK OF AI API key for balance and order queries.
+Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
@@ -369,6 +371,7 @@ When `Installation Complete!` lights up at the bottom of the screen — congratu
     File permissions: 600 (owner read/write only)
 
 ✓ Installed skills:
+  • agent-wallet
   • Multi-Sig & Account Permissions
   • recharge-skill
   • TRC20 Token Toolkit

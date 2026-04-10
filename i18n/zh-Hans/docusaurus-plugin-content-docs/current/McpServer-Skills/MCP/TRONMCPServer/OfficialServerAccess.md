@@ -169,5 +169,5 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 ## 下一步
 
 - 需要转账、质押或合约写入？ → [本地私有化部署](./LocalPrivatizedDeployment.md)
-- 想看所有 95 个工具的详细说明？ → [完整能力清单](./ToolList.md)
+- 想看所有 97 个工具的详细说明？ → [完整能力清单](./ToolList.md)
 

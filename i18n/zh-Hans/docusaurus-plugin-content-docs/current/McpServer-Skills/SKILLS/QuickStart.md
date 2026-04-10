@@ -47,10 +47,10 @@ Ok to proceed? (y) y
 安装器会自动从仓库拉取所有可用的 Skills，然后列出清单让你勾选。按**空格键**切换选中/取消，默认全选即可：
 
 ```
-◇  Found 7 skills
+◇  Found 8 skills
 │
 ◇  Select skills to install (space to toggle)
-│  Multi-Sig & Account Permissions, recharge-skill,
+│  agent-wallet, Multi-Sig & Account Permissions, recharge-skill,
 │  SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
 │  TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
@@ -84,18 +84,19 @@ Ok to proceed? (y) y
 安装器会对每个 Skill 进行安全风险扫描，并展示评估结果。确认无误后选择 `Yes` 开始安装：
 
 ```
-◇  Security Risk Assessments ──────────────────────────────╮
-│                                                          │
-│                                    Gen    Socket   Snyk  │
-│  Multi-Sig & Account Permissions   --     --       --    │
-│  recharge-skill                    --     --       --    │
-│  SunPerp Perpetual Futures Trading --     --       --    │
-│  SunSwap DEX Trading               --     --       --    │
-│  TRC20 Token Toolkit               --     --       --    │
-│  TronScan Data Lookup              --     --       --    │
-│  x402-payment                      Med    1 alert  Med   │
-│                                                          │
-├──────────────────────────────────────────────────────────╯
+◇  Security Risk Assessments ──────────────────────────────────────╮
+│                                                                  │
+│                                    Gen         Socket     Snyk   │
+│  agent-wallet                      Med Risk    1 alert    High Risk │
+│  Multi-Sig & Account Permissions   --          --         --     │
+│  recharge-skill                    Safe        1 alert    Med Risk │
+│  SunPerp Perpetual Futures Trading --          --         --     │
+│  SunSwap DEX Trading               --          --         --     │
+│  TRC20 Token Toolkit               --          --         --     │
+│  TronScan Data Lookup              --          --         --     │
+│  x402-payment                      Safe        1 alert    Med Risk │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────╯
 
 ◇  Proceed with installation?
 │  Yes
@@ -106,8 +107,9 @@ Ok to proceed? (y) y
 看到类似以下输出，说明所有 Skills 已经成功安装到你选择的 AI 工具中：
 
 ```
-◇  Installed 7 skills ────────────────────────╮
+◇  Installed 8 skills ────────────────────────╮
 │                                             │
+│  ✓ agent-wallet (copied)                    │
 │  ✓ Multi-Sig & Account Permissions (copied) │
 │  ✓ recharge-skill (copied)                  │
 │  ✓ SunPerp Perpetual Futures Trading (copied)│
@@ -182,7 +184,7 @@ AI 能准确描述功能——恭喜，安装成功！
    ```bash
    export TRON_PRIVATE_KEY='你的真实或测试网私钥'
    ```
-   ⚠️ 注意：两边的英文双引号千万别漏掉！
+   ⚠️ 注意：两边的英文单引号千万别漏掉！
 3. 按 `Command + S` 保存，关掉记事本。
 
 :::danger 极其重要的一步

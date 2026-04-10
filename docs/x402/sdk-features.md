@@ -46,6 +46,7 @@ This page tracks the implementation progress and feature support status of the x
 | exact_permit/bsc | ✅ | ✅ |
 | exact/tron | ✅ | ✅ |
 | exact/bsc | ✅ | ✅ |
+| exact_gasfree/tron | ✅ | ✅ |
 
 ---
 
@@ -69,6 +70,8 @@ This page tracks the implementation progress and feature support status of the x
 | Allowance check | ✅ | ✅ |
 | Signing (TRON) | ✅ | ✅ |
 | Signing (EVM) | ✅ | ✅ |
+| SufficientBalancePolicy | ✅ | ✅ |
+| GasFree (zero-gas TRON payments) | ✅ | ✅ |
 
 ---
 
@@ -101,6 +104,7 @@ This page tracks the implementation progress and feature support status of the x
 | Token | Python | TypeScript |
 |--------|--------|------------|
 | USDT (TRC-20) | ✅ | ✅ |
+| USDD (TRC-20) | ✅ | ✅ |
 | Custom TRC-20 | ✅ | ✅ |
 | USDT (BEP-20) | ✅ | ✅ |
 | Custom BEP-20 | ✅ | ✅ |

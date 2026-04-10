@@ -44,66 +44,61 @@
 ## 安装步骤
 ### 第一步：配置钱包
 
-钱包决定了 AI 助手以哪个身份执行链上操作。SUN MCP Server 支持三种钱包模式，若未配置任何钱包，服务器会自动以只读模式运行。
+钱包决定了 AI 助手以哪个身份执行链上操作。SUN MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行安全的钱包管理。若未配置钱包，服务器会自动以只读模式运行。
 
-#### 有三种创建钱包的方式，请根据需要选择
+#### Agent Wallet
 
-| 特性 | Agent Wallet | 私钥 | 助记词 |
-| :--- | :--- | :--- | :--- |
-| 安全等级 | 高（加密存储） | 低（明文） | 低（明文） |
-| 多钱包支持 | 是 | 否 | 否 |
-| 运行时切换钱包 | 是 | 否 | 否 |
-| 配置复杂度 | 中等 | 简单 | 简单 |
-| 推荐场景 | 生产环境、较多资金 | 开发测试、少量资金 | 开发测试、少量资金 |
+SUN MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 管理钱包。私钥加密存储在本地磁盘，不会以明文形式暴露在环境变量中。即使环境变量被泄露，攻击者仍需要加密的密钥库文件才能访问资金。Agent Wallet 还支持**多钱包管理**和运行时通过 `select_wallet` 工具切换钱包。
 
-#### 方式一：通过 Agent Wallet（推荐）创建钱包
+| 特性 | 说明 |
+| :--- | :--- |
+| 安全等级 | 高（加密存储） |
+| 多钱包支持 | 是 |
+| 运行时切换钱包 | 是 |
+| 推荐场景 | 所有场景 |
 
-这是最安全的方式。私钥加密存储在本地磁盘，不会以明文形式暴露在环境变量中。即使环境变量被泄露，攻击者仍需要加密的密钥库文件才能访问资金。Agent Wallet 还支持**多钱包管理**和运行时通过 `select_wallet` 工具切换钱包。
+> Agent Wallet 的安装、初始化及详细用法请参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)。
 
-> Agent Wallet 的安装、初始化及详细用法请参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro)。
-
-**初始化 Agent Wallet 后设置环境变量：**
+首先，安装 Agent Wallet：
 
 ```bash
-# 添加到 ~/.zshrc 或 ~/.bashrc
-export AGENT_WALLET_PASSWORD='<你的主密码>'
-
-# 可选：指定自定义钱包目录（默认：~/.agent-wallet）
-export AGENT_WALLET_DIR="$HOME/.agent-wallet"
+npm install -g @bankofai/agent-wallet
 ```
 
+然后，根据你的情况选择以下两种方式之一：
 
+#### 方式 A：生成新钱包（推荐新用户使用）
 
-#### 方式二：通过私钥导入钱包
-
-通过环境变量直接提供私钥。配置最简单，但安全性较低。
+如果你没有现成的私钥，使用 `agent-wallet start` 生成新钱包，包含加密密钥库和主密码：
 
 ```bash
-# 添加到 ~/.zshrc 或 ~/.bashrc
-export TRON_PRIVATE_KEY="<你的私钥十六进制值>"
+agent-wallet start
 ```
 
-私钥可以是带 `0x` 前缀或不带前缀的十六进制格式。
+按照交互式提示设置主密码并生成钱包。完成后即可直接使用——**无需额外设置任何环境变量**。Agent Wallet 会自动管理加密密钥库。
 
-:::warning
-在环境变量中使用明文私钥存在**真实的资金被盗风险**——环境变量可能通过 shell 历史记录、进程列表（`ps aux`）或日志文件泄露。**这类钱包只应存放少量资金**。
-:::
+#### 方式 B：导入已有私钥
 
-#### 方式三：通过助记词导入钱包
-
-通过 BIP-39 助记词进行 HD 钱包派生。
+如果你已经有想使用的私钥，通过 `AGENT_WALLET_PRIVATE_KEY` 环境变量设置：
 
 ```bash
-# 添加到 ~/.zshrc 或 ~/.bashrc
-export TRON_MNEMONIC="单词1 单词2 单词3 ... 单词12"
-
-# 可选：指定 HD 钱包派生索引（默认：0）
-# 派生路径：m/44'/195'/0'/0/{index}
-export TRON_ACCOUNT_INDEX="0"
+export AGENT_WALLET_PRIVATE_KEY=你的私钥
 ```
 
-:::warning
-与私钥方式的安全风险相同。明文存储的助记词容易泄露，请只用于存放少量资金的开发/测试钱包。
+:::tip
+如需在每次打开终端时自动生效，可将其写入 shell 配置文件：
+
+```bash
+echo 'export AGENT_WALLET_PRIVATE_KEY=你的私钥' >> ~/.zshrc   # zsh（macOS 默认）
+echo 'export AGENT_WALLET_PRIVATE_KEY=你的私钥' >> ~/.bashrc  # bash（Linux 默认）
+source ~/.zshrc   # 或 source ~/.bashrc — 无需重启终端即可立即生效
+```
+
+验证环境变量已生效：
+
+```bash
+echo $AGENT_WALLET_PRIVATE_KEY
+```
 :::
 
 ---

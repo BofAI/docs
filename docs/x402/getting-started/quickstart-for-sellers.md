@@ -24,7 +24,7 @@ The entire flow takes **4 steps**, estimated time: **15–20 minutes**.
 In your terminal (Terminal on macOS/Linux, or PowerShell/Command Prompt on Windows), run the following commands to confirm the required tools are installed:
 
 ```bash
-python --version   # Requires 3.10 or higher
+python --version   # Requires 3.11 or higher
 pip --version      # Installed alongside Python
 git --version      # Version control tool
 ```
@@ -150,7 +150,7 @@ In your project directory, create a new file named `server.py` and paste in the 
 <TabItem value="TRON" label="TRON">
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from bankofai.x402.server import X402Server
 from bankofai.x402.fastapi import x402_protected
 from bankofai.x402.facilitator import FacilitatorClient
@@ -179,7 +179,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
     network=NetworkConfig.TRON_NILE, # Using testnet now (change to TRON_MAINNET when going live)
     pay_to=PAY_TO_ADDRESS,           # Your receiving wallet address
 )
-async def protected_endpoint():
+async def protected_endpoint(request: Request):
     return {"data": "This is premium content!"}
 
 
@@ -192,7 +192,7 @@ if __name__ == "__main__":
 <TabItem value="BSC" label="BSC">
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from bankofai.x402.server import X402Server
 from bankofai.x402.fastapi import x402_protected
 from bankofai.x402.facilitator import FacilitatorClient
@@ -225,7 +225,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
     pay_to=PAY_TO_ADDRESS,             # Your receiving wallet address
     schemes=["exact_permit"],
 )
-async def protected_endpoint():
+async def protected_endpoint(request: Request):
     return {"data": "This is premium content!"}
 
 
@@ -359,80 +359,214 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 </TabItem>
 <TabItem value="selfhost" label="Self-Hosted Facilitator">
 
-The self-hosted option gives you full control over fee strategy and energy management. It is intended for advanced users with specific customization requirements.
+The self-hosted option gives you full control over fee strategy and network configuration. It is intended for advanced users with specific customization requirements.
 
 > ⚠️ **Security reminder — please read first:**
 > - You need the private key of a **dedicated wallet** to pay blockchain transaction fees — **this wallet should be separate from your receiving wallet**
 > - The Facilitator wallet only needs a small amount of tokens (for fees) — do not deposit large amounts
-> - The private key lives only in the `.env` file — **never upload it to GitHub or share it with anyone**
+> - The private key is set via environment variable — **never commit it to Git or share it with anyone**
 
-#### 3.1 Prepare a Dedicated Facilitator Wallet
+#### 3.1 Prepare Prerequisites
 
-Create a dedicated new wallet for the Facilitator, following the same steps as in Prerequisites, then claim test tokens from the faucet (to pay transaction fees).
+Before starting, make sure you have:
 
-#### 3.2 Clone and Configure the Facilitator Project
+- **Python 3.11+** and **Git** (confirmed in the Prerequisites section above)
+- **PostgreSQL** — the Facilitator stores payment records in a database.
 
-Open a **new terminal window** (keep the existing one open) and run:
+  <Tabs>
+  <TabItem value="mac" label="macOS">
+
+  ```bash
+  brew install postgresql@16
+  brew services start postgresql@16
+  createdb x402
+  ```
+
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+
+  **Ubuntu / Debian:**
+  ```bash
+  sudo apt install -y postgresql
+  sudo systemctl start postgresql
+  sudo -u postgres createdb x402
+  ```
+
+  **Amazon Linux / CentOS / RHEL / Fedora:**
+  ```bash
+  sudo dnf install -y postgresql15 postgresql15-server   # Amazon Linux 2023; other distros: postgresql-server
+  sudo postgresql-setup --initdb
+  sudo systemctl start postgresql
+  sudo systemctl enable postgresql
+  sudo -u postgres createdb x402
+  ```
+
+  **Arch Linux:**
+  ```bash
+  sudo pacman -S postgresql
+  sudo -u postgres initdb -D /var/lib/postgres/data
+  sudo systemctl start postgresql
+  sudo -u postgres createdb x402
+  ```
+
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+
+  Download and run the installer from [postgresql.org/download/windows](https://www.postgresql.org/download/windows/), then create a database named `x402` via pgAdmin or psql.
+
+  </TabItem>
+  </Tabs>
+
+  **Set a password for the `postgres` user** (required for the connection string):
+
+  ```bash
+  sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'yourpassword';"
+  ```
+
+  > Replace `yourpassword` with a password of your choice. You will use it in the connection string below.
+
+  **Enable password authentication** (Linux only — required on most distributions):
+
+  By default, PostgreSQL uses `ident` authentication on Linux, which only allows connections when the OS username matches the database username. You need to change it to `md5` (password-based) for the Facilitator to connect:
+
+  ```bash
+  # Find the pg_hba.conf file
+  sudo find / -name pg_hba.conf 2>/dev/null
+  # Typical location: /var/lib/pgsql/data/pg_hba.conf (Amazon Linux / CentOS)
+  #                   /etc/postgresql/*/main/pg_hba.conf (Ubuntu / Debian)
+  ```
+
+  Open the file and change `ident` to `md5` for IPv4 and IPv6 local connections:
+
+  ```
+  # IPv4 local connections:
+  host    all             all             127.0.0.1/32            md5
+  # IPv6 local connections:
+  host    all             all             ::1/128                 md5
+  ```
+
+  Then restart PostgreSQL to apply:
+
+  ```bash
+  sudo systemctl restart postgresql
+  ```
+
+  Connection string: `postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
+
+- **A dedicated Facilitator wallet** — create a new wallet (separate from your receiving wallet, following the same steps in Prerequisites), and claim testnet tokens from the faucet to cover transaction fees.
+
+#### 3.2 Clone and Install
+
+Open a **new terminal window** and run:
 
 ```bash
-# Download the demo project (includes the Facilitator implementation)
-git clone https://github.com/BofAI/x402-demo.git
-cd x402-demo
+# Clone the Facilitator service
+git clone https://github.com/BofAI/x402-facilitator.git
+cd x402-facilitator
 
 # Install dependencies
 pip install -r requirements.txt
-
-# Create configuration file from the template
-cp .env.sample .env
 ```
 
-Open the `.env` file in the `x402-demo` directory with a text editor and fill in the private key for your dedicated Facilitator wallet:
+#### 3.3 Configure the Service
+
+Copy the example config and open it in a text editor:
+
+```bash
+cp config/facilitator.config.example.yaml config/facilitator.config.yaml
+```
+
+Fill in the required fields:
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
+```yaml
+database:
+  url: "postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402"
+
+facilitator:
+  networks:
+    tron:nile:                   # Use tron:mainnet when going live
+      base_fee:
+        USDT: 100                # 0.0001 USDT per settlement (adjust as needed)
+        USDD: 100000000000000  # 0.0001 USDD (18 decimals; adjust as needed)
+```
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+```yaml
+database:
+  url: "postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402"
+
+facilitator:
+  networks:
+    bsc:testnet:                 # Use bsc:mainnet when going live
+      base_fee:
+        USDT: 100                # 0.0001 USDT per settlement (adjust as needed)
+```
+
+</TabItem>
+</Tabs>
+
+Then set the private key of your dedicated Facilitator wallet as an environment variable:
 
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
 ```bash
-# Private key of the dedicated Facilitator wallet (NOT your receiving wallet!)
 # How to get it: TronLink → Settings → Account Management → Export Private Key
-TRON_PRIVATE_KEY=paste_your_facilitator_private_key_here
+export AGENT_WALLET_PRIVATE_KEY=paste_your_facilitator_private_key_here
 
-# TronGrid API Key (required for mainnet, can be left blank for testnet)
+# TronGrid API Key (recommended for stable RPC access)
 # Apply at: https://www.trongrid.io/
-TRON_GRID_API_KEY=
+export TRON_GRID_API_KEY=paste_your_trongrid_api_key_here
 ```
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
 ```bash
-# Private key of the dedicated Facilitator wallet (NOT your receiving wallet!)
 # How to get it: MetaMask → Account Details → Export Private Key
-BSC_PRIVATE_KEY=paste_your_facilitator_private_key_here
+export AGENT_WALLET_PRIVATE_KEY=paste_your_facilitator_private_key_here
 ```
 
 </TabItem>
 </Tabs>
 
-#### 3.3 Start the Facilitator Service
+#### 3.4 Start the Facilitator Service
 
 ```bash
-./start.sh facilitator
+python src/main.py
 ```
 
-**After a successful start, you should see:**
+**After a successful start, you should see output like:**
 
 ```
-Facilitator running on http://localhost:8001
-Supported endpoints:
-  GET  /supported
-  POST /verify
-  POST /settle
-  POST /fee/quote
+INFO:     Started server process
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 ```
 
-> ✅ **Success:** Terminal shows `Facilitator running on http://localhost:8001` — **keep this terminal window open, do not close it**
+> ✅ **Success:** Uvicorn is running on port 8001 — **keep this terminal window open, do not close it**
 
-The `FACILITATOR_URL = "http://localhost:8001"` in `server.py` is already configured for self-hosting — **no changes needed**. Proceed to Step 4.
+#### 3.5 Register an API Key (Optional)
+
+If you want to track payment records per seller, register an API key using the built-in script:
+
+```bash
+python scripts/register_seller.py
+# A random API key will be generated and printed — save it
+```
+
+Set this key on your server side:
+```bash
+export FACILITATOR_API_KEY=your_generated_key
+```
+
+The `FACILITATOR_URL = "http://localhost:8001"` in `server.py` is already configured for self-hosting — **no other changes needed**. Proceed to Step 4.
 
 </TabItem>
 </Tabs>
@@ -487,11 +621,12 @@ To test the complete pay → receive content flow, you need a client that can si
 
 | Issue | Solution |
 |------|----------|
-| `Connection refused` when connecting to Facilitator | If using **self-hosted**: confirm the Facilitator terminal from Step 3 is still running on port 8001. If using **official**: check that `FACILITATOR_URL` is correctly set to `https://facilitator.bankofai.io` |
+| `Connection refused` when connecting to Facilitator | If using **self-hosted**: confirm the Facilitator terminal from Step 3 is still running on port 8001 (`python src/main.py`). If using **official**: check that `FACILITATOR_URL` is correctly set to `https://facilitator.bankofai.io` |
 | `ModuleNotFoundError: bankofai` | Re-run the install command from Step 1 |
 | Wallet address format error | TRON addresses start with `T`; BSC addresses start with `0x` — check that the address was copied in full |
-| Facilitator fails to start (self-hosted) | Check that the private key in the `.env` file is correctly filled in, with no extra spaces or line breaks |
-| API Key invalid or rate limited (official) | Confirm `FACILITATOR_API_KEY` is correctly filled in; go to [admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) to check the key status |
+| Facilitator fails to start — database error | Confirm `database.url` in `config/facilitator.config.yaml` is correct and the PostgreSQL instance is running |
+| Facilitator fails to start — wallet error | Confirm `AGENT_WALLET_PRIVATE_KEY` is exported in your terminal session with no extra spaces or line breaks |
+| API Key invalid or rate limited (official) | Confirm `FACILITATOR_API_KEY` is correctly set; go to [admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) to check the key status |
 | `server.py` fails to start | Confirm `PAY_TO_ADDRESS` has been replaced with a real wallet address (do not leave the placeholder text) |
 
 **Need more examples and references?**
@@ -545,16 +680,59 @@ Modify the `network` parameter in the `@x402_protected` decorator in `server.py`
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
-1. **Apply for a TronGrid API Key**: go to [TronGrid](https://www.trongrid.io/) to register and create an API Key, then fill it into the `TRON_GRID_API_KEY` field in `.env` (required for mainnet)
-2. **Replace the private key**: update the private key in `.env` to the mainnet Facilitator wallet's private key
-3. **Fund the fee wallet**: transfer sufficient real TRX to the Facilitator mainnet wallet (to pay Energy and Bandwidth fees)
-4. **Update the network config**: change the network configuration in the Facilitator code to `NetworkConfig.TRON_MAINNET`
+1. **Apply for a TronGrid API Key**: go to [TronGrid](https://www.trongrid.io/) to register and create an API Key, then set it as an environment variable:
+
+   ```bash
+   export TRON_GRID_API_KEY=your_trongrid_api_key
+   ```
+
+   :::note
+   When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy workloads. For production, set your own `TRON_GRID_API_KEY` to ensure reliability.
+   :::
+
+2. **Replace the private key**: update `AGENT_WALLET_PRIVATE_KEY` to the mainnet Facilitator wallet's private key:
+
+   ```bash
+   export AGENT_WALLET_PRIVATE_KEY=your_mainnet_facilitator_private_key
+   ```
+
+3. **Fund the fee wallet**: transfer sufficient real TRX to the Facilitator mainnet wallet (to pay Energy and Bandwidth fees).
+
+4. **Update the network config**: open `config/facilitator.config.yaml` and change the network key from `tron:nile` to `tron:mainnet`:
+
+   ```yaml
+   facilitator:
+     networks:
+       tron:mainnet:              # Changed from tron:nile
+         base_fee:
+           USDT: 100
+           USDD: 100000000000000  # 0.0001 USDD (18 decimals; adjust as needed)
+   ```
+
+5. **Restart the service**: `python src/main.py`
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-1. **Fund the fee wallet**: transfer sufficient real BNB to the Facilitator mainnet wallet (to pay Gas fees)
-2. **Update the network config**: change the network configuration in the Facilitator code to `NetworkConfig.BSC_MAINNET`
+1. **Fund the fee wallet**: transfer sufficient real BNB to the Facilitator mainnet wallet (to pay Gas fees).
+
+2. **Replace the private key**: update `AGENT_WALLET_PRIVATE_KEY` to the mainnet Facilitator wallet's private key:
+
+   ```bash
+   export AGENT_WALLET_PRIVATE_KEY=your_mainnet_facilitator_private_key
+   ```
+
+3. **Update the network config**: open `config/facilitator.config.yaml` and change the network key from `bsc:testnet` to `bsc:mainnet`:
+
+   ```yaml
+   facilitator:
+     networks:
+       bsc:mainnet:               # Changed from bsc:testnet
+         base_fee:
+           USDT: 100
+   ```
+
+4. **Restart the service**: `python src/main.py`
 
 </TabItem>
 </Tabs>

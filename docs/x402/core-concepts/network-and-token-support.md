@@ -20,12 +20,14 @@ The `<network_name>` can be `mainnet`, `shasta`, or `nile`.
 
 ## BSC Network Identifiers
 
-For BSC, x402 uses the EIP-155 chain ID format:
+In the x402 protocol (on-the-wire), BSC uses the EIP-155 chain ID format:
 
-| Network Name     | Network       | Description                    |
+| Network Name     | Protocol ID   | Description                    |
 | :--------------- | :------------ | :----------------------------- |
 | **BSC Mainnet**  | `eip155:56`   | BSC Mainnet (Production)      |
 | **BSC Testnet**  | `eip155:97`   | BSC Testnet (Chapel)          |
+
+> **Note**: When configuring a self-hosted Facilitator, the YAML config file uses a human-readable format: `bsc:mainnet` and `bsc:testnet`. The Facilitator automatically maps these to the corresponding EIP-155 chain IDs used in the protocol.
 
 ---
 
@@ -100,29 +102,57 @@ When configuring an `HTTP 402` payment request on the server side, you must expl
 
 ## Payment Scheme
 
-x402 supports two payment schemes: `exact_permit` and `exact`.
+x402 supports three payment schemes: `exact_permit`, `exact`, and `exact_gasfree`.
 
 ### `exact_permit` Scheme
 
 The `exact_permit` scheme transfers tokens via the `PaymentPermit` contract, suitable for:
 
-- **Pay-per-use APIs** (e.g., LLM token generation, image generation services)  
-- **Metered resources** (cloud compute time, storage usage, bandwidth consumption)  
-- **Dynamic pricing services** based on actual usage  
+- **Pay-per-use APIs** (e.g., LLM token generation, image generation services)
+- **Metered resources** (cloud compute time, storage usage, bandwidth consumption)
+- **Dynamic pricing services** based on actual usage
 
 ### `exact` Scheme
 
 The `exact` scheme is for tokens that natively support `transferWithAuthorization`. It does not require the `PaymentPermit` contract.
 
+### `exact_gasfree` Scheme
+
+The `exact_gasfree` scheme is a TRON-specific payment mechanism that allows users to pay with USDT/USDD **without holding TRX for gas fees**. Settlement is handled via the official GasFree Proxy through the BANK OF AI facilitator endpoint.
+
+Key characteristics:
+
+- **Zero gas cost for buyers**: Buyers do not need to hold TRX — gas is covered by the GasFree infrastructure
+- **No API keys required**: All GasFree API calls route through the BANK OF AI proxy at `https://facilitator.bankofai.io/{mainnet,nile}`, so clients do not need to configure `GASFREE_API_KEY` or `GASFREE_API_SECRET`
+- **TRON only**: Available on `tron:mainnet` and `tron:nile`
+
+#### GasFree Account Management (via x402-payment skill)
+
+When using the `x402-payment` skill, you can manage GasFree accounts directly from the CLI:
+
+**Query GasFree wallet info** (address, activation status, balance, nonce):
+```bash
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --network nile
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --wallet <YOUR_WALLET_ADDRESS>
+```
+
+**Activate a GasFree account** (required before first use):
+```bash
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network mainnet
+npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --token USDT
+```
+
 ### How Payment Schemes Work
 
-1. **Authorize**  
+1. **Authorize**
    The client signs a message authorizing a **maximum amount**.
 
-2. **Execute**  
+2. **Execute**
    The server performs the requested task and calculates the **actual cost**.
 
-3. **Settle**  
+3. **Settle**
    The Facilitator submits the on-chain transaction based on the actual cost.
 
 ---
@@ -154,7 +184,7 @@ You may deploy your own Facilitator node to gain full control over payment verif
 | **Networks**   | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97` |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20 |
 | **Signing Mechanism** | Typed data signing |
-| **Payment Scheme** | `exact_permit`, `exact` |
+| **Payment Scheme** | `exact_permit`, `exact`, `exact_gasfree` (TRON only) |
 
 ---
 

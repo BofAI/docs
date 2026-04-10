@@ -102,7 +102,7 @@ Installation Mode
 The following data will be permanently deleted:
   • ALL MCP entries in: ~/.mcporter/mcporter.json
   • ALL installed skills (global and workspace)
-
+  • x402 config file: ~/.x402-config.json
   • BANK OF AI local config: ~/.mcporter/bankofai-config.json
   • AgentWallet config will be overwritten by: agent-wallet start --override --save-runtime-secrets
 
@@ -233,19 +233,17 @@ Active wallet: my_wallet_1
 
 #### mcp-server-tron（波场工具箱）
 
+这个全自动，不需要输入任何信息！安装器会直接添加 TRON MCP 服务器：
+
 ```
 Configuring mcp-server-tron...
-This step configures network access for TRON MCP.
-? Enter TRONGRID_API_KEY (optional):
-```
-
-⚠️ **这里安装器会问你要 `TRONGRID_API_KEY`。** 这是 TronGrid 的专属访问密钥，有了它查数据就不会被限速。**现在没有？直接按回车跳过！** 完全不影响安装，以后随时补填。
-
-配置成功后你会看到 `add-mcp` 的安装横幅和：
-
-```
+Adding MCP server...
 ✓ Configuration saved for mcp-server-tron.
 ```
+
+:::tip 想要更快的查询速度？
+安装后你可以自行配置 `TRONGRID_API_KEY` 来获取 TronGrid 专属访问通道——没有它的话，高频查询可能会被限速。配置方法见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
+:::
 
 #### bnbchain-mcp（BNB Chain 工具箱）
 
@@ -297,10 +295,10 @@ Select skills installation scope:
 然后技能选择器启动：
 
 ```
-◇  Found 7 skills
+◇  Found 8 skills
 │
 ◇  Select skills to install (space to toggle)
-│  Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
+│  agent-wallet, Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
 │  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
@@ -308,6 +306,7 @@ Select skills installation scope:
 
 | 技能 | 功能 |
 | :--- | :--- |
+| **agent-wallet** | AgentWallet 钱包管理操作（查看钱包、签署交易） |
 | **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
 | **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
 | **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
@@ -320,21 +319,23 @@ Select skills installation scope:
 
 ```
 ◇  Security Risk Assessments
-│                                     Gen        Socket        Snyk
-│  Multi-Sig & Account Permissions    --         --            --
-│  recharge-skill                     Safe       1 alert       Med Risk
-│  SunPerp Perpetual Futures Trading  --         --            --
-│  SunSwap DEX Trading                --         --            --
-│  TRC20 Token Toolkit                --         --            --
-│  TronScan Data Lookup               --         --            --
-│  x402-payment                       Safe       0 alerts      Med Risk
+│                                     Gen               Socket            Snyk
+│  agent-wallet                       Med Risk          1 alert           High Risk
+│  Multi-Sig & Account Permissions    --                --                --
+│  recharge-skill                     Safe              1 alert           Med Risk
+│  SunPerp Perpetual Futures Trading  --                --                --
+│  SunSwap DEX Trading                --                --                --
+│  TRC20 Token Toolkit                --                --                --
+│  TronScan Data Lookup               --                --                --
+│  x402-payment                       Safe              1 alert           Med Risk
 ```
 
 查看报告后确认继续。安装完成时：
 
 ```
-◇  Installed 7 skills
+◇  Installed 8 skills
 │
+│  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
 │  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
@@ -344,13 +345,14 @@ Select skills installation scope:
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
-技能装完后，安装器会自动进入配置环节，询问一组 API Key：
+技能装完后，安装器会自动进入配置环节：
 
 #### recharge-skill API Key 配置
 
 ```
 recharge-skill API Key Configuration
 recharge-skill uses your local BANK OF AI API key for balance and order queries.
+Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
@@ -369,6 +371,7 @@ recharge-skill uses your local BANK OF AI API key for balance and order queries.
     File permissions: 600 (owner read/write only)
 
 ✓ Installed skills:
+  • agent-wallet
   • Multi-Sig & Account Permissions
   • recharge-skill
   • TRC20 Token Toolkit

@@ -57,7 +57,15 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Seven core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+Eight core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+
+### 🔑 Secure Wallet Management
+
+Create encrypted wallets, sign transactions and messages, manage multiple wallets — all without exposing your private key. This is the foundation that other trading and payment skills rely on. Supports both EVM (BSC, Ethereum, Polygon, etc.) and TRON networks.
+
+> 🗣️ "Create a new agent wallet for me" or "List all my wallets and show their addresses."
+
+💡 For setup and advanced usage, see: [**agent-wallet**](./BANKOFAISkill.md#agent-wallet)
 
 ### 💱 Execute DEX Trades
 

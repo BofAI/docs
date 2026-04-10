@@ -72,7 +72,7 @@ Once connected, try a few more prompts to get a feel for what TRON MCP Server ca
 | "Get the ABI of contract TXyz..." | Read a smart contract interface definition |
 | "Query the latest events triggered by contract TXyz..." | Get contract event logs |
 
-These are just the tip of the iceberg. For the full list of 95 tools and 6 prompt templates, see [Full Capability List](./ToolList.md).
+These are just the tip of the iceberg. For the full list of 97 tools and 6 prompt templates, see [Full Capability List](./ToolList.md).
 
 ---
 

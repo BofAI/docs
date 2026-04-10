@@ -24,6 +24,16 @@ agent-wallet start
 交互式向导可能会提供 `raw_secret` 选项。该类型将私钥**以明文形式**存储在磁盘上——任何有文件系统访问权限的程序都能直接读取。`raw_secret` 仅适用于完全隔离的测试环境。持有真实资金的钱包请始终选择 `local_secure`。
 :::
 
+:::tip Privy 钱包类型
+向导还提供 `privy` 选项，用于 Privy 托管的服务器钱包。该类型将密钥托管交给 Privy 的基础设施——本地磁盘上不存储私钥。配置时需要 Privy App ID、App Secret 和 Wallet ID：
+
+```bash
+agent-wallet start   # 然后在提示时选择 "privy"
+```
+
+Privy 钱包的默认 ID 是 `default_privy`。
+:::
+
 **自定义密码：**
 ```bash
 agent-wallet start -p Abc12345!
@@ -53,17 +63,19 @@ agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 每条 `sign` 子命令都需要 `--network` / `-n` 来指定链。
 
 :::info 密码重试机制
-使用 `local_secure` 钱包签名时，如果未通过 `-p` 或 `AGENT_WALLET_PASSWORD` 提供密码，CLI 会交互式提示输入主密码。如果密码输入错误，你有 **2 次重试机会**（共 3 次），超过后命令将以"Wrong password. 3 attempts failed."失败退出。
+使用 `local_secure` 钱包签名时，如果未通过 `-p` 或 `AGENT_WALLET_PASSWORD` 提供密码，CLI 会交互式提示输入主密码。如果密码输入错误，你有 **2 次重试机会**（共 3 次），超过后命令将以"密码错误，已失败 3 次。"（`Wrong password. 3 attempts failed.`）失败退出。
 :::
 
 **签名消息：**
 ```bash
 agent-wallet sign msg "Hello" -n tron
+# 输出: Signature: d220de880cbc1c3f...
 ```
 
 **签名交易**（需要先通过 RPC 构建未签名交易）：
 ```bash
 agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
+# 输出: Signed tx: { "txID": "abc123...", "signature": ["..."], ... }
 ```
 
 **签名 EIP-712 结构化数据：**
@@ -78,6 +90,33 @@ agent-wallet sign typed-data '{
   "message": {"to":"0x7099...","amount":1000000}
 }' -n eip155:1
 ```
+
+---
+
+### `agent-wallet init`（初始化密钥目录）
+
+初始化密钥目录并设置主密码------但此时不会创建钱包。这在一些高级场景中很有用，比如你希望在添加钱包之前先准备好目录结构。
+
+``` bash
+agent-wallet init
+```
+
+**非交互模式：**
+
+``` bash
+agent-wallet init -p 'Abc12345!'
+```
+
+| 参数 | 说明 |
+| :--- | :--- |
+| `--password, -p <pw>` | 主密码（跳过交互输入） |
+| `--save-runtime-secrets` | 将密码持久化保存到  `runtime_secrets.json` |
+
+:::tip 什么时候使用 `init` 和 `start` 
+`start` = `init` + 创建钱包（一步完成）。如果你只需要先设置目录和密码（例如用于 CI
+流程，或稍后再导入私钥），可以单独使用 `init`。 
+:::
+
 
 ---
 
@@ -105,6 +144,15 @@ agent-wallet use my-bsc-wallet
 agent-wallet inspect my-bsc-wallet
 ```
 
+查看钱包元数据及派生地址：
+```bash
+agent-wallet inspect my-bsc-wallet --show-address
+```
+
+| Flag | 说明 |
+| :--- | :--- |
+| `--show-address` | 派生并显示 EVM + TRON 地址（`local_secure` 钱包需要输入密码） |
+
 **用指定钱包签名**（不切换活跃钱包）：
 ```bash
 agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
@@ -113,6 +161,30 @@ agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
 **删除钱包：**
 ```bash
 agent-wallet remove my-bsc-wallet
+```
+
+### `agent-wallet resolve-address`（解析钱包地址）
+
+显示某个钱包关联的链上地址。对于助记词派生的钱包，会显示所有支持网络（EVM 和 TRON）的地址。对于私钥钱包，只显示对应网络的单个地址。
+
+```bash
+agent-wallet resolve-address my-wallet
+```
+
+如果省略钱包 ID，CLI 会弹出交互式列表让你选择：
+
+```bash
+agent-wallet resolve-address
+```
+
+示例输出：
+```
+  Wallet │ my-wallet
+    Type │ local_secure
+
+Addresses
+     EVM │ 0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18
+    TRON │ TJRyWwFs9wTFGZg3JbrVriFbNfCug5tDeC
 ```
 
 ---
@@ -227,9 +299,25 @@ agent-wallet sign msg "Hello" -n tron --dir /Volumes/MyUSB/agent-wallet
 
 修改后，**所有密钥文件会用新密码重新加密**。旧密码立即失效，请确保已在密码管理器中更新。
 
+**交互式（默认）：**
 ```bash
 agent-wallet change-password
 ```
+
+**非交互式**（用于自动化脚本）：
+```bash
+agent-wallet change-password -p 'OldPassword123!' --new-password 'NewPassword456!'
+```
+
+| 参数 | 说明 |
+| :--- | :--- |
+| `--password, -p <pw>` | 当前主密码（跳过提示） |
+| `--new-password <pw>` | 新主密码（跳过提示） |
+| `--save-runtime-secrets` | 同步更新 `runtime_secrets.json` 中的缓存密码 |
+
+:::caution
+`-p` 和 `--new-password` 都会被记录在 Shell 历史中。生产环境请优先使用交互式模式，或通过密钥管理器传入密码。
+:::
 
 <a id="agent-wallet-reset-reset-all-data"></a>
 

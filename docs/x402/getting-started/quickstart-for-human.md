@@ -27,7 +27,7 @@ This guide is for developers who want to **call an x402-protected API from code*
 
 ### Checklist Before You Start
 
-- [ ] **Python 3.10+** or **Node.js 18+** installed (depending on your chosen language)
+- [ ] **Python 3.11+** or **Node.js 18+** installed (depending on your chosen language)
 - [ ] A dedicated **test wallet** created (see below)
 - [ ] Test tokens claimed (free)
 - [ ] A target x402-protected API URL (or use our demo endpoint)
@@ -144,55 +144,59 @@ Since `@bankofai/x402` is an ESM module, add the following to your `package.json
 
 ---
 
+:::info Wallet Management
+x402 SDK uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet is automatically installed as a dependency of x402. Private key resolution priority:
+1. Encrypted wallet file (imported via the Agent Wallet CLI)
+2. Environment variable `AGENT_WALLET_PRIVATE_KEY`
+
+This guide uses the environment variable method.
+:::
+
 ## Step Two: Configure Your Private Key
 
-**Never put your private key in code.** Store it as an environment variable so it stays out of your source files.
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-In your terminal, run (replace `your_private_key_here` with the key you exported):
+**Never put your private key in code.** Store it as an environment variable so it stays out of your source files. Replace `your_private_key_here` with the private key you exported in the Prerequisites step.
 
 ```bash
-export TRON_PRIVATE_KEY=your_private_key_here
+export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-> 💡 **Recommended:** Create a `.env` file in your project directory containing `TRON_PRIVATE_KEY=your_key`, then add `.env` to `.gitignore` to prevent accidental commits.
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-In your terminal, run (replace `your_private_key_here` with the key you exported):
-
-```bash
-export BSC_PRIVATE_KEY=your_private_key_here
-```
-
-> 💡 **Recommended:** Create a `.env` file in your project directory containing `BSC_PRIVATE_KEY=your_key`, then add `.env` to `.gitignore` to prevent accidental commits.
-
-</TabItem>
-</Tabs>
+> 💡 **Tip:** To make this permanent across terminal sessions, add the line to your shell profile:
+> ```bash
+> echo 'export AGENT_WALLET_PRIVATE_KEY=your_key' >> ~/.zshrc   # for zsh (macOS default)
+> echo 'export AGENT_WALLET_PRIVATE_KEY=your_key' >> ~/.bashrc  # for bash (Linux default)
+> source ~/.zshrc   # or source ~/.bashrc — apply immediately without restarting the terminal
+> ```
 
 Verify the variable was set:
 
+```bash
+echo $AGENT_WALLET_PRIVATE_KEY
+```
+
+> ✅ **Success check:** Terminal prints your private key string (not blank)
+
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
+**Optional:** For production TRON workloads, configure a TronGrid API Key for better RPC reliability:
+
 ```bash
-echo $TRON_PRIVATE_KEY
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 ```
+
+> 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above.
+
+:::note
+When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy workloads. For production, set your own `TRON_GRID_API_KEY` to ensure reliability.
+:::
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-```bash
-echo $BSC_PRIVATE_KEY
-```
+No additional configuration needed for BSC.
 
 </TabItem>
 </Tabs>
-
-> ✅ **Success check:** Terminal prints your private key string (not blank)
 
 ---
 
@@ -207,12 +211,14 @@ Create a new file (e.g. `client.py` or `client.ts`) and paste the code for your 
 
 ```python
 import asyncio
-import os
 import httpx
 
 from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
 from bankofai.x402.mechanisms.tron.exact_permit import ExactPermitTronClientMechanism
+from bankofai.x402.mechanisms.tron.exact_gasfree.client import ExactGasFreeClientMechanism
 from bankofai.x402.signers.client import TronClientSigner
+from bankofai.x402.utils.gasfree import GasFreeAPIClient
+from bankofai.x402.config import NetworkConfig
 
 
 # ========== Configuration ==========
@@ -221,17 +227,24 @@ from bankofai.x402.signers.client import TronClientSigner
 SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"
 # ====================================
 
+# GasFree API clients (routed through BANK OF AI proxy — no API keys needed)
+gasfree_clients = {
+    "tron:nile": GasFreeAPIClient(NetworkConfig.get_gasfree_api_base_url("tron:nile")),
+    "tron:mainnet": GasFreeAPIClient(NetworkConfig.get_gasfree_api_base_url("tron:mainnet")),
+}
+
 
 async def main():
-    # Initialize signer with your private key (network is resolved dynamically)
-    signer = TronClientSigner.from_private_key(os.getenv("TRON_PRIVATE_KEY"))
+    # Initialize signer via agent-wallet (resolves wallet from environment automatically)
+    signer = await TronClientSigner.create()
 
-    # Create x402 client and register the payment mechanism and balance policy
+    # Create x402 client and register payment mechanisms and balance policy
     x402_client = X402Client()
     x402_client.register("tron:*", ExactPermitTronClientMechanism(signer))
+    x402_client.register("tron:*", ExactGasFreeClientMechanism(signer, clients=gasfree_clients))
     x402_client.register_policy(SufficientBalancePolicy)
 
-    async with httpx.AsyncClient(timeout=60.0) as http_client:
+    async with httpx.AsyncClient(timeout=120) as http_client:
         client = X402HttpClient(http_client, x402_client)
 
         # Make the request — the SDK handles payment automatically
@@ -264,11 +277,10 @@ Response: {"data": "This is premium content!"}
 import 'dotenv/config'
 import {
   X402Client, X402FetchClient,
-  ExactPermitTronClientMechanism, TronClientSigner,
-  SufficientBalancePolicy,
+  ExactPermitTronClientMechanism, ExactGasFreeClientMechanism,
+  TronClientSigner, SufficientBalancePolicy,
+  GasFreeAPIClient, getGasFreeApiBaseUrl,
 } from '@bankofai/x402'
-
-const TRON_PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!
 
 // ========== Configuration ==========
 // The x402-protected API you want to call.
@@ -277,12 +289,16 @@ const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile'
 // ====================================
 
 async function main(): Promise<void> {
-  // Initialize signer with your private key
-  const signer = new TronClientSigner(TRON_PRIVATE_KEY)
+  // Initialize signer via agent-wallet (resolves wallet from environment automatically)
+  const signer = await TronClientSigner.create()
 
-  // Create x402 client and register the payment mechanism and balance policy
+  // Create x402 client and register payment mechanisms and balance policy
   const x402 = new X402Client()
   x402.register('tron:*', new ExactPermitTronClientMechanism(signer))
+  x402.register('tron:*', new ExactGasFreeClientMechanism(signer, {
+    'tron:nile': new GasFreeAPIClient(getGasFreeApiBaseUrl('tron:nile')),
+    'tron:mainnet': new GasFreeAPIClient(getGasFreeApiBaseUrl('tron:mainnet')),
+  }))
   x402.registerPolicy(SufficientBalancePolicy)
 
   const client = new X402FetchClient(x402)
@@ -334,7 +350,6 @@ Response: { data: 'This is premium content!' }
 
 ```python
 import asyncio
-import os
 import httpx
 
 from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
@@ -349,8 +364,8 @@ SERVER_URL = "https://x402-demo.bankofai.io/protected-bsc-testnet"
 
 
 async def main():
-    # Initialize signer with your private key
-    signer = EvmClientSigner.from_private_key(os.getenv("BSC_PRIVATE_KEY"))
+    # Initialize signer via agent-wallet (resolves wallet from environment automatically)
+    signer = await EvmClientSigner.create()
 
     # Create x402 client and register BSC mechanisms and balance policy
     x402_client = X402Client()
@@ -358,7 +373,7 @@ async def main():
     x402_client.register("eip155:*", ExactEvmClientMechanism(signer))
     x402_client.register_policy(SufficientBalancePolicy)
 
-    async with httpx.AsyncClient(timeout=60.0) as http_client:
+    async with httpx.AsyncClient(timeout=120) as http_client:
         client = X402HttpClient(http_client, x402_client)
 
         # Make the request — the SDK handles payment automatically
@@ -395,15 +410,13 @@ import {
   EvmClientSigner, SufficientBalancePolicy,
 } from '@bankofai/x402'
 
-const BSC_PRIVATE_KEY = process.env.BSC_PRIVATE_KEY!
-
 // ========== Configuration ==========
 const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet'
 // ====================================
 
 async function main(): Promise<void> {
-  // Initialize signer with your private key
-  const signer = new EvmClientSigner(BSC_PRIVATE_KEY)
+  // Initialize signer via agent-wallet (resolves wallet from environment automatically)
+  const signer = await EvmClientSigner.create()
 
   // Create x402 client and register BSC mechanisms and balance policy
   const x402 = new X402Client()
@@ -465,6 +478,7 @@ If your script throws an error, refer to the table below:
 | Error | Cause | Fix |
 |-------|-------|-----|
 | Environment variable is `None` or not set | Private key env var not configured | Re-run the `export` command in **the same terminal window** where you run the script |
+| `WalletNotFoundError: No active wallet set` | agent-wallet has no wallet configured | Run `agent-wallet start` and follow the prompts to import your private key |
 | `Insufficient balance` / balance error | Test wallet doesn't have enough USDT/USDD | Go back to Prerequisites and claim test tokens from the faucet |
 | `UnsupportedNetworkError` | Registered network doesn't match the server | Confirm `SERVER_URL` network matches your registered mechanism (`tron:*` for TRON, `eip155:*` for BSC) |
 | `InsufficientAllowanceError` | Token allowance too low | The SDK usually handles this automatically; if it persists, check your wallet balance |

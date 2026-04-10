@@ -24,7 +24,7 @@ import TabItem from '@theme/TabItem';
 请在终端（macOS/Linux 的 Terminal，或 Windows 的 PowerShell/命令提示符）中依次运行以下命令，确认相关工具已安装：
 
 ```bash
-python --version   # 需要 3.10 或以上版本
+python --version   # 需要 3.11 或以上版本
 pip --version      # 随 Python 一起安装
 git --version      # 版本控制工具
 ```
@@ -151,7 +151,7 @@ pip install -e ".[fastapi]"
 <TabItem value="TRON" label="TRON">
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from bankofai.x402.server import X402Server
 from bankofai.x402.fastapi import x402_protected
 from bankofai.x402.facilitator import FacilitatorClient
@@ -180,7 +180,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
     network=NetworkConfig.TRON_NILE, # 当前使用测试网（上线时改为 TRON_MAINNET）
     pay_to=PAY_TO_ADDRESS,           # 您的收款钱包地址
 )
-async def protected_endpoint():
+async def protected_endpoint(request: Request):
     return {"data": "这是需要付款才能获取的内容！"}
 
 
@@ -193,7 +193,7 @@ if __name__ == "__main__":
 <TabItem value="BSC" label="BSC">
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from bankofai.x402.server import X402Server
 from bankofai.x402.fastapi import x402_protected
 from bankofai.x402.facilitator import FacilitatorClient
@@ -226,7 +226,7 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
     pay_to=PAY_TO_ADDRESS,             # 您的收款钱包地址
     schemes=["exact_permit"],
 )
-async def protected_endpoint():
+async def protected_endpoint(request: Request):
     return {"data": "这是需要付款才能获取的内容！"}
 
 
@@ -360,78 +360,213 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
 </TabItem>
 <TabItem value="selfhost" label="自托管 Facilitator">
 
-自托管方式让您完全掌控费用策略和能量管理，适合有特定定制需求的高级用户。
+自托管方式让您完全掌控费用策略和网络配置，适合有特定定制需求的高级用户。
 
 > ⚠️ **安全提示——请先阅读：**
 > - 需要一个**专用钱包**的私钥用于支付区块链手续费，**该钱包应与收款钱包分开**
 > - Facilitator 钱包只需少量代币（用于手续费），不要存入大量资金
-> - 私钥只存在 `.env` 文件中，**绝不要上传到 GitHub 或分享给他人**
+> - 私钥通过环境变量设置，**绝不要提交到 Git 或分享给他人**
 
-#### 3.1 准备 Facilitator 专用钱包
+#### 3.1 准备前置依赖
 
-请专门创建一个新钱包用于 Facilitator，步骤与前置准备中创建收款钱包相同，然后从水龙头领取测试代币（用于支付手续费）。
+启动前，请确认以下条件已就绪：
 
-#### 3.2 克隆并配置 Facilitator 项目
+- **Python 3.11+** 和 **Git**（前置准备中已确认）
+- **PostgreSQL** — Facilitator 使用数据库持久化支付记录。
 
-打开一个**新的终端窗口**（保持现有终端开着），执行：
+  <Tabs>
+  <TabItem value="mac" label="macOS">
+
+  ```bash
+  brew install postgresql@16
+  brew services start postgresql@16
+  createdb x402
+  ```
+
+  </TabItem>
+  <TabItem value="linux" label="Linux">
+
+  **Ubuntu / Debian：**
+  ```bash
+  sudo apt install -y postgresql
+  sudo systemctl start postgresql
+  sudo -u postgres createdb x402
+  ```
+
+  **Amazon Linux / CentOS / RHEL / Fedora：**
+  ```bash
+  sudo dnf install -y postgresql15 postgresql15-server   # Amazon Linux 2023；其他发行版使用 postgresql-server
+  sudo postgresql-setup --initdb
+  sudo systemctl start postgresql
+  sudo systemctl enable postgresql
+  sudo -u postgres createdb x402
+  ```
+
+  **Arch Linux：**
+  ```bash
+  sudo pacman -S postgresql
+  sudo -u postgres initdb -D /var/lib/postgres/data
+  sudo systemctl start postgresql
+  sudo -u postgres createdb x402
+  ```
+
+  </TabItem>
+  <TabItem value="windows" label="Windows">
+
+  从 [postgresql.org/download/windows](https://www.postgresql.org/download/windows/) 下载并运行安装程序，然后通过 pgAdmin 或 psql 创建名为 `x402` 的数据库。
+
+  </TabItem>
+  </Tabs>
+
+  **为 `postgres` 用户设置密码**（连接字符串中需要用到）：
+
+  ```bash
+  sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'yourpassword';"
+  ```
+
+  > 将 `yourpassword` 替换为您自定义的密码，后续配置文件中会用到。
+
+  **开启密码认证**（仅 Linux — 大多数发行版需要此步骤）：
+
+  Linux 上 PostgreSQL 默认使用 `ident` 认证，要求操作系统用户名与数据库用户名一致，否则连接会被拒绝。需要将认证方式改为 `md5`（密码认证），Facilitator 才能正常连接：
+
+  ```bash
+  # 查找 pg_hba.conf 文件位置
+  sudo find / -name pg_hba.conf 2>/dev/null
+  # 常见路径：/var/lib/pgsql/data/pg_hba.conf（Amazon Linux / CentOS）
+  #           /etc/postgresql/*/main/pg_hba.conf（Ubuntu / Debian）
+  ```
+
+  打开文件，将 IPv4 和 IPv6 本地连接的 `ident` 改为 `md5`：
+
+  ```
+  # IPv4 local connections:
+  host    all             all             127.0.0.1/32            md5
+  # IPv6 local connections:
+  host    all             all             ::1/128                 md5
+  ```
+
+  修改后重启 PostgreSQL 使配置生效：
+
+  ```bash
+  sudo systemctl restart postgresql
+  ```
+
+  连接字符串：`postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
+
+
+- **Facilitator 专用钱包** — 单独创建一个新钱包（与收款钱包隔离，步骤与前置准备相同），并从水龙头领取测试代币用于支付手续费。
+
+#### 3.2 克隆并安装
+
+打开一个**新的终端窗口**，执行：
 
 ```bash
-# 下载示例项目（包含 Facilitator 实现）
-git clone https://github.com/BofAI/x402-demo.git
-cd x402-demo
+# 克隆 Facilitator 服务仓库
+git clone https://github.com/BofAI/x402-facilitator.git
+cd x402-facilitator
 
 # 安装依赖
 pip install -r requirements.txt
-
-# 根据模板创建配置文件
-cp .env.sample .env
 ```
 
-用文本编辑器打开 `x402-demo` 目录下的 `.env` 文件，填写 Facilitator 专用钱包的私钥：
+#### 3.3 配置服务
+
+复制示例配置文件并用文本编辑器打开：
+
+```bash
+cp config/facilitator.config.example.yaml config/facilitator.config.yaml
+```
+
+填写必填字段：
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
+```yaml
+database:
+  url: "postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402"
+
+facilitator:
+  networks:
+    tron:nile:                   # 上线时改为 tron:mainnet
+      base_fee:
+        USDT: 100                # 每笔结算收 0.0001 USDT（可按需调整）
+        USDD: 100000000000000  # 0.0001 USDD（18位精度；按需调整）
+```
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+```yaml
+database:
+  url: "postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402"
+
+facilitator:
+  networks:
+    bsc:testnet:                 # 上线时改为 bsc:mainnet
+      base_fee:
+        USDT: 100                # 每笔结算收 0.0001 USDT（可按需调整）
+```
+
+</TabItem>
+</Tabs>
+
+然后通过环境变量设置 Facilitator 专用钱包的私钥：
 
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
 ```bash
-# Facilitator 专用钱包的私钥（不是收款钱包！）
 # 获取方式：TronLink → 设置 → 账户管理 → 导出私钥
-TRON_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
+export AGENT_WALLET_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
 
-# TronGrid API Key（主网必填，测试网可暂时留空）
+# TronGrid API Key（推荐配置，确保 RPC 稳定访问）
 # 申请地址：https://www.trongrid.io/
-TRON_GRID_API_KEY=
+export TRON_GRID_API_KEY=在此填入TronGrid API Key
 ```
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
 ```bash
-# Facilitator 专用钱包的私钥（不是收款钱包！）
 # 获取方式：MetaMask → 账户详情 → 导出私钥
-BSC_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
+export AGENT_WALLET_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
 ```
 
 </TabItem>
 </Tabs>
 
-#### 3.3 启动 Facilitator 服务
+#### 3.4 启动 Facilitator 服务
 
 ```bash
-./start.sh facilitator
+python src/main.py
 ```
 
-**成功启动后，您应该看到：**
+**成功启动后，您应该看到类似以下输出：**
 
 ```
-Facilitator running on http://localhost:8001
-Supported endpoints:
-  GET  /supported
-  POST /verify
-  POST /settle
-  POST /fee/quote
+INFO:     Started server process
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
 ```
 
-> ✅ **成功标志：** 终端显示 `Facilitator running on http://localhost:8001`，**保持此终端窗口开启，不要关闭**
+> ✅ **成功标志：** Uvicorn 已在 8001 端口运行，**保持此终端窗口开启，不要关闭**
+
+#### 3.5 注册 API Key（可选）
+
+如需按卖家维度追踪支付记录，可用内置脚本生成 API Key：
+
+```bash
+python scripts/register_seller.py
+# 会自动生成并打印一个随机 API Key，请妥善保存
+```
+
+将此 Key 配置到您的服务端：
+```bash
+export FACILITATOR_API_KEY=生成的API Key
+```
 
 `server.py` 中的 `FACILITATOR_URL = "http://localhost:8001"` 已是自托管配置，**无需修改**，直接进入第四步。
 
@@ -488,11 +623,12 @@ curl http://localhost:8000/protected
 
 | 问题 | 解决方案 |
 |------|----------|
-| `Connection refused` 连接 Facilitator 失败 | 使用**自托管**方式时，确认第三步的 Facilitator 终端仍在运行、监听 8001 端口；使用**官方**方式时，检查 `FACILITATOR_URL` 是否正确配置为 `https://facilitator.bankofai.io` |
+| `Connection refused` 连接 Facilitator 失败 | 使用**自托管**方式时，确认第三步的 Facilitator 终端仍在运行（`python src/main.py`），监听 8001 端口；使用**官方**方式时，检查 `FACILITATOR_URL` 是否正确配置为 `https://facilitator.bankofai.io` |
 | `ModuleNotFoundError: bankofai` | 重新执行第一步的安装命令 |
 | 钱包地址格式错误 | TRON 地址以 `T` 开头；BSC 地址以 `0x` 开头，检查是否完整复制 |
-| Facilitator 启动失败（自托管）| 检查 `.env` 文件中私钥是否正确填写，注意不要有多余空格或换行 |
-| API Key 无效或频率受限（官方）| 确认 `FACILITATOR_API_KEY` 已正确填写，前往 [admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) 检查 Key 状态 |
+| Facilitator 启动失败——数据库报错（自托管）| 确认 `config/facilitator.config.yaml` 中 `database.url` 填写正确，且 PostgreSQL 实例正在运行 |
+| Facilitator 启动失败——钱包报错（自托管）| 确认 `AGENT_WALLET_PRIVATE_KEY` 已在当前终端 `export`，且无多余空格或换行 |
+| API Key 无效或频率受限（官方）| 确认 `FACILITATOR_API_KEY` 已正确设置，前往 [admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) 检查 Key 状态 |
 | `server.py` 启动报错 | 确认 `PAY_TO_ADDRESS` 已替换为真实钱包地址（不要保留占位文字） |
 
 **需要更多示例和参考？**
@@ -546,16 +682,59 @@ curl http://localhost:8000/protected
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
-1. **申请 TronGrid API Key**：前往 [TronGrid](https://www.trongrid.io/) 注册并创建 API Key，填入 `.env` 的 `TRON_GRID_API_KEY` 字段（主网必须）
-2. **替换私钥**：将 `.env` 中的私钥替换为主网 Facilitator 钱包的私钥
-3. **充值手续费**：向 Facilitator 主网钱包转入足够的真实 TRX（用于支付 Energy 和 Bandwidth 费用）
-4. **更新网络配置**：将 Facilitator 代码中的网络配置改为 `NetworkConfig.TRON_MAINNET`
+1. **申请 TronGrid API Key**：前往 [TronGrid](https://www.trongrid.io/) 注册并创建 API Key，然后通过环境变量设置：
+
+   ```bash
+   export TRON_GRID_API_KEY=your_trongrid_api_key
+   ```
+
+   :::note
+   未配置 `TRON_GRID_API_KEY` 时，在高负载下可能会被限速。生产环境请配置 `TRON_GRID_API_KEY`，以确保可靠性。
+   :::
+
+2. **替换私钥**：将环境变量更新为主网 Facilitator 钱包的私钥：
+
+   ```bash
+   export AGENT_WALLET_PRIVATE_KEY=your_mainnet_facilitator_private_key
+   ```
+
+3. **充值手续费**：向 Facilitator 主网钱包转入足够的真实 TRX（用于支付 Energy 和 Bandwidth 费用）。
+
+4. **更新网络配置**：打开 `config/facilitator.config.yaml`，将网络键从 `tron:nile` 改为 `tron:mainnet`：
+
+   ```yaml
+   facilitator:
+     networks:
+       tron:mainnet:              # 从 tron:nile 改为 tron:mainnet
+         base_fee:
+           USDT: 100
+           USDD: 100000000000000  # 0.0001 USDD（18位精度；按需调整）
+   ```
+
+5. **重启服务**：`python src/main.py`
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-1. **充值手续费**：向 Facilitator 主网钱包转入足够的真实 BNB（用于支付 Gas 费用）
-2. **更新网络配置**：将 Facilitator 代码中的网络配置改为 `NetworkConfig.BSC_MAINNET`
+1. **充值手续费**：向 Facilitator 主网钱包转入足够的真实 BNB（用于支付 Gas 费用）。
+
+2. **替换私钥**：将环境变量更新为主网 Facilitator 钱包的私钥：
+
+   ```bash
+   export AGENT_WALLET_PRIVATE_KEY=your_mainnet_facilitator_private_key
+   ```
+
+3. **更新网络配置**：打开 `config/facilitator.config.yaml`，将网络键从 `bsc:testnet` 改为 `bsc:mainnet`：
+
+   ```yaml
+   facilitator:
+     networks:
+       bsc:mainnet:               # 从 bsc:testnet 改为 bsc:mainnet
+         base_fee:
+           USDT: 100
+   ```
+
+4. **重启服务**：`python src/main.py`
 
 </TabItem>
 </Tabs>

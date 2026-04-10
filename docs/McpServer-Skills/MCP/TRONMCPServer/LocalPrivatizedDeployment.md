@@ -50,66 +50,61 @@ Before configuring your wallet, make sure to understand the following security p
 ## Installation Steps
 ### Step 1: Configure Wallet
 
-The wallet determines which identity the AI assistant uses to perform on-chain operations. TRON MCP Server supports three wallet modes; if no wallet is configured, the server automatically runs in read-only mode.
+The wallet determines which identity the AI assistant uses to perform on-chain operations. TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for secure wallet management. If no wallet is configured, write tools will return an error prompting you to set up a wallet.
 
-#### There are three wallet options — choose based on your needs
+#### Agent Wallet
 
-| Feature | Agent Wallet | Private Key | Mnemonic |
-| :--- | :--- | :--- | :--- |
-| Security Level | High (encrypted storage) | Low (plaintext) | Low (plaintext) |
-| Multi-Wallet Support | Yes | No | No |
-| Runtime Wallet Switching | Yes | No | No |
-| Setup Complexity | Medium | Simple | Simple |
-| Recommended For | Production, significant funds | Development, small amounts | Development, small amounts |
+TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for wallet management. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
 
-#### Option 1: Agent Wallet (Recommended)
+| Feature | Description |
+| :--- | :--- |
+| Security Level | High (encrypted storage) |
+| Multi-Wallet Support | Yes |
+| Runtime Wallet Switching | Yes |
+| Recommended For | All use cases |
 
-This is the most secure option. Private keys are encrypted and stored on local disk, never exposed as plaintext in environment variables. Even if environment variables are leaked, the attacker still needs the encrypted keystore file to access funds. Agent Wallet also supports **multi-wallet management** and runtime wallet switching via the `select_wallet` tool.
+> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md).
 
-> For installation, initialization, and detailed usage of Agent Wallet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro).
-
-**Set environment variables after initializing Agent Wallet:**
+First, install Agent Wallet:
 
 ```bash
-# Add to ~/.zshrc or ~/.bashrc
-export AGENT_WALLET_PASSWORD='<your-master-password>'
-
-# Optional: specify custom wallet directory (default: ~/.agent-wallet)
-export AGENT_WALLET_DIR="$HOME/.agent-wallet"
+npm install -g @bankofai/agent-wallet
 ```
 
+Then, choose one of the following two paths depending on your situation:
 
+#### Path 1: Generate a New Wallet (Recommended for New Users)
 
-#### Option 2: Private Key
-
-Provide the private key directly via environment variable. Simplest setup, but lower security.
+If you don't have an existing private key, use `agent-wallet start` to generate a new wallet with an encrypted keystore and master password:
 
 ```bash
-# Add to ~/.zshrc or ~/.bashrc
-export TRON_PRIVATE_KEY="<your-private-key-hex>"
+agent-wallet start
 ```
 
-The private key can be in hex format with or without the `0x` prefix.
+Follow the interactive prompts to set your master password and generate a wallet. Once complete, the wallet is ready to use — **no additional environment variables are needed**. Agent Wallet will automatically manage the encrypted keystore.
 
-:::warning
-Using a plaintext private key in environment variables carries a **real risk of fund theft** — environment variables can be leaked via shell history, process listings (`ps aux`), or log files. **Only keep small amounts of funds** in wallets configured this way.
-:::
+#### Path 2: Import an Existing Private Key
 
-#### Option 3: Mnemonic Phrase
-
-Use a BIP-39 mnemonic phrase for HD wallet derivation.
+If you already have a private key you want to use, set it via the `AGENT_WALLET_PRIVATE_KEY` environment variable:
 
 ```bash
-# Add to ~/.zshrc or ~/.bashrc
-export TRON_MNEMONIC="word1 word2 word3 ... word12"
-
-# Optional: specify HD wallet derivation index (default: 0)
-# Derivation path: m/44'/195'/0'/0/{index}
-export TRON_ACCOUNT_INDEX="0"
+export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-:::warning
-Same security risks as the private key option. Mnemonic phrases stored in plaintext are vulnerable to exposure. Use this only for development/testing wallets with small balances.
+:::tip
+To make this persist across terminal sessions, add it to your shell configuration file:
+
+```bash
+echo 'export AGENT_WALLET_PRIVATE_KEY=your_private_key' >> ~/.zshrc   # zsh (macOS default)
+echo 'export AGENT_WALLET_PRIVATE_KEY=your_private_key' >> ~/.bashrc  # bash (Linux default)
+source ~/.zshrc   # or source ~/.bashrc — takes effect immediately without restarting the terminal
+```
+
+Verify the environment variable is set:
+
+```bash
+echo $AGENT_WALLET_PRIVATE_KEY
+```
 :::
 
 
@@ -134,7 +129,7 @@ Register for free at [trongrid.io](https://www.trongrid.io/). The server still w
 
 ### Step 3: Local Private Deployment
 
-Two options are available. For most users, Option A is sufficient.
+Multiple deployment options are available. For most users, Option A is sufficient.
 
 #### Option A: Run directly with npx (Recommended)
 
@@ -163,14 +158,52 @@ Start the server in HTTP mode, then connect your MCP client via the HTTP endpoin
 npm run start:http
 ```
 
-This will start a local HTTP server (default: `http://localhost:3001/mcp`) that your MCP client can connect to.
+This will start a local stateless Streamable HTTP server (default: `http://localhost:3001/mcp`) that your MCP client can connect to. Each request is handled independently — no session state is maintained between requests.
+
+You can customize the port and host via environment variables:
+
+```bash
+export MCP_PORT=3001      # default: 3001
+export MCP_HOST=0.0.0.0   # default: 0.0.0.0
+```
+
+#### Option D: Docker Deployment
+
+Run TRON MCP Server in a Docker container for isolated, reproducible environments. The Docker image runs in **read-only HTTP mode** by default.
+
+```bash
+# 1. Create a .env file for sensitive variables (never commit this file)
+cat > .env.docker << 'EOF'
+TRONGRID_API_KEY=your-key-here
+EOF
+
+# 2. Build the image
+docker build -t mcp-server-tron .
+
+# 3. Run the container with --env-file
+docker run -d \
+  -p 3001:3001 \
+  -v $(pwd)/logs:/app/logs \
+  --env-file .env.docker \
+  mcp-server-tron
+```
+
+:::warning
+Never pass API keys with `-e KEY=value` on the command line — the value will appear in shell history and `docker inspect` output. Always use `--env-file` with a file excluded from version control (add `.env.docker` to your `.gitignore`).
+:::
+
+The container exposes port 3001 and writes date-stamped logs to the mounted `logs/` directory. A health check endpoint is available at `http://localhost:3001/health`.
+
+:::tip
+The Docker image is designed for read-only cloud deployments. For local write operations (transfers, staking, etc.), use Option A, B, or C with a configured Agent Wallet.
+:::
 
 #### Configuration Notes
 
 If you're configuring an MCP client to point to your local server:
 
 - **If running via npx or source**: Use the appropriate command in your MCP client's configuration (e.g., `command: npx` with `args: ["-y", "@bankofai/mcp-server-tron"]`)
-- **If running in HTTP mode**: Point your client to `http://localhost:3001/mcp` via the HTTP URL configuration option
+- **If running in HTTP mode or Docker**: Point your client to `http://localhost:3001/mcp` via the HTTP URL configuration option
 
 If your MCP client does not inherit system environment variables, you'll need to configure them explicitly in the client settings. **Make sure any configuration file storing credentials is never shared or committed to version control**.
 
