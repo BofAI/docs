@@ -101,10 +101,6 @@ echo $AGENT_WALLET_PRIVATE_KEY
 ```
 :::
 
-:::caution 旧版钱包选项已移除
-`TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC` 环境变量已不再支持。所有钱包管理现在统一通过 Agent Wallet 处理。如果您之前使用的是明文私钥或助记词，请迁移到 Agent Wallet 以获得更好的安全性。
-:::
-
 ---
 
 ### 第二步：本地私有化部署

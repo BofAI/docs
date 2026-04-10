@@ -107,10 +107,6 @@ echo $AGENT_WALLET_PRIVATE_KEY
 ```
 :::
 
-:::caution 旧版钱包方式已移除
-从 v1.1.7 起，旧版的 `TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC` 环境变量不再受支持。所有钱包管理现在统一通过 Agent Wallet 进行。如果你之前使用明文私钥或助记词，请迁移到 Agent Wallet 以获得更好的安全性。
-:::
-
 
 
 ---

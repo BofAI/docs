@@ -94,10 +94,6 @@ This page collects frequently asked questions when using SUN MCP Server and thei
 
 Verify successful configuration by checking [Full Capability List](ToolList.md) for Full Capability List.
 
-:::caution
-The legacy `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management is now handled through Agent Wallet.
-:::
-
 ## Authentication and Key Issues
 
 ### "Invalid Private Key" Error
@@ -149,9 +145,6 @@ export AGENT_WALLET_PASSWORD='your_password'
 
 # Optional: specify custom wallet directory
 export AGENT_WALLET_DIR="$HOME/.agent-wallet"
-
-# Clear any legacy environment variables that may cause confusion
-unset TRON_PRIVATE_KEY TRON_MNEMONIC
 
 # Restart server
 sun-mcp-server

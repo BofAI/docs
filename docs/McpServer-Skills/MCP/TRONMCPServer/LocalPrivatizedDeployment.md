@@ -107,10 +107,6 @@ echo $AGENT_WALLET_PRIVATE_KEY
 ```
 :::
 
-:::caution Legacy wallet options removed
-As of v1.1.7, the legacy `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management is now handled through Agent Wallet. If you were previously using plaintext private keys or mnemonics, please migrate to Agent Wallet for improved security.
-:::
-
 
 
 ---

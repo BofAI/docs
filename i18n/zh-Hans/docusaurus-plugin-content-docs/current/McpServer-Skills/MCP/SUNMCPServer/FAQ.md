@@ -94,10 +94,6 @@ description: SUN MCP Server 的常见问题解答，涵盖连接、认证、DeFi
 
 验证配置成功的方式：查看 [完整能力清单](ToolList.md) 中的完整能力清单。
 
-:::caution
-`TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC` 环境变量已不再支持。所有钱包管理现在统一通过 Agent Wallet 处理。
-:::
-
 ## 认证与密钥问题
 
 ### "私钥无效"错误
@@ -149,9 +145,6 @@ export AGENT_WALLET_PASSWORD='your_password'
 
 # 可选：指定自定义钱包目录
 export AGENT_WALLET_DIR="$HOME/.agent-wallet"
-
-# 清除可能引起混淆的旧环境变量
-unset TRON_PRIVATE_KEY TRON_MNEMONIC
 
 # 重启服务器
 sun-mcp-server

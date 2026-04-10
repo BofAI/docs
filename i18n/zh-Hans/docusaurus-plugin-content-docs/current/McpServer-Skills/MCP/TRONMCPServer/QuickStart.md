@@ -1,9 +1,5 @@
 # 快速开始
 
-:::warning 从 v1.1.6 或更早版本升级？
-从 **v1.1.7** 起，`TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC` 环境变量不再受支持。所有钱包管理现在统一使用 **Agent Wallet**。如果你之前设置了这些变量，升级后写入操作将会失败，直到你完成迁移。参阅[本地私有化部署 → Agent Wallet](./LocalPrivatizedDeployment.md#agent-wallet) 获取详细迁移步骤。
-:::
-
 这个页面的目标很简单：**让你在 1 分钟内完成接入，发起第一次区块链查询。**
 
 我们会使用[官方云服务](./OfficialServerAccess.md)来完成这次快速体验。云服务是只读的，不需要安装任何依赖、不需要配置钱包、不需要申请 API Key——你只需要把一段配置复制到 AI 客户端，重启，然后开始提问。

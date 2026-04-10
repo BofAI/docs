@@ -1,9 +1,5 @@
 # Introduction
 
-:::warning Upgrading from v1.1.6 or earlier?
-As of **v1.1.7**, the `TRON_PRIVATE_KEY` and `TRON_MNEMONIC` environment variables are no longer supported. All wallet management now uses **Agent Wallet**. If you had either variable set, write operations will fail until you migrate. See [Local Private Deployment → Agent Wallet](./LocalPrivatizedDeployment.md#agent-wallet) for step-by-step instructions.
-:::
-
 ## What is TRON MCP Server?
 
 TRON MCP Server is a bridge that connects AI assistants with the TRON blockchain. Built on the [Model Context Protocol (MCP)](../Intro.md) standard, it lets you interact with the blockchain using natural language — checking balances, initiating transfers, calling smart contracts — without writing any code.
