@@ -64,7 +64,7 @@ Both tools connect you to the same SunSwap ecosystem, but serve different use ca
 | **No-prompt mode** | `--yes` flag for unattended execution | AI handles confirmation flow |
 
 :::tip When to choose which?
-If your AI assistant supports the MCP protocol (e.g. Claude), prefer SUN MCP Server—the integration is cleaner with no command assembly or output parsing. If you need shell scripts, cron jobs, CI/CD pipelines, or your AI agent doesn't support MCP, choose SUN CLI.
+If your AI assistant supports the MCP protocol, prefer SUN MCP Server—the integration is cleaner with no command assembly or output parsing. If you need shell scripts, cron jobs, CI/CD pipelines, or your AI agent doesn't support MCP, choose SUN CLI.
 :::
 
 ---

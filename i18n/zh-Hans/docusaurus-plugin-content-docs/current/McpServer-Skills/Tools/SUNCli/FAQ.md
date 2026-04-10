@@ -96,7 +96,7 @@ npm run start -- --network nile swap TRX USDT 1000000
 
 ### SUN CLI 和 SUN MCP Server 有什么区别？
 
-SUN CLI 是直接调用的命令行工具。SUN MCP Server 是一个 MCP 兼容的服务器，AI 客户端（如 Claude）通过它进行自然语言 DeFi 交互。两者访问的是同一个 SunSwap 生态。脚本和自动化选 CLI，AI 辅助工作流选 MCP Server。
+SUN CLI 是直接调用的命令行工具。SUN MCP Server 是一个 MCP 兼容的服务器，AI 客户端通过它进行自然语言 DeFi 交互。两者访问的是同一个 SunSwap 生态。脚本和自动化选 CLI，AI 辅助工作流选 MCP Server。
 
 ---
 

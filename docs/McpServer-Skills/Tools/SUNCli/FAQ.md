@@ -96,7 +96,7 @@ Yes. SUN CLI is designed for both human and AI-driven workflows. Key features fo
 
 ### What's the difference between SUN CLI and SUN MCP Server?
 
-SUN CLI is a command-line tool invoked directly. SUN MCP Server is an MCP-compatible server that AI clients (like Claude) connect to for natural language DeFi interaction. Both access the same SunSwap ecosystem. Choose CLI for scripts and automation, MCP Server for AI-assisted workflows.
+SUN CLI is a command-line tool invoked directly. SUN MCP Server is an MCP-compatible server that AI clients connect to for natural language DeFi interaction. Both access the same SunSwap ecosystem. Choose CLI for scripts and automation, MCP Server for AI-assisted workflows.
 
 ---
 
