@@ -385,8 +385,6 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
   createdb x402
   ```
 
-  连接字符串：`postgresql+asyncpg://localhost/x402`
-
   </TabItem>
   <TabItem value="linux" label="Linux">
 
@@ -397,11 +395,12 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
   sudo -u postgres createdb x402
   ```
 
-  **CentOS / RHEL / Fedora：**
+  **Amazon Linux / CentOS / RHEL / Fedora：**
   ```bash
-  sudo dnf install -y postgresql-server postgresql-contrib
+  sudo dnf install -y postgresql15 postgresql15-server   # Amazon Linux 2023；其他发行版使用 postgresql-server
   sudo postgresql-setup --initdb
   sudo systemctl start postgresql
+  sudo systemctl enable postgresql
   sudo -u postgres createdb x402
   ```
 
@@ -413,17 +412,49 @@ server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
   sudo -u postgres createdb x402
   ```
 
-  连接字符串：`postgresql+asyncpg://localhost/x402`
-
   </TabItem>
   <TabItem value="windows" label="Windows">
 
   从 [postgresql.org/download/windows](https://www.postgresql.org/download/windows/) 下载并运行安装程序，然后通过 pgAdmin 或 psql 创建名为 `x402` 的数据库。
 
-  连接字符串：`postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
-
   </TabItem>
   </Tabs>
+
+  **为 `postgres` 用户设置密码**（连接字符串中需要用到）：
+
+  ```bash
+  sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'yourpassword';"
+  ```
+
+  > 将 `yourpassword` 替换为您自定义的密码，后续配置文件中会用到。
+
+  **开启密码认证**（仅 Linux — 大多数发行版需要此步骤）：
+
+  Linux 上 PostgreSQL 默认使用 `ident` 认证，要求操作系统用户名与数据库用户名一致，否则连接会被拒绝。需要将认证方式改为 `md5`（密码认证），Facilitator 才能正常连接：
+
+  ```bash
+  # 查找 pg_hba.conf 文件位置
+  sudo find / -name pg_hba.conf 2>/dev/null
+  # 常见路径：/var/lib/pgsql/data/pg_hba.conf（Amazon Linux / CentOS）
+  #           /etc/postgresql/*/main/pg_hba.conf（Ubuntu / Debian）
+  ```
+
+  打开文件，将 IPv4 和 IPv6 本地连接的 `ident` 改为 `md5`：
+
+  ```
+  # IPv4 local connections:
+  host    all             all             127.0.0.1/32            md5
+  # IPv6 local connections:
+  host    all             all             ::1/128                 md5
+  ```
+
+  修改后重启 PostgreSQL 使配置生效：
+
+  ```bash
+  sudo systemctl restart postgresql
+  ```
+
+  连接字符串：`postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
 
   **方式 B — 使用免费云数据库（本地零安装）：**
 

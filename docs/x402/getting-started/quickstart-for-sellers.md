@@ -384,8 +384,6 @@ Before starting, make sure you have:
   createdb x402
   ```
 
-  Connection string: `postgresql+asyncpg://localhost/x402`
-
   </TabItem>
   <TabItem value="linux" label="Linux">
 
@@ -396,11 +394,12 @@ Before starting, make sure you have:
   sudo -u postgres createdb x402
   ```
 
-  **CentOS / RHEL / Fedora:**
+  **Amazon Linux / CentOS / RHEL / Fedora:**
   ```bash
-  sudo dnf install -y postgresql-server postgresql-contrib
+  sudo dnf install -y postgresql15 postgresql15-server   # Amazon Linux 2023; other distros: postgresql-server
   sudo postgresql-setup --initdb
   sudo systemctl start postgresql
+  sudo systemctl enable postgresql
   sudo -u postgres createdb x402
   ```
 
@@ -412,17 +411,49 @@ Before starting, make sure you have:
   sudo -u postgres createdb x402
   ```
 
-  Connection string: `postgresql+asyncpg://localhost/x402`
-
   </TabItem>
   <TabItem value="windows" label="Windows">
 
   Download and run the installer from [postgresql.org/download/windows](https://www.postgresql.org/download/windows/), then create a database named `x402` via pgAdmin or psql.
 
-  Connection string: `postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
-
   </TabItem>
   </Tabs>
+
+  **Set a password for the `postgres` user** (required for the connection string):
+
+  ```bash
+  sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'yourpassword';"
+  ```
+
+  > Replace `yourpassword` with a password of your choice. You will use it in the connection string below.
+
+  **Enable password authentication** (Linux only — required on most distributions):
+
+  By default, PostgreSQL uses `ident` authentication on Linux, which only allows connections when the OS username matches the database username. You need to change it to `md5` (password-based) for the Facilitator to connect:
+
+  ```bash
+  # Find the pg_hba.conf file
+  sudo find / -name pg_hba.conf 2>/dev/null
+  # Typical location: /var/lib/pgsql/data/pg_hba.conf (Amazon Linux / CentOS)
+  #                   /etc/postgresql/*/main/pg_hba.conf (Ubuntu / Debian)
+  ```
+
+  Open the file and change `ident` to `md5` for IPv4 and IPv6 local connections:
+
+  ```
+  # IPv4 local connections:
+  host    all             all             127.0.0.1/32            md5
+  # IPv6 local connections:
+  host    all             all             ::1/128                 md5
+  ```
+
+  Then restart PostgreSQL to apply:
+
+  ```bash
+  sudo systemctl restart postgresql
+  ```
+
+  Connection string: `postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
 
   **Option B — Use a free cloud database (zero local install):**
 
