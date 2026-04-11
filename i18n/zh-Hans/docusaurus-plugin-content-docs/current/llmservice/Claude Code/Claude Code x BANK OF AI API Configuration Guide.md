@@ -1,3 +1,5 @@
+# 使用 BANK OF AI API 配置 Claude Code
+
 ## 目录
 
 - [开始之前](#开始之前)
@@ -11,7 +13,7 @@
 
 ## 开始之前
 
-在开始配置之前，请先完成以下两个前置步骤。
+在继续配置之前，请先完成以下两个前置步骤。
 
 ### 第一步：安装 Claude Code
 
@@ -35,15 +37,15 @@ irm https://claude.ai/install.ps1 | iex
 npm install -g @anthropic-ai/claude-code
 ```
 
-### 第二步：获取 AINFT API Key
+### 第二步：获取 BANK OF AI API Key
 
-1. 登录 [AINFT Chat 平台](https://chat.ainft.com/)
-2. 进入 [API Key 管理页面](https://chat.ainft.com/key)
+1. 登录 [BANK OF AI Chat 平台](https://chat.bankofai.io/chat)
+2. 进入 [API Key 管理页面](https://chat.bankofai.io/key)
 3. 点击创建新的 API Key
 
 > **注意：** 请妥善保管你的 API Key。你将在下面的配置步骤中使用它。
 
-完成以上两个前置步骤后，即可选择下面任意一种方式来配置 AINFT API。
+完成以上两个前置步骤后，即可选择下面任意一种方式来配置 BANK OF AI API。
 
 ***
 
@@ -59,8 +61,8 @@ npm install -g @anthropic-ai/claude-code
 ```json
 {
   "env": {
-    "ANTHROPIC_AUTH_TOKEN": "你的-AINFT-API-Key",
-    "ANTHROPIC_BASE_URL": "https://api.ainft.com/",
+    "ANTHROPIC_AUTH_TOKEN": "你的-BANK-OF-AI-API-Key",
+    "ANTHROPIC_BASE_URL": "https://api.bankofai.io/",
     "ANTHROPIC_MODEL": "claude-sonnet-4.6",
     "API_TIMEOUT_MS": "3000000"
   }
@@ -77,7 +79,7 @@ claude --version
 claude
 ```
 
-如果 Claude Code 可以正常启动，并且能够使用 AINFT 模型返回结果，则说明配置完成。
+如果 Claude Code 可以正常启动，并且能够使用 BANK OF AI 模型返回结果，则说明配置完成。
 
 ***
 
@@ -94,11 +96,11 @@ claude
 编辑 `~/.bashrc`（macOS 也可能是 `~/.bash_profile`）：
 
 ```bash
-# Claude Code - AINFT Provider Configuration
-export ANTHROPIC_BASE_URL="https://api.ainft.com/"
+# Claude Code - BANK OF AI Provider Configuration
+export ANTHROPIC_BASE_URL="https://api.bankofai.io/"
 export ANTHROPIC_AUTH_TOKEN="your-api-key-here"
 export ANTHROPIC_MODEL="claude-sonnet-4.6"
-# End of AINFT Provider Configuration
+# End of BANK OF AI Provider Configuration
 ```
 
 应用修改：
@@ -112,11 +114,11 @@ source ~/.bashrc
 编辑 `~/.zshrc`：
 
 ```bash
-# Claude Code - AINFT Provider Configuration
-export ANTHROPIC_BASE_URL="https://api.ainft.com/"
+# Claude Code - BANK OF AI Provider Configuration
+export ANTHROPIC_BASE_URL="https://api.bankofai.io/"
 export ANTHROPIC_AUTH_TOKEN="your-api-key-here"
 export ANTHROPIC_MODEL="claude-sonnet-4.6"
-# End of AINFT Provider Configuration
+# End of BANK OF AI Provider Configuration
 ```
 
 应用修改：
@@ -130,11 +132,11 @@ source ~/.zshrc
 编辑你的 `$PROFILE` 文件：
 
 ```powershell
-# Claude Code - AINFT Provider Configuration
-$env:ANTHROPIC_BASE_URL = "https://api.ainft.com/"
+# Claude Code - BANK OF AI Provider Configuration
+$env:ANTHROPIC_BASE_URL = "https://api.bankofai.io/"
 $env:ANTHROPIC_AUTH_TOKEN = "your-api-key-here"
 $env:ANTHROPIC_MODEL = "claude-sonnet-4.6"
-# End of AINFT Provider Configuration
+# End of BANK OF AI Provider Configuration
 ```
 
 应用修改：
@@ -145,13 +147,13 @@ $env:ANTHROPIC_MODEL = "claude-sonnet-4.6"
 
 #### 配置文件路径参考
 
-|   操作系统   |   Shell   | 配置文件路径                      |
-| :----------: | :-------: | :-------------------------------- |
-|    Linux     |   Bash    | `~/.bashrc`                       |
-|    Linux     |    Zsh    | `~/.zshrc`                        |
-|    macOS     |   Bash    | `~/.bashrc` 或 `~/.bash_profile`  |
-|    macOS     |    Zsh    | `~/.zshrc`                        |
-|   Windows    | PowerShell| `$PROFILE`                        |
+|   操作系统   |   Shell    | 配置文件路径                      |
+| :----------: | :--------: | :-------------------------------- |
+|    Linux     |    Bash    | `~/.bashrc`                       |
+|    Linux     |    Zsh     | `~/.zshrc`                        |
+|    macOS     |    Bash    | `~/.bashrc` 或 `~/.bash_profile`  |
+|    macOS     |    Zsh     | `~/.zshrc`                        |
+|   Windows    | PowerShell | `$PROFILE`                        |
 
 ### 验证配置
 
@@ -160,7 +162,7 @@ claude --version
 claude
 ```
 
-如果 Claude Code 可以正常启动，并且能够使用 AINFT 模型返回结果，则说明配置完成。
+如果 Claude Code 可以正常启动，并且能够使用 BANK OF AI 模型返回结果，则说明配置完成。
 
 ***
 
@@ -204,7 +206,7 @@ $env:ANTHROPIC_MODEL="claude-opus-4.6"; claude
 | `glm-5`             | Zhipu AI   |
 | `minimax-m2.5`      | MiniMax    |
 
-> 完整且最新的模型列表，请查询 [Models API](https://docs.ainft.com/reference/listmodels)。
+> 完整且最新的模型列表，请查询 BANK OF AI 提供的 Models API。
 
 ***
 
@@ -229,7 +231,7 @@ $env:ANTHROPIC_MODEL="claude-opus-4.6"; claude
 
 1. Claude Code 已正确安装（执行 `claude --version` 可以看到版本号）
 2. 已安装 `curl`（Linux / macOS）
-3. 网络可以访问 `https://api.ainft.com/`
+3. 网络可以访问 `https://api.bankofai.io/`
 
 如果问题仍然存在，可以尝试使用[方案二：使用环境变量](#方案二使用环境变量)进行手动配置。
 
@@ -270,21 +272,21 @@ $env:ANTHROPIC_MODEL
 <details>
 <summary><strong>Q：为什么调用某些模型时会返回 403 access_denied？</strong></summary>
 
-带有 **Premium** 标签的模型，如果你的 AINFT 账户此前从未充值，可能会返回 `403 access_denied`。
+带有 **Premium** 标签的模型，如果你的 BANK OF AI 账户此前从未充值，可能会返回 `403 access_denied`。
 
 仅有有效的 API Key 并不足以调用 Premium 模型。请先完成账户充值，然后再重试。
 
 </details>
 
 <details>
-<summary><strong>Q：如何移除 AINFT provider 配置？</strong></summary>
+<summary><strong>Q：如何移除 BANK OF AI provider 配置？</strong></summary>
 
 编辑你的 shell 配置文件，删除以下注释块之间的内容：
 
 ```bash
-# Claude Code - AINFT Provider Configuration
+# Claude Code - BANK OF AI Provider Configuration
 ...
-# End of AINFT Provider Configuration
+# End of BANK OF AI Provider Configuration
 ```
 
 然后重新加载配置文件，例如：
