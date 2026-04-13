@@ -40,7 +40,7 @@
 ls ~/.openclaw/skills
 ```
 
-能看到 `sunswap`、`sunperp-skill`、`tronscan-skill`、`x402-payment`、`recharge-skill` 等目录名就说明装好了。
+能看到 `sunswap`、`sunperp-skill`、`tronscan-skill`、`trc20-toolkit-skill`、`multisig-permissions`、`x402-payment`、`recharge-skill` 等目录名就说明装好了。
 
 然后在 AI 对话中验证：
 

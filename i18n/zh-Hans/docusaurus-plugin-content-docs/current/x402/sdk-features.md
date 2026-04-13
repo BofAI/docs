@@ -24,8 +24,8 @@
 | tron:mainnet | ✅ | ✅ |
 | tron:nile | ✅ | ✅ |
 | tron:shasta | ✅ | ✅ |
-| bsc:mainnet | ✅ | ✅ |
-| bsc:testnet | ✅ | ✅ |
+| eip155:56 (BSC Mainnet) | ✅ | ✅ |
+| eip155:97 (BSC Testnet) | ✅ | ✅ |
 
 
 ## 机制 
@@ -36,6 +36,7 @@
 | exact_permit/bsc | ✅ | ✅ |
 | exact/tron | ✅ | ✅ |
 | exact/bsc | ✅ | ✅ |
+| exact_gasfree/tron | ✅ | ✅ |
 
 ## 签名器 
 
@@ -55,6 +56,8 @@
 | 额度检查 | ✅ | ✅ |
 | 签名 (TRON) | ✅ | ✅ |
 | 签名 (EVM) | ✅ | ✅ |
+| SufficientBalancePolicy（余额检查策略） | ✅ | ✅ |
+| GasFree（TRON 零 gas 支付） | ✅ | ✅ |
 
 ## 服务端功能 
 
@@ -81,6 +84,7 @@
 | 代币 | Python | TypeScript |
 |-------|--------|------------|
 | USDT (TRC-20) | ✅ | ✅ |
+| USDD (TRC-20) | ✅ | ✅ |
 | 自定义 TRC-20 | ✅ | ✅ |
 | USDT (BEP-20) | ✅ | ✅ |
 | 自定义 BEP-20 | ✅ | ✅ |

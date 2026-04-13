@@ -57,7 +57,15 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Five core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+Eight core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+
+### 🔑 Secure Wallet Management
+
+Create encrypted wallets, sign transactions and messages, manage multiple wallets — all without exposing your private key. This is the foundation that other trading and payment skills rely on. Supports both EVM (BSC, Ethereum, Polygon, etc.) and TRON networks.
+
+> 🗣️ "Create a new agent wallet for me" or "List all my wallets and show their addresses."
+
+💡 For setup and advanced usage, see: [**agent-wallet**](./BANKOFAISkill.md#agent-wallet)
 
 ### 💱 Execute DEX Trades
 
@@ -65,7 +73,7 @@ Check prices, compare rates, even swap tokens in one go.
 
 > 🗣️ "How much TRX can I get for 100 USDT on SunSwap right now?"
 
-💡 For more advanced features, see: [**sunswap** (DEX Trading Guide)](./BANKOFAISkill.md#sunswap)
+💡 For more advanced features, see: [**sunswap**](./BANKOFAISkill.md#sunswap)
 
 ### 📈 Trade Perpetual Contracts
 
@@ -73,7 +81,7 @@ View market data, open and close positions on SunPerp. Built-in safety lock: max
 
 > 🗣️ "What's BTC's funding rate right now? Open a 5x long position with a 5% stop-loss."
 
-💡 For more parameter settings, see: [**sunperp-skill** (Perpetual Contract Safety Officer)](./BANKOFAISkill.md#sunperp-skill)
+💡 For more parameter settings, see: [**sunperp-skill**](./BANKOFAISkill.md#sunperp-skill)
 
 ### 🕵️ Query On-Chain Data
 
@@ -81,7 +89,23 @@ Look up accounts, transactions, and check if a new token is legit. Pure read-onl
 
 > 🗣️ "Check the holder distribution for that new token — is it controlled by a whale?"
 
-💡 For more query dimensions, see: [**tronscan-skill** (On-Chain Data Detective)](./BANKOFAISkill.md#tronscan-skill)
+💡 For more query dimensions, see: [**tronscan-skill**](./BANKOFAISkill.md#tronscan-skill)
+
+### 💸 Transfer & Manage TRC20 Tokens
+
+Check balances, transfer tokens, manage approvals for any TRC20 token — USDT, USDD, SUN, and more. Supports batch balance checks and symbol-based lookups.
+
+> 🗣️ "Check my USDT, USDD, and SUN balances. Then transfer 10 USDT to TRecipientAddress."
+
+💡 For more token operations, see: [**trc20-toolkit-skill**](./BANKOFAISkill.md#trc20-toolkit-skill)
+
+### 🔐 Multi-Sig & Account Permissions
+
+Set up multi-signature security for your TRON account — configure keys, thresholds, and co-sign transactions. Perfect for teams or for restricting your AI agent to DeFi-only operations.
+
+> 🗣️ "Check my account's current permission setup. Then set up a 2-of-3 multi-sig on owner permission."
+
+💡 For permission templates and multi-sig workflows, see: [**multisig-permissions**](./BANKOFAISkill.md#multisig-permissions)
 
 ### ☕ Auto-Settle On-Chain Paid Services
 
@@ -89,7 +113,7 @@ When the AI needs to call a paid on-chain service or data API, it uses the x402 
 
 > 🗣️ "Use the x402 protocol to call this paid agent endpoint: https://api.example.com" (replace with the actual paid endpoint URL you want to call)
 
-💡 For payment and authorization details, see: [**x402-payment** (On-Chain Auto-Settlement)](./BANKOFAISkill.md#x402-payment)
+💡 For payment and authorization details, see: [**x402-payment**](./BANKOFAISkill.md#x402-payment)
 
 ### 🏦 Manage BANK OF AI Account
 
@@ -97,7 +121,7 @@ Check your BANK OF AI balance and top up with a single sentence.
 
 > 🗣️ "How much balance do I have? Go ahead and recharge 5 USDT."
 
-💡 For top-up and withdrawal rules, see: [**recharge-skill** (Account Manager)](./BANKOFAISkill.md#recharge-skill)
+💡 For top-up and withdrawal rules, see: [**recharge-skill**](./BANKOFAISkill.md#recharge-skill)
 
 ---
 

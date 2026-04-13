@@ -93,9 +93,32 @@ Whether using the official service or a self-hosted instance, the Facilitator pr
 | GET | `/supported` | Supported payment capabilities and configuration |
 | POST | `/fee/quote` | Get fee quote for payment requirements |
 | POST | `/verify` | Verify payment payload validity |
-| POST | `/settle` | Execute on-chain settlement (**rate-limited** on the Official Facilitator) |
-| GET | `/payments/{payment_id}` | Query payment records by payment ID |
-| GET | `/payments/tx/{tx_hash}` | Query payment records by transaction hash |
+| POST | `/settle` | Execute on-chain settlement (**rate-limited**, see below) |
+| GET | `/payments/{payment_id}` | Query payment records by payment ID (seller-scoped when authenticated) |
+| GET | `/payments/tx/{tx_hash}` | Query payment records by transaction hash (seller-scoped when authenticated) |
+
+---
+
+## Rate Limiting
+
+The `/settle` endpoint enforces dynamic rate limits based on the caller's authentication status:
+
+| Mode | Rate Limit | How to Authenticate |
+|------|------------|---------------------|
+| **Authenticated** | 1000 requests / minute | Include `X-API-KEY: <your_key>` header |
+| **Anonymous** | 1 request / minute | No API Key provided |
+
+Other endpoints (`/verify`, `/fee/quote`, `/supported`, `/payments/*`) are not individually rate-limited.
+
+> **Tip**: For any production workload, apply for an API Key via the [Admin Portal](https://admin-facilitator.bankofai.io) to unlock the higher rate limit.
+
+---
+
+## Payment Record Queries
+
+The `/payments/{payment_id}` and `/payments/tx/{tx_hash}` endpoints support querying historical payment records.
+
+When the request includes a valid `X-API-KEY` header, the results are **automatically scoped to the seller** associated with that API Key — you will only see your own payment records. Anonymous requests (without an API Key) can only access records that are not bound to any specific seller.
 
 ---
 

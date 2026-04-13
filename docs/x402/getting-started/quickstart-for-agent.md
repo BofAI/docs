@@ -11,18 +11,7 @@ This guide walks you through: setting up a dedicated agent wallet, configuring c
 
 ## Prerequisites
 
-### 1. Confirm Platform Support
-
-The `x402-payment` skill currently supports the following platforms:
-
-| Platform | Installation Method |
-|----------|---------------------|
-| **OpenClaw** | Manually copy skill files into the `.openclaw/skills` directory |
-| **opencode** | Manually copy skill files into the `.opencode/skill/` directory |
-
-Before continuing, confirm that you are using one of the supported platforms above.
-
-### 2. Create a Dedicated Agent Wallet
+### 1. Create a Dedicated Agent Wallet
 
 > ⚠️ **Important: Create a separate, dedicated wallet for your AI agent — do not use your personal main wallet.**
 >
@@ -51,50 +40,59 @@ Before continuing, confirm that you are using one of the supported platforms abo
 
 ---
 
-## Step 1: Configure Wallet Credentials
+:::info Wallet Management
+x402 SDK uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet is automatically installed as a dependency of x402. Private key resolution priority:
+1. Encrypted wallet file (imported via the Agent Wallet CLI)
+2. Environment variable `AGENT_WALLET_PRIVATE_KEY`
 
-Set your agent wallet's private key as environment variables so the x402-payment skill can read them:
+This guide uses the environment variable method.
+:::
 
-<Tabs>
-<TabItem value="TRON" label="TRON">
+## Step 1: Configure Your Private Key
 
-```bash
-export TRON_PRIVATE_KEY="your_agent_wallet_private_key_here"
-export TRON_GRID_API_KEY="your_trongrid_api_key_here"  # Recommended to avoid RPC rate limits
-```
-
-> 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above. You can leave this blank during testnet testing, but it is required for mainnet.
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
+Configure your private key as an environment variable so the x402-payment skill can sign payments. Replace `your_agent_wallet_private_key_here` with the private key you exported in the Prerequisites step.
 
 ```bash
-export BSC_PRIVATE_KEY="your_agent_wallet_private_key_here"
+export AGENT_WALLET_PRIVATE_KEY="your_agent_wallet_private_key_here"
 ```
 
-</TabItem>
-</Tabs>
+> 💡 **Tip:** To make this permanent across terminal sessions, add the line to your shell profile:
+> ```bash
+> echo 'export AGENT_WALLET_PRIVATE_KEY=your_key' >> ~/.zshrc   # for zsh (macOS default)
+> echo 'export AGENT_WALLET_PRIVATE_KEY=your_key' >> ~/.bashrc  # for bash (Linux default)
+> source ~/.zshrc   # or source ~/.bashrc — apply immediately without restarting the terminal
+> ```
 
-Verify the environment variables are set correctly:
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
+Verify the environment variable is set correctly:
 
 ```bash
-echo $TRON_PRIVATE_KEY
+echo $AGENT_WALLET_PRIVATE_KEY
 ```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-echo $BSC_PRIVATE_KEY
-```
-
-</TabItem>
-</Tabs>
 
 > ✅ **Success indicator:** The terminal prints your private key string (not blank)
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
+
+**Optional:** For production TRON workloads, configure a TronGrid API Key:
+
+```bash
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"
+```
+
+> 💡 **How to get a TronGrid API Key:** Register for free at [TronGrid](https://www.trongrid.io/), create an API Key, and paste it above.
+
+:::note
+When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy workloads. For production, set your own `TRON_GRID_API_KEY` to ensure reliability.
+:::
+
+</TabItem>
+<TabItem value="BSC" label="BSC">
+
+No additional configuration needed for BSC.
+
+</TabItem>
+</Tabs>
 
 > ⚠️ **Security reminder:** Keep your private key only in local environment variables or a `.env` file. **Never commit files containing private keys to Git or share them with anyone.**
 
@@ -102,34 +100,27 @@ echo $BSC_PRIVATE_KEY
 
 ## Step 2: Install the x402-payment Skill
 
-Choose the installation method for your platform:
+### Quick Auto-Install (Recommended)
 
-<Tabs>
-<TabItem value="openclaw" label="OpenClaw">
+Run the following command to install all BANK OF AI Skills (including x402-payment) at once:
 
-1. Download the skill files from the [x402-payment skill repository](https://github.com/BofAI/skills/tree/main/x402-payment)
-2. In your project root, confirm the `.openclaw/skills/` directory exists (create it if not):
-   ```bash
-   mkdir -p .openclaw/skills/x402-payment
-   ```
-3. Copy the downloaded skill files into that directory
+```bash
+npx skills add https://github.com/BofAI/skills -y -g
+```
 
-> ✅ **Success indicator:** The `.openclaw/skills/x402-payment/` directory contains the skill files
+The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag enables global installation (available across all projects). The installer auto-detects AI tools on your computer (Cursor, Claude Code, Cline, OpenCode, etc.) and copies the skills into the correct directories.
 
-</TabItem>
-<TabItem value="opencode" label="opencode">
+> ✅ **Success indicator:** Terminal shows `✓ x402-payment (copied)` along with other installed skills
 
-1. Download the skill files from the [x402-payment skill repository](https://github.com/BofAI/skills/tree/main/x402-payment)
-2. In your project root, confirm the `.opencode/skill/` directory exists (create it if not):
-   ```bash
-   mkdir -p .opencode/skill/x402-payment
-   ```
-3. Copy the downloaded skill files into that directory
+### Interactive Installation
 
-> ✅ **Success indicator:** The `.opencode/skill/x402-payment/` directory contains the skill files
+If you prefer to select specific skills or choose the installation scope:
 
-</TabItem>
-</Tabs>
+```bash
+npx skills add https://github.com/BofAI/skills
+```
+
+For a detailed walkthrough of the interactive installation process, see the [Skills Quick Start](../../McpServer-Skills/SKILLS/QuickStart.md).
 
 ---
 
@@ -194,7 +185,7 @@ Before deploying your agent to production, make sure to review the following:
 | Agent doesn't initiate payment, errors immediately | Skill not installed correctly | Re-run the installation command in Step 2 |
 | `Private key not found` or signing fails | Environment variable not set or misconfigured | Re-run Step 1, and make sure you run the agent **in the same terminal session** |
 | Insufficient balance error | No test tokens in the agent wallet | Go back to Prerequisites and claim test tokens from the faucet |
-| Request times out | Network issue or RPC rate limiting | Configure `TRON_GRID_API_KEY` to avoid rate limits |
+| Request times out | Network issue or RPC rate limiting | Configure `TRON_GRID_API_KEY` for better performance |
 | Agent accesses successfully but balance doesn't change | May have accessed a free endpoint | Confirm the URL path is `/protected-nile`, not another path |
 
 ---

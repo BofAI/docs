@@ -24,11 +24,25 @@ The system walks you through choosing a wallet type, generating keys, and settin
 The interactive wizard may offer a `raw_secret` option. This type stores your private key **unencrypted** on disk — any program with file system access can read it directly. Only use `raw_secret` in fully isolated test environments. For any wallet holding real funds, always choose `local_secure`.
 :::
 
+:::tip Privy wallet type
+The wizard also offers a `privy` option for Privy-managed server wallets. This type delegates key custody to Privy's infrastructure — no local private key is stored on disk. You'll need a Privy App ID, App Secret, and Wallet ID to configure it:
+
+```bash
+agent-wallet start   # then choose "privy" when prompted
+```
+
+The default wallet ID for Privy wallets is `default_privy`.
+:::
+
 **Custom password:**
 ```bash
 agent-wallet start -p Abc12345!
 ```
-Password requirements: at least 8 characters, including uppercase, lowercase, numbers, and special characters.
+Password requirements: at least 8 characters, including uppercase, lowercase, numbers, and special characters. If the password doesn't meet these requirements, the CLI will keep prompting you to enter a stronger one until it passes validation.
+
+When creating a new password interactively, you must enter it twice for confirmation. If the two entries don't match, the CLI will ask you to try again.
+
+**Default wallet IDs:** If you don't specify a wallet ID, the system defaults to `default_secure` for `local_secure` wallets and `default_raw` for `raw_secret` wallets.
 
 :::caution Shell history risk
 Passing `-p` inline records the password in your terminal's history file. For production wallets, prefer interactive mode (`agent-wallet start` without `-p`) or set `AGENT_WALLET_PASSWORD` as an environment variable — see [Non-Interactive Execution](#non-interactive-execution-for-automation--background-services).
@@ -48,14 +62,20 @@ agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 
 Every `sign` subcommand requires `--network` / `-n` to specify the chain.
 
+:::info Password retry behavior
+When signing with a `local_secure` wallet, the CLI will prompt for the master password if it's not provided via `-p` or `AGENT_WALLET_PASSWORD`. If you enter the wrong password, you get **2 retry attempts** (3 total) before the command fails with "Wrong password. 3 attempts failed."
+:::
+
 **Sign a message:**
 ```bash
 agent-wallet sign msg "Hello" -n tron
+# Output: Signature: d220de880cbc1c3f...
 ```
 
 **Sign a transaction** (build the unsigned tx via RPC first):
 ```bash
 agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
+# Output: Signed tx: { "txID": "abc123...", "signature": ["..."], ... }
 ```
 
 **Sign EIP-712 typed data:**
@@ -70,6 +90,30 @@ agent-wallet sign typed-data '{
   "message": {"to":"0x7099...","amount":1000000}
 }' -n eip155:1
 ```
+
+---
+
+### `agent-wallet init` (Initialize Secrets Directory)
+
+Initialize the secrets directory and set the master password — without creating a wallet yet. This is useful for advanced scenarios where you want to prepare the directory before adding wallets.
+
+```bash
+agent-wallet init
+```
+
+**Non-interactive mode:**
+```bash
+agent-wallet init -p 'Abc12345!'
+```
+
+| Flag | Description |
+| :--- | :--- |
+| `--password, -p <pw>` | Master password (skip prompt) |
+| `--save-runtime-secrets` | Persist password to `runtime_secrets.json` |
+
+:::tip When to use `init` vs `start`
+`start` = `init` + create a wallet in one step. If you just need to set up the directory and password first (e.g., for a CI pipeline or when importing keys later), use `init` alone.
+:::
 
 ---
 
@@ -97,6 +141,15 @@ agent-wallet use my-bsc-wallet
 agent-wallet inspect my-bsc-wallet
 ```
 
+Show wallet metadata along with derived addresses:
+```bash
+agent-wallet inspect my-bsc-wallet --show-address
+```
+
+| Flag | Description |
+| :--- | :--- |
+| `--show-address` | Derive and display EVM + TRON addresses (requires password for `local_secure` wallets) |
+
 **Sign with a specific wallet** (without switching the active one):
 ```bash
 agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
@@ -105,6 +158,34 @@ agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
 **Remove a wallet:**
 ```bash
 agent-wallet remove my-bsc-wallet
+```
+
+| Flag | Short | Description |
+| :--- | :--- | :--- |
+| `--yes` | `-y` | Skip confirmation prompt (**required in non-interactive / agent contexts**) |
+
+### `agent-wallet resolve-address` (Resolve Wallet Addresses)
+
+Display the on-chain addresses associated with a wallet. For wallets derived from a mnemonic, this shows addresses for all supported networks (EVM and TRON). For private-key-based wallets, it shows the single address for the configured network.
+
+```bash
+agent-wallet resolve-address my-wallet
+```
+
+If you omit the wallet ID, the CLI will present an interactive list to choose from:
+
+```bash
+agent-wallet resolve-address
+```
+
+Example output:
+```
+  Wallet │ my-wallet
+    Type │ local_secure
+
+Addresses
+     EVM │ 0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18
+    TRON │ TJRyWwFs9wTFGZg3JbrVriFbNfCug5tDeC
 ```
 
 ---
@@ -219,9 +300,25 @@ agent-wallet sign msg "Hello" -n tron --dir /Volumes/MyUSB/agent-wallet
 
 After changing, **all key files are re-encrypted with the new password**. The old password becomes invalid immediately — make sure to update your password manager.
 
+**Interactive mode (default):**
 ```bash
 agent-wallet change-password
 ```
+
+**Non-interactive mode** (for automation scripts):
+```bash
+agent-wallet change-password -p 'OldPassword123!' --new-password 'NewPassword456!'
+```
+
+| Flag | Description |
+| :--- | :--- |
+| `--password, -p <pw>` | Current master password (skip prompt) |
+| `--new-password <pw>` | New master password (skip prompt) |
+| `--save-runtime-secrets` | Update cached password in `runtime_secrets.json` |
+
+:::caution
+Both `-p` and `--new-password` will be recorded in shell history. For production use, prefer interactive mode or pipe passwords from a secrets manager.
+:::
 
 ### `agent-wallet reset` (Reset All Data)
 

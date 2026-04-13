@@ -68,16 +68,21 @@ No limit. You can create separate wallets for different AI agents, different cha
 
 ## Wallet Types
 
-### What's the difference between `local_secure` and `raw_secret`?
+### What's the difference between `local_secure`, `raw_secret`, and `privy`?
 
-| | `local_secure` | `raw_secret` |
-| :--- | :---: | :---: |
-| **Key encryption** | ✅ Strong encryption | ❌ Plaintext |
-| **If an agent reads the file** | ✅ Key is inaccessible | ❌ Stolen instantly |
-| **Use case** | ✅ All scenarios | ⚠️ Fully isolated dev environments only |
+| | `local_secure` | `raw_secret` | `privy` |
+| :--- | :---: | :---: | :---: |
+| **Key storage** | ✅ Encrypted locally | ❌ Plaintext locally | ☁️ Privy cloud custody |
+| **If an agent reads the file** | ✅ Key is inaccessible | ❌ Stolen instantly | ✅ No local key file |
+| **Requires master password** | ✅ Yes | ❌ No | ❌ No (uses API credentials) |
+| **Use case** | ✅ All scenarios | ⚠️ Fully isolated dev only | ✅ Server-side agents with Privy |
 
 :::danger `raw_secret` exposes your private key as plaintext
 `raw_secret` stores your key unencrypted — the exact exposure `local_secure` mode is designed to prevent. If any other process on your machine can read files, your key can be stolen instantly. **Always use `local_secure`** unless you're 100% certain no other agent is running on that machine and it's a fully isolated, offline test environment.
+:::
+
+:::tip Privy wallets
+The `privy` type delegates key custody to [Privy](https://privy.io)'s server-side wallet infrastructure. No private key is stored on your local disk — signing requests are sent to Privy's API. This is ideal for server-side AI agents that already use Privy for wallet management. You'll need a Privy App ID, App Secret, and Wallet ID to set it up.
 :::
 
 ### What values does the `network` parameter accept?
@@ -136,7 +141,7 @@ Agent-wallet uses the Keystore V3 standard encryption (scrypt + AES-128-CTR), th
 
 ### What operating systems are supported?
 
-macOS and Linux. As long as you can run Node.js >= 18 or Python >= 3.11, you're good to go. Windows is not currently supported.
+macOS, Linux, and Windows. As long as you can run Node.js >= 20 or Python >= 3.11, you're good to go. Windows support was added in v2.3.x — file permission features (like `chmod 600`) are gracefully skipped on Windows since it doesn't support Unix-style permissions.
 
 ### `npm install -g` gives a permission error?
 

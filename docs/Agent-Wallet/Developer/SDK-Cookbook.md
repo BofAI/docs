@@ -560,6 +560,24 @@ The x402 SDK automatically constructs the PaymentPermit data and calls the signi
 
 ---
 
+## More Examples
+
+The Agent-wallet repository includes additional ready-to-run examples covering more advanced scenarios:
+
+| Example | Description |
+| :--- | :--- |
+| `dual-sign-typed-data-from-private-key` | Sign EIP-712 typed data on both TRON and EVM from a single private key |
+| `switch-active-wallet` | Programmatically switch between multiple wallets |
+| `create-wallet-provider` | Direct provider instantiation without auto-resolution |
+| `tron-x402-sign-typed-data` | x402 PaymentPermit signing on TRON |
+| `bsc-x402-sign-typed-data` | x402 PaymentPermit signing on BSC |
+| `verify-tron-privy-typed-data` | Verify Privy TRON EIP-712 signatures |
+| `compare-sign-consistency` | Cross-wallet signature consistency testing |
+
+Browse the full set in the [TypeScript examples](https://github.com/BofAI/agent-wallet/tree/main/packages/typescript/examples) and [Python examples](https://github.com/BofAI/agent-wallet/tree/main/packages/python/examples) directories.
+
+---
+
 ## Next Steps
 
 - Prefer the command line? → [CLI Reference](./CLI-Reference.md)

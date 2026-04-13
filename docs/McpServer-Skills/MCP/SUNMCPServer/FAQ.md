@@ -85,19 +85,12 @@ This page collects frequently asked questions when using SUN MCP Server and thei
 
 **Solution:**
 
-1. **Configure [Agent Wallet](../../../Agent-Wallet/Intro)** (recommended) — set `AGENT_WALLET_PASSWORD`
-
-2. **Or Configure Private Key (Testnet Only)**
+1. **Configure [Agent Wallet](../../../Agent-Wallet/Intro.md)** — set `AGENT_WALLET_PASSWORD`
    ```bash
-   export TRON_PRIVATE_KEY="your_64_hex_char_private_key"
+   export AGENT_WALLET_PASSWORD='your_password'
    ```
 
-3. **Or Configure Mnemonic**
-   ```bash
-   export TRON_MNEMONIC="word1 word2 ... word12"
-   ```
-
-4. **Restart server** and reconnect MCP client
+2. **Restart server** and reconnect MCP client
 
 Verify successful configuration by checking [Full Capability List](ToolList.md) for Full Capability List.
 
@@ -135,45 +128,29 @@ echo "your_private_key" | grep -E '^[0-9a-fA-F]{64}$'
 
 1. **Verify password is set**: Run `[[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "Password is set" || echo "Password NOT set"` to confirm the variable is set without revealing the value.
 2. **Check wallet directory**: Verify `~/.agent-wallet/` exists and contains wallet files. If you used a custom directory, ensure `AGENT_WALLET_DIR` points to the correct path.
-3. **If password is lost**: You'll need to re-initialize the wallet. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ) for details. Passwords with special characters are supported — use single quotes when setting the environment variable.
+3. **If password is lost**: You'll need to re-initialize the wallet. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ.md) for details. Passwords with special characters are supported — use single quotes when setting the environment variable.
 
 
-### "Conflicting Wallet Modes"
+### "Wallet Not Found" or Initialization Error
 
-**Symptom:** Error "Conflicting wallet modes detected".
+**Symptom:** Server cannot find or initialize wallet.
 
-**Cause:** Multiple wallet environment variables set simultaneously.
+**Cause:** Agent Wallet not properly configured.
 
-**Solution:** Set only one of the following:
+**Solution:** Ensure Agent Wallet is installed and configured:
 
 ```bash
-# Option 1: Agent Wallet (recommended for production)
+# Set Agent Wallet password
 export AGENT_WALLET_PASSWORD='your_password'
-unset TRON_PRIVATE_KEY
-unset TRON_MNEMONIC
 
-# Option 2: Private Key (testnet only)
-export TRON_PRIVATE_KEY='your_64_hex_chars'
-unset AGENT_WALLET_PASSWORD
-unset TRON_MNEMONIC
-
-# Option 3: Mnemonic
-export TRON_MNEMONIC='word1 word2 ... word12'
-unset AGENT_WALLET_PASSWORD
-unset TRON_PRIVATE_KEY
-```
-
-**Verify Configuration:**
-```bash
-# Clear all wallet-related environment variables
-unset AGENT_WALLET_PASSWORD TRON_PRIVATE_KEY TRON_MNEMONIC
-
-# Set only one
-export AGENT_WALLET_PASSWORD='your_password'
+# Optional: specify custom wallet directory
+export AGENT_WALLET_DIR="$HOME/.agent-wallet"
 
 # Restart server
 sun-mcp-server
 ```
+
+If you haven't initialized Agent Wallet yet, see the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md) for setup instructions.
 
 ## DeFi Operation Errors
 
@@ -271,7 +248,7 @@ sun-mcp-server
    - Check Permit2 request structured data
    - Confirm chain ID, token address, deadline correct
 
-3. **Reinitialize Wallet** — run `agent-wallet reset` to wipe and start over. See [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data) for details.
+3. **Reinitialize Wallet** — run `agent-wallet reset` to wipe and start over. See [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data) for details.
 
 4. **Use Alternate Authorization Method**
    ```
@@ -414,7 +391,7 @@ Check transaction hash details on https://tronscan.org for error message
       "args": ["--port", "8081"],
       "env": {
         "TRON_NETWORK": "nile",
-        "TRON_PRIVATE_KEY": "your_testnet_private_key"
+        "AGENT_WALLET_PASSWORD": "your_testnet_password"
       }
     }
   }

@@ -9,7 +9,7 @@ description: >-
 
 x402 is an open blockchain payment standard built on the HTTP `402 Payment Required` status code. It enables web services to charge for APIs or content through a “pay-before-response” mechanism — without relying on traditional account systems or session management.  
 
-x402 currently supports the TRON and BSC networks, with plans to expand to a broader multi-chain ecosystem in the future.
+x402 currently supports the **TRON** and **BSC** networks, with plans to expand to a broader multi-chain ecosystem in the future.
 
 **Interested in contributing to the documentation?**  
 Feel free to submit a PR to the [GitHub repository](https://github.com/BofAI/docs). Our only principle is to maintain neutrality — aside from essential resource links, please avoid promotional or branded content.

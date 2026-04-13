@@ -72,7 +72,7 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
 | "获取合约 TXyz... 的 ABI" | 读取智能合约接口定义 |
 | "查询合约 TXyz... 最近触发的事件" | 获取合约事件日志 |
 
-这些只是冰山一角。完整的 95 个工具和 6 个提示词模板，请查阅 [完整能力清单](./ToolList.md)。
+这些只是冰山一角。完整的 97 个工具和 6 个提示词模板，请查阅 [完整能力清单](./ToolList.md)。
 
 ---
 

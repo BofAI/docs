@@ -169,4 +169,4 @@ For the Full Capability List, please refer to [Full Capability List](./ToolList.
 ## Next Steps
 
 - Need transfers, staking, or contract writes? → [Local Private Deployment](./LocalPrivatizedDeployment.md)
-- Want the detailed description of all 95 tools? → [Full Capability List](./ToolList.md)
+- Want the detailed description of all 97 tools? → [Full Capability List](./ToolList.md)

@@ -47,49 +47,41 @@
 
 3. **防火墙拦截**。如果你从另一台机器访问本地 HTTP 服务，检查防火墙是否允许该端口的入站连接。
 
-### 工具列表中只有读取工具，没有写入工具
+### 写入工具出现但返回"钱包未配置"错误
 
-这不是一个错误——它是设计如此。写入工具（转账、质押等）仅在配置了钱包之后才会注册到 AI 的工具列表中。如果你没有设置任何钱包环境变量，服务器会自动以只读模式运行。
+从 v1.1.7 起，写入工具（转账、质押等）始终出现在 AI 的工具列表中，但会在执行时检查钱包是否已配置。如果没有配置钱包就调用写入工具，会返回错误提示你设置钱包。
 
-要解锁写入工具，配置以下三种钱包模式之一：
+要启用写入操作，请配置 [Agent Wallet](../../../Agent-Wallet/Intro.md)：
 
-- 设置 `AGENT_WALLET_PASSWORD`（[Agent Wallet](../../../Agent-Wallet/Intro) 模式，推荐）
-- 设置 `TRON_PRIVATE_KEY`（私钥模式）
-- 设置 `TRON_MNEMONIC`（助记词模式）
+- 设置 `AGENT_WALLET_PASSWORD` 环境变量为你的主密码
+- 可选设置 `AGENT_WALLET_DIR`（如使用自定义钱包目录）
 
 配置完成后重启 AI 客户端即可。详细说明请参阅[本地私有化部署](./LocalPrivatizedDeployment.md)。
+
+:::info
+如果你通过官方云服务连接或使用 `--readonly` 模式，写入工具根本不会出现——这是预期行为。
+:::
 
 ---
 
 ## 认证与密钥问题
 
-### "私钥无效"错误
+### "钱包未配置"错误
 
-服务器启动时报告私钥无效，通常是格式问题：
+这表示尚未设置用于签名交易的钱包。TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行所有钱包管理。解决方法：
 
-1. **检查密钥格式**。私钥应为 64 个字符的十六进制字符串，可以带或不带 `0x` 前缀：
-   ```
-   # 合法格式：
-   abc123def456...       （64 个十六进制字符）
-   0xabc123def456...    （0x + 64 个十六进制字符）
-   ```
-
-2. **避免多余的空格或引号**。环境变量值不能包含额外的空格、嵌套引号或换行符：
+1. **安装并初始化 Agent Wallet**，参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)。
+2. **设置环境变量**：
    ```bash
-   # 正确
-   export TRON_PRIVATE_KEY=abc123def456...
-
-   # 错误（引号成了值的一部分）
-   export TRON_PRIVATE_KEY="'abc123def456...'"
+   export AGENT_WALLET_PASSWORD='<你的主密码>'
    ```
-
-3. **验证密钥有效性**。将同一私钥导入 TRON 钱包（如 TronLink）确认其有效。
+3. **重启 AI 客户端**使配置生效。
 
 ### "Agent Wallet 密码错误"
 
 `AGENT_WALLET_PASSWORD` 必须与运行 `agent-wallet start` 时生成的主密码完全一致。请确认钱包目录存在（`ls ~/.agent-wallet/`），如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
 
-如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ)。
+如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ.md)。
 
 ### TronGrid API Key 不生效
 
@@ -209,4 +201,5 @@ npm run build
 ### 支持哪个 MCP 协议版本？
 
 TRON MCP Server 支持 MCP 协议版本 **2025-11-25**，使用 `@modelcontextprotocol/sdk` 1.22.0 或更高版本。
+
 

@@ -47,12 +47,12 @@ Ok to proceed? (y) y
 The installer automatically fetches all available Skills from the repo and lists them for selection. Press **Space** to toggle each one — we recommend selecting all:
 
 ```
-◇  Found 6 skills
+◇  Found 8 skills
 │
 ◇  Select skills to install (space to toggle)
-│  Multi-Sig & Account Permissions, recharge-skill,
+│  agent-wallet, Multi-Sig & Account Permissions, recharge-skill,
 │  SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
-│  TronScan Data Lookup, x402-payment
+│  TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
 ```
 
 :::tip Select all
@@ -84,17 +84,19 @@ Select `Project` (current project only) or `User` (globally available across all
 The installer runs a security scan on each Skill and shows the results. Review them and select `Yes` to proceed:
 
 ```
-◇  Security Risk Assessments ──────────────────────────────╮
-│                                                          │
-│                                    Gen    Socket   Snyk  │
-│  Multi-Sig & Account Permissions   --     --       --    │
-│  recharge-skill                    --     --       --    │
-│  SunPerp Perpetual Futures Trading --     --       --    │
-│  SunSwap DEX Trading               --     --       --    │
-│  TronScan Data Lookup              --     --       --    │
-│  x402-payment                      Med    1 alert  Med   │
-│                                                          │
-├──────────────────────────────────────────────────────────╯
+◇  Security Risk Assessments ──────────────────────────────────────╮
+│                                                                  │
+│                                    Gen         Socket     Snyk   │
+│  agent-wallet                      Med Risk    1 alert    High Risk │
+│  Multi-Sig & Account Permissions   --          --         --     │
+│  recharge-skill                    Safe        1 alert    Med Risk │
+│  SunPerp Perpetual Futures Trading --          --         --     │
+│  SunSwap DEX Trading               --          --         --     │
+│  TRC20 Token Toolkit               --          --         --     │
+│  TronScan Data Lookup              --          --         --     │
+│  x402-payment                      Safe        1 alert    Med Risk │
+│                                                                  │
+├──────────────────────────────────────────────────────────────────╯
 
 ◇  Proceed with installation?
 │  Yes
@@ -105,12 +107,14 @@ The installer runs a security scan on each Skill and shows the results. Review t
 When you see output like this, all Skills have been successfully installed to your selected AI tools:
 
 ```
-◇  Installed 6 skills ────────────────────────╮
+◇  Installed 8 skills ────────────────────────╮
 │                                             │
+│  ✓ agent-wallet (copied)                    │
 │  ✓ Multi-Sig & Account Permissions (copied) │
 │  ✓ recharge-skill (copied)                  │
 │  ✓ SunPerp Perpetual Futures Trading (copied)│
 │  ✓ SunSwap DEX Trading (copied)             │
+│  ✓ TRC20 Token Toolkit (copied)             │
 │  ✓ TronScan Data Lookup (copied)            │
 │  ✓ x402-payment (copied)                    │
 │                                             │

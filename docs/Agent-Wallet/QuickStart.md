@@ -15,7 +15,7 @@ This page only walks you through the shortest path. For password-free configurat
 
 ### 1.1 Prepare Your Environment: Install Node.js
 
-Agent-wallet requires Node.js (a runtime environment, version >= 18) on your computer.
+Agent-wallet requires Node.js (a runtime environment, version >= 20) on your computer.
 
 Open a terminal (Mac users press `Command + Space` and search for "Terminal"), then type:
 
@@ -23,7 +23,7 @@ Open a terminal (Mac users press `Command + Space` and search for "Terminal"), t
 node -v
 ```
 
-- **If the output shows `v18.x.x` or higher:** Great, skip straight to 1.2!
+- **If the output shows `v20.x.x` or higher:** Great, skip straight to 1.2!
 - **If there's no output or an error:** Don't panic — go to the **[Node.js official website](https://nodejs.org)** and download the latest **LTS** installer. Install it like any regular software — double-click and follow the prompts. After installation, close and reopen your terminal, then run `node -v` again to confirm.
 
 <details>
@@ -36,8 +36,8 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 # 2. Reload your terminal config
 source ~/.bashrc   # zsh users: source ~/.zshrc
 
-# 3. Install and switch to Node.js 18
-nvm install 18 && nvm use 18
+# 3. Install and switch to Node.js 20
+nvm install 20 && nvm use 20
 ```
 
 </details>
@@ -66,22 +66,22 @@ The system will guide you through initializing your **Agent-wallet wallet**. The
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
-Wallet ID (e.g. my_wallet_1) (default):
+Wallet ID (e.g. my_wallet_1) (default_secure):
 
 Wallet initialized!
 ? Import source: generate  — Generate a new random private key
 
 Wallets:
-┌───────────┬──────────────┐
-│ Wallet ID │ Type         │
-├───────────┼──────────────┤
-│ default   │ local_secure │
-└───────────┴──────────────┘
+┌────────────────┬──────────────┐
+│ Wallet ID      │ Type         │
+├────────────────┼──────────────┤
+│ default_secure │ local_secure │
+└────────────────┴──────────────┘
 
 Your master password: <your-unique-password-will-appear-here>
    Save this password! You'll need it for signing and other operations.
 
-Active wallet: default
+Active wallet: default_secure
 ```
 
 :::caution Master password = the only key to all your assets

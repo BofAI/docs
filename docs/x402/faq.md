@@ -67,7 +67,10 @@ Common pricing models include:
 
 #### What payment schemes does x402 support?
 
-x402 supports `exact_permit` and `exact` payment schemes. Both allow the client to authorize a **maximum payment amount**, and the server to settle the **actual cost incurred** (up to the authorized limit). This is ideal for **metered billing**, **LLM token usage**, and similar use cases.
+x402 supports three payment schemes:
+
+- **`exact_permit`** and **`exact`**: Both allow the client to authorize a **maximum payment amount**, and the server to settle the **actual cost incurred** (up to the authorized limit). This is ideal for **metered billing**, **LLM token usage**, and similar use cases.
+- **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. All GasFree API calls are routed through the BANK OF AI proxy — no API keys required on the client side.
 
 ---
 
