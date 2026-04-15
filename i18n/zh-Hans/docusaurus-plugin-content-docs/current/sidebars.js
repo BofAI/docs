@@ -3,6 +3,15 @@ const sidebars = {
   docsSidebar: [
     {
       type: 'category',
+      label: 'BANK OF AI',
+      collapsed: false,
+      items: [
+        'BANK-OF-AI/Intro',
+        'BANK-OF-AI/QuickStart',
+      ],
+    },
+    {
+      type: 'category',
       label: 'x402 Payment Protocol',
       collapsed: false,
       items: [

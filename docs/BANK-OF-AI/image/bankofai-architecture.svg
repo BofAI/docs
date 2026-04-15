@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 930" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#6d28d9"/>
+    </marker>
+    <marker id="arrowGray" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrowDashed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+    <marker id="arrowReturn" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#059669"/>
+    </marker>
+    <marker id="arrowGrayStart" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="10" markerHeight="10" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+    <linearGradient id="top" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <linearGradient id="skills" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <linearGradient id="agent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#eef2ff"/>
+      <stop offset="100%" stop-color="#e0e7ff"/>
+    </linearGradient>
+    <linearGradient id="protocolBand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#fefce8"/>
+      <stop offset="100%" stop-color="#fef9c3"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="380" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#0f172a">BANK OF AI — How User Commands Reach the Blockchain</text>
+
+  <!-- ===== Cross-layer protocol band on the right ===== -->
+  <rect x="760" y="182" width="180" height="560" rx="12" fill="url(#protocolBand)" stroke="#eab308" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="850" y="206" text-anchor="middle" font-size="12" font-weight="700" fill="#a16207">📡 Protocol</text>
+  <text x="850" y="223" text-anchor="middle" font-size="10" fill="#ca8a04">Cross-layer</text>
+  <text x="850" y="236" text-anchor="middle" font-size="10" fill="#ca8a04">Capability</text>
+
+  <rect x="775" y="254" width="150" height="50" rx="6" fill="#ffffff" stroke="#eab308" stroke-width="1"/>
+  <text x="850" y="275" text-anchor="middle" font-size="12" font-weight="600" fill="#713f12">x402</text>
+  <text x="850" y="292" text-anchor="middle" font-size="9" fill="#a16207">Pay-before-response</text>
+
+  <rect x="775" y="320" width="150" height="50" rx="6" fill="#ffffff" stroke="#eab308" stroke-width="1"/>
+  <text x="850" y="341" text-anchor="middle" font-size="12" font-weight="600" fill="#713f12">8004</text>
+  <text x="850" y="358" text-anchor="middle" font-size="9" fill="#a16207">Agent ID + Reputation</text>
+
+  <text x="850" y="410" text-anchor="middle" font-size="10" font-weight="600" fill="#a16207">Applies at multiple layers</text>
+  <text x="850" y="428" text-anchor="middle" font-size="9" fill="#a16207">· Paid service calls</text>
+  <text x="850" y="444" text-anchor="middle" font-size="9" fill="#a16207">· Identity verification</text>
+  <text x="850" y="460" text-anchor="middle" font-size="9" fill="#a16207">· Reputation checks</text>
+
+  <line x1="758" y1="228" x2="700" y2="228" stroke="#eab308" stroke-width="1" stroke-dasharray="3 2"/>
+  <line x1="758" y1="539" x2="700" y2="539" stroke="#eab308" stroke-width="1" stroke-dasharray="3 2"/>
+
+  <!-- ===== Return path (orthogonal L-shape, Blockchain → AI Agent) ===== -->
+  <path d="M 200 809 L 30 809 L 30 228 L 58 228" fill="none" stroke="#059669" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrowReturn)"/>
+  <text x="20" y="520" font-size="11" font-weight="700" fill="#059669" transform="rotate(-90, 20, 520)">Result → AI Agent · Feedback</text>
+
+  <!-- ===== Main downward flow ===== -->
+
+  <!-- Layer 1: User -->
+  <rect x="200" y="56" width="360" height="56" rx="12" fill="url(#top)" stroke="#0f172a" stroke-width="1.5"/>
+  <text x="380" y="83" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">👤 You · One Sentence</text>
+  <text x="380" y="102" text-anchor="middle" font-size="12" fill="#cbd5e1">"Swap 100 TRX for USDT"</text>
+
+  <!-- Bidirectional arrow: You ↔ AI Agent -->
+  <line x1="380" y1="118" x2="380" y2="174" stroke="#94a3b8" stroke-width="2.5" marker-start="url(#arrowGrayStart)" marker-end="url(#arrowGray)"/>
+  <text x="395" y="134" font-size="10" fill="#64748b">↑ AI reply</text>
+  <text x="395" y="164" font-size="10" fill="#64748b">↓ Your command</text>
+
+  <!-- Layer 2: AI Agent -->
+  <rect x="60" y="182" width="640" height="92" rx="12" fill="url(#agent)" stroke="#6366f1" stroke-width="2"/>
+  <text x="380" y="210" text-anchor="middle" font-size="16" font-weight="700" fill="#3730a3">🧠 AI Agent</text>
+  <text x="380" y="232" text-anchor="middle" font-size="12" fill="#4f46e5">Powered by LLM Service · GPT / Claude / Gemini / DeepSeek / Kimi ...</text>
+  <text x="380" y="254" text-anchor="middle" font-size="11" font-weight="600" fill="#6366f1">Understands your intent and chooses the execution path</text>
+
+  <!-- Path A: via Skills -->
+  <line x1="280" y1="274" x2="280" y2="322" stroke="#6d28d9" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Path B: Bypass Skills — orthogonal vertical -->
+  <line x1="600" y1="274" x2="600" y2="482" stroke="#94a3b8" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#arrowDashed)"/>
+  <text x="612" y="370" font-size="11" font-weight="600" fill="#64748b">Bypass Skills</text>
+  <text x="612" y="386" font-size="10" fill="#94a3b8">Direct MCP call</text>
+
+  <!-- Skills — hero component -->
+  <rect x="60" y="326" width="440" height="110" rx="10" fill="url(#skills)" stroke="#6d28d9" stroke-width="2"/>
+  <text x="280" y="354" text-anchor="middle" font-size="18" font-weight="700" fill="#ffffff">🌟  Skills</text>
+  <text x="280" y="376" text-anchor="middle" font-size="12" font-weight="600" fill="#ede9fe">Business Orchestration Layer</text>
+  <text x="280" y="400" text-anchor="middle" font-size="11" fill="#ede9fe">SunSwap · SunPerp · TronScan · TRC20 · Multi-Sig · Staking · x402 · ...</text>
+  <text x="280" y="420" text-anchor="middle" font-size="10" fill="#c4b5fd">Auto SOP: balance → approval → quote → slippage → confirm → call MCP</text>
+
+  <!-- Skills → MCP arrow -->
+  <line x1="280" y1="440" x2="280" y2="478" stroke="#6d28d9" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <!-- Layer 4: MCP Server -->
+  <rect x="60" y="484" width="640" height="110" rx="12" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+  <text x="80" y="508" font-size="13" font-weight="700" fill="#334155">⚙️ MCP Server · Capability Provider Layer</text>
+  <text x="80" y="524" font-size="10" fill="#64748b">Wraps on-chain and off-chain capabilities into AI-callable standardized tools</text>
+
+  <rect x="80" y="536" width="195" height="46" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="177" y="555" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">TRON MCP Server</text>
+  <text x="177" y="572" text-anchor="middle" font-size="9" fill="#64748b">On-chain query + tx</text>
+
+  <rect x="285" y="536" width="195" height="46" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="382" y="555" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">SUN MCP Server</text>
+  <text x="382" y="572" text-anchor="middle" font-size="9" fill="#64748b">SunSwap V2/V3/V4</text>
+
+  <rect x="490" y="536" width="195" height="46" rx="6" fill="#ffffff" stroke="#94a3b8" stroke-width="1"/>
+  <text x="587" y="555" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">BSC MCP Server</text>
+  <text x="587" y="572" text-anchor="middle" font-size="9" fill="#64748b">BNB Chain</text>
+
+  <!-- MCP → Wallet arrow -->
+  <line x1="380" y1="598" x2="380" y2="626" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#arrowGray)"/>
+
+  <!-- Layer 5: Agent-Wallet -->
+  <rect x="60" y="634" width="640" height="110" rx="12" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <text x="80" y="658" font-size="13" font-weight="700" fill="#c2410c">🔐 Agent-Wallet · Local Secure Wallet</text>
+  <text x="80" y="674" font-size="10" fill="#f97316">Private key never leaves your machine · Transactions signed locally</text>
+
+  <rect x="80" y="686" width="148" height="46" rx="6" fill="#ffffff" stroke="#f97316" stroke-width="1"/>
+  <text x="154" y="704" text-anchor="middle" font-size="11" font-weight="600" fill="#7c2d12">Local Secure</text>
+  <text x="154" y="721" text-anchor="middle" font-size="9" fill="#c2410c">Encrypted storage</text>
+
+  <rect x="238" y="686" width="148" height="46" rx="6" fill="#ffffff" stroke="#f97316" stroke-width="1"/>
+  <text x="312" y="704" text-anchor="middle" font-size="11" font-weight="600" fill="#7c2d12">Local Signing</text>
+  <text x="312" y="721" text-anchor="middle" font-size="9" fill="#c2410c">100% offline</text>
+
+  <rect x="396" y="686" width="148" height="46" rx="6" fill="#ffffff" stroke="#f97316" stroke-width="1"/>
+  <text x="470" y="704" text-anchor="middle" font-size="11" font-weight="600" fill="#7c2d12">Multi-Wallet</text>
+  <text x="470" y="721" text-anchor="middle" font-size="9" fill="#c2410c">Wallet management</text>
+
+  <rect x="554" y="686" width="128" height="46" rx="6" fill="#ffffff" stroke="#f97316" stroke-width="1"/>
+  <text x="618" y="704" text-anchor="middle" font-size="11" font-weight="600" fill="#7c2d12">Multi-Chain</text>
+  <text x="618" y="721" text-anchor="middle" font-size="9" fill="#c2410c">EVM + TRON</text>
+
+  <!-- Wallet → Blockchain arrow -->
+  <line x1="380" y1="748" x2="380" y2="776" stroke="#94a3b8" stroke-width="2.5" marker-end="url(#arrowGray)"/>
+
+  <!-- Layer 6: Blockchain -->
+  <rect x="200" y="784" width="360" height="50" rx="12" fill="#1e293b" stroke="#0f172a" stroke-width="1.5"/>
+  <text x="380" y="814" text-anchor="middle" font-size="14" font-weight="700" fill="#ffffff">⛓️  Blockchain  ·  TRON · BSC · ...</text>
+
+  <!-- Legend -->
+  <text x="60" y="878" font-size="10" font-weight="600" fill="#475569">Legend：</text>
+  <line x1="105" y1="874" x2="135" y2="874" stroke="#6d28d9" stroke-width="3" marker-end="url(#arrow)"/>
+  <text x="141" y="878" font-size="10" fill="#475569">Standard path (Agent → Skills → MCP)</text>
+  <line x1="370" y1="874" x2="400" y2="874" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrowDashed)"/>
+  <text x="406" y="878" font-size="10" fill="#475569">Bypass Skills, direct MCP</text>
+  <line x1="560" y1="874" x2="590" y2="874" stroke="#059669" stroke-width="2" stroke-dasharray="5 3" marker-end="url(#arrowReturn)"/>
+  <text x="596" y="878" font-size="10" fill="#475569">Result feedback</text>
+  <line x1="720" y1="874" x2="750" y2="874" stroke="#eab308" stroke-width="1" stroke-dasharray="3 2"/>
+  <text x="756" y="878" font-size="10" fill="#475569">Protocol cross-layer</text>
+</svg>

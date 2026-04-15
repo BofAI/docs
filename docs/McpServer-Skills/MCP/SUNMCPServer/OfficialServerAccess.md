@@ -26,9 +26,41 @@ The official cloud service only provides **read-only access**. It does **not sup
 
 ## How to Connect
 
-### Quick Auto-Install
+We provide three installation methods. **Pick the one that matches your level of comfort** — the conversational install is the easiest; the interactive install gives you the most control.
 
-Simply tell your AI Agent to execute the following command:
+### Method 1: Conversational Install (Easiest)
+
+If you're already using an AI Agent that can run shell commands (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.), you can install everything by **simply chatting with the AI** — no need to open a terminal yourself, no manual file copying.
+
+:::tip Prerequisite
+**Node.js is required** on the machine where the AI Agent runs (the Agent uses `npx` under the hood). If Node.js isn't installed yet, grab the LTS installer from [nodejs.org](https://nodejs.org) — install once, double-click and follow the prompts.
+:::
+
+**How it works:**
+
+1. Open your AI Agent chat
+2. Copy and paste the following prompt:
+
+   ```
+   Run npx add-mcp https://sun-mcp-server.bankofai.io/mcp -y to install the SUN MCP Server.
+   Note: Please install to the MCP config of the current Agent.
+   ```
+
+3. The AI handles the entire flow automatically:
+   - Detects the remote MCP service URL
+   - Auto-detects which AI client is currently running
+   - Writes the `sun-mcp-server` entry into the right MCP config file (no manual JSON editing)
+   - Reports back with a ✅ confirmation when done
+
+Once the AI confirms the install, the SUN MCP Server is ready — you can start asking questions right away.
+
+:::tip Why this is the recommended path for beginners
+You don't need to know what `npx`, `npm`, or "MCP config file" means. The AI handles every step including selecting the right config path for your client.
+:::
+
+### Method 2: Quick Auto-Install (Command Line)
+
+If you have Node.js installed and prefer the command line, run the following directly in your terminal:
 
 ```bash
 npx add-mcp https://sun-mcp-server.bankofai.io/mcp -y
@@ -36,9 +68,9 @@ npx add-mcp https://sun-mcp-server.bankofai.io/mcp -y
 
 The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
 
-Once installation is complete, restart your AI Agent, and you can start interacting with SunSwap via SUN MCP Server.
+Once installation is complete, you can start interacting with SunSwap via SUN MCP Server.
 
-### Interactive Installation
+### Method 3: Interactive Install (Most Control)
 
 If you want to choose which AI tools to install to, remove the `-y` flag:
 
@@ -109,7 +141,7 @@ When you see output like this, SUN MCP Server has been successfully installed to
 └  Done!
 ```
 
-Once installation is complete, restart your AI Agent, and you can start interacting with SunSwap via SUN MCP Server.
+Once installation is complete, you can start interacting with SunSwap via SUN MCP Server.
 
 ---
 
@@ -126,7 +158,6 @@ If you receive a normal response, the connection is working.
 If you encounter issues, first confirm:
 1. Node.js version >= 20.0.0 (run `node --version` to check)
 2. Network can reach `sun-mcp-server.bankofai.io`
-3. AI client has been fully quit and restarted (not just refreshed)
 
 ---
 

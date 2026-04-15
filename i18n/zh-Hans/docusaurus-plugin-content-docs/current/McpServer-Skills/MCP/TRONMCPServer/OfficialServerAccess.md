@@ -45,9 +45,41 @@
 
 ## 如何接入官方云服务？
 
-### 一键自动安装
+我们提供了三种安装方式。**根据你的使用习惯选一种即可**——对话式安装最简单；交互式安装控制最精细。
 
-只需告诉你的 AI Agent 执行以下命令：
+### 方式一：对话式安装（最简单）
+
+如果你已经在使用支持 shell 命令的 AI Agent（OpenClaw、Telegram Bot、Web 聊天页面、Claude Code、Cursor 等），你可以**直接在对话框里让 AI 完成安装**——不用自己打开终端，不用手动复制文件。
+
+:::tip 前置依赖
+**需要在 AI Agent 运行的机器上安装 Node.js**（Agent 内部会调用 `npx`）。如果还没装，去 [nodejs.org](https://nodejs.org) 下载 LTS 安装包，双击按提示装一次即可，后续无需再操作。
+:::
+
+**操作步骤：**
+
+1. 打开你的 AI Agent 对话框
+2. 复制下面这段 prompt 发送给 AI：
+
+   ```
+   运行 npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y 安装 TRON MCP Server。
+   注意：请安装到当前 Agent 对应的 MCP 配置中。
+   ```
+
+3. AI 会自动完成以下流程（无需人工干预）：
+   - 识别远程 MCP 服务地址
+   - 自动检测当前正在使用的 AI 客户端
+   - 把 `tron-mcp-server` 配置写入对应的 MCP 配置文件（无需手动改 JSON）
+   - 完成后给出 ✅ 确认信息
+
+AI 给出 ✅ 确认后，TRON MCP Server 就已就位，可以直接开始提问。
+
+:::tip 这是新手最推荐的路径
+你不需要懂 `npx`、`npm` 是什么，也不用关心 MCP 配置文件在哪里。AI 会处理每一步，包括为你的客户端选对配置文件路径。
+:::
+
+### 方式二：一键自动安装（命令行）
+
+如果你已经装好 Node.js 并习惯使用命令行，直接在终端运行以下命令：
 
 ```bash
 npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
@@ -55,9 +87,9 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
 
 `-y` 参数会跳过所有交互选择，自动安装到你电脑上检测到的所有 AI 工具中。安装完成后会显示 ✅ 安装完成！以及安装到了哪些 Agent。
 
-安装完成后，重启 AI Agent，即可使用 TRON MCP Server 开始与 TRON 区块链交互。
+安装完成后，即可使用 TRON MCP Server 开始与 TRON 区块链交互。
 
-### 交互式安装
+### 方式三：交互式安装（最精细控制）
 
 如果你想手动选择安装到哪些 AI 工具，去掉 `-y` 参数即可：
 
@@ -128,7 +160,7 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 └  Done!
 ```
 
-安装完成后，重启 AI Agent，即可使用 TRON MCP Server 开始与 TRON 区块链交互。
+安装完成后，即可使用 TRON MCP Server 开始与 TRON 区块链交互。
 
 ---
 
