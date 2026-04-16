@@ -3,38 +3,23 @@
 Want your AI client to gain BANK OF AI's on-chain capabilities? Just **two steps**, under **1 minute**:
 
 1. **Paste the install command** → AI installs every Skill, checks wallet status, and asks whether to create a wallet
-2. **Reply with `A`** → AI automatically creates your local encrypted wallet
-
-:::tip This doc only covers the "Tool Layer" path
-**The full BANK OF AI product matrix is more than Skills.** To use the other products independently or to self-host the lower layers, see:
-
-- **LLM Service** (model-access layer): use BANKOFAI APP directly, or connect to the unified API Gateway → [LLM Service Introduction](../llmservice/introduction.md)
-- **x402 Payment** (payment protocol): let AI auto-settle micropayments on-chain → [x402 Protocol Introduction](../x402/index.md)
-- **8004 Protocol** (identity + reputation): on-chain reputation lookup for Agents → [8004 Protocol Introduction](../8004/general.md)
-- **MCP Server local private deployment**: Skills call MCP Server through BANK OF AI's official cloud endpoints by default — no separate install needed. For local deployment, see [TRON MCP — Local Private Deployment](../McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment.md) · [SUN MCP — Local Private Deployment](../McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment.md) · [BSC MCP — Installation](../McpServer-Skills/MCP/BSCMCPServer/Installation.md)
-- **SUN CLI**: a command-line tool with capabilities equivalent to SUN MCP Server, for scripting / automation / CI-CD → [SUN CLI Quick Start](../McpServer-Skills/Tools/SUNCli/QuickStart.md)
-:::
+2. **Confirm wallet creation** → AI automatically creates your local encrypted wallet
 
 ---
 
 ## Step 1: Paste the Install Command
 
-### What You Type
-
-Open whichever AI client you use (OpenClaw / Claude Code / Cursor / Codex / any of them) and paste this command in:
+Open whichever AI client you use (OpenClaw / Claude Code / Cursor / Codex / etc.) and paste this command in:
 
 ```
 Run npx skills add BofAI/skills to install every BANK OF AI Skill. After the install completes, run bankofai-guide to walk me through the next steps.
 Note: please install into this Agent's own skills directory.
 ```
 
-:::tip You can also send this via Telegram
-If you've already wired Telegram into OpenClaw, send the same command in your Telegram chat — the result is identical to pasting it into the desktop client.
-:::
+The AI will install the Skills and then ask whether to create a wallet.
 
-### What the AI Outputs
-
-The AI takes over the whole flow — installs the Skills, runs `bankofai-guide` to check your environment, prints a summary, and asks whether to create a wallet:
+<details>
+<summary>Show example AI output</summary>
 
 > Got it — here we go.
 >
@@ -92,25 +77,16 @@ The AI takes over the whole flow — installs the Skills, runs `bankofai-guide` 
 >
 > Please reply **A** or **B**.
 
+</details>
+
 ---
 
-## Step 2: Reply with `A`
+## Step 2: Confirm Wallet Creation
 
-### What You Type
+Confirm wallet creation however the AI prompts you (e.g. reply "create", "go ahead", or whichever option the AI offers). The AI will create your local encrypted wallet and, in one message, show your wallet info, addresses, master password, and suggested next steps.
 
-In the AI chat, type:
-
-```
-A
-```
-
-:::info If you chose `B`
-The AI skips wallet creation and this step ends. When you're ready, you can trigger **conversational wallet creation** right in the AI chat at any time — no need to re-run the install command. See [Agent-Wallet Quick Start · Option 1: Conversational Creation](../Agent-Wallet/QuickStart.md).
-:::
-
-### What the AI Outputs
-
-The AI walks through the full wallet-creation flow and, at the end, shows your wallet info, addresses, master password, and suggested next steps — all in one message:
+<details>
+<summary>Show example AI output</summary>
 
 > Got it — running quick-setup wallet creation.
 >
@@ -167,11 +143,7 @@ The AI walks through the full wallet-creation flow and, at the end, shows your w
 >
 > Want me to check a balance or do anything else?
 
-:::caution The master password is critical — back it up immediately
-The master password is shown **exactly once** here. It's auto-saved to `~/.agent-wallet/runtime_secrets.json` locally, but we strongly recommend **also saving it manually in a password manager** (1Password / Bitwarden / etc.). If the local file is ever lost or corrupted *and* you have no external backup, your wallet becomes **permanently unrecoverable** (no recovery mechanism, no support, no backdoors).
-
-⚠️ **Never** paste this password into chat tools, emails, screenshots, or public repos.
-:::
+</details>
 
 ---
 
@@ -180,48 +152,13 @@ The master password is shown **exactly once** here. It's auto-saved to `~/.agent
 Open your AI chat and send:
 
 ```
-Which BANK OF AI Skills do I have installed right now?
+Check the TRX and USDT balances of the wallet address you just created.
 ```
 
-If the AI can list every Skill by name — **congrats, the full stack is live and ready to use.**
+If the AI returns a structured balance result — **congrats, the full stack is live and ready to use.**
 
----
-
-## Typical Scenarios
-
-Here's one scenario showing AI and on-chain infrastructure collaborating **through natural conversation** to complete a complex task — the user says one sentence, the AI orchestrates via Skills, Agent Wallet signs locally, x402 settles the payment, and a structured result comes back.
-
-### Top Up BANK OF AI Account (x402 auto-settlement)
-
-**🧑 You:** Buy APIKEY Credits On BANK OF AI With USDT
-
-**🤖 BANK OF AI Agent** (TRON Mainnet):
-
-> BANK OF AI settles APIKEY top-ups via the **x402** protocol. This top-up package is **10 USDT (TRON network)** — I'll debit your wallet and credit the quota.
->
-> ✅ **x402 payment of 10 USDT confirmed on TRON**
->
-> Done! Your APIKEY balance is updated:
->
-> | Item | Value |
-> | :-- | :-- |
-> | Service | BANK OF AI API |
-> | Protocol | x402 |
-> | Paid | 10 USDT |
-> | Credits added | **+500,000** |
-> | APIKEY quota | **750,000 credits** |
-
-**🧑 You:** Check My USDT Balance
-
-**🤖:** Your Current Balance: **4,692 USDT** (Mainnet)
-
-**Products involved**: `recharge-skill` + `x402-payment` (Skills) → TRON MCP Server → Agent Wallet
-
-:::tip What does this scenario illustrate?
-- **Natural language is the operation** — from start to finish the user connected no wallet and touched no frontend
-- **Skills handle orchestration** — the AI walks the SOP automatically: pay, sign, credit the quota
-- **Agent Wallet handles security** — every signature happens locally and offline; the private key never leaves your machine
-- **x402 engages on demand** — whenever payment is involved, x402 handles "pay-before-response" automatically
+:::note What a brand-new wallet may show
+A TRON address that has never received any transfer is considered **not activated**, so the query may report **balance 0 / account not activated**. This is completely normal for a fresh wallet and doesn't prevent you from using BANK OF AI.
 :::
 
 ---
@@ -231,8 +168,6 @@ Here's one scenario showing AI and on-chain infrastructure collaborating **throu
 Just describe what you want in plain language:
 
 ### 🔍 On-chain Data Lookup (Free)
-
-> "Check the TRX and USDT balances of my wallet."
 
 > "What happened in transaction abc123…?"
 
@@ -258,12 +193,32 @@ Just describe what you want in plain language:
 
 ---
 
-## Three Rules for Beginners
+## A Few Reminders
 
-:::warning On-chain transactions are irreversible — remember these three rules
+:::warning Three Rules for Beginners · On-chain transactions are irreversible
 1. **Always practice on testnet first.** Run 1–2 transactions on Nile testnet, confirm the AI behaves exactly as expected, *then* switch to mainnet.
 2. **Review the AI's bill before every spending action.**
 3. **Start small.** Even for operations you've tested, use a small amount the first time you run them on mainnet.
+:::
+
+:::caution The master password is critical — back it up immediately
+The master password is shown **exactly once in Step 2**. It's auto-saved to `~/.agent-wallet/runtime_secrets.json` locally, but we strongly recommend **also saving it manually in a password manager** (1Password / Bitwarden / etc.). If the local file is ever lost or corrupted *and* you have no external backup, your wallet becomes **permanently unrecoverable** (no recovery mechanism, no support, no backdoors).
+
+⚠️ **Never** paste this password into chat tools, emails, screenshots, or public repos.
+:::
+
+:::info If you skip wallet creation in Step 2
+The AI skips wallet creation. When you're ready, you can trigger **conversational wallet creation** right in the AI chat at any time — no need to re-run the install command. See [Agent-Wallet Quick Start · Option 1: Conversational Creation](../Agent-Wallet/QuickStart.md).
+:::
+
+:::tip Want to use the other products independently, or self-host?
+**The full BANK OF AI product matrix is more than Skills.** To use the other products independently or to self-host the lower layers, see:
+
+- **LLM Service** (model-access layer): use BANKOFAI APP directly, or connect to the unified API Gateway → [LLM Service Introduction](../llmservice/introduction.md)
+- **x402 Payment** (payment protocol): let AI auto-settle micropayments on-chain → [x402 Protocol Introduction](../x402/index.md)
+- **8004 Protocol** (identity + reputation): on-chain reputation lookup for Agents → [8004 Protocol Introduction](../8004/general.md)
+- **MCP Server local private deployment**: Skills call MCP Server through BANK OF AI's official cloud endpoints by default — no separate install needed. For local deployment, see [TRON MCP — Local Private Deployment](../McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment.md) · [SUN MCP — Local Private Deployment](../McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment.md) · [BSC MCP — Installation](../McpServer-Skills/MCP/BSCMCPServer/Installation.md)
+- **SUN CLI**: a command-line tool with capabilities equivalent to SUN MCP Server, for scripting / automation / CI-CD → [SUN CLI Quick Start](../McpServer-Skills/Tools/SUNCli/QuickStart.md)
 :::
 
 ---
