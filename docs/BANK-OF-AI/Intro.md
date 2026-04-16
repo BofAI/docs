@@ -2,188 +2,271 @@
 
 ## BANK OF AI in One Sentence
 
-**BANK OF AI is a complete infrastructure stack that lets your AI actually *do things* on the blockchain.**
+**BANK OF AI is the infrastructure that gives AI real Web3 capabilities.**
 
-Think of your AI assistant as a brilliant new intern: smart, tireless, always available — but with no bank account, no understanding of Web3's "unwritten rules," and no way to pay for online services on its own. BANK OF AI's job is to upgrade that intern into a **licensed on-chain operator** — equipped with a complete playbook covering every on-chain scenario (Skills), a secure wallet, and a protocol layer that lets it autonomously buy services as needed.
+Core positioning: **Your Web3 Gateway to AI.**
 
-You don't need to write code, run scripts, or hop between dApps connecting wallets. You just give your AI the task — BANK OF AI handles everything underneath.
+BANK OF AI gives your AI four core capabilities:
 
----
+- 💸 **Payment** — pay in crypto (x402)
+- 🪪 **Identity** — a verifiable on-chain identity and reputation (8004)
+- ⚙️ **Action** — the full set of on-chain atomic capabilities, plus orchestration (Skills + MCP Server + Agent Wallet)
+- 🧠 **Cognition** — one unified entry point to all leading LLMs (LLM Service)
 
-## How Does a Single Sentence Reach the Blockchain?
-
-The flow is simpler than it looks — **you type one sentence into your AI client, and the diagram below is everything that happens next:**
-
-<div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
-
-![BANK OF AI Architecture: How a user command reaches the blockchain](./image/bankofai-architecture.svg)
-
-</div>
-
-**Step 1: The AI Agent understands what you said**
-
-You type a plain-language instruction into your AI client (OpenClaw / Cursor / Claude Code / Codex / ...) — something like *"swap 100 TRX for USDT."* The AI Agent is powered by **LLM Service** (one of GPT, Claude, Gemini, DeepSeek, Kimi, etc.), parses your intent, then decides which execution path to take.
-
-**Step 2: Choose one of two execution paths**
-
-Once the intent is clear, the AI Agent has two options:
-
-- **🌟 Via Skills (Business Orchestration Layer)** — covers the vast majority of use cases
-  Skills are pre-written "on-chain operation SOPs." The AI Agent picks the matching skill (e.g., the SunSwap Skill) and follows its standard flow: **check balance → verify approval → fetch quote → apply slippage protection → wait for your confirmation → call MCP Server to execute.** Complex multi-step operations collapse into "one sentence does it all" — no missed steps, no hidden pitfalls.
-
-- **⚙️ Bypass Skills, call MCP Server directly**
-  MCP Server provides standardized atomic-capability tools (both on-chain and off-chain). The AI Agent can call them without going through Skills. Note this path bypasses the Skills **orchestration layer** — **not the AI Agent itself**. The AI Agent is always the one initiating calls. Direct-call is fine for simple queries or custom developer flows; for complex transactions, approvals, or risk-sensitive operations, Skills are strongly recommended.
-
-**Step 3: Sign, settle, commit to chain**
-
-Whichever path is taken, the resulting transaction: **is signed locally by Agent-Wallet on your machine** (private key never leaves your computer; unified support for both EVM and TRON ecosystems) → **submitted to the blockchain**.
-
-**Step 4: The result flows back to the AI Agent**
-
-Once on-chain execution completes, **the result travels back up the same path to the AI Agent** — the blockchain returns a tx hash, status, and event logs; MCP Server parses them into structured data and passes them back to the AI Agent. **The AI Agent then generates a natural-language summary** from that structured data and attaches the transaction hash (for on-chain verification), all delivered through normal chat.
-
-For example:
-
-> ✅ Done — swapped 100 TRX for 350 USDT, fee 1.2 TRX.
-> Tx hash: `0xabc123...def456` ([view on TronScan](https://tronscan.org))
-
-The loop closes: **one sentence out, one readable sentence back**. You only ever talk to the AI Agent — no need to parse raw chain data yourself; meanwhile the tx hash is always visible for traceability and verification.
-
-**🔀 Cross-layer Capability: x402 + 8004**
-
-x402 (payment protocol) and 8004 (identity / reputation protocol) are **cross-layer capabilities** — they don't belong to any single layer but can be invoked at multiple points in the flow:
-
-- When MCP Server calls a paid off-chain API, x402 handles "pay-before-response" settlement
-- When the AI Agent or a Skill needs to verify a counterparty Agent's identity, 8004 provides an on-chain reputation report
-- When Skills orchestration needs to run a pre-check against a service provider's credit, 8004 is queried again
+You don't need to write code, switch wallets, or hop between multiple dApps — just hand the task to your AI, and BANK OF AI's full stack does the rest in the background.
 
 ---
 
-## Core Modules (ordered from "most user-facing" → "deeper infrastructure")
+## The BANK OF AI Product Matrix
 
-### 🧠 1. AI Agent — Your Primary Entry Point
+BANK OF AI is made up of **4 layers**:
 
-**This is what you actually "talk to."** In any AI client (OpenClaw / Cursor / Claude Code / etc.), you type a sentence and the AI Agent receives, understands, executes, and replies — to you the whole experience is just "chatting with AI."
+- **🧠 Model Layer | Top AI in One Account** — LLM Service (BANKOFAI APP + API Gateway), a single entry point to every leading LLM
+- **🛤️ Protocol Layer | Payment. Verify. Build.** — x402 Payment · 8004 Protocol, two open protocols connecting AI and Web3
+- **🔧 Tool Layer | Everything Your Agent Needs** — Agent Wallet · Skills · MCP Server, the full toolkit giving your AI on-chain signing, operational SOPs, and protocol wrappers
+- **🌐 Ecosystem Layer | AI Agent Ecosystem** — Third-party MCP Servers and Skills across TRON / Ethereum / BNB Chain, all plugged into the same protocols
 
-The AI Agent's intelligence comes from **LLM Service**, BANK OF AI's unified model gateway that aggregates GPT, Claude, Gemini, DeepSeek, Kimi, GLM, MiniMax, and other leading models behind a single API — **one API key for every top-tier model**, billed by usage.
+Each layer is usable on its own, or composable with the others — pick what you need.
 
-Whether you use OpenClaw, Cursor, Claude Code, or any other AI client, LLM Service connects you to all these brains.
+---
+
+## 🧠 Model Layer | Top AI in One Account
+
+### LLM Service — A Unified Entry Point to Every Leading LLM
+
+**LLM Service is BANK OF AI's model-access layer.** It aggregates GPT, Claude, Gemini, DeepSeek, Kimi, GLM, MiniMax, and other leading models under a single account, exposed two ways:
+
+- **BANKOFAI APP** (the official app, corresponding to the `BANKOFAI APP →` button in the top-right of the website): an AI Chat app for end users — open [chat.bankofai.io/chat](https://chat.bankofai.io/chat) and use it directly, switch models on demand
+- **API Gateway** (one API key for every model): a unified API for developers, billed by usage, OpenAI-compatible, usable from any OpenAI-compatible third-party AI client
+
+**Key points**: fund with crypto (TRON / BNB Chain), pay-as-you-go, no card linking, no subscription.
 
 👉 Learn more: [LLM Service Introduction](../llmservice/introduction.md)
 
 ---
 
-### 🌟 2. Skills — The AI Agent's "On-chain Operation SOP Playbook"
+## 🛤️ Protocol Layer | Payment. Verify. Build.
 
-**This is the standard flow the AI Agent follows when handling most on-chain tasks.** You don't notice Skills directly, but every time you see the AI work fast and reliably, it's Skills doing the orchestration in the background.
+With the model layer in place, AI is still just a "brain." To let it spend on-chain and be verified, you first need two open protocols: **x402 defines how payments get made**, and **8004 defines who each Agent is.**
 
-Skills are pre-written "on-chain operation SOPs for AI," covering common scenarios across the TRON ecosystem — SunSwap swaps, SunPerp perpetual futures, TronScan queries, TRC20 transfers, TRX staking & SR voting, USDD/JUST protocol, multi-sig permissions, x402 payments, BANK OF AI top-ups, and more. The skill set will keep expanding as the ecosystem grows.
+### 01 · x402 Payment — One Line of Code for On-chain Payments
 
-Example: a user says *"use 50 USDT to buy some TRX."* A vanilla AI might generate a transaction that fails immediately because USDT was never approved on SunSwap. An AI loaded with the SunSwap Skill walks the full SOP automatically — **check balance → check approval → quote → slippage protection → wait for confirmation → execute** — no step skipped.
+**An open payment protocol built on an extension of HTTP `402 Payment Required`.** When AI calls a paid service, it automatically signs a small on-chain payment and instantly receives the content — no account, no credit card, no pre-funding.
 
-**You just talk to the AI Agent in plain language; Skills lets it compress complex multi-step on-chain operations into "one sentence done."** All the underlying MCP tool calls, wallet signatures, and contract parameter calculations are orchestrated automatically — you never need to know any of it.
+- **Currently supports**: TRON, BNB Chain (more chains rolling out)
+- **SDK components**: Client SDK · Server SDK · Facilitator
 
-👉 Learn more: [Skills Introduction](../McpServer-Skills/SKILLS/Intro.md)
+**Typical scenarios**:
 
----
+- MCP Server calls a paid off-chain API
+- The `x402-payment` Skill triggers payment explicitly
+- An AI Agent autonomously decides to buy paid content
+- **Agent-to-Agent auto-settlement** — pay-per-call between two AIs
 
-### 🔐 3. Agent-Wallet — A Local Encrypted Vault Built for AI
-
-A brain and a playbook still aren't enough. To spend money or send transactions, your AI needs **its own wallet**. But pasting a private key into a plaintext config file is like writing your bank PIN on a sticky note — every program on your machine (malicious plugins, AI coding assistants, automation scripts) can read it in a heartbeat.
-
-Agent-Wallet is a local encrypted wallet purpose-built for AI agents. Your private key is encrypted and locked in a hidden directory; the AI only ever holds an unlock password. **Even if the password leaks, the encrypted file alone is useless. Even if the file is stolen, without the password it's just gibberish.** Two locks, orders of magnitude safer than plaintext keys.
-
-Around this encryption mechanism, Agent-Wallet ships the following core capabilities:
-
-- **Local Secure**: your private key is encrypted with industry-leading algorithms and stored in a hidden local directory (`~/.agent-wallet`); only the master password can unlock it
-- **Local Signing**: all signing happens entirely on your machine — **100% offline** — your private key never leaves your computer
-- **Multi-Wallet**: manage multiple wallets via CLI or SDK, switch the active wallet on demand, with full isolation between them
-- **Multi-Chain**: a single unified interface covering both **EVM-compatible chains** (Ethereum / BSC / Polygon / Base / Arbitrum, etc.) and **TRON** (Mainnet / Nile / Shasta) — learn it once, use it across every supported chain
-
-Whenever Skills (or the AI Agent calling MCP directly) needs to send a transaction, Agent-Wallet signs it locally and passes only the signed payload outward — **the private key itself never leaves your machine**.
-
-👉 Learn more: [Agent-Wallet Introduction](../Agent-Wallet/Intro.md)
-
----
-
-### 💸 4. x402 — Teaching Your AI to "Pay for the Internet" (Cross-layer Capability)
-
-When your AI needs to call a **paid online service** (paid APIs, paid datasets), the traditional approach — register an account, link a credit card, configure an API key — simply doesn't work for an AI.
-
-x402 is an open payment protocol built on the HTTP `402 Payment Required` status code. When the AI sees a 402 response, it **automatically signs a small on-chain payment and instantly receives the content**. No account registration, no human in the loop, no pre-funding.
-
-x402 is a **cross-layer capability** — it doesn't belong to any single layer. Wherever "pay-before-response" is needed, x402 can be invoked: MCP Server calling a paid API can trigger it, the `x402-payment` Skill can trigger it explicitly, and the AI Agent itself can decide to trigger it.
-
-Currently supports TRON and BSC, with more chains on the roadmap.
+> ⚙️ **Dependency**: The x402 SDK uses [Agent-Wallet](#03--agent-wallet--ais-local-signing-layer) to parse and manage wallet credentials — installing x402 pulls in agent-wallet automatically.
 
 👉 Learn more: [x402 Protocol Introduction](../x402/index.md)
 
 ---
 
-### 🪪 5. 8004 — On-chain Identity + Reputation for Agents (Cross-layer Capability)
+### 02 · 8004 Protocol — On-chain Identity and Reputation for AI Agents
 
-As AI agents proliferate online, how do you know which ones are real, which are fake, and which can be trusted? The 8004 Protocol is Web3's "Agent Registry" — any agent can mint an identity NFT on-chain, bind its service endpoints (Web, MCP, DID), and accept feedback from other agents and users.
+**A Web3-native "Agent Registry + Reputation System."** Any Agent can mint an identity NFT on-chain, bind its service endpoints (Web / MCP / DID), and openly accept feedback from other Agents and users.
 
-Like x402, 8004 is a **cross-layer capability** that can be invoked at several points in the flow: the AI Agent can check reputation before calling an unknown service, Skills orchestration can run pre-flight risk checks, and MCP Servers can verify each other's identities — all using the same protocol.
+It solves one core question: **as AI Agents proliferate, how do you know which ones you can trust?**
 
-**In short, 8004 is the discovery + reputation layer for agents** — letting your AI pull a stranger's "credit report" on-chain before paying or granting authorization.
+- **Standard metadata**: name, capability claims, service endpoints
+- **Verifiable credentials**: signatures + rotation policy
+- **Chain support**: TRON · BNB Chain
+
+**Typical uses**:
+
+- An AI Agent checks a stranger's on-chain reputation before calling its service
+- Skills orchestration runs a pre-flight risk check
+- MCP Servers verify each other's identity
+- Check a counterparty's reputation before paying or granting authorization
+
+8004 is a **horizontal protocol** — any step that needs "identity verification" or "reputation lookup" can call it; it isn't tied to a specific layer.
 
 👉 Learn more: [8004 Protocol Introduction](../8004/general.md)
 
 ---
 
-### ⚙️ 6. MCP Server — The Capability Provider Layer
+## 🔧 Tool Layer | Everything Your Agent Needs
 
-:::info Regular users can skip this section
-MCP Server is the low-level capability interface that Skills calls under the hood. **In most cases you won't notice it's there** — Skills has already wrapped it cleanly. This section is mainly for developers who want to understand the architecture.
-:::
+The protocol layer is in place — now AI needs tools to actually use those protocols. **A single `npx skills add` command** gives your AI on-chain signing (Agent Wallet), on-chain operation SOPs (Skills), and protocol wrappers (MCP Server) all at once — the three things an AI needs to perform any on-chain operation.
 
-MCP Server (Model Context Protocol Server) is built on Anthropic's **Model Context Protocol** standard. It wraps various external capabilities into AI-callable standardized tools. By protocol design, MCP Server can carry both **on-chain capabilities** (queries, contract calls, transfer signing, etc.) and **off-chain capabilities** (price feeds, data queries, external APIs, etc.) — what each MCP Server actually exposes is entirely determined by its own implementation.
+### 03 · Agent Wallet — AI's Local Signing Layer
+
+**Agent Wallet is the AI Agent's local encrypted wallet**, providing unified signing for every Skill, MCP Server, and the x402 SDK.
+
+Your private key is encrypted and locked in a hidden local directory; the AI only ever holds an unlock password. **Even if the password leaks, the encrypted file alone is useless. Even if the file is stolen, without the password it's just gibberish.**
+
+- 🔒 **Encrypted storage**: Keystore encryption + `local_secure` mode, 100% local and offline
+- 🔑 **Flexible import**: create new, or import from private key / mnemonic
+- 🔄 **Multi-wallet switching**: manage multiple wallets and switch the active account any time
+- ⛓️ **Multi-chain signing**: TRON + every EVM-compatible chain (Ethereum / BSC / Polygon / Base / Arbitrum…)
+
+```bash
+npm i @bankofai/agent-wallet
+```
+
+> 💡 **Who depends on Agent-Wallet**:
+> - **x402 SDK** — parses payment credentials, signs x402 micropayments (pulled in automatically when x402 is installed)
+> - **Skills** — whenever an on-chain operation needs a signature
+> - **MCP Servers** (when self-hosted) — write-type tools read the local wallet before executing
+
+**What users see**: when you first follow the [Quick Start](./QuickStart.md), Agent-Wallet is created and configured for you automatically — most users never touch it directly.
+
+👉 Learn more: [Agent-Wallet Introduction](../Agent-Wallet/Intro.md)
+
+---
+
+### 04 · Skills — The SOP Playbook for AI On-chain Operations
+
+**Skills are pre-written standard operating procedures for AI on-chain actions.** The AI Agent follows the Skill's SOP step by step — **check balance → check approval → fetch quote → apply slippage protection → wait for your confirmation → call MCP Server to execute** — nothing skipped, common pitfalls avoided.
+
+Example: a user says "use 50 USDT to buy some TRX." A vanilla AI might generate a transaction that fails because USDT was never approved on SunSwap. An AI loaded with the `sunswap-dex-trading` Skill walks the full SOP automatically.
+
+**BankOfAI Skills suite** (growing alongside the ecosystem):
+
+| Skill | Covers |
+| :-- | :-- |
+| `agent-wallet` | Wallet management |
+| `bankofai-guide` | Onboarding new users through setup |
+| `sunswap-dex-trading` | SunSwap V2/V3/V4 swaps |
+| `sunperp-perpetual-futures-trading` | SunPerp perpetual futures |
+| `trc20-token-toolkit` | TRC20 token toolkit |
+| `tronscan-data-lookup` | TronScan on-chain data lookup |
+| `trx-staking-sr-voting` | TRX staking + SR voting |
+| `usdd-just-protocol` | USDD / JUST protocol |
+| `multi-sig-account-permissions` | TRON multi-sig and permissions |
+| `x402-payment` | x402 payment |
+| `recharge-skill` | BANK OF AI account top-up |
+
+**Key properties**: one sentence installs every Skill; invoked in natural language; automatically calls the underlying MCP Server to execute atomic on-chain operations.
+
+👉 Learn more: [Skills Introduction](../McpServer-Skills/SKILLS/Intro.md) · [Quick Start](./QuickStart.md)
+
+---
+
+### 05 · MCP Server — The On-chain Atomic Capability Interface
+
+**MCP Server (Model Context Protocol Server)** is built on Anthropic's MCP standard. It wraps on-chain and off-chain capabilities into standardized, AI-callable tools.
 
 **Relationship between Skills and MCP Server:**
 
 | Layer | Role | Responsibility |
-|:---|:---|:---|
+| :-- | :-- | :-- |
 | **Skills** | Business Orchestration Layer | Stringing multi-step operations into SOPs, handling pre-checks and risk control |
-| **MCP Server** | Capability Provider Layer | Exposing atomic capability tools to upper layers |
+| **MCP Server** | Capability Provider Layer | Exposing atomic capability tools for upper layers to call |
 
-BANK OF AI currently ships three core MCP Servers, all **focused on atomic on-chain operations**:
+BANK OF AI officially ships three **MCP Servers**, all pointed at BANK OF AI's official cloud endpoints by default — ready to use out of the box:
 
-- **TRON MCP Server**: atomic on-chain operations on TRON (query, transfer, contracts, staking, governance)
-- **SUN MCP Server**: SunSwap V2/V3/V4 swap and liquidity capabilities
-- **BSC MCP Server**: atomic on-chain operations on BNB Chain
+- **TRON MCP Server** — atomic TRON on-chain operations (query, transfer, contracts, staking, governance), 60+ tools. Supports local private deployment
+- **SUN MCP Server** — SunSwap V2/V3/V4 swap and liquidity capabilities, 20+ tools. Supports local private deployment. Also ships **[SUN CLI](../McpServer-Skills/Tools/SUNCli/Intro.md)** — a command-line implementation fully equivalent to SUN MCP Server's capabilities, for scripting / automation / CI-CD scenarios
+- **BSC MCP Server** — atomic on-chain operations for BNB Chain
 
-We plan to extend more MCP Servers as needed, covering off-chain data, third-party protocols, and other scenarios.
+> 💡 **Private deployment**: Skills call MCP Server via the official cloud endpoints by default — no separate install needed. For local deployment, see each MCP Server's deployment guide.
 
-Advanced developers can have the AI Agent bypass Skills and call MCP tools directly, but that means handling pre-checks, approvals, slippage, error recovery, and everything else yourself — exactly the things Skills automates for you.
+> ⚙️ **Dependency**: A self-hosted MCP Server needs Agent-Wallet configured first — the wallet determines which identity the AI uses for on-chain actions. Without a wallet, write-type tools return an error.
+
+Beyond BANK OF AI's official MCP Servers, the ecosystem has more third-party MCP Servers and Skills — see [🌐 Ecosystem Layer](#-ecosystem-layer--ai-agent-ecosystem) below.
 
 👉 Learn more: [MCP Server Introduction](../McpServer-Skills/MCP/Intro.md)
 
 ---
 
-### 🖥️ 7. SUN CLI — Developer Tool (CLI Interface to SUN MCP)
+## 🌐 Ecosystem Layer | AI Agent Ecosystem
 
-SUN CLI isn't a standalone layer — it's the **command-line interface to SUN MCP Server's capabilities** (CLI interface to MCP Server), built for developers and automation scenarios.
+Beyond BANK OF AI's own products, the ecosystem already includes several leading DeFi / data protocols across 3 chains — each shipping a **production-grade MCP Server or Skills** that AI can install and use immediately.
 
-Prefer driving SunSwap from a terminal? Want to invoke SUN MCP from shell scripts or CI/CD pipelines? SUN CLI wraps quotes, swaps, liquidity, and position management into one-line commands with output that pipes cleanly into other tools.
+### 🔴 TRON
 
-👉 Learn more: [SUN CLI Introduction](../McpServer-Skills/Tools/SUNCli/Intro.md)
+| Product | Provider | Capabilities | Install |
+| :-- | :-- | :-- | :-- |
+| **TRON MCP Server** | Bank of AI | Transfer / Contract / Staking / Governance, 60+ tools | `npx -y @bankofai/mcp-server-tron` |
+| **SUN MCP Server** | Bank of AI | Swap / Liquidity / Farming, V2/V3/V4, 20+ tools | `npx -y @bankofai/sun-mcp-server` |
+| **JustLend MCP Server** | JustLend DAO | Lend / Borrow / Staking / Governance, 50 tools | `npx -y @justlend/mcp-server-justlend` |
+| **TronScan MCP Server** | TronScan | Query / Analytics / Security, 119 tools | `https://mcp.tronscan.org/mcp` |
+
+### 🔵 Ethereum
+
+| Product | Provider | Capabilities | Install |
+| :-- | :-- | :-- | :-- |
+| **Etherscan** | Etherscan Official | Query / Tracking / Analytics, 60+ chains | `npx skills add https://docs.etherscan.io` |
+| **Uniswap AI** | Uniswap Labs | Swap / Liquidity / V4 Hooks / 5 Plugins | `npx skills add Uniswap/uniswap-ai` |
+
+### 🟡 BNB Chain
+
+| Product | Provider | Capabilities | Install |
+| :-- | :-- | :-- | :-- |
+| **BNB Chain** | BNB Chain Official | Transfer / Contract / Query / 8004 identity registry | `npx skills add bnb-chain/bnbchain-skills` |
+| **PancakeSwap AI** | PancakeSwap Official | Swap / Liquidity / Farming, 3 Skills · 8 chains | `npx skills add pancakeswap/pancakeswap-ai` |
+| **ListaDAO** | ListaDAO Official | Lending / Staking / CDP, 3 Skills · 9 MCP tools | `npx skills add lista-dao/lista-skills` |
+
+> 💡 The ecosystem is expanding — refer to the official **[AI Agent Ecosystem](https://bankofai.io)** page for the latest list.
+
+---
+
+## How BANK OF AI Layers Work Together
+
+The sections above covered what each of the 4 layers does. Below is what happens when they collaborate on a real operation — a **TRC20 transfer**, the most common case.
+
+<div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
+
+![AI Agent completes a TRC20 transfer through natural conversation](./image/bankofai-architecture.svg)
+
+</div>
+
+**① Model Layer · Understanding Intent**
+
+In any AI client (BANKOFAI APP / OpenClaw / Cursor / Claude Code / Codex / Telegram / …), you type a sentence:
+
+> Transfer 100 TRX to address `T....XXXXX`
+
+The AI client is powered by **LLM Service**, recognizes this as a TRC20 / TRX transfer, and decides to call the `trc20-token-toolkit` Skill.
+
+**② Tool Layer · Skills Orchestration**
+
+`trc20-token-toolkit` walks its SOP step by step: **check balance → validate the recipient address → build the transaction → wait for your confirmation.** If any step fails (insufficient balance, malformed address, etc.), it stops immediately and returns the reason.
+
+**③ Tool Layer · MCP + Wallet · Build · Sign · Submit**
+
+The Skill calls **TRON MCP Server** to assemble the TRC20 transfer, hands it to **Agent-Wallet** for local signing on your machine (**private keys never leave your computer**), and submits it to TRON Mainnet.
+
+**④ Return · The result travels back to the AI Agent**
+
+Once on-chain execution completes, the tx hash, status, and event logs travel back along the same path — MCP Server parses them into structured data, and the AI Agent turns that into a natural-language summary:
+
+> ✅ Transferred 100 TRX to `T....XXXXX`. Fee: 1.1 TRX.
+> Tx hash: `0xabc123...def456` ([view on TronScan](https://tronscan.org))
+
+:::tip When do the other two layers engage?
+This example only involves the **Model Layer** and **Tool Layer**. The other two kick in by scenario:
+
+- **🛤️ Protocol Layer**: **x402** activates when a payment is involved (calling a paid API, subscribing to an Agent service, etc.); **8004** activates when verifying an unfamiliar Agent's identity or looking up its reputation
+- **🌐 Ecosystem Layer**: when you need to go cross-chain or call a third-party protocol (e.g. swapping on Ethereum via **Uniswap AI**, staking on BNB Chain via **ListaDAO**), the AI Agent calls the corresponding third-party MCP Server / Skills — the flow is identical to this example, just with a different MCP Server at the target chain
+:::
 
 ---
 
 ## Is BANK OF AI for Me?
 
-- **Web3 beginner:** Absolutely. Just say "agent install everything" in your AI client — everything else is configured automatically. After that, talk to your AI in plain English; no underlying details needed.
-- **Web3 veteran:** Skip the "switch wallet → copy address → calculate slippage → wait for blocks" grind. Let the AI handle the repetitive work; you focus on strategy.
-- **AI Agent developer:** BANK OF AI ships full SDKs, CLIs, APIs, and MCP-standard interfaces. Build your own AI agents on top, with complete on-chain capability and autonomous payment built in.
-- **API service provider:** With x402, your paid APIs can be called and metered automatically by AI agents — no traditional account registration or credit-card binding required. Especially well-suited for micropayments, AI agents auto-calling paid services, and agent-to-agent settlement scenarios.
+- **Web3 beginner:** Absolutely. Paste one install command into your AI client, and everything else is configured automatically; from there, plain-language conversation is all you need — no underlying knowledge required.
+- **Web3 veteran:** Skip the "switch wallet → copy address → calculate slippage → wait for blocks" grind. Let AI handle the repetitive work; you focus on strategy.
+- **AI Agent developer:** Full SDKs, CLIs, APIs, and MCP-standard interfaces — build your own AI Agents on top of BANK OF AI, giving them on-chain capability and autonomous payment.
+- **API service provider:** With x402, your paid APIs can be called by AI and billed per call automatically — no traditional account registration, no credit-card binding required. Especially well-suited for micropayments and agent-to-agent settlement.
 
 ---
 
 ## Ready?
 
-The entire BANK OF AI installation has been compressed into **one sentence** — just say to your AI: "**agent install everything**"
+Want your AI client to gain BANK OF AI's on-chain capabilities? Just **two steps**, under **1 minute**:
 
-That's it. The AI handles the rest: Skills, wallet setup, configuration across 9 AI clients — all in under a minute.
+1. Paste one install command into your AI assistant — AI automatically installs every BANK OF AI Skill and the Agent Wallet CLI
+2. Reply with a single **`A`** — AI automatically creates your local encrypted wallet
 
-👉 **[Go to Quick Start and activate your full BANK OF AI stack in 1 minute](./QuickStart.md)**
+For standalone integration of **LLM Service / x402 / 8004**, or **local private deployment of MCP Server / using SUN CLI**, refer to each product's own docs.
+
+👉 **[Go to Quick Start](./QuickStart.md)**

@@ -2,188 +2,271 @@
 
 ## 一句话理解 BANK OF AI
 
-**BANK OF AI 是一整套让 AI 真正在区块链上"动起来"的基础设施。**
+**BANK OF AI 是让 AI 真正拥有 Web3 能力的基础设施。**
 
-把你的 AI 助手想象成一位刚毕业的实习生：聪明、勤快、随叫随到，但他既没有银行账户，也不懂 Web3 的"潜规则"，更没法替你为付费服务自动结账。BANK OF AI 做的事情，就是把这位实习生升级成一个**"持证上岗"的链上理财顾问**——给他配一套覆盖所有链上场景的"标准作业手册"（Skills），一个安全的钱包，还有让他能自动付费购买服务的协议底座。
+核心定位：**Your Web3 Gateway to AI** —— 你的 Web3 AI 门户。
 
-你不需要懂代码，不需要写脚本，也不需要在多个 dApp 之间反复切换。你只需要把任务交给 AI，剩下的全都由 BANK OF AI 这一整套基础设施在后台自动完成。
+BANK OF AI 让你的 AI 获得 4 项核心能力：
 
----
+- 💸 **付款能力**：会用加密货币付款（x402）
+- 🪪 **身份能力**：拥有可验证的链上身份与信誉（8004）
+- ⚙️ **行动能力**：掌握完整的链上原子能力与编排（Skills + MCP Server + Agent Wallet）
+- 🧠 **认知能力**：统一接入主流顶级大模型（LLM Service）
 
-## 一条指令是怎么到达链上的？
-
-整个流程其实非常简单——**你在 AI 客户端里说一句话，这句话会按下面这张图走完全程：**
-
-<div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
-
-![BANK OF AI 架构图：用户指令如何到达链上](./image/bankofai-architecture.svg)
-
-</div>
-
-**第 1 步：AI Agent 理解你的话**
-
-你在 AI 客户端（OpenClaw / Cursor / Claude Code / Codex ……）里发出一句自然语言指令——比如"帮我把 100 TRX 换成 USDT"。AI Agent 由 **LLM Service** 驱动（背后是 GPT、Claude、Gemini、DeepSeek、Kimi 等顶级大模型中的某一个），负责理解你的意图，并决定后续的执行路径。
-
-**第 2 步：选一条路径去执行**
-
-理解完之后，AI Agent 面前有两条路：
-
-- **🌟 走 Skills（业务编排层）**——覆盖绝大多数使用场景
-  Skills 是预先编写好的"链上操作 SOP 手册"——AI Agent 从 Skills 中选择对应的技能（例如 SunSwap Skill），按照标准流程执行：**查余额 → 检查授权 → 报价 → 滑点保护 → 等你确认 → 调用 MCP Server 执行**。复杂的多步操作被压缩为"一句话完成"，不会漏步骤，也能规避常见陷阱。
-
-- **⚙️ 跳过 Skills，AI Agent 直接调用 MCP Server**
-  MCP Server 提供的是标准化的原子能力工具（链上 + 链下），AI Agent 可以不经过 Skills 直接调用。注意这里绕过的是 Skills 编排层，**不是 AI Agent 本身**——AI Agent 仍然是所有调用的发起方。直连适合简单查询或开发者自定义流程；涉及复杂交易、授权、风控时，建议走 Skills。
-
-**第 3 步：签名、协议、上链**
-
-无论走哪条路，最终的交易都会：**经过 Agent-Wallet 在你本机本地签名**（私钥永不出本机，统一支持 EVM + TRON 双生态）→ **提交到区块链**。
-
-**第 4 步：执行结果返回到 AI Agent**
-
-链上执行完成后，**结果会沿着原路径反向回到 AI Agent**——区块链返回的交易哈希、状态、事件日志先被 MCP Server 解析成结构化数据，再回传给 AI Agent。**AI Agent 基于这些结构化数据生成自然语言摘要**，并附上交易哈希（方便链上核查），通过正常对话告诉用户。
-
-例如：
-
-> ✅ 成功，用 100 TRX 换到了 350 USDT，手续费 1.2 TRX。
-> 交易哈希：`0xabc123...def456`（[在 TronScan 查看](https://tronscan.org)）
-
-整个流程形成闭环：**一句指令进去，一句可读的结果出来**。你始终只与 AI Agent 对话，无需自己解析链上原始数据；同时交易哈希始终可见，便于追溯和验证。
-
-**🔀 横向能力：x402 + 8004 协议**
-
-x402（付费协议）和 8004（身份 / 信誉协议）是**横向能力**（Cross-layer Capability），不局限于某一层——它们可以在以下任何环节介入：
-
-- 当 MCP Server 调用链下付费 API 时，x402 完成"先付款、后响应"结算
-- 当 AI Agent 或 Skills 需要验证对方 Agent 身份时，8004 提供链上征信报告
-- 当 Skills 编排中需要检查服务提供方信誉时，同样查询 8004
+你不需要懂代码，不需要切钱包，不需要在多个 dApp 之间反复跳转——把任务交给 AI，剩下的由 BANK OF AI 这一整套基础设施在后台完成。
 
 ---
 
-## 核心模块（按"最常接触 → 越来越底层"排序）
+## BANK OF AI 的产品矩阵
 
-### 🧠 1. AI Agent — 你的主要入口点
+BANK OF AI 由 **4 层** 组成：
 
-**这是你真正"对话"的对象。** 在 OpenClaw / Cursor / Claude Code 等任意 AI 客户端里，你说一句话，AI Agent 接收、理解、执行、回复——整套流程对你来说就是"和 AI 聊天"这么简单。
+- **🧠 模型层 | Top AI in One Account** —— LLM Service（BANKOFAI APP + API Gateway），主流大模型的统一入口
+- **🛤️ 协议层 | Payment. Verify. Build.** —— x402 Payment · 8004 Protocol，连接 AI 与 Web3 的两套开放协议
+- **🔧 工具层 | Everything Your Agent Needs** —— Agent Wallet · Skills · MCP Server，让 AI 获得链上签名、操作 SOP 与协议封装的完整工具包
+- **🌐 生态层 | AI Agent Ecosystem** —— 基于同一套协议开放接入的 TRON / Ethereum / BNB Chain 第三方 MCP Server 与 Skills
 
-AI Agent 的智力由 **LLM Service** 提供，这是 BANK OF AI 的统一模型接入层：把 GPT、Claude、Gemini、DeepSeek、Kimi、GLM、MiniMax 等主流大模型聚合到一个 API 网关下——**一个 API Key 即可调用所有模型**，按用量计费，接入简单且成本可控。
+每一层都可以独立使用，也可以组合起来——按需取用。
 
-不管你用 OpenClaw、Cursor、Claude Code 还是其他 AI 客户端，都能通过 LLM Service 直连这些顶级大脑。
+---
+
+## 🧠 模型层 | Top AI in One Account
+
+### LLM Service — 主流大模型的统一入口
+
+**LLM Service 是 BANK OF AI 的模型接入层**，把 GPT、Claude、Gemini、DeepSeek、Kimi、GLM、MiniMax 等主流大模型聚合到一个账户下，提供两种使用方式：
+
+- **BANKOFAI APP**（官方应用，对应官网右上角 `BANKOFAI APP →` 按钮）：面向终端用户的 AI Chat 应用，打开 [chat.bankofai.io/chat](https://chat.bankofai.io/chat) 直接使用，随需切换模型
+- **API Gateway**（一套 API Key 调所有模型）：面向开发者的统一 API，按用量计费，兼容 OpenAI 协议，可接入任意兼容 OpenAI 协议的第三方 AI 客户端
+
+**核心特点**：加密货币充值（TRON / BNB Chain）、按用量付费（Pay-as-you-go）、不绑卡、不订阅。
 
 👉 详见：[LLM Service 简介](../llmservice/introduction.md)
 
 ---
 
-### 🌟 2. Skills — AI Agent 的"链上操作 SOP 手册"
+## 🛤️ 协议层 | Payment. Verify. Build.
 
-**这是 AI Agent 完成绝大多数链上任务时遵循的标准流程。** 你感知不到 Skills 的存在，但你看到的"AI 干活又稳又快"，背后正是 Skills 在编排。
+有了模型层，AI 还只是一个"大脑"——要让 AI 能在链上花钱、被验证，得先约定两套公开协议：**x402 解决钱怎么收**，**8004 解决 Agent 是谁**。
 
-Skills 是一套预先编写好的"AI 链上操作 SOP 手册"，覆盖 TRON 生态常见的使用场景——SunSwap 兑换、SunPerp 合约、TronScan 查询、TRC20 转账、TRX 质押投票、USDD/JUST 协议、多签权限、x402 支付、BANK OF AI 充值……随着生态发展还会持续扩充。
+### 01 · x402 Payment — 一行代码接入链上支付
 
-举例说明：用户说"花 50 USDT 买点 TRX"。普通 AI 可能直接生成一段交易代码，由于未授权 SunSwap 而当场报错；装了 SunSwap Skill 的 AI 则会按 SOP 自动执行——**查余额 → 检查授权 → 报价 → 滑点保护 → 等你确认 → 执行交易**，每一步都不遗漏。
+**基于 HTTP `402 Payment Required` 扩展的开放支付协议**——让 AI 在调用付费服务时自动在链上签一笔小额支付、立刻拿到内容，无需账号、无需信用卡、无需预充值。
 
-**你只需用自然语言告诉 AI Agent，Skills 会让它把复杂的多步链上操作压缩为"一句话完成"。** 背后涉及的 MCP 工具调用、钱包签名、合约参数计算，全部由 Skills 自动编排——你无需关心任何底层细节。
+- **当前支持**：TRON、BNB Chain（更多公链陆续接入）
+- **SDK 组件**：Client SDK · Server SDK · Facilitator
 
-👉 详见：[Skills 简介](../McpServer-Skills/SKILLS/Intro.md)
+**典型场景**：
 
----
+- MCP Server 调用链下付费 API
+- Skills 中的 `x402-payment` 显式发起支付
+- AI Agent 自主决定购买付费内容
+- **Agent 对 Agent 自动结算** —— 两个 AI 之间的按次计费
 
-### 🔐 3. Agent-Wallet — AI 专属的本地加密保险箱
-
-有了大脑和手册还不够，AI 需要花钱、需要转账，必须拥有一个**属于自己的钱包**。但如果把私钥以明文形式写在配置文件里，就等于把银行卡密码公开放置——任何运行在你电脑上的程序（恶意插件、AI 编程助手、自动化脚本）都有可能在极短时间内读取并窃取。
-
-Agent-Wallet 是专为 AI 设计的本地加密钱包——你的私钥被加密锁在本地的隐藏目录中，AI 只持有一个"解锁密码"。**即便密码泄漏，没有加密文件依然无法解密；即便文件被窃取，没有密码也只是一段无法解读的密文。** 双重保险，安全等级比明文私钥高出数个数量级。
-
-围绕这套加密机制，Agent-Wallet 提供以下核心能力：
-
-- **Local Secure（加密本地存储）**：私钥会被行业顶级的算法加密，存放在本机的隐藏目录（`~/.agent-wallet`），需主密码才能解锁
-- **Local Signing（本地离线签名）**：所有签名操作完全在你本机完成，**100% 离线**，私钥永远不离开你的电脑
-- **Multi-Wallet（多钱包管理）**：通过 CLI 或 SDK 可同时管理多个钱包，按需切换活跃钱包，互不干扰
-- **Multi-Chain（多链统一接口）**：同一套接口同时覆盖 **EVM 系**（Ethereum / BSC / Polygon / Base / Arbitrum 等）和 **TRON 系**（Mainnet / Nile / Shasta），学一次即可在多条链上通用
-
-每当 Skills（或 AI Agent 直连 MCP 时）需要发一笔交易，Agent-Wallet 在本地完成签名后只把签好的结果传出去——**私钥本身永远不出本机**。
-
-👉 详见：[Agent-Wallet 简介](../Agent-Wallet/Intro.md)
-
----
-
-### 💸 4. x402 — 让 AI 自己学会"付费上网"（横向能力）
-
-当你的 AI 需要去调用某个**收费的在线服务**（比如付费 API、付费数据集），传统做法是你提前注册账号、绑定信用卡、配置 API Key——这套流程对 AI 来说根本走不通。
-
-x402 是基于 HTTP `402 Payment Required` 状态码的开放支付协议，让 AI 在收到"需要付费"的回应后**自动在链上签一笔小额支付，然后立刻拿到内容**。整个过程不用注册账号，不用人工介入，也不用提前充值。
-
-x402 是一种**横向能力（Cross-layer Capability）**——它不属于某一固定层，哪里需要"先付款、后响应"，哪里就可以触发 x402：MCP Server 调用付费 API 时可以触发，Skills 里的 x402-payment 技能可以显式触发，AI Agent 自己决定付费调用时也可以触发。
-
-支持 TRON、BSC，未来还会扩展到更多链。
+> ⚙️ **依赖关系**：x402 SDK 通过 [Agent-Wallet](#03--agent-wallet--ai-的本地签名层) 解析和管理钱包凭证——安装 x402 时会自动把 agent-wallet 作为依赖一起装上。
 
 👉 详见：[x402 协议简介](../x402/index.md)
 
 ---
 
-### 🪪 5. 8004 — Agent 的链上身份证 + 信誉系统（横向能力）
+### 02 · 8004 Protocol — AI Agent 的链上身份与信誉
 
-互联网世界里，AI Agent 越来越多，但你怎么知道某个 Agent 是真是假、值不值得信任？8004 协议是 Web3 上的"Agent 注册局"——任何 Agent 都可以在链上铸造一个身份 NFT，绑定自己的服务端点（Web、MCP、DID），并接受其他 Agent 和用户的反馈。
+**Web3 上的「Agent 注册局 + 信誉系统」**——任何 Agent 都可以在链上铸造一个身份 NFT，绑定自己的服务端点（Web / MCP / DID），并公开接受其他 Agent 和用户的反馈。
 
-和 x402 一样，8004 也是**横向能力**，可以在整个流程的多个环节介入：AI Agent 调用陌生服务前查询对方信誉、Skills 编排中做前置风控校验、MCP Server 之间互相验证身份——都用的是这套协议。
+它解决一个核心问题：**AI Agent 越来越多，你怎么知道某个 Agent 可不可信？**
 
-**简单说，8004 是 Agent 的发现机制 + 信誉系统**——让你的 AI 在付费或授权之前，先去链上查一下对方的"征信报告"。
+- **标准元数据**：名称、能力声明、服务端点
+- **可验证凭证**：签名 + 轮换策略
+- **链支持**：TRON · BNB Chain
+
+**典型用法**：
+
+- AI Agent 调用陌生服务前，先查对方的链上征信
+- Skills 编排中做前置风控校验
+- MCP Server 之间互相验证身份
+- 付费 / 授权之前查对方的信誉评级
+
+8004 是**横向协议**——任何需要"验证身份"或"查信誉"的环节都可以调用，不绑定特定层。
 
 👉 详见：[8004 协议简介](../8004/general.md)
 
 ---
 
-### ⚙️ 6. MCP Server — 能力提供层
+## 🔧 工具层 | Everything Your Agent Needs
 
-:::info 一般用户可以跳过这一节
-MCP Server 是 Skills 调用的底层能力接口，**大多数情况下你感受不到它的存在**——Skills 已在上层完成了封装。这一节主要写给希望深入了解架构的开发者。
-:::
+协议层搭好了，还差一套工具让 AI 真正把协议用起来。**一条 `npx skills add` 命令**，就能让 AI 同时获得链上签名（Agent Wallet）、链上操作 SOP（Skills）、链上协议封装（MCP Server）——这三件事是 AI 完成任意链上操作所需的全部。
 
-MCP Server（Model Context Protocol Server）基于 Anthropic 提出的 **Model Context Protocol** 标准，把各类外部能力封装成 AI 可调用的标准化工具。从协议设计上，MCP Server 既可以承载**链上能力**（链上查询、合约调用、转账签名等），也可以承载**链下能力**（价格源、数据查询、外部 API 等）——具体包含哪些工具完全取决于每个 MCP Server 的实现。
+### 03 · Agent Wallet — AI 的本地签名层
+
+**Agent Wallet 是 AI Agent 的本地加密钱包**，为所有 Skills、MCP Server、x402 SDK 提供统一的签名能力。
+
+私钥被加密锁在本地隐藏目录中，AI 只持有一个"解锁密码"。**即便密码泄漏，没有加密文件依然无法解密；即便文件被窃取，没有密码也只是一段无法解读的密文。**
+
+- 🔒 **加密存储**：Keystore 加密 + `local_secure` 模式，100% 本地离线
+- 🔑 **灵活导入**：新建、导入私钥或助记词
+- 🔄 **多钱包切换**：管理多个钱包，随时切换活跃账户
+- ⛓️ **多链签名**：TRON + 全部 EVM 兼容链（Ethereum / BSC / Polygon / Base / Arbitrum…）
+
+```bash
+npm i @bankofai/agent-wallet
+```
+
+> 💡 **谁在依赖 Agent-Wallet**：
+> - **x402 SDK** —— 解析支付凭证、签发 x402 小额支付（安装 x402 时自动带入）
+> - **Skills** —— 执行需要签名的链上操作时
+> - **MCP Server** 私有化部署时 —— 写入类工具执行前读取本机钱包签名
+
+**用户感知**：首次按 [快速开始](./QuickStart.md) 走一遍时，Agent-Wallet 会自动创建并配置好——大多数用户不需要单独接触它。
+
+👉 详见：[Agent-Wallet 简介](../Agent-Wallet/Intro.md)
+
+---
+
+### 04 · Skills — AI 链上操作的 SOP 手册
+
+**Skills 是一套预先编写好的 AI 链上操作标准作业流程。** AI Agent 按 Skills 的 SOP 逐步执行——**查余额 → 检查授权 → 报价 → 滑点保护 → 等你确认 → 调用 MCP Server 执行**，一步不漏，规避常见陷阱。
+
+举例：用户说"花 50 USDT 买点 TRX"。没装 Skills 的 AI 可能直接生成一段交易代码，因未授权 SunSwap 而报错；装了 `sunswap-dex-trading` Skill 的 AI 会严格按 SOP 自动完成所有前置与确认步骤。
+
+**BankOfAI Skills 套件**（随生态持续扩展）：
+
+| Skill | 覆盖场景 |
+| :-- | :-- |
+| `agent-wallet` | 钱包管理 |
+| `bankofai-guide` | 引导新用户完成安装配置 |
+| `sunswap-dex-trading` | SunSwap V2/V3/V4 兑换 |
+| `sunperp-perpetual-futures-trading` | SunPerp 永续合约 |
+| `trc20-token-toolkit` | TRC20 代币工具 |
+| `tronscan-data-lookup` | TronScan 链上数据查询 |
+| `trx-staking-sr-voting` | TRX 质押 + SR 投票 |
+| `usdd-just-protocol` | USDD / JUST 协议 |
+| `multi-sig-account-permissions` | TRON 多签与权限 |
+| `x402-payment` | x402 支付 |
+| `recharge-skill` | BANK OF AI 账户充值 |
+
+**关键特性**：一句话安装全部 Skills；自然语言调用；自动调用下层 MCP Server 完成链上原子操作。
+
+👉 详见：[Skills 简介](../McpServer-Skills/SKILLS/Intro.md) · [快速开始](./QuickStart.md)
+
+---
+
+### 05 · MCP Server — 链上原子能力接口层
+
+**MCP Server（Model Context Protocol Server）** 基于 Anthropic 的 MCP 标准，把链上与链下能力封装成 AI 可调用的标准化工具。
 
 **Skills 与 MCP Server 的关系：**
 
 | 层 | 角色 | 负责什么 |
-|:---|:---|:---|
-| **Skills** | 业务编排层（Orchestration） | 把多步操作按 SOP 串起来、处理前置检查和风控 |
+| :-- | :-- | :-- |
+| **Skills** | 业务编排层（Orchestration） | 把多步操作按 SOP 串起来，处理前置检查和风控 |
 | **MCP Server** | 能力提供层（Capability Provider） | 提供原子能力工具给上层调用 |
 
-BANK OF AI 目前提供的三套核心 MCP Server **聚焦于链上原子操作**：
+BANK OF AI 官方提供三套 **MCP Server**，默认接入 BANK OF AI 官方云服务端点，开箱即用：
 
-- **TRON MCP Server**：TRON 链上原子操作能力（查询、转账、合约、质押、治理）
-- **SUN MCP Server**：SunSwap V2/V3/V4 兑换与流动性能力
-- **BSC MCP Server**：BNB Chain 链上原子操作能力
+- **TRON MCP Server** — TRON 链上原子操作（查询、转账、合约、质押、治理），60+ 工具。支持本地私有化部署
+- **SUN MCP Server** — SunSwap V2/V3/V4 兑换与流动性，20+ 工具。支持本地私有化部署。另提供 **[SUN CLI](../McpServer-Skills/Tools/SUNCli/Intro.md)**——与 SUN MCP Server 能力完全对等的命令行实现，面向脚本 / 自动化 / CI-CD 场景
+- **BSC MCP Server** — BNB Chain 链上原子操作
 
-未来我们会按需扩展更多 MCP Server，包括链下数据、第三方协议等场景。
+> 💡 **私有化部署**：Skills 默认通过官方云端点调用 MCP Server，无需单独安装；若需本地部署，参考对应 MCP Server 的部署文档。
 
-高级开发者可以让 AI Agent 绕过 Skills 直接调用 MCP 工具，但这意味着你需要自行处理前置检查、授权、滑点、错误恢复等所有流程——而这些正是 Skills 已经为你自动化的环节。
+> ⚙️ **依赖关系**：MCP Server 私有化部署时需先配置 Agent-Wallet——钱包决定了 AI 以哪个身份执行链上操作。若未配置钱包，写入类工具执行时会返回错误提示。
+
+除了 BANK OF AI 官方的 MCP Server，生态中还有更多第三方 MCP Server 和 Skills，见下方 [🌐 生态层](#-生态层--ai-agent-ecosystem)。
 
 👉 详见：[MCP Server 简介](../McpServer-Skills/MCP/Intro.md)
 
 ---
 
-### 🖥️ 7. SUN CLI — Developer Tool（给开发者的命令行入口）
+## 🌐 生态层 | AI Agent Ecosystem
 
-SUN CLI 不是一层独立的服务，而是 **SUN MCP Server 能力的命令行入口**（CLI interface to MCP Server）——专为开发者和自动化场景设计。
+除了 BANK OF AI 官方的产品，整个生态已接入跨 3 条链的多个主流 DeFi / 数据协议——每一家都提供**生产级的 MCP Server 或 Skills**，AI 安装后立即能用。
 
-如果你习惯使用命令行操作 SunSwap，或者需要在 shell 脚本、CI/CD 流水线中调用 SUN MCP 的能力，SUN CLI 把查价、报价、兑换、加流动性、管理头寸等操作封装为一行命令即可完成，输出可直接 pipe 到其他工具。
+### 🔴 TRON
 
-👉 详见：[SUN CLI 简介](../McpServer-Skills/Tools/SUNCli/Intro.md)
+| 产品 | 提供方 | 覆盖能力 | 安装 |
+| :-- | :-- | :-- | :-- |
+| **TRON MCP Server** | Bank of AI | Transfer / Contract / Staking / Governance，60+ 工具 | `npx -y @bankofai/mcp-server-tron` |
+| **SUN MCP Server** | Bank of AI | Swap / Liquidity / Farming，V2/V3/V4，20+ 工具 | `npx -y @bankofai/sun-mcp-server` |
+| **JustLend MCP Server** | JustLend DAO | Lend / Borrow / Staking / Governance，50 工具 | `npx -y @justlend/mcp-server-justlend` |
+| **TronScan MCP Server** | TronScan | Query / Analytics / Security，119 工具 | `https://mcp.tronscan.org/mcp` |
+
+### 🔵 Ethereum
+
+| 产品 | 提供方 | 覆盖能力 | 安装 |
+| :-- | :-- | :-- | :-- |
+| **Etherscan** | Etherscan Official | Query / Tracking / Analytics，60+ 链 | `npx skills add https://docs.etherscan.io` |
+| **Uniswap AI** | Uniswap Labs | Swap / Liquidity / V4 Hooks / 5 Plugins | `npx skills add Uniswap/uniswap-ai` |
+
+### 🟡 BNB Chain
+
+| 产品 | 提供方 | 覆盖能力 | 安装 |
+| :-- | :-- | :-- | :-- |
+| **BNB Chain** | BNB Chain Official | Transfer / Contract / Query / 8004 身份注册 | `npx skills add bnb-chain/bnbchain-skills` |
+| **PancakeSwap AI** | PancakeSwap Official | Swap / Liquidity / Farming，3 Skills · 8 链 | `npx skills add pancakeswap/pancakeswap-ai` |
+| **ListaDAO** | ListaDAO Official | Lending / Staking / CDP，3 Skills · 9 MCP 工具 | `npx skills add lista-dao/lista-skills` |
+
+> 💡 生态持续扩张中，以官网 **[AI Agent Ecosystem](https://bankofai.io)** 为准。
+
+---
+
+## BANK OF AI 的协作流程
+
+前面介绍了 4 层各自的分工——下面看它们在一次真实操作中如何协作。用 **TRC20 转账** 这个最常见场景举例。
+
+<div style={{ textAlign: 'center', margin: '1.5rem 0' }}>
+
+![AI 智能体通过自然对话完成 TRC20 转账的工作流程](./image/bankofai-architecture.svg)
+
+</div>
+
+**① 模型层 · 理解意图**
+
+你在任意 AI 客户端（BANKOFAI APP / OpenClaw / Cursor / Claude Code / Codex / Telegram 等）里发一句话：
+
+> 向地址 `T....XXXXX` 转 100 TRX
+
+AI 客户端由 **LLM Service** 驱动，识别出这是一笔 TRC20 / TRX 转账，决定调用 `trc20-token-toolkit` 这个 Skill。
+
+**② 工具层 · Skills 编排**
+
+`trc20-token-toolkit` 按 SOP 逐步推进：**查余额 → 校验收款地址 → 构造交易 → 等你确认**。任何一步不通过（余额不足、地址格式错等）都会立即停下并把原因返回给你。
+
+**③ 工具层 · MCP + Wallet · 构造 · 签名 · 上链**
+
+Skill 调用 **TRON MCP Server** 组装这笔 TRC20 转账交易，然后交给 **Agent-Wallet** 在你本机本地完成签名（**私钥永不出本机**），最后提交到 TRON 主网。
+
+**④ 返回 · 结果沿原路径回到 AI 智能体**
+
+链上执行完成后，交易哈希、状态、事件日志沿原路径反向返回——MCP Server 解析成结构化数据，AI 智能体再生成自然语言摘要：
+
+> ✅ 已向 `T....XXXXX` 转账 100 TRX。手续费 1.1 TRX。
+> 交易哈希：`0xabc123...def456`（[在 TronScan 查看](https://tronscan.org)）
+
+:::tip 另外两层什么时候登场？
+本例只涉及 **模型层** 和 **工具层**。其他两层按场景触发：
+
+- **🛤️ 协议层**：**涉及付费**时（调用付费 API、订阅 Agent 服务等）走 **x402**；**验证陌生 Agent 身份或查信誉**时走 **8004**
+- **🌐 生态层**：当你需要跨链或调用第三方协议（如 **Uniswap AI** 在以太坊兑换、**ListaDAO** 在 BNB Chain 质押）时，AI 智能体会调用对应的第三方 MCP Server / Skills——流程与本例一致，只是把 TRON MCP 换成目标链的 MCP Server
+:::
 
 ---
 
 ## 我适合用 BANK OF AI 吗？
 
-- **Web3 新手：** 完全没问题。在 AI 客户端里说一句"agent 一键安装"，剩下的全部自动完成；之后用自然语言对话即可，无需了解底层细节。
-- **Web3 老手：** 可以告别"切钱包 + 复制地址 + 算滑点 + 等区块"的繁琐流程，让 AI 接管所有重复性工作，自己专注策略。
-- **AI Agent 开发者：** 整套 BANK OF AI 提供完整的 SDK、CLI、API 和 MCP 标准接口——你可以基于它构建自己的 AI Agent，让 Agent 拥有完整的链上能力和自动支付能力。
-- **API 服务提供方：** x402 协议让你的付费 API 可以被 AI Agent 自动调用并按次计费，不需要传统的账号注册、信用卡绑定流程，特别适合微支付、AI Agent 自动调用付费服务、以及 Agent 之间自动结算等场景。
+- **Web3 新手：** 完全没问题。把一段安装指令粘贴给 AI 客户端，剩下的全部自动完成；之后用自然语言对话即可，无需了解底层细节。
+- **Web3 老手：** 可以告别「切钱包 + 复制地址 + 算滑点 + 等区块」的繁琐流程，让 AI 接管所有重复性工作，自己专注策略。
+- **AI Agent 开发者：** 完整的 SDK、CLI、API 和 MCP 标准接口——你可以基于 BANK OF AI 构建自己的 AI Agent，让 Agent 拥有链上能力和自动支付能力。
+- **API 服务提供方：** x402 协议让你的付费 API 被 AI 自动调用并按次计费，不需要传统账号注册、信用卡绑定流程，特别适合微支付和 Agent 对 Agent 自动结算场景。
 
 ---
 
 ## 准备好了吗？
 
-整套 BANK OF AI 的安装和配置已经被压缩到**一句话**——你只需要对你的 AI 助手说："**agent 一键安装**"。
+想让你的 AI 客户端拥有 BANK OF AI 链上能力，只需**两步**，不到 **1 分钟**：
 
-剩下的会全部自动完成：安装 Skills、配置钱包、同步到 9 个 AI 客户端，全程不到 1 分钟。
+1. 把一段安装指令粘贴给你的 AI 助手——AI 自动安装 BANK OF AI 全部 Skills 和 Agent Wallet CLI
+2. 回复一个 **`A`**——AI 自动创建本地加密钱包
 
-👉 **[前往快速开始，1 分钟激活你的 BANK OF AI](./QuickStart.md)**
+如需独立接入 **LLM Service / x402 / 8004** 或对 MCP Server 做**本地私有化部署 / 使用 SUN CLI**，请参考对应产品的文档。
+
+👉 **[前往快速开始](./QuickStart.md)**
