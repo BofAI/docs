@@ -5,8 +5,9 @@ import TabItem from '@theme/TabItem';
 
 从零到在 AI 代理对话框里唤醒你的 Agent-wallet。我们提供了两种创建钱包的方式——**对话式创建最简单**，全程在 AI 对话框里完成；**命令行创建**则给你最精细的控制。
 
-:::tip 想看 CLI 命令细节？
-本页只带你跑通最短路径。免密配置、管理多个钱包、签名类型等进阶内容，请看 [CLI 命令行手册](./Developer/CLI-Reference.md)。
+:::tip 前置依赖 & CLI 命令细节
+- 你的 AI Agent 支持 shell 命令执行（OpenClaw、Telegram Bot、Web 聊天页面、Claude Code、Cursor 等）
+- 本页只带你跑通最短路径。免密配置、管理多个钱包、签名类型等进阶内容，请看 [CLI 命令行手册](./Developer/CLI-Reference.md)。
 :::
 
 ---
@@ -14,11 +15,6 @@ import TabItem from '@theme/TabItem';
 ## 方式一：对话式创建（最简单）
 
 如果你已经安装了 [BANK OF AI 全部技能](../McpServer-Skills/SKILLS/QuickStart.md)（包含 `agent-wallet` 和 `bankofai-guide`），那么创建钱包只需要在 AI 对话框里发一句话就行——AI 会自动帮你生成密码、创建钱包、保存配置，全程无需手动改文件。
-
-:::tip 前置依赖
-- 已安装 BANK OF AI 技能库（参见 [SKILLS 快速开始](../McpServer-Skills/SKILLS/QuickStart.md)）
-- 你的 AI Agent 支持 shell 命令执行（OpenClaw、Telegram Bot、Web 聊天页面、Claude Code、Cursor 等）
-:::
 
 **操作步骤：**
 
@@ -39,39 +35,11 @@ import TabItem from '@theme/TabItem';
    - **步骤 2**：创建钱包
    - **步骤 3**：获取钱包地址
 
-**完成后你会看到类似下面的输出：**
 
-```text
-🎉 Agent Wallet 创建成功！
+:::caution 主密码非常重要，请立即备份
+主密码仅展示一次。虽然会自动保存到本地的 `~/.agent-wallet/runtime_secrets.json`，但强烈建议你同时手动保存到密码管理器（1Password / Bitwarden 等）——一旦本地文件丢失或损坏，且没有外部备份，你的钱包将永久无法解锁（没有备份找回机制，没有客服，没有后门）。
 
-| 项目     | 详情                       |
-| -------- | -------------------------- |
-| 钱包 ID  | default_local_secure       |
-| 类型     | local_secure（安全加密）   |
-| 状态     | ✅ 已激活                  |
-
-钱包地址
-
-| 网络 | 地址                                                |
-| ---- | --------------------------------------------------- |
-| EVM  | 0x1339Df9ac21E494b39Be47d012A3f33fb9188366          |
-| TRON | TBisApdFay75x3FXNWiG8UE75KzhnFLceY                  |
-
-💡 EVM 地址支持所有 EVM 兼容链 (Ethereum、BSC、Base、Polygon、Arbitrum 等)
-
-🔐 钱包密码
-
-$mU80m9fLYB5
-
-⚠️ 重要提示：
-• 此密码用于加密本地存储的私钥
-• 签名交易、解析地址等所有操作都需要此密码
-• 密码已自动保存到 ~/.agent-wallet/runtime_secrets.json
-• 请务必备份密码！如果 runtime_secrets 文件被删除，密码是恢复钱包的唯一方式
-```
-
-:::caution 备份你的钱包密码！
-即使密码已经被自动保存到 `~/.agent-wallet/runtime_secrets.json`，**你仍然必须把它单独抄一份**到密码管理器（1Password、Bitwarden 等）。这个文件一旦被误删、磁盘损坏或重装系统，密码就找不回来了——你的钱包资产也将永久无法访问。
+⚠️ 切勿把这个密码发到聊天工具、邮件、截图或公开仓库中。
 :::
 
 :::tip 完成即可用，无需配置环境变量

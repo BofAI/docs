@@ -25,10 +25,6 @@ node --version  # 应输出 v20.x.x 或更高
 
 最简单的安装方式是**直接在 AI Agent 对话框里让 AI 完成**——不用自己打开终端，不用手动复制文件。如果你已经在使用支持 shell 命令的 AI Agent（OpenClaw、Telegram Bot、Web 聊天页面、Claude Code、Cursor 等），这一步即可搞定。
 
-:::tip 前置依赖
-**需要在 AI Agent 运行的机器上安装 Node.js**（Agent 内部会调用 `npx`）。如果还没装，去 [nodejs.org](https://nodejs.org) 下载 LTS 安装包，双击按提示装一次即可，后续无需再操作。
-:::
-
 **操作步骤：**
 
 1. 打开你的 AI Agent 对话框

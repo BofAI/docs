@@ -4,6 +4,10 @@
 
 ---
 
+:::tip 前置依赖
+**需要在 AI Agent 运行的机器上安装 Node.js**（Agent 内部会调用 `npx`）。如果还没装，去 [nodejs.org](https://nodejs.org) 下载 LTS 安装包，双击按提示装一次即可，后续无需再操作。
+:::
+
 ## 第 1 步：安装技能库
 
 我们提供了三种安装方式。**根据你的使用习惯选一种即可**——对话式安装最简单；交互式安装控制最精细。
@@ -11,10 +15,6 @@
 ### 方式一：对话式安装（最简单）
 
 如果你已经在使用支持 Skills 的 AI Agent（OpenClaw、Telegram Bot、Web 聊天页面，或任何能执行 shell 命令的客户端），你可以**直接在对话框里让 AI 完成安装**——不用自己打开终端，不用手动复制文件。
-
-:::tip 前置依赖
-**需要在 AI Agent 运行的机器上安装 Node.js**（Agent 内部会调用 `npx`）。如果还没装，去 [nodejs.org](https://nodejs.org) 下载 LTS 安装包，双击按提示装一次即可，后续无需再操作。
-:::
 
 **操作步骤：**
 
@@ -30,68 +30,6 @@
    - 拉取 `BofAI/skills` 仓库
    - 自动检测当前 Agent 对应的 skills 目录（如 `~/.openclaw/workspace/.agents/skills/`）
    - 安装全部 11 个 BANK OF AI 技能（`agent-wallet`、`sunswap-dex-trading`、`x402-payment`、`bankofai-guide` 等）
-   - 调用 `bankofai-guide` 技能进行引导：
-     - **步骤 1**：安装 Agent Wallet CLI
-     - **步骤 2**：检查钱包状态
-     - **步骤 3**：如果还没有钱包，引导你立即创建（选项 **A** = 自动快速设置，约 10 秒；选项 **B** = 稍后设置）
-
-**示例对话：**
-
-![通过 AI Agent 对话式安装](./image/conversational-install.png)
-
-或者纯文本展示，AI 的回复大致如下：
-
-```
-> 运行 npx skills add BofAI/skills 安装 BANK OF AI 全部技能...
-
-✅ 11 个 BANK OF AI 技能安装完成！
-
-🎉 BANK OF AI 技能安装完成！
-
-已成功安装 11 个技能到 ~/.openclaw/workspace/.agents/skills/：
-
-| 技能                              | 用途              |
-|-----------------------------------|-------------------|
-| agent-wallet                      | 通用钱包管理      |
-| bankofai-guide                    | 本引导技能        |
-| multi-sig-account-permissions     | TRON 多签权限     |
-| recharge-skill                    | BANK OF AI 充值   |
-| sunperp-perpetual-futures-trading | SunPerp 永续合约  |
-| sunswap-dex-trading               | SunSwap DEX 交易  |
-| trc20-token-toolkit               | TRC20 代币工具    |
-| tronscan-data-lookup              | TronScan 数据查询 |
-| trx-staking-sr-voting             | TRX 质押投票      |
-| usdd-just-protocol                | USDD/JUST 协议    |
-| x402-payment                      | x402 支付         |
-
-步骤 1: 安装 Agent Wallet CLI
-✅ Agent Wallet CLI 安装完成！
-
-步骤 2: 检查钱包状态
-
-📋 钱包状态检查
-当前状态：⚠️ 没有配置钱包
-
-要进行转账和交易，你需要创建一个 Agent Wallet。
-
-请选择：
-
-A. 立即创建钱包（推荐）
-   • 快速设置：全自动，约 10 秒完成
-   • 详细设置：自定义配置
-
-B. 稍后设置
-   • 你可以随时回来创建钱包
-
-请回复 A 或 B。
-```
-
-**完成后选择：**
-
-- 输入 `A` → AI 引导你完成钱包创建（自动或自定义）
-- 输入 `B` → 跳过钱包配置，需要时再回来创建
-
-引导走完后，所有技能即可正常使用。
 
 :::tip 这是新手最推荐的路径
 你不需要懂 `npx`、`npm` 是什么，也不用关心"全局安装"是什么意思。AI 会处理每一步，包括为你的平台选对 skills 目录、安装钱包 CLI、引导你完成首个钱包配置。

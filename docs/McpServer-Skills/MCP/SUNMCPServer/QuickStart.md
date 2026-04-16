@@ -19,10 +19,6 @@ Before you get started, make sure you have:
 
 The easiest way to install is by **simply chatting with your AI Agent** — no need to open a terminal yourself, no manual file copying. If you're already using an AI Agent that can run shell commands (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.), you're set.
 
-:::tip Prerequisite
-**Node.js is required** on the machine where the AI Agent runs (the Agent uses `npx` under the hood). If Node.js isn't installed yet, grab the LTS installer from [nodejs.org](https://nodejs.org) — install once, double-click and follow the prompts.
-:::
-
 **How it works:**
 
 1. Open your AI Agent chat

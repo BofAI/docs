@@ -4,6 +4,10 @@ Get your AI up and running with BANK OF AI SKILLS in **2 steps** and less than *
 
 ---
 
+:::tip Prerequisite
+**Node.js is required** on the machine where the AI Agent runs (the Agent uses `npx` under the hood). If Node.js isn't installed yet, grab the LTS installer from [nodejs.org](https://nodejs.org) — install once, double-click and follow the prompts.
+:::
+
 ## Step 1: Install the Skills
 
 We provide three installation methods. **Pick the one that matches your level of comfort** — the conversational install is the easiest; the interactive install gives you the most control.
@@ -11,10 +15,6 @@ We provide three installation methods. **Pick the one that matches your level of
 ### Method 1: Conversational Install (Easiest)
 
 If you're already using a Skills-compatible AI Agent (OpenClaw, a Telegram bot, web chat, or any client that supports running shell commands), you can install everything by **simply chatting with the AI** — no need to open a terminal yourself, no manual file copying.
-
-:::tip Prerequisite
-**Node.js is required** on the machine where the AI Agent runs (the Agent uses `npx` under the hood). If Node.js isn't installed yet, grab the LTS installer from [nodejs.org](https://nodejs.org) — install once, double-click and follow the prompts.
-:::
 
 **How it works:**
 
@@ -30,66 +30,6 @@ If you're already using a Skills-compatible AI Agent (OpenClaw, a Telegram bot, 
    - Pulls the `BofAI/skills` repository
    - Detects your current Agent's skills directory (e.g. `~/.openclaw/workspace/.agents/skills/`)
    - Installs all 11 BANK OF AI skills (`agent-wallet`, `sunswap-dex-trading`, `x402-payment`, `bankofai-guide`, etc.)
-   - Invokes the `bankofai-guide` skill to onboard you:
-     - **Step 1**: Install the Agent Wallet CLI
-     - **Step 2**: Check your wallet state
-     - **Step 3**: If no wallet exists, prompt you to set one up (reply **A** = quick setup in ~10 seconds, reply **B** = skip for now and create later)
-
-**Example dialog:**
-
-![Conversational install via AI Agent](./image/conversational-install.png)
-
-Or in plain text, the response looks like:
-
-```
-> Run npx skills add BofAI/skills to install all BANK OF AI skills...
-
-✅ 11 BANK OF AI skills installed!
-
-Now using bankofai-guide for onboarding:
-
-🎉 BANK OF AI Skills Installation Complete!
-
-11 skills installed to ~/.openclaw/workspace/.agents/skills/:
-
-| Skill                              | Purpose             |
-|------------------------------------|---------------------|
-| agent-wallet                       | Wallet management   |
-| bankofai-guide                     | Onboarding guide    |
-| multi-sig-account-permissions      | TRON multi-sig      |
-| recharge-skill                     | BANK OF AI recharge |
-| sunperp-perpetual-futures-trading  | SunPerp trading     |
-| sunswap-dex-trading                | SunSwap DEX         |
-| trc20-token-toolkit                | TRC20 token tools   |
-| tronscan-data-lookup               | TronScan queries    |
-| trx-staking-sr-voting              | TRX staking         |
-| usdd-just-protocol                 | USDD/JUST protocol  |
-| x402-payment                       | x402 payments       |
-
-Step 1: Install Agent Wallet CLI
-✅ Agent Wallet CLI installed!
-
-Step 2: Check Wallet State
-
-📋 Wallet Status Check
-Status: ⚠️  No wallets configured
-
-A wallet is required for transfers and trading.
-
-Would you like to set up a wallet now?
-
-A. Yes - Create a wallet (Quick setup recommended, ~10 seconds)
-B. No  - Skip for now, you can create one later
-
-Please reply A or B.
-```
-
-**After the prompt:**
-
-- Reply `A` → the AI walks you through wallet creation (quick setup recommended, ~10 seconds)
-- Reply `B` → skip for now; you can create one any time later
-
-That's it — once the guide finishes, all skills are ready to use.
 
 :::tip Why this is the recommended path for beginners
 You don't need to know what `npx`, `npm`, or "global install" mean. The AI handles every step including selecting the right skills directory for your platform, installing the wallet CLI, and onboarding you to your first wallet.

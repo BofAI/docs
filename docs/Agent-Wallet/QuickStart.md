@@ -5,8 +5,9 @@ import TabItem from '@theme/TabItem';
 
 From zero to invoking your Agent-wallet in your AI agent chat. We provide two ways to create your wallet — **conversational setup is the easiest**, done entirely from your AI chat; **command-line setup** gives you the most precise control.
 
-:::tip Want CLI command details?
-This page only walks you through the shortest path. For password-free configuration, managing multiple wallets, signature types, and other advanced topics, see the [CLI Reference](./Developer/CLI-Reference.md).
+:::tip Prerequisites & CLI command details
+- Your AI Agent supports shell command execution (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.)
+- This page only walks you through the shortest path. For password-free configuration, managing multiple wallets, signature types, and other advanced topics, see the [CLI Reference](./Developer/CLI-Reference.md).
 :::
 
 ---
@@ -14,11 +15,6 @@ This page only walks you through the shortest path. For password-free configurat
 ## Method 1: Conversational Setup (Easiest)
 
 If you've already installed [the BANK OF AI skill suite](../McpServer-Skills/SKILLS/QuickStart.md) (which includes `agent-wallet` and `bankofai-guide`), creating a wallet takes just one prompt in your AI chat — the AI generates the password, creates the wallet, and saves the config for you, with no manual file editing.
-
-:::tip Prerequisites
-- BANK OF AI skills installed (see [SKILLS Quick Start](../McpServer-Skills/SKILLS/QuickStart.md))
-- Your AI Agent supports shell command execution (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.)
-:::
 
 **How it works:**
 
@@ -39,39 +35,11 @@ If you've already installed [the BANK OF AI skill suite](../McpServer-Skills/SKI
    - **Step 2**: Create the wallet
    - **Step 3**: Retrieve the wallet addresses
 
-**When done, you'll see output like this:**
 
-```text
-🎉 Agent Wallet created successfully!
+:::caution Your master password is critical — back it up immediately
+The master password is only shown once. Although it is auto-saved to `~/.agent-wallet/runtime_secrets.json`, you should also save it manually to a password manager (1Password, Bitwarden, etc.). If the local file is lost or corrupted and you have no external backup, your wallet will be permanently locked — there is no recovery mechanism, no support team, and no backdoor.
 
-| Field    | Detail                     |
-| -------- | -------------------------- |
-| Wallet ID| default_local_secure       |
-| Type     | local_secure (encrypted)   |
-| Status   | ✅ Active                   |
-
-Wallet addresses
-
-| Network | Address                                             |
-| ------- | --------------------------------------------------- |
-| EVM     | 0x1339Df9ac21E494b39Be47d012A3f33fb9188366          |
-| TRON    | TBisApdFay75x3FXNWiG8UE75KzhnFLceY                  |
-
-💡 The EVM address works on every EVM-compatible chain (Ethereum, BSC, Base, Polygon, Arbitrum, etc.)
-
-🔐 Wallet password
-
-$mU80m9fLYB5
-
-⚠️ Important:
-• This password encrypts the private key stored locally
-• Signing transactions, resolving addresses, and every other operation requires this password
-• The password is auto-saved to ~/.agent-wallet/runtime_secrets.json
-• Back up the password yourself! If runtime_secrets is ever deleted, the password is the only way to recover the wallet
-```
-
-:::caution Back up your wallet password!
-Even though the password is auto-saved to `~/.agent-wallet/runtime_secrets.json`, **you still must copy it separately** into a password manager (1Password, Bitwarden, etc.). If that file is ever accidentally deleted, your disk fails, or you reinstall your OS, the password is gone — and so is access to your wallet's assets, permanently.
+⚠️ Never share this password via chat, email, screenshots, or public repositories.
 :::
 
 :::tip Done — no env-var configuration needed
