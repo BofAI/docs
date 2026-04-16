@@ -155,7 +155,7 @@ Open your AI chat and send:
 Check the TRX and USDT balances of the wallet address you just created.
 ```
 
-If the AI returns a structured balance result — **congrats, the full stack is live and ready to use.**
+If the AI returns the balance — **congrats, the full stack is live and ready to use.**
 
 :::note What a brand-new wallet may show
 A TRON address that has never received any transfer is considered **not activated**, so the query may report **balance 0 / account not activated**. This is completely normal for a fresh wallet and doesn't prevent you from using BANK OF AI.
