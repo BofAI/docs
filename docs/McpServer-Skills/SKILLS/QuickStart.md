@@ -4,11 +4,42 @@ Get your AI up and running with BANK OF AI SKILLS in **2 steps** and less than *
 
 ---
 
+:::tip Prerequisite
+**Node.js is required** on the machine where the AI Agent runs (the Agent uses `npx` under the hood). If Node.js isn't installed yet, grab the LTS installer from [nodejs.org](https://nodejs.org) — install once, double-click and follow the prompts.
+:::
+
 ## Step 1: Install the Skills
 
-### Quick Auto-Install
+We provide three installation methods. **Pick the one that matches your level of comfort** — the conversational install is the easiest; the interactive install gives you the most control.
 
-Simply tell your AI Agent to execute the following command:
+### Method 1: Conversational Install (Easiest)
+
+If you're already using a Skills-compatible AI Agent (OpenClaw, a Telegram bot, web chat, or any client that supports running shell commands), you can install everything by **simply chatting with the AI** — no need to open a terminal yourself, no manual file copying.
+
+**How it works:**
+
+1. Open your AI Agent chat
+2. Copy and paste the following prompt:
+
+   ```
+   Run npx skills add BofAI/skills to install all BANK OF AI skills. After installation, use bankofai-guide to guide subsequent operations.
+   Note: Please install to the skill directory corresponding to the current Agent.
+   ```
+
+3. The AI handles the entire flow automatically:
+   - Pulls the `BofAI/skills` repository
+   - Detects your current Agent's skills directory (e.g. `~/.openclaw/workspace/.agents/skills/`)
+   - Installs all 11 BANK OF AI skills (`agent-wallet`, `sunswap-dex-trading`, `x402-payment`, `bankofai-guide`, etc.)
+
+:::tip Why this is the recommended path for beginners
+You don't need to know what `npx`, `npm`, or "global install" mean. The AI handles every step including selecting the right skills directory for your platform, installing the wallet CLI, and onboarding you to your first wallet.
+:::
+
+---
+
+### Method 2: Quick Auto-Install (Command Line)
+
+If you have Node.js installed and prefer the command line, simply tell your AI Agent to execute the following command:
 
 ```bash
 npx skills add https://github.com/BofAI/skills -y -g
@@ -16,7 +47,9 @@ npx skills add https://github.com/BofAI/skills -y -g
 
 The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag enables global installation (available across all projects). Once complete, it will show ✅ Global installation complete! along with the full list of installed Skills.
 
-### Interactive Installation
+---
+
+### Method 3: Interactive Install (Most Control)
 
 If you want to choose which Skills to install and the installation scope, remove the `-y -g` flags:
 
@@ -28,7 +61,7 @@ npx skills add https://github.com/BofAI/skills
 This guide demonstrates the installation process using terminal commands as an example.
 :::
 
-#### Installation Walkthrough
+#### Interactive Installation Walkthrough
 
 The installer will guide you through a few steps — just follow along:
 

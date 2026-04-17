@@ -17,25 +17,35 @@ Before you get started, make sure you have:
 
 ## Install
 
-Simply tell your AI Agent to execute the following command:
+The easiest way to install is by **simply chatting with your AI Agent** — no need to open a terminal yourself, no manual file copying. If you're already using an AI Agent that can run shell commands (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.), you're set.
 
-```bash
-npx add-mcp https://sun-mcp-server.bankofai.io/mcp -y
-```
+**How it works:**
 
-The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
+1. Open your AI Agent chat
+2. Copy and paste the following prompt:
 
-After the command completes, restart your MCP client.
+   ```
+   Run npx add-mcp https://sun-mcp-server.bankofai.io/mcp -y to install the SUN MCP Server.
+   Note: Please install to the MCP config of the current Agent.
+   ```
 
-:::tip Want to choose which AI tools to install to?
-Remove the `-y` flag to enter interactive installation mode. See [Official Cloud Service Access](./OfficialServerAccess.md) for details.
+3. The AI handles the entire flow automatically:
+   - Detects the remote MCP service URL
+   - Auto-detects which AI client is currently running
+   - Writes the `sun-mcp-server` entry into the right MCP config file (no manual JSON editing)
+   - Reports back with a ✅ confirmation when done
+
+Once the AI confirms the install, the SUN MCP Server is ready — you can start asking questions right away.
+
+:::tip Prefer the command line?
+If you'd rather run the install yourself or need finer control (e.g. selecting which AI tools to install to), see [Official Cloud Service Access](./OfficialServerAccess.md) for the command-line and interactive options.
 :::
 
 ---
 
-## Restart and Test
+## Test It Out
 
-After completing the configuration, restart your MCP client. Then try the following query in a conversation:
+Try the following query in a conversation:
 
 ```
 Check the current prices of USDT and TRX on SunSwap

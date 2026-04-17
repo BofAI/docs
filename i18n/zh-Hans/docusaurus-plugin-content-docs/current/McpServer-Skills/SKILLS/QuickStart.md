@@ -4,11 +4,42 @@
 
 ---
 
+:::tip 前置依赖
+**需要在 AI Agent 运行的机器上安装 Node.js**（Agent 内部会调用 `npx`）。如果还没装，去 [nodejs.org](https://nodejs.org) 下载 LTS 安装包，双击按提示装一次即可，后续无需再操作。
+:::
+
 ## 第 1 步：安装技能库
 
-### 一键自动安装
+我们提供了三种安装方式。**根据你的使用习惯选一种即可**——对话式安装最简单；交互式安装控制最精细。
 
-只需告诉你的 AI Agent 执行以下命令：
+### 方式一：对话式安装（最简单）
+
+如果你已经在使用支持 Skills 的 AI Agent（OpenClaw、Telegram Bot、Web 聊天页面，或任何能执行 shell 命令的客户端），你可以**直接在对话框里让 AI 完成安装**——不用自己打开终端，不用手动复制文件。
+
+**操作步骤：**
+
+1. 打开你的 AI Agent 对话框
+2. 复制下面这段 prompt 发送给 AI：
+
+   ```
+   运行 npx skills add BofAI/skills 安装 BANK OF AI 全部技能，安装完成后使用 bankofai-guide 进行引导后续操作。
+   注意：请安装到当前 Agent 对应的 skill 目录
+   ```
+
+3. AI 会自动完成以下流程（无需人工干预）：
+   - 拉取 `BofAI/skills` 仓库
+   - 自动检测当前 Agent 对应的 skills 目录（如 `~/.openclaw/workspace/.agents/skills/`）
+   - 安装全部 11 个 BANK OF AI 技能（`agent-wallet`、`sunswap-dex-trading`、`x402-payment`、`bankofai-guide` 等）
+
+:::tip 这是新手最推荐的路径
+你不需要懂 `npx`、`npm` 是什么，也不用关心"全局安装"是什么意思。AI 会处理每一步，包括为你的平台选对 skills 目录、安装钱包 CLI、引导你完成首个钱包配置。
+:::
+
+---
+
+### 方式二：一键自动安装（命令行）
+
+如果你已经装好 Node.js 并习惯使用命令行，告诉你的 AI Agent 执行以下命令：
 
 ```bash
 npx skills add https://github.com/BofAI/skills -y -g
@@ -16,7 +47,9 @@ npx skills add https://github.com/BofAI/skills -y -g
 
 `-y` 参数会跳过所有交互选择，默认安装所有 Skills；`-g` 参数表示全局安装（所有项目都可使用）。安装完成后会显示 ✅ 全局安装完成！以及安装的所有 Skills 列表。
 
-### 交互式安装
+---
+
+### 方式三：交互式安装（最精细控制）
 
 如果你想手动选择安装哪些 Skills 以及安装范围，去掉 `-y -g` 参数即可：
 
@@ -28,7 +61,7 @@ npx skills add https://github.com/BofAI/skills
 本文档以在终端中运行命令为例展示安装过程。
 :::
 
-#### 安装过程详解
+#### 交互式安装步骤详解
 
 安装器会引导你完成以下几步，照着做就行：
 

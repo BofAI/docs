@@ -3,6 +3,10 @@
     "message": "当前",
     "description": "The label for version current"
   },
+  "sidebar.docsSidebar.category.BANK OF AI": {
+    "message": "BANK OF AI",
+    "description": "The label for category BANK OF AI in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.category.x402 Payment Protocol": {
     "message": "x402支付协议",
     "description": "The label for category x402 Payment Protocol in sidebar docsSidebar"

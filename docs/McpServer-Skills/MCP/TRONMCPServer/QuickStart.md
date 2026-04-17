@@ -2,7 +2,7 @@
 
 The goal of this page is simple: **get you connected in 1 minute and make your first blockchain query.**
 
-We'll use the [official cloud service](./OfficialServerAccess.md) for this quick start. The cloud service is read-only — no dependencies to install, no wallet to configure, no API Key required. Just copy a config snippet into your AI client, restart, and start asking questions.
+We'll use the [official cloud service](./OfficialServerAccess.md) for this quick start. The cloud service is read-only — no dependencies to install, no wallet to configure, no API Key required. Just copy a config snippet into your AI client and start asking questions.
 
 ---
 
@@ -23,27 +23,35 @@ node --version  # should output v20.x.x or higher
 
 ## Install
 
-Simply tell your AI Agent to execute the following command:
+The easiest way to install is by **simply chatting with your AI Agent** — no need to open a terminal yourself, no manual file copying. If you're already using an AI Agent that can run shell commands (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.), you're set.
 
-```bash
-npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
-```
+**How it works:**
 
-The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
+1. Open your AI Agent chat
+2. Copy and paste the following prompt:
 
-After the command completes, restart your MCP client.
+   ```
+   Run npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y to install the TRON MCP Server.
+   Note: Please install to the MCP config of the current Agent.
+   ```
 
-:::tip Want to choose which AI tools to install to?
-Remove the `-y` flag to enter interactive installation mode. See [Official Cloud Service Access](./OfficialServerAccess.md) for details.
+3. The AI handles the entire flow automatically:
+   - Detects the remote MCP service URL
+   - Auto-detects which AI client is currently running
+   - Writes the `tron-mcp-server` entry into the right MCP config file (no manual JSON editing)
+   - Reports back with a ✅ confirmation when done
+
+Once the AI confirms the install, the TRON MCP Server is ready — you can start asking questions right away.
+
+:::tip Prefer the command line?
+If you'd rather run the install yourself or need finer control (e.g. selecting which AI tools to install to), see [Official Cloud Service Access](./OfficialServerAccess.md) for the command-line and interactive options.
 :::
 
 ---
 
-## Restart and Test
+## Test It Out
 
-After saving the configuration, **completely quit and restart** your AI client. After restarting, the client will automatically connect to TRON MCP Server.
-
-Then enter your first query in the chat:
+Enter your first query in the chat:
 
 ```
 Check the TRX balance of TRON address TXyz...

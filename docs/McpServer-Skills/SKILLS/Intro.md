@@ -57,7 +57,7 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Eight core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+Ten core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
 
 ### 🔑 Secure Wallet Management
 
@@ -98,6 +98,22 @@ Check balances, transfer tokens, manage approvals for any TRC20 token — USDT, 
 > 🗣️ "Check my USDT, USDD, and SUN balances. Then transfer 10 USDT to TRecipientAddress."
 
 💡 For more token operations, see: [**trc20-toolkit-skill**](./BANKOFAISkill.md#trc20-toolkit-skill)
+
+### 💵 USDD Stablecoin & JUST Protocol
+
+Swap USDT ↔ USDD at 1:1 via the Peg Stability Module (zero fee currently), check USDD/USDT/USDC/TRX/JST balances, and read vault (CDP) positions and protocol parameters.
+
+> 🗣️ "Sell 1000 USDT for USDD via the PSM" or "Show me all USDD vault types and their stability fees."
+
+💡 For PSM swaps and vault queries, see: [**usdd-skill**](./BANKOFAISkill.md#usdd-skill)
+
+### 🗳️ TRX Staking & SR Voting
+
+Stake TRX for TRON Power, vote for Super Representatives, and claim voting rewards. Stake 2.0 compatible — top 27 SRs distribute block rewards every 6 hours proportionally to their voters.
+
+> 🗣️ "Show my TRON Power and current votes, then list the top 10 SRs." or "Claim my pending voting rewards."
+
+💡 For staking, voting, and reward flows, see: [**trx-staking-skill**](./BANKOFAISkill.md#trx-staking-skill)
 
 ### 🔐 Multi-Sig & Account Permissions
 
