@@ -1,7 +1,7 @@
 # Claude Opus 4.6
 
 ## Overview
-Claude Opus 4.6 is the latest iteration of Anthropic's flagship AI model series. Building upon the 4.5 version's exceptional intelligence and profound ethical considerations, it further enhances complex reasoning capabilities, multimodal understanding, and performance in specific professional domains, aiming to provide a more powerful and precise AI experience within the Bank of AI ecosystem.
+Claude Opus 4.6 is the latest iteration of Anthropic's flagship AI model series. Building upon the 4.5 version's exceptional intelligence and profound ethical considerations, it further enhances complex reasoning capabilities, multimodal understanding, and performance in specific professional domains, aiming to provide a more powerful and precise AI experience within the B.AI ecosystem.
 
 ## Key Features
 * **Enhanced Complex Reasoning:** Deeply optimized for multi-step, cross-domain, and abstract concept reasoning, performing exceptionally well in solving complex scientific, engineering, and legal problems.
@@ -29,4 +29,4 @@ Claude Opus 4.6 is the latest iteration of Anthropic's flagship AI model series.
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Opus 4.6** | 5.00 | 25.00 |
+| **Claude Opus 4.6** | 5.50 | 27.50 |
