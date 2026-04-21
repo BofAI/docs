@@ -21,6 +21,8 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | **sunperp-skill** | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys |
 | **tronscan-skill** | Look up accounts, transactions, tokens, blocks, network stats | Recommended: TronScan API key (may throttle without one) |
 | **trc20-toolkit-skill** | Transfer tokens, check balances, manage approvals for any TRC20 token | Read-only: none. Transfers/approvals: wallet credentials |
+| **usdd-skill** | USDD stablecoin — PSM swaps (1:1 USDT ↔ USDD), vault queries, balance checks | Read-only: none. PSM swaps: wallet credentials |
+| **trx-staking-skill** | Stake TRX, vote for Super Representatives, claim voting rewards | Wallet credentials |
 | **multisig-permissions** | Multi-sig permission setup, key management, co-signed proposals | Wallet credentials (owner key for permission changes) |
 | **x402-payment** | On-chain "pay-first" auto-settlement | Wallet credentials |
 | **recharge-skill** | Balance, order history, account top-up | BANK OF AI API key |
@@ -231,6 +233,87 @@ Need to check balances, transfer tokens, or manage approvals for any TRC20 token
 > Sending tokens to a friend? Try: "Transfer 50 USDT to TXX...."
 
 > Preparing for a DeFi operation? Try: "Approve 200 USDT for the SunSwap router, then check the allowance."
+
+---
+
+## usdd-skill {#usdd-skill}
+
+Want to work with **USDD**, TRON's over-collateralized stablecoin? This skill handles the JUST Protocol's Peg Stability Module (PSM) for 1:1 USDT ↔ USDD swaps, reads vault (CDP) positions and protocol parameters, and checks USDD/USDT/USDC/TRX/JST balances.
+
+**Completely safe — looking only, no spending:**
+
+> Show me PSM state: current fees, USDT reserves, and USDD total supply.
+
+> Check my USDD, USDT, and JST balances.
+
+> Show all USDD vault types (TRX-A, TRX-B, sTRX-A, USDT-A, etc.) with their debt ceilings and stability fees.
+
+> Show me CDP position #42 — collateral locked, debt, and collateralization ratio.
+
+**Requires your confirmation (AI shows the bill first):**
+
+> Swap 1000 USDT for 1000 USDD via the PSM (zero fee).
+
+> Redeem 500 USDD back to 500 USDT via the PSM.
+
+**Real-world scenarios:**
+
+> Getting into USDD for the first time? Try: "Sell 1000 USDT for USDD via PSM" — 1:1 swap, currently zero fee, auto-handles TRC20 approval.
+
+> Checking vault health? Try: "Show me all vault types and their current stability fees." (TRX-A/B/C = 5%, sTRX-A = 1%, USDT-A = 0%)
+
+> Following a specific CDP? Try: "Check CDP #42's collateralization ratio."
+
+:::tip PSM vs. vaults
+The PSM gives you **instant 1:1 USDT ↔ USDD** swaps — the easiest way to get USDD. Vault/CDP positions (minting USDD against collateral like TRX) are read-only in this skill — you can query them but not open, draw, or repay directly.
+:::
+
+:::caution PSM reserves can be depleted
+Before redeeming USDD for USDT, check `psm-info` — if USDT reserves are low, `buyGem` may fail. The skill handles 18-decimal USDD vs. 6-decimal USDT normalization automatically.
+:::
+
+---
+
+## trx-staking-skill {#trx-staking-skill}
+
+Want to earn rewards by participating in TRON's governance? This skill stakes TRX for **TRON Power (TP)**, votes for Super Representatives (SRs), and claims voting rewards. TRON uses Delegated Proof of Stake — the top 27 SRs produce blocks and distribute rewards proportionally to their voters every 6 hours.
+
+**Completely safe — looking only, no spending:**
+
+> Show my staking overview: TRON Power, frozen TRX, current votes, and pending rewards.
+
+> List the top 27 active Super Representatives.
+
+> Show the top 50 SRs including partners.
+
+> Check the staking status for address TXX....
+
+**Requires your confirmation:**
+
+> Vote all my TRON Power for SR address TSRAddress.
+
+> Split my votes 60% to TSR1 and 40% to TSR2.
+
+> Claim my pending voting rewards.
+
+**Real-world scenarios:**
+
+> First time voting? Try: "List the top 10 SRs, then dry-run a vote for TSRAddress before confirming."
+
+> Want to diversify? Try: "Split my votes 50/50 between TSR1 and TSR2." Each vote transaction replaces all previous votes — the new slate is complete.
+
+> Collecting rewards? Try: "Check my pending rewards, then claim them." Rewards are separate from unstake withdrawals.
+
+:::tip Key facts
+- 1 frozen TRX = 1 TRON Power (TP)
+- Voting rewards are distributed every 6 hours
+- Votes **replace** all previous votes — each vote is a full slate
+- Stake 2.0 compatible: reads `frozenV2[]` and uses `voteWitnessAccount`
+:::
+
+:::danger 14-day unbonding period
+When TRX is unstaked (via the companion staking flow), it enters a **14-day cooldown** during which it is locked and earns no resources or voting power. After 14 days, you must manually call `withdrawExpireUnfreeze` to reclaim the TRX — it does not return automatically. Unstaking also removes the corresponding TRON Power, which invalidates any active votes that depend on it.
+:::
 
 ---
 

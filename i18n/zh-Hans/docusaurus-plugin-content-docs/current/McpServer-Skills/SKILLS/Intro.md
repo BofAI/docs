@@ -57,7 +57,7 @@
 
 ## 目前 Skills 能帮你干什么？
 
-八大核心技能，覆盖 TRON 生态最常用的场景。每个技能都配了一句"参考话术"——复制到 AI 对话框里回车就能体验。
+十大核心技能，覆盖 TRON 生态最常用的场景。每个技能都配了一句"参考话术"——复制到 AI 对话框里回车就能体验。
 
 ### 🔑 安全钱包管理
 
@@ -98,6 +98,22 @@
 > 🗣️ "帮我查一下 USDT、USDD 和 SUN 的余额，然后转 10 USDT 到 TRecipientAddress。"
 
 💡 如需了解更多代币操作，请查看：[**trc20-toolkit-skill**](./BANKOFAISkill.md#trc20-toolkit-skill)
+
+### 💵 USDD 稳定币与 JUST 协议
+
+通过 PSM（Peg Stability Module）进行 1:1 的 USDT ↔ USDD 兑换（目前零手续费），查看 USDD/USDT/USDC/TRX/JST 余额，以及查询金库（CDP）仓位和协议参数。
+
+> 🗣️ "帮我通过 PSM 用 1000 USDT 换成 USDD" 或 "帮我列出所有 USDD 金库类型和它们的稳定费率。"
+
+💡 如需了解 PSM 兑换和金库查询，请查看：[**usdd-skill**](./BANKOFAISkill.md#usdd-skill)
+
+### 🗳️ TRX 质押与超级代表投票
+
+质押 TRX 换取 TRON Power，给超级代表投票，领取投票奖励。兼容 Stake 2.0——得票前 27 名的超级代表每 6 小时按得票比例分配区块奖励给投票人。
+
+> 🗣️ "查一下我的 TRON Power 和当前投票情况，然后列出前 10 名超级代表。" 或 "帮我领取待结算的投票奖励。"
+
+💡 如需了解质押、投票与奖励流程，请查看：[**trx-staking-skill**](./BANKOFAISkill.md#trx-staking-skill)
 
 ### 🔐 多签与账户权限管理
 
