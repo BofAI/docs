@@ -1,7 +1,7 @@
 # Claude Sonnet 4.5
 
 ## Overview
-Claude Sonnet 4.5 is a balanced AI model developed by Anthropic, integrated into the Bank of AI platform. It is designed to provide near-flagship intelligence at a lower cost, making it the ideal choice for large-scale enterprise AI deployment.
+Claude Sonnet 4.5 is a balanced AI model developed by Anthropic, integrated into the B.AI platform. It is designed to provide near-flagship intelligence at a lower cost, making it the ideal choice for large-scale enterprise AI deployment.
 
 ## Key Features
 * **Ideal Intelligence & Speed:** Far surpasses similar models in intelligence while offering twice the response speed of the Opus model series.
@@ -27,4 +27,4 @@ Claude Sonnet 4.5 is a balanced AI model developed by Anthropic, integrated into
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Sonnet 4.5** | 3.00 | 15.00 |
+| **Claude Sonnet 4.5** | 3.30 | 16.50 |

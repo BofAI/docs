@@ -1,7 +1,7 @@
 # Claude Opus 4.5
 
 ## Overview
-Claude Opus 4.5 is the flagship AI model developed by Anthropic, integrated into the Bank of AI platform. It is renowned for its superior intelligence, top-tier performance, and profound ethical considerations, setting new benchmarks for professional AI applications.
+Claude Opus 4.5 is the flagship AI model developed by Anthropic, integrated into the B.AI platform. It is renowned for its superior intelligence, top-tier performance, and profound ethical considerations, setting new benchmarks for professional AI applications.
 
 ## Key Features
 * **Unparalleled Intelligence:** Sets industry benchmarks in graduate-level reasoning, mathematics, and coding, capable of solving extremely complex and open-ended problems.
@@ -27,4 +27,4 @@ Claude Opus 4.5 is the flagship AI model developed by Anthropic, integrated into
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Opus 4.5** | 5.00 | 25.00 |
+| **Claude Opus 4.5** | 5.50 | 27.50 |
