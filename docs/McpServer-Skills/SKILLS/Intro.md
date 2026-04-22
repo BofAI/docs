@@ -57,7 +57,7 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Ten core skills covering the most common scenarios in the TRON ecosystem. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+Eleven skills in total — covering the most common scenarios in the TRON ecosystem, plus a dedicated onboarding helper. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
 
 ### 🔑 Secure Wallet Management
 
@@ -77,7 +77,7 @@ Check prices, compare rates, even swap tokens in one go.
 
 ### 📈 Trade Perpetual Contracts
 
-View market data, open and close positions on SunPerp. Built-in safety lock: max 20x leverage, mandatory stop-loss on every position — keeps you from blowing up your account.
+View market data, open and close positions on SunPerp. Built-in safety locks: max 20x leverage (configurable) and a mandatory stop-loss on every position-opening order — auto-set to 5% from entry if omitted, and rejected if wider than 25%. Keeps you from blowing up your account.
 
 > 🗣️ "What's BTC's funding rate right now? Open a 5x long position with a 5% stop-loss."
 
@@ -93,7 +93,7 @@ Look up accounts, transactions, and check if a new token is legit. Pure read-onl
 
 ### 💸 Transfer & Manage TRC20 Tokens
 
-Check balances, transfer tokens, manage approvals for any TRC20 token — USDT, USDD, SUN, and more. Supports batch balance checks and symbol-based lookups.
+Check balances, transfer tokens, manage approvals — supports common tokens like USDT, USDD, SUN, and can also operate any TRC20 token via its contract address. Supports batch balance checks.
 
 > 🗣️ "Check my USDT, USDD, and SUN balances. Then transfer 10 USDT to TRecipientAddress."
 
@@ -125,7 +125,7 @@ Set up multi-signature security for your TRON account — configure keys, thresh
 
 ### ☕ Auto-Settle On-Chain Paid Services
 
-When the AI needs to call a paid on-chain service or data API, it uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — no manual QR scanning or wallet switching needed.
+When the AI needs to call a paid on-chain service or data API, it uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — no manual QR scanning or wallet switching needed. Multi-chain support — TRON (TRC20: USDT, USDD, with GasFree) and BSC (ERC20: USDT, USDC) both work; just switch the `--network` parameter.
 
 > 🗣️ "Use the x402 protocol to call this paid agent endpoint: https://api.example.com" (replace with the actual paid endpoint URL you want to call)
 
@@ -138,6 +138,14 @@ Check your BANK OF AI balance and top up with a single sentence.
 > 🗣️ "How much balance do I have? Go ahead and recharge 5 USDT."
 
 💡 For top-up and withdrawal rules, see: [**recharge-skill**](./BANKOFAISkill.md#recharge-skill)
+
+### 🧭 Onboarding Guide (bankofai-guide)
+
+A lightweight companion skill that runs the post-install setup flow, helps you create your first AgentWallet, and acts as a "wallet guard" before any on-chain operation — reminding you to set up a wallet if none exists. You don't usually call it directly; it gets invoked automatically by the installer and by other skills when needed.
+
+> 🗣️ "Walk me through BANK OF AI onboarding." or "Run bankofai-guide so I can set up my first wallet."
+
+💡 For the full onboarding flow, see: [**bankofai-guide**](./BANKOFAISkill.md#bankofai-guide)
 
 ---
 
