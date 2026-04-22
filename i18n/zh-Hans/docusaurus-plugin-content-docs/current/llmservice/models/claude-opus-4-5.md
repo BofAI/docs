@@ -2,7 +2,7 @@
 
 ## 概述
 
-Claude Opus 4.5 是 Anthropic 推出的旗舰级 AI 模型，已集成至 Bank of AI 平台。以顶级智能、卓越性能和强伦理能力著称，适用于高端专业场景。
+Claude Opus 4.5 是 Anthropic 推出的旗舰级 AI 模型，已集成至 白B.AI 平台。以顶级智能、卓越性能和强伦理能力著称，适用于高端专业场景。
 
 ---
 
@@ -38,4 +38,4 @@ Claude Opus 4.5 是 Anthropic 推出的旗舰级 AI 模型，已集成至 Bank o
 
 | 模型 | 输入（积分/Token） | 输出（积分/Token） |
 | :--- | :--- | :--- |
-| **Claude Opus 4.5** | 5.00 | 25.00 |
+| **Claude Opus 4.5** | 5.50 | 27.50 |

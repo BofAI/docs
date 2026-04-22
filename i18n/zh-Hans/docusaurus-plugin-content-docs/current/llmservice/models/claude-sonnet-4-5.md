@@ -2,7 +2,7 @@
 
 ## 概述
 
-Claude Sonnet 4.5 是 Anthropic 推出的平衡型 AI 模型，已集成至 Bank of AI 平台。在接近旗舰级智能的同时提供更低成本，是企业规模化部署 AI 的理想选择。
+Claude Sonnet 4.5 是 Anthropic 推出的平衡型 AI 模型，已集成至 白B.AI 平台。在接近旗舰级智能的同时提供更低成本，是企业规模化部署 AI 的理想选择。
 
 ---
 
@@ -38,4 +38,4 @@ Claude Sonnet 4.5 是 Anthropic 推出的平衡型 AI 模型，已集成至 Bank
 
 | 模型 | 输入（积分/Token） | 输出（积分/Token） |
 | :--- | :--- | :--- |
-| **Claude Sonnet 4.5** | 3.00 | 15.00 |
+| **Claude Sonnet 4.5** | 3.30 | 16.50 |

@@ -2,7 +2,7 @@
 
 ## 概述
 
-Claude Haiku 4.5 是 Anthropic 推出的轻量高速模型，已集成至 Bank of AI 平台。主打极低延迟与高并发，适用于实时交互场景。
+Claude Haiku 4.5 是 Anthropic 推出的轻量高速模型，已集成至 白B.AI 平台。主打极低延迟与高并发，适用于实时交互场景。
 
 ---
 
@@ -38,4 +38,4 @@ Claude Haiku 4.5 是 Anthropic 推出的轻量高速模型，已集成至 Bank o
 
 | 模型 | 输入（积分/Token） | 输出（积分/Token） |
 | :--- | :--- | :--- |
-| **Claude Haiku 4.5** | 1.00 | 5.00 |
+| **Claude Haiku 4.5** | 1.10 | 5.50 |
