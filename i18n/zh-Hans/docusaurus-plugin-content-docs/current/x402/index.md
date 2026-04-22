@@ -67,6 +67,8 @@ x402 目前支持以下网络环境：
 - **BSC 主网** （`eip155:56`）
 - **BSC 测试网** （`eip155:97`)
 
+> **协议互通**：自 v0.5.9 起，`exact` 支付方案（EVM 与 TRON）已与 **x402 Foundation（原 Coinbase）** 公布的 v2 规范保持一致，支持与 x402 Foundation 的 v2 参考客户端/服务端双向互通。详见 [SDK 功能特性](./sdk-features.md) 与 [网络与代币支持](./core-concepts/network-and-token-support.md#exact-方案)。
+
 
 ## 快速开始
 

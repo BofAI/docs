@@ -38,6 +38,8 @@
 | exact/bsc | ✅ | ✅ |
 | exact_gasfree/tron | ✅ | ✅ |
 
+> **Coinbase x402 v2 兼容**：自 v0.5.9 起，`exact` 机制（EVM 与 TRON）的 `payload` 已对齐 x402 Foundation（原 Coinbase）v2 链路传输格式。标准 v2 客户端可直接与本 SDK 服务端互通，反之亦然。详见 [网络与代币支持 → `exact` 方案](./core-concepts/network-and-token-support.md#exact-方案)。
+
 ## 签名器 
 
 | 签名器 | Python | TypeScript |
@@ -87,6 +89,8 @@
 | USDD (TRC-20) | ✅ | ✅ |
 | 自定义 TRC-20 | ✅ | ✅ |
 | USDT (BEP-20) | ✅ | ✅ |
+| USDC (BEP-20，主网/测试网) | ✅ | ✅ |
+| DHLU (BSC 测试网，用于 `exact` 互通测试) | ✅ | ✅ |
 | 自定义 BEP-20 | ✅ | ✅ |
 
 ## 图例 

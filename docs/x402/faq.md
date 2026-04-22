@@ -69,8 +69,18 @@ Common pricing models include:
 
 x402 supports three payment schemes:
 
-- **`exact_permit`** and **`exact`**: Both allow the client to authorize a **maximum payment amount**, and the server to settle the **actual cost incurred** (up to the authorized limit). This is ideal for **metered billing**, **LLM token usage**, and similar use cases.
+- **`exact_permit`** and **`exact`**: Both allow the client to authorize a **maximum payment amount**, and the server to settle the **actual cost incurred** (up to the authorized limit). This is ideal for **metered billing**, **LLM token usage**, and similar use cases. Since v0.5.9, the wire `payload` of the `exact` scheme conforms to the v2 specification published by the **x402 Foundation (formerly Coinbase)**.
 - **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. All GasFree API calls are routed through the BANK OF AI proxy — no API keys required on the client side.
+
+#### Can this SDK interoperate with the x402 Foundation (formerly Coinbase) v2 reference implementation?
+
+**Yes.** Since v0.5.9, the `exact` payment scheme (EVM and TRON) conforms to the v2 specification published by the **x402 Foundation (formerly Coinbase)**:
+
+- A stock v2 client can directly access this SDK's `exact` protected endpoints with no project-specific adapter layer.
+- This SDK's client can pay v2-compatible servers directly.
+- In the V2 structure, transfer authorization data is carried in the `payload.authorization` field (a structured object). As a migration fallback, the client also populates `extensions.transferAuthorization` so that servers still running older versions can parse the payload.
+- When using the `exact` scheme on BSC, the advertised asset **must** natively implement ERC-3009 `transferWithAuthorization` — for example, **DHLU** on BSC testnet. BSC USDT is a plain ERC-20 and natively supports neither ERC-3009 nor EIP-2612 permit — if you need to accept USDT, use the `exact_permit` scheme instead (which is backed by this project's `PaymentPermit` proxy contract and works with any ERC-20).
+- The `examples/bsc-testnet-smoke/` directory contains smoke tests for bidirectional interoperability (Coinbase official client → BANK OF AI server, BANK OF AI client → Coinbase official server) that you can use as a debugging and integration reference.
 
 ---
 
@@ -86,7 +96,11 @@ x402 supports three payment schemes:
 | TRON Mainnet (`tron:mainnet`) | USDD (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:nile`)       | USDD (TRC-20) | **Testnet** |
 | BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
+| BSC Mainnet (`eip155:56`)     | USDC (BEP-20) | **Mainnet** |
+| BSC Mainnet (`eip155:56`)     | EPS (BEP-20)  | **Mainnet** |
 | BSC Testnet (`eip155:97`)     | USDT (BEP-20) | **Testnet** |
+| BSC Testnet (`eip155:97`)     | USDC (BEP-20) | **Testnet** |
+| BSC Testnet (`eip155:97`)     | DHLU (BEP-20, for `exact` interop tests) | **Testnet** |
 
 Custom TRC-20 and BEP-20 tokens can also be added via the TokenRegistry.
 
