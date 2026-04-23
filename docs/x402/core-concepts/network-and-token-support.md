@@ -62,9 +62,15 @@ By default, **USDT** and **USDD** are used as primary settlement currencies.
 | **USDD** | `tron:mainnet` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
 | **USDD** | `tron:nile`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56`    | `0x55d398326f99059fF775485246999027B3197955` |
+| **USDC** | `eip155:56`    | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
+| **EPS**  | `eip155:56`    | `0xA7f552078dcC247C2684336020c03648500C6d9F` |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
+| **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
+| **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
 
 > **Extensibility**: The protocol is highly extensible. By registering tokens in the `TokenRegistry`, you can easily support any custom TRC-20 or BEP-20 token.
+
+> **Token selection for the `exact` scheme**: The `exact` scheme requires a token that natively implements ERC-3009 `transferWithAuthorization`. For BSC testnet `exact` interoperability testing, the recommended asset is **DHLU** (Da Hulu). `USDT (BEP-20)` does not natively support ERC-3009 — do NOT advertise `exact` payment requirements with the BSC USDT contract. If you need USDT on BSC, use the `exact_permit` scheme instead.
 
 ---
 
@@ -114,7 +120,14 @@ The `exact_permit` scheme transfers tokens via the `PaymentPermit` contract, sui
 
 ### `exact` Scheme
 
-The `exact` scheme is for tokens that natively support `transferWithAuthorization`. It does not require the `PaymentPermit` contract.
+The `exact` scheme is for tokens that natively support ERC-3009 `transferWithAuthorization`. It does not require the `PaymentPermit` contract.
+
+Since **v0.5.9**, the `exact` scheme on both EVM and TRON conforms to the v2 specification published by the **x402 Foundation (formerly Coinbase)**:
+
+- **V2 wire format**: The `payload` of `exact` conforms to the v2 spec field layout and semantics. A stock v2 client can pay a protected endpoint on this SDK's server directly, and this SDK's client can pay any v2-compliant server — no project-specific translation required.
+- **Structured authorization**: The `nativeExact` / `nativeExactEvm` / `nativeExactTron` mechanisms have been updated to emit a V2-compatible `payload` — using a typed-field authorization structure instead of the previous flat hex blob. Transfer authorization data is carried in `payload.authorization`.
+- **Migration fallback**: To reduce disruption during rollout, the client dual-writes both `payload.authorization` (V2) and `extensions.transferAuthorization` (V1); the server prefers `payload.authorization` and keeps a temporary fallback for the legacy field.
+- **BSC interop smoke tests**: The `examples/bsc-testnet-smoke/` directory provides BSC testnet interoperability smoke tests (TypeScript and Python), validating both the "Coinbase official client → BANK OF AI server" and "BANK OF AI client → Coinbase official server" directions.
 
 ### `exact_gasfree` Scheme
 

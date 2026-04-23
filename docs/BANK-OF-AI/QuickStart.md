@@ -69,7 +69,7 @@ The AI will install the Skills and then ask whether to create a wallet.
 >
 > **A. Create now (recommended, ~10 seconds)**
 > - Quick setup, secure password auto-generated
-> - Ready to use every BankOfAI feature right after creation
+> - Ready to use every BANK OF AI feature right after creation
 >
 > **B. Create later**
 > - You can run `bankofai-guide` again any time to continue setup

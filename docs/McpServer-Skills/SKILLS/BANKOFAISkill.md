@@ -17,15 +17,16 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | Skill | What It Does | What Key/Credential Do I Need? |
 | :--- | :--- | :--- |
 | **agent-wallet** | Create wallets, sign transactions/messages, manage multiple wallets — supports EVM and TRON | `AGENT_WALLET_PASSWORD` (encrypted mode) or none (interactive) |
-| **sunswap** | Check prices, get quotes, swap tokens, manage liquidity pools | Read-only: none. Trading: wallet credentials |
+| **sunswap** | Check prices, get quotes, swap tokens, manage V2/V3/V4 liquidity pools | Read-only: none. Trading: wallet credentials |
 | **sunperp-skill** | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys |
 | **tronscan-skill** | Look up accounts, transactions, tokens, blocks, network stats | Recommended: TronScan API key (may throttle without one) |
 | **trc20-toolkit-skill** | Transfer tokens, check balances, manage approvals for any TRC20 token | Read-only: none. Transfers/approvals: wallet credentials |
 | **usdd-skill** | USDD stablecoin — PSM swaps (1:1 USDT ↔ USDD), vault queries, balance checks | Read-only: none. PSM swaps: wallet credentials |
 | **trx-staking-skill** | Stake TRX, vote for Super Representatives, claim voting rewards | Wallet credentials |
 | **multisig-permissions** | Multi-sig permission setup, key management, co-signed proposals | Wallet credentials (owner key for permission changes) |
-| **x402-payment** | On-chain "pay-first" auto-settlement | Wallet credentials |
+| **x402-payment** | On-chain "pay-first" auto-settlement on TRON (TRC20) & BSC (ERC20), with GasFree support | Wallet credentials (via agent-wallet) |
 | **recharge-skill** | Balance, order history, account top-up | BANK OF AI API key |
+| **bankofai-guide** | Onboarding helper — post-install setup, first AgentWallet creation, wallet guard for other skills | None (runs automatically when needed) |
 
 ### 🔑 Where Do I Get These Keys? How Do I Set Them Up?
 
@@ -67,7 +68,7 @@ Head over to **[Quick Start](./QuickStart.md)** — it takes about 1 minute. Com
 
 ## agent-wallet {#agent-wallet}
 
-Your AI's secure signing engine. This skill creates and manages encrypted wallets for your AI agent, letting it sign transactions and messages on both EVM (BSC, Ethereum, Polygon, etc.) and TRON networks — without ever exposing your private key. Think of it as the "keychain" that all other trading and payment skills rely on.
+Your AI's secure signing engine. This skill creates and manages encrypted wallets for your AI agent, letting it sign transactions and messages on both EVM (BSC, Ethereum, Polygon, Arbitrum, Base, etc.) and TRON networks — without ever exposing your private key. Think of it as the "keychain" that all other trading and payment skills rely on. Requires Node.js 20+.
 
 **Completely safe — looking only, no spending:**
 
@@ -87,18 +88,18 @@ Your AI's secure signing engine. This skill creates and manages encrypted wallet
 
 **Real-world scenarios:**
 
-> Setting up for the first time? Try: "Create a new agent wallet" — the AI walks you through choosing a wallet type, generating keys, and saving your master password.
+> Setting up for the first time? Try: "Create a new agent wallet" — the AI walks you through choosing a wallet type (`local_secure` for an encrypted local key, or `privy` for a hosted wallet via API credentials), generating keys, and saving your master password.
 
-> Managing multiple chains? Try: "Show me all my wallets and their addresses" — one wallet derives both EVM and TRON addresses from the same key.
+> Managing multiple chains? Try: "Show me all my wallets and their addresses" — one wallet derives both EVM and TRON addresses from the same key. Use `eip155:<chainId>` for EVM networks (e.g. `eip155:1` Ethereum, `eip155:56` BSC, `eip155:137` Polygon, `eip155:42161` Arbitrum, `eip155:8453` Base) and `tron:mainnet` / `tron:nile` for TRON.
 
-> Need to sign something? Try: "Sign this transaction on BSC" — the AI handles the signing locally without broadcasting.
+> Need to sign something? Try: "Sign this transaction on BSC" — the AI handles the signing locally without broadcasting. Supports raw transactions, EIP-191 messages, and EIP-712 typed data (EVM only).
 
 :::tip Why use Agent Wallet instead of raw private keys?
 Agent Wallet encrypts your private key with a master password. Even if someone accesses your files, they can't use the key without the master password. This is the recommended way to configure wallet credentials for all other skills (sunswap, x402-payment, etc.).
 :::
 
 :::caution Dangerous operations are agent-restricted
-`remove`, `reset`, and `change-password` cannot be executed by the AI — you must run these commands yourself in the terminal. This protects against accidental or irreversible loss of wallet access.
+`remove`, `reset`, and `change-password` cannot be executed by the AI — you must run these commands yourself in the terminal. This protects against accidental or irreversible loss of wallet access. The AI will explain the command and ask you to run it yourself.
 :::
 
 For detailed setup instructions, see [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md).
@@ -107,7 +108,7 @@ For detailed setup instructions, see [Agent Wallet Quick Start](../../Agent-Wall
 
 ## sunswap {#sunswap}
 
-Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the AI.
+Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the AI. This skill is powered by `@bankofai/sun-cli` and supports swaps plus V2 AMM, V3 concentrated liquidity, and V4 hooks-enabled pools.
 
 **Completely safe — looking only, no spending:**
 
@@ -125,6 +126,10 @@ Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the 
 
 > Add 100 TRX and 15 USDT liquidity to the TRX/USDT pool on SunSwap V2.
 
+> Mint a V3 position: TRX/USDT, fee tier 0.3%, full-range.
+
+> Mint a V4 position with `--create-pool` if the pool doesn't exist yet.
+
 > Collect fee rewards from V3 position #12345.
 
 **Real-world scenarios:**
@@ -135,11 +140,15 @@ Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the 
 
 > Looking to buy the dip? Try: "What's TRX's price trend over the last 7 days?"
 
+:::tip V3 fee tiers & tick alignment
+V3 only accepts fee tiers `100`, `500`, `3000`, or `10000` (0.01% / 0.05% / 0.3% / 1%). `--tick-lower` and `--tick-upper` must be multiples of the fee's tick spacing (1 / 10 / 60 / 200). The AI validates these before minting — misaligned ticks would otherwise fail on-chain.
+:::
+
 ---
 
 ## sunperp-skill {#sunperp-skill}
 
-Want to trade contracts? This skill handles market data, opening/closing positions, stop-loss, and withdrawals. Built-in safety: max 20x leverage, mandatory stop-loss — if losses exceed 5%, the AI automatically closes your position to prevent liquidation.
+Want to trade contracts? This skill handles market data, opening positions, closing positions, and setting stop-loss on SunPerp. Built-in safety locks enforced at the script level: max 20x leverage (configurable in `resources/sunperp_config.json`) and a **mandatory stop-loss on every position-opening order** — auto-set to 5% from entry if you don't specify one, and rejected outright if wider than 25%. Close-position orders (`reduce_only`) are themselves risk-reducing, so they're exempt from the mandatory stop-loss.
 
 **Completely safe — looking only, no spending:**
 
@@ -364,11 +373,29 @@ Changing Owner permissions is **irreversible** without the new keys. The skill v
 
 ## x402-payment {#x402-payment}
 
-Some APIs and AI agents require on-chain payment before use. This skill uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — the AI detects the charge, completes the on-chain payment, gets the result, and reports back. It always asks for your confirmation before paying.
+Some APIs and AI agents require on-chain payment before use. This skill uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — the AI detects the charge, completes the on-chain payment, gets the result, and reports back. It always asks for your confirmation before paying. Supports payments on multiple chains — **TRON (TRC20: USDT, USDD)** and **BSC (ERC20: USDT, USDC)** (each payment settles on its own chain; this is multi-chain support, not a cross-chain bridge), covering both mainnet and testnet (Nile / BSC testnet).
+
+**Completely safe — looking only, no spending:**
+
+> Verify my x402 wallet status (addresses + readiness).
+
+> Show my GasFree wallet info (address, activation status, balances).
+
+> Fetch the manifest for this x402 agent: https://api.example.com/.well-known/agent.json
 
 **Requires your confirmation:**
 
-> Use x402 protocol to call this paid agent endpoint: https://api.example.com （replace with the actual paid endpoint URL you want to call）
+> Use the x402 protocol to call this paid agent endpoint: https://api.example.com (replace with the actual paid endpoint URL you want to call)
+
+> Activate my GasFree account on nile with USDT.
+
+:::tip GasFree support (TRON)
+The skill prefers the `exact_gasfree` scheme over `exact_permit` when paying on TRON. GasFree requires an activated account with enough token balance in the GasFree wallet — use `--gasfree-info` to check, and `--gasfree-activate` if it's not active yet.
+:::
+
+:::caution Wallet credentials come from agent-wallet
+This skill loads signers via `agent-wallet` only — it does **not** read raw private keys from random config files. Set `AGENT_WALLET_PASSWORD` for encrypted local mode, or `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC` for static mode. Requires Node.js 20+.
+:::
 
 ---
 
@@ -386,6 +413,31 @@ Check your balance, view order history, or top up your account.
 
 > Recharge 1 USDT to my BANK OF AI account.
 
+---
+
+## bankofai-guide {#bankofai-guide}
+
+The onboarding companion that ties the rest of the skill set together. You don't typically invoke this skill directly — it kicks in automatically in three situations:
+
+1. **Post-install setup.** Right after you run `npx skills add BofAI/skills`, the installer hands off to `bankofai-guide`. It installs the `@bankofai/agent-wallet` CLI globally, checks whether you already have a wallet, and asks whether you want to set one up now or later.
+2. **First-wallet creation.** If you have no wallet yet, it offers two paths: a **quick setup** (strongly recommended — fully automated, takes ~10 seconds, generates an encrypted `local_secure` wallet and a strong random password) and a **detailed setup** (step-by-step walkthrough with custom options). Once your wallet is ready, it shows you both the EVM and TRON addresses and tells you where to deposit USDT.
+3. **Wallet guard.** Signing skills (`sunswap`, `sunperp-skill`, `trc20-toolkit-skill`, `multisig-permissions`, `x402-payment`) run `agent-wallet list` first to check wallet state before any on-chain operation. **Only when no wallet is found** do they hand off to `bankofai-guide`, which pauses the current operation, walks you through creating one in a minute or two, and then returns control to the original flow.
+
+**Sample prompts that will activate it:**
+
+> Walk me through BANK OF AI onboarding.
+
+> Run bankofai-guide so I can set up my first wallet.
+
+> Help me create an AgentWallet with quick setup.
+
+:::tip Why this skill exists
+Most Web3 stumbles happen on day one — no wallet configured, no idea where to deposit funds, no sense of which address belongs to which chain. `bankofai-guide` compresses that whole journey into a handful of confirmations so the rest of your skills can just work.
+:::
+
+:::caution Your password matters
+The quick setup auto-generates a strong password and stores it in `~/.agent-wallet/runtime_secrets.json` for convenience. Save or memorize it anyway — if that file is ever deleted, the password is the only way to recover access to the encrypted wallet.
+:::
 
 ---
 
