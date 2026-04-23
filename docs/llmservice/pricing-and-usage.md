@@ -1,3 +1,5 @@
+# Pricing and Usage
+
 ## Credits & Pricing
 
 The platform utilizes a unified credit system to measure and settle usage for all AI services.
@@ -10,20 +12,22 @@ The platform utilizes a unified credit system to measure and settle usage for al
 
 | Model             | Input (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
 | :---------------- | --------------------: | ---------------------: | -----------------------: |
-| MiniMax-M2.5      |                  0.30 |                   1.20 |                        - |
-| Kimi-K2.5         |                  0.23 |                   3.00 |                        - |
+| MiniMax M2.5      |                  0.30 |                   1.20 |                        - |
+| Kimi K2.5         |                  0.23 |                   3.00 |                        - |
 | GLM-5             |                  0.30 |                   2.55 |                        - |
+| DeepSeek V3.2     |                  0.27 |                   0.42 |                        - |
 | GPT-5.4           |                  2.50 |                  15.00 |                   10,000 |
+| GPT-5.4 Pro       |                 30.00 |                 180.00 |                        - |
 | GPT-5.2           |                  1.75 |                  14.00 |                   10,000 |
-| GPT-5.4-mini      |                  0.75 |                   4.50 |                   10,000 |
-| GPT-5-mini        |                  0.25 |                   2.00 |                   10,000 |
-| GPT-5.4-nano      |                  0.20 |                   1.20 |                   10,000 |
-| GPT-5-nano        |                  0.05 |                   0.40 |                        - |
-| Claude Opus 4.6   |                  5.00 |                  25.00 |                   10,000 |
-| Claude Opus 4.5   |                  5.00 |                  25.00 |                   10,000 |
-| Claude Sonnet 4.6 |                  3.00 |                  15.00 |                   10,000 |
-| Claude Sonnet 4.5 |                  3.00 |                  15.00 |                   10,000 |
-| Claude Haiku 4.5  |                  1.00 |                   5.00 |                   10,000 |
+| GPT-5.4 Mini      |                  0.75 |                   4.50 |                   10,000 |
+| GPT-5 Mini        |                  0.25 |                   2.00 |                   10,000 |
+| GPT-5.4 Nano      |                  0.20 |                   1.20 |                   10,000 |
+| GPT-5 Nano        |                  0.05 |                   0.40 |                        - |
+| Claude Opus 4.6   |                  5.50 |                  27.50 |                   10,000 |
+| Claude Opus 4.5   |                  5.50 |                  27.50 |                   10,000 |
+| Claude Sonnet 4.6 |                  3.30 |                  16.50 |                   10,000 |
+| Claude Sonnet 4.5 |                  3.30 |                  16.50 |                   10,000 |
+| Claude Haiku 4.5  |                  1.10 |                   5.50 |                   10,000 |
 | Gemini 3.1 Pro    |                  2.00 |                  12.00 |                   14,000 |
 | Gemini 3 Flash    |                  0.50 |                   3.00 |                   14,000 |
 

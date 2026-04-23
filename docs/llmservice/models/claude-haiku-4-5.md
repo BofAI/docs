@@ -1,7 +1,7 @@
 # Claude Haiku 4.5
 
 ## Overview
-Claude Haiku 4.5 is the fastest and most compact AI model developed by Anthropic, integrated into the Bank of AI platform. It is designed to provide near-instantaneous responses, making it the premier choice for building seamless, real-time AI experiences.
+Claude Haiku 4.5 is the fastest and most compact AI model developed by Anthropic, integrated into the B.AI platform. It is designed to provide near-instantaneous responses, making it the premier choice for building seamless, real-time AI experiences.
 
 ## Key Features
 * **Unmatched Response Speed:** As the fastest model in its intelligence class, it delivers extremely low latency, ideal for applications requiring immediate interaction.
@@ -27,4 +27,4 @@ Claude Haiku 4.5 is the fastest and most compact AI model developed by Anthropic
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Haiku 4.5** | 1.00 | 5.00 |
+| **Claude Haiku 4.5** | 1.10 | 5.50 |
