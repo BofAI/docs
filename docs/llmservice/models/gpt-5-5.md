@@ -1,5 +1,3 @@
-# GPT-5.5
-
 ## Overview
 
 GPT-5.5 is OpenAI's most capable model, released on April 23, 2026. Codenamed "Spud," it is the first fully retrained base model since GPT-4.5, and all prior GPT-5 releases were post-training iterations on the same foundation. GPT-5.5 features a natively omnimodal architecture, a 1-million-token context window, and leads on 14 benchmarks at launch.
