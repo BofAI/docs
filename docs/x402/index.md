@@ -81,6 +81,8 @@ x402 currently supports the following networks:
 - **BSC Mainnet** (`eip155:56`)
 - **BSC Testnet** (`eip155:97`)
 
+> **Protocol interoperability**: Since v0.5.9, the `exact` payment scheme (EVM and TRON) conforms to the v2 specification published by the **x402 Foundation (formerly Coinbase)**, enabling bidirectional interoperability with the x402 Foundation's v2 reference clients and servers. See [SDK Feature Matrix](./sdk-features) and [Network & Token Support](./core-concepts/network-and-token-support#exact-scheme) for details.
+
 ---
 
 ## Quick Start

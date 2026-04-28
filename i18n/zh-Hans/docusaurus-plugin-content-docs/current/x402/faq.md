@@ -61,8 +61,18 @@ x402 目前提供以下 SDK：
 
 x402 支持三种支付方案：
 
-- **`exact_permit`** 和 **`exact`**：两种方案均允许客户端授权一个**最高支付金额**，服务端结算**实际产生的费用**（不超过授权上限）。此方案非常适用于**按量计费 (Metered Billing)**、**LLM Token 消耗**等场景。
+- **`exact_permit`** 和 **`exact`**：两种方案均允许客户端授权一个**最高支付金额**，服务端结算**实际产生的费用**（不超过授权上限）。此方案非常适用于**按量计费 (Metered Billing)**、**LLM Token 消耗**等场景。自 v0.5.9 起，`exact` 方案的协议 `payload` 已遵循 **x402 Foundation（原 Coinbase）** 公布的 v2 规范。
 - **`exact_gasfree`**（仅限 TRON）：允许买家使用 USDT/USDD 付款而无需持有 TRX 来支付 gas。所有 GasFree API 调用通过 BANK OF AI 代理路由，客户端无需配置 API 密钥。
+
+#### 本 SDK 是否可以与 x402 Foundation（原 Coinbase）的 v2 参考实现互通？
+
+**可以。** 自 v0.5.9 起，`exact` 支付方案（EVM 与 TRON）已与 **x402 Foundation（原 Coinbase）** 公布的 v2 协议规范保持一致：
+
+- 标准的 v2 客户端可以直接访问本 SDK 的 `exact` 受保护端点，无需任何项目特定的适配层。
+- 本 SDK 的客户端可以直接向 v2 兼容的服务端付款。
+- V2 结构中转账授权数据位于 `payload.authorization` 字段（结构化对象）；作为迁移过渡，客户端还会同时填充 `extensions.transferAuthorization`，以便仍在运行旧版本的服务端也能解析。
+- 在 BSC 上使用 `exact` 方案时，**必须**选择代币自身原生实现 ERC-3009 `transferWithAuthorization` 的资产，例如 BSC 测试网上的 **DHLU**。BSC USDT 是普通 ERC-20，既不原生支持 ERC-3009 也不原生支持 EIP-2612 permit——如果需要用 USDT 收款，请改用 `exact_permit` 方案（由自研 `PaymentPermit` 代理合约封装，兼容任意 ERC-20）。
+- 仓库中的 `examples/bsc-testnet-smoke/` 目录提供了双向互通的烟雾测试示例（Coinbase 官方客户端 → BANK OF AI 服务端、BANK OF AI 客户端 → Coinbase 官方服务端），可作为调试与集成参考。
 
 ### 资产、网络及费用
 
@@ -76,7 +86,11 @@ x402 支持三种支付方案：
 | TRON Mainnet (`tron:mainnet`) | USDD (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:nile`)       | USDD (TRC-20) | **Testnet** |
 | BSC 主网 (`eip155:56`) | USDT (BEP-20) | **Mainnet** |
+| BSC 主网 (`eip155:56`) | USDC (BEP-20) | **Mainnet** |
+| BSC 主网 (`eip155:56`) | EPS (BEP-20) | **Mainnet** |
 | BSC testnet (`eip155:97`)      | USDT (BEP-20) | **Testnet** |
+| BSC testnet (`eip155:97`)      | USDC (BEP-20) | **Testnet** |
+| BSC testnet (`eip155:97`)      | DHLU (BEP-20, 用于 `exact` 互通测试) | **Testnet** |
 
 此外，支持通过 TokenRegistry 添加自定义的 TRC-20/BEP-20 代币。
 

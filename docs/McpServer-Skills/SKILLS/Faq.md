@@ -11,15 +11,15 @@ Questions are ordered by urgency — the ones you're most likely to hit first ar
 Tell the AI exactly where to find the skill file:
 
 ```
-Please read ~/.openclaw/skills/sunswap/SKILL.md and check the current price of TRX.
+Please read ~/.agents/skills/sunswap-dex-trading/SKILL.md and check the current price of TRX.
 ```
 
 If that works, the issue was just the AI's auto-matching. Add clearer keywords next time, like "use the sunswap skill."
 
 If that doesn't work either, check these in order:
 
-1. Does the skill directory exist? Run `ls ~/.openclaw/skills` in your terminal.
-2. Are dependencies installed? Go to the skill folder and run `npm install` (e.g., `cd ~/.openclaw/skills/tronscan-skill && npm install`).
+1. Does the skill directory exist? Run `ls ~/.agents/skills` in your terminal.
+2. Are dependencies installed? Go to the skill folder and run `npm install` (e.g., `cd ~/.agents/skills/tronscan-data-lookup && npm install`).
 3. Are credentials configured? See [How do I configure credentials?](#how-do-i-configure-credentials) below.
 
 ### Installation failed
@@ -37,10 +37,10 @@ Run `node --version` in your terminal. Skills require **v20 or higher**. If your
 Run this in your terminal:
 
 ```bash
-ls ~/.openclaw/skills
+ls ~/.agents/skills
 ```
 
-You should see directory names like `sunswap`, `sunperp-skill`, `tronscan-skill`, `trc20-toolkit-skill`, `multisig-permissions`, `x402-payment`, `recharge-skill`.
+You should see 11 directory names: `agent-wallet`, `sunswap-dex-trading`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`, and `bankofai-guide`.
 
 Then verify in your AI chat:
 
@@ -126,19 +126,27 @@ If you're comfortable with the command line, you can store credentials in your s
 Add the variables for the skills you need:
 
 ```bash
-# SunSwap trading (needed for swap operations)
+# SunSwap trading, TRC20 toolkit, USDD PSM, TRX staking, multisig
+# (any skill that spends on-chain funds)
 export TRON_PRIVATE_KEY="your_private_key"
 export TRONGRID_API_KEY="your_TronGrid_API_key"
+export TRON_NETWORK="mainnet"   # or "nile" / "shasta" for testnet
 
 # SunPerp perpetual contracts
 export SUNPERP_ACCESS_KEY="your_SunPerp_Access_Key"
 export SUNPERP_SECRET_KEY="your_SunPerp_Secret_Key"
 
-# TronScan data queries
+# TronScan data queries (optional — BANK OF AI proxy works without a key)
 export TRONSCAN_API_KEY="your_TronScan_API_Key"
 
-# BANK OF AI account
+# BANK OF AI account (recharge-skill)
 export BANKOFAI_API_KEY="your_BANKOFAI_API_Key"
+
+# agent-wallet (if you use encrypted local mode for x402-payment / signing)
+export AGENT_WALLET_PASSWORD="your_master_password"
+
+# multisig-permissions hybrid flow (review.js --sign)
+export TRON_HUMAN_PRIVATE_KEY="your_human_reviewer_key"
 ```
 
 </details>
@@ -155,14 +163,14 @@ Currently: **OpenClaw** (most seamless), and any AI assistant that can read loca
 
 Absolutely. Skills are just regular folders on your computer. Edit anything you want.
 
-For example, if you think 20x leverage is still too risky for perpetual trading, open `~/.openclaw/skills/sunperp-skill/resources/sunperp_config.json` and lower the number. Your AI, your rules.
+For example, if you think 20x leverage is still too risky for perpetual trading, open `~/.agents/skills/sunperp-perpetual-futures-trading/resources/sunperp_config.json` and lower the number. Your AI, your rules.
 
 ### How do I uninstall or update?
 
 **Uninstall:** Delete the folder.
 
 ```bash
-rm -rf ~/.openclaw/skills/sunswap
+rm -rf ~/.agents/skills/sunswap-dex-trading
 ```
 
 **Update:** Re-run the install command. It will update all skills to the latest version.

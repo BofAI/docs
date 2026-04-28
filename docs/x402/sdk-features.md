@@ -48,6 +48,8 @@ This page tracks the implementation progress and feature support status of the x
 | exact/bsc | ✅ | ✅ |
 | exact_gasfree/tron | ✅ | ✅ |
 
+> **Coinbase x402 v2 compatibility**: Since v0.5.9, the `payload` emitted by the `exact` mechanism (EVM and TRON) aligns with the x402 Foundation (formerly Coinbase) v2 wire format. Stock v2 clients can interoperate with this SDK's server and vice versa. See [Network & Token Support → `exact` Scheme](./core-concepts/network-and-token-support.md#exact-scheme) for details.
+
 ---
 
 ## Signers
@@ -107,6 +109,8 @@ This page tracks the implementation progress and feature support status of the x
 | USDD (TRC-20) | ✅ | ✅ |
 | Custom TRC-20 | ✅ | ✅ |
 | USDT (BEP-20) | ✅ | ✅ |
+| USDC (BEP-20, mainnet & testnet) | ✅ | ✅ |
+| DHLU (BSC testnet, for `exact` interop tests) | ✅ | ✅ |
 | Custom BEP-20 | ✅ | ✅ |
 
 ---
