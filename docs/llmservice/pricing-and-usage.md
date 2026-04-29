@@ -16,7 +16,10 @@ The platform utilizes a unified credit system to measure and settle usage for al
 | Kimi K2.5         |                  0.23 |                   3.00 |                        - |
 | GLM-5             |                  0.30 |                   2.55 |                        - |
 | DeepSeek V3.2     |                  0.27 |                   0.42 |                        - |
+| DeepSeek V4 Flash |                  0.14 |                   0.28 |                        - |
+| DeepSeek V4 Pro   |                  1.74 |                   3.48 |                        - |
 | GPT-5.4           |                  2.50 |                  15.00 |                   10,000 |
+| GPT-5.5           |                  5.00 |                  30.00 |                        - |
 | GPT-5.4 Pro       |                 30.00 |                 180.00 |                        - |
 | GPT-5.2           |                  1.75 |                  14.00 |                   10,000 |
 | GPT-5.4 Mini      |                  0.75 |                   4.50 |                   10,000 |
