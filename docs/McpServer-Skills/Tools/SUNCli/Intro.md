@@ -12,11 +12,13 @@ For example, checking the price of TRX is as simple as:
 sun price TRX
 ```
 
-And executing a swap:
+And executing a swap — for example, **swap 1 TRX for USDT**:
 
 ```bash
 sun swap TRX USDT 1000000 --yes
 ```
+
+> Amounts are passed as integers scaled by the token's `decimals`. TRX has 6 decimals, so `1000000` is exactly **1 TRX**. Full conversion rules and the decimals table for every built-in token live in [Swap → amount precision](./CommandGuide.md#swap).
 
 No frontend, no browser, no manual contract interaction.
 

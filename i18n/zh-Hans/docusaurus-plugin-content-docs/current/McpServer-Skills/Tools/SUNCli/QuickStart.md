@@ -60,13 +60,13 @@ sun price TRX
 sun pool top-apy --page-size 5
 ```
 
-**获取兑换报价（不需要钱包）：**
+**获取「用 1 个 TRX 兑换 USDT」的报价**（不需要钱包）：
 
 ```bash
 sun swap:quote TRX USDT 1000000
 ```
 
-这会显示将 1 TRX（1,000,000 sun）兑换为 USDT 的最佳路径和预期输出——不会执行任何交易。
+这会显示最佳路径和预期输出——不会执行任何交易。（金额按代币 `decimals` 整数缩放传入；TRX 精度为 6，所以 `1000000` = 1 TRX。详见 [Swap → 金额精度](./CommandGuide.md#swap)。）
 
 **获取 JSON 格式输出（适合脚本）：**
 
@@ -108,7 +108,7 @@ sun wallet address
 
 ## 在测试网执行第一笔兑换
 
-钱包配置好后，在 Nile 测试网上试一笔兑换：
+钱包配置好后，在 Nile 测试网上试一笔**用 1 个 TRX 兑换 USDT** 的交易：
 
 ```bash
 sun swap TRX USDT 1000000 --network nile --yes

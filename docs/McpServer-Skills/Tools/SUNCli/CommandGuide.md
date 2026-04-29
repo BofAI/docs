@@ -151,6 +151,15 @@ sun token search <keyword> [options]
 
 ## Swap
 
+:::caution Amount precision — `<amountIn>` is an integer scaled by the token's `decimals`
+Every `<amountIn>` (and every `--amount*` option in the Liquidity section below) is the human-readable amount × `10^decimals`. **No decimal point, no automatic conversion.**
+
+- TRX, USDT (TRC20), WTRX, USDCOLD, WIN — **6 decimals** → `1` token = `1000000`
+- USDD, SUN, JST, BTT, USDDOLD — **18 decimals** → `1` token = `1000000000000000000`
+
+So `sun swap TRX USDT 1000000` swaps **1 TRX** (not 1,000,000 TRX) for USDT. Full table: [Built-In Token Symbols](#built-in-token-symbols). For non-built-in tokens, query `decimals()` on the contract first. Preview every swap with `swap:quote` and use `--dry-run` on mainnet writes — overshooting is unrecoverable.
+:::
+
 ### `swap <tokenIn> <tokenOut> <amountIn>` (write)
 
 Execute a token swap via SunSwap Universal Router.
@@ -164,10 +173,12 @@ sun swap <tokenIn> <tokenOut> <amountIn> [options]
 | `--slippage <n>` | Slippage tolerance as decimal (e.g. 0.005 = 0.5%) | `0.005` |
 
 ```bash
+# Swap 1 TRX for USDT
 sun swap TRX USDT 1000000
 ```
 
 ```bash
+# Same swap, with 1% slippage tolerance
 sun swap TRX USDT 1000000 --slippage 0.01
 ```
 
@@ -184,6 +195,7 @@ sun swap:quote <tokenIn> <tokenOut> <amountIn> [options]
 | `--all` | Show all available routes | `false` |
 
 ```bash
+# Quote: swap 1 TRX for USDT
 sun swap:quote TRX USDT 1000000
 ```
 
