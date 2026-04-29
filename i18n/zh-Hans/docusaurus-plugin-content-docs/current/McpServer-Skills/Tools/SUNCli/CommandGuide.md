@@ -156,7 +156,7 @@ sun token search <keyword> [options]
 - TRX、USDT（TRC20）、WTRX、USDCOLD、WIN —— **精度 6** → `1` 个代币 = `1000000`
 - USDD、SUN、JST、BTT、USDDOLD —— **精度 18** → `1` 个代币 = `1000000000000000000`
 
-所以 `sun swap TRX USDT 1000000` 是**用 1 个 TRX**（不是 100 万个）兑换 USDT。完整精度表见 [内置代币符号](#built-in-token-symbols)。非内置代币请先查询合约的 `decimals()`。任何写入操作前，建议先用 `swap:quote` 预览，主网写操作可加 `--dry-run` —— 多写一位是无法回滚的。
+所以 `sun swap TRX USDT 1000000` 是**用 1 个 TRX**（不是 100 万个）兑换 USDT。
 :::
 
 ### `swap <tokenIn> <tokenOut> <amountIn>`（写入）

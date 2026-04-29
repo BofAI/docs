@@ -18,7 +18,7 @@ sun price TRX
 sun swap TRX USDT 1000000 --yes
 ```
 
-> 金额按该代币的 `decimals` 进行整数缩放传入。TRX 精度为 6，所以 `1000000` 就是 **1 个 TRX**。完整的换算规则与内置代币精度表见 [Swap → 金额精度](./CommandGuide.md#swap)。
+> 金额按该代币的 `decimals` 进行整数缩放传入。TRX 精度为 6，所以 `1000000` 就是 **1 个 TRX**。
 
 不需要打开浏览器，不需要前端界面，不需要手动与合约交互。
 

@@ -66,7 +66,7 @@ sun pool top-apy --page-size 5
 sun swap:quote TRX USDT 1000000
 ```
 
-这会显示最佳路径和预期输出——不会执行任何交易。（金额按代币 `decimals` 整数缩放传入；TRX 精度为 6，所以 `1000000` = 1 TRX。详见 [Swap → 金额精度](./CommandGuide.md#swap)。）
+这会显示最佳路径和预期输出——不会执行任何交易。（TRX 精度为 6，所以 `1000000` = 1 TRX。）
 
 **获取 JSON 格式输出（适合脚本）：**
 

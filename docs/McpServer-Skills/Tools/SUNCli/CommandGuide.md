@@ -157,7 +157,7 @@ Every `<amountIn>` (and every `--amount*` option in the Liquidity section below)
 - TRX, USDT (TRC20), WTRX, USDCOLD, WIN — **6 decimals** → `1` token = `1000000`
 - USDD, SUN, JST, BTT, USDDOLD — **18 decimals** → `1` token = `1000000000000000000`
 
-So `sun swap TRX USDT 1000000` swaps **1 TRX** (not 1,000,000 TRX) for USDT. Full table: [Built-In Token Symbols](#built-in-token-symbols). For non-built-in tokens, query `decimals()` on the contract first. Preview every swap with `swap:quote` and use `--dry-run` on mainnet writes — overshooting is unrecoverable.
+So `sun swap TRX USDT 1000000` swaps **1 TRX** (not 1,000,000 TRX) for USDT.
 :::
 
 ### `swap <tokenIn> <tokenOut> <amountIn>` (write)

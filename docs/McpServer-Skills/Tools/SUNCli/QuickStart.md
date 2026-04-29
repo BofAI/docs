@@ -66,7 +66,7 @@ sun pool top-apy --page-size 5
 sun swap:quote TRX USDT 1000000
 ```
 
-This shows the best route and expected output—without executing anything. (Amounts use integer-scaled decimals; TRX is 6 decimals → `1000000` = 1 TRX. See [Swap → amount precision](./CommandGuide.md#swap).)
+This shows the best route and expected output—without executing anything. (TRX has 6 decimals, so `1000000` = 1 TRX.)
 
 **Get JSON output for scripting:**
 

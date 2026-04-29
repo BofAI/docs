@@ -18,7 +18,7 @@ And executing a swap — for example, **swap 1 TRX for USDT**:
 sun swap TRX USDT 1000000 --yes
 ```
 
-> Amounts are passed as integers scaled by the token's `decimals`. TRX has 6 decimals, so `1000000` is exactly **1 TRX**. Full conversion rules and the decimals table for every built-in token live in [Swap → amount precision](./CommandGuide.md#swap).
+> Amounts are passed as integers scaled by the token's `decimals`. TRX has 6 decimals, so `1000000` is exactly **1 TRX**.
 
 No frontend, no browser, no manual contract interaction.
 
