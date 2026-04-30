@@ -150,6 +150,15 @@ sun token search <keyword> [options]
 
 ## 兑换
 
+:::caution 金额精度 —— `<amountIn>` 是按代币 `decimals` 整数缩放后的值
+所有 `<amountIn>`（以及下面流动性命令里的 `--amount*` 参数）= 人类可读金额 × `10^decimals`，**不带小数点，也不会自动换算**。
+
+- TRX、USDT（TRC20）、WTRX、USDCOLD、WIN —— **精度 6** → `1` 个代币 = `1000000`
+- USDD、SUN、JST、BTT、USDDOLD —— **精度 18** → `1` 个代币 = `1000000000000000000`
+
+所以 `sun swap TRX USDT 1000000` 是**用 1 个 TRX**（不是 100 万个）兑换 USDT。
+:::
+
 ### `swap <tokenIn> <tokenOut> <amountIn>`（写入）
 
 通过 SunSwap Universal Router 执行代币兑换。
@@ -163,10 +172,12 @@ sun swap <tokenIn> <tokenOut> <amountIn> [options]
 | `--slippage <n>` | 滑点容差，小数表示（如 0.005 = 0.5%） | `0.005` |
 
 ```bash
+# 用 1 个 TRX 兑换 USDT
 sun swap TRX USDT 1000000
 ```
 
 ```bash
+# 同样的兑换，滑点容差 1%
 sun swap TRX USDT 1000000 --slippage 0.01
 ```
 
@@ -183,6 +194,7 @@ sun swap:quote <tokenIn> <tokenOut> <amountIn> [options]
 | `--all` | 显示所有可用路径 | `false` |
 
 ```bash
+# 报价：用 1 个 TRX 兑换 USDT
 sun swap:quote TRX USDT 1000000
 ```
 
