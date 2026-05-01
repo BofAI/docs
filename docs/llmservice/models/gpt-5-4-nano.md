@@ -33,4 +33,4 @@ GPT-5.4 Nano is the smallest and most cost-effective variant in the GPT-5.4 fami
 
 | Model        | Input (per 1M tokens) | Output (per 1M tokens) |
 | :----------- | --------------------: | ---------------------: |
-| GPT-5.4 Nano |                 $0.20 |                   $1.2 |
+| GPT-5.4 Nano |                 $0.20 |                  $1.25 |
