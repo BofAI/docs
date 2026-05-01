@@ -39,8 +39,3 @@ GPT-5.5 是 OpenAI 于 2026 年 4 月 23 日发布的最强模型，内部代号
 | 模型名称 | 输入 (Credits/Token) | 输出 (Credits/Token) | 备注 |
 | :--- | --------------------: | -------------------: | :--- |
 | **GPT-5.5** | `5.00` | `30.00` | 超过 272K 输入按 2 倍、输出按 1.5 倍计费 |
-
-## 参考资料
-
-[1] [OpenAI GPT-5.5 发布说明](https://openai.com/index/gpt-5-5)  
-[2] [OpenAI API 定价](https://openai.com/api/pricing)
