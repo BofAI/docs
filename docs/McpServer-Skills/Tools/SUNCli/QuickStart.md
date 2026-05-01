@@ -60,13 +60,13 @@ Try a few more read-only commands to see what's available:
 sun pool top-apy --page-size 5
 ```
 
-**Get a swap quote (no wallet required):**
+**Quote a swap of 1 TRX for USDT** (no wallet required):
 
 ```bash
 sun swap:quote TRX USDT 1000000
 ```
 
-This shows you the best route and expected output for swapping 1 TRX (1,000,000 sun) to USDT—without executing anything.
+This shows the best route and expected output—without executing anything. (TRX has 6 decimals, so `1000000` = 1 TRX.)
 
 **Get JSON output for scripting:**
 
@@ -108,7 +108,7 @@ You should see your wallet address and network:
 
 ## Execute Your First Swap (On Testnet)
 
-With a wallet configured, try a swap on the Nile testnet:
+With a wallet configured, try **swapping 1 TRX for USDT** on the Nile testnet:
 
 ```bash
 sun swap TRX USDT 1000000 --network nile --yes

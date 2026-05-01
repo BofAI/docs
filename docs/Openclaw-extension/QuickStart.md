@@ -295,11 +295,12 @@ Press Enter (or type `1`) to install globally — this way all your OpenClaw wor
 Then the skill picker launches:
 
 ```
-◇  Found 8 skills
+◇  Found 11 skills
 │
 ◇  Select skills to install (space to toggle)
-│  agent-wallet, Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
-│  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
+│  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions, recharge-skill,
+│  SunPerp Perpetual Futures Trading, SunSwap DEX Trading, TRC20 Token Toolkit,
+│  TronScan Data Lookup, TRX Staking & SR Voting, USDD / JUST Protocol, x402-payment
 ```
 
 Here's what each skill does:
@@ -307,11 +308,14 @@ Here's what each skill does:
 | Skill | What It Does |
 | :--- | :--- |
 | **agent-wallet** | AgentWallet management operations (view wallets, sign transactions) |
+| **bankofai-guide** | Onboarding helper that walks the AI through next steps after installation |
 | **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
 | **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
 | **TronScan Data Lookup** | Query blockchain data via TronScan |
-| **Multi-Sig & Account Permissions** | Multi-signature wallet and account permission management |
 | **TRC20 Token Toolkit** | Common TRC20 token operations like sending tokens |
+| **TRX Staking & SR Voting** | Stake TRX, get energy/bandwidth, and vote for Super Representatives |
+| **USDD / JUST Protocol** | Manage USDD stablecoin and JUST Protocol positions |
+| **Multi-Sig & Account Permissions** | Multi-signature wallet and account permission management |
 | **x402-payment** | x402 protocol payments (agent-to-agent) |
 | **recharge-skill** | Check and top up your BANK OF AI balance |
 
@@ -320,28 +324,34 @@ After selecting, the installer shows a security risk assessment:
 ```
 ◇  Security Risk Assessments
 │                                     Gen               Socket            Snyk
-│  agent-wallet                       Med Risk          1 alert           High Risk
+│  bankofai-guide                     Safe              0 alerts          High Risk
 │  Multi-Sig & Account Permissions    --                --                --
 │  recharge-skill                     Safe              1 alert           Med Risk
 │  SunPerp Perpetual Futures Trading  --                --                --
 │  SunSwap DEX Trading                --                --                --
 │  TRC20 Token Toolkit                --                --                --
 │  TronScan Data Lookup               --                --                --
+│  TRX Staking & SR Voting            --                --                --
+│  USDD / JUST Protocol               --                --                --
 │  x402-payment                       Safe              1 alert           Med Risk
+│  agent-wallet                       Safe              1 alert           High Risk
 ```
 
 Review the report, then confirm to proceed. When installation completes:
 
 ```
-◇  Installed 8 skills
+◇  Installed 11 skills
 │
 │  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
+│  ✓ bankofai-guide → ~/.openclaw/skills/bankofai-guide
 │  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
 │  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
 │  ✓ TRC20 Token Toolkit → ~/.openclaw/skills/trc20-token-toolkit
 │  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
+│  ✓ TRX Staking & SR Voting → ~/.openclaw/skills/trx-staking-sr-voting
+│  ✓ USDD / JUST Protocol → ~/.openclaw/skills/usdd-just-protocol
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
@@ -372,9 +382,12 @@ When `Installation Complete!` lights up at the bottom of the screen — congratu
 
 ✓ Installed skills:
   • agent-wallet
+  • bankofai-guide
   • Multi-Sig & Account Permissions
   • recharge-skill
   • TRC20 Token Toolkit
+  • TRX Staking & SR Voting
+  • USDD / JUST Protocol
   • x402-payment
   Verify with: npx skills list -g
 

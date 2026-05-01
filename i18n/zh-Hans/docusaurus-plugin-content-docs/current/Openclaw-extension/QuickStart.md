@@ -295,11 +295,12 @@ Select skills installation scope:
 然后技能选择器启动：
 
 ```
-◇  Found 8 skills
+◇  Found 11 skills
 │
 ◇  Select skills to install (space to toggle)
-│  agent-wallet, Multi-Sig & Account Permissions, recharge-skill, SunPerp Perpetual Futures Trading,
-│  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup, x402-payment
+│  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions, recharge-skill,
+│  SunPerp Perpetual Futures Trading, SunSwap DEX Trading, TRC20 Token Toolkit,
+│  TronScan Data Lookup, TRX Staking & SR Voting, USDD / JUST Protocol, x402-payment
 ```
 
 每个技能是干啥的：
@@ -307,11 +308,14 @@ Select skills installation scope:
 | 技能 | 功能 |
 | :--- | :--- |
 | **agent-wallet** | AgentWallet 钱包管理操作（查看钱包、签署交易） |
+| **bankofai-guide** | 安装完成后引导 AI 帮你完成后续操作的入门助手 |
 | **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
 | **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
 | **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
-| **Multi-Sig & Account Permissions** | 多签钱包与账户权限管理 |
 | **TRC20 Token Toolkit** | TRC20 代币发送等常用操作 |
+| **TRX Staking & SR Voting** | 质押 TRX 获取能量/带宽，并为超级代表（SR）投票 |
+| **USDD / JUST Protocol** | 管理 USDD 稳定币与 JUST 协议仓位 |
+| **Multi-Sig & Account Permissions** | 多签钱包与账户权限管理 |
 | **x402-payment** | x402 协议支付（Agent 间付款） |
 | **recharge-skill** | 查询和充值 BANK OF AI 余额 |
 
@@ -320,28 +324,34 @@ Select skills installation scope:
 ```
 ◇  Security Risk Assessments
 │                                     Gen               Socket            Snyk
-│  agent-wallet                       Med Risk          1 alert           High Risk
+│  bankofai-guide                     Safe              0 alerts          High Risk
 │  Multi-Sig & Account Permissions    --                --                --
 │  recharge-skill                     Safe              1 alert           Med Risk
 │  SunPerp Perpetual Futures Trading  --                --                --
 │  SunSwap DEX Trading                --                --                --
 │  TRC20 Token Toolkit                --                --                --
 │  TronScan Data Lookup               --                --                --
+│  TRX Staking & SR Voting            --                --                --
+│  USDD / JUST Protocol               --                --                --
 │  x402-payment                       Safe              1 alert           Med Risk
+│  agent-wallet                       Safe              1 alert           High Risk
 ```
 
 查看报告后确认继续。安装完成时：
 
 ```
-◇  Installed 8 skills
+◇  Installed 11 skills
 │
 │  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
+│  ✓ bankofai-guide → ~/.openclaw/skills/bankofai-guide
 │  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
 │  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
 │  ✓ TRC20 Token Toolkit → ~/.openclaw/skills/trc20-token-toolkit
 │  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
+│  ✓ TRX Staking & SR Voting → ~/.openclaw/skills/trx-staking-sr-voting
+│  ✓ USDD / JUST Protocol → ~/.openclaw/skills/usdd-just-protocol
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
@@ -372,9 +382,12 @@ Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 
 ✓ Installed skills:
   • agent-wallet
+  • bankofai-guide
   • Multi-Sig & Account Permissions
   • recharge-skill
   • TRC20 Token Toolkit
+  • TRX Staking & SR Voting
+  • USDD / JUST Protocol
   • x402-payment
   Verify with: npx skills list -g
 
