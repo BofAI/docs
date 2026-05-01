@@ -37,7 +37,7 @@ It achieves industry-leading performance in coding and Agent capabilities, with 
 
 ---
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |

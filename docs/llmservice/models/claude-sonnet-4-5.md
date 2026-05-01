@@ -23,8 +23,8 @@ Claude Sonnet 4.5 is a balanced AI model developed by Anthropic, integrated into
 | **Response Speed** | **Medium.** Strikes an excellent balance between intelligence and speed, ideal for interactive applications. |
 | **Context Window** | **Huge.** Shares the extra-long context processing capability with the flagship Opus model. |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Sonnet 4.5** | 3.30 | 16.50 |
+| **Claude Sonnet 4.5** | 3.00 | 15.00 |

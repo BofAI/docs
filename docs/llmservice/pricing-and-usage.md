@@ -8,6 +8,8 @@ The platform utilizes a unified credit system to measure and settle usage for al
 
 **Token Consumption Details:** In the AI response details, the platform displays the breakdown of token consumption, helping you understand the specific sources of credit usage and optimize future usage patterns.
 
+**Platform-wide Credits conversion: 1 USD = 1,000,000 Credits (1M / 1000K Credits)**
+
 **Pricing for Different Models:** Pricing varies due to differences in capabilities and computational costs among AI models. Generally, more capable models consume more credits. The web search feature incurs an additional fee and is charged on a pay-per-use basis. Some models do not support web search and are marked with "-". For specific model pricing, please check here:
 
 | Model             | Input (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
@@ -26,12 +28,12 @@ The platform utilizes a unified credit system to measure and settle usage for al
 | GPT-5 Mini        |                  0.25 |                   2.00 |                   10,000 |
 | GPT-5.4 Nano      |                  0.20 |                   1.20 |                   10,000 |
 | GPT-5 Nano        |                  0.05 |                   0.40 |                        - |
-| Claude Opus 4.7   |                  5.50 |                  27.50 |                   10,000 |
-| Claude Opus 4.6   |                  5.50 |                  27.50 |                   10,000 |
-| Claude Opus 4.5   |                  5.50 |                  27.50 |                   10,000 |
-| Claude Sonnet 4.6 |                  3.30 |                  16.50 |                   10,000 |
-| Claude Sonnet 4.5 |                  3.30 |                  16.50 |                   10,000 |
-| Claude Haiku 4.5  |                  1.10 |                   5.50 |                   10,000 |
+| Claude Opus 4.7   |                  5.00 |                  25.00 |                   10,000 |
+| Claude Opus 4.6   |                  5.00 |                  25.00 |                   10,000 |
+| Claude Opus 4.5   |                  5.00 |                  25.00 |                   10,000 |
+| Claude Sonnet 4.6 |                  3.00 |                  15.00 |                   10,000 |
+| Claude Sonnet 4.5 |                  3.00 |                  15.00 |                   10,000 |
+| Claude Haiku 4.5  |                  1.00 |                   5.00 |                   10,000 |
 | Gemini 3.1 Pro    |                  2.00 |                  12.00 |                   14,000 |
 | Gemini 3 Flash    |                  0.50 |                   3.00 |                   14,000 |
 

@@ -23,7 +23,7 @@ GPT-5.2 is the latest generation of the flagship large language model developed 
 | **Response Speed** | Medium to Slow. Improved compared to 5.1, but still a deep analysis model, not suitable for extremely low-latency scenarios. |
 | **Context Window** | Huge. Supports a context window of millions of tokens. |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |

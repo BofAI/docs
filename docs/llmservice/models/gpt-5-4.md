@@ -29,7 +29,7 @@ GPT-5.4 is OpenAI's flagship frontier model released on March 5, 2026, the first
 | **Max Output** | 128,000 tokens |
 | **Knowledge Cutoff** | August 31, 2025 |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (per 1M tokens) | Output (per 1M tokens) |
 | :--- | :--- | :--- |

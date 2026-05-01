@@ -23,8 +23,8 @@ Claude Opus 4.5 is the flagship AI model developed by Anthropic, integrated into
 | **Response Speed** | **Slow.** Prioritizes the highest quality and depth over response time. |
 | **Context Window** | **Huge.** Supports a context window of over 200K tokens, with potential for further expansion. |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Opus 4.5** | 5.50 | 27.50 |
+| **Claude Opus 4.5** | 5.00 | 25.00 |

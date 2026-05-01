@@ -37,7 +37,7 @@ With its **256K ultra-long context window**, multimodal understanding, and advan
 
 ---
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |

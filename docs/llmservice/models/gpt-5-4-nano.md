@@ -29,7 +29,7 @@ GPT-5.4 Nano is the smallest and most cost-effective variant in the GPT-5.4 fami
 | **Max Output**         | Not officially specified                                                                                                                                             |
 | **Knowledge Cutoff**   | August 31, 2025                                                                                                                                                      |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model        | Input (per 1M tokens) | Output (per 1M tokens) |
 | :----------- | --------------------: | ---------------------: |

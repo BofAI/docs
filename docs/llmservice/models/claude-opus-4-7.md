@@ -41,8 +41,8 @@ Claude Opus 4.7, released on April 16, 2026, is Anthropic's most capable publicl
 * Image input only (no audio or video input natively).
 * No real-time or internet-connected capabilities without tool integrations.
 
-## Pricing
+## Credits Usage
 
 | Model           | Input (Credits/Token) | Output (Credits/Token) | Notes                                 |
 | :-------------- | --------------------: | ---------------------: | :------------------------------------ |
-| Claude Opus 4.7 |                  5.50 |                  27.50 | Up to 90% savings with prompt caching |
+| Claude Opus 4.7 |                  5.00 |                  25.00 | Up to 90% savings with prompt caching |

@@ -36,7 +36,7 @@ DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, rele
 * Falls behind V4-Pro and frontier closed-source models on pure knowledge tasks and the most complex agentic workflows due to smaller parameter scale.
 * May require Flash-Max mode (larger thinking budget) to match Pro-level reasoning, increasing latency and cost for complex tasks.
 
-## Credits and Pricing
+## Credits Usage
 
 | Model                 | Input (Credits/Token) | Output (Credits/Token) | Notes                       |
 | :-------------------- | --------------------: | ---------------------: | :-------------------------- |
