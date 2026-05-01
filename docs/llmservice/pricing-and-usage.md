@@ -26,6 +26,7 @@ The platform utilizes a unified credit system to measure and settle usage for al
 | GPT-5 Mini        |                  0.25 |                   2.00 |                   10,000 |
 | GPT-5.4 Nano      |                  0.20 |                   1.20 |                   10,000 |
 | GPT-5 Nano        |                  0.05 |                   0.40 |                        - |
+| Claude Opus 4.7   |                  5.50 |                  27.50 |                   10,000 |
 | Claude Opus 4.6   |                  5.50 |                  27.50 |                   10,000 |
 | Claude Opus 4.5   |                  5.50 |                  27.50 |                   10,000 |
 | Claude Sonnet 4.6 |                  3.30 |                  16.50 |                   10,000 |
