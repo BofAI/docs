@@ -40,4 +40,4 @@ DeepSeek-V4-Pro is DeepSeek's flagship open-source large language model, release
 
 | Model               | Input (Credits/Token) | Output (Credits/Token) | Notes                       |
 | :------------------ | --------------------: | ---------------------: | :-------------------------- |
-| **DeepSeek V4 Pro** | `1.74`                | `3.48`                 | 1M context, 384K max output |
+| **DeepSeek V4 Pro** | `0.435`               | `0.87`                 | 1M context, 384K max output |
