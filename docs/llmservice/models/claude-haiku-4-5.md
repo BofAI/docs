@@ -23,8 +23,8 @@ Claude Haiku 4.5 is the fastest and most compact AI model developed by Anthropic
 | **Response Speed** | **Extremely Fast.** The fastest responding model on the platform, enabling near-instantaneous interaction. |
 | **Context Window** | **Huge.** Supports an extra-long context window, capable of handling large documents and extensive conversation histories. |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Haiku 4.5** | 1.10 | 5.50 |
+| **Claude Haiku 4.5** | 1.00 | 5.00 |

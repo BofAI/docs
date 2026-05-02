@@ -23,7 +23,7 @@ GPT-5-mini is an efficient and economical lightweight language model. It is opti
 | **Response Speed** | **Fast.** One of the fastest responding models on the platform. |
 | **Context Window** | **Standard.** Supports tens of thousands of tokens, sufficient for most daily conversation scenarios. |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |

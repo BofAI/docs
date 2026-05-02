@@ -23,7 +23,7 @@ GPT-5-nano is an advanced language model that strikes an excellent balance betwe
 | **Response Speed** | **Medium.** Faster than flagship models, though slightly slower than the mini model. |
 | **Context Window** | **Large.** Supports a context window of hundreds of thousands of tokens for long document processing. |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |

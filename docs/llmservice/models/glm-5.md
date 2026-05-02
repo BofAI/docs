@@ -36,7 +36,7 @@ Based on a **744B** scale foundation model, combined with asynchronous reinforce
 
 ---
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |

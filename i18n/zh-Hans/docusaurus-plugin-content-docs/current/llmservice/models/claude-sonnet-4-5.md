@@ -34,8 +34,8 @@ Claude Sonnet 4.5 是 Anthropic 推出的平衡型 AI 模型，已集成至 白B
 
 ---
 
-## 积分与定价
+## 积分消耗
 
 | 模型 | 输入（积分/Token） | 输出（积分/Token） |
 | :--- | :--- | :--- |
-| **Claude Sonnet 4.5** | 3.30 | 16.50 |
+| **Claude Sonnet 4.5** | 3.00 | 15.00 |

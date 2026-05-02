@@ -25,8 +25,8 @@ Claude Sonnet 4.6 is a major upgrade to Anthropic's Sonnet series, designed to d
 | **Response Speed** | **Medium.** Achieves an excellent balance between performance and speed. |
 | **Context Window** | **1,000,000 Tokens (beta).** Supports a max output of 128,000 tokens. |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Sonnet 4.6** | 3.30 | 16.50 |
+| **Claude Sonnet 4.6** | 3.00 | 15.00 |

@@ -39,7 +39,7 @@
 
 ---
 
-## 💰 Credits and Pricing
+## Credits Usage
 
 > **Note:** Consumption is calculated per 1,000 Tokens.
 

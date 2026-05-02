@@ -25,8 +25,8 @@ Claude Opus 4.6 is the latest iteration of Anthropic's flagship AI model series.
 | **Response Speed** | **Slow.** Prioritizes quality and depth; suitable for tasks that are not time-sensitive. |
 | **Context Window** | **Huge.** Supports an ultra-long context window for processing massive documents and codebases. |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model | Input (Credits/Token) | Output (Credits/Token) |
 | :--- | :--- | :--- |
-| **Claude Opus 4.6** | 5.50 | 27.50 |
+| **Claude Opus 4.6** | 5.00 | 25.00 |

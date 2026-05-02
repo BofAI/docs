@@ -29,7 +29,7 @@ GPT-5.4 Pro is the highest-performance variant in the GPT-5.4 family, allocating
 | **Max Output**         | 128,000 tokens                                                                                                                                                                                                                           |
 | **Knowledge Cutoff**   | August 31, 2025                                                                                                                                                                                                                          |
 
-## Credits and Pricing
+## Credits Usage
 
 | Model       | Input (Credits/Token) | Output (Credits/Token) |
 | :---------- | --------------------: | ---------------------: |
