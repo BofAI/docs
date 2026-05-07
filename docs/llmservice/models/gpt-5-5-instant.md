@@ -1,4 +1,3 @@
-# GPT-5.5 Instant
 
 ## Overview
 
