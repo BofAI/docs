@@ -38,6 +38,6 @@ GPT-5.5 Instant is an OpenAI model released on May 5, 2026 as the successor to G
 
 ## Credits Usage
 
-| Model               | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Billing Notes                                        |
-| :------------------ | --------------------: | --------------------------: | -------------------------: | ---------------------: | :--------------------------------------------------- |
-| **GPT-5.5 Instant** | `5.00`                | `5.00`                      | `0.50`                     | `30.00`                | Long-context (>272K input tokens): Input 2x, Output 1.5x |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GPT-5.5 Instant** | `5.00` | `5.00` | `0.50` | `30.00` | `10,000` | Long-context (>272K input tokens): Input 2x, Output 1.5x |

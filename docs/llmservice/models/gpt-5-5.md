@@ -36,6 +36,6 @@ GPT-5.5 is OpenAI's most capable model, released on April 23, 2026. Codenamed "S
 
 ## Credits Usage
 
-| Model       | Input (Credits/Token) | Output (Credits/Token) | Notes                                     |
-| :---------- | --------------------: | ---------------------: | :---------------------------------------- |
-| **GPT-5.5** | `5.00`                | `30.00`                | 2x input / 1.5x output beyond 272K tokens |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GPT-5.5** | `5.00` | `5.00` | `0.50` | `30.00` | `10,000` | 2x input / 1.5x output beyond 272K tokens |
