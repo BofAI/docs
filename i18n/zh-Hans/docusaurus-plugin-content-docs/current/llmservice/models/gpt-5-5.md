@@ -30,7 +30,7 @@ GPT-5.5 是 OpenAI 于 2026 年 4 月 23 日发布的最强模型，内部代号
 
 ### 已知限制
 
-* 相比开源替代模型成本明显更高，输入价格约为 DeepSeek V4 Pro 的 50 倍。
+* 相比开源替代模型成本明显更高，输入价格约为 DeepSeek V4 Pro 的 6 倍。
 * 虽然在标准 SWE-Bench Verified 上领先，但在更难的 SWE-Bench Pro 基准上落后于 Claude Opus 4.7。
 * 对于超过 272K token 的长上下文输入，输入价格会翻倍，显著提高整体成本。
 

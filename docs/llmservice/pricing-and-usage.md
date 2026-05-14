@@ -17,11 +17,12 @@ The platform uses a unified Credits system to measure and settle usage across al
 | MiniMax M2.7      |                  0.30 |                       0.375 |                       0.06 |                   1.20 |                        - |
 | MiniMax M2.5      |                  0.30 |                        0.30 |                       0.03 |                   1.20 |                        - |
 | Kimi K2.6         |                  0.95 |                        0.95 |                       0.16 |                   4.00 |                        - |
-| Kimi K2.5         |                  0.23 |                        0.23 |                       0.07 |                   3.00 |                        - |
+| Kimi K2.5         |                  0.59 |                        0.59 |                      0.177 |                   3.00 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.26 |                   4.40 |                        - |
-| GLM-5             |                  0.30 |                        0.30 |                       0.06 |                   2.55 |                        - |
-| DeepSeek V4 Flash |                  0.14 |                        0.14 |                      0.003 |                   0.28 |                        - |
-| DeepSeek V4 Pro   |                 0.435 |                       0.435 |                      0.004 |                   0.87 |                        - |
+| GLM-5             |                  1.00 |                        1.00 |                       0.20 |                   3.20 |                        - |
+| DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
+| DeepSeek V4 Flash |                  0.28 |                        0.28 |                     0.0056 |                   0.56 |                        - |
+| DeepSeek V4 Pro   |                  0.87 |                        0.87 |                     0.0087 |                   1.74 |                        - |
 | GPT-5.4           |                  2.50 |                        2.50 |                       0.25 |                  15.00 |                   10,000 |
 | GPT-5.5           |                  5.00 |                        5.00 |                       0.50 |                  30.00 |                   10,000 |
 | GPT-5.5 Instant   |                  5.00 |                        5.00 |                       0.50 |                  30.00 |                   10,000 |
@@ -104,15 +105,21 @@ You can use the **Usage** page in the left navigation to review detailed consump
 
 ## Top Up
 
-The platform uses a prepaid model, so you need to top up your account to obtain Credits. Leveraging the advantages of the TRON network, the platform offers a secure and convenient top-up experience.
+The platform uses a prepaid model, so you need to top up your account to obtain Credits. The platform offers a secure and convenient top-up experience across fiat payment channels and supported blockchain networks.
 
-Fiat payment is now supported. You can also follow the on-screen instructions to complete a top-up using a credit card or other supported payment methods.
+Fiat payment is now supported. You can follow the on-screen instructions to complete a top-up using Alipay, WeChat Pay, UnionPay, credit cards, or other supported payment methods.
 
-**Top-up process:** On the **Top up** page, the platform guides you through payment using your connected TronLink wallet. You do not need to enter an address manually. Just confirm the transaction in the wallet popup to finish the top-up.
+:::caution Security reminder
+Before topping up, make sure the address bar shows an official B.AI domain, such as `https://b.ai` or `https://chat.b.ai`. Do not continue from unfamiliar links, search ads, or pages with a different domain.
 
-**Supported tokens:** The platform supports several major tokens in the TRON ecosystem, including TRX, USDT, USDD, and USD1.
+Complete fund-related operations only in a trusted network environment. Avoid topping up on public or shared Wi-Fi, and always review the payment details shown by your wallet before confirming.
+:::
 
-**Arrival time:** Once the transfer is confirmed on the TRON chain, the system automatically credits the equivalent value to your account. This usually takes a few minutes.
+**Top-up process:** On the **Top up** page, the platform guides you through the selected payment method. You can use fiat payment methods such as Alipay, WeChat Pay, and UnionPay, or choose supported blockchain networks and tokens for on-chain payment. Follow the on-screen instructions to confirm the payment, and the system will automatically process the top-up after payment succeeds.
+
+**Supported payment methods:** The platform supports multiple fiat payment channels and mainstream tokens across supported blockchain networks. Available payment channels, networks, and token types may vary by region and availability, so please refer to the real-time options shown on the **Top up** page.
+
+**Arrival time:** After payment is completed and confirmed, the system automatically credits the corresponding value to your account. Fiat payments are usually processed quickly; on-chain payments need to wait for confirmation on the selected network and usually take a few minutes. Actual arrival time may vary depending on network congestion and payment channel processing speed.
 
 ## Billing Records
 

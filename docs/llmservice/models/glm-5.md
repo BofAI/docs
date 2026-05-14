@@ -38,10 +38,6 @@ Based on a **744B** scale foundation model, combined with asynchronous reinforce
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **GLM-5** | 0.30 | 2.55 |
-
----
-
-> **Note:** For optimal performance in coding tasks, it is recommended to provide clear system prompts and utilize the 128K output capacity for building complete modules.
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GLM-5** | `1.00` | `1.00` | `0.20` | `3.20` | `-` | - |

@@ -39,10 +39,6 @@ It achieves industry-leading performance in coding and Agent capabilities, with 
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **MiniMax-M2.5** | 0.30 | 1.20 |
-
----
-
-> **Pro Tip:** MiniMax-M2.5 is exceptionally cost-effective for **high-volume production API calls**. If your workflow requires processing thousands of documents per hour, M2.5 provides the best balance of speed and budget.
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **MiniMax M2.5** | `0.30` | `0.30` | `0.03` | `1.20` | `-` | - |

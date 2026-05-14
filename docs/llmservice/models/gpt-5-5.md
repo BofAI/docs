@@ -30,7 +30,7 @@ GPT-5.5 is OpenAI's most capable model, released on April 23, 2026. Codenamed "S
 
 ### Known Limitations
 
-* Significantly more expensive than open-source alternatives, roughly 50x the cost of DeepSeek V4 Pro for input tokens.
+* Significantly more expensive than open-source alternatives, roughly 6x the cost of DeepSeek V4 Pro for input tokens.
 * Lost the harder SWE-Bench Pro benchmark to Claude Opus 4.7 despite winning the standard SWE-Bench Verified headline.
 * 2x input pricing for prompts exceeding 272K tokens increases costs substantially for long-context workloads.
 

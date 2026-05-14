@@ -25,6 +25,6 @@ Claude Opus 4.5 is the flagship AI model developed by Anthropic, integrated into
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **Claude Opus 4.5** | 5.00 | 25.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Claude Opus 4.5** | `5.00` | `6.25` | `0.50` | `25.00` | `10,000` | - |

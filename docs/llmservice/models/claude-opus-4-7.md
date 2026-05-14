@@ -43,6 +43,6 @@ Claude Opus 4.7, released on April 16, 2026, is Anthropic's most capable publicl
 
 ## Credits Usage
 
-| Model           | Input (Credits/Token) | Output (Credits/Token) | Notes                                 |
-| :-------------- | --------------------: | ---------------------: | :------------------------------------ |
-| Claude Opus 4.7 |                  5.00 |                  25.00 | Up to 90% savings with prompt caching |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Claude Opus 4.7** | `5.00` | `6.25` | `0.50` | `25.00` | `10,000` | - |

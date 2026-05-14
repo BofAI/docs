@@ -39,6 +39,6 @@ GLM-5.1 is an open-source flagship AI model developed by Z.ai, formerly Zhipu AI
 
 ## Credits Usage
 
-| Model       | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) |
-| :---------- | --------------------: | --------------------------: | -------------------------: | ---------------------: |
-| **GLM-5.1** | `1.40`                | `1.40`                      | `0.26`                     | `4.40`                 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GLM-5.1** | `1.40` | `1.40` | `0.26` | `4.40` | `-` | - |

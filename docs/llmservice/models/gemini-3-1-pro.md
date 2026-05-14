@@ -26,6 +26,6 @@ Gemini 3.1 pro is a significant upgrade to Google's flagship multimodal model se
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **Gemini 3.1 pro** | 2.00 | 12.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Gemini 3.1 Pro** | `2.00` | `2.00` | `0.20` | `12.00` | `14,000` | - |
