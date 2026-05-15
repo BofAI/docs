@@ -25,6 +25,6 @@ Claude Sonnet 4.5 is a balanced AI model developed by Anthropic, integrated into
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **Claude Sonnet 4.5** | 3.00 | 15.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Claude Sonnet 4.5** | `3.00` | `3.75` | `0.30` | `15.00` | `10,000` | - |

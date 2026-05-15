@@ -38,6 +38,6 @@ MiniMax M2.7 is a reasoning-focused large language model developed by MiniMax (S
 
 ## Credits Usage
 
-| Model             | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) |
-| :---------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: |
-| **MiniMax M2.7**  | `0.30`                | `0.375`                     | `0.06`                     | `1.20`                |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **MiniMax M2.7** | `0.30` | `0.375` | `0.06` | `1.20` | `-` | - |

@@ -39,10 +39,6 @@ With its **256K ultra-long context window**, multimodal understanding, and advan
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **Kimi-K2.5** | 0.23 | 3.00 |
-
----
-
-> **Pro Tip:** When using Kimi-K2.5 for complex system design, try leveraging its **Thinking Mode** for architecture planning before switching to standard mode for rapid code execution.
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Kimi K2.5** | `0.59` | `0.59` | `0.177` | `3.00` | `-` | - |

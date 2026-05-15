@@ -41,6 +41,6 @@ Kimi K2.6 is Moonshot AI's open-weight multimodal model, released on April 20, 2
 
 ## Credits Usage
 
-| Model          | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) |
-| :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: |
-| **Kimi K2.6** | `0.95`                | `0.95`                      | `0.16`                     | `4.00`                 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Kimi K2.6** | `0.95` | `0.95` | `0.16` | `4.00` | `-` | - |

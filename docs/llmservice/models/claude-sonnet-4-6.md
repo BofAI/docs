@@ -27,6 +27,6 @@ Claude Sonnet 4.6 is a major upgrade to Anthropic's Sonnet series, designed to d
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **Claude Sonnet 4.6** | 3.00 | 15.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Claude Sonnet 4.6** | `3.00` | `3.75` | `0.30` | `15.00` | `10,000` | - |

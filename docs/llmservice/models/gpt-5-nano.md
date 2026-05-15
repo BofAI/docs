@@ -25,6 +25,6 @@ GPT-5-nano is an advanced language model that strikes an excellent balance betwe
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **GPT-5-nano** | 0.05 | 0.40 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GPT-5 Nano** | `0.05` | `0.05` | `0.005` | `0.40` | `-` | - |

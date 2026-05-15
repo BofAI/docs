@@ -25,6 +25,6 @@ Claude Haiku 4.5 is the fastest and most compact AI model developed by Anthropic
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **Claude Haiku 4.5** | 1.00 | 5.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Claude Haiku 4.5** | `1.00` | `1.25` | `0.10` | `5.00` | `10,000` | - |

@@ -31,6 +31,6 @@ GPT-5.4 Nano is the smallest and most cost-effective variant in the GPT-5.4 fami
 
 ## Credits Usage
 
-| Model        | Input (per 1M tokens) | Output (per 1M tokens) |
-| :----------- | --------------------: | ---------------------: |
-| GPT-5.4 Nano |                 $0.20 |                  $1.25 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GPT-5.4 Nano** | `0.20` | `0.20` | `0.02` | `1.25` | `10,000` | - |
