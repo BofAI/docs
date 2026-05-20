@@ -1,7 +1,7 @@
 
 
 ## Overview
-GPT-5.2 is the latest generation of the flagship large language model developed by OpenAI. Building upon the powerful capabilities of the 5.1 version, it further optimizes the speed of multimodal processing and the execution efficiency of complex tasks, making it the ideal choice for professional users seeking ultimate performance and efficiency.
+GPT-5.2 is an OpenAI large language model optimized for multimodal processing speed and complex task execution efficiency. Building upon the capabilities of version 5.1, it delivers faster multimodal handling and more efficient execution for demanding professional workflows.
 
 ## Key Features
 * **Efficient Multimodal Processing:** Significantly improves the parsing and generation speed of image and video content compared to 5.1, achieving a smoother multimodal interaction experience.
@@ -23,8 +23,8 @@ GPT-5.2 is the latest generation of the flagship large language model developed 
 | **Response Speed** | Medium to Slow. Improved compared to 5.1, but still a deep analysis model, not suitable for extremely low-latency scenarios. |
 | **Context Window** | Huge. Supports a context window of millions of tokens. |
 
-## Credits and Pricing
+## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **GPT-5.2** | 1.75 | 14.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GPT-5.2** | `1.75` | `1.75` | `0.175` | `14.00` | `10,000` | - |

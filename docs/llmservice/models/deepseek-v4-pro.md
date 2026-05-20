@@ -36,8 +36,8 @@ DeepSeek-V4-Pro is DeepSeek's flagship open-source large language model, release
 * Trails GPT-5.4 and Gemini 3.1 Pro on world knowledge benchmarks by a margin DeepSeek estimates at 3-6 months of development.
 * May underperform on tasks requiring creative writing or highly nuanced reasoning compared to top closed-source models.
 
-## Credits and Pricing
+## Credits Usage
 
-| Model               | Input (Credits/Token) | Output (Credits/Token) | Notes                       |
-| :------------------ | --------------------: | ---------------------: | :-------------------------- |
-| **DeepSeek V4 Pro** | `1.74`                | `3.48`                 | 1M context, 384K max output |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **DeepSeek V4 Pro** | `0.87` | `0.87` | `0.0087` | `1.74` | `-` | - |

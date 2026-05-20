@@ -1,6 +1,6 @@
 ## Overview
 
-GPT-5.4 is OpenAI's flagship frontier model released on March 5, 2026, the first mainline model to unify reasoning, coding (GPT-5.3-Codex), and computer use into a single architecture. With up to 1,050,000 tokens of context and 128,000 tokens of max output, it is OpenAI's most capable and versatile model to date.
+GPT-5.4 is OpenAI's frontier model released on March 5, 2026, and the first mainline model to unify reasoning, coding (GPT-5.3-Codex), and computer use into a single architecture. With up to 1,050,000 tokens of context and 128,000 tokens of max output, it is designed for advanced, broad-scope workflows.
 
 ## Key Features
 
@@ -29,8 +29,8 @@ GPT-5.4 is OpenAI's flagship frontier model released on March 5, 2026, the first
 | **Max Output** | 128,000 tokens |
 | **Knowledge Cutoff** | August 31, 2025 |
 
-## Credits and Pricing
+## Credits Usage
 
-| Model | Input (per 1M tokens) | Output (per 1M tokens) |
-| :--- | :--- | :--- |
-| GPT-5.4 | $2.50 | $15.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GPT-5.4** | `2.50` | `2.50` | `0.25` | `15.00` | `10,000` | - |

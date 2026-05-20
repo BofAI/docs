@@ -23,8 +23,8 @@ Gemini 3 flash is the fastest and most efficient model in the Gemini 3 series re
 | **Response Speed** | **Extremely Fast.** One of the fastest models on the platform, enabling near-instantaneous interaction. |
 | **Context Window** | **Huge.** Supports an extremely long context window, consistent with the flagship Pro version. |
 
-## Credits and Pricing
+## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **Gemini 3 flash** | 0.50 | 3.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Gemini 3 Flash** | `0.50` | `0.50` | `0.05` | `3.00` | `14,000` | - |

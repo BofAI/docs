@@ -29,16 +29,8 @@ GPT-5.4 Pro is the highest-performance variant in the GPT-5.4 family, allocating
 | **Max Output**         | 128,000 tokens                                                                                                                                                                                                                           |
 | **Knowledge Cutoff**   | August 31, 2025                                                                                                                                                                                                                          |
 
-## Credits and Pricing
+## Credits Usage
 
-| Model       | Input (Credits/Token) | Output (Credits/Token) |
-| :---------- | --------------------: | ---------------------: |
-| GPT-5.4 Pro |                 30.00 |                 180.00 |
-
-
-
-## Limitations
-
-- **High latency**: Complex requests may take several minutes; not suitable for real-time or low-latency applications.
-- **Cost**: It is one of the most expensive API models available.
-- **No audio/video input**: Multimodal support is limited to text and image input.
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GPT-5.4 Pro** | `30.00` | `30.00` | `3.00` | `180.00` | `-` | - |

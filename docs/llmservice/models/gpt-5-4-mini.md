@@ -29,8 +29,8 @@ GPT-5.4 Mini is OpenAI's high-performance compact model released on March 17, 20
 | **Max Output**         | Not officially specified, estimated 16,000–32,000 tokens                                                                               |
 | **Knowledge Cutoff**   | August 31, 2025                                                                                                                        |
 
-## Credits and Pricing
+## Credits Usage
 
-| Model        | Input (per 1M tokens) | Output (per 1M tokens) |
-| :----------- | --------------------: | ---------------------: |
-| GPT-5.4 Mini |                 $0.75 |                  $4.50 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **GPT-5.4 Mini** | `0.75` | `0.75` | `0.075` | `4.50` | `10,000` | - |

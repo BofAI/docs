@@ -24,8 +24,8 @@ Gemini 3.1 pro is a significant upgrade to Google's flagship multimodal model se
 | **Response Speed** | **Medium to Slow.** Prioritizes the quality, depth, and completeness of professional-grade output. |
 | **Context Window** | **1,000,000 Tokens.** (Supports a maximum output of 64,000 tokens). |
 
-## Credits and Pricing
+## Credits Usage
 
-| Model | Input (Credits/Token) | Output (Credits/Token) |
-| :--- | :--- | :--- |
-| **Gemini 3.1 pro** | 2.00 | 12.00 |
+| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Gemini 3.1 Pro** | `2.00` | `2.00` | `0.20` | `12.00` | `14,000` | - |
