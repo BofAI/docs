@@ -7,21 +7,23 @@ description: 'Implementation status and feature support comparison between the P
 
 This page tracks the implementation progress and feature support status of the x402 SDKs across supported languages (Python and TypeScript).
 
+> **TypeScript / Python parity (since v0.6.0)**: As of **v0.6.0**, the TypeScript SDK reaches feature parity with Python for the Server and Facilitator roles. TypeScript now ships the facilitator client and engine (`X402Facilitator`), server middleware (`x402Hono` / `x402Express`), the `fetch` wrapper, facilitator signers, and `exact` / `exact_permit` / `exact_gasfree` verify + settle paths.
+
 ---
 
 ## Core Components
 
 | Component | Python | TypeScript |
 |------------|--------|------------|
-| Server | ✅ | ⏳ |
+| Server | ✅ | ✅ |
 | Client | ✅ | ✅ |
-| Facilitator | ✅ | ⏳ |
+| Facilitator | ✅ | ✅ |
 
 ### HTTP Framework Integration
 
 | Role | Python | TypeScript |
 |------|--------|------------|
-| Server | FastAPI, Flask | - |
+| Server | FastAPI, Flask | Hono, Express |
 | Client | httpx | fetch |
 
 ---
@@ -58,8 +60,8 @@ This page tracks the implementation progress and feature support status of the x
 |----------|--------|------------|
 | TronClientSigner | ✅ | ✅ |
 | EvmClientSigner | ✅ | ✅ |
-| TronFacilitatorSigner | ✅ | ⏳ |
-| EvmFacilitatorSigner | ✅ | ⏳ |
+| TronFacilitatorSigner | ✅ | ✅ |
+| EvmFacilitatorSigner | ✅ | ✅ |
 
 ---
 
@@ -81,10 +83,10 @@ This page tracks the implementation progress and feature support status of the x
 
 | Feature | Python | TypeScript |
 |------------|--------|------------|
-| `@x402_protected` decorator | ✅ | ⏳ |
-| Payment verification | ✅ | ⏳ |
-| Payment settlement | ✅ | ⏳ |
-| Fee support | ✅ | ⏳ |
+| Protected-route integration | ✅ (`@x402_protected` decorator) | ✅ (`x402Hono` / `x402Express` middleware) |
+| Payment verification | ✅ | ✅ |
+| Payment settlement | ✅ | ✅ |
+| Fee support | ✅ | ✅ |
 
 ---
 
@@ -92,12 +94,12 @@ This page tracks the implementation progress and feature support status of the x
 
 | Feature | Python | TypeScript |
 |------------|--------|------------|
-| `/verify` endpoint | ✅ | ⏳ |
-| `/settle` endpoint | ✅ | ⏳ |
-| `/fee/quote` endpoint | ✅ | ⏳ |
-| `/supported` endpoint | ✅ | ⏳ |
-| Submit transaction | ✅ | ⏳ |
-| Confirm transaction | ✅ | ⏳ |
+| `/verify` endpoint | ✅ | ✅ |
+| `/settle` endpoint | ✅ | ✅ |
+| `/fee/quote` endpoint | ✅ | ✅ |
+| `/supported` endpoint | ✅ | ✅ |
+| Submit transaction | ✅ | ✅ |
+| Confirm transaction | ✅ | ✅ |
 
 ---
 

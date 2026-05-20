@@ -83,6 +83,8 @@ x402 currently supports the following networks:
 
 > **Protocol interoperability**: Since v0.5.9, the `exact` payment scheme (EVM and TRON) conforms to the v2 specification published by the **x402 Foundation (formerly Coinbase)**, enabling bidirectional interoperability with the x402 Foundation's v2 reference clients and servers. See [SDK Feature Matrix](./sdk-features) and [Network & Token Support](./core-concepts/network-and-token-support#exact-scheme) for details.
 
+> **TypeScript / Python parity (v0.6.0)**: As of v0.6.0, the TypeScript SDK reaches feature parity with Python for the Server and Facilitator roles — facilitator client and engine, server middleware (Hono + Express), the `fetch` wrapper, facilitator signers, and `exact` / `exact_permit` / `exact_gasfree` verify + settle. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
+
 ---
 
 ## Quick Start

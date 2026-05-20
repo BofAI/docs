@@ -69,6 +69,8 @@ x402 目前支持以下网络环境：
 
 > **协议互通**：自 v0.5.9 起，`exact` 支付方案（EVM 与 TRON）已与 **x402 Foundation（原 Coinbase）** 公布的 v2 规范保持一致，支持与 x402 Foundation 的 v2 参考客户端/服务端双向互通。详见 [SDK 功能特性](./sdk-features.md) 与 [网络与代币支持](./core-concepts/network-and-token-support.md#exact-方案)。
 
+> **TypeScript / Python 对齐（v0.6.0）**：自 v0.6.0 起，TypeScript SDK 在服务端与 Facilitator 角色上已与 Python 功能对齐——包括 Facilitator 客户端与引擎、服务端中间件（Hono 与 Express）、`fetch` 封装、Facilitator 签名器，以及 `exact` / `exact_permit` / `exact_gasfree` 的 verify + settle。完整对比详见 [SDK 功能特性](./sdk-features.md)。
+
 
 ## 快速开始
 
