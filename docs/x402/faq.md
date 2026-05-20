@@ -29,10 +29,10 @@ Not at all. Any Web API or content provider—whether Web3-native or traditional
 
 x402 currently provides the following SDKs:
 
-- **Python**: Integrated with FastAPI and Flask  
-- **TypeScript**: Supports standard `fetch` clients  
+- **Python**: Server integration with FastAPI and Flask; `httpx`-based client  
+- **TypeScript**: Server middleware for Hono and Express; standard `fetch` client  
 
-Both SDKs fully implement Client, Server, and Facilitator functionality.
+Both SDKs fully implement Client, Server, and Facilitator functionality. As of **v0.6.0**, the TypeScript SDK reaches feature parity with Python across the Server and Facilitator roles (facilitator client/engine, server middleware, and `exact` / `exact_permit` / `exact_gasfree` verify + settle).
 
 ---
 

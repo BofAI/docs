@@ -2,19 +2,21 @@
 
 本页面记录了 x402 各语言 SDK（Python, TypeScript）的功能实现进度与支持状态。
 
+> **TypeScript / Python 对齐（自 v0.6.0 起）**：自 **v0.6.0** 起，TypeScript SDK 在服务端（Server）与 Facilitator 角色上已与 Python 实现功能对齐。TypeScript 现已提供 Facilitator 客户端与引擎（`X402Facilitator`）、服务端中间件（`x402Hono` / `x402Express`）、`fetch` 封装、Facilitator 签名器，以及 `exact` / `exact_permit` / `exact_gasfree` 的 verify + settle 流程。
+
 ## 核心 
 
 | 组件 | Python | TypeScript |
 |-----------|--------|------------|
-| 服务端 (Server) | ✅ | ⏳ |
+| 服务端 (Server) | ✅ | ✅ |
 | 客户端 (Client) | ✅ | ✅ |
-| Facilitator | ✅ | ⏳ |
+| Facilitator | ✅ | ✅ |
 
 ### HTTP 框架集成
 
 | 角色 | Python | TypeScript |
 |------|--------|------------|
-| 服务端 | FastAPI, Flask | - |
+| 服务端 | FastAPI, Flask | Hono, Express |
 | 客户端 | httpx | fetch |
 
 ## 网络 
@@ -46,8 +48,8 @@
 |--------|--------|------------|
 | TronClientSigner | ✅ | ✅ |
 | EvmClientSigner | ✅ | ✅ |
-| TronFacilitatorSigner | ✅ | ⏳ |
-| EvmFacilitatorSigner | ✅ | ⏳ |
+| TronFacilitatorSigner | ✅ | ✅ |
+| EvmFacilitatorSigner | ✅ | ✅ |
 
 ## 客户端功能 
 
@@ -65,21 +67,21 @@
 
 | 功能 | Python | TypeScript |
 |---------|--------|------------|
-| @x402_protected 装饰器 | ✅ | ⏳ |
-| 支付验证 | ✅ | ⏳ |
-| 支付结算 | ✅ | ⏳ |
-| 费用支持 | ✅ | ⏳ |
+| 受保护路由集成 | ✅（`@x402_protected` 装饰器） | ✅（`x402Hono` / `x402Express` 中间件） |
+| 支付验证 | ✅ | ✅ |
+| 支付结算 | ✅ | ✅ |
+| 费用支持 | ✅ | ✅ |
 
 ## Facilitator 功能 
 
 | 功能 | Python | TypeScript |
 |---------|--------|------------|
-| /verify 端点 | ✅ | ⏳ |
-| /settle 端点 | ✅ | ⏳ |
-| /fee/quote 端点 | ✅ | ⏳ |
-| /supported 端点 | ✅ | ⏳ |
-| 提交交易 | ✅ | ⏳ |
-| 确认交易 | ✅ | ⏳ |
+| /verify 端点 | ✅ | ✅ |
+| /settle 端点 | ✅ | ✅ |
+| /fee/quote 端点 | ✅ | ✅ |
+| /supported 端点 | ✅ | ✅ |
+| 提交交易 | ✅ | ✅ |
+| 确认交易 | ✅ | ✅ |
 
 ## 支持代币 
 
