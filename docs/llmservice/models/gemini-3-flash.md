@@ -6,7 +6,7 @@ Gemini 3 flash is the fastest and most efficient model in the Gemini 3 series re
 ## Key Features
 * **Rapid Response & High Throughput:** Optimized for low-latency and high-concurrency scenarios, making it the preferred choice for real-time AI applications.
 * **Efficient Multimodality:** Inherits native multimodal capabilities to quickly process and understand information like images and audio, with lower computational requirements than the Pro version.
-* **Excellent Cost-Effectiveness:** Ensures high speed and multimodal versatility while significantly reducing operating costs within the Bank of AI ecosystem.
+* **Excellent Cost-Effectiveness:** Ensures high speed and multimodal versatility while keeping operating costs lower for B.AI users.
 
 ## Best Use Cases
 * **Real-time Chatbots:** Providing smooth, instant, and multimodal interactive experiences for customer service and support.

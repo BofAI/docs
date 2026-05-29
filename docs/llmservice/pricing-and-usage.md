@@ -14,8 +14,9 @@ The platform uses a unified Credits system to measure and settle usage across al
 
 | Model             | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
 | :---------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
+| MiniMax M3        |                  0.60 |                        0.75 |                       0.12 |                   2.40 |                        - |
 | MiniMax M2.7      |                  0.30 |                       0.375 |                       0.06 |                   1.20 |                        - |
-| MiniMax M2.5      |                  0.30 |                        0.30 |                       0.03 |                   1.20 |                        - |
+| MiniMax M2.5      |                  0.30 |                       0.375 |                       0.03 |                   1.20 |                        - |
 | Kimi K2.6         |                  0.95 |                        0.95 |                       0.16 |                   4.00 |                        - |
 | Kimi K2.5         |                  0.59 |                        0.59 |                      0.177 |                   3.00 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.26 |                   4.40 |                        - |
@@ -32,6 +33,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | GPT-5 Mini        |                  0.25 |                        0.25 |                      0.025 |                   2.00 |                   10,000 |
 | GPT-5.4 Nano      |                  0.20 |                        0.20 |                       0.02 |                   1.25 |                   10,000 |
 | GPT-5 Nano        |                  0.05 |                        0.05 |                      0.005 |                   0.40 |                        - |
+| Claude Opus 4.8   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.7   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.6   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.5   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |

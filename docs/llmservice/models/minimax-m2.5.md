@@ -41,4 +41,4 @@ It achieves industry-leading performance in coding and Agent capabilities, with 
 
 | Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **MiniMax M2.5** | `0.30` | `0.30` | `0.03` | `1.20` | `-` | - |
+| **MiniMax M2.5** | `0.30` | `0.375` | `0.03` | `1.20` | `-` | - |
