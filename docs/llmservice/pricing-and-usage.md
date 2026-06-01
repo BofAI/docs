@@ -14,7 +14,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 
 | Model             | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
 | :---------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| MiniMax M3        |                  0.60 |                        0.75 |                       0.12 |                   2.40 |                        - |
+| MiniMax M3        |                  0.60 |                        0.60 |                       0.12 |                   2.40 |                        - |
 | MiniMax M2.7      |                  0.30 |                       0.375 |                       0.06 |                   1.20 |                        - |
 | MiniMax M2.5      |                  0.30 |                       0.375 |                       0.03 |                   1.20 |                        - |
 | Kimi K2.6         |                  0.95 |                        0.95 |                       0.16 |                   4.00 |                        - |
