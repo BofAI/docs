@@ -39,4 +39,4 @@ MiniMax M3 is MiniMax's next-generation large language model in the M series. It
 
 | Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **MiniMax M3** | `0.60` | `0.60` | `0.12` | `2.40` | `-` | - |
+| **MiniMax M3** | `0.30` | `0.30` | `0.06` | `1.20` | `-` | - |
