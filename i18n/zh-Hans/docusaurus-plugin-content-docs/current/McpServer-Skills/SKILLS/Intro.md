@@ -77,11 +77,11 @@
 
 ### 🚀 玩转 SunPump meme 币
 
-在 TRON 的 meme 代币发射台 SunPump 上买卖、查行情。AI 会自动判断该走哪条路：还没在 SunSwap V2 上创建交易对的「发射前」代币用打新交易，已在 SunSwap V2 建好交易对的「发射后」代币走普通兑换。还能查代币详情、排行榜、持有人分布和钱包持仓。**sunpump-agent-skill 的所有功能都只支持 TRON 主网**。
+在 TRON 的 meme 代币发射台 SunPump 上买卖、查行情。AI 会自动判断该走哪条路：还没在 SunSwap V2 上创建交易对的「发射前」代币在 SunPump 上买卖，已在 SunSwap V2 建好交易对的「发射后」代币走普通兑换。还能查代币详情、排行榜、持有人分布和钱包持仓。**sunpump-agent-skill 的所有功能都只支持 TRON 主网**。
 
 > 🗣️ "帮我看看 SunPump 上 24 小时涨幅前 10 的 meme 币，再查一下第一名的持有人集中度。"
 
-💡 如需了解打新与风控细节，请查看：[**sunpump-agent-skill**](./BANKOFAISkill.md#sunpump-agent-skill)
+💡 如需了解交易与风控细节，请查看：[**sunpump-agent-skill**](./BANKOFAISkill.md#sunpump-agent-skill)
 
 ### 📈 进行永续合约交易
 

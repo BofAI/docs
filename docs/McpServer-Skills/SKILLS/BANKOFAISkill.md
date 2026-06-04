@@ -18,7 +18,7 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | :--- | :--- | :--- |
 | **agent-wallet** | Create wallets, sign transactions/messages, manage multiple wallets — supports EVM and TRON | `AGENT_WALLET_PASSWORD` (encrypted mode) or none (interactive) |
 | **sunswap** | Check prices, get quotes, swap tokens, manage V2/V3/V4 liquidity pools | Read-only: none. Trading: wallet credentials |
-| **sunpump-agent-skill** | SunPump meme coins: market data/rankings/holders/portfolios, plus buy/sell launch trading on SunPump (TRON mainnet only) | Read-only: none. On-chain buy/sell: wallet credentials |
+| **sunpump-agent-skill** | SunPump meme coins: market data/rankings/holders/portfolios, plus buy/sell meme coins (auto-routes pre/post-launch, TRON mainnet only) | Read-only: none. On-chain buy/sell: wallet credentials |
 | **sunperp-skill** | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys |
 | **tronscan-skill** | Look up accounts, transactions, tokens, blocks, network stats | Recommended: TronScan API key (may throttle without one) |
 | **trc20-toolkit-skill** | Transfer tokens, check balances, manage approvals for any TRC20 token | Read-only: none. Transfers/approvals: wallet credentials |
@@ -149,7 +149,7 @@ V3 only accepts fee tiers `100`, `500`, `3000`, or `10000` (0.01% / 0.05% / 0.3%
 
 ## sunpump-agent-skill {#sunpump-agent-skill}
 
-Want to play with meme coins on SunPump? This skill is built on `@bankofai/sun-cli` and helps you check market data, do research, and buy/sell launch trades on SunPump. The key thing is that it **picks the trade path automatically**: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") go through `sun sunpump buy/sell`, while tokens that already have a SunSwap V2 pair ("post-launch") use a regular `sun swap` — before placing an order the AI runs `sunpump state` to confirm which path applies.
+Want to play with meme coins on SunPump? This skill is built on `@bankofai/sun-cli` and helps you check market data, do research, and buy/sell meme coins. The key thing is that it **picks the trade path automatically**: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") go through `sun sunpump buy/sell`, while tokens that already have a SunSwap V2 pair ("post-launch") use a regular `sun swap` — before placing an order the AI runs `sunpump state` to confirm which path applies.
 
 **Absolutely safe, read-only:**
 
@@ -185,7 +185,7 @@ A SunPump token has two states: **pre-launch** (no SunSwap V2 pair yet, `state` 
 Meme coins are highly volatile and easily manipulated. When the AI shows you token info it also surfaces holder concentration — if the top few addresses hold too much combined (e.g. top 5 > 40%), it explicitly warns you of rug-pull risk. Default slippage is 5% (meme coins move fast); always review the quote before confirming a buy or sell.
 :::
 
-**sunpump-agent-skill's full functionality (queries and buy/sell launch trading) only works on TRON mainnet, not testnets.**
+**sunpump-agent-skill's full functionality (queries and trading) only works on TRON mainnet, not testnets.**
 
 ---
 

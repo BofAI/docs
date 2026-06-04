@@ -81,7 +81,7 @@ Buy and sell on SunPump — TRON's meme-token launchpad — and check market dat
 
 > 🗣️ "Show me the top 10 SunPump meme coins by 24h gain, then check the holder concentration of the top one."
 
-💡 For launch-trading and risk details, see: [**sunpump-agent-skill**](./BANKOFAISkill.md#sunpump-agent-skill)
+💡 For trading and risk details, see: [**sunpump-agent-skill**](./BANKOFAISkill.md#sunpump-agent-skill)
 
 ### 📈 Trade Perpetual Contracts
 

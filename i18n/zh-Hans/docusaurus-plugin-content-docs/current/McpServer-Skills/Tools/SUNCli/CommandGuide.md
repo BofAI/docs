@@ -843,7 +843,7 @@ sun contract send TRecipient transfer --args '["TRecipient","1000000"]' --value 
 
 ## SunPump
 
-SunPump 是 TRON 上的 meme 代币发射平台。本命令组覆盖代币发现（行情、排行、持有人、钱包持仓、交易历史）以及发射前的打新买卖。
+SunPump 是 TRON 上的 meme 代币发射平台。本命令组覆盖代币发现（行情、排行、持有人、钱包持仓、交易历史）以及发射前交易。
 
 > **关于 Bonding Curve：** Bonding Curve 是代币的发射进度条——随着社区参与和买入增加，meme 币市值逐步增长，进度最高涨到 100%；满 100% 后会自动在 SunSwap V2 上创建交易对，代币就「发射」了。进度未满 100% 的「发射前」代币用 `sun sunpump buy/sell` 在 SunPump 上交易；发射后改用 [`sun swap`](#兑换)。
 
@@ -852,10 +852,10 @@ SunPump 是 TRON 上的 meme 代币发射平台。本命令组覆盖代币发现
 :::
 
 :::tip 发射前 vs 发射后 —— 选对交易命令
-- **发射前（Bonding Curve 进度未满 100%、还没在 SunSwap V2 上创建交易对）：** `tokenLaunchedInstant` 为 `null`，链上 `state` 为 `1`（TRADING）或 `2`（READY_TO_LAUNCH）——用打新交易 `sun sunpump buy` / `sun sunpump sell`。
+- **发射前（Bonding Curve 进度未满 100%、还没在 SunSwap V2 上创建交易对）：** `tokenLaunchedInstant` 为 `null`，链上 `state` 为 `1`（TRADING）或 `2`（READY_TO_LAUNCH）——用 `sun sunpump buy` / `sun sunpump sell` 交易。
 - **发射后（已在 SunSwap V2 建好交易对）：** `state` 为 `3`（LAUNCHED），`swapPoolAddress` 非空——走普通兑换 [`sun swap`](#兑换)。
 
-下单前先用 `sun sunpump state <addr>` 或 `sun sunpump token get <addr>` 判断走哪条路径。只读查询（行情、持有人、钱包持仓、交易历史）无需钱包；打新交易需要钱包。
+下单前先用 `sun sunpump state <addr>` 或 `sun sunpump token get <addr>` 判断走哪条路径。只读查询（行情、持有人、钱包持仓、交易历史）无需钱包；发射前交易需要钱包。
 :::
 
 ### `sunpump token get <contractAddress>`（读取）
@@ -1055,7 +1055,7 @@ sun sunpump portfolio <walletAddress> [options]
 
 ### `sunpump state <tokenAddress>`（读取）
 
-查询 SunPump 代币的链上状态，用于判断该走 SunPump 打新还是 SunSwap。
+查询 SunPump 代币的链上状态，用于判断该走 SunPump 发射前交易还是 SunSwap。
 
 ```bash
 sun sunpump state <tokenAddress>
@@ -1072,7 +1072,7 @@ sun sunpump state <tokenAddress>
 
 ### `sunpump quote-buy <tokenAddress>`（读取）
 
-预览一笔 SunPump 打新买入，不发送交易。
+预览一笔 SunPump 发射前买入，不发送交易。
 
 ```bash
 sun sunpump quote-buy <tokenAddress> --trx 10
@@ -1084,7 +1084,7 @@ sun sunpump quote-buy <tokenAddress> --trx 10
 
 ### `sunpump quote-sell <tokenAddress>`（读取）
 
-预览一笔 SunPump 打新卖出，不发送交易。
+预览一笔 SunPump 发射前卖出，不发送交易。
 
 ```bash
 sun sunpump quote-sell <tokenAddress> --amount 1000
