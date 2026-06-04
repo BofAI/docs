@@ -18,7 +18,7 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | :--- | :--- | :--- |
 | **agent-wallet** | Create wallets, sign transactions/messages, manage multiple wallets — supports EVM and TRON | `AGENT_WALLET_PASSWORD` (encrypted mode) or none (interactive) |
 | **sunswap** | Check prices, get quotes, swap tokens, manage V2/V3/V4 liquidity pools | Read-only: none. Trading: wallet credentials |
-| **sunpump-agent-skill** | SunPump meme coins: market data/rankings/holders/portfolios, plus buy/sell meme coins (auto-routes pre/post-launch, TRON mainnet only) | Read-only: none. On-chain buy/sell: wallet credentials |
+| **sunpump-agent-skill** | SunPump meme coins: market data/rankings/holders/portfolios, plus buy/sell meme coins (automatically picks the swap route based on whether the token has launched, TRON mainnet only) | Read-only: none. On-chain buy/sell: wallet credentials |
 | **sunperp-skill** | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys |
 | **tronscan-skill** | Look up accounts, transactions, tokens, blocks, network stats | Recommended: TronScan API key (may throttle without one) |
 | **trc20-toolkit-skill** | Transfer tokens, check balances, manage approvals for any TRC20 token | Read-only: none. Transfers/approvals: wallet credentials |
