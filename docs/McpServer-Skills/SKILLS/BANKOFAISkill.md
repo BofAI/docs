@@ -18,6 +18,7 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | :--- | :--- | :--- |
 | **agent-wallet** | Create wallets, sign transactions/messages, manage multiple wallets — supports EVM and TRON | `AGENT_WALLET_PASSWORD` (encrypted mode) or none (interactive) |
 | **sunswap** | Check prices, get quotes, swap tokens, manage V2/V3/V4 liquidity pools | Read-only: none. Trading: wallet credentials |
+| **sunpump-agent-skill** | SunPump meme coins: market data/rankings/holders/portfolios, plus buy/sell launch trading on SunPump (TRON mainnet only) | Read-only: none. On-chain buy/sell: wallet credentials |
 | **sunperp-skill** | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys |
 | **tronscan-skill** | Look up accounts, transactions, tokens, blocks, network stats | Recommended: TronScan API key (may throttle without one) |
 | **trc20-toolkit-skill** | Transfer tokens, check balances, manage approvals for any TRC20 token | Read-only: none. Transfers/approvals: wallet credentials |
@@ -143,6 +144,48 @@ Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the 
 :::tip V3 fee tiers & tick alignment
 V3 only accepts fee tiers `100`, `500`, `3000`, or `10000` (0.01% / 0.05% / 0.3% / 1%). `--tick-lower` and `--tick-upper` must be multiples of the fee's tick spacing (1 / 10 / 60 / 200). The AI validates these before minting — misaligned ticks would otherwise fail on-chain.
 :::
+
+---
+
+## sunpump-agent-skill {#sunpump-agent-skill}
+
+Want to play with meme coins on SunPump? This skill is built on `@bankofai/sun-cli` and helps you check market data, do research, and buy/sell launch trades on SunPump. The key thing is that it **picks the trade path automatically**: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") go through `sun sunpump buy/sell`, while tokens that already have a SunSwap V2 pair ("post-launch") use a regular `sun swap` — before placing an order the AI runs `sunpump state` to confirm which path applies.
+
+**Absolutely safe, read-only:**
+
+> What are the top 10 SunPump meme coins by 24h gain?
+
+> Get the detail for token TXYZ...: price, market cap, 24h volume, holder count.
+
+> Show me the holder distribution for TXYZ... — is it controlled by a few addresses?
+
+> Show wallet T...'s SunPump holdings and last 20 trades.
+
+**Requires your confirmation (the AI shows you the bill first):**
+
+> Buy TXYZ... with 10 TRX on SunPump (a token without a SunSwap V2 pair yet).
+
+> Sell 1000 TXYZ... with slippage set to 5%.
+
+> Buy some TXYZ... that already has a SunSwap V2 pair, with 100 TRX and 1% slippage.
+
+**Real scenarios:**
+
+> Looking for hot new coins? "List the top 10 SunPump tokens by 24h volume, then check the holder concentration of the #1."
+
+> Want to snipe a launch? "What's the state of TXYZ... right now? If it's still tradeable on the bonding curve, buy it with 10 TRX." — the AI checks `state` first, quotes, and only places the order after you confirm.
+
+> Want to review your record? "Show me wallet T...'s SunPump holdings and buy history."
+
+:::tip Pre-launch vs post-launch
+A SunPump token has two states: **pre-launch** (no SunSwap V2 pair yet, `state` = 1 TRADING or 2 READY_TO_LAUNCH) and **post-launch** (a SunSwap V2 pair has been created, `state` = 3 LAUNCHED). The key concept is the **Bonding Curve (launch progress bar)**: as the community buys in, the meme coin's market cap grows, and once the curve hits 100% a trading pair is automatically created on SunSwap V2 and the token "launches". The AI picks the right command automatically — you don't need to worry about the details, but understanding this helps you follow what it's doing.
+:::
+
+:::caution Meme coins are high-risk
+Meme coins are highly volatile and easily manipulated. When the AI shows you token info it also surfaces holder concentration — if the top few addresses hold too much combined (e.g. top 5 > 40%), it explicitly warns you of rug-pull risk. Default slippage is 5% (meme coins move fast); always review the quote before confirming a buy or sell.
+:::
+
+**sunpump-agent-skill's full functionality (queries and buy/sell launch trading) only works on TRON mainnet, not testnets.**
 
 ---
 

@@ -1,6 +1,6 @@
 # Complete Capabilities
 
-This page is the complete reference for all SUN CLI commands. Commands are organized by category: wallet management, price, token, swap, pool, liquidity, position, pair, farm, protocol, transaction, and contract.
+This page is the complete reference for all SUN CLI commands. Commands are organized by category: wallet management, price, token, swap, pool, liquidity, position, pair, farm, protocol, transaction, contract, and SunPump.
 
 > Legend: `<arg>` = required argument, `[arg]` = optional argument.
 > Options marked with **(required)** must be provided. All others are optional.
@@ -842,6 +842,297 @@ sun contract send TRecipient transfer --args '["TRecipient","1000000"]' --value 
 
 ---
 
+## SunPump
+
+SunPump is the meme-token launchpad on TRON. This command group covers token discovery (prices, rankings, holders, wallet portfolios, trade history) plus pre-launch trading.
+
+> **About the Bonding Curve:** the Bonding Curve is a token's launch progress bar — as the community participates and buys in, the meme coin's market cap grows and the curve fills toward 100%; once it hits 100% a trading pair is automatically created on SunSwap V2 and the token "launches". Tokens still under 100% (pre-launch) trade with `sun sunpump buy/sell` on SunPump; after launch, use [`sun swap`](#swap) instead.
+
+:::caution SunPump is TRON mainnet only
+All `sunpump` subcommands only work on TRON mainnet. The API host is `https://api-v2.sunpump.meme/pump-api` and the on-chain bonding-curve contract is `TTfvyrAz86hbZk5iDpKD78pqLGgi8C7AAw`. Passing `--network nile` (or any non-mainnet value) fails fast with `SunPump is only available on mainnet`. Drop `--network` or pass `--network mainnet`.
+:::
+
+:::tip Pre-launch vs post-launch — pick the right trade command
+- **Pre-launch (Bonding Curve under 100%, no SunSwap V2 pair yet):** `tokenLaunchedInstant` is `null`, on-chain `state` is `1` (TRADING) or `2` (READY_TO_LAUNCH) — trade with `sun sunpump buy` / `sun sunpump sell`.
+- **Post-launch (SunSwap V2 pair created):** `state` is `3` (LAUNCHED) and `swapPoolAddress` is set — use [`sun swap`](#swap) instead.
+
+Run `sun sunpump state <addr>` or `sun sunpump token get <addr>` before trading to decide which path to use. Read-only queries (prices, holders, portfolio, trade history) need no wallet; trading does.
+:::
+
+### `sunpump token get <contractAddress>` (read)
+
+Get SunPump token detail by contract address: price, market cap, 24h volume, holder count, total supply, owner, swap-pool address, social links, and launch state.
+
+```bash
+sun sunpump token get <contractAddress>
+```
+
+### `sunpump token list` (read)
+
+List SunPump tokens with optional filters and pagination.
+
+```bash
+sun sunpump token list [options]
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--contract <address>` | Filter by contract address | — |
+| `--owner <address>` | Filter by owner address | — |
+| `--symbol <symbol>` | Filter by symbol | — |
+| `--name <name>` | Filter by name | — |
+| `--description <text>` | Filter by description | — |
+| `--page <n>` | Page number | — |
+| `--size <n>` | Page size | — |
+| `--sort <field>` | Sort field (e.g. `marketCap,desc`) | — |
+
+### `sunpump token search <query>` (read)
+
+Fuzzy search tokens by name or symbol.
+
+```bash
+sun sunpump token search <query> [options]
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--on-sunswap` | Only tokens already launched on SunSwap | `false` |
+| `--page <n>` | Page number | — |
+| `--size <n>` | Page size | — |
+| `--sort <field>` | Sort field | — |
+
+### `sunpump token search-v2 <query>` (read)
+
+The v2 version of fuzzy search (calls the `/token/searchV2` endpoint). Compared with `search`, it adds the `--dlive`, `--ai-helper`, `--twitter-launch`, and `--sun-agent-launch` filters.
+
+```bash
+sun sunpump token search-v2 <query> [options]
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--on-sunswap` | Only tokens already launched on SunSwap | — |
+| `--dlive` | Filter: DLive showing | — |
+| `--ai-helper` | Filter: AI helper | — |
+| `--twitter-launch` | Filter: Twitter launch | — |
+| `--sun-agent-launch` | Filter: Sun agent launch | — |
+| `--page <n>` | Page number | — |
+| `--size <n>` | Page size | — |
+| `--sort <field>` | Sort field | — |
+
+### `sunpump token by-owner <ownerAddress>` (read)
+
+List tokens created by a wallet.
+
+```bash
+sun sunpump token by-owner <ownerAddress> [options]
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--page <n>` | Page number | — |
+| `--size <n>` | Page size | — |
+| `--sort <field>` | Sort field | — |
+
+### `sunpump token holders <tokenAddress>` (read)
+
+List a token's holders, with balance and percentage.
+
+```bash
+sun sunpump token holders <tokenAddress> [options]
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--include-zero` | Include zero-balance holders | — |
+| `--page <n>` | Page number | — |
+| `--size <n>` | Page size | — |
+| `--sort <field>` | Sort field (default: balance descending) | — |
+
+> The `percent` field is returned as a percent value (e.g. `38.51` = 38.51%) by the holders endpoint, but as a fraction (e.g. `0.3851`) by the token-list endpoint. The CLI normalizes this, but check the magnitude when reading raw JSON.
+
+### `sunpump token holders-v2 <tokenAddress>` (read)
+
+The v2 version of the holders list (calls the newer `/token/holdersV2` endpoint). Same input options as `holders`; returned fields may differ slightly.
+
+```bash
+sun sunpump token holders-v2 <tokenAddress> [options]
+```
+
+### `sunpump token ranking` (read)
+
+Get token ranking by a chosen metric. **`--type` is required.**
+
+```bash
+sun sunpump token ranking --type MARKET_CAP --size 10
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--type <rankingType>` | **(required)** Ranking type: `MARKET_CAP`, `VOLUME_24H`, `PRICE_CHANGE_24H` | — |
+| `--size <n>` | Number of entries | — |
+
+> `--type` only accepts `MARKET_CAP`, `VOLUME_24H`, or `PRICE_CHANGE_24H` (case-sensitive); other values are rejected by the API.
+
+### `sunpump token king-of-hill` (read)
+
+Get the current king-of-the-hill token.
+
+```bash
+sun sunpump token king-of-hill
+```
+
+### `sunpump token pump-list` (read)
+
+Get the raw SunPump token list (returns the API response directly, without stripping the outer `{code, msg, data}` envelope).
+
+```bash
+sun sunpump token pump-list
+```
+
+### `sunpump token favors` (read, requires signature)
+
+List a user's favorite tokens. Requires a signed message.
+
+```bash
+sun sunpump token favors --user-address <address> --signature <sig> --signed-message <msg> [options]
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--user-address <address>` | **(required)** User wallet address | — |
+| `--signature <sig>` | **(required)** Signature of the signed message | — |
+| `--signed-message <msg>` | **(required)** The signed message | — |
+| `--token-address <address>` | Filter by token address | — |
+| `--page <n>` | Page number | — |
+| `--size <n>` | Page size | — |
+
+### `sunpump tx token <contractAddress>` (read)
+
+Query a token's buy/sell trade history.
+
+```bash
+sun sunpump tx token <contractAddress> [options]
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--swap-type <type>` | Direction filter (`BUY` / `SELL`) | — |
+| `--pool <address>` | Swap pool address | — |
+| `--tx-hash <hash>` | Specific tx hash | — |
+| `--block <n>` | Block number | — |
+| `--start-time <epoch>` | Start time (epoch **seconds**) | — |
+| `--end-time <epoch>` | End time (epoch **seconds**) | — |
+| `--page <n>` | Page number | — |
+| `--size <n>` | Page size | — |
+| `--sort <field>` | Sort field (e.g. `txDateTime,desc`) | — |
+
+> `--start-time` / `--end-time` are epoch **seconds**, not milliseconds.
+
+### `sunpump tx user <ownerAddress>` (read)
+
+Query a wallet's buy/sell trade history. Same options as `tx token`.
+
+```bash
+sun sunpump tx user <ownerAddress> --size 20
+sun sunpump tx user <ownerAddress> --swap-type BUY --size 20
+```
+
+### `sunpump portfolio <walletAddress>` (read)
+
+List all SunPump tokens held by a wallet, with TRX-denominated value and portfolio weight.
+
+```bash
+sun sunpump portfolio <walletAddress> [options]
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--include-zero` | Include zero-balance tokens | — |
+| `--min-trx <amount>` | Minimum TRX-equivalent value | — |
+| `--page <n>` | Page number | — |
+| `--size <n>` | Page size | — |
+| `--sort <field>` | Sort field (e.g. `valueInTrx,desc`) | — |
+
+### `sunpump state <tokenAddress>` (read)
+
+Show a SunPump token's on-chain state, to decide whether to use the SunPump bonding-curve path or SunSwap.
+
+```bash
+sun sunpump state <tokenAddress>
+```
+
+| State | Label | Tradeable via `sunpump buy/sell`? |
+| :--- | :--- | :--- |
+| `0` | `NOT_EXIST` | No (unknown to SunPump) |
+| `1` | `TRADING` | Yes |
+| `2` | `READY_TO_LAUNCH` | Yes (Bonding Curve at 100%, about to create a SunSwap V2 pair) |
+| `3` | `LAUNCHED` | No — use `sun swap` |
+
+> `sun-kit`'s TypeScript enum only lists 0–2, but the on-chain contract returns 3 for launched tokens. The CLI maps 3 to `LAUNCHED` — trust the printed label, not the raw number.
+
+### `sunpump quote-buy <tokenAddress>` (read)
+
+Preview a SunPump buy without sending a transaction.
+
+```bash
+sun sunpump quote-buy <tokenAddress> --trx 10
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--trx <amount>` | **(required)** TRX to spend, **decimal** (e.g. `10` or `1.5`) | — |
+
+### `sunpump quote-sell <tokenAddress>` (read)
+
+Preview a SunPump sell without sending a transaction.
+
+```bash
+sun sunpump quote-sell <tokenAddress> --amount 1000
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--amount <amount>` | **(required)** Token amount to sell, **decimal** | — |
+| `--decimals <n>` | Token decimals | `18` |
+
+### `sunpump buy <tokenAddress>` (write)
+
+Buy a meme token with TRX on SunPump (only for tokens that have not yet created a SunSwap V2 pair). `--trx` accepts decimals; the CLI scales by TRX-Sun (1e6) internally.
+
+```bash
+sun sunpump buy <tokenAddress> --trx 10
+sun sunpump buy <tokenAddress> --trx 10 --slippage 0.1
+sun sunpump buy <tokenAddress> --trx 10 --min-out 27955000000000000000000
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--trx <amount>` | **(required)** TRX to spend, **decimal** | — |
+| `--slippage <n>` | Slippage tolerance as a decimal (meme tokens are volatile) | `0.05` |
+| `--min-out <raw>` | Minimum tokens out in raw base units (overrides slippage) | — |
+
+### `sunpump sell <tokenAddress>` (write)
+
+Sell a meme token for TRX on SunPump (only for tokens that have not yet created a SunSwap V2 pair). On the first sell of a token, the SDK auto-sends a TRC20 `approve` transaction first.
+
+```bash
+sun sunpump sell <tokenAddress> --amount 1000
+sun sunpump sell <tokenAddress> --amount 1000 --decimals 6
+sun sunpump sell <tokenAddress> --amount 1000 --slippage 0.1
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--amount <amount>` | **(required)** Token amount to sell, **decimal** | — |
+| `--decimals <n>` | Token decimals (resolve via `sunpump token get` if unsure) | `18` |
+| `--slippage <n>` | Slippage tolerance as a decimal | `0.05` |
+| `--min-out <raw>` | Minimum TRX out in Sun (overrides slippage) | — |
+
+> Use `--dry-run` to print the resolved parameters (TRX/Sun scaling, computed `minOut`, slippage, network) without broadcasting — handy for showing the user exactly what will be sent.
+
+---
+
 ## Built-In Token Symbols
 
 Many commands accept token symbols in addition to full TRON addresses:
@@ -858,6 +1149,8 @@ Many commands accept token symbols in addition to full TRON addresses:
 | `JST` | `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9` | 18 |
 | `BTT` | `TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4` | 18 |
 | `WIN` | `TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7` | 6 |
+| `NFT` | `TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq` | 6 |
+| `TUSD` | `TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4` | 18 |
 
 You can use either the symbol or the full address:
 

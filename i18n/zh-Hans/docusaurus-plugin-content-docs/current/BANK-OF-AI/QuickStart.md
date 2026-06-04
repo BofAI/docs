@@ -25,7 +25,7 @@ AI 会自动安装 Skills，随后问你是否创建钱包。
 >
 > 命令进入交互模式，让我选择全部技能：让我使用 `-y` 参数但不使用 `-g`，这样应该能默认选择全部并安装到当前 Agent 目录：
 >
-> ✅ **11 个 Skills 安装完成！**（安装到当前 Agent skill 目录）
+> ✅ **12 个 Skills 安装完成！**（安装到当前 Agent skill 目录）
 >
 > 现在使用 `bankofai-guide` 进行引导...
 >
@@ -47,12 +47,13 @@ AI 会自动安装 Skills，随后问你是否创建钱包。
 > | 3 | `multi-sig-account-permissions` |
 > | 4 | `recharge-skill` |
 > | 5 | `sunperp-perpetual-futures-trading` |
-> | 6 | `sunswap-dex-trading` |
-> | 7 | `trc20-token-toolkit` |
-> | 8 | `tronscan-data-lookup` |
-> | 9 | `trx-staking-sr-voting` |
-> | 10 | `usdd-just-protocol` |
-> | 11 | `x402-payment` |
+> | 6 | `sunpump-meme-token-toolkit` |
+> | 7 | `sunswap-dex-trading` |
+> | 8 | `trc20-token-toolkit` |
+> | 9 | `tronscan-data-lookup` |
+> | 10 | `trx-staking-sr-voting` |
+> | 11 | `usdd-just-protocol` |
+> | 12 | `x402-payment` |
 >
 > **📋 当前状态**
 >

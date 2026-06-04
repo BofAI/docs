@@ -57,7 +57,7 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Eleven skills in total — covering the most common scenarios in the TRON ecosystem, plus a dedicated onboarding helper. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+Twelve skills in total — covering the most common scenarios in the TRON ecosystem, plus a dedicated onboarding helper. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
 
 ### 🔑 Secure Wallet Management
 
@@ -74,6 +74,14 @@ Check prices, compare rates, even swap tokens in one go.
 > 🗣️ "How much TRX can I get for 100 USDT on SunSwap right now?"
 
 💡 For more advanced features, see: [**sunswap**](./BANKOFAISkill.md#sunswap)
+
+### 🚀 Trade SunPump Meme Coins
+
+Buy and sell on SunPump — TRON's meme-token launchpad — and check market data. The AI automatically picks the right path: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") trade on the bonding curve, while tokens that already have a SunSwap V2 pair ("post-launch") go through a regular swap. You can also look up token detail, rankings, holder distribution, and wallet portfolios. TRON mainnet only.
+
+> 🗣️ "Show me the top 10 SunPump meme coins by 24h gain, then check the holder concentration of the top one."
+
+💡 For launch-trading and risk details, see: [**sunpump-agent-skill**](./BANKOFAISkill.md#sunpump-agent-skill)
 
 ### 📈 Trade Perpetual Contracts
 

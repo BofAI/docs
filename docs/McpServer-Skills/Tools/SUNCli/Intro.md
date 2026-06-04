@@ -39,6 +39,7 @@ SUN CLI covers the full range of SunSwap DEX interactions, from real-time market
 | **Protocol Stats** | SunSwap-wide volume, users, pools, and liquidity history | `sun protocol info` |
 | **Farm Info** | Yield farm lists, mining positions, and farming transactions | `sun farm list` |
 | **Token Discovery** | Search tokens, list by protocol version | `sun token search USDT` |
+| **SunPump Market Data** | Meme-token discovery: rankings, detail, holders, wallet portfolios, trade history (TRON mainnet only) | `sun sunpump token ranking --type MARKET_CAP --size 10` |
 
 **DeFi Operations (write, requires wallet):**
 
@@ -49,6 +50,7 @@ SUN CLI covers the full range of SunSwap DEX interactions, from real-time market
 | **V3 Liquidity** | Mint, increase, decrease concentrated positions, collect fees | `sun liquidity v3:mint --token0 TRX --token1 USDT --amount0 1000000` |
 | **V4 Liquidity** | V4 concentrated liquidity with Permit2 authorization | `sun liquidity v4:mint --token0 TRX --token1 USDT --amount0 1000000` |
 | **Contract Interaction** | Read or write to any TRON smart contract | `sun contract read <address> balanceOf --args '[...]'` |
+| **SunPump Pre-launch Trading** | Buy/sell meme tokens that have no SunSwap V2 pair yet (TRON mainnet only) | `sun sunpump buy <address> --trx 10` |
 
 ---
 
