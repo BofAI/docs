@@ -1,7 +1,7 @@
 
 
 ## Overview
-GPT-5-mini is an efficient and economical lightweight language model. It is optimized for fast, smooth daily conversations and general tasks, making it a premier choice for cost-effective AI interaction within the Bank of AI ecosystem.
+GPT-5-mini is an efficient and economical lightweight language model. It is optimized for fast, smooth daily conversations and general tasks, making it a strong choice for cost-effective AI interaction on B.AI.
 
 ## Key Features
 * **Extremely Fast Response:** Deeply optimized for low response latency, providing a near real-time conversation experience.

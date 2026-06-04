@@ -14,8 +14,9 @@ The platform uses a unified Credits system to measure and settle usage across al
 
 | Model             | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
 | :---------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
+| MiniMax M3        |                  0.30 |                        0.30 |                       0.06 |                   1.20 |                        - |
 | MiniMax M2.7      |                  0.30 |                       0.375 |                       0.06 |                   1.20 |                        - |
-| MiniMax M2.5      |                  0.30 |                        0.30 |                       0.03 |                   1.20 |                        - |
+| MiniMax M2.5      |                  0.30 |                       0.375 |                       0.03 |                   1.20 |                        - |
 | Kimi K2.6         |                  0.95 |                        0.95 |                       0.16 |                   4.00 |                        - |
 | Kimi K2.5         |                  0.59 |                        0.59 |                      0.177 |                   3.00 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.26 |                   4.40 |                        - |
@@ -32,6 +33,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | GPT-5 Mini        |                  0.25 |                        0.25 |                      0.025 |                   2.00 |                   10,000 |
 | GPT-5.4 Nano      |                  0.20 |                        0.20 |                       0.02 |                   1.25 |                   10,000 |
 | GPT-5 Nano        |                  0.05 |                        0.05 |                      0.005 |                   0.40 |                        - |
+| Claude Opus 4.8   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.7   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.6   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.5   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
@@ -39,6 +41,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | Claude Sonnet 4.5 |                  3.00 |                        3.75 |                       0.30 |                  15.00 |                   10,000 |
 | Claude Haiku 4.5  |                  1.00 |                        1.25 |                       0.10 |                   5.00 |                   10,000 |
 | Gemini 3.1 Pro    |                  2.00 |                        2.00 |                       0.20 |                  12.00 |                   14,000 |
+| Gemini 3.5 Flash  |                  1.50 |                        1.50 |                       0.15 |                   9.00 |                   14,000 |
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 ### Cache Pricing Notes
@@ -55,6 +58,10 @@ The platform uses a unified Credits system to measure and settle usage across al
 The platform supports two usage models: topping up Credits and subscription plans.
 
 Top-up Credits are suitable for flexible, on-demand usage. Subscription plans are better suited for frequent users and include a fixed allowance within each billing period. When your subscription allowance is exhausted, the system will continue consuming Credits from your account balance.
+
+:::caution Free bonus Credits validity
+Free bonus Credits are valid for 30 days from the date they are issued, including Credits granted for new-user registration and Credits granted through top-up promotions. Any unused portion automatically expires after the validity period.
+:::
 
 ### Subscription Plans
 
