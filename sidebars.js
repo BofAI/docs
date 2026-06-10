@@ -41,8 +41,20 @@ const sidebars = {
             'x402/core-concepts/client-server',
             'x402/core-concepts/facilitator',
             'x402/core-concepts/OfficialFacilitator',
+            'x402/core-concepts/gateway',
             'x402/core-concepts/wallet',
             'x402/core-concepts/network-and-token-support',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'API Catalog',
+          collapsed: false,
+          items: [
+            'agent-apis/index',
+            'agent-apis/get-started',
+            'agent-apis/list-your-service',
+            'agent-apis/reference',
           ],
         },
         {
