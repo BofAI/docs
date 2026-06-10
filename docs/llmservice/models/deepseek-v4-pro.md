@@ -41,3 +41,7 @@ DeepSeek-V4-Pro is DeepSeek's flagship open-source large language model, release
 | Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
 | **DeepSeek V4 Pro** | `0.87` | `0.87` | `0.0087` | `1.74` | `-` | - |
+
+:::info Pricing note
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+:::

@@ -40,3 +40,7 @@ MiniMax M3 is MiniMax's next-generation large language model in the M series. It
 | Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
 | **MiniMax M3** | `0.30` | `0.30` | `0.06` | `1.20` | `-` | - |
+
+:::info Pricing note
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+:::

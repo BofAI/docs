@@ -16,7 +16,6 @@ The platform uses a unified Credits system to measure and settle usage across al
 | :---------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
 | MiniMax M3        |                  0.30 |                        0.30 |                       0.06 |                   1.20 |                        - |
 | MiniMax M2.7      |                  0.30 |                       0.375 |                       0.06 |                   1.20 |                        - |
-| MiniMax M2.5      |                  0.30 |                       0.375 |                       0.03 |                   1.20 |                        - |
 | Kimi K2.6         |                  0.95 |                        0.95 |                       0.16 |                   4.00 |                        - |
 | Kimi K2.5         |                  0.59 |                        0.59 |                      0.177 |                   3.00 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.26 |                   4.40 |                        - |
@@ -33,6 +32,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | GPT-5 Mini        |                  0.25 |                        0.25 |                      0.025 |                   2.00 |                   10,000 |
 | GPT-5.4 Nano      |                  0.20 |                        0.20 |                       0.02 |                   1.25 |                   10,000 |
 | GPT-5 Nano        |                  0.05 |                        0.05 |                      0.005 |                   0.40 |                        - |
+| Claude Fable 5    |                 10.00 |                       12.50 |                       1.00 |                  50.00 |                   10,000 |
 | Claude Opus 4.8   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.7   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.6   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
@@ -43,6 +43,10 @@ The platform uses a unified Credits system to measure and settle usage across al
 | Gemini 3.1 Pro    |                  2.00 |                        2.00 |                       0.20 |                  12.00 |                   14,000 |
 | Gemini 3.5 Flash  |                  1.50 |                        1.50 |                       0.15 |                   9.00 |                   14,000 |
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
+
+:::info Pricing note
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+:::
 
 ### Cache Pricing Notes
 
@@ -114,15 +118,15 @@ You can use the **Usage** page in the left navigation to review detailed consump
 
 The platform uses a prepaid model, so you need to top up your account to obtain Credits. The platform offers a secure and convenient top-up experience across fiat payment channels and supported blockchain networks.
 
-Fiat payment is now supported. You can follow the on-screen instructions to complete a top-up using Alipay, WeChat Pay, UnionPay, credit cards, or other supported payment methods.
+The platform now supports both fiat and on-chain top-up flows end to end. You can follow the on-screen instructions to top up with Stripe-supported card payments, WeChat Pay, Alipay, UnionPay, and other available fiat payment methods, or use supported blockchain networks and tokens for on-chain payment.
 
 :::caution Security reminder
-Before topping up, make sure the address bar shows an official B.AI domain, such as `https://b.ai` or `https://chat.b.ai`. Do not continue from unfamiliar links, search ads, or pages with a different domain.
+Before topping up, make sure the address bar shows an official B.AI access URL, such as `https://chat.b.ai/chat`, `https://chat.ainft.com/chat`, or `https://chat.bankofai.io/chat`. Do not continue from unfamiliar links, search ads, or pages with a different domain.
 
 Complete fund-related operations only in a trusted network environment. Avoid topping up on public or shared Wi-Fi, and always review the payment details shown by your wallet before confirming.
 :::
 
-**Top-up process:** On the **Top up** page, the platform guides you through the selected payment method. You can use fiat payment methods such as Alipay, WeChat Pay, and UnionPay, or choose supported blockchain networks and tokens for on-chain payment. Follow the on-screen instructions to confirm the payment, and the system will automatically process the top-up after payment succeeds.
+**Top-up process:** On the **Top up** page, the platform guides you through the selected payment method. You can use fiat payment methods such as Stripe-supported card payments, WeChat Pay, Alipay, and UnionPay, or choose supported blockchain networks and tokens for on-chain payment. Follow the on-screen instructions to confirm the payment, and the system will automatically process the top-up after payment succeeds.
 
 **Supported payment methods:** The platform supports multiple fiat payment channels and mainstream tokens across supported blockchain networks. Available payment channels, networks, and token types may vary by region and availability, so please refer to the real-time options shown on the **Top up** page.
 

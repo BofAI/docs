@@ -42,3 +42,7 @@ With its **256K ultra-long context window**, multimodal understanding, and advan
 | Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
 | **Kimi K2.5** | `0.59` | `0.59` | `0.177` | `3.00` | `-` | - |
+
+:::info Pricing note
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+:::
