@@ -51,10 +51,10 @@ const sidebars = {
           label: 'API Catalog',
           collapsed: false,
           items: [
-            'agent-apis/index',
-            'agent-apis/get-started',
-            'agent-apis/list-your-service',
-            'agent-apis/reference',
+            'api-catalog/index',
+            'api-catalog/get-started',
+            'api-catalog/list-your-service',
+            'api-catalog/reference',
           ],
         },
         {

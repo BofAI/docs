@@ -79,10 +79,10 @@ A minimal working example (taken from the demo service `acme-weather`):
   "useCase": "Use for current weather lookup by city.",
   "i18n": {
     "zh-CN": {
-      "title": "Acme 天气 API",
-      "subtitle": "城市级实时天气查询",
-      "description": "为城市级应用提供实时天气数据。",
-      "useCase": "适合按城市查询当前天气。"
+      "title": "<zh-CN title>",
+      "subtitle": "<zh-CN subtitle>",
+      "description": "<zh-CN description>",
+      "useCase": "<zh-CN useCase>"
     }
   },
   "logo": "https://catalog.bankofai.io/assets/providers/acme-weather/logo.png",
@@ -101,7 +101,7 @@ A minimal working example (taken from the demo service `acme-weather`):
       "subtitle": "Lookup by city",
       "description": "Current weather for a city.",
       "useCase": "Use when an app needs real-time city weather.",
-      "i18n": { "zh-CN": { "title": "实时天气", "subtitle": "按城市查询", "description": "查询指定城市的实时天气。", "useCase": "适合应用需要实时城市天气时使用。" } },
+      "i18n": { "zh-CN": { "title": "<zh-CN title>", "subtitle": "<zh-CN subtitle>", "description": "<zh-CN description>", "useCase": "<zh-CN useCase>" } },
       "metered": true,
       "minPriceUsd": 0.002,
       "maxPriceUsd": 0.002
@@ -110,7 +110,7 @@ A minimal working example (taken from the demo service `acme-weather`):
 }
 ```
 
-Full field definitions: [Data Format & API Reference](./reference.md).
+The `<zh-CN ...>` placeholders stand for the Simplified-Chinese translations of the four fields — they are required and must be filled in with actual Chinese text. Full field definitions: [Data Format & API Reference](./reference.md).
 
 ### How to write pay.md
 

@@ -11,7 +11,7 @@ Turn any API into a pay-per-call service for AI Agents.
 The Gateway sits in front of your API and handles payment: AI Agents discover, call, and pay for it on their own. Every call settles on-chain, with funds going straight to the wallet you designate. Your existing API stays exactly as it is — no code changes.
 
 :::tip
-Ready to dive in? Jump to [List your API](../../agent-apis/list-your-service.md); want to see what's live first, go [browse the API Catalog](../../agent-apis/index.md).
+Ready to dive in? Jump to [List your API](../../api-catalog/list-your-service.md); want to see what's live first, go [browse the API Catalog](../../api-catalog/index.md).
 :::
 
 ## How it works
@@ -65,7 +65,7 @@ Providers turn calls into cash flow. Agents turn calls into capabilities. The ga
 - **Zero code changes** — your existing API stays exactly as it is.
 - **You set the price** — flexible per-endpoint, per-tier pricing; free routes stay free.
 
-→ [List your API](../../agent-apis/list-your-service.md)
+→ [List your API](../../api-catalog/list-your-service.md)
 
 ### For AI Agents: one catalog, many APIs, pay as you go
 
@@ -74,7 +74,7 @@ Providers turn calls into cash flow. Agents turn calls into capabilities. The ga
 - **Live price transparency** — every call's price is signed by the gateway in real time; the quote is what you pay.
 - **No accounts, no keys** — your wallet is your identity; nothing to register or manage.
 
-→ [Browse the API Catalog](../../agent-apis/index.md)
+→ [Browse the API Catalog](../../api-catalog/index.md)
 
 ## How to plug your API in
 
@@ -82,9 +82,9 @@ Three steps to launch — your API stays untouched:
 
 1. **Pick a gateway** — use BANK OF AI's hosted gateway, or run your own (differences below).
 2. **Set your price list** — decide the endpoints, per-endpoint pricing, and the payout wallet; no SDK to install, no code to rewrite.
-3. **Get listed** — submit two public files to the catalog repository (or start with the application form and we'll help you through). Once your service appears in the [API Catalog](../../agent-apis/index.md), any Agent can discover it, call it, and pay automatically.
+3. **Get listed** — submit two public files to the catalog repository (or start with the application form and we'll help you through). Once your service appears in the [API Catalog](../../api-catalog/index.md), any Agent can discover it, call it, and pay automatically.
 
-Full steps: [List Your Service](../../agent-apis/list-your-service.md).
+Full steps: [List Your Service](../../api-catalog/list-your-service.md).
 
 ### Official gateway, or run your own?
 
@@ -99,6 +99,6 @@ The gateway and the catalog solve two different problems: **the gateway collects
 
 ## Next steps
 
-- [List your API](../../agent-apis/list-your-service.md) — submission flow, required info, and security red lines
-- [Browse the API Catalog](../../agent-apis/index.md) — see what's already live
-- [API Catalog · Get Started](../../agent-apis/get-started.md) — onboard from the caller's perspective
+- [List your API](../../api-catalog/list-your-service.md) — submission flow, required info, and security red lines
+- [Browse the API Catalog](../../api-catalog/index.md) — see what's already live
+- [API Catalog · Get Started](../../api-catalog/get-started.md) — onboard from the caller's perspective
