@@ -22,7 +22,7 @@ npm i @bankofai/agent-wallet
 ```
 
 :::tip 还没创建钱包？
-先按 [Agent Wallet 快速开始](../Agent-Wallet/QuickStart.md) 创建并充值钱包（不到一分钟）。Catalog 复用同一个钱包，无需重复配置。
+先按 [Agent Wallet 快速开始](../../Agent-Wallet/QuickStart.md) 创建并充值钱包（不到一分钟）。Catalog 复用同一个钱包，无需重复配置。
 :::
 
 :::caution 风险隔离

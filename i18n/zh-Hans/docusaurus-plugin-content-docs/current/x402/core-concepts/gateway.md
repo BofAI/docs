@@ -11,7 +11,7 @@ description: 网关把任意 API 变成面向 AI Agent 的按次计费服务 —
 网关接在你的 API 前面，负责处理收款：AI Agent 自主发现、调用并完成付费，每一笔调用都在链上结算，款项直接进入你指定的钱包。现有 API 保持原样，无需改动任何代码。
 
 :::tip
-想直接上手？跳到 [上架你的 API](../../api-catalog/list-your-service.md)；想先看看有哪些服务，去 [浏览 API 目录](../../api-catalog/index.md)。
+想直接上手？跳到 [上架你的 API](../api-catalog/list-your-service.md)；想先看看有哪些服务，去 [浏览 API 目录](../api-catalog/index.md)。
 :::
 
 ## 它是怎么工作的
@@ -65,7 +65,7 @@ Agent ──► 网关 ──► 你的上游 API
 - **零代码改动** —— 现有 API 保持原样，无需改动任何代码。
 - **定价自主** —— 可按接口、按档位灵活定价，免费接口依然免费。
 
-→ [上架你的 API](../../api-catalog/list-your-service.md)
+→ [上架你的 API](../api-catalog/list-your-service.md)
 
 ### 面向 AI Agent：一个目录，汇聚海量 API，按需付费
 
@@ -74,7 +74,7 @@ Agent ──► 网关 ──► 你的上游 API
 - **实时价格透明** —— 每次调用的价格均由网关实时签发，所报即所付。
 - **无账号、无密钥** —— 钱包即身份，无需注册或管理任何 API Key。
 
-→ [浏览 API 目录](../../api-catalog/index.md)
+→ [浏览 API 目录](../api-catalog/index.md)
 
 ## 怎么把你的 API 接进来
 
@@ -82,9 +82,9 @@ Agent ──► 网关 ──► 你的上游 API
 
 1. **选网关** —— 用 BANK OF AI 官方托管的网关，或自己部署一个（两种方式的区别见下）。
 2. **定好价目表** —— 确定接口、各端点定价与收款钱包；无需集成 SDK，无需重写任何代码。
-3. **上架目录** —— 向目录仓库提交两份公开文件（可先填表申请，由我们联系协助）。服务出现在 [API 目录](../../api-catalog/index.md) 后，任意 Agent 都能发现、调用并自动付费。
+3. **上架目录** —— 向目录仓库提交两份公开文件（可先填表申请，由我们联系协助）。服务出现在 [API 目录](../api-catalog/index.md) 后，任意 Agent 都能发现、调用并自动付费。
 
-完整步骤见 [上架你的服务](../../api-catalog/list-your-service.md)。
+完整步骤见 [上架你的服务](../api-catalog/list-your-service.md)。
 
 ### 官方网关，还是自己运行？
 
@@ -99,6 +99,6 @@ Agent ──► 网关 ──► 你的上游 API
 
 ## 下一步
 
-- [上架你的 API](../../api-catalog/list-your-service.md) —— 提交流程、所需信息与安全红线
-- [浏览 API 目录](../../api-catalog/index.md) —— 看看已经在架的服务
-- [API 目录·快速开始](../../api-catalog/get-started.md) —— 从调用方视角接入
+- [上架你的 API](../api-catalog/list-your-service.md) —— 提交流程、所需信息与安全红线
+- [浏览 API 目录](../api-catalog/index.md) —— 看看已经在架的服务
+- [API 目录·快速开始](../api-catalog/get-started.md) —— 从调用方视角接入

@@ -22,7 +22,7 @@ npm i @bankofai/agent-wallet
 ```
 
 :::tip No wallet yet?
-Follow the [Agent Wallet Quick Start](../Agent-Wallet/QuickStart.md) to create and fund a wallet (takes under a minute). The Catalog reuses the same wallet — no extra setup.
+Follow the [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md) to create and fund a wallet (takes under a minute). The Catalog reuses the same wallet — no extra setup.
 :::
 
 :::caution Risk isolation
