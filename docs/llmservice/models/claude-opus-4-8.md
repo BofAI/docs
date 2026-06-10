@@ -46,4 +46,8 @@ Claude Opus 4.8 is an advanced model in Anthropic's Claude Opus series, released
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
 | **Claude Opus 4.8** | `5.00` | `6.25` | `0.50` | `25.00` | `10,000` | - |
 
+:::info Pricing note
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+:::
+
 * **Prompt caching**: Cache writes are charged at 1.25x base input price for the 5-minute TTL option, or 2x base input price for the 1-hour TTL option. Cache reads are charged at 0.1x base input price. Prompt caching requires a minimum of 1,024 tokens.
