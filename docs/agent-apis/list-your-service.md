@@ -8,7 +8,7 @@ description: List your API in the API Catalog — apply via the form or open a P
 
 List once — every AI Agent call after that is revenue in.
 
-Put your API behind the x402 gateway and it appears in the catalog: any Agent can discover it, call it, and pay for it. Payments settle to the wallet you specify in real time — **no platform escrow, no payout cycle**; settle on TRON or BNB Chain; your existing API stays exactly as it is, **not one line of code changes**, and you set the prices.
+Put your API behind the Gateway and it appears in the catalog: any Agent can discover it, call it, and pay for it. Payments settle to the wallet you specify in real time — **no platform escrow, no payout cycle**; settle on TRON or BNB Chain; your existing API stays exactly as it is, **not one line of code changes**, and you set the prices.
 
 ## The big picture: what listing actually means
 

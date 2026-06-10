@@ -1,14 +1,14 @@
 ---
 title: Gateway
 sidebar_label: Gateway
-description: The x402 gateway turns any API into a pay-per-call service for AI Agents — Agents discover, call, and pay on their own, with every call settled on-chain to your wallet.
+description: The Gateway turns any API into a pay-per-call service for AI Agents — Agents discover, call, and pay on their own, with every call settled on-chain to your wallet.
 ---
 
-# x402 Gateway
+# Gateway
 
 Turn any API into a pay-per-call service for AI Agents.
 
-The x402 gateway sits in front of your API and handles payment: AI Agents discover, call, and pay for it on their own. Every call settles on-chain, with funds going straight to the wallet you designate. Your existing API stays exactly as it is — no code changes.
+The Gateway sits in front of your API and handles payment: AI Agents discover, call, and pay for it on their own. Every call settles on-chain, with funds going straight to the wallet you designate. Your existing API stays exactly as it is — no code changes.
 
 :::tip
 Ready to dive in? Jump to [List your API](../../agent-apis/list-your-service.md); want to see what's live first, go [browse the API Catalog](../../agent-apis/index.md).
@@ -24,7 +24,7 @@ Think of the gateway as a **cashier + relay** standing in front of your API (tec
 - **You decide pricing per endpoint.** Price an endpoint in the config and it takes the paid flow; leave it unpriced (price 0) and it's forwarded directly — free endpoints stay free.
 
 ```text
-Agent ──► x402 Gateway ──► your upstream API
+Agent ──► Gateway ──► your upstream API
           │ quote / verify / settle (paid endpoints only)
           └ forwards requests, holds upstream keys for you
 ```
@@ -89,7 +89,7 @@ Full steps: [List Your Service](../../agent-apis/list-your-service.md).
 ### Official gateway, or run your own?
 
 - **Official gateway (hosted)**: BANK OF AI runs the gateway, proxies your API, and handles payment — you deploy nothing; the call addresses in your listing files use the official domain (like `gateway.bankofai.io/providers/<fqn>`).
-- **Run your own**: deploy the x402 gateway on your own machine; upstream credentials and payout config stay local; the call addresses in your listing files use your own domain. For providers who want full control over credentials and infrastructure.
+- **Run your own**: deploy the gateway on your own machine; upstream credentials and payout config stay local; the call addresses in your listing files use your own domain. For providers who want full control over credentials and infrastructure.
 
 Either way, the calling Agent's experience is identical: discovery, quoting, payment, and the call all follow the same x402 flow.
 
