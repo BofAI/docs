@@ -75,11 +75,11 @@ Check prices, compare rates, even swap tokens in one go.
 
 💡 For more advanced features, see: [**sunswap**](./BANKOFAISkill.md#sunswap)
 
-### 🚀 Trade SunPump Meme Coins
+### 🚀 Launch & Trade SunPump Meme Coins
 
-Buy and sell on SunPump — TRON's meme-token launchpad — and check market data. The AI automatically picks the right path: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") trade on the bonding curve, while tokens that already have a SunSwap V2 pair ("post-launch") go through a regular swap. You can also look up token detail, rankings, holder distribution, and wallet portfolios. TRON mainnet only.
+Create your own meme token in one sentence, buy and sell on SunPump — TRON's meme-token launchpad — and check market data. Token creation happens **server-side, no wallet needed**: just give a name, symbol, description, and logo. For trading, the AI automatically picks the right path: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") trade on the bonding curve, while tokens that already have a SunSwap V2 pair ("post-launch") go through a regular swap. You can also look up token detail, rankings, holder distribution, and wallet portfolios. TRON mainnet only.
 
-> 🗣️ "Show me the top 10 SunPump meme coins by 24h gain, then check the holder concentration of the top one."
+> 🗣️ "Launch a meme token on SunPump — here are the name, symbol, description, and logo." or "Show me the top 10 SunPump meme coins by 24h gain, then check the holder concentration of the top one."
 
 💡 For trading and risk details, see: [**sunpump-agent-skill**](./BANKOFAISkill.md#sunpump-agent-skill)
 
