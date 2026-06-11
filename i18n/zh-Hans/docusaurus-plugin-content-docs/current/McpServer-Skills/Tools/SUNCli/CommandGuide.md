@@ -843,7 +843,7 @@ sun contract send TRecipient transfer --args '["TRecipient","1000000"]' --value 
 
 ## SunPump
 
-SunPump 是 TRON 上的 meme 代币发射平台。本命令组覆盖代币发现（行情、排行、持有人、钱包持仓、交易历史）以及发射前交易。
+SunPump 是 TRON 上的 meme 代币发射平台。本命令组覆盖代币发现（行情、排行、持有人、钱包持仓、交易历史）、一键发币（`launch`）以及发射前交易。
 
 > **关于 Bonding Curve：** Bonding Curve 是代币的发射进度条——随着社区参与和买入增加，meme 币市值逐步增长，进度最高涨到 100%；满 100% 后会自动在 SunSwap V2 上创建交易对，代币就「发射」了。进度未满 100% 的「发射前」代币用 `sun sunpump buy/sell` 在 SunPump 上交易；发射后改用 [`sun swap`](#兑换)。
 
@@ -855,7 +855,7 @@ SunPump 是 TRON 上的 meme 代币发射平台。本命令组覆盖代币发现
 - **发射前（Bonding Curve 进度未满 100%、还没在 SunSwap V2 上创建交易对）：** `tokenLaunchedInstant` 为 `null`，链上 `state` 为 `1`（TRADING）或 `2`（READY_TO_LAUNCH）——用 `sun sunpump buy` / `sun sunpump sell` 交易。
 - **发射后（已在 SunSwap V2 建好交易对）：** `state` 为 `3`（LAUNCHED），`swapPoolAddress` 非空——走普通兑换 [`sun swap`](#兑换)。
 
-下单前先用 `sun sunpump state <addr>` 或 `sun sunpump token get <addr>` 判断走哪条路径。只读查询（行情、持有人、钱包持仓、交易历史）无需钱包；发射前交易需要钱包。
+下单前先用 `sun sunpump state <addr>` 或 `sun sunpump token get <addr>` 判断走哪条路径。只读查询（行情、持有人、钱包持仓、交易历史）与一键发币（`launch`）无需钱包；发射前交易需要钱包。
 :::
 
 ### `sunpump token get <contractAddress>`（读取）
@@ -1052,6 +1052,30 @@ sun sunpump portfolio <walletAddress> [options]
 | `--page <n>` | 页码 | — |
 | `--size <n>` | 每页数量 | — |
 | `--sort <field>` | 排序字段（如 `valueInTrx,desc`） | — |
+
+### `sunpump launch`（写入，无需钱包）
+
+通过 SunPump agent 端点（`POST /ai/agentTokenLaunch`）创建新的 meme 代币。创建在**服务端**完成：由平台签名并广播创建交易，本地无需钱包。CLI 会先打印摘要并要求确认（`--yes` 跳过）；`--dry-run` 只预览请求不发送。成功后输出新代币的合约地址、创建交易哈希和 logo URL。
+
+```bash
+sun sunpump launch --name MyToken --symbol MTK \
+  --description "my meme token" --image ./logo.png \
+  --twitter-url https://x.com/mytoken --website-url https://mytoken.xyz
+```
+
+| 选项 | 说明 | 默认值 |
+| :--- | :--- | :--- |
+| `--name <name>` | **（必填）**代币名称 | — |
+| `--symbol <symbol>` | **（必填）**代币符号 | — |
+| `--description <text>` | **（必填）**代币描述 | — |
+| `--image <path>` | logo 图片文件，读取后以 base64 发送 | — |
+| `--image-base64 <data>` | logo 的 base64 原始字符串（优先于 `--image`） | — |
+| `--twitter-url <url>` | Twitter 链接 | — |
+| `--telegram-url <url>` | Telegram 链接 | — |
+| `--website-url <url>` | 官网链接 | — |
+| `--tweet-username <name>` | 关联的推文用户名 | — |
+
+> 强烈建议通过 `--image` / `--image-base64` 提供 logo——缺少 logo 时 API 可能直接返回不带原因的 `500`（CLI 遇到时会给出提示）。
 
 ### `sunpump state <tokenAddress>`（读取）
 

@@ -844,7 +844,7 @@ sun contract send TRecipient transfer --args '["TRecipient","1000000"]' --value 
 
 ## SunPump
 
-SunPump is the meme-token launchpad on TRON. This command group covers token discovery (prices, rankings, holders, wallet portfolios, trade history) plus pre-launch trading.
+SunPump is the meme-token launchpad on TRON. This command group covers token discovery (prices, rankings, holders, wallet portfolios, trade history), one-command token creation (`launch`), plus pre-launch trading.
 
 > **About the Bonding Curve:** the Bonding Curve is a token's launch progress bar — as the community participates and buys in, the meme coin's market cap grows and the curve fills toward 100%; once it hits 100% a trading pair is automatically created on SunSwap V2 and the token "launches". Tokens still under 100% (pre-launch) trade with `sun sunpump buy/sell` on SunPump; after launch, use [`sun swap`](#swap) instead.
 
@@ -856,7 +856,7 @@ All `sunpump` subcommands only work on TRON mainnet. The API host is `https://ap
 - **Pre-launch (Bonding Curve under 100%, no SunSwap V2 pair yet):** `tokenLaunchedInstant` is `null`, on-chain `state` is `1` (TRADING) or `2` (READY_TO_LAUNCH) — trade with `sun sunpump buy` / `sun sunpump sell`.
 - **Post-launch (SunSwap V2 pair created):** `state` is `3` (LAUNCHED) and `swapPoolAddress` is set — use [`sun swap`](#swap) instead.
 
-Run `sun sunpump state <addr>` or `sun sunpump token get <addr>` before trading to decide which path to use. Read-only queries (prices, holders, portfolio, trade history) need no wallet; trading does.
+Run `sun sunpump state <addr>` or `sun sunpump token get <addr>` before trading to decide which path to use. Read-only queries (prices, holders, portfolio, trade history) and `launch` need no wallet; trading does.
 :::
 
 ### `sunpump token get <contractAddress>` (read)
@@ -1053,6 +1053,30 @@ sun sunpump portfolio <walletAddress> [options]
 | `--page <n>` | Page number | — |
 | `--size <n>` | Page size | — |
 | `--sort <field>` | Sort field (e.g. `valueInTrx,desc`) | — |
+
+### `sunpump launch` (write, no wallet required)
+
+Create a new meme token through the SunPump agent endpoint (`POST /ai/agentTokenLaunch`). Creation is **server-side**: the platform signs and broadcasts the creation transaction, so no local wallet is needed. The CLI prints a summary and asks for confirmation (`--yes` skips); `--dry-run` previews the request without sending. On success it prints the new token's contract address, creation tx hash, and logo URL.
+
+```bash
+sun sunpump launch --name MyToken --symbol MTK \
+  --description "my meme token" --image ./logo.png \
+  --twitter-url https://x.com/mytoken --website-url https://mytoken.xyz
+```
+
+| Option | Description | Default |
+| :--- | :--- | :--- |
+| `--name <name>` | **(required)** Token name | — |
+| `--symbol <symbol>` | **(required)** Token symbol | — |
+| `--description <text>` | **(required)** Token description | — |
+| `--image <path>` | Logo image file, read and sent as base64 | — |
+| `--image-base64 <data>` | Logo as a raw base64 string (overrides `--image`) | — |
+| `--twitter-url <url>` | Twitter URL | — |
+| `--telegram-url <url>` | Telegram URL | — |
+| `--website-url <url>` | Website URL | — |
+| `--tweet-username <name>` | Tweet username to associate with the launch | — |
+
+> Providing a logo via `--image` / `--image-base64` is strongly recommended — launches without a logo may be rejected by the API with an opaque `500` (the CLI hints at this when it happens).
 
 ### `sunpump state <tokenAddress>` (read)
 

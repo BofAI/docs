@@ -50,6 +50,7 @@ SUN CLI covers the full range of SunSwap DEX interactions, from real-time market
 | **V3 Liquidity** | Mint, increase, decrease concentrated positions, collect fees | `sun liquidity v3:mint --token0 TRX --token1 USDT --amount0 1000000` |
 | **V4 Liquidity** | V4 concentrated liquidity with Permit2 authorization | `sun liquidity v4:mint --token0 TRX --token1 USDT --amount0 1000000` |
 | **Contract Interaction** | Read or write to any TRON smart contract | `sun contract read <address> balanceOf --args '[...]'` |
+| **SunPump Token Launch** | Create a meme token in one command via the SunPump agent endpoint — server-side creation, **no wallet needed** (TRON mainnet only) | `sun sunpump launch --name MyToken --symbol MTK --description "..."` |
 | **SunPump Pre-launch Trading** | Buy/sell meme tokens that have no SunSwap V2 pair yet (TRON mainnet only) | `sun sunpump buy <address> --trx 10` |
 
 ---
