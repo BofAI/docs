@@ -1059,9 +1059,9 @@ sun sunpump portfolio <walletAddress> [options]
 Create a new meme token through the SunPump agent endpoint (`POST /ai/agentTokenLaunch`). Creation is **server-side**: the platform signs and broadcasts the creation transaction, so no local wallet is needed. The CLI prints a summary and asks for confirmation (`--yes` skips); `--dry-run` previews the request without sending. On success it prints the new token's contract address, creation tx hash, and logo URL.
 
 ```bash
-sun sunpump launch --name MyToken --symbol MTK \
-  --description "my meme token" --image ./logo.png \
-  --twitter-url https://x.com/mytoken --website-url https://mytoken.xyz
+sun sunpump launch --name "<token name>" --symbol "<SYMBOL>" \
+  --description "<one-line description>" --image ./logo.png \
+  --twitter-url "https://x.com/<your-handle>" --website-url "https://<your-site>"
 ```
 
 | Option | Description | Default |

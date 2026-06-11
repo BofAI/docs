@@ -1058,9 +1058,9 @@ sun sunpump portfolio <walletAddress> [options]
 通过 SunPump agent 端点（`POST /ai/agentTokenLaunch`）创建新的 meme 代币。创建在**服务端**完成：由平台签名并广播创建交易，本地无需钱包。CLI 会先打印摘要并要求确认（`--yes` 跳过）；`--dry-run` 只预览请求不发送。成功后输出新代币的合约地址、创建交易哈希和 logo URL。
 
 ```bash
-sun sunpump launch --name MyToken --symbol MTK \
-  --description "my meme token" --image ./logo.png \
-  --twitter-url https://x.com/mytoken --website-url https://mytoken.xyz
+sun sunpump launch --name "<token name>" --symbol "<SYMBOL>" \
+  --description "<one-line description>" --image ./logo.png \
+  --twitter-url "https://x.com/<your-handle>" --website-url "https://<your-site>"
 ```
 
 | 选项 | 说明 | 默认值 |
