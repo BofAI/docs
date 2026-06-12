@@ -239,6 +239,7 @@ const sidebars = {
             'llmservice/models/glm-5',
             'llmservice/models/kimi-k2.6',
             'llmservice/models/kimi-k2.5',
+            'llmservice/models/qwen3.6-27b',
             'llmservice/models/minimax-m3',
             'llmservice/models/minimax-m2.7',
           ],
