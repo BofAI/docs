@@ -18,6 +18,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | MiniMax M2.7      |                  0.30 |                       0.375 |                       0.06 |                   1.20 |                        - |
 | Kimi K2.5         |                  0.59 |                        0.59 |                      0.177 |                   3.00 |                        - |
 | Qwen3.6-27B       |                  0.19 |                        0.19 |                       0.19 |                   2.99 |                        - |
+| GLM-5.2           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.26 |                   4.40 |                        - |
 | GLM-5             |                  1.00 |                        1.00 |                       0.20 |                   3.20 |                        - |
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
