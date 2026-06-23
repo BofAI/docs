@@ -41,20 +41,22 @@ pay.md                        构建静态快照 dist/          /api/providers/<
 
 ## 目录里有什么
 
-目录覆盖 AI 模型、数据、计算、网页工具、消息、DeFi 等多个类目。当前在架的典型服务：
+首批上线服务覆盖发币、DeFi 市场数据与链上安全 —— 全部支持 TRON 与 BNB Chain 结算，后续会陆续增加：
 
-| 服务 | 类目 | 它能做什么 | 计费 |
-|---|---|---|---|
-| LLM Aggregator | AI | 兼容 OpenAI 的 API，覆盖 Anthropic、OpenAI、Google、DeepSeek 等多个前沿模型 | 按 token |
-| SunPump · Create Token | DeFi | 在 SunPump 上发行 Meme 代币（名称、符号、描述、图片） | 按次（敬请期待） |
-| SUN Swap | DeFi | 通过 SUN 协议在 TRON 上完成兑换、做市与挖矿 | 按次 |
-| Wolfram\|Alpha | Compute | 数学、科学与事实查询的计算引擎 | 按次 |
-| ScreenshotOne | Web Tools | 把任意网页截成高清图片 | 按张 |
-| Textbelt SMS | Messaging | 向任意手机号发送短信，无需 A2P 注册 | 按条 |
-| 2Captcha | Web Tools | 程序化识别图形验证码、reCAPTCHA、hCaptcha | 按次 |
+| 服务 | 它能做什么 | 计费 |
+|---|---|---|
+| SunPump Agent 发币 | 先用 x402 付费，再把发币元数据（名称、符号、描述、图片）提交给 SunPump，支付结算后由网关转发你的请求 | $0.001 / 次起 |
+| DefiLlama 代币价格 | 查询单个或多个代币的实时与历史美元价格、价格走势图和涨跌幅 | 免费 |
+| DefiLlama DeFi 数据 | 协议 TVL、手续费/收入与稳定币指标，用于研究和风险筛查 | 免费 |
+| DefiLlama 收益 / APY | 列出并比较 DeFi 池的收益（APY/TVL），以及单个池的历史序列 | 免费 |
+| DexScreener DEX 数据 | 代币的 DEX 交易对、价格与流动性；代币搜索；最新上新档案 | 免费 |
+| DIA 代币价格 | 按符号或链 + 合约地址获取实时、多源聚合的美元价格 | 免费 |
+| GoPlus 代币与地址安全 | 蜜罐/诈骗代币检测、恶意地址筛查与高风险授权识别 | 免费 |
+
+以上服务均属 **金融（Finance）** 类目，TRON 与 BNB Chain 均可用。
 
 :::note
-在架服务清单与统计数字（服务数、链数等）均由目录数据**动态生成**，以 `/api/catalog.json` 的实时内容为准，本文不写死具体数量。
+在架服务清单与统计数字（服务数、链数等）均由目录数据**动态生成**，以 `/api/catalog.json` 的实时内容为准，本文不写死具体数量；目录会随新服务上架而增长。
 :::
 
 ## 下一步

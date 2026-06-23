@@ -147,9 +147,10 @@ CI enforces the following rules — go through them before submitting:
 - `version` must be `1`.
 - `fqn` is lowercase letters/digits/hyphens and must match the directory name.
 - `category` must be one of the allowed values (see [reference](./reference.md#allowed-categories)).
-- `chains` needs at least one entry, using CAIP-2 style chain IDs (e.g. `tron:mainnet`, `eip155:56`).
+- `chains` needs at least one entry, using CAIP-2 style chain IDs — mainnets or testnets (e.g. `tron:mainnet`, `tron:nile`, `eip155:56`, `eip155:97`).
 - `isFirstParty`, `isFeatured` (booleans) and `featuredTags` (string array, may be empty `[]`) are **required** — missing any of them fails validation.
 - For every endpoint: `method` must be uppercase, `path` must start with `/`, and `maxPriceUsd` must not be less than `minPriceUsd`.
+- _(Optional)_ An endpoint that settles across multiple chains can add `x402Routes` — one entry per network (`network`, `provider`, `scheme`, `url`). See the [reference](./reference.md#x402routes--multi-network-routing).
 - The service and every endpoint must provide `i18n.zh-CN` translations for `title`, `subtitle`, `description`, and `useCase`.
 - `pay.md` must be submitted together with `catalog.json`; both files are scanned for sensitive data.
 - No keys, private keys, or private network addresses anywhere.

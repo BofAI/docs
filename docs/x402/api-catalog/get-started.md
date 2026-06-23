@@ -1,17 +1,14 @@
 ---
 title: Get Started
 sidebar_label: Get Started
-description: Plug your Agent into the API Catalog in 3 minutes — install the Agent Wallet, then one MCP install to discover and call every service in the catalog.
+description: Plug your Agent into the API Catalog in 3 minutes — install the Agent Wallet, then install the x402 CLI to discover and call every service in the catalog.
 ---
-
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
 
 # Get Started
 
-Two steps and under 3 minutes to plug your Agent into the whole catalog: install the wallet, then do one MCP install. After that, your Agent can discover and call any service in the catalog by name, paying per call on-chain.
+Two steps and under 3 minutes to plug your Agent into the whole catalog: install the wallet, then install the x402 CLI. After that, your Agent can discover and call any service in the catalog, paying per call on-chain.
 
-**Prerequisite**: an MCP-compatible Agent (Claude Code, OpenAI Codex, Cursor, Continue, etc.).
+**Prerequisite**: Node.js (for the wallet) and Python with `pip` (for the CLI).
 
 ## Step 1: Install the Agent Wallet
 
@@ -19,6 +16,7 @@ Run the command below to install a local wallet that manages stablecoins on TRON
 
 ```bash
 npm i @bankofai/agent-wallet
+agent-wallet --help
 ```
 
 :::tip No wallet yet?
@@ -29,53 +27,57 @@ Follow the [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md) to creat
 Keep only a small amount of stablecoins in the wallet for per-call payments. Never store your main assets in an Agent wallet.
 :::
 
-## Step 2: Connect the Catalog to your Agent
+## Step 2: Install the x402 CLI
 
-One MCP install and your Agent immediately sees every service in the catalog and can call them by name — no accounts, no API keys to manage.
-
-<Tabs>
-  <TabItem value="claude" label="Claude Code" default>
+One install connects your Agent to the catalog — it discovers and calls every service over x402, paying per call. No accounts, no API keys to manage.
 
 ```bash
-claude mcp add bankofai -s user -- npx @bankofai/mcp-catalog
+pip install bankofai-x402-cli
+x402-cli --version
 ```
 
-  </TabItem>
-  <TabItem value="other" label="Other MCP Agents">
-
-Also works with OpenAI Codex, Cursor, Continue, and any MCP-compatible Agent: add a server named `bankofai` to its MCP configuration, with the startup command:
+Once installed, your Agent can discover and call services through the CLI. Search by name or keyword to see what's in the catalog:
 
 ```bash
-npx @bankofai/mcp-catalog
-```
-
-  </TabItem>
-</Tabs>
-
-Once installed, just tell your Agent what you want in plain language — for example, "find a weather API and look up the current weather in Shanghai." The Agent finds the service in the catalog, gets a quote, pays on-chain with the wallet, and brings back the result — discovery, payment, and the call all happen automatically.
-
-## Calling from the command line (optional)
-
-If you prefer the terminal, `x402-cli` offers the same capabilities: search, inspect, and make paid calls directly.
-
-Search by name or keyword to see what's in the catalog:
-
-```bash
-x402-cli catalog search weather --catalog https://catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog search <keyword> --catalog https://catalog.bankofai.io/api/catalog.json --json
 ```
 
 Inspect a service's details and available endpoints:
 
 ```bash
-x402-cli catalog show acme-weather --catalog https://catalog.bankofai.io/api/catalog.json --json
-x402-cli catalog endpoints acme-weather --catalog https://catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog show <fqn> --catalog https://catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog endpoints <fqn> --catalog https://catalog.bankofai.io/api/catalog.json --json
 ```
 
-Then make a paid call against the target endpoint — quote, payment, and result retrieval in one step:
+Then make a paid call against the target endpoint — quote, payment, and result retrieval in one step. A simple GET endpoint needs nothing more than the URL:
 
 ```bash
-x402-cli pay 'https://gateway.bankofai.io/providers/acme-weather/v1/current?city=Shanghai'
+x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/...'
 ```
+
+For a POST endpoint, or to pin the payment chain, token, and scheme, pass them explicitly:
+
+```bash
+x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/<path>' \
+  --method POST \
+  --network tron:mainnet \
+  --token USDT \
+  --scheme exact_gasfree \
+  --max-amount 0.001 \
+  --header 'Content-Type: application/json' \
+  --body '{ ... }'
+```
+
+| Flag | Purpose |
+|---|---|
+| `--method` | HTTP method (defaults to `GET`) |
+| `--network` | CAIP-2 payment chain, e.g. `tron:mainnet`, `eip155:56` |
+| `--token` | Settlement token, e.g. `USDT` |
+| `--scheme` | Payment scheme — `exact_gasfree` (TRON) or `exact_permit` (EVM) |
+| `--max-amount` | Spend ceiling in USD; the call aborts if the quote exceeds it |
+| `--header` / `--body` | Request headers and body for the upstream call |
+
+A service that settles on multiple chains exposes one route per network (`x402Routes`); pick the route — and the matching `--network` / `--scheme` — for the chain you want to pay on.
 
 :::tip
 `--catalog` can point to the hosted URL above or to a locally built `dist/catalog.json` for offline debugging.

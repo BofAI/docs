@@ -50,6 +50,35 @@ Each service is described in `providers/<fqn>/catalog.json`. Top-level fields:
 | `metered` | boolean | Yes | Metered billing or not |
 | `minPriceUsd` | number | Yes | Minimum price (USD) |
 | `maxPriceUsd` | number | Yes | Maximum price (USD), must not be less than `minPriceUsd` |
+| `x402Routes` | object[] | No | Per-network payment routes (see below) |
+
+### x402Routes — multi-network routing
+
+An endpoint may serve the same capability across several chains, each settling through its own gateway provider and payment scheme. List those alternatives in `x402Routes`; each route describes one network:
+
+| Field | Type | Description |
+|---|---|---|
+| `network` | string | CAIP-2 chain ID this route settles on (e.g. `tron:mainnet`, `eip155:56`) |
+| `provider` | string | The gateway provider `fqn` that handles this network |
+| `scheme` | string | Payment scheme — `exact_gasfree` (TRON) or `exact_permit` (EVM) |
+| `url` | string | Full gateway URL for this network's route |
+
+The build passes this through to outputs as `x402_routes`. When present, callers/agents pick the route matching their intended payment chain; the top-level `url` remains the default route.
+
+For example, a token-launch endpoint might expose four routes — TRON Nile, TRON Mainnet, BSC Testnet, BSC Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
+
+```bash
+x402-cli pay 'https://gateway.bankofai.io/providers/<provider>/<path>' \
+  --method POST \
+  --network tron:mainnet \
+  --token USDT \
+  --scheme exact_gasfree \
+  --max-amount 0.001 \
+  --header 'Content-Type: application/json' \
+  --body '{ ... }'
+```
+
+The other routes reuse the same request body, swapping only the route `url`, `--network`, and `--scheme` (TRON routes use `exact_gasfree`; EVM routes use `exact_permit`).
 
 ### status block
 
@@ -76,12 +105,17 @@ security   shopping    storage     translation
 
 ## Chain IDs
 
-`chains` uses CAIP-2 style chain identifiers:
+`chains` uses CAIP-2 style chain identifiers. Mainnets and testnets are both recognized:
 
 | Chain | ID |
 |---|---|
 | TRON mainnet | `tron:mainnet` |
+| TRON Nile testnet | `tron:nile` |
+| TRON Shasta testnet | `tron:shasta` |
 | BNB Chain (BSC) | `eip155:56` |
+| BNB Smart Chain testnet | `eip155:97` |
+
+The build resolves each chain ID into display metadata (`kind` / `label` / `label_zh`) so the frontend doesn't have to parse CAIP-2 itself — see [Frontend display fields](#frontend-display-fields).
 
 ## Validation and secret scanning
 
@@ -120,10 +154,10 @@ Besides the `providers` array, the list endpoint carries dynamic stats — front
 | `chain_count` | Chains covered |
 | `generated_at` | Build time (UTC) |
 | `frontend.featured_fqns` | `fqn` list of featured services |
-| `frontend.categories` | Categories and counts |
-| `frontend.chains` | Chains and counts |
+| `frontend.categories` | Categories in use — each `{ id, label, label_zh, count }` |
+| `frontend.chains` | Chains in use — each `{ id, kind, label, label_zh, count }` |
 
-The `providers` array is pre-sorted at build time by **featured first → category → fqn**; frontends can render it as-is.
+The `providers` array is pre-sorted at build time by **featured first → category → fqn**; frontends can render it as-is. Use `frontend.categories` / `frontend.chains` to drive filter UIs — including their `label` / `label_zh` display names — rather than hard-coding category or chain lists.
 
 ### Derived fields
 
@@ -137,11 +171,26 @@ Build outputs add derived fields on top of the raw data and convert everything t
 | `min_price_usd` / `max_price_usd` | The service's price range across all endpoints |
 | `sha` | Content hash of `catalog.json` + `pay.md`, for change detection |
 
+### Frontend display fields
+
+To save the frontend from parsing raw IDs and picking translations, the build also emits ready-to-render fields on each provider summary and detail:
+
+| Field | Description |
+|---|---|
+| `title_zh` | Chinese service name (falls back to `title`) — usable directly as the first header line |
+| `main_title` | Primary title (equals `title`) — second header line |
+| `sub_title` | Subtitle — third header line |
+| `category_meta` | `{ id, label, label_zh }` for the category |
+| `chain_kinds` | De-duplicated friendly chain kinds, e.g. `["tron"]`, `["bnb"]` |
+| `chains_meta` | Per-chain `{ id, kind, label, label_zh }`, so the frontend never parses CAIP-2 |
+
+These are additive — the raw `title`, `subtitle`, `category`, `chains`, and `i18n.zh-CN` are still present. A separate frontend-facing contract (`API.md` in the catalog repo) documents the full response shapes and rendering guidance.
+
 ### Other output structures
 
-- **`/api/pay/<fqn>.json`**: payment summary for Agents / CLI. Top level: `version`, `fqn`, `title`, `subtitle`, `description`, `use_case`, `i18n`, `service_url`, `chains`, `sha`; `endpoints[]` keeps only call-relevant fields: `method`, `path`, `url`, `description`, `metered`, `min_price_usd`, `max_price_usd`.
-- **`/api/search-index.json`**: `{ version, generated_at, documents[] }`, each document being a service summary plus each endpoint's `method` / `path` / `title` / `description`.
-- **`/api/categories.json`**: array of categories in use, each `{ id, count }`.
+- **`/api/pay/<fqn>.json`**: payment summary for Agents / CLI. Top level includes `version`, `fqn`, `title`, `title_zh`, `main_title`, `sub_title`, `subtitle`, `description`, `use_case`, `i18n`, `service_url`, `chains`, `chain_kinds`, `chains_meta`, `sha`; `endpoints[]` keeps the call-relevant fields `method`, `path`, `url`, `description`, `metered`, `min_price_usd`, `max_price_usd`, plus `x402_routes` when the endpoint defines multi-network routes.
+- **`/api/search-index.json`**: `{ version, generated_at, documents[] }`, each document being a service summary (with `category_meta` / `chain_kinds` / `chains_meta`) plus each endpoint's `method` / `path` / `title` / `description` (and `x402_routes` when present).
+- **`/api/categories.json`**: array of categories in use, each `{ id, label, label_zh, count }` — a direct export of `frontend.categories`.
 - **`/api/status.json`**: `{ version, generated_at, provider_count, status }`; `status` of `ok` means the build is healthy.
 
 ## Local build and run

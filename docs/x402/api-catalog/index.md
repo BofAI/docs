@@ -41,20 +41,22 @@ Three consumers share the same data:
 
 ## What's in the catalog
 
-The catalog spans AI models, data, compute, web tools, messaging, DeFi, and more. Typical live services:
+The first live services cover token creation plus DeFi market data and on-chain security — all settling across TRON and BNB Chain, with more being added over time:
 
-| Service | Category | What it does | Billing |
-|---|---|---|---|
-| LLM Aggregator | AI | OpenAI-compatible API across frontier models from Anthropic, OpenAI, Google, DeepSeek, and more | per token |
-| SunPump · Create Token | DeFi | Launch a Meme token on SunPump — name, symbol, description, image | per launch (stay tuned) |
-| SUN Swap | DeFi | Swap, liquidity, and farming on TRON via the SUN protocol | per call |
-| Wolfram\|Alpha | Compute | Computational engine for math, science, and factual queries | per call |
-| ScreenshotOne | Web Tools | Capture any webpage as a high-quality image | per shot |
-| Textbelt SMS | Messaging | Send SMS to any phone number, no A2P registration | per message |
-| 2Captcha | Web Tools | Solve image, reCAPTCHA, and hCaptcha challenges programmatically | per solve |
+| Service | What it does | Billing |
+|---|---|---|
+| SunPump Agent Token Launch | Pay with x402, then submit token-launch metadata (name, symbol, description, image) to SunPump — the gateway forwards your request after settlement | From $0.001 / call |
+| DefiLlama Token Price | Current and historical USD price for one or many tokens, price charts, and percent change | Free |
+| DefiLlama DeFi Data | Protocol TVL, fees/revenue, and stablecoin metrics for research and risk screening | Free |
+| DefiLlama Yields / APY | List and compare DeFi pool yields (APY/TVL), plus a pool's historical series | Free |
+| DexScreener DEX Data | Token DEX pairs, price and liquidity; token search; latest new-listing profiles | Free |
+| DIA Token Price | Real-time, multi-source aggregated USD price by symbol or by chain + contract address | Free |
+| GoPlus Token & Address Security | Honeypot/scam checks, malicious-address screening, and risky-approval detection | Free |
+
+All of the above are in the **Finance** category and available on both TRON and BNB Chain.
 
 :::note
-The live service list and statistics (service count, chain count, etc.) are **generated dynamically** from catalog data — treat `/api/catalog.json` as the source of truth; this page hard-codes no numbers.
+The live service list and statistics (service count, chain count, etc.) are **generated dynamically** from catalog data — treat `/api/catalog.json` as the source of truth; this page hard-codes no numbers, and the catalog grows as new services are listed.
 :::
 
 ## Next steps

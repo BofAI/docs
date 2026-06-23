@@ -147,9 +147,10 @@ CI 会强制以下规则，建议提交前逐条对照：
 - `version` 必须为 `1`。
 - `fqn` 为小写字母/数字/连字符，且与目录名一致。
 - `category` 必须是合法类目之一（见[参考](./reference.md#合法类目)）。
-- `chains` 至少一条，使用 CAIP-2 风格的链 ID（如 `tron:mainnet`、`eip155:56`）。
+- `chains` 至少一条，使用 CAIP-2 风格的链 ID —— 主网或测试网均可（如 `tron:mainnet`、`tron:nile`、`eip155:56`、`eip155:97`）。
 - `isFirstParty`、`isFeatured`（布尔值）与 `featuredTags`（字符串数组，可为空 `[]`）为**必填**，缺一即校验失败。
 - 每个 endpoint 的 `method` 必须大写、`path` 以 `/` 开头、`maxPriceUsd` 不小于 `minPriceUsd`。
+- _（选填）_ 跨多条链结算的端点可加 `x402Routes`，每个网络一条（`network`、`provider`、`scheme`、`url`）。详见[参考](./reference.md#x402routes-多网络路由)。
 - 服务与每个 endpoint 都必须提供 `i18n.zh-CN` 的 `title`、`subtitle`、`description`、`useCase`。
 - `pay.md` 必须与 `catalog.json` 一同提交，两份文件都会被敏感信息扫描。
 - 不得包含任何密钥、私钥或内网地址。
