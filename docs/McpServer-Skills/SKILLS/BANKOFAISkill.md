@@ -163,7 +163,7 @@ Want to play with meme coins on SunPump? This skill is built on `@bankofai/sun-c
 
 **Requires your confirmation (the AI shows you the bill first):**
 
-> Launch a meme token on SunPump: name <your token name>, symbol <SYMBOL>, description <one sentence>, logo <path to your image>.
+> Launch a meme token on SunPump: name `<your token name>`, symbol `<SYMBOL>`, description `<one sentence>`, logo `<path to your image>`.
 
 > Buy TXYZ... with 10 TRX on SunPump (a token without a SunSwap V2 pair yet).
 
