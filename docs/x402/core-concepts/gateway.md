@@ -54,15 +54,15 @@ That means one service can mix paid and free endpoints — say `/v1/current` bil
 Paid or free, upstream credentials never leave the gateway — the calling Agent can't touch a single key.
 :::
 
-## What each side gets
+## Built for both sides
 
 Providers turn calls into cash flow. Agents turn calls into capabilities. The gateway is the bridge.
 
 ### For API providers: list your API, earn on every call
 
 - **Straight to your wallet** — payments settle to your payout wallet in real time; no platform escrow, no payout cycle.
-- **Native multi-chain** — settle on TRON or BNB Chain, your call.
-- **Zero code changes** — your existing API stays exactly as it is.
+- **Native multi-chain** — settle on TRON or BNB Chain, the provider's choice.
+- **Zero-touch onboarding** — your existing API stays exactly as it is, not one line changes.
 - **You set the price** — flexible per-endpoint, per-tier pricing; free routes stay free.
 
 → [List your API](../api-catalog/list-your-service.md)

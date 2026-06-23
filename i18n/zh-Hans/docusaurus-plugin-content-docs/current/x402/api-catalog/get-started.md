@@ -19,14 +19,6 @@ npm i @bankofai/agent-wallet
 agent-wallet --help
 ```
 
-:::tip 还没创建钱包？
-先按 [Agent Wallet 快速开始](../../Agent-Wallet/QuickStart.md) 创建并充值钱包（不到一分钟）。Catalog 复用同一个钱包，无需重复配置。
-:::
-
-:::caution 风险隔离
-钱包里只放少量稳定币用于按次付费，主资产请勿放在 Agent 钱包中。
-:::
-
 ## 第 2 步：安装 x402 CLI
 
 一次安装，就把 Agent 接入了目录 —— 它通过 x402 发现并调用全部服务、按次付费。无需账号，也无需管理任何 API Key。
@@ -35,6 +27,10 @@ agent-wallet --help
 pip install bankofai-x402-cli
 x402-cli --version
 ```
+
+看到版本号即安装完成。两步到此结束 —— 你的 Agent 已经接入目录，可以开始调用了。
+
+## 用 CLI 调用服务
 
 装好后，Agent 就能通过 CLI 发现并调用服务。先按服务名或关键字搜索，看看目录里有什么：
 
@@ -95,8 +91,10 @@ x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/<path>' \
 
 上游凭证始终保留在网关侧，调用方 Agent 全程接触不到任何密钥。
 
-:::tip 免费端点
-不是每次调用都要付钱：服务方设为免费的端点不会向你收费——没有报价环节，直接返回结果，钱包不会发生任何扣款。
+:::tip 几点提示
+- **免费端点**：不是每次调用都要付钱。服务方设为免费的端点不会向你收费——没有报价环节，直接返回结果，钱包不会发生任何扣款。
+- **还没创建钱包？** 先按 [Agent Wallet 快速开始](../../Agent-Wallet/QuickStart.md) 创建并充值钱包（不到一分钟）。Catalog 复用同一个钱包，无需重复配置。
+- **风险隔离**：钱包里只放少量稳定币用于按次付费，主资产请勿放在 Agent 钱包中。
 :::
 
 ## 下一步

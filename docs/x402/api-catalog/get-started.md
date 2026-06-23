@@ -19,14 +19,6 @@ npm i @bankofai/agent-wallet
 agent-wallet --help
 ```
 
-:::tip No wallet yet?
-Follow the [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md) to create and fund a wallet (takes under a minute). The Catalog reuses the same wallet — no extra setup.
-:::
-
-:::caution Risk isolation
-Keep only a small amount of stablecoins in the wallet for per-call payments. Never store your main assets in an Agent wallet.
-:::
-
 ## Step 2: Install the x402 CLI
 
 One install connects your Agent to the catalog — it discovers and calls every service over x402, paying per call. No accounts, no API keys to manage.
@@ -35,6 +27,10 @@ One install connects your Agent to the catalog — it discovers and calls every 
 pip install bankofai-x402-cli
 x402-cli --version
 ```
+
+When the version prints, you're done — that's both steps. Your Agent is now plugged into the catalog and ready to call.
+
+## Calling services with the CLI
 
 Once installed, your Agent can discover and call services through the CLI. Search by name or keyword to see what's in the catalog:
 
@@ -95,8 +91,10 @@ Every call clears on-chain via x402 — the quoted price is exactly what you pay
 
 Upstream credentials never leave the gateway — the calling Agent never touches any key.
 
-:::tip Free endpoints
-Not every call costs money: endpoints the provider leaves unpriced charge you nothing — there's no quote step, the result comes straight back, and your wallet is never debited.
+:::tip Good to know
+- **Free endpoints**: not every call costs money. Endpoints the provider leaves unpriced charge you nothing — there's no quote step, the result comes straight back, and your wallet is never debited.
+- **No wallet yet?** Follow the [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md) to create and fund a wallet (takes under a minute). The Catalog reuses the same wallet — no extra setup.
+- **Risk isolation**: keep only a small amount of stablecoins in the wallet for per-call payments. Never store your main assets in an Agent wallet.
 :::
 
 ## Next steps
