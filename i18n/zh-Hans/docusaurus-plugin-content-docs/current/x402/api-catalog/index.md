@@ -24,7 +24,7 @@ description: BANK OF AI 的钱包原生服务目录 —— AI Agent 在这里发
 ```text
 服务方                         目录仓库 (CI)                 分发
 ─────────                     ─────────────                ────────
-catalog.json   ──提交 PR──►   字段校验 + 密钥扫描   ──►   /api/catalog.json
+catalog.json   ──提交 PR──►   字段校验 + 敏感信息扫描 ──►   /api/catalog.json
 pay.md                        构建静态快照 dist/          /api/providers/<fqn>.json
                                                           /api/pay/<fqn>.json · .md
                                                                     │

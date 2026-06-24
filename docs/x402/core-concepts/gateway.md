@@ -20,13 +20,14 @@ Think of the gateway as a **cashier + relay** standing in front of your API (tec
 
 - **Agents only ever hit the gateway address** (like `https://x402-gateway.bankofai.io/providers/<fqn>/v1/...`) — they never reach your upstream API directly.
 - **The gateway forwards requests.** Once payment is verified (or the endpoint is free), it proxies the request upstream and returns the upstream result to the Agent untouched.
-- **Credential isolation.** Upstream API keys and other sensitive config live only in the gateway-side `provider.yml` or environment variables — callers never touch them.
+- **Never a wallet private key.** Settlement uses a wallet **address** only; callers pay on-chain from their own wallets. Neither side of the gateway ever touches a private key.
+- **Upstream keys stay isolated.** If your upstream API needs auth, that API key lives only on the side running the gateway — in your local YAML / env for a self-hosted gateway, or held by us for the official gateway. Either way the caller never sees it, and it never enters the public catalog.
 - **You decide pricing per endpoint.** Price an endpoint in the config and it takes the paid flow; leave it unpriced (price 0) and it's forwarded directly — free endpoints stay free.
 
 ```text
 Agent ──► Gateway ──► your upstream API
           │ quote / verify / settle (paid endpoints only)
-          └ forwards requests, holds upstream keys for you
+          └ forwards the request
 ```
 
 ## Anatomy of a call
@@ -51,7 +52,7 @@ Unpriced endpoints skip the quote step entirely and trigger no on-chain transact
 That means one service can mix paid and free endpoints — say `/v1/current` billed per call while `/v1/ping` stays free. Free endpoints are flagged in the catalog, so Agents can see at a glance which capabilities cost nothing.
 
 :::note
-Paid or free, upstream credentials never leave the gateway — the calling Agent can't touch a single key.
+Paid or free, the caller gets access by paying on-chain and needs no API key; any upstream credentials stay gateway-side and the calling Agent can never touch them.
 :::
 
 ## Built for both sides

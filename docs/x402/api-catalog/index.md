@@ -24,7 +24,7 @@ To get listed, a provider submits two **public** files to the catalog repository
 ```text
 Provider                     Catalog repo (CI)                Distribution
 ────────                     ─────────────────                ────────────
-catalog.json  ──open PR──►   field checks + secret scan  ──►  /api/catalog.json
+catalog.json  ──open PR──►   field & sensitive-data scan ──►  /api/catalog.json
 pay.md                       build static snapshot dist/      /api/providers/<fqn>.json
                                                               /api/pay/<fqn>.json · .md
                                                                         │
