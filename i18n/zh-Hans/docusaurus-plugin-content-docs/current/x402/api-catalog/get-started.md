@@ -35,30 +35,30 @@ x402-cli --version
 装好后，Agent 就能通过 CLI 发现并调用服务。先按服务名或关键字搜索，看看目录里有什么：
 
 ```bash
-x402-cli catalog search <keyword> --catalog https://catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog search <keyword> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
 ```
 
 查看某个服务的详情与可用端点：
 
 ```bash
-x402-cli catalog show <fqn> --catalog https://catalog.bankofai.io/api/catalog.json --json
-x402-cli catalog endpoints <fqn> --catalog https://catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog show <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
+x402-cli catalog endpoints <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
 ```
 
 确认后，直接对目标端点发起一次付费调用——报价、付款、取回结果一步完成。简单的 GET 端点只需给出 URL：
 
 ```bash
-x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/...'
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
 ```
 
 如果是 POST 端点，或想指定支付链、代币与方案，显式传入对应参数：
 
 ```bash
-x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/<path>' \
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
   --method POST \
   --network tron:mainnet \
   --token USDT \
-  --scheme exact_gasfree \
+  --scheme exact_permit \
   --max-amount 0.001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
@@ -69,7 +69,7 @@ x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--method` | HTTP 方法（默认 `GET`） |
 | `--network` | CAIP-2 支付链，如 `tron:mainnet`、`eip155:56` |
 | `--token` | 结算代币，如 `USDT` |
-| `--scheme` | 支付方案 —— `exact_gasfree`（TRON）或 `exact_permit`（EVM） |
+| `--scheme` | 路由声明的 x402 支付方案，如 `exact_permit` 或 `exact_gasfree` |
 | `--max-amount` | 美元支出上限；报价超出即中止调用 |
 | `--header` / `--body` | 转发到上游的请求头与请求体 |
 

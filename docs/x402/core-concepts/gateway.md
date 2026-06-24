@@ -18,7 +18,7 @@ Ready to dive in? Jump to [List your API](../api-catalog/list-your-service.md); 
 
 Think of the gateway as a **cashier + relay** standing in front of your API (technically, a reverse proxy):
 
-- **Agents only ever hit the gateway address** (like `https://gateway.../providers/<fqn>/v1/...`) — they never reach your upstream API directly.
+- **Agents only ever hit the gateway address** (like `https://x402-gateway.bankofai.io/providers/<fqn>/v1/...`) — they never reach your upstream API directly.
 - **The gateway forwards requests.** Once payment is verified (or the endpoint is free), it proxies the request upstream and returns the upstream result to the Agent untouched.
 - **Credential isolation.** Upstream API keys and other sensitive config live only in the gateway-side `provider.yml` or environment variables — callers never touch them.
 - **You decide pricing per endpoint.** Price an endpoint in the config and it takes the paid flow; leave it unpriced (price 0) and it's forwarded directly — free endpoints stay free.
@@ -88,7 +88,7 @@ Full steps: [List Your Service](../api-catalog/list-your-service.md).
 
 ### Official gateway, or run your own?
 
-- **Official gateway (hosted)**: BANK OF AI runs the gateway, proxies your API, and handles payment — you deploy nothing; the call addresses in your listing files use the official domain (like `gateway.bankofai.io/providers/<fqn>`).
+- **Official gateway (hosted)**: BANK OF AI runs the gateway, proxies your API, and handles payment — you deploy nothing; the call addresses in your listing files use the official domain (like `x402-gateway.bankofai.io/providers/<fqn>`).
 - **Run your own**: deploy the gateway on your own machine; upstream credentials and payout config stay local; the call addresses in your listing files use your own domain. For providers who want full control over credentials and infrastructure.
 
 Either way, the calling Agent's experience is identical: discovery, quoting, payment, and the call all follow the same x402 flow.

@@ -16,8 +16,10 @@ Each service is described in `providers/<fqn>/catalog.json`. Top-level fields:
 |---|---|---|---|
 | `version` | number | Yes | Always `1` |
 | `fqn` | string | Yes | Globally unique ID, regex `^[a-z0-9][a-z0-9-]{1,62}$`, must match the directory name |
-| `title` | string | Yes | Service name |
+| `title` | string | Yes | Service name (typically a clean brand name, e.g. `DefiLlama`) |
 | `subtitle` | string | Yes | One-line subtitle |
+| `mainTitle` | string | No | Display tagline for the card/header (e.g. `Aggregated DeFi data — TVL, fees, prices & yields`); falls back to `title` |
+| `subTitle` | string | No | Secondary display line; falls back to `subtitle` |
 | `description` | string | Yes | Service description |
 | `useCase` | string | Yes | When to use it — helps Agents decide when to call |
 | `i18n` | object | Yes | Translations, must include `zh-CN` (see below) |
@@ -33,7 +35,7 @@ Each service is described in `providers/<fqn>/catalog.json`. Top-level fields:
 
 ### i18n translations
 
-`i18n.zh-CN` is required and must contain Chinese translations for `title`, `subtitle`, `description`, and `useCase`. Every endpoint needs its own `i18n.zh-CN` as well.
+`i18n.zh-CN` is required and must contain Chinese translations for `title`, `subtitle`, `description`, and `useCase`. It may also include `mainTitle` (Chinese display tagline). Every endpoint needs its own `i18n.zh-CN` as well.
 
 ### endpoint fields
 
@@ -60,25 +62,25 @@ An endpoint may serve the same capability across several chains, each settling t
 |---|---|---|
 | `network` | string | CAIP-2 chain ID this route settles on (e.g. `tron:mainnet`, `eip155:56`) |
 | `provider` | string | The gateway provider `fqn` that handles this network |
-| `scheme` | string | Payment scheme — `exact_gasfree` (TRON) or `exact_permit` (EVM) |
+| `scheme` | string | x402 payment scheme for this route, e.g. `exact_permit` or `exact_gasfree` — each route declares its own |
 | `url` | string | Full gateway URL for this network's route |
 
 The build passes this through to outputs as `x402_routes`. When present, callers/agents pick the route matching their intended payment chain; the top-level `url` remains the default route.
 
-For example, a token-launch endpoint might expose four routes — TRON Nile, TRON Mainnet, BSC Testnet, BSC Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
+For example, a token-launch endpoint might expose one route per supported chain — TRON Mainnet and BSC Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
 
 ```bash
-x402-cli pay 'https://gateway.bankofai.io/providers/<provider>/<path>' \
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --method POST \
   --network tron:mainnet \
   --token USDT \
-  --scheme exact_gasfree \
+  --scheme exact_permit \
   --max-amount 0.001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
 ```
 
-The other routes reuse the same request body, swapping only the route `url`, `--network`, and `--scheme` (TRON routes use `exact_gasfree`; EVM routes use `exact_permit`).
+The other routes reuse the same request body, swapping only the route `url`, `--network`, and the route's declared `--scheme`.
 
 ### status block
 
@@ -177,18 +179,20 @@ To save the frontend from parsing raw IDs and picking translations, the build al
 
 | Field | Description |
 |---|---|
-| `title_zh` | Chinese service name (falls back to `title`) — usable directly as the first header line |
-| `main_title` | Primary title (equals `title`) — second header line |
-| `sub_title` | Subtitle — third header line |
+| `title_zh` | Chinese service name (from `i18n.zh-CN.title`, falls back to `title`) |
+| `main_title` | Display tagline (from `mainTitle`, falls back to `title`) |
+| `main_title_zh` | Chinese display tagline (from `i18n.zh-CN.mainTitle` / `mainTitle`, falls back to `title`) |
+| `sub_title` | Secondary display line (from `subTitle`, falls back to `subtitle`) |
+| `sub_title_zh` | Chinese secondary display line (from `i18n.zh-CN.subtitle` / `subTitle`, falls back to `subtitle`) |
 | `category_meta` | `{ id, label, label_zh }` for the category |
 | `chain_kinds` | De-duplicated friendly chain kinds, e.g. `["tron"]`, `["bnb"]` |
 | `chains_meta` | Per-chain `{ id, kind, label, label_zh }`, so the frontend never parses CAIP-2 |
 
-These are additive — the raw `title`, `subtitle`, `category`, `chains`, and `i18n.zh-CN` are still present. A separate frontend-facing contract (`API.md` in the catalog repo) documents the full response shapes and rendering guidance.
+These are additive — the raw `title`, `subtitle`, `category`, `chains`, and `i18n.zh-CN` are still present.
 
 ### Other output structures
 
-- **`/api/pay/<fqn>.json`**: payment summary for Agents / CLI. Top level includes `version`, `fqn`, `title`, `title_zh`, `main_title`, `sub_title`, `subtitle`, `description`, `use_case`, `i18n`, `service_url`, `chains`, `chain_kinds`, `chains_meta`, `sha`; `endpoints[]` keeps the call-relevant fields `method`, `path`, `url`, `description`, `metered`, `min_price_usd`, `max_price_usd`, plus `x402_routes` when the endpoint defines multi-network routes.
+- **`/api/pay/<fqn>.json`**: payment summary for Agents / CLI. Top level includes `version`, `fqn`, `title`, `title_zh`, `main_title`, `main_title_zh`, `sub_title`, `sub_title_zh`, `subtitle`, `description`, `use_case`, `i18n`, `service_url`, `chains`, `chain_kinds`, `chains_meta`, `sha`; `endpoints[]` keeps the call-relevant fields `method`, `path`, `url`, `description`, `metered`, `min_price_usd`, `max_price_usd`, plus `x402_routes` when the endpoint defines multi-network routes.
 - **`/api/search-index.json`**: `{ version, generated_at, documents[] }`, each document being a service summary (with `category_meta` / `chain_kinds` / `chains_meta`) plus each endpoint's `method` / `path` / `title` / `description` (and `x402_routes` when present).
 - **`/api/categories.json`**: array of categories in use, each `{ id, label, label_zh, count }` — a direct export of `frontend.categories`.
 - **`/api/status.json`**: `{ version, generated_at, provider_count, status }`; `status` of `ok` means the build is healthy.

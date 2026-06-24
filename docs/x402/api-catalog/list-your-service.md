@@ -31,7 +31,7 @@ This determines what goes into the call addresses (`serviceUrl` and each endpoin
 
 | | Official gateway (hosted) | Self-hosted gateway |
 |---|---|---|
-| Call address in your files | Official domain (`gateway.bankofai.io/...`) | Your own gateway domain |
+| Call address in your files | Official domain (`x402-gateway.bankofai.io/...`) | Your own gateway domain |
 | Who runs the gateway | BANK OF AI | You |
 | Funds & traffic | Proxied through the official gateway, settled to your wallet | Straight to your gateway and wallet, never passing through BANK OF AI |
 | Where upstream credentials live | Held by the official gateway | Your machine only |
@@ -63,7 +63,7 @@ x402-cli catalog export-gateway https://gateway.example.com \
   --output-dir providers/<fqn>
 ```
 
-**Official gateway**: once onboarding is confirmed, fill in the two files using the official address assigned to you (like `https://gateway.bankofai.io/providers/<fqn>`), following the examples below.
+**Official gateway**: once onboarding is confirmed, fill in the two files using the official address assigned to you (like `https://x402-gateway.bankofai.io/providers/<fqn>`), following the examples below.
 
 ### What catalog.json looks like
 
@@ -85,18 +85,18 @@ A minimal working example (taken from the demo service `acme-weather`):
       "useCase": "<zh-CN useCase>"
     }
   },
-  "logo": "https://catalog.bankofai.io/assets/providers/acme-weather/logo.png",
+  "logo": "https://x402-catelog.bankofai.io/assets/providers/acme-weather/logo.png",
   "category": "data",
   "chains": ["tron:mainnet", "eip155:56"],
   "isFirstParty": false,
   "isFeatured": false,
   "featuredTags": [],
-  "serviceUrl": "https://gateway.bankofai.io/providers/acme-weather",
+  "serviceUrl": "https://x402-gateway.bankofai.io/providers/acme-weather",
   "endpoints": [
     {
       "method": "GET",
       "path": "/v1/current",
-      "url": "https://gateway.bankofai.io/providers/acme-weather/v1/current",
+      "url": "https://x402-gateway.bankofai.io/providers/acme-weather/v1/current",
       "title": "Current Weather",
       "subtitle": "Lookup by city",
       "description": "Current weather for a city.",
@@ -122,7 +122,7 @@ The `<zh-CN ...>` placeholders stand for the Simplified-Chinese translations of 
 ## Service
 
 - FQN: `acme-weather`
-- Service URL: `https://gateway.bankofai.io/providers/acme-weather`
+- Service URL: `https://x402-gateway.bankofai.io/providers/acme-weather`
 - Category: `data`
 - Chains: `tron:mainnet`, `eip155:56`
 
@@ -132,11 +132,11 @@ The `<zh-CN ...>` placeholders stand for the Simplified-Chinese translations of 
 
 Current weather for a city.
 
-- URL: `https://gateway.bankofai.io/providers/acme-weather/v1/current`
+- URL: `https://x402-gateway.bankofai.io/providers/acme-weather/v1/current`
 - Price: `$0.002`
 
 ```bash
-x402-cli pay 'https://gateway.bankofai.io/providers/acme-weather/v1/current?city=Shanghai'
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/acme-weather/v1/current?city=Shanghai'
 ```
 ````
 

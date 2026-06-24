@@ -45,13 +45,11 @@ The first live services cover token creation plus DeFi market data and on-chain 
 
 | Service | What it does | Billing |
 |---|---|---|
-| SunPump Agent Token Launch | Pay with x402, then submit token-launch metadata (name, symbol, description, image) to SunPump — the gateway forwards your request after settlement | From $0.001 / call |
-| DefiLlama Token Price | Current and historical USD price for one or many tokens, price charts, and percent change | Free |
-| DefiLlama DeFi Data | Protocol TVL, fees/revenue, and stablecoin metrics for research and risk screening | Free |
-| DefiLlama Yields / APY | List and compare DeFi pool yields (APY/TVL), plus a pool's historical series | Free |
-| DexScreener DEX Data | Token DEX pairs, price and liquidity; token search; latest new-listing profiles | Free |
-| DIA Token Price | Real-time, multi-source aggregated USD price by symbol or by chain + contract address | Free |
-| GoPlus Token & Address Security | Honeypot/scam checks, malicious-address screening, and risky-approval detection | Free |
+| SunPump | One-call agent/meme token launch, paid via x402 — submit token metadata (name, symbol, description, image) and the gateway forwards your request after settlement | $0.001 / call |
+| DefiLlama | Aggregated DeFi data — protocol TVL, fees, token prices (current & historical), and pool yields/APY | $0.001 / call |
+| DexScreener | Real-time DEX pairs, prices and liquidity, token search, and the latest new-listing profiles | $0.001 / call |
+| DIA | Decentralized, multi-source oracle prices by symbol or by chain + contract address | $0.001 / call |
+| GoPlus | Token and address security checks — honeypot/scam screening, malicious-address and risky-approval detection | $0.001 / call |
 
 All of the above are in the **Finance** category and available on both TRON and BNB Chain.
 

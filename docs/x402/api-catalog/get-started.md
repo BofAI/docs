@@ -35,30 +35,30 @@ When the version prints, you're done — that's both steps. Your Agent is now pl
 Once installed, your Agent can discover and call services through the CLI. Search by name or keyword to see what's in the catalog:
 
 ```bash
-x402-cli catalog search <keyword> --catalog https://catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog search <keyword> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
 ```
 
 Inspect a service's details and available endpoints:
 
 ```bash
-x402-cli catalog show <fqn> --catalog https://catalog.bankofai.io/api/catalog.json --json
-x402-cli catalog endpoints <fqn> --catalog https://catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog show <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
+x402-cli catalog endpoints <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
 ```
 
 Then make a paid call against the target endpoint — quote, payment, and result retrieval in one step. A simple GET endpoint needs nothing more than the URL:
 
 ```bash
-x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/...'
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
 ```
 
 For a POST endpoint, or to pin the payment chain, token, and scheme, pass them explicitly:
 
 ```bash
-x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/<path>' \
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
   --method POST \
   --network tron:mainnet \
   --token USDT \
-  --scheme exact_gasfree \
+  --scheme exact_permit \
   --max-amount 0.001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
@@ -69,7 +69,7 @@ x402-cli pay 'https://gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--method` | HTTP method (defaults to `GET`) |
 | `--network` | CAIP-2 payment chain, e.g. `tron:mainnet`, `eip155:56` |
 | `--token` | Settlement token, e.g. `USDT` |
-| `--scheme` | Payment scheme — `exact_gasfree` (TRON) or `exact_permit` (EVM) |
+| `--scheme` | x402 payment scheme declared by the route, e.g. `exact_permit` or `exact_gasfree` |
 | `--max-amount` | Spend ceiling in USD; the call aborts if the quote exceeds it |
 | `--header` / `--body` | Request headers and body for the upstream call |
 
