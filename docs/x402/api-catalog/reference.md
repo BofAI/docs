@@ -75,7 +75,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --network tron:mainnet \
   --token USDT \
   --scheme exact_permit \
-  --max-amount 0.001 \
+  --max-amount 0.000001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
 ```

@@ -45,11 +45,11 @@ The first live services cover token creation plus DeFi market data and on-chain 
 
 | Service | What it does | Billing |
 |---|---|---|
-| SunPump | One-call agent/meme token launch, paid via x402 — submit token metadata (name, symbol, description, image) and the gateway forwards your request after settlement | $0.001 / call |
-| DefiLlama | Aggregated DeFi data — protocol TVL, fees, token prices (current & historical), and pool yields/APY | $0.001 / call |
-| DexScreener | Real-time DEX pairs, prices and liquidity, token search, and the latest new-listing profiles | $0.001 / call |
-| DIA | Decentralized, multi-source oracle prices by symbol or by chain + contract address | $0.001 / call |
-| GoPlus | Token and address security checks — honeypot/scam screening, malicious-address and risky-approval detection | $0.001 / call |
+| SunPump | One-call agent/meme token launch, paid via x402 — submit token metadata (name, symbol, description, image) and the gateway forwards your request after settlement | $0.000001 / call |
+| DefiLlama | Aggregated DeFi data — protocol TVL, fees, token prices (current & historical), and pool yields/APY | $0.000001 / call |
+| DexScreener | Real-time DEX pairs, prices and liquidity, token search, and the latest new-listing profiles | $0.000001 / call |
+| DIA | Decentralized, multi-source oracle prices by symbol or by chain + contract address | $0.000001 / call |
+| GoPlus | Token and address security checks — honeypot/scam screening, malicious-address and risky-approval detection | $0.000001 / call |
 
 All of the above are in the **Finance** category and available on both TRON and BNB Chain.
 
