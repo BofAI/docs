@@ -29,7 +29,7 @@ If you're already using a Skills-compatible AI Agent (OpenClaw, a Telegram bot, 
 3. The AI handles the entire flow automatically:
    - Pulls the `BofAI/skills` repository
    - Detects your current Agent's skills directory (e.g. `~/.agents/skills/`)
-   - Installs all 11 BANK OF AI skills: the 10 core skills (`agent-wallet`, `sunswap-dex-trading`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`) plus `bankofai-guide` (the onboarding helper)
+   - Installs all 12 BANK OF AI skills: the 11 core skills (`agent-wallet`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`) plus `bankofai-guide` (the onboarding helper)
 
 :::tip Why this is the recommended path for beginners
 You don't need to know what `npx`, `npm`, or "global install" mean. The AI handles every step including selecting the right skills directory for your platform, installing the wallet CLI, and onboarding you to your first wallet.
@@ -42,16 +42,16 @@ You don't need to know what `npx`, `npm`, or "global install" mean. The AI handl
 If you have Node.js installed and prefer the command line, simply tell your AI Agent to execute the following command:
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y -g
+npx skills add https://github.com/BofAI/skills -y
 ```
 
-The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag enables global installation (available across all projects). Once complete, it will show ✅ Global installation complete! along with the full list of installed Skills.
+The `-y` flag skips all interactive prompts and installs all available Skills by default. Once complete, it will show ✅ Installation complete! along with the full list of installed Skills.
 
 ---
 
 ### Method 3: Interactive Install (Most Control)
 
-If you want to choose which Skills to install and the installation scope, remove the `-y -g` flags:
+If you want to choose which Skills to install and the installation scope, remove the `-y` flag:
 
 ```bash
 npx skills add https://github.com/BofAI/skills
@@ -65,48 +65,37 @@ This guide demonstrates the installation process using terminal commands as an e
 
 The installer will guide you through a few steps — just follow along:
 
-**1️⃣ Confirm tool installation**
-
-Terminal will ask you to install the `skills` package. Type `y` and press Enter:
-
-```
-Need to install the following packages:
-  skills@1.4.6
-Ok to proceed? (y) y
-```
-
-**2️⃣ Select which Skills to install**
+**1️⃣ Select which Skills to install**
 
 The installer automatically fetches all available Skills from the repo and lists them for selection. Press **Space** to toggle each one — we recommend selecting all:
 
 ```
-◇  Found 11 skills
+◇  Found 12 skills
 │
 ◇  Select skills to install (space to toggle)
 │  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions,
-│  recharge-skill, SunPerp Perpetual Futures Trading, SunSwap DEX Trading,
-│  TRC20 Token Toolkit, TronScan Data Lookup, TRX Staking & SR Voting,
-│  USDD / JUST Protocol, x402-payment
+│  recharge-skill, SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit,
+│  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup,
+│  TRX Staking & SR Voting, USDD / JUST Protocol, x402-payment
 ```
 
 :::tip Select all
 Unless you're sure you only need specific skills, install them all. Skills use an on-demand architecture — unused skills consume zero resources.
 :::
 
-**3️⃣ Choose which AI tools to install to**
+**2️⃣ Choose which AI tools to install to**
 
 The installer auto-detects AI tools on your computer (e.g., Cursor, Claude Code, Cline, etc.). Use Space to select the ones you want:
 
 ```
-◇  45 agents
+◇  71 agents
 ◇  Which agents do you want to install to?
-│  Amp, Antigravity, Cline, Codex, Cursor, Deep Agents,
-│  Gemini CLI, GitHub Copilot, Kimi Code CLI, OpenCode, Warp
-│
-●  Installing to: Antigravity, Claude Code, Cursor, Gemini CLI, GitHub Copilot
+│  Amp, Antigravity, Antigravity CLI, Cline, Codex, Cursor, Deep Agents,
+│  Gemini CLI, GitHub Copilot, Kimi Code CLI, OpenCode, Warp, Zed,
+│  Claude Code, OpenClaw … (71 in total — tick the ones you actually use)
 ```
 
-**4️⃣ Choose installation scope**
+**3️⃣ Choose installation scope**
 
 Select `Project` (current project only) or `User` (globally available across all projects):
 
@@ -115,62 +104,87 @@ Select `Project` (current project only) or `User` (globally available across all
 │  Project
 ```
 
-**5️⃣ Review the installation plan**
+**4️⃣ Choose installation method**
 
-The installer shows a summary of where each Skill will land and, for each target tool, whether it'll be a full copy (`universal`) or a symlink:
+Choose how skill files land in each tool — `Symlink` (recommended) or `Universal` (full copy). Just press Enter to use the recommended option:
 
 ```
-◇  Installation Summary ──────────────────────────────────────────────────────╮
-│                                                                             │
-│  ~/.agents/skills/agent-wallet                                              │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/bankofai-guide                                            │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/multi-sig-account-permissions                             │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/recharge-skill                                            │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/sunperp-perpetual-futures-trading                         │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/sunswap-dex-trading                                       │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/trc20-token-toolkit                                       │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/tronscan-data-lookup                                      │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/trx-staking-sr-voting                                     │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/usdd-just-protocol                                        │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-│  ~/.agents/skills/x402-payment                                              │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlink → Claude Code                                                    │
-│                                                                             │
-├─────────────────────────────────────────────────────────────────────────────╯
+◇  Installation method
+│  Symlink (Recommended)
+```
+
+**5️⃣ Review the installation plan**
+
+The installer shows a summary of where each Skill will land, whether it'll be a full copy (`universal`) or a symlink for each target tool, and which existing files it overwrites:
+
+```
+◇  Installation Summary ─────────────────────────────────────────────────────────╮
+│                                                                                │
+│  ~/.agents/skills/bankofai-guide                                               │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/multi-sig-account-permissions                                │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/recharge-skill                                               │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/sunperp-perpetual-futures-trading                            │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/sunpump-meme-token-toolkit                                   │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/sunswap-dex-trading                                          │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/trc20-token-toolkit                                          │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/tronscan-data-lookup                                         │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/trx-staking-sr-voting                                        │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/usdd-just-protocol                                           │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/x402-payment                                                 │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+│  ~/.agents/skills/agent-wallet                                                 │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
+│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
+│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
+│                                                                                │
+├────────────────────────────────────────────────────────────────────────────────╯
 ```
 
 :::tip universal vs symlink
-Tools that follow the generic skills layout get a **universal** copy under `~/.agents/skills/`. Claude Code uses its own convention, so the installer creates a **symlink** pointing back to the universal copy — one source of truth, both places stay in sync.
+Tools that follow the generic skills layout get a **universal** copy under `~/.agents/skills/`. Claude Code, OpenClaw, and similar tools use their own conventions, so the installer creates **symlinks** pointing back to the universal copy — one source of truth, everything stays in sync. `overwrites` lists the existing same-name skill files this run will replace.
 :::
 
 **6️⃣ Review security assessment & confirm**
@@ -181,17 +195,18 @@ The installer runs a security scan on each Skill and shows the results. Review t
 ◇  Security Risk Assessments ────────────────────────────────────────────────────────╮
 │                                                                                    │
 │                                     Gen               Socket            Snyk       │
-│  agent-wallet                       Safe              0 alerts          High Risk  │
-│  bankofai-guide                     Med Risk          1 alert           High Risk  │
+│  bankofai-guide                     Safe              0 alerts          High Risk  │
 │  Multi-Sig & Account Permissions    --                --                --         │
 │  recharge-skill                     Safe              1 alert           Med Risk   │
 │  SunPerp Perpetual Futures Trading  --                --                --         │
+│  SunPump Meme Token Toolkit         --                --                --         │
 │  SunSwap DEX Trading                --                --                --         │
 │  TRC20 Token Toolkit                --                --                --         │
 │  TronScan Data Lookup               --                --                --         │
 │  TRX Staking & SR Voting            --                --                --         │
 │  USDD / JUST Protocol               --                --                --         │
 │  x402-payment                       Safe              1 alert           Med Risk   │
+│  agent-wallet                       Safe              1 alert           High Risk  │
 │                                                                                    │
 │  Details: https://skills.sh/BofAI/skills                                           │
 │                                                                                    │
@@ -208,50 +223,49 @@ When you see output like this, all Skills have been successfully installed to yo
 ```
 ◇  Installation complete
 
-◇  Installed 11 skills ───────────────────────────────────────────────────────╮
-│                                                                             │
-│  ✓ ~/.agents/skills/agent-wallet                                            │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/bankofai-guide                                          │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/multi-sig-account-permissions                           │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/recharge-skill                                          │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/sunperp-perpetual-futures-trading                       │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/sunswap-dex-trading                                     │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/trc20-token-toolkit                                     │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/tronscan-data-lookup                                    │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/trx-staking-sr-voting                                   │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/usdd-just-protocol                                      │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│  ✓ ~/.agents/skills/x402-payment                                            │
-│    universal: Antigravity, Cursor, Gemini CLI, GitHub Copilot, Amp +7 more  │
-│    symlinked: Claude Code                                                   │
-│                                                                             │
-├─────────────────────────────────────────────────────────────────────────────╯
+◇  Installed 12 skills ──────────────────────────────────────────────────╮
+│                                                                        │
+│  ✓ ~/.agents/skills/bankofai-guide                                     │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/multi-sig-account-permissions                      │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/recharge-skill                                     │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/sunperp-perpetual-futures-trading                  │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/sunpump-meme-token-toolkit                         │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/sunswap-dex-trading                                │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/trc20-token-toolkit                                │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/tronscan-data-lookup                               │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/trx-staking-sr-voting                              │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/usdd-just-protocol                                 │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/x402-payment                                       │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/agent-wallet                                       │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│                                                                        │
+├────────────────────────────────────────────────────────────────────────╯
 
 └  Done!  Review skills before use; they run with full agent permissions.
 ```
-
-:::tip Optional: Install find-skills
-After installation, you may be prompted to install `find-skills` — a helper that lets your AI automatically discover and suggest new skills. We recommend selecting `Yes`.
-:::
 
 ### Verify Installation
 

@@ -1,6 +1,6 @@
 # 完整能力清单
 
-本页是 SUN CLI 所有命令的完整参考。命令按类别组织：钱包管理、价格、代币、兑换、池子、流动性、持仓、交易对、矿池、协议、交易和合约。
+本页是 SUN CLI 所有命令的完整参考。命令按类别组织：钱包管理、价格、代币、兑换、池子、流动性、持仓、交易对、矿池、协议、交易、合约和 SunPump。
 
 > 说明：`<arg>` = 必需参数，`[arg]` = 可选参数。
 > 标注 **(必需)** 的选项必须提供，其余均为可选。
@@ -841,6 +841,321 @@ sun contract send TRecipient transfer --args '["TRecipient","1000000"]' --value 
 
 ---
 
+## SunPump
+
+SunPump 是 TRON 上的 meme 代币发射平台。本命令组覆盖代币发现（行情、排行、持有人、钱包持仓、交易历史）、一键发币（`launch`）以及发射前交易。
+
+> **关于 Bonding Curve：** Bonding Curve 是代币的发射进度条——随着社区参与和买入增加，meme 币市值逐步增长，进度最高涨到 100%；满 100% 后会自动在 SunSwap V2 上创建交易对，代币就「发射」了。进度未满 100% 的「发射前」代币用 `sun sunpump buy/sell` 在 SunPump 上交易；发射后改用 [`sun swap`](#兑换)。
+
+:::caution SunPump 仅支持 TRON 主网
+所有 `sunpump` 子命令只在 TRON 主网可用。API 端点为 `https://api-v2.sunpump.meme/pump-api`，链上 Bonding Curve 合约为 `TTfvyrAz86hbZk5iDpKD78pqLGgi8C7AAw`。传入 `--network nile`（或任何非 mainnet 值）会立即报错 `SunPump is only available on mainnet`。去掉 `--network` 或显式传 `--network mainnet` 即可。
+:::
+
+:::tip 发射前 vs 发射后 —— 选对交易命令
+- **发射前（Bonding Curve 进度未满 100%、还没在 SunSwap V2 上创建交易对）：** `tokenLaunchedInstant` 为 `null`，链上 `state` 为 `1`（TRADING）或 `2`（READY_TO_LAUNCH）——用 `sun sunpump buy` / `sun sunpump sell` 交易。
+- **发射后（已在 SunSwap V2 建好交易对）：** `state` 为 `3`（LAUNCHED），`swapPoolAddress` 非空——走普通兑换 [`sun swap`](#兑换)。
+
+下单前先用 `sun sunpump state <addr>` 或 `sun sunpump token get <addr>` 判断走哪条路径。只读查询（行情、持有人、钱包持仓、交易历史）与一键发币（`launch`）无需钱包；发射前交易需要钱包。
+:::
+
+### `sunpump token get <contractAddress>`（读取）
+
+按合约地址获取 SunPump 代币详情：价格、市值、24h 成交量、持有人数、总量、所有者、交易池地址、社交链接和发射状态。
+
+```bash
+sun sunpump token get <contractAddress>
+```
+
+### `sunpump token list`（读取）
+
+列出 SunPump 代币，支持过滤和分页。
+
+```bash
+sun sunpump token list [options]
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--contract <address>` | 按合约地址过滤 | — |
+| `--owner <address>` | 按所有者地址过滤 | — |
+| `--symbol <symbol>` | 按符号过滤 | — |
+| `--name <name>` | 按名称过滤 | — |
+| `--description <text>` | 按描述过滤 | — |
+| `--page <n>` | 页码 | — |
+| `--size <n>` | 每页数量 | — |
+| `--sort <field>` | 排序字段（如 `marketCap,desc`） | — |
+
+### `sunpump token search <query>`（读取）
+
+按名称或符号模糊搜索代币。
+
+```bash
+sun sunpump token search <query> [options]
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--on-sunswap` | 仅显示已发射到 SunSwap 的代币 | `false` |
+| `--page <n>` | 页码 | — |
+| `--size <n>` | 每页数量 | — |
+| `--sort <field>` | 排序字段 | — |
+
+### `sunpump token search-v2 <query>`（读取）
+
+模糊搜索的 v2 版本（调用 `/token/searchV2` 接口）。相比 `search`，额外支持 `--dlive`、`--ai-helper`、`--twitter-launch`、`--sun-agent-launch` 几个过滤维度。
+
+```bash
+sun sunpump token search-v2 <query> [options]
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--on-sunswap` | 仅显示已发射到 SunSwap 的代币 | — |
+| `--dlive` | 过滤：DLive showing | — |
+| `--ai-helper` | 过滤：AI helper | — |
+| `--twitter-launch` | 过滤：Twitter launch | — |
+| `--sun-agent-launch` | 过滤：Sun agent launch | — |
+| `--page <n>` | 页码 | — |
+| `--size <n>` | 每页数量 | — |
+| `--sort <field>` | 排序字段 | — |
+
+### `sunpump token by-owner <ownerAddress>`（读取）
+
+列出某个钱包创建的代币。
+
+```bash
+sun sunpump token by-owner <ownerAddress> [options]
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--page <n>` | 页码 | — |
+| `--size <n>` | 每页数量 | — |
+| `--sort <field>` | 排序字段 | — |
+
+### `sunpump token holders <tokenAddress>`（读取）
+
+列出某个代币的持有人，含余额和占比。
+
+```bash
+sun sunpump token holders <tokenAddress> [options]
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--include-zero` | 包含零余额持有人 | — |
+| `--page <n>` | 页码 | — |
+| `--size <n>` | 每页数量 | — |
+| `--sort <field>` | 排序字段（默认按余额降序） | — |
+
+> `percent` 字段在 holders 端点返回的是百分值（如 `38.51` = 38.51%），而 token list 端点返回的是小数（如 `0.3851`）。CLI 会自动归一化，但直接读原始 JSON 时请注意量级。
+
+### `sunpump token holders-v2 <tokenAddress>`（读取）
+
+持有人列表的 v2 版本（调用较新的 `/token/holdersV2` 接口），输入参数同 `holders`，返回字段可能略有差异。
+
+```bash
+sun sunpump token holders-v2 <tokenAddress> [options]
+```
+
+### `sunpump token ranking`（读取）
+
+按指定指标获取代币排行。**`--type` 为必需项。**
+
+```bash
+sun sunpump token ranking --type MARKET_CAP --size 10
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--type <rankingType>` | **（必需）** 排行类型：`MARKET_CAP`、`VOLUME_24H`、`PRICE_CHANGE_24H` | — |
+| `--size <n>` | 返回条数 | — |
+
+> `--type` 只接受 `MARKET_CAP`、`VOLUME_24H`、`PRICE_CHANGE_24H` 三个值（大小写敏感），其他值会被 API 拒绝。
+
+### `sunpump token king-of-hill`（读取）
+
+获取当前的 king-of-the-hill 代币。
+
+```bash
+sun sunpump token king-of-hill
+```
+
+### `sunpump token pump-list`（读取）
+
+获取 SunPump 原始代币列表（直接返回接口响应，不拆除外层的 `{code, msg, data}` 包装）。
+
+```bash
+sun sunpump token pump-list
+```
+
+### `sunpump token favors`（读取，需签名）
+
+列出用户收藏的代币。需要签名消息。
+
+```bash
+sun sunpump token favors --user-address <address> --signature <sig> --signed-message <msg> [options]
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--user-address <address>` | **（必需）** 用户钱包地址 | — |
+| `--signature <sig>` | **（必需）** 签名消息的签名 | — |
+| `--signed-message <msg>` | **（必需）** 被签名的消息 | — |
+| `--token-address <address>` | 按代币地址过滤 | — |
+| `--page <n>` | 页码 | — |
+| `--size <n>` | 每页数量 | — |
+
+### `sunpump tx token <contractAddress>`（读取）
+
+查询某个代币的买卖交易历史。
+
+```bash
+sun sunpump tx token <contractAddress> [options]
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--swap-type <type>` | 方向过滤（`BUY` / `SELL`） | — |
+| `--pool <address>` | 交易池地址 | — |
+| `--tx-hash <hash>` | 指定交易哈希 | — |
+| `--block <n>` | 区块号 | — |
+| `--start-time <epoch>` | 开始时间（epoch **秒**） | — |
+| `--end-time <epoch>` | 结束时间（epoch **秒**） | — |
+| `--page <n>` | 页码 | — |
+| `--size <n>` | 每页数量 | — |
+| `--sort <field>` | 排序字段（如 `txDateTime,desc`） | — |
+
+> `--start-time` / `--end-time` 是 epoch **秒**，不是毫秒。
+
+### `sunpump tx user <ownerAddress>`（读取）
+
+查询某个钱包的买卖交易历史，选项同 `tx token`。
+
+```bash
+sun sunpump tx user <ownerAddress> --size 20
+sun sunpump tx user <ownerAddress> --swap-type BUY --size 20
+```
+
+### `sunpump portfolio <walletAddress>`（读取）
+
+列出某个钱包持有的所有 SunPump 代币，含 TRX 计价价值和持仓占比。
+
+```bash
+sun sunpump portfolio <walletAddress> [options]
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--include-zero` | 包含零余额代币 | — |
+| `--min-trx <amount>` | 最低 TRX 计价价值过滤 | — |
+| `--page <n>` | 页码 | — |
+| `--size <n>` | 每页数量 | — |
+| `--sort <field>` | 排序字段（如 `valueInTrx,desc`） | — |
+
+### `sunpump launch`（写入，无需钱包）
+
+通过 SunPump agent 端点（`POST /ai/agentTokenLaunch`）创建新的 meme 代币。创建在**服务端**完成：由平台签名并广播创建交易，本地无需钱包。CLI 会先打印摘要并要求确认（`--yes` 跳过）；`--dry-run` 只预览请求不发送。成功后输出新代币的合约地址、创建交易哈希和 logo URL。
+
+```bash
+sun sunpump launch --name "<token name>" --symbol "<SYMBOL>" \
+  --description "<one-line description>" --image ./logo.png \
+  --twitter-url "https://x.com/<your-handle>" --website-url "https://<your-site>"
+```
+
+| 选项 | 说明 | 默认值 |
+| :--- | :--- | :--- |
+| `--name <name>` | **（必填）**代币名称 | — |
+| `--symbol <symbol>` | **（必填）**代币符号 | — |
+| `--description <text>` | **（必填）**代币描述 | — |
+| `--image <path>` | logo 图片文件，读取后以 base64 发送 | — |
+| `--image-base64 <data>` | logo 的 base64 原始字符串（优先于 `--image`） | — |
+| `--twitter-url <url>` | Twitter 链接 | — |
+| `--telegram-url <url>` | Telegram 链接 | — |
+| `--website-url <url>` | 官网链接 | — |
+| `--tweet-username <name>` | 关联的推文用户名 | — |
+
+> 强烈建议通过 `--image` / `--image-base64` 提供 logo——缺少 logo 时 API 可能直接返回不带原因的 `500`（CLI 遇到时会给出提示）。
+
+### `sunpump state <tokenAddress>`（读取）
+
+查询 SunPump 代币的链上状态，用于判断该走 SunPump 发射前交易还是 SunSwap。
+
+```bash
+sun sunpump state <tokenAddress>
+```
+
+| 状态值 | 标签 | 能否用 `sunpump buy/sell` 交易 |
+| :--- | :--- | :--- |
+| `0` | `NOT_EXIST` | 否（SunPump 不认识该代币） |
+| `1` | `TRADING` | 是 |
+| `2` | `READY_TO_LAUNCH` | 是（Bonding Curve 进度已满 100%，即将在 SunSwap V2 上创建交易对） |
+| `3` | `LAUNCHED` | 否——改用 `sun swap` |
+
+> `sun-kit` 的 TypeScript 枚举只列了 0–2，但链上合约对已发射代币会返回 3。CLI 会把 3 映射为 `LAUNCHED`——请以打印出的标签为准，不要只看原始数字。
+
+### `sunpump quote-buy <tokenAddress>`（读取）
+
+预览一笔 SunPump 发射前买入，不发送交易。
+
+```bash
+sun sunpump quote-buy <tokenAddress> --trx 10
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--trx <amount>` | **（必需）** 要花费的 TRX，**小数**（如 `10` 或 `1.5`） | — |
+
+### `sunpump quote-sell <tokenAddress>`（读取）
+
+预览一笔 SunPump 发射前卖出，不发送交易。
+
+```bash
+sun sunpump quote-sell <tokenAddress> --amount 1000
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--amount <amount>` | **（必需）** 要卖出的代币数量，**小数** | — |
+| `--decimals <n>` | 代币精度 | `18` |
+
+### `sunpump buy <tokenAddress>`（写入）
+
+在 SunPump 上用 TRX 买入 meme 代币（仅限还没在 SunSwap V2 上创建交易对的代币）。`--trx` 接受小数，CLI 内部按 TRX-Sun（1e6）缩放。
+
+```bash
+sun sunpump buy <tokenAddress> --trx 10
+sun sunpump buy <tokenAddress> --trx 10 --slippage 0.1
+sun sunpump buy <tokenAddress> --trx 10 --min-out 27955000000000000000000
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--trx <amount>` | **（必需）** 要花费的 TRX，**小数** | — |
+| `--slippage <n>` | 滑点容差，小数表示（meme 代币波动大） | `0.05` |
+| `--min-out <raw>` | 最少获得代币数（原始单位，覆盖滑点） | — |
+
+### `sunpump sell <tokenAddress>`（写入）
+
+在 SunPump 上把 meme 代币卖成 TRX（仅限还没在 SunSwap V2 上创建交易对的代币）。首次卖出某代币时，SDK 会自动先发一笔 TRC20 `approve` 交易。
+
+```bash
+sun sunpump sell <tokenAddress> --amount 1000
+sun sunpump sell <tokenAddress> --amount 1000 --decimals 6
+sun sunpump sell <tokenAddress> --amount 1000 --slippage 0.1
+```
+
+| 选项 | 描述 | 默认值 |
+| :--- | :--- | :--- |
+| `--amount <amount>` | **（必需）** 要卖出的代币数量，**小数** | — |
+| `--decimals <n>` | 代币精度（不确定时用 `sunpump token get` 查） | `18` |
+| `--slippage <n>` | 滑点容差，小数表示 | `0.05` |
+| `--min-out <raw>` | 最少获得 TRX（Sun 为单位，覆盖滑点） | — |
+
+> 用 `--dry-run` 可在不广播的情况下打印解析后的参数（TRX/Sun 缩放、计算出的 `minOut`、滑点、网络），方便先给用户看清将要发送的内容。
+
+---
+
 ## 内置代币符号
 
 很多命令同时接受代币符号和完整的 TRON 地址：
@@ -857,6 +1172,8 @@ sun contract send TRecipient transfer --args '["TRecipient","1000000"]' --value 
 | `JST` | `TCFLL5dx5ZJdKnWuesXxi1VPwjLVmWZZy9` | 18 |
 | `BTT` | `TAFjULxiVgT4qWk6UZwjqwZXTSaGaqnVp4` | 18 |
 | `WIN` | `TLa2f6VPqDgRE67v1736s7bJ8Ray5wYjU7` | 6 |
+| `NFT` | `TFczxzPhnThNSqr5by8tvxsdCFRRz6cPNq` | 6 |
+| `TUSD` | `TUpMhErZL2fhh4sVNULAbNKLokS4GjC1F4` | 18 |
 
 你可以使用符号或完整地址：
 
