@@ -25,7 +25,7 @@ The AI will install the Skills and then ask whether to create a wallet.
 >
 > The command enters interactive mode to let me pick the Skills: I'll use the `-y` flag (without `-g`) so it selects everything by default and installs into this Agent's directory:
 >
-> ✅ **11 Skills installed.** (installed into this Agent's skills directory)
+> ✅ **12 Skills installed.** (installed into this Agent's skills directory)
 >
 > Now running `bankofai-guide` to walk you through setup…
 >
@@ -47,12 +47,13 @@ The AI will install the Skills and then ask whether to create a wallet.
 > | 3 | `multi-sig-account-permissions` |
 > | 4 | `recharge-skill` |
 > | 5 | `sunperp-perpetual-futures-trading` |
-> | 6 | `sunswap-dex-trading` |
-> | 7 | `trc20-token-toolkit` |
-> | 8 | `tronscan-data-lookup` |
-> | 9 | `trx-staking-sr-voting` |
-> | 10 | `usdd-just-protocol` |
-> | 11 | `x402-payment` |
+> | 6 | `sunpump-meme-token-toolkit` |
+> | 7 | `sunswap-dex-trading` |
+> | 8 | `trc20-token-toolkit` |
+> | 9 | `tronscan-data-lookup` |
+> | 10 | `trx-staking-sr-voting` |
+> | 11 | `usdd-just-protocol` |
+> | 12 | `x402-payment` |
 >
 > **📋 Current status**
 >

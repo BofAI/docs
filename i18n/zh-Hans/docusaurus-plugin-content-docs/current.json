@@ -15,7 +15,7 @@
     "message": "8004协议",
     "description": "The label for category 8004 Protocol in sidebar docsSidebar"
   },
-    "sidebar.docsSidebar.category.Usage": {
+  "sidebar.docsSidebar.category.Usage": {
     "message": "使用指南",
     "description": "The label for category Usage in sidebar docsSidebar"
   },
@@ -31,7 +31,6 @@
     "message": "核心概念",
     "description": "The label for category Core Concepts in sidebar docsSidebar"
   },
- 
   "sidebar.docsSidebar.doc.Introduction": {
     "message": "简介",
     "description": "The label for the doc item Introduction in sidebar docsSidebar"
@@ -75,5 +74,13 @@
   "sidebar.docsSidebar.category.Explore Further": {
     "message": "进一步探索",
     "description": "The label for category Explore Further in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Gateway": {
+    "message": "网关",
+    "description": "The label for the doc item Gateway in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.API Catalog": {
+    "message": "API 目录",
+    "description": "The label for category API Catalog in sidebar docsSidebar"
   }
 }

@@ -41,6 +41,18 @@ const sidebars = {
             'x402/core-concepts/client-server',
             'x402/core-concepts/facilitator',
             'x402/core-concepts/OfficialFacilitator',
+            'x402/core-concepts/gateway',
+            {
+              type: 'category',
+              label: 'API 目录',
+              collapsed: false,
+              items: [
+                'x402/api-catalog/index',
+                'x402/api-catalog/get-started',
+                'x402/api-catalog/list-your-service',
+                'x402/api-catalog/reference',
+              ],
+            },
             'x402/core-concepts/wallet',
             'x402/core-concepts/network-and-token-support',
           ],

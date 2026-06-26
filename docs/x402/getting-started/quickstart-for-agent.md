@@ -105,10 +105,10 @@ No additional configuration needed for BSC.
 Run the following command to install all BANK OF AI Skills (including x402-payment) at once:
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y -g
+npx skills add https://github.com/BofAI/skills -y
 ```
 
-The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag enables global installation (available across all projects). The installer auto-detects AI tools on your computer (Cursor, Claude Code, Cline, OpenCode, etc.) and copies the skills into the correct directories.
+The `-y` flag skips all interactive prompts and installs all available Skills by default. The installer auto-detects AI tools on your computer (Cursor, Claude Code, Cline, OpenCode, etc.) and copies the skills into the correct directories.
 
 > ✅ **Success indicator:** Terminal shows `✓ x402-payment (copied)` along with other installed skills
 
