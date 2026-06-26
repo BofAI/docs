@@ -41,7 +41,7 @@ Qwen3.6-27B FP8 is a dense 27-billion-parameter multimodal model developed by Al
 
 | Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **Qwen3.6-27B** | `0.19` | `0.19` | `0.19` | `2.99` | `-` | Cache reads and writes are billed at the same rate. |
+| **Qwen3.6-27B** | `0.19` | `0.19` | `0.019` | `2.99` | `-` | - |
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
