@@ -241,6 +241,8 @@ const sidebars = {
             'llmservice/models/claude-opus-4-6',
             'llmservice/models/claude-opus-4-7',
             'llmservice/models/claude-opus-4-8',
+            'llmservice/models/claude-fable-5',
+            'llmservice/models/claude-sonnet-5',
             'llmservice/models/claude-sonnet-4-5',
             'llmservice/models/claude-sonnet-4-6',
             'llmservice/models/deepseek-v3.2',
