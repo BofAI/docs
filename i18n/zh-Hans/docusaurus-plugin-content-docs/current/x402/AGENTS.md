@@ -16,20 +16,20 @@ import TabItem from '@theme/TabItem';
 - `docs/faq.md` — 常见问题解答。
 - `sidebars.js` — Docusaurus 侧边栏配置文件。
 - `docusaurus.config.js` — Docusaurus 主配置文件。
-- `docs/sdk-features.md` — Python 与 TypeScript SDK 的功能特性对比表。
+- `docs/sdk-features.md` — 仅 TypeScript 的 x402 SDK（`@bankofai/x402-*` 包）功能矩阵。
 
 ## 3. 代码与文档的同步机制
 
 文档维护需遵循以下依赖关系，确保代码变更即时反映在文档中：
 
 - `typescript/packages/` 目录下的变更 $\rightarrow$ 需同步更新 TypeScript 相关文档。
-- `python/x402/` 目录下的变更 $\rightarrow$ 需同步更新 Python 相关文档。
+- `examples/typescript/` 目录下的变更 $\rightarrow$ 需更新「快速入门」指南与代码示例（快速入门以示例为蓝本）。
 - 端点逻辑的变更 $\rightarrow$ 需更新“快速入门”指南。
 - 底层机制的变更 $\rightarrow$ 需更新 `core-concepts` 文档。
 
 ## 4. 风格与规范 
-- 以 **Python** 作为主要代码示例（鉴于其 SDK 功能最为完备）。
-- 在功能支持的情况下，务必补充 **TypeScript** 示例。
+- 以 **TypeScript** 作为主要代码示例（SDK 仅 TypeScript；此前的 Python SDK 已移至 `legacy/`）。
+- 尽可能引用 `examples/typescript/` 目录中的可运行示例源码。
 - 所有 API 调用示例必须包含完整的错误处理逻辑。
 - 内容撰写面向具有 **2–5 年经验** 的开发者。
 - 必须使用 Docusaurus MDX 组件（`<Tabs>`、`<TabItem>`）来展示多语言代码。
@@ -117,7 +117,7 @@ import TabItem from '@theme/TabItem';
 - `*/signers/` 目录中新增了签名器。
 - 客户端 (Client) 或服务端 (Server) 新增了功能特性。
 
-**注意**：更新文档时，需同时交叉检查 **Python** 与 **TypeScript** 两个 SDK 的实现进度。
+**注意**：SDK 仅 TypeScript。更新文档时需对照 `typescript/packages/` 的导出与 `examples/typescript/` 的源码交叉检查。
 
 
 ## 12.开发常用命令 

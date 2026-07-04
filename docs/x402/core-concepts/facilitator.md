@@ -11,7 +11,7 @@ A Facilitator is a middleware service primarily responsible for:
 
 - **Payload Verification**: Validating the payment payload submitted by the client.
 - **Settlement Execution**: Submitting transactions to the blockchain on behalf of the server to complete settlement.
-- **Token Transfer**: Executing token transfers by calling the `permitTransferFrom` method of the `PaymentPermit` contract.
+- **Token Transfer**: Executing the on-chain transfer — ERC-3009 `transferWithAuthorization`, Permit2 `permitTransferFrom` via the `x402ExactPermit2Proxy`, a batch-settlement claim, or a GasFree relay, depending on the scheme.
 
 By introducing a Facilitator, servers no longer need to maintain direct connections to blockchain nodes or implement complex signature verification logic themselves. This reduces operational complexity while ensuring accurate and real-time transaction validation.
 

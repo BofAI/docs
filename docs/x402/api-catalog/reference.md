@@ -62,7 +62,7 @@ An endpoint may serve the same capability across several chains, each settling t
 |---|---|---|
 | `network` | string | CAIP-2 chain ID this route settles on (e.g. `tron:mainnet`, `eip155:56`) |
 | `provider` | string | The gateway provider `fqn` that handles this network |
-| `scheme` | string | x402 payment scheme for this route, e.g. `exact_permit` or `exact_gasfree` — each route declares its own |
+| `scheme` | string | x402 payment scheme for this route, e.g. `exact` or `exact_gasfree` — each route declares its own |
 | `url` | string | Full gateway URL for this network's route |
 
 The build passes this through to outputs as `x402_routes`. When present, callers/agents pick the route matching their intended payment chain; the top-level `url` remains the default route.
@@ -74,7 +74,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --method POST \
   --network tron:mainnet \
   --token USDT \
-  --scheme exact_permit \
+  --scheme exact \
   --max-amount 0.000001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'

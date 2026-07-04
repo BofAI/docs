@@ -52,7 +52,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "tron:nile",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
@@ -71,15 +71,9 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
     }
   ],
   "extensions": {
-    "paymentPermitContext": {
-      "meta": {
-        "kind": "PAYMENT_ONLY",
-        "paymentId": "0xb08d71cabc27d5552e36a7f60084e130",
-        "nonce": "11984290373079535093514815017206530944",
-        "validAfter": 1770816589,
-        "validBefore": 1770820189
-      }
-    }
+    // 仅当代币需要 gas 赞助的 Permit2 approve 时才出现
+    // （如 BSC USDC 等普通 ERC-20）。ERC-3009 代币省略此项。
+    "erc20ApprovalGasSponsoring": {}
   }
 }
 ```
@@ -98,7 +92,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "eip155:97",
       "amount": "100000000000000",
       "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
@@ -117,15 +111,9 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
     }
   ],
   "extensions": {
-    "paymentPermitContext": {
-      "meta": {
-        "kind": "PAYMENT_ONLY",
-        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
-        "nonce": "94261896388554187915350651456800860604",
-        "validAfter": 1770817158,
-        "validBefore": 1770820758
-      }
-    }
+    // BSC USDT 是普通 ERC-20 → Permit2 路径需要此 gas 赞助
+    // 扩展，以便客户端离线签署一次性 approve。
+    "erc20ApprovalGasSponsoring": {}
   }
 }
 ```
@@ -140,14 +128,14 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `error`             | 人类可读的错误提示                                |
 | `resource`          | 关于请求资源的信息                                |
 | `accepts`           | 接受的支付选项数组                                |
-| `scheme`            | 支付方案（`exact_permit` 或 `exact`）                     |
+| `scheme`            | 支付方案（`exact`、`upto`、`batch-settlement`、`auth-capture`、`exact_gasfree`）  |
 | `network`           | 网络标识符（`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`） |
 | `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
 | `asset`             | TRC-20/BEP-20 代币合约地址                               |
 | `payTo`             | 卖家的钱包地址                              |
 | `maxTimeoutSeconds` | 支付有效期的最大时长                              |
 | `extra.fee`         | Facilitator 费用信息（包含 `facilitatorId`、`feeTo`、`feeAmount`、`caller`） |
-| `extensions`        | 支付方案的附加上下文（如 `paymentPermitContext`，包含 nonce、有效期窗口等） |
+| `extensions`        | 支付方案的附加上下文（如 gas 赞助、payment-identifier） |
 
 ## 支付签名结构
 
@@ -159,29 +147,18 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
+  "scheme": "exact",
   "network": "tron:nile",
   "payload": {
     "signature": "0x...",
-    "permit": {
-      "meta": {
-        "kind": 0,
-        "paymentId": "0x65f9d4ca3fb5f6dd14930055aa5ccbc4",
-        "nonce": "241054476753796864345738420545497456919",
-        "validAfter": 1770817311,
-        "validBefore": 1770820911
-      },
-      "buyer": "<CLIENT_TRON_ADDRESS>",
-      "caller": "<FACILITATOR_CALLER_ADDRESS>",
-      "payment": {
-        "payToken": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
-        "payAmount": 100,
-        "payTo": "<SELLER_TRON_ADDRESS>"
-      },
-      "fee": {
-        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-        "feeAmount": 100
-      }
+    "authorization": {
+      // Permit2 witness（TRON 上的 USDT/USDD 为普通 TRC-20）
+      "from": "<CLIENT_TRON_ADDRESS>",
+      "to": "<SELLER_TRON_ADDRESS>",
+      "value": 100,
+      "validAfter": 1770817311,
+      "validBefore": 1770820911,
+      "nonce": "0x65f9d4ca3fb5f6dd14930055aa5ccbc4"
     }
   }
 }
@@ -193,29 +170,18 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
+  "scheme": "exact",
   "network": "eip155:97",
   "payload": {
     "signature": "0x...",
-    "permit": {
-      "meta": {
-        "kind": 0,
-        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
-        "nonce": "94261896388554187915350651456800860604",
-        "validAfter": 1770817158,
-        "validBefore": 1770820758
-      },
-      "buyer": "<CLIENT_BSC_ADDRESS>",
-      "caller": "<FACILITATOR_CALLER_ADDRESS>",
-      "payment": {
-        "payToken": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
-        "payAmount": 100000000000000,
-        "payTo": "<SELLER_BSC_ADDRESS>"
-      },
-      "fee": {
-        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-        "feeAmount": 100000000000000
-      }
+    "authorization": {
+      // Permit2 witness（BSC USDT 为普通 ERC-20）
+      "from": "<CLIENT_BSC_ADDRESS>",
+      "to": "<SELLER_BSC_ADDRESS>",
+      "value": 100000000000000,
+      "validAfter": 1770817158,
+      "validBefore": 1770820758,
+      "nonce": "0xc00fc79b9a26084ad078b71ffcaa07fd"
     }
   }
 }

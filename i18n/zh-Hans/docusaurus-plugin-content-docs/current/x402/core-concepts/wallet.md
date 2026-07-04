@@ -56,7 +56,7 @@ x402 协议采用类型化数据签名来执行安全的支付授权。
 
 ## 代币授权
 
-对于 `exact_permit` 支付方案，客户端必须授权 `PaymentPermit` 合约从其钱包中划转代币以进行支付结算。这是通过标准的 TRC-20/BEP-20 `approve` 函数完成的。
+对于 `exact` 支付方案，普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算。客户端需授权 Permit2 合约划转代币——一次性 `approve(Permit2, max)`。x402 客户端 SDK 会在首次付款时自动广播此授权。ERC-3009 代币（如 BSC 测试网 DHLU）无需授权——通过 `transferWithAuthorization` 无 gas 结算。
 
 x402 客户端 SDK 会自动处理此操作。
 

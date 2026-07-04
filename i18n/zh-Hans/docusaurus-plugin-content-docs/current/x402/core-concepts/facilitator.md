@@ -11,7 +11,7 @@ Facilitator 是一种中间件服务，主要负责：
 
 - **验证载荷**：校验客户端提交的支付载荷的有效性。
 - **执行结算**：代表服务端将交易提交至区块链进行结算。
-- **代币转移**：通过调用 `PaymentPermit` 合约的 `permitTransferFrom` 方法来执行代币转移。
+- **代币转移**：执行链上转账——根据方案，调用 ERC-3009 `transferWithAuthorization`、通过 `x402ExactPermit2Proxy` 的 Permit2 `permitTransferFrom`、批量 settlement claim 或 GasFree relay。
 
 通过引入 Facilitator，服务端无需维护与区块链节点的直连，也无需自行实现复杂的签名验证逻辑。这不仅降低了运维复杂度，还能确保交易验证的准确性与实时性。
 

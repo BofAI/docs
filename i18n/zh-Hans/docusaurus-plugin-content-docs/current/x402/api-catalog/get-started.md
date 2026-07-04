@@ -58,7 +58,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
   --method POST \
   --network tron:mainnet \
   --token USDT \
-  --scheme exact_permit \
+  --scheme exact \
   --max-amount 0.000001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
@@ -69,7 +69,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--method` | HTTP 方法（默认 `GET`） |
 | `--network` | CAIP-2 支付链，如 `tron:mainnet`、`eip155:56` |
 | `--token` | 结算代币，如 `USDT` |
-| `--scheme` | 路由声明的 x402 支付方案，如 `exact_permit` 或 `exact_gasfree` |
+| `--scheme` | 路由声明的 x402 支付方案，如 `exact` 或 `exact_gasfree` |
 | `--max-amount` | 美元支出上限；报价超出即中止调用 |
 | `--header` / `--body` | 转发到上游的请求头与请求体 |
 

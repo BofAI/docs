@@ -76,11 +76,7 @@ x402 uses typed data signing for secure payment authorization.
 
 ## Token Approval
 
-For the `exact_permit` payment scheme, the client must authorize the `PaymentPermit` contract to transfer tokens from their wallet for settlement.  
-
-This is completed via the standard TRC-20/BEP-20 `approve` function.
-
-The x402 client SDK automatically handles this process.
+For the `exact` payment scheme, plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path. The client must authorize the Permit2 contract to transfer tokens — a one-time `approve(Permit2, max)`. The x402 client SDK auto-broadcasts this approve on the first payment. ERC-3009 tokens (e.g. BSC testnet DHLU) need no approve — they settle gaslessly via `transferWithAuthorization`.
 
 ---
 

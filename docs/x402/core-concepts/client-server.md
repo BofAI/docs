@@ -23,7 +23,7 @@ Clients can take many forms, including:
 
 - **Initiate Requests**: Send the initial HTTP request to the resource server.  
 - **Handle Payment Requirements**: Parse the `402 Payment Required` response and extract payment details.  
-- **Manage Token Approvals**: Approve the `PaymentPermit` contract to transfer tokens from the client’s wallet for settlement.  
+- **Manage Token Approvals**: Authorize Permit2 (one-time `approve(Permit2)`) for plain ERC-20/TRC-20 tokens; ERC-3009 tokens need no approve. The SDK auto-broadcasts this on first payment.  
 - **Prepare Payment Payload**: Construct and sign a payment payload according to server requirements.  
 - **Retry with Payment**: Attach the `PAYMENT-SIGNATURE` header and resend the request.  
 

@@ -58,7 +58,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
   --method POST \
   --network tron:mainnet \
   --token USDT \
-  --scheme exact_permit \
+  --scheme exact \
   --max-amount 0.000001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
@@ -69,7 +69,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--method` | HTTP method (defaults to `GET`) |
 | `--network` | CAIP-2 payment chain, e.g. `tron:mainnet`, `eip155:56` |
 | `--token` | Settlement token, e.g. `USDT` |
-| `--scheme` | x402 payment scheme declared by the route, e.g. `exact_permit` or `exact_gasfree` |
+| `--scheme` | x402 payment scheme declared by the route, e.g. `exact` or `exact_gasfree` |
 | `--max-amount` | Spend ceiling in USD; the call aborts if the quote exceeds it |
 | `--header` / `--body` | Request headers and body for the upstream call |
 

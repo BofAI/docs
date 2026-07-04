@@ -128,17 +128,22 @@ npx skills add https://github.com/BofAI/skills
 
 完成配置后，按以下步骤验证代理能够正常自主付款：
 
-### 3.1 使用演示地址测试
+### 3.1 使用本地付费接口测试
 
-指示您的 AI 代理访问以下演示地址（这是一个需要付款才能访问的测试接口）：
+从 `examples/typescript` 启动示例三件套，然后将代理指向本地服务器：
 
+```bash
+cd x402/examples/typescript
+cp .env-exact.example .env-exact   # 填入 AGENT_WALLET_PRIVATE_KEY + 收款地址
+pnpm dev:facilitator   # 终端 1（:4022）
+pnpm dev:server        # 终端 2（:4021）
 ```
-https://x402-demo.bankofai.io/protected-nile
-```
+
+然后指示您的代理访问 `http://localhost:4021/weather`。
 
 **代理应自动完成以下流程（无需人工干预）：**
 
-1. 向演示地址发起 GET 请求
+1. 向该接口发起 GET 请求
 2. 收到服务器返回的 HTTP 402（需要付款）响应
 3. 读取响应头中的付款要求（金额、网络、收款地址）
 4. 使用配置的私钥签名付款授权
@@ -186,7 +191,7 @@ https://x402-demo.bankofai.io/protected-nile
 | `私钥未找到` 或签名失败 | 环境变量未配置或配置错误 | 重新执行第一步，在**同一终端**中运行代理 |
 | 余额不足错误 | 测试钱包中没有测试代币 | 回到前置准备，从水龙头领取测试代币 |
 | 请求超时 | 网络问题或 RPC 限速 | 配置 `TRON_GRID_API_KEY` 以获得更好的性能 |
-| 代理访问成功但余额没有变化 | 可能访问的是免费接口 | 确认 URL 是 `/protected-nile` 而非其他路径 |
+| 代理访问成功但余额没有变化 | 可能访问的是免费接口 | 确认 URL 是 `/weather`（付费路由）而非其他路径 |
 
 ---
 
@@ -200,6 +205,7 @@ https://x402-demo.bankofai.io/protected-nile
 
 ## 参考资料
 
+- [x402 仓库](https://github.com/BofAI/x402) —— SDK 源码与可运行示例（`examples/typescript/`）
+- [MCP 示例](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/mcp) —— 通过 MCP 传输的代理付款
 - [OpenClaw 扩展库](https://github.com/BofAI/openclaw-extension)
 - [ClawHub 上的 x402-payment 技能](https://github.com/BofAI/skills/tree/main/x402-payment)
-- [x402 演示项目](https://github.com/BofAI/x402-demo)
