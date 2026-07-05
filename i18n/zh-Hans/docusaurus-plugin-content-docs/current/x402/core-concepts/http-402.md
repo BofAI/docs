@@ -41,6 +41,8 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
+> **注意：** 在 TRON 上，`accepted.asset` 和 `accepted.payTo` 使用 Base58 地址，但 `permit2Authorization` 内部的地址（`permitted.token`、`spender`、`witness.to`、`from`）会转换为 `0x` hex 格式以进行 EIP-712/TIP-712 签名。
+
 ```json
 {
   "x402Version": 2,
@@ -59,8 +61,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
       "payTo": "<SELLER_TRON_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "name": "Tether USD",
-        "version": "1",
+        "assetTransferMethod": "permit2",
         "fee": {
           "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
@@ -94,8 +95,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
       "payTo": "<SELLER_BSC_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "name": "Tether USD",
-        "version": "1",
+        "assetTransferMethod": "permit2",
         "fee": {
           "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
@@ -152,12 +152,12 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   "payload": {
     "signature": "0x...",
     "permit2Authorization": {
-      "permitted": { "token": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf", "amount": "100" },
-      "spender": "<X402_PERMIT2_PROXY_ADDRESS>",
+      "permitted": { "token": "0x...", "amount": "100" },
+      "spender": "0x...",
       "nonce": "0",
       "deadline": "1770820911",
-      "witness": { "to": "<SELLER_TRON_ADDRESS>", "validAfter": "1770817311" },
-      "from": "<CLIENT_TRON_ADDRESS>"
+      "witness": { "to": "0x...", "validAfter": "1770817311" },
+      "from": "0x..."
     }
   }
 }

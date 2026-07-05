@@ -5,7 +5,7 @@ import TabItem from '@theme/TabItem';
 
 ## TRON Network Identifiers
 
-x402 adopts a standardized network identifier format: `tron:<network_name>`.  
+x402 adopts a standardized network identifier format: `tron:<network_name>`.
 The `<network_name>` can be `mainnet`, `shasta`, or `nile`.
 
 ### Identifier Reference
@@ -33,7 +33,7 @@ In the x402 protocol (on-the-wire), BSC uses the EIP-155 chain ID format:
 
 ## Overview
 
-x402 is purpose-built for blockchain ecosystems, enabling native on-chain payment verification and settlement.  
+x402 is purpose-built for blockchain ecosystems, enabling native on-chain payment verification and settlement.
 The protocol uses secure signing mechanisms to ensure tamper-resistant message authorization.
 
 ### Supported Networks
@@ -50,7 +50,7 @@ The protocol uses secure signing mechanisms to ensure tamper-resistant message a
 
 ## Supported Tokens
 
-x402 fully supports **TRC-20 and BEP-20** standard tokens.  
+x402 fully supports **TRC-20 and BEP-20** standard tokens.
 By default, **USDT** and **USDD** are used as primary settlement currencies.
 
 ### Supported Token List
@@ -79,13 +79,13 @@ x402 uses typed data signing for all payment-related signatures.
 
 ### Key Benefits
 
-- **Off-chain Authorization**  
+- **Off-chain Authorization**
   Buyers sign transfer intent locally (off-chain) without locking funds in advance.
 
-- **Trust-Minimized**  
+- **Trust-Minimized**
   Signatures include strict constraints (amount, recipient, expiration), preventing the Facilitator from moving funds beyond the explicitly authorized scope.
 
-- **On-chain Verifiability**  
+- **On-chain Verifiability**
   All signatures can be cryptographically verified at the smart contract level, ensuring immutability and integrity.
 
 ---
@@ -94,13 +94,13 @@ x402 uses typed data signing for all payment-related signatures.
 
 When configuring an `HTTP 402` payment request on the server side, you must explicitly define:
 
-1. **Network** – The unique network identifier (e.g., `tron:nile`)  
-2. **Asset** – The TRC-20/BEP-20 token **contract address**  
-3. **Amount** – The integer value in the token’s **smallest unit (raw amount)**  
+1. **Network** – The unique network identifier (e.g., `tron:nile`)
+2. **Asset** – The TRC-20/BEP-20 token **contract address**
+3. **Amount** – The integer value in the token’s **smallest unit (raw amount)**
 
-> **Precision Example**  
-> USDT on TRON uses **6 decimals**.  
-> To charge **1.0 USDT**, you must configure the amount as:  
+> **Precision Example**
+> USDT on TRON uses **6 decimals**.
+> To charge **1.0 USDT**, you must configure the amount as:
 > `1000000`
 
 ---
@@ -223,7 +223,7 @@ x402 is deeply tailored for blockchain-native architectures, providing seamless 
 
 ### Key Takeaways
 
-- **Development Environment**: Use testnets for development and debugging.  
+- **Development Environment**: Use testnets for development and debugging.
 - **Default Settlement Asset**: **USDT** is the primary default token with preconfigured SDK support.
 - **Security Model**: TIP-712 / EIP-712 typed data signing ensures secure, trust-minimized payment authorization.
-- **Extensibility**: Expand support for any custom TRC-20/BEP-20 token via the TRON token registry (`registerToken`) or the server's `EVM_TOKENS` config table.  
+- **Extensibility**: Expand support for any custom TRC-20/BEP-20 token via the TRON token registry (`registerToken`) or the server's `EVM_TOKENS` config table.

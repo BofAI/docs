@@ -51,8 +51,8 @@ All payment payloads are **signed by the buyer**, and settlement is executed **d
 
 A Facilitator can only:
 
-- Transfer the exact amount authorized by the buyer  
-- Send funds to the specific recipient address defined in the signed payload  
+- Transfer the exact amount authorized by the buyer
+- Send funds to the specific recipient address defined in the signed payload
 
 ---
 
@@ -62,9 +62,9 @@ A Facilitator can only:
 
 Common pricing models include:
 
-- **Flat rate per call**: e.g., `1 USDT` per request  
-- **Tiered pricing**: Different prices for endpoints like `/basic` and `/pro`  
-- **`exact` scheme**: Pay the exact amount advertised per call  
+- **Flat rate per call**: e.g., `1 USDT` per request
+- **Tiered pricing**: Different prices for endpoints like `/basic` and `/pro`
+- **`exact` scheme**: Pay the exact amount advertised per call
 
 #### What payment schemes does x402 support?
 
@@ -122,9 +122,9 @@ Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` f
 
 **No.** Recommended security model:
 
-1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).  
-2. **Seller** verifies signatures without accessing private keys.  
-3. **Facilitator** uses its own key to submit transactions on-chain.  
+1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).
+2. **Seller** verifies signatures without accessing private keys.
+3. **Facilitator** uses its own key to submit transactions on-chain.
 
 #### How does refunds work?
 
@@ -132,8 +132,8 @@ The `exact` scheme uses a **push payment** model — once settled on-chain, it i
 
 Refund options:
 
-1. **Business-layer refund**: Seller manually sends a new USDT transfer back to the buyer.  
-2. **Preventative settlement**: Server settles only the actual usage amount under the payment scheme.  
+1. **Business-layer refund**: Seller manually sends a new USDT transfer back to the buyer.
+2. **Preventative settlement**: Server settles only the actual usage amount under the payment scheme.
 
 ---
 
@@ -143,10 +143,10 @@ Refund options:
 
 The flow mirrors a human user:
 
-1. Send initial request.  
-2. Parse `PAYMENT-REQUIRED` header in the response.  
-3. Sign the payment payload using the x402 client SDK.  
-4. Retry request with `PAYMENT-SIGNATURE` header attached.  
+1. Send initial request.
+2. Parse `PAYMENT-REQUIRED` header in the response.
+3. Sign the payment payload using the x402 client SDK.
+4. Retry request with `PAYMENT-SIGNATURE` header attached.
 
 #### Does an agent need a wallet?
 
@@ -169,13 +169,13 @@ The flow mirrors a human user:
 
 **TRON Nile** is recommended for TRON testing:
 
-- Faucet: https://nileex.io/join/getJoinPage  
-- Explorer: https://nile.tronscan.org  
+- Faucet: https://nileex.io/join/getJoinPage
+- Explorer: https://nile.tronscan.org
 
 **BSC Testnet** is recommended for BSC testing:
 
-- Faucet: https://www.bnbchain.org/en/testnet-faucet  
-- Explorer: https://testnet.bscscan.com  
+- Faucet: https://www.bnbchain.org/en/testnet-faucet
+- Explorer: https://testnet.bscscan.com
 
 ---
 
@@ -185,21 +185,21 @@ The flow mirrors a human user:
 
 Common causes:
 
-1. Invalid signature (incorrect domain or payload).  
-2. Insufficient payment amount.  
-3. Insufficient token allowance granted to Facilitator.  
-4. Insufficient wallet balance.  
+1. Invalid signature (incorrect domain or payload).
+2. Insufficient payment amount.
+3. Insufficient token allowance granted to Facilitator.
+4. Insufficient wallet balance.
 
 Check the `error` field in the server’s JSON response for detailed diagnostics.
 
 #### It works on Nile but fails on Mainnet — why?
 
-- Network configuration not updated  
-- Using testnet tokens instead of real mainnet tokens  
-- Facilitator lacks sufficient gas tokens  
-- Token contract address differs between networks  
+- Network configuration not updated
+- Using testnet tokens instead of real mainnet tokens
+- Facilitator lacks sufficient gas tokens
+- Token contract address differs between networks
 
 ### Still Have Questions?
 
-• Submit a GitHub Issue in the [x402 repository](https://github.com/BofAI/x402)  
-• Refer to the [runnable examples](https://github.com/BofAI/x402/tree/main/examples/typescript) in the x402 repository for a complete client → server → facilitator loop  
+• Submit a GitHub Issue in the [x402 repository](https://github.com/BofAI/x402)
+• Refer to the [reference examples](https://github.com/BofAI/x402/tree/main/examples/typescript) in the x402 repository for a complete client → server → facilitator loop

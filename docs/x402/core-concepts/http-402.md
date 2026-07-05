@@ -41,6 +41,8 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
+> **Note:** On TRON, `accepted.asset` and `accepted.payTo` use Base58 addresses, but the addresses inside `permit2Authorization` (`permitted.token`, `spender`, `witness.to`, `from`) are converted to `0x` hex form for EIP-712/TIP-712 signing.
+
 ```json
 {
   "x402Version": 2,
@@ -59,8 +61,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
       "payTo": "<SELLER_TRON_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "name": "Tether USD",
-        "version": "1",
+        "assetTransferMethod": "permit2",
         "fee": {
           "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
@@ -94,8 +95,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
       "payTo": "<SELLER_BSC_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "name": "Tether USD",
-        "version": "1",
+        "assetTransferMethod": "permit2",
         "fee": {
           "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
@@ -153,12 +153,12 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
   "payload": {
     "signature": "0x...",
     "permit2Authorization": {
-      "permitted": { "token": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf", "amount": "100" },
-      "spender": "<X402_PERMIT2_PROXY_ADDRESS>",
+      "permitted": { "token": "0x...", "amount": "100" },
+      "spender": "0x...",
       "nonce": "0",
       "deadline": "1770820911",
-      "witness": { "to": "<SELLER_TRON_ADDRESS>", "validAfter": "1770817311" },
-      "from": "<CLIENT_TRON_ADDRESS>"
+      "witness": { "to": "0x...", "validAfter": "1770817311" },
+      "from": "0x..."
     }
   }
 }
