@@ -63,7 +63,6 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
       "extra": {
         "assetTransferMethod": "permit2",
         "fee": {
-          "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
           "feeAmount": "100",
           "caller": "<FACILITATOR_CALLER_ADDRESS>"
@@ -76,6 +75,8 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
+
+> **注意：** `extensions.erc20ApprovalGasSponsoring` 包含 `info`（description + version）和 `schema`（客户端预签名 `approve(Permit2)` 载荷的 JSON Schema）。为简洁起见，下方 `schema.properties` 的具体声明已省略。
 
 ```json
 {
@@ -95,18 +96,23 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
       "payTo": "<SELLER_BSC_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "assetTransferMethod": "permit2",
-        "fee": {
-          "facilitatorId": "<FACILITATOR_URL>",
-          "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-          "feeAmount": "100000000000000",
-          "caller": "<FACILITATOR_CALLER_ADDRESS>"
-        }
+        "assetTransferMethod": "permit2"
       }
     }
   ],
   "extensions": {
-    "erc20ApprovalGasSponsoring": {}
+    "erc20ApprovalGasSponsoring": {
+      "info": {
+        "description": "The facilitator broadcasts a pre-signed ERC-20 approve() transaction to grant Permit2 allowance.",
+        "version": "1"
+      },
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": "...",
+        "required": ["from", "asset", "spender", "amount", "signedTransaction", "version"]
+      }
+    }
   }
 }
 ```
@@ -127,7 +133,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `asset`             | TRC-20/BEP-20 代币合约地址                               |
 | `payTo`             | 卖家的钱包地址                              |
 | `maxTimeoutSeconds` | 支付有效期的最大时长                              |
-| `extra.fee`         | Facilitator 费用信息（包含 `facilitatorId`、`feeTo`、`feeAmount`、`caller`） |
+| `extra.fee`         | Facilitator 费用信息（包含 `feeTo`、`feeAmount`、`caller`） |
 | `extensions`        | 支付方案的附加上下文（如 gas 赞助、payment-identifier） |
 
 ## 支付签名结构

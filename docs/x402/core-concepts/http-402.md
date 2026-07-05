@@ -63,7 +63,6 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
       "extra": {
         "assetTransferMethod": "permit2",
         "fee": {
-          "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
           "feeAmount": "100",
           "caller": "<FACILITATOR_CALLER_ADDRESS>"
@@ -76,6 +75,8 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
+
+> **Note:** `extensions.erc20ApprovalGasSponsoring` carries `info` (description + version) and a `schema` (JSON Schema for the clients pre-signed `approve(Permit2)` payload). The `schema.properties` declarations are abbreviated below for brevity.
 
 ```json
 {
@@ -95,18 +96,23 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
       "payTo": "<SELLER_BSC_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "assetTransferMethod": "permit2",
-        "fee": {
-          "facilitatorId": "<FACILITATOR_URL>",
-          "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-          "feeAmount": "100000000000000",
-          "caller": "<FACILITATOR_CALLER_ADDRESS>"
-        }
+        "assetTransferMethod": "permit2"
       }
     }
   ],
   "extensions": {
-    "erc20ApprovalGasSponsoring": {}
+    "erc20ApprovalGasSponsoring": {
+      "info": {
+        "description": "The facilitator broadcasts a pre-signed ERC-20 approve() transaction to grant Permit2 allowance.",
+        "version": "1"
+      },
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": "...",
+        "required": ["from", "asset", "spender", "amount", "signedTransaction", "version"]
+      }
+    }
   }
 }
 ```
@@ -128,7 +134,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 | `asset`             | TRC-20/BEP-20 token contract address                                        |
 | `payTo`             | Seller's wallet address                                                     |
 | `maxTimeoutSeconds` | Maximum validity duration of the payment                                    |
-| `extra.fee`         | Facilitator fee information (includes `facilitatorId`, `feeTo`, `feeAmount`, `caller`) |
+| `extra.fee`         | Facilitator fee information (includes `feeTo`, `feeAmount`, `caller`) |
 | `extensions`        | Additional context for the payment scheme (e.g., gas-sponsoring, payment-identifier) |
 
 ## Payment Signature Structure
