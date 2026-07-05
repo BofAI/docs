@@ -31,7 +31,7 @@ x402 `1.0.0` 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 
 
 ### 开始前清单
 
-- [ ] 已安装 **Node.js 20+** 和 **pnpm 11+**
+- [ ] 已安装 **Node.js 22+** 和 **pnpm 11.1+**
 - [ ] 已创建专用**测试钱包**（见下文）
 - [ ] 已领取测试代币（免费）
 - [ ] 有一个目标 x402 保护的 API URL（或运行示例 server）
@@ -95,15 +95,15 @@ x402 `1.0.0` 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 
 
 ```bash
 git clone https://github.com/BofAI/x402.git
-cd x402/typescript            # pnpm/turbo monorepo 根目录
+cd x402/typescript            # pnpm/turbo monorepo 根目录（SDK 包）
 
-# 安装并链接所有工作区包（SDK + 示例）
+# 安装并链接 SDK 包，然后构建其 dist
 pnpm install
-
-# 构建示例所依赖的 @bankofai/x402-* dist
 pnpm build
 
-cd examples/typescript
+# 示例位于仓库根目录下的独立工作区
+cd ../examples/typescript
+pnpm install                  # 链接仓库内 SDK 包 + 示例依赖
 ```
 
 fetch client 依赖 `@bankofai/x402-fetch`、`@bankofai/x402-evm`、`@bankofai/x402-tron` 和 `@bankofai/agent-wallet`——全部由 `pnpm install` 自动链接。

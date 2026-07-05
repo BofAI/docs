@@ -28,8 +28,8 @@ x402 `1.0.0` is a **TypeScript-only** pnpm/turbo monorepo published as granular 
 In your terminal (Terminal on macOS/Linux, or PowerShell/Command Prompt on Windows), run the following commands to confirm the required tools are installed:
 
 ```bash
-node --version    # Requires Node.js 20 or higher
-pnpm --version    # Requires pnpm 11 or higher
+node --version    # Requires Node.js 22 or higher
+pnpm --version    # Requires pnpm 11.1 or higher
 git --version     # Version control tool
 ```
 
@@ -118,15 +118,15 @@ The examples workspace links the in-repo `@bankofai/x402-*` packages and builds 
 
 ```bash
 git clone https://github.com/BofAI/x402.git
-cd x402/typescript            # the pnpm/turbo monorepo root
+cd x402/typescript            # the pnpm/turbo monorepo root (SDK packages)
 
-# Install + link all workspace packages (SDK + examples)
+# Install + link the SDK packages, then build their dist
 pnpm install
-
-# Build the @bankofai/x402-* dist the examples import from
 pnpm build
 
-cd examples/typescript
+# Examples live in a separate workspace at the repo root
+cd ../examples/typescript
+pnpm install                  # links the in-repo SDK packages + example deps
 ```
 
 Verify the install by starting the example resource server (it will print a port and the chains it accepts):

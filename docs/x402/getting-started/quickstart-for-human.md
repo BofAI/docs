@@ -31,7 +31,7 @@ x402 `1.0.0` is a **TypeScript-only** SDK published as granular `@bankofai/x402-
 
 ### Checklist Before You Start
 
-- [ ] **Node.js 20+** and **pnpm 11+** installed
+- [ ] **Node.js 22+** and **pnpm 11.1+** installed
 - [ ] A dedicated **test wallet** created (see below)
 - [ ] Test tokens claimed (free)
 - [ ] A target x402-protected API URL (or run the example server)
@@ -95,15 +95,15 @@ The examples workspace links the in-repo `@bankofai/x402-*` packages and runs fr
 
 ```bash
 git clone https://github.com/BofAI/x402.git
-cd x402/typescript            # the pnpm/turbo monorepo root
+cd x402/typescript            # the pnpm/turbo monorepo root (SDK packages)
 
-# Install + link all workspace packages (SDK + examples)
+# Install + link the SDK packages, then build their dist
 pnpm install
-
-# Build the @bankofai/x402-* dist the examples import from
 pnpm build
 
-cd examples/typescript
+# Examples live in a separate workspace at the repo root
+cd ../examples/typescript
+pnpm install                  # links the in-repo SDK packages + example deps
 ```
 
 The fetch client depends on `@bankofai/x402-fetch`, `@bankofai/x402-evm`, `@bankofai/x402-tron`, and `@bankofai/agent-wallet` — all linked automatically by `pnpm install`.

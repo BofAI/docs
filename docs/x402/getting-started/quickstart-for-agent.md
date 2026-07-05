@@ -138,16 +138,33 @@ After completing the setup, follow these steps to verify your agent can complete
 
 ### 3.1 Test with a Local Paid Endpoint
 
-Start the example trio from `examples/typescript`, then point your agent at the local server:
+First, get the SDK and examples (requires **Node.js 22+** and **pnpm 11.1+**):
 
 ```bash
-cd x402/examples/typescript
+git clone https://github.com/BofAI/x402.git
+cd x402/typescript            # the pnpm/turbo monorepo root (SDK packages)
+
+# Install + link the SDK packages, then build their dist
+pnpm install
+pnpm build
+
+# Examples live in a separate workspace at the repo root
+cd ../examples/typescript
+pnpm install                  # links the in-repo SDK packages + example deps
 cp .env-exact.example .env-exact   # fill AGENT_WALLET_PRIVATE_KEY + payout addresses
-pnpm dev:facilitator   # terminal 1 (:4022)
-pnpm dev:server        # terminal 2 (:4021)
 ```
 
-Then instruct your agent to access `http://localhost:4021/weather`.
+Then start the facilitator and the resource server **in two separate terminals** (both from `examples/typescript`):
+
+```bash
+# Terminal 1 — facilitator (verifies + settles on-chain)
+pnpm dev:facilitator          # http://localhost:4022
+
+# Terminal 2 — resource server (sells GET /weather behind 402)
+pnpm dev:server               # http://localhost:4021
+```
+
+Once both are running, instruct your agent to access `http://localhost:4021/weather`.
 
 **The agent should automatically complete the following flow (no human intervention required):**
 

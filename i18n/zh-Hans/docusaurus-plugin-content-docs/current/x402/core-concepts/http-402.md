@@ -69,12 +69,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
         }
       }
     }
-  ],
-  "extensions": {
-    // 仅当代币需要 gas 赞助的 Permit2 approve 时才出现
-    // （如 BSC USDC 等普通 ERC-20）。ERC-3009 代币省略此项。
-    "erc20ApprovalGasSponsoring": {}
-  }
+  ]
 }
 ```
 
@@ -111,8 +106,6 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
     }
   ],
   "extensions": {
-    // BSC USDT 是普通 ERC-20 → Permit2 路径需要此 gas 赞助
-    // 扩展，以便客户端离线签署一次性 approve。
     "erc20ApprovalGasSponsoring": {}
   }
 }
@@ -147,18 +140,24 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact",
-  "network": "tron:nile",
+  "accepted": {
+    "scheme": "exact",
+    "network": "tron:nile",
+    "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
+    "amount": "100",
+    "payTo": "<SELLER_TRON_ADDRESS>",
+    "maxTimeoutSeconds": 3600,
+    "extra": { "assetTransferMethod": "permit2" }
+  },
   "payload": {
     "signature": "0x...",
-    "authorization": {
-      // Permit2 witness（TRON 上的 USDT/USDD 为普通 TRC-20）
-      "from": "<CLIENT_TRON_ADDRESS>",
-      "to": "<SELLER_TRON_ADDRESS>",
-      "value": 100,
-      "validAfter": 1770817311,
-      "validBefore": 1770820911,
-      "nonce": "0x65f9d4ca3fb5f6dd14930055aa5ccbc4"
+    "permit2Authorization": {
+      "permitted": { "token": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf", "amount": "100" },
+      "spender": "<X402_PERMIT2_PROXY_ADDRESS>",
+      "nonce": "0",
+      "deadline": "1770820911",
+      "witness": { "to": "<SELLER_TRON_ADDRESS>", "validAfter": "1770817311" },
+      "from": "<CLIENT_TRON_ADDRESS>"
     }
   }
 }
@@ -170,18 +169,24 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact",
-  "network": "eip155:97",
+  "accepted": {
+    "scheme": "exact",
+    "network": "eip155:97",
+    "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+    "amount": "100000000000000",
+    "payTo": "<SELLER_BSC_ADDRESS>",
+    "maxTimeoutSeconds": 3600,
+    "extra": { "assetTransferMethod": "permit2" }
+  },
   "payload": {
     "signature": "0x...",
-    "authorization": {
-      // Permit2 witness（BSC USDT 为普通 ERC-20）
-      "from": "<CLIENT_BSC_ADDRESS>",
-      "to": "<SELLER_BSC_ADDRESS>",
-      "value": 100000000000000,
-      "validAfter": 1770817158,
-      "validBefore": 1770820758,
-      "nonce": "0xc00fc79b9a26084ad078b71ffcaa07fd"
+    "permit2Authorization": {
+      "permitted": { "token": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd", "amount": "100000000000000" },
+      "spender": "<X402_PERMIT2_PROXY_ADDRESS>",
+      "nonce": "0",
+      "deadline": "1770820758",
+      "witness": { "to": "<SELLER_BSC_ADDRESS>", "validAfter": "1770817158" },
+      "from": "<CLIENT_BSC_ADDRESS>"
     }
   }
 }

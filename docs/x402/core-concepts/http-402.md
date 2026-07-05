@@ -69,12 +69,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
         }
       }
     }
-  ],
-  "extensions": {
-    // Present only when the token needs a gas-sponsored Permit2 approve
-    // (plain ERC-20 like BSC USDC). ERC-3009 tokens omit this.
-    "erc20ApprovalGasSponsoring": {}
-  }
+  ]
 }
 ```
 
@@ -111,8 +106,6 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
     }
   ],
   "extensions": {
-    // BSC USDT is a plain ERC-20 → the Permit2 path needs this gas-sponsoring
-    // extension so the client can sign the one-time approve offline.
     "erc20ApprovalGasSponsoring": {}
   }
 }
@@ -148,18 +141,24 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact",
-  "network": "tron:nile",
+  "accepted": {
+    "scheme": "exact",
+    "network": "tron:nile",
+    "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
+    "amount": "100",
+    "payTo": "<SELLER_TRON_ADDRESS>",
+    "maxTimeoutSeconds": 3600,
+    "extra": { "assetTransferMethod": "permit2" }
+  },
   "payload": {
     "signature": "0x...",
-    "authorization": {
-      // Permit2 witness (USDT/USDD on TRON are plain TRC-20)
-      "from": "<CLIENT_TRON_ADDRESS>",
-      "to": "<SELLER_TRON_ADDRESS>",
-      "value": 100,
-      "validAfter": 1770817311,
-      "validBefore": 1770820911,
-      "nonce": "0x65f9d4ca3fb5f6dd14930055aa5ccbc4"
+    "permit2Authorization": {
+      "permitted": { "token": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf", "amount": "100" },
+      "spender": "<X402_PERMIT2_PROXY_ADDRESS>",
+      "nonce": "0",
+      "deadline": "1770820911",
+      "witness": { "to": "<SELLER_TRON_ADDRESS>", "validAfter": "1770817311" },
+      "from": "<CLIENT_TRON_ADDRESS>"
     }
   }
 }
@@ -171,18 +170,24 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact",
-  "network": "eip155:97",
+  "accepted": {
+    "scheme": "exact",
+    "network": "eip155:97",
+    "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+    "amount": "100000000000000",
+    "payTo": "<SELLER_BSC_ADDRESS>",
+    "maxTimeoutSeconds": 3600,
+    "extra": { "assetTransferMethod": "permit2" }
+  },
   "payload": {
     "signature": "0x...",
-    "authorization": {
-      // Permit2 witness (BSC USDT is a plain ERC-20)
-      "from": "<CLIENT_BSC_ADDRESS>",
-      "to": "<SELLER_BSC_ADDRESS>",
-      "value": 100000000000000,
-      "validAfter": 1770817158,
-      "validBefore": 1770820758,
-      "nonce": "0xc00fc79b9a26084ad078b71ffcaa07fd"
+    "permit2Authorization": {
+      "permitted": { "token": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd", "amount": "100000000000000" },
+      "spender": "<X402_PERMIT2_PROXY_ADDRESS>",
+      "nonce": "0",
+      "deadline": "1770820758",
+      "witness": { "to": "<SELLER_BSC_ADDRESS>", "validAfter": "1770817158" },
+      "from": "<CLIENT_BSC_ADDRESS>"
     }
   }
 }
@@ -203,5 +208,5 @@ HTTP 402 is the foundation of the x402 protocol. It enables servers to integrate
 
 Next, explore:
 
-- [Client / Server](./client-server.md) — Understand the roles and responsibilities of clients and servers  
-- [Facilitator](./facilitator.md) — Learn how servers verify and settle payments  
+- [Client / Server](./client-server.md) — Understand the roles and responsibilities of clients and servers
+- [Facilitator](./facilitator.md) — Learn how servers verify and settle payments
