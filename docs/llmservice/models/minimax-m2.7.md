@@ -6,7 +6,7 @@ MiniMax M2.7 is a reasoning-focused large language model developed by MiniMax (S
 
 ## Key Features
 
-* **Cost-Efficient Reasoning**: Achieves intelligence scores comparable to GLM-5 and Kimi K2.5 while costing roughly one-third as much to run, with 20% fewer output tokens needed for equivalent results.
+* **Cost-Efficient Reasoning**: Delivers strong reasoning performance at a lower operating cost than many flagship models, with 20% fewer output tokens needed for equivalent results.
 * **Low Hallucination Rate**: Scores a 34% hallucination rate on the AA-Omniscience Index, lower than Claude Sonnet 4.6 and Gemini 3.1 Pro Preview.
 * **Multi-Agent Collaboration**: Native support for multi-agent orchestration and complex skill coordination, including dynamic tool discovery and invocation at runtime.
 * **Self-Evolution**: Can autonomously complete 30-50% of reinforcement-learning research workflows, representing an early step toward model self-improvement.
