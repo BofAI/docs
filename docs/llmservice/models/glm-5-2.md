@@ -24,7 +24,7 @@ GLM-5.2 is a GLM-family text foundation model developed by Z.AI and released on 
 | **Reasoning**        | Supports deep-thinking mode and `reasoning_effort`; Z.AI positions it for complex engineering, debugging, and long-chain reasoning workflows. |
 | **Creative Writing** | Supports general text generation through the chat completion API, but official GLM-5.2 materials emphasize coding and engineering use cases.  |
 | **Coding**           | Z.AI reports Terminal-Bench 2.1 score of 81.0 and SWE-bench Pro score of 62.1, with focus on long-horizon coding-agent scenarios.             |
-| **Multimodal**       | Text input and text output. Vision and multimodal workflows are handled by separate Z.AI models such as GLM-5V-Turbo.                         |
+| **Multimodal**       | Text input and text output. Vision and multimodal workflows are handled by separate Z.AI vision-language models.                              |
 | **Response Speed**   | Official docs do not publish latency or tokens-per-second figures; streaming responses and streaming tool calls are supported.                |
 | **Context Window**   | 1M tokens.                                                                                                                                    |
 | **Max Output**       | 128K tokens.                                                                                                                                  |
@@ -33,7 +33,7 @@ GLM-5.2 is a GLM-family text foundation model developed by Z.AI and released on 
 
 ### Known Limitations
 
-* Text-only model; image, video, and GUI-understanding tasks require a separate vision-language model such as GLM-5V-Turbo.
+* Text-only model; image, video, and GUI-understanding tasks require a separate vision-language model.
 * Very long contexts and 128K outputs can increase latency and cost; cap `max_tokens` and use context caching where applicable.
 
 ## Credits Usage
