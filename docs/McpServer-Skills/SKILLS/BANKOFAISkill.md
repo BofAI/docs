@@ -439,7 +439,7 @@ Some APIs and AI agents require on-chain payment before use. This skill uses the
 > Activate my GasFree account on nile with USDT.
 
 :::tip GasFree support (TRON)
-The skill prefers the `exact_gasfree` scheme over `exact_permit` when paying on TRON. GasFree requires an activated account with enough token balance in the GasFree wallet — use `--gasfree-info` to check, and `--gasfree-activate` if it's not active yet.
+When paying on TRON, the skill prefers `exact_gasfree` and automatically falls back to `exact` if GasFree payment creation fails. GasFree requires sufficient token balance in the GasFree wallet; inactive accounts can be activated on first payment when the advertised fees permit it. Use `--gasfree-info` to check wallet address, activation status, balance, and nonce; use `--gasfree-activate` to activate manually.
 :::
 
 :::caution Wallet credentials come from agent-wallet
