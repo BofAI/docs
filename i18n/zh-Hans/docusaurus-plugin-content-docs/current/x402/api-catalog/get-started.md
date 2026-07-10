@@ -35,23 +35,29 @@ x402-cli --version
 装好后，Agent 就能通过 CLI 发现并调用服务。先按服务名或关键字搜索，看看目录里有什么：
 
 ```bash
-x402-cli catalog search <keyword> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
+x402-cli catalog search <keyword> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
 ```
 
 查看某个服务的详情与可用端点：
 
 ```bash
-x402-cli catalog show <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
-x402-cli catalog endpoints <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
+x402-cli catalog show <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog endpoints <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
 ```
 
-确认后，直接对目标端点发起一次付费调用——报价、付款、取回结果一步完成。简单的 GET 端点只需给出 URL：
+**免费端点**（服务方未定价的端点）用普通 `curl` 即可拿到结果——无需 CLI、也无需付费：
+
+```bash
+curl -sS 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
+```
+
+对于**付费端点**，使用 `x402-cli pay`——它一步完成报价、付款和取回结果。简单的 GET 只需给出 URL：
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
 ```
 
-如果是 POST 端点，或想指定支付链、代币与方案，显式传入对应参数：
+如果是付费 POST 端点，或想指定支付链、代币与方案，显式传入对应参数：
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \

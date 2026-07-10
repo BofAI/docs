@@ -56,7 +56,7 @@ Official Facilitator supports **two calling modes**.
 
 | Mode | Rate Limit | Description |
 |-----|-----|-----|
-| **Anonymous Mode** | 1 time / minute | No API Key required, suitable for local development and functional testing |
+| **Anonymous Mode** | 10 times / minute (default, configurable) | No API Key required, suitable for local development and functional testing |
 | **API Key Mode** | 1000 times / minute | API Key required, suitable for production environments and high-frequency payment requests |
 
 The calling methods for both modes are exactly the same, but they differ in **identity recognition and interface rate limiting strategies**.
@@ -69,8 +69,8 @@ If the request **does not carry an API Key**, the Facilitator will treat the req
 
 In anonymous mode:
 
-- The `/settle` interface will enable **strict rate limiting**
-- **Maximum 1 call per minute**
+- The `/settle` interface is **rate-limited**
+- **Maximum 10 calls per minute** (default, configurable)
 
 This mode is mainly used for:
 
@@ -84,7 +84,7 @@ Anonymous call example:
 ```bash
 curl -X POST https://facilitator.bankofai.io/settle \
   -H "Content-Type: application/json" \
-  -d \'{ ... }\'
+  -d '{ ... }'
 ```
 
 Although anonymous mode can call all core interfaces normally, due to the very low call frequency of `/settle`, it is **not suitable for production environments**.
@@ -107,7 +107,7 @@ Call example:
 curl -X POST https://facilitator.bankofai.io/settle \
   -H "X-API-KEY: your_api_key_here" \
   -H "Content-Type: application/json" \
-  -d \'{ ... }\'
+  -d '{ ... }'
 ```
 
 When the Facilitator recognizes the API Key:
@@ -246,24 +246,30 @@ After clicking **"Confirm"**, you will return to the Dashboard page, and the API
 |------|------|------|
 | GET | `/health` | Service health check |
 | GET | `/supported` | Query supported payment capabilities and configurations |
-| POST | `/fee/quote` | Get estimated fees for payment requirements |
 | POST | `/verify` | Verify payment payload validity |
 | POST | `/settle` | Perform on-chain settlement (**rate-limited**)|
-| GET | `/payments/{payment_id}` | Query payment records by payment ID |
-| GET | `/payments/tx/{tx_hash}` | Query payment records by transaction hash |
+| GET | `/payments/tx/{tx_hash}` | Query payment records by settlement transaction hash |
+| GET | `/payments?network=&nonce=[&asset=&payer=]` | Query payment records by the on-chain authorization identity |
+| GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`) |
 
-> Rate limiting only applies to the `/settle` interface; other interfaces are not affected by rate limiting.
+> There is **no** `/fee/quote` endpoint — fee terms travel inside the payment requirements' `extra` field. Rate limiting only applies to the `/settle` interface; other interfaces are not affected by rate limiting.
 
 ### Payment Record Query
 
-Both `/payments/{payment_id}` and `/payments/tx/{tx_hash}` interfaces return a JSON array sorted in reverse chronological order. Each record contains:
+The `/payments/tx/{tx_hash}` and `/payments?network=&nonce=[&asset=&payer=]` interfaces return a JSON array sorted in reverse chronological order. Records are keyed on the on-chain authorization identity rather than a client-supplied payment ID. Each record contains:
 
-- `paymentId` — Unique payment identifier (may be empty)
+- `network` — CAIP-2 network identifier
+- `scheme` — Payment scheme (e.g. `exact`)
+- `asset` — Token contract address
+- `payer` — Payer address
+- `nonce` — Authorization nonce
+- `amount` — Settled amount (atomic units)
 - `txHash` — On-chain transaction hash
 - `status` — `"success"` or `"failed"`
+- `errorReason` — Failure reason (when applicable)
 - `createdAt` — Timestamp
 
-> When an API Key is provided, these two interfaces only return payment records associated with your account; you will not see data from other sellers.
+> When an API Key is provided, these interfaces only return payment records associated with your account; you will not see data from other sellers.
 
 ---
 
@@ -271,7 +277,7 @@ Both `/payments/{payment_id}` and `/payments/tx/{tx_hash}` interfaces return a J
 
 **Q: Can it run normally without configuring an API Key?**
 
-Yes, it can run, but the `/settle` interface can only be called once per IP per minute. This is only suitable for testing; any real traffic must be configured with an API Key.
+Yes, it can run, but the `/settle` interface is limited to 10 calls per IP per minute by default. This is only suitable for testing; any real traffic must be configured with an API Key.
 
 **Q: Does the API Key expire?**
 

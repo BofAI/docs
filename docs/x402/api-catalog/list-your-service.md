@@ -12,7 +12,7 @@ Put your API behind the Gateway and it appears in the catalog: any Agent can dis
 
 ## The big picture: what listing actually means
 
-Listing comes down to one action: opening a PR against the [catalog repository](https://github.com/BofAI/x402-catelog) with just two **public** files:
+Listing comes down to one action: opening a PR against the [catalog repository](https://github.com/BofAI/x402-catalog) with just two **public** files:
 
 | File | Purpose |
 |---|---|
@@ -259,7 +259,7 @@ built 1 provider(s) into dist
 
 ## Step 3: Open the Pull Request
 
-Add the two files to the [catalog repository](https://github.com/BofAI/x402-catelog) under the matching directory:
+Add the two files to the [catalog repository](https://github.com/BofAI/x402-catalog) under the matching directory:
 
 ```text
 providers/<fqn>/catalog.json

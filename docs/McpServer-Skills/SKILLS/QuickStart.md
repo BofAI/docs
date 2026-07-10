@@ -29,7 +29,7 @@ If you're already using a Skills-compatible AI Agent (OpenClaw, a Telegram bot, 
 3. The AI handles the entire flow automatically:
    - Pulls the `BofAI/skills` repository
    - Detects your current Agent's skills directory (e.g. `~/.agents/skills/`)
-   - Installs all 12 BANK OF AI skills: the 11 core skills (`agent-wallet`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`) plus `bankofai-guide` (the onboarding helper)
+   - Installs all 14 BANK OF AI skills: the 13 core skills (`agent-wallet`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`, `twitter-digest`, `twitter-mcp`) plus `bankofai-guide` (the onboarding helper)
 
 :::tip Why this is the recommended path for beginners
 You don't need to know what `npx`, `npm`, or "global install" mean. The AI handles every step including selecting the right skills directory for your platform, installing the wallet CLI, and onboarding you to your first wallet.
@@ -70,13 +70,14 @@ The installer will guide you through a few steps — just follow along:
 The installer automatically fetches all available Skills from the repo and lists them for selection. Press **Space** to toggle each one — we recommend selecting all:
 
 ```
-◇  Found 12 skills
+◇  Found 14 skills
 │
 ◇  Select skills to install (space to toggle)
 │  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions,
 │  recharge-skill, SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit,
 │  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup,
-│  TRX Staking & SR Voting, USDD / JUST Protocol, x402-payment
+│  TRX Staking & SR Voting, USDD / JUST Protocol, twitter-digest, twitter-mcp,
+│  x402-payment
 ```
 
 :::tip Select all
@@ -223,7 +224,7 @@ When you see output like this, all Skills have been successfully installed to yo
 ```
 ◇  Installation complete
 
-◇  Installed 12 skills ──────────────────────────────────────────────────╮
+◇  Installed 14 skills ──────────────────────────────────────────────────╮
 │                                                                        │
 │  ✓ ~/.agents/skills/bankofai-guide                                     │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
@@ -253,6 +254,12 @@ When you see output like this, all Skills have been successfully installed to yo
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
 │  ✓ ~/.agents/skills/usdd-just-protocol                                 │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/twitter-digest                                     │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/twitter-mcp                                        │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
 │  ✓ ~/.agents/skills/x402-payment                                       │

@@ -6,7 +6,7 @@ description: Field definitions for catalog.json / pay.md, allowed categories and
 
 # Data Format & API Reference
 
-This page is the API Catalog's data contract: the `catalog.json` fields providers submit to the [catalog repository](https://github.com/BofAI/x402-catelog), the allowed values, and the structures of the `/api/*` endpoints the catalog exposes after build.
+This page is the API Catalog's data contract: the `catalog.json` fields providers submit to the [catalog repository](https://github.com/BofAI/x402-catalog), the allowed values, and the structures of the `/api/*` endpoints the catalog exposes after build.
 
 ## provider catalog.json fields
 

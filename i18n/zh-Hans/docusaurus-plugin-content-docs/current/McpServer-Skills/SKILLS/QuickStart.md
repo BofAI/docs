@@ -29,7 +29,7 @@
 3. AI 会自动完成以下流程（无需人工干预）：
    - 拉取 `BofAI/skills` 仓库
    - 自动检测当前 Agent 对应的 skills 目录（如 `~/.agents/skills/`）
-   - 安装全部 12 个 BANK OF AI 技能：11 个核心技能（`agent-wallet`、`sunswap-dex-trading`、`sunpump-meme-token-toolkit`、`sunperp-perpetual-futures-trading`、`tronscan-data-lookup`、`trc20-token-toolkit`、`usdd-just-protocol`、`trx-staking-sr-voting`、`multi-sig-account-permissions`、`x402-payment`、`recharge-skill`），以及 `bankofai-guide`（引导辅助技能）
+   - 安装全部 14 个 BANK OF AI 技能：13 个核心技能（`agent-wallet`、`sunswap-dex-trading`、`sunpump-meme-token-toolkit`、`sunperp-perpetual-futures-trading`、`tronscan-data-lookup`、`trc20-token-toolkit`、`usdd-just-protocol`、`trx-staking-sr-voting`、`multi-sig-account-permissions`、`x402-payment`、`recharge-skill`、`twitter-digest`、`twitter-mcp`），以及 `bankofai-guide`（引导辅助技能）
 
 :::tip 这是新手最推荐的路径
 你不需要懂 `npx`、`npm` 是什么，也不用关心"全局安装"是什么意思。AI 会处理每一步，包括为你的平台选对 skills 目录、安装钱包 CLI、引导你完成首个钱包配置。
@@ -70,13 +70,14 @@ npx skills add https://github.com/BofAI/skills
 安装器会自动从仓库拉取所有可用的 Skills，然后列出清单让你勾选。按**空格键**切换选中/取消，默认全选即可：
 
 ```
-◇  Found 12 skills
+◇  Found 14 skills
 │
 ◇  Select skills to install (space to toggle)
 │  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions,
 │  recharge-skill, SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit,
 │  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup,
-│  TRX Staking & SR Voting, USDD / JUST Protocol, x402-payment
+│  TRX Staking & SR Voting, USDD / JUST Protocol, twitter-digest, twitter-mcp,
+│  x402-payment
 ```
 
 :::tip 建议全选
@@ -223,7 +224,7 @@ npx skills add https://github.com/BofAI/skills
 ```
 ◇  Installation complete
 
-◇  Installed 12 skills ──────────────────────────────────────────────────╮
+◇  Installed 14 skills ──────────────────────────────────────────────────╮
 │                                                                        │
 │  ✓ ~/.agents/skills/bankofai-guide                                     │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
@@ -253,6 +254,12 @@ npx skills add https://github.com/BofAI/skills
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
 │  ✓ ~/.agents/skills/usdd-just-protocol                                 │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/twitter-digest                                     │
+│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
+│    symlinked: Claude Code, OpenClaw                                    │
+│  ✓ ~/.agents/skills/twitter-mcp                                        │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
 │  ✓ ~/.agents/skills/x402-payment                                       │

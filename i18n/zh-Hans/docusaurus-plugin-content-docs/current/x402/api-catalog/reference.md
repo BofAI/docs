@@ -6,7 +6,7 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 
 # 数据格式与 API 参考
 
-本页是 API 目录 的数据契约：服务方向[目录仓库](https://github.com/BofAI/x402-catelog)提交的 `catalog.json` 字段、合法取值，以及目录构建后对外暴露的 `/api/*` 接口结构。
+本页是 API 目录 的数据契约：服务方向[目录仓库](https://github.com/BofAI/x402-catalog)提交的 `catalog.json` 字段、合法取值，以及目录构建后对外暴露的 `/api/*` 接口结构。
 
 ## provider catalog.json 字段
 
