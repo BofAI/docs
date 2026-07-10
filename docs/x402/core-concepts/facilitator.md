@@ -11,7 +11,7 @@ A Facilitator is a middleware service primarily responsible for:
 
 - **Payload Verification**: Validating the payment payload submitted by the client.
 - **Settlement Execution**: Submitting transactions to the blockchain on behalf of the server to complete settlement.
-- **Token Transfer**: Executing token transfers by calling the `permitTransferFrom` method of the `PaymentPermit` contract.
+- **Token Transfer**: Executing the on-chain settlement for the scheme — ERC-3009 `transferWithAuthorization`, a Permit2 transfer via the `x402ExactPermit2Proxy` (`exact`) or `x402UptoPermit2Proxy` (`upto`), a batch-settlement claim, or a GasFree relay.
 
 By introducing a Facilitator, servers no longer need to maintain direct connections to blockchain nodes or implement complex signature verification logic themselves. This reduces operational complexity while ensuring accurate and real-time transaction validation.
 
@@ -91,11 +91,15 @@ Whether using the official service or a self-hosted instance, the Facilitator pr
 |--------|------|-------------|
 | GET | `/health` | Liveness check |
 | GET | `/supported` | Supported payment capabilities and configuration |
-| POST | `/fee/quote` | Get fee quote for payment requirements |
 | POST | `/verify` | Verify payment payload validity |
-| POST | `/settle` | Execute on-chain settlement (**rate-limited**, see below) |
-| GET | `/payments/{payment_id}` | Query payment records by payment ID (seller-scoped when authenticated) |
-| GET | `/payments/tx/{tx_hash}` | Query payment records by transaction hash (seller-scoped when authenticated) |
+| POST | `/settle` | Execute on-chain settlement (**rate-limited**, see below); persists a settlement record |
+| GET | `/payments/tx/{tx_hash}` | Query payment records by settlement transaction hash (seller-scoped when authenticated) |
+| GET | `/payments?network=&nonce=[&asset=&payer=]` | Query payment records by the on-chain authorization identity (seller-scoped when authenticated) |
+| GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`) |
+| GET | `/metrics` | Prometheus metrics (operational; exposed on the main port only when monitoring shares it) |
+| ALL | `/mainnet/*` · `/nile/*` | GasFree Open API transparent proxy (HMAC-signed) — used internally by the TRON `exact_gasfree` scheme |
+
+> There is **no** `/fee/quote` endpoint. Fee terms travel inside the payment requirements' `extra` field, and payment records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`), not a client-supplied payment ID.
 
 ---
 
@@ -106,9 +110,9 @@ The `/settle` endpoint enforces dynamic rate limits based on the caller's authen
 | Mode | Rate Limit | How to Authenticate |
 |------|------------|---------------------|
 | **Authenticated** | 1000 requests / minute | Include `X-API-KEY: <your_key>` header |
-| **Anonymous** | 1 request / minute | No API Key provided |
+| **Anonymous** | 10 requests / minute (default, configurable) | No API Key provided |
 
-Other endpoints (`/verify`, `/fee/quote`, `/supported`, `/payments/*`) are not individually rate-limited.
+Other endpoints (`/verify`, `/supported`, `/payments/*`) are not individually rate-limited.
 
 > **Tip**: For any production workload, apply for an API Key via the [Admin Portal](https://admin-facilitator.bankofai.io) to unlock the higher rate limit.
 
@@ -116,7 +120,7 @@ Other endpoints (`/verify`, `/fee/quote`, `/supported`, `/payments/*`) are not i
 
 ## Payment Record Queries
 
-The `/payments/{payment_id}` and `/payments/tx/{tx_hash}` endpoints support querying historical payment records.
+The `/payments/tx/{tx_hash}` and `/payments?network=&nonce=[&asset=&payer=]` endpoints support querying historical payment records; `/payments` alone returns the authenticated seller's settlement feed. Records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`) rather than a client-supplied payment ID.
 
 When the request includes a valid `X-API-KEY` header, the results are **automatically scoped to the seller** associated with that API Key — you will only see your own payment records. Anonymous requests (without an API Key) can only access records that are not bound to any specific seller.
 
@@ -126,11 +130,10 @@ When the request includes a valid `X-API-KEY` header, the results are **automati
 
 The Facilitator supports flexible service fee configurations:
 
-- **Base Fee**: A fixed service fee per transaction (e.g., `1 USDT`).
-- **Percentage Fee**: A percentage-based fee calculated from the transaction amount.
-- **No Fee Mode**: Supports zero-fee operation.
+- **Base Fee**: A fixed service fee per transaction, configured per network and asset (e.g., `1 USDT`).
+- **No Fee Mode**: Supports zero-fee operation (e.g. EVM `exact` takes no facilitator fee).
 
-Detailed fee information is returned via the `/fee/quote` endpoint and included in the Payment Requirements sent from the server to the client.
+Fee terms are included in the Payment Requirements' `extra` field sent from the server to the client; there is no separate `/fee/quote` endpoint.
 
 ---
 

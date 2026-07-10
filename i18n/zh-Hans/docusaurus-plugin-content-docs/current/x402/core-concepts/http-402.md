@@ -41,6 +41,8 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
+> **注意：** 在 TRON 上，`accepted.asset` 和 `accepted.payTo` 使用 Base58 地址，但 `permit2Authorization` 内部的地址（`permitted.token`、`spender`、`witness.to`、`from`）会转换为 `0x` hex 格式以进行 EIP-712/TIP-712 签名。
+
 ```json
 {
   "x402Version": 2,
@@ -52,40 +54,29 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "tron:nile",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
       "payTo": "<SELLER_TRON_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "name": "Tether USD",
-        "version": "1",
+        "assetTransferMethod": "permit2",
         "fee": {
-          "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
           "feeAmount": "100",
           "caller": "<FACILITATOR_CALLER_ADDRESS>"
         }
       }
     }
-  ],
-  "extensions": {
-    "paymentPermitContext": {
-      "meta": {
-        "kind": "PAYMENT_ONLY",
-        "paymentId": "0xb08d71cabc27d5552e36a7f60084e130",
-        "nonce": "11984290373079535093514815017206530944",
-        "validAfter": 1770816589,
-        "validBefore": 1770820189
-      }
-    }
-  }
+  ]
 }
 ```
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
+
+> **注意：** `extensions.erc20ApprovalGasSponsoring` 包含 `info`（description + version）和 `schema`（客户端预签名 `approve(Permit2)` 载荷的 JSON Schema）。为简洁起见，下方 `schema.properties` 的具体声明已省略。
 
 ```json
 {
@@ -98,32 +89,28 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "eip155:97",
       "amount": "100000000000000",
       "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
       "payTo": "<SELLER_BSC_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "name": "Tether USD",
-        "version": "1",
-        "fee": {
-          "facilitatorId": "<FACILITATOR_URL>",
-          "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-          "feeAmount": "100000000000000",
-          "caller": "<FACILITATOR_CALLER_ADDRESS>"
-        }
+        "assetTransferMethod": "permit2"
       }
     }
   ],
   "extensions": {
-    "paymentPermitContext": {
-      "meta": {
-        "kind": "PAYMENT_ONLY",
-        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
-        "nonce": "94261896388554187915350651456800860604",
-        "validAfter": 1770817158,
-        "validBefore": 1770820758
+    "erc20ApprovalGasSponsoring": {
+      "info": {
+        "description": "The facilitator broadcasts a pre-signed ERC-20 approve() transaction to grant Permit2 allowance.",
+        "version": "1"
+      },
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": "...",
+        "required": ["from", "asset", "spender", "amount", "signedTransaction", "version"]
       }
     }
   }
@@ -140,14 +127,14 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `error`             | 人类可读的错误提示                                |
 | `resource`          | 关于请求资源的信息                                |
 | `accepts`           | 接受的支付选项数组                                |
-| `scheme`            | 支付方案（`exact_permit` 或 `exact`）                     |
+| `scheme`            | 支付方案（`exact`、`upto`、`batch-settlement`、`auth-capture`、`exact_gasfree`）  |
 | `network`           | 网络标识符（`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`） |
 | `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
 | `asset`             | TRC-20/BEP-20 代币合约地址                               |
 | `payTo`             | 卖家的钱包地址                              |
 | `maxTimeoutSeconds` | 支付有效期的最大时长                              |
-| `extra.fee`         | Facilitator 费用信息（包含 `facilitatorId`、`feeTo`、`feeAmount`、`caller`） |
-| `extensions`        | 支付方案的附加上下文（如 `paymentPermitContext`，包含 nonce、有效期窗口等） |
+| `extra.fee`         | Facilitator 费用信息（包含 `feeTo`、`feeAmount`、`caller`） |
+| `extensions`        | 支付方案的附加上下文（如 gas 赞助、payment-identifier） |
 
 ## 支付签名结构
 
@@ -159,29 +146,24 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
-  "network": "tron:nile",
+  "accepted": {
+    "scheme": "exact",
+    "network": "tron:nile",
+    "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
+    "amount": "100",
+    "payTo": "<SELLER_TRON_ADDRESS>",
+    "maxTimeoutSeconds": 3600,
+    "extra": { "assetTransferMethod": "permit2" }
+  },
   "payload": {
     "signature": "0x...",
-    "permit": {
-      "meta": {
-        "kind": 0,
-        "paymentId": "0x65f9d4ca3fb5f6dd14930055aa5ccbc4",
-        "nonce": "241054476753796864345738420545497456919",
-        "validAfter": 1770817311,
-        "validBefore": 1770820911
-      },
-      "buyer": "<CLIENT_TRON_ADDRESS>",
-      "caller": "<FACILITATOR_CALLER_ADDRESS>",
-      "payment": {
-        "payToken": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
-        "payAmount": 100,
-        "payTo": "<SELLER_TRON_ADDRESS>"
-      },
-      "fee": {
-        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-        "feeAmount": 100
-      }
+    "permit2Authorization": {
+      "permitted": { "token": "0x...", "amount": "100" },
+      "spender": "0x...",
+      "nonce": "0",
+      "deadline": "1770820911",
+      "witness": { "to": "0x...", "validAfter": "1770817311" },
+      "from": "0x..."
     }
   }
 }
@@ -193,29 +175,24 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
-  "network": "eip155:97",
+  "accepted": {
+    "scheme": "exact",
+    "network": "eip155:97",
+    "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+    "amount": "100000000000000",
+    "payTo": "<SELLER_BSC_ADDRESS>",
+    "maxTimeoutSeconds": 3600,
+    "extra": { "assetTransferMethod": "permit2" }
+  },
   "payload": {
     "signature": "0x...",
-    "permit": {
-      "meta": {
-        "kind": 0,
-        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
-        "nonce": "94261896388554187915350651456800860604",
-        "validAfter": 1770817158,
-        "validBefore": 1770820758
-      },
-      "buyer": "<CLIENT_BSC_ADDRESS>",
-      "caller": "<FACILITATOR_CALLER_ADDRESS>",
-      "payment": {
-        "payToken": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
-        "payAmount": 100000000000000,
-        "payTo": "<SELLER_BSC_ADDRESS>"
-      },
-      "fee": {
-        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-        "feeAmount": 100000000000000
-      }
+    "permit2Authorization": {
+      "permitted": { "token": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd", "amount": "100000000000000" },
+      "spender": "<X402_PERMIT2_PROXY_ADDRESS>",
+      "nonce": "0",
+      "deadline": "1770820758",
+      "witness": { "to": "<SELLER_BSC_ADDRESS>", "validAfter": "1770817158" },
+      "from": "<CLIENT_BSC_ADDRESS>"
     }
   }
 }

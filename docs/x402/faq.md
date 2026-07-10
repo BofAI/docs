@@ -27,12 +27,13 @@ Not at all. Any Web API or content provider—whether Web3-native or traditional
 
 #### What languages and frameworks are supported?
 
-x402 currently provides the following SDKs:
+x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages:
 
-- **Python**: Server integration with FastAPI and Flask; `httpx`-based client  
-- **TypeScript**: Server middleware for Hono and Express; standard `fetch` client  
+- **Server middleware**: Express, Fastify, Hono, Next.js
+- **Client**: wrapped `fetch` (`@bankofai/x402-fetch`), Axios, MCP transport
+- **Facilitator**: chain-agnostic engine with per-scheme verify + settle
 
-Both SDKs fully implement Client, Server, and Facilitator functionality. As of **v0.6.0**, the TypeScript SDK reaches feature parity with Python across the Server and Facilitator roles (facilitator client/engine, server middleware, and `exact` / `exact_permit` / `exact_gasfree` verify + settle).
+The previous Python SDK lives under `legacy/` for reference.
 
 ---
 
@@ -50,8 +51,8 @@ All payment payloads are **signed by the buyer**, and settlement is executed **d
 
 A Facilitator can only:
 
-- Transfer the exact amount authorized by the buyer  
-- Send funds to the specific recipient address defined in the signed payload  
+- Transfer the exact amount authorized by the buyer
+- Send funds to the specific recipient address defined in the signed payload
 
 ---
 
@@ -61,25 +62,28 @@ A Facilitator can only:
 
 Common pricing models include:
 
-- **Flat rate per call**: e.g., `1 USDT` per request  
-- **Tiered pricing**: Different prices for endpoints like `/basic` and `/pro`  
-- **`exact_permit` / `exact` scheme**: Pay the exact amount determined by the service  
+- **Flat rate per call**: e.g., `1 USDT` per request
+- **Tiered pricing**: Different prices for endpoints like `/basic` and `/pro`
+- **`exact` scheme**: Pay the exact amount advertised per call
 
 #### What payment schemes does x402 support?
 
-x402 supports three payment schemes:
+x402 supports five payment schemes:
 
-- **`exact_permit`** and **`exact`**: Both allow the client to authorize a **maximum payment amount**, and the server to settle the **actual cost incurred** (up to the authorized limit). This is ideal for **metered billing**, **LLM token usage**, and similar use cases. Since v0.5.9, the wire `payload` of the `exact` scheme conforms to the v2 specification published by the **x402 Foundation (formerly Coinbase)**.
-- **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. All GasFree API calls are routed through the BANK OF AI proxy — no API keys required on the client side.
+- **`exact`**: Pay the exact advertised amount. ERC-3009 tokens (e.g. BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
+- **`upto`**: Usage-based billing — the client signs a Permit2 authorization for up to a **maximum**; the server settles only the **real usage** (≤ max). Ideal for **metered billing**, **LLM token usage**.
+- **`batch-settlement`**: Payment-channel for high-frequency micro-payments — deposit once, pay many requests with off-chain vouchers, settle in one batch tx. Includes a refund path.
+- **`auth-capture`** (EVM only): Escrow-style authorization capture.
+- **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. A relayer pays the on-chain energy via the GasFree API — no API keys required on the client side.
 
 #### Can this SDK interoperate with the x402 Foundation (formerly Coinbase) v2 reference implementation?
 
-**Yes.** Since v0.5.9, the `exact` payment scheme (EVM and TRON) conforms to the v2 specification published by the **x402 Foundation (formerly Coinbase)**:
+**Yes.** The `exact` payment scheme (EVM and TRON) conforms to the v2 specification published by the **x402 Foundation**:
 
 - A stock v2 client can directly access this SDK's `exact` protected endpoints with no project-specific adapter layer.
 - This SDK's client can pay v2-compatible servers directly.
 - In the V2 structure, transfer authorization data is carried in the `payload.authorization` field (a structured object). As a migration fallback, the client also populates `extensions.transferAuthorization` so that servers still running older versions can parse the payload.
-- When using the `exact` scheme on BSC, the advertised asset **must** natively implement ERC-3009 `transferWithAuthorization` — for example, **DHLU** on BSC testnet. BSC USDT is a plain ERC-20 and natively supports neither ERC-3009 nor EIP-2612 permit — if you need to accept USDT, use the `exact_permit` scheme instead (which is backed by this project's `PaymentPermit` proxy contract and works with any ERC-20).
+- BSC USDT/USDC are plain ERC-20s (no ERC-3009). They settle via the Permit2 path under the `exact` scheme — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. ERC-3009 tokens like BSC testnet **DHLU** settle gaslessly with no approve.
 - The `examples/bsc-testnet-smoke/` directory contains smoke tests for bidirectional interoperability (Coinbase official client → BANK OF AI server, BANK OF AI client → Coinbase official server) that you can use as a debugging and integration reference.
 
 ---
@@ -97,12 +101,11 @@ x402 supports three payment schemes:
 | TRON Nile (`tron:nile`)       | USDD (TRC-20) | **Testnet** |
 | BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
 | BSC Mainnet (`eip155:56`)     | USDC (BEP-20) | **Mainnet** |
-| BSC Mainnet (`eip155:56`)     | EPS (BEP-20)  | **Mainnet** |
 | BSC Testnet (`eip155:97`)     | USDT (BEP-20) | **Testnet** |
 | BSC Testnet (`eip155:97`)     | USDC (BEP-20) | **Testnet** |
 | BSC Testnet (`eip155:97`)     | DHLU (BEP-20, for `exact` interop tests) | **Testnet** |
 
-Custom TRC-20 and BEP-20 tokens can also be added via the TokenRegistry.
+Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` from `@bankofai/x402-tron`); custom BEP-20 tokens are advertised by adding an entry to the server's `EVM_TOKENS` config table.
 
 #### What fees are involved?
 
@@ -119,18 +122,18 @@ Custom TRC-20 and BEP-20 tokens can also be added via the TokenRegistry.
 
 **No.** Recommended security model:
 
-1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).  
-2. **Seller** verifies signatures without accessing private keys.  
-3. **Facilitator** uses its own key to submit transactions on-chain.  
+1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).
+2. **Seller** verifies signatures without accessing private keys.
+3. **Facilitator** uses its own key to submit transactions on-chain.
 
 #### How does refunds work?
 
-The `exact_permit` / `exact` scheme uses a **push payment** model—once executed on-chain, it is irreversible.
+The `exact` scheme uses a **push payment** model — once settled on-chain, it is irreversible. The `batch-settlement` scheme, by contrast, supports an on-chain **refund** path for the unused channel balance.
 
 Refund options:
 
-1. **Business-layer refund**: Seller manually sends a new USDT transfer back to the buyer.  
-2. **Preventative settlement**: Server settles only the actual usage amount under the payment scheme.  
+1. **Business-layer refund**: Seller manually sends a new USDT transfer back to the buyer.
+2. **Preventative settlement**: Server settles only the actual usage amount under the payment scheme.
 
 ---
 
@@ -140,10 +143,10 @@ Refund options:
 
 The flow mirrors a human user:
 
-1. Send initial request.  
-2. Parse `PAYMENT-REQUIRED` header in the response.  
-3. Sign the payment payload using the x402 client SDK.  
-4. Retry request with `PAYMENT-SIGNATURE` header attached.  
+1. Send initial request.
+2. Parse `PAYMENT-REQUIRED` header in the response.
+3. Sign the payment payload using the x402 client SDK.
+4. Retry request with `PAYMENT-SIGNATURE` header attached.
 
 #### Does an agent need a wallet?
 
@@ -153,26 +156,28 @@ The flow mirrors a human user:
 
 ### Development Guide
 
-#### How do I run x402 locally?
+#### How do I develop with x402 locally?
 
-1. **Clone the repository:** Download the [x402-demo repository](https://github.com/BofAI/x402-demo).  
-2. **Install dependencies:** Run `pip install -r requirements.txt`.  
-3. **Configure environment:** Copy `.env.example` to `.env` and configure your private keys.  
-4. **Start Facilitator:** `python facilitator/main.py`  
-5. **Start Server:** `python server/main.py`  
-6. **Run Client:** `python client/main.py`  
+Install the published packages in your TypeScript app and build against npm, for example:
+
+```bash
+pnpm add @bankofai/x402-fetch @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
+pnpm add @bankofai/x402-core @bankofai/x402-express
+```
+
+Use the framework package that matches your server (`express`, `hono`, `fastify`, or `next`). The [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) workspace is a runnable reference for client → server → facilitator flows, not a prerequisite for application development.
 
 #### Which testnet is recommended?
 
 **TRON Nile** is recommended for TRON testing:
 
-- Faucet: https://nileex.io/join/getJoinPage  
-- Explorer: https://nile.tronscan.org  
+- Faucet: https://nileex.io/join/getJoinPage
+- Explorer: https://nile.tronscan.org
 
 **BSC Testnet** is recommended for BSC testing:
 
-- Faucet: https://www.bnbchain.org/en/testnet-faucet  
-- Explorer: https://testnet.bscscan.com  
+- Faucet: https://www.bnbchain.org/en/testnet-faucet
+- Explorer: https://testnet.bscscan.com
 
 ---
 
@@ -182,21 +187,21 @@ The flow mirrors a human user:
 
 Common causes:
 
-1. Invalid signature (incorrect domain or payload).  
-2. Insufficient payment amount.  
-3. Insufficient token allowance granted to Facilitator.  
-4. Insufficient wallet balance.  
+1. Invalid signature (incorrect domain or payload).
+2. Insufficient payment amount.
+3. Insufficient token allowance granted to Facilitator.
+4. Insufficient wallet balance.
 
 Check the `error` field in the server’s JSON response for detailed diagnostics.
 
 #### It works on Nile but fails on Mainnet — why?
 
-- Network configuration not updated  
-- Using testnet tokens instead of real mainnet tokens  
-- Facilitator lacks sufficient gas tokens  
-- Token contract address differs between networks  
+- Network configuration not updated
+- Using testnet tokens instead of real mainnet tokens
+- Facilitator lacks sufficient gas tokens
+- Token contract address differs between networks
 
 ### Still Have Questions?
 
-• Submit a GitHub Issue in the [x402 repository](https://github.com/BofAI/x402)  
-• Refer to [x402-demo](https://github.com/BofAI/x402-demo) for a complete, runnable example  
+• Submit a GitHub Issue in the [x402 repository](https://github.com/BofAI/x402)
+• Refer to the [reference examples](https://github.com/BofAI/x402/tree/main/examples/typescript) in the x402 repository for a complete client → server → facilitator loop

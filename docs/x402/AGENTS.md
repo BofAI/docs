@@ -18,7 +18,7 @@ import TabItem from '@theme/TabItem';
 - `docs/faq.md` — Frequently Asked Questions.
 - `sidebars.js` — Docusaurus sidebar configuration.
 - `docusaurus.config.js` — Main Docusaurus configuration file.
-- `docs/sdk-features.md` — Feature comparison matrix for Python and TypeScript SDKs.
+- `docs/sdk-features.md` — Feature matrix for the TypeScript-only x402 SDK (`@bankofai/x402-*` packages).
 
 ---
 
@@ -27,16 +27,16 @@ import TabItem from '@theme/TabItem';
 Documentation must reflect code changes immediately. Follow these dependency mappings:
 
 - Changes in `typescript/packages/` → Update TypeScript documentation.
-- Changes in `python/x402/` → Update Python documentation.
-- Endpoint logic changes → Update “Getting Started” guides.
+- Changes in `examples/typescript/` → Check whether "Getting Started" reference snippets need updates. Quickstarts should present published npm packages as the primary development path; examples are reference implementations.
+- Endpoint logic changes → Update "Getting Started" guides.
 - Core mechanism changes → Update `core-concepts` documentation.
 
 ---
 
 ## 4. Style & Writing Standards
 
-- Use **Python** as the primary example language (most feature-complete SDK).
-- Provide **TypeScript** examples whenever supported.
+- Use **TypeScript** as the primary example language (the SDK is TypeScript-only; the previous Python SDK lives under `legacy/`).
+- Prefer code samples that work with the published `@bankofai/x402-*` npm packages. Runnable `examples/typescript/` code may be used as a reference implementation when it matches the package API.
 - All API examples **must include complete error handling**.
 - Target audience: developers with **2–5 years of experience**.
 - Use Docusaurus MDX components (`<Tabs>`, `<TabItem>`) for multi-language examples.
@@ -135,7 +135,7 @@ When SDK code changes in any of the following areas, you **must** update `docs/s
 - New signers added under the `*/signers/` directory.
 - New features introduced in the Client or Server components.
 
-> **Note**: Always cross-check implementation progress between the **Python** and **TypeScript** SDKs when updating documentation.
+> **Note**: The SDK is TypeScript-only. Cross-check documentation against the published `@bankofai/x402-*` package API, `typescript/packages/` exports, and `examples/typescript/` reference source.
 
 ---
 

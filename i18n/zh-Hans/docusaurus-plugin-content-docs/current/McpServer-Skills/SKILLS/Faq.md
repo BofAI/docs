@@ -40,7 +40,7 @@
 ls ~/.agents/skills
 ```
 
-能看到 12 个目录：`agent-wallet`、`sunswap-dex-trading`、`sunpump-meme-token-toolkit`、`sunperp-perpetual-futures-trading`、`tronscan-data-lookup`、`trc20-token-toolkit`、`usdd-just-protocol`、`trx-staking-sr-voting`、`multi-sig-account-permissions`、`x402-payment`、`recharge-skill`，以及 `bankofai-guide`，就说明装好了。
+能看到 14 个目录：`agent-wallet`、`sunswap-dex-trading`、`sunpump-meme-token-toolkit`、`sunperp-perpetual-futures-trading`、`tronscan-data-lookup`、`trc20-token-toolkit`、`usdd-just-protocol`、`trx-staking-sr-voting`、`multi-sig-account-permissions`、`x402-payment`、`recharge-skill`、`twitter-digest`、`twitter-mcp`，以及 `bankofai-guide`，就说明装好了。
 
 然后在 AI 对话中验证：
 

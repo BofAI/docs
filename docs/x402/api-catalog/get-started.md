@@ -8,14 +8,14 @@ description: Plug your Agent into the API Catalog in 3 minutes — install the A
 
 Two steps and under 3 minutes to plug your Agent into the whole catalog: install the wallet, then install the x402 CLI. After that, your Agent can discover and call any service in the catalog, paying per call on-chain.
 
-**Prerequisite**: Node.js (for the wallet) and Python with `pip` (for the CLI).
+**Prerequisite**: Node.js and npm.
 
 ## Step 1: Install the Agent Wallet
 
 Run the command below to install a local wallet that manages stablecoins on TRON & BNB Chain. Every paid call your Agent makes from now on is signed locally by this wallet.
 
 ```bash
-npm i @bankofai/agent-wallet
+npm i -g @bankofai/agent-wallet
 agent-wallet --help
 ```
 
@@ -24,7 +24,7 @@ agent-wallet --help
 One install connects your Agent to the catalog — it discovers and calls every service over x402, paying per call. No accounts, no API keys to manage.
 
 ```bash
-pip install bankofai-x402-cli
+npm install -g @bankofai/x402-cli
 x402-cli --version
 ```
 
@@ -35,30 +35,36 @@ When the version prints, you're done — that's both steps. Your Agent is now pl
 Once installed, your Agent can discover and call services through the CLI. Search by name or keyword to see what's in the catalog:
 
 ```bash
-x402-cli catalog search <keyword> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
+x402-cli catalog search <keyword> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
 ```
 
 Inspect a service's details and available endpoints:
 
 ```bash
-x402-cli catalog show <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
-x402-cli catalog endpoints <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
+x402-cli catalog show <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog endpoints <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
 ```
 
-Then make a paid call against the target endpoint — quote, payment, and result retrieval in one step. A simple GET endpoint needs nothing more than the URL:
+**Free endpoints** (those the provider leaves unpriced) return their result to a plain `curl` — no CLI and no payment needed:
+
+```bash
+curl -sS 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
+```
+
+For a **paid** endpoint, use `x402-cli pay` — it handles the quote, payment, and result retrieval in one step. A simple GET needs nothing more than the URL:
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
 ```
 
-For a POST endpoint, or to pin the payment chain, token, and scheme, pass them explicitly:
+For a paid POST endpoint, or to pin the payment chain, token, and scheme, pass them explicitly:
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
   --method POST \
   --network tron:mainnet \
   --token USDT \
-  --scheme exact_permit \
+  --scheme exact \
   --max-amount 0.000001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
@@ -69,7 +75,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--method` | HTTP method (defaults to `GET`) |
 | `--network` | CAIP-2 payment chain, e.g. `tron:mainnet`, `eip155:56` |
 | `--token` | Settlement token, e.g. `USDT` |
-| `--scheme` | x402 payment scheme declared by the route, e.g. `exact_permit` or `exact_gasfree` |
+| `--scheme` | x402 payment scheme declared by the route, e.g. `exact` |
 | `--max-amount` | Spend ceiling in USD; the call aborts if the quote exceeds it |
 | `--header` / `--body` | Request headers and body for the upstream call |
 

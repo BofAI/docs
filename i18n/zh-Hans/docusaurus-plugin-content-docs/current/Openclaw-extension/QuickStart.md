@@ -115,9 +115,9 @@ The following data will be permanently deleted:
 ```
 Running cleanup...
 
-◇  Found 11 unique installed skill(s)
+◇  Found 14 unique installed skill(s)
 ◇  Removal process complete
-◆  Successfully removed 11 skill(s)
+◆  Successfully removed 14 skill(s)
 
 ✓ Clean install cleanup completed.
 
@@ -295,12 +295,13 @@ Select skills installation scope:
 然后技能选择器启动：
 
 ```
-◇  Found 11 skills
+◇  Found 14 skills
 │
 ◇  Select skills to install (space to toggle)
 │  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions, recharge-skill,
-│  SunPerp Perpetual Futures Trading, SunSwap DEX Trading, TRC20 Token Toolkit,
-│  TronScan Data Lookup, TRX Staking & SR Voting, USDD / JUST Protocol, x402-payment
+│  SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit, SunSwap DEX Trading,
+│  TRC20 Token Toolkit, TronScan Data Lookup, TRX Staking & SR Voting, USDD / JUST Protocol,
+│  twitter-digest, twitter-mcp, x402-payment
 ```
 
 每个技能是干啥的：
@@ -311,11 +312,14 @@ Select skills installation scope:
 | **bankofai-guide** | 安装完成后引导 AI 帮你完成后续操作的入门助手 |
 | **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
 | **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
+| **SunPump Meme Token Toolkit** | 在 SunPump 上创建与交易 meme 代币，查询代币信息、排行、持有者与交易历史 |
 | **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
 | **TRC20 Token Toolkit** | TRC20 代币发送等常用操作 |
 | **TRX Staking & SR Voting** | 质押 TRX 获取能量/带宽，并为超级代表（SR）投票 |
 | **USDD / JUST Protocol** | 管理 USDD 稳定币与 JUST 协议仓位 |
 | **Multi-Sig & Account Permissions** | 多签钱包与账户权限管理 |
+| **twitter-digest** | 生成 X/Twitter 每日日报（提及、主页时间线、可回复机会） |
+| **twitter-mcp** | 为 X/Twitter 安装/授权 xurl，并用本地 xurl CLI 生成日报 |
 | **x402-payment** | x402 协议支付（Agent 间付款） |
 | **recharge-skill** | 查询和充值 BANK OF AI 余额 |
 
@@ -328,11 +332,14 @@ Select skills installation scope:
 │  Multi-Sig & Account Permissions    --                --                --
 │  recharge-skill                     Safe              1 alert           Med Risk
 │  SunPerp Perpetual Futures Trading  --                --                --
+│  SunPump Meme Token Toolkit         --                --                --
 │  SunSwap DEX Trading                --                --                --
 │  TRC20 Token Toolkit                --                --                --
 │  TronScan Data Lookup               --                --                --
 │  TRX Staking & SR Voting            --                --                --
 │  USDD / JUST Protocol               --                --                --
+│  twitter-digest                     --                --                --
+│  twitter-mcp                        --                --                --
 │  x402-payment                       Safe              1 alert           Med Risk
 │  agent-wallet                       Safe              1 alert           High Risk
 ```
@@ -340,18 +347,21 @@ Select skills installation scope:
 查看报告后确认继续。安装完成时：
 
 ```
-◇  Installed 11 skills
+◇  Installed 14 skills
 │
 │  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
 │  ✓ bankofai-guide → ~/.openclaw/skills/bankofai-guide
 │  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
+│  ✓ SunPump Meme Token Toolkit → ~/.openclaw/skills/sunpump-meme-token-toolkit
 │  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
 │  ✓ TRC20 Token Toolkit → ~/.openclaw/skills/trc20-token-toolkit
 │  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
 │  ✓ TRX Staking & SR Voting → ~/.openclaw/skills/trx-staking-sr-voting
 │  ✓ USDD / JUST Protocol → ~/.openclaw/skills/usdd-just-protocol
+│  ✓ twitter-digest → ~/.openclaw/skills/twitter-digest
+│  ✓ twitter-mcp → ~/.openclaw/skills/twitter-mcp
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 

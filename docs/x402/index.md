@@ -14,8 +14,8 @@ x402 currently supports the **TRON** and **BSC** networks, with plans to expand 
 **Interested in contributing to the documentation?**  
 Feel free to submit a PR to the [GitHub repository](https://github.com/BofAI/docs). Our only principle is to maintain neutrality — aside from essential resource links, please avoid promotional or branded content.
 
-**Looking for runnable examples?**  
-Visit the [x402-demo repository](https://github.com/BofAI/x402-demo) for a complete, production-ready sample project.
+**Building with x402?**
+Install the published [`@bankofai/x402-*`](https://www.npmjs.com/package/@bankofai/x402-tron) packages in your TypeScript app. The [`x402` repository](https://github.com/BofAI/x402) ships runnable client → server → facilitator examples under `examples/typescript/` for reference — `exact`, `gasfree`, `upto`, and `batch-settlement`.
 
 ---
 
@@ -81,9 +81,7 @@ x402 currently supports the following networks:
 - **BSC Mainnet** (`eip155:56`)
 - **BSC Testnet** (`eip155:97`)
 
-> **Protocol interoperability**: Since v0.5.9, the `exact` payment scheme (EVM and TRON) conforms to the v2 specification published by the **x402 Foundation (formerly Coinbase)**, enabling bidirectional interoperability with the x402 Foundation's v2 reference clients and servers. See [SDK Feature Matrix](./sdk-features) and [Network & Token Support](./core-concepts/network-and-token-support#exact-scheme) for details.
-
-> **TypeScript / Python parity (v0.6.0)**: As of v0.6.0, the TypeScript SDK reaches feature parity with Python for the Server and Facilitator roles — facilitator client and engine, server middleware (Hono + Express), the `fetch` wrapper, facilitator signers, and `exact` / `exact_permit` / `exact_gasfree` verify + settle. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
+> **SDK (TypeScript-only)**: x402 is a TypeScript-only SDK published as granular `@bankofai/x402-*` npm packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The source is maintained in a pnpm/turbo monorepo, but application development should install the published packages. Supported schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, `auth-capture` (EVM), and `exact_gasfree` (TRON). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
 
 ---
 
