@@ -15,8 +15,8 @@ import TabItem from '@theme/TabItem';
 
 整个流程共 **4 步**，预计耗时 **15–20 分钟**。
 
-:::info SDK 1.0.0（仅 TypeScript）
-x402 `1.0.0` 是一个**仅 TypeScript** 的 pnpm/turbo monorepo，以颗粒化的 `@bankofai/x402-*` 包发布。此前的 Python SDK 已移至 `legacy/` 仅供参考。本指南使用 [`x402` 仓库](https://github.com/BofAI/x402) 中的可运行示例（`examples/typescript/`），这些示例链接了仓库内的 SDK 包并从源码运行。
+:::info SDK（仅 TypeScript）
+x402 是一个**仅 TypeScript** 的 pnpm/turbo monorepo，以颗粒化的 `@bankofai/x402-*` 包发布。此前的 Python SDK 已移至 `legacy/` 仅供参考。本指南使用 [`x402` 仓库](https://github.com/BofAI/x402) 中的可运行示例（`examples/typescript/`），这些示例链接了仓库内的 SDK 包并从源码运行。
 :::
 
 ---

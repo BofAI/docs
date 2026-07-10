@@ -15,8 +15,8 @@ After completing this guide, you'll have a **service that charges for API calls*
 
 The entire flow takes **4 steps**, estimated time: **15–20 minutes**.
 
-:::info SDK 1.0.0 (TypeScript-only)
-x402 `1.0.0` is a **TypeScript-only** pnpm/turbo monorepo published as granular `@bankofai/x402-*` packages. The previous Python SDK lives under `legacy/` for reference. This guide uses the runnable examples in the [`x402` repository](https://github.com/BofAI/x402) (`examples/typescript/`), which link the in-repo SDK packages and run from source.
+:::info (TypeScript-only)
+x402 is a **TypeScript-only** pnpm/turbo monorepo published as granular `@bankofai/x402-*` packages. The previous Python SDK lives under `legacy/` for reference. This guide uses the runnable examples in the [`x402` repository](https://github.com/BofAI/x402) (`examples/typescript/`), which link the in-repo SDK packages and run from source.
 :::
 
 ---

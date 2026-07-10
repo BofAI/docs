@@ -9,8 +9,8 @@ import TabItem from '@theme/TabItem';
 
 > **测试网优先：** 本指南默认使用测试网，您可以安全地完成每一步而不花费真实资金。
 
-:::info SDK 1.0.0（仅 TypeScript）
-x402 `1.0.0` 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发布。本指南使用 [`x402` 仓库](https://github.com/BofAI/x402) 中的可运行 fetch client（`examples/typescript/clients/fetch`），它链接了仓库内的 SDK 包并从源码运行。
+:::info SDK（仅 TypeScript）
+x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发布。本指南使用 [`x402` 仓库](https://github.com/BofAI/x402) 中的可运行 fetch client（`examples/typescript/clients/fetch`），它链接了仓库内的 SDK 包并从源码运行。
 :::
 
 ---

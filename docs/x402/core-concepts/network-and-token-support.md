@@ -63,6 +63,7 @@ By default, **USDT** and **USDD** are used as primary settlement currencies.
 | **USDD** | `tron:nile`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56`    | `0x55d398326f99059fF775485246999027B3197955` |
 | **USDC** | `eip155:56`    | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
+| **EPS**  | `eip155:56`    | `0xA7f552078dcC247C2684336020c03648500C6d9F` |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 | **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
 | **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
@@ -107,7 +108,7 @@ When configuring an `HTTP 402` payment request on the server side, you must expl
 
 ## Payment Schemes
 
-x402 1.0.0 supports five payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
+x402 supports five payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
 
 ### `exact` Scheme
 

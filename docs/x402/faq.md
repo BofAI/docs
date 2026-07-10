@@ -27,7 +27,7 @@ Not at all. Any Web API or content provider—whether Web3-native or traditional
 
 #### What languages and frameworks are supported?
 
-x402 1.0.0 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages:
+x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages:
 
 - **Server middleware**: Express, Fastify, Hono, Next.js
 - **Client**: wrapped `fetch` (`@bankofai/x402-fetch`), Axios, MCP transport
@@ -68,7 +68,7 @@ Common pricing models include:
 
 #### What payment schemes does x402 support?
 
-x402 1.0.0 supports five payment schemes:
+x402 supports five payment schemes:
 
 - **`exact`**: Pay the exact advertised amount. ERC-3009 tokens (e.g. BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
 - **`upto`**: Usage-based billing — the client signs a Permit2 authorization for up to a **maximum**; the server settles only the **real usage** (≤ max). Ideal for **metered billing**, **LLM token usage**.

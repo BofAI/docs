@@ -81,7 +81,7 @@ x402 currently supports the following networks:
 - **BSC Mainnet** (`eip155:56`)
 - **BSC Testnet** (`eip155:97`)
 
-> **SDK 1.0.0 (TypeScript-only)**: x402 `1.0.0` is a TypeScript-only pnpm/turbo monorepo published as granular `@bankofai/x402-*` packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The `core` and EVM mechanism fork the [`x402-foundation/x402`](https://github.com/x402-foundation/x402) upstream; the TRON mechanism is in-house. Supported schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, `auth-capture` (EVM), and `exact_gasfree` (TRON). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
+> **SDK (TypeScript-only)**: x402 is a TypeScript-only pnpm/turbo monorepo published as granular `@bankofai/x402-*` packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The `core` and EVM mechanism fork the [`x402-foundation/x402`](https://github.com/x402-foundation/x402) upstream; the TRON mechanism is in-house. Supported schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, `auth-capture` (EVM), and `exact_gasfree` (TRON). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
 
 ---
 

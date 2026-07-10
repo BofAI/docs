@@ -9,8 +9,8 @@ This guide walks you through: setting up a dedicated agent wallet, configuring c
 
 ---
 
-:::info SDK 1.0.0 (TypeScript-only)
-x402 `1.0.0` is a **TypeScript-only** SDK. The `x402-payment` skill wraps the new `@bankofai/x402-*` packages and uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) for key custody — the wallet/private-key setup in this guide is unchanged. You can also drive payments directly from the runnable [MCP examples](https://github.com/BofAI/x402/tree/main/examples/typescript) (`servers/mcp` + `clients/mcp`).
+:::info SDK (TypeScript-only)
+x402 is a **TypeScript-only** SDK. The `x402-payment` skill wraps the new `@bankofai/x402-*` packages and uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) for key custody — the wallet/private-key setup in this guide is unchanged. You can also drive payments directly from the runnable [MCP examples](https://github.com/BofAI/x402/tree/main/examples/typescript) (`servers/mcp` + `clients/mcp`).
 :::
 
 ## Prerequisites

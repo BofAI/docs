@@ -1,13 +1,13 @@
 ---
 title: 'SDK 功能矩阵'
-description: 'x402 TypeScript SDK（1.0.0）的功能支持矩阵，以颗粒化 @bankofai/x402-* 包发布。'
+description: 'x402 TypeScript SDK 的功能支持矩阵，以颗粒化 @bankofai/x402-* 包发布。'
 ---
 
 # SDK 功能矩阵
 
 本页跟踪 x402 SDK 的功能支持情况。
 
-> **SDK 1.0.0（仅 TypeScript）**：x402 是一个**仅 TypeScript** 的 pnpm/turbo monorepo，以颗粒化的 `@bankofai/x402-*` 包发布。`core` 与 EVM 机制 fork 自 [`x402-foundation/x402`](https://github.com/x402-foundation/x402) 上游；TRON 机制为自研。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。
+> **SDK（仅 TypeScript）**：x402 是一个**仅 TypeScript** 的 pnpm/turbo monorepo，以颗粒化的 `@bankofai/x402-*` 包发布。`core` 与 EVM 机制 fork 自 [`x402-foundation/x402`](https://github.com/x402-foundation/x402) 上游；TRON 机制为自研。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。
 
 ---
 
@@ -62,7 +62,7 @@ description: 'x402 TypeScript SDK（1.0.0）的功能支持矩阵，以颗粒化
 
 ## 付款方案
 
-x402 1.0.0 支持五种付款方案。每种方案按链族实现为 client + server + facilitator 三件套。
+x402 支持五种付款方案。每种方案按链族实现为 client + server + facilitator 三件套。
 
 | 方案 | EVM | TRON | 说明 |
 |--------|-----|------|-------------|
@@ -141,6 +141,7 @@ x402 1.0.0 支持五种付款方案。每种方案按链族实现为 client + se
 | USDD（TRC-20） | `tron:mainnet`、`tron:nile` | ✅ |
 | USDT（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
 | USDC（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
+| EPS（BEP-20） | `eip155:56` | ✅ |
 | DHLU（BSC 测试网，ERC-3009） | `eip155:97` | ✅ |
 | 自定义 TRC-20 / BEP-20 | 任意 | ✅（通过代币注册表 / `EVM_TOKENS` 配置） |
 

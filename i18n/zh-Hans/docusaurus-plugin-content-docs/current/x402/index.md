@@ -67,7 +67,7 @@ x402 目前支持以下网络环境：
 - **BSC 主网** （`eip155:56`）
 - **BSC 测试网** （`eip155:97`)
 
-> **SDK 1.0.0（仅 TypeScript）**：x402 `1.0.0` 是仅 TypeScript 的 pnpm/turbo monorepo，以颗粒化 `@bankofai/x402-*` 包发布（`core`、`evm`、`tron`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）。`core` 与 EVM 机制 fork 自 [`x402-foundation/x402`](https://github.com/x402-foundation/x402) 上游；TRON 机制为自研。支持的方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`auth-capture`（EVM）、`exact_gasfree`（TRON）。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。完整对比详见 [SDK 功能特性](./sdk-features.md)。
+> **SDK（仅 TypeScript）**：x402 是仅 TypeScript 的 pnpm/turbo monorepo，以颗粒化 `@bankofai/x402-*` 包发布（`core`、`evm`、`tron`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）。`core` 与 EVM 机制 fork 自 [`x402-foundation/x402`](https://github.com/x402-foundation/x402) 上游；TRON 机制为自研。支持的方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`auth-capture`（EVM）、`exact_gasfree`（TRON）。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。完整对比详见 [SDK 功能特性](./sdk-features.md)。
 
 
 ## 快速开始

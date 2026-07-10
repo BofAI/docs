@@ -1,13 +1,13 @@
 ---
 title: 'SDK Feature Matrix'
-description: 'Feature support matrix for the x402 TypeScript SDK (1.0.0), published as granular @bankofai/x402-* packages.'
+description: 'Feature support matrix for the x402 TypeScript SDK, published as granular @bankofai/x402-* packages.'
 ---
 
 # SDK Feature Matrix
 
 This page tracks the feature support of the x402 SDK.
 
-> **SDK 1.0.0 (TypeScript-only)**: x402 is a **TypeScript-only** pnpm/turbo monorepo published as granular `@bankofai/x402-*` packages. The `core` and EVM mechanism fork the [`x402-foundation/x402`](https://github.com/x402-foundation/x402) upstream; the TRON mechanism is in-house. The previous-generation Python + TypeScript SDK lives under `legacy/` for reference.
+> **SDK (TypeScript-only)**: x402 is a **TypeScript-only** pnpm/turbo monorepo published as granular `@bankofai/x402-*` packages. The `core` and EVM mechanism fork the [`x402-foundation/x402`](https://github.com/x402-foundation/x402) upstream; the TRON mechanism is in-house. The previous-generation Python + TypeScript SDK lives under `legacy/` for reference.
 
 ---
 
@@ -62,7 +62,7 @@ This page tracks the feature support of the x402 SDK.
 
 ## Payment Schemes
 
-x402 1.0.0 supports five payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
+x402 supports five payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
 
 | Scheme | EVM | TRON | Description |
 |--------|-----|------|-------------|

@@ -9,8 +9,8 @@ This guide is for developers who want to **call an x402-protected API from code*
 
 > **Testnet first:** This guide uses testnet by default. You can safely follow every step without spending real money.
 
-:::info SDK 1.0.0 (TypeScript-only)
-x402 `1.0.0` is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide uses the runnable fetch client in the [`x402` repository](https://github.com/BofAI/x402) (`examples/typescript/clients/fetch`), which links the in-repo SDK packages and runs from source.
+:::info (TypeScript-only)
+x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide uses the runnable fetch client in the [`x402` repository](https://github.com/BofAI/x402) (`examples/typescript/clients/fetch`), which links the in-repo SDK packages and runs from source.
 :::
 
 ---
