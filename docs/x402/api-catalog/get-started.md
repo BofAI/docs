@@ -8,14 +8,14 @@ description: Plug your Agent into the API Catalog in 3 minutes — install the A
 
 Two steps and under 3 minutes to plug your Agent into the whole catalog: install the wallet, then install the x402 CLI. After that, your Agent can discover and call any service in the catalog, paying per call on-chain.
 
-**Prerequisite**: Node.js (for the wallet) and Python with `pip` (for the CLI).
+**Prerequisite**: Node.js and npm.
 
 ## Step 1: Install the Agent Wallet
 
 Run the command below to install a local wallet that manages stablecoins on TRON & BNB Chain. Every paid call your Agent makes from now on is signed locally by this wallet.
 
 ```bash
-npm i @bankofai/agent-wallet
+npm i -g @bankofai/agent-wallet
 agent-wallet --help
 ```
 
@@ -24,7 +24,7 @@ agent-wallet --help
 One install connects your Agent to the catalog — it discovers and calls every service over x402, paying per call. No accounts, no API keys to manage.
 
 ```bash
-pip install bankofai-x402-cli
+npm install -g @bankofai/x402-cli
 x402-cli --version
 ```
 
@@ -75,7 +75,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--method` | HTTP method (defaults to `GET`) |
 | `--network` | CAIP-2 payment chain, e.g. `tron:mainnet`, `eip155:56` |
 | `--token` | Settlement token, e.g. `USDT` |
-| `--scheme` | x402 payment scheme declared by the route, e.g. `exact` or `exact_gasfree` |
+| `--scheme` | x402 payment scheme declared by the route, e.g. `exact` |
 | `--max-amount` | Spend ceiling in USD; the call aborts if the quote exceeds it |
 | `--header` / `--body` | Request headers and body for the upstream call |
 

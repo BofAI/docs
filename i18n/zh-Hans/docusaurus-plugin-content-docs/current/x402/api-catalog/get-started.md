@@ -8,14 +8,14 @@ description: 3 分钟把你的 Agent 接入 API 目录 —— 安装 Agent Walle
 
 只需两步、不到 3 分钟，你的 Agent 就能接入整个目录：装好钱包，再装上 x402 CLI。完成后，Agent 就能发现并调用目录里的任意服务，按次在链上付费。
 
-**前提**：Node.js（用于钱包）和带 `pip` 的 Python（用于 CLI）。
+**前提**：Node.js 和 npm。
 
 ## 第 1 步：安装 Agent Wallet
 
 运行下面这行命令，你会装上一个在 TRON 与 BNB Chain 上管理稳定币的本地钱包。之后 Agent 发起的每一次付费调用，都由它在本地签名。
 
 ```bash
-npm i @bankofai/agent-wallet
+npm i -g @bankofai/agent-wallet
 agent-wallet --help
 ```
 
@@ -24,7 +24,7 @@ agent-wallet --help
 一次安装，就把 Agent 接入了目录 —— 它通过 x402 发现并调用全部服务、按次付费。无需账号，也无需管理任何 API Key。
 
 ```bash
-pip install bankofai-x402-cli
+npm install -g @bankofai/x402-cli
 x402-cli --version
 ```
 
@@ -75,7 +75,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--method` | HTTP 方法（默认 `GET`） |
 | `--network` | CAIP-2 支付链，如 `tron:mainnet`、`eip155:56` |
 | `--token` | 结算代币，如 `USDT` |
-| `--scheme` | 路由声明的 x402 支付方案，如 `exact` 或 `exact_gasfree` |
+| `--scheme` | 路由声明的 x402 支付方案，如 `exact` |
 | `--max-amount` | 美元支出上限；报价超出即中止调用 |
 | `--header` / `--body` | 转发到上游的请求头与请求体 |
 
