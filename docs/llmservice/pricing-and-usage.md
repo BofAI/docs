@@ -24,6 +24,9 @@ The platform uses a unified Credits system to measure and settle usage across al
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
 | DeepSeek V4 Flash |                  0.28 |                        0.28 |                     0.0056 |                   0.56 |                        - |
 | DeepSeek V4 Pro   |                  0.87 |                        0.87 |                     0.0087 |                   1.74 |                        - |
+| GPT-5.6 Sol       |                  5.00 |                        6.25 |                       0.50 |                  30.00 |                   10,000 |
+| GPT-5.6 Terra     |                  2.50 |                       3.125 |                       0.25 |                  15.00 |                   10,000 |
+| GPT-5.6 Luna      |                  1.00 |                        1.25 |                       0.10 |                   6.00 |                   10,000 |
 | GPT-5.4           |                  2.50 |                        2.50 |                       0.25 |                  15.00 |                   10,000 |
 | GPT-5.5           |                  5.00 |                        5.00 |                       0.50 |                  30.00 |                   10,000 |
 | GPT-5.5 Instant   |                  5.00 |                        5.00 |                       0.50 |                  30.00 |                   10,000 |
@@ -47,7 +50,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 :::caution Main table scope
-The main pricing table shows the currently effective standard reference price for each model. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, and extended caching options may vary by model provider. If a model has special caching rules, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
+The main pricing table shows the currently effective standard reference price for each model. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
 :::
 
 :::info Pricing note
@@ -56,7 +59,7 @@ Prices shown in the documentation are B.AI standard reference prices for base bi
 
 ### Cache Pricing Notes
 
-- **Cache Write:** The cost when tokens are first written into the prompt cache. Most providers charge no premium and use the same rate as standard input pricing. Claude models apply a 25% premium on cache writes.
+- **Cache Write:** The cost when tokens are first written into the prompt cache. Most providers charge no premium and use the same rate as standard input pricing. Claude models and GPT-5.6 models apply a 25% premium on cache writes; GPT-5.6 long-context cache write rates follow the corresponding long-context input tier.
 - **Cache Read:** The discounted cost when cached tokens are reused in subsequent requests.
 - **Example with Caching:** If you use Claude Sonnet 4.6 with 1000 tokens cached:
   - First request (cache write): `1000 × 3.75 = 3,750 credits`
