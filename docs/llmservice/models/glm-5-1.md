@@ -2,7 +2,7 @@
 
 ## Overview
 
-GLM-5.1 is an open-source flagship AI model developed by Z.ai, formerly Zhipu AI, a Tsinghua University spinoff and the first publicly traded foundation model company. Released on April 7, 2026, it is a post-training upgrade to GLM-5, built on a 754-billion-parameter Mixture-of-Experts architecture with 40 billion active parameters per token. GLM-5.1 is designed for agentic engineering and long-horizon autonomous software development.
+GLM-5.1 is an open-source flagship AI model developed by Z.ai, formerly Zhipu AI, a Tsinghua University spinoff and the first publicly traded foundation model company. Released on April 7, 2026, it is a post-training upgrade in the GLM family, built on a 754-billion-parameter Mixture-of-Experts architecture with 40 billion active parameters per token. GLM-5.1 is designed for agentic engineering and long-horizon autonomous software development.
 
 ## Key Features
 
@@ -23,7 +23,7 @@ GLM-5.1 is an open-source flagship AI model developed by Z.ai, formerly Zhipu AI
 | :----------------- | :----------------------------------------------------------------------------------------------------------- |
 | **Reasoning**      | AIME 2026: 95.3%, GPQA-Diamond: 86.2%, with strong system-level reasoning across planning and iterative debugging |
 | **Coding**         | SWE-Bench Pro 58.4%, CyberGym 68.7%, BrowseComp 68.0%, MCP-Atlas 71.8%                                      |
-| **Multimodal**     | Text only. No image, audio, or video input. A separate GLM-5V-Turbo variant is available for vision tasks   |
+| **Multimodal**     | Text only. No image, audio, or video input. Vision tasks require a separate vision-capable model             |
 | **Response Speed** | Not independently benchmarked yet; expected to be comparable to similar-scale MoE models                    |
 | **Context Window** | 200K tokens                                                                                                  |
 | **Max Output**     | 128K tokens                                                                                                  |
@@ -32,7 +32,7 @@ GLM-5.1 is an open-source flagship AI model developed by Z.ai, formerly Zhipu AI
 
 ### Known Limitations
 
-* Text-only input with no native multimodal support. Vision use cases rely on the separate GLM-5V-Turbo model.
+* Text-only input with no native multimodal support. Vision use cases rely on a separate vision-capable model.
 * Math and science benchmark scores trail some top proprietary models, making it less suitable for purely quantitative research tasks.
 * On broader coding composites such as Terminal-Bench 2.0 plus NL2Repo, Claude Opus 4.6 still leads.
 * Self-hosting requires substantial compute resources because of the 754B parameter count.
