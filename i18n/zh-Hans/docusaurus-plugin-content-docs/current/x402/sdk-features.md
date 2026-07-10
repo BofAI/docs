@@ -7,7 +7,7 @@ description: 'x402 TypeScript SDK 的功能支持矩阵，以颗粒化 @bankofai
 
 本页跟踪 x402 SDK 的功能支持情况。
 
-> **SDK（仅 TypeScript）**：x402 是一个**仅 TypeScript** 的 pnpm/turbo monorepo，以颗粒化的 `@bankofai/x402-*` 包发布。`core` 与 EVM 机制 fork 自 [`x402-foundation/x402`](https://github.com/x402-foundation/x402) 上游；TRON 机制为自研。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。
+> **SDK（仅 TypeScript）**：x402 是一个**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` npm 包发布。源码由 pnpm/turbo monorepo 维护，但应用应依赖已发布的包。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。
 
 ---
 

@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 整个流程共 **4 步**，预计耗时 **15–20 分钟**。
 
 :::info SDK（仅 TypeScript）
-x402 是一个**仅 TypeScript** 的 pnpm/turbo monorepo，以颗粒化的 `@bankofai/x402-*` 包发布。此前的 Python SDK 已移至 `legacy/` 仅供参考。本指南使用 [`x402` 仓库](https://github.com/BofAI/x402) 中的可运行示例（`examples/typescript/`），这些示例链接了仓库内的 SDK 包并从源码运行。
+x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发布。本指南展示如何基于已发布的 npm 包开发；[`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) 中的可运行项目是参考实现，可用于对照和 smoke test。
 :::
 
 ---
@@ -112,39 +112,26 @@ git --version     # 版本控制工具
 
 ---
 
-## 第一步：获取 SDK 与示例
+## 第一步：安装 SDK 包
 
-示例工作区链接了仓库内的 `@bankofai/x402-*` 包并从源码构建，无需发布到 npm 仓库即可获得最新 SDK：
-
-```bash
-git clone https://github.com/BofAI/x402.git
-cd x402/typescript            # pnpm/turbo monorepo 根目录（SDK 包）
-
-# 安装并链接 SDK 包，然后构建其 dist
-pnpm install
-pnpm build
-
-# 示例位于仓库根目录下的独立工作区
-cd ../examples/typescript
-pnpm install                  # 链接仓库内 SDK 包 + 示例依赖
-```
-
-通过启动示例资源服务器来验证安装（它会打印端口和所接受的链）：
+在您的 TypeScript API 项目中安装 server、链和钱包相关包：
 
 ```bash
-pnpm dev:server
+pnpm add @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
 ```
 
-> ✅ **成功：** 服务器启动并打印启动日志。在未设置收款地址时它会以 `❌ No payout address configured (set EVM_ADDRESS and/or TRON_ADDRESS)` 退出——这是预期行为，说明工具链可用。您将在第二步设置这些地址。
+请根据服务框架选择对应包（`@bankofai/x402-express`、`@bankofai/x402-hono`、`@bankofai/x402-fastify` 或 `@bankofai/x402-next`）。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
+
+仓库中的 examples 仍然适合作为可运行参考，但应用开发应依赖已发布的 npm 包，而不是链接 monorepo 源码。
 
 ---
 
 ## 第二步：配置环境变量
 
-主线（facilitator、server、client）三个进程共用一个文件：`.env-exact`。复制模板并填写：
+在您的 API 项目中创建本地 `.env-exact` 文件并填写：
 
 ```bash
-cp .env-exact.example .env-exact
+touch .env-exact
 ```
 
 在编辑器中打开 `.env-exact`，设置钱包与收款变量：

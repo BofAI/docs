@@ -27,7 +27,7 @@ import TabItem from '@theme/TabItem';
 Documentation must reflect code changes immediately. Follow these dependency mappings:
 
 - Changes in `typescript/packages/` → Update TypeScript documentation.
-- Changes in `examples/typescript/` → Update "Getting Started" guides and code samples (quickstarts mirror the examples).
+- Changes in `examples/typescript/` → Check whether "Getting Started" reference snippets need updates. Quickstarts should present published npm packages as the primary development path; examples are reference implementations.
 - Endpoint logic changes → Update "Getting Started" guides.
 - Core mechanism changes → Update `core-concepts` documentation.
 
@@ -36,7 +36,7 @@ Documentation must reflect code changes immediately. Follow these dependency map
 ## 4. Style & Writing Standards
 
 - Use **TypeScript** as the primary example language (the SDK is TypeScript-only; the previous Python SDK lives under `legacy/`).
-- Source code samples from the runnable `examples/typescript/` directory whenever possible.
+- Prefer code samples that work with the published `@bankofai/x402-*` npm packages. Runnable `examples/typescript/` code may be used as a reference implementation when it matches the package API.
 - All API examples **must include complete error handling**.
 - Target audience: developers with **2–5 years of experience**.
 - Use Docusaurus MDX components (`<Tabs>`, `<TabItem>`) for multi-language examples.
@@ -135,7 +135,7 @@ When SDK code changes in any of the following areas, you **must** update `docs/s
 - New signers added under the `*/signers/` directory.
 - New features introduced in the Client or Server components.
 
-> **Note**: The SDK is TypeScript-only. Cross-check documentation against `typescript/packages/` exports and `examples/typescript/` source.
+> **Note**: The SDK is TypeScript-only. Cross-check documentation against the published `@bankofai/x402-*` package API, `typescript/packages/` exports, and `examples/typescript/` reference source.
 
 ---
 

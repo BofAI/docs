@@ -156,14 +156,16 @@ The flow mirrors a human user:
 
 ### Development Guide
 
-#### How do I run x402 locally?
+#### How do I develop with x402 locally?
 
-1. **Clone the repository:** `git clone https://github.com/BofAI/x402.git`
-2. **Install + build:** `cd x402/typescript && pnpm install && pnpm build`
-3. **Configure environment:** `cd examples/typescript && cp .env-exact.example .env-exact` and fill in `AGENT_WALLET_PRIVATE_KEY` + payout addresses
-4. **Start Facilitator:** `pnpm dev:facilitator` (terminal 1, `:4022`)
-5. **Start Server:** `pnpm dev:server` (terminal 2, `:4021`)
-6. **Run Client:** `pnpm dev:client` (terminal 3)
+Install the published packages in your TypeScript app and build against npm, for example:
+
+```bash
+pnpm add @bankofai/x402-fetch @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
+pnpm add @bankofai/x402-core @bankofai/x402-express
+```
+
+Use the framework package that matches your server (`express`, `hono`, `fastify`, or `next`). The [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) workspace is a runnable reference for client → server → facilitator flows, not a prerequisite for application development.
 
 #### Which testnet is recommended?
 

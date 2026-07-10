@@ -10,7 +10,7 @@ This guide is for developers who want to **call an x402-protected API from code*
 > **Testnet first:** This guide uses testnet by default. You can safely follow every step without spending real money.
 
 :::info (TypeScript-only)
-x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide uses the runnable fetch client in the [`x402` repository](https://github.com/BofAI/x402) (`examples/typescript/clients/fetch`), which links the in-repo SDK packages and runs from source.
+x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide shows how to integrate the published npm packages directly; the runnable [`examples/typescript/clients/fetch`](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/fetch) project is a reference implementation, not the required development path.
 :::
 
 ---
@@ -89,27 +89,18 @@ x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packa
 
 ---
 
-## Step One: Get the SDK and Examples
+## Step One: Install the SDK Packages
 
-The examples workspace links the in-repo `@bankofai/x402-*` packages and runs from source:
+Install the published npm packages in your TypeScript application:
 
 ```bash
-git clone https://github.com/BofAI/x402.git
-cd x402/typescript            # the pnpm/turbo monorepo root (SDK packages)
-
-# Install + link the SDK packages, then build their dist
-pnpm install
-pnpm build
-
-# Examples live in a separate workspace at the repo root
-cd ../examples/typescript
-pnpm install                  # links the in-repo SDK packages + example deps
+pnpm add @bankofai/x402-fetch @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
 ```
 
-The fetch client depends on `@bankofai/x402-fetch`, `@bankofai/x402-evm`, `@bankofai/x402-tron`, and `@bankofai/agent-wallet` — all linked automatically by `pnpm install`.
+Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
 
 :::info Wallet Management
-x402 uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet is installed as a dependency of the examples. Private key resolution priority:
+x402 uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet is installed with the package set above. Private key resolution priority:
 1. Encrypted wallet file (imported via the Agent Wallet CLI)
 2. Environment variable `AGENT_WALLET_PRIVATE_KEY`
 
@@ -176,7 +167,7 @@ EVM_RPC_URL=https://bsc-testnet-rpc.publicnode.com
 
 ## Step Three: Write and Run the Client Code
 
-The example fetch client wraps `fetch` so HTTP `402 Payment Required` challenges are paid automatically. Here is the entry point (`examples/typescript/clients/fetch/src/index.ts`), abridged to the essentials:
+The client wraps `fetch` so HTTP `402 Payment Required` challenges are paid automatically. The runnable example at `examples/typescript/clients/fetch/src/index.ts` follows the same structure; the essentials are:
 
 ```typescript
 import { x402Client, wrapFetchWithPayment } from "@bankofai/x402-fetch";
@@ -281,11 +272,13 @@ export async function registerEvm(client: x402Client): Promise<boolean> {
 
 ### Run the client
 
-First, make sure a resource server + facilitator are running (see [Quickstart for Sellers](./quickstart-for-sellers.md)), then from `examples/typescript`:
+First, make sure a resource server + facilitator are running (see [Quickstart for Sellers](./quickstart-for-sellers.md)), then run your client app with the same environment variables:
 
 ```bash
-pnpm dev:client
+pnpm tsx src/index.ts   # or your app's dev script
 ```
+
+If you are comparing against the reference example, run `pnpm dev:client` from `examples/typescript`.
 
 **Expected output:**
 
@@ -358,6 +351,6 @@ Through this guide you:
 
 ## References
 
-- [x402 repository](https://github.com/BofAI/x402) — SDK source and runnable examples (`examples/typescript/`)
-- [Fetch client example](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/fetch) — the client this guide is based on
+- [x402 npm packages](https://www.npmjs.com/package/@bankofai/x402-tron) — published packages for application development
+- [Fetch client example](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/fetch) — reference implementation for the client flow
 - [Agent Wallet](https://github.com/BofAI/agent-wallet) — key custody used by the SDK

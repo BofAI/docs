@@ -139,14 +139,16 @@ x402 支持五种支付方案：
 
 ### 开发指南
 
-#### 如何在本地运行 x402？
+#### 如何在本地开发 x402？
 
-1.  **克隆仓库：** `git clone https://github.com/BofAI/x402.git`
-2.  **安装并构建：** `cd x402/typescript && pnpm install && pnpm build`
-3.  **配置环境：** `cd examples/typescript && cp .env-exact.example .env-exact`，填入 `AGENT_WALLET_PRIVATE_KEY` 与收款地址
-4.  **启动 Facilitator：** `pnpm dev:facilitator`（终端 1，`:4022`）
-5.  **启动服务端：** `pnpm dev:server`（终端 2，`:4021`）
-6.  **运行客户端：** `pnpm dev:client`（终端 3）
+在您的 TypeScript 应用中安装已发布的 npm 包并基于这些包开发，例如：
+
+```bash
+pnpm add @bankofai/x402-fetch @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
+pnpm add @bankofai/x402-core @bankofai/x402-express
+```
+
+请根据服务框架选择对应包（`express`、`hono`、`fastify` 或 `next`）。[`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) 工作区是 client → server → facilitator 流程的可运行参考，不是应用开发的前置条件。
 
 #### 推荐使用哪个测试网？
 

@@ -7,7 +7,7 @@ description: 'Feature support matrix for the x402 TypeScript SDK, published as g
 
 This page tracks the feature support of the x402 SDK.
 
-> **SDK (TypeScript-only)**: x402 is a **TypeScript-only** pnpm/turbo monorepo published as granular `@bankofai/x402-*` packages. The `core` and EVM mechanism fork the [`x402-foundation/x402`](https://github.com/x402-foundation/x402) upstream; the TRON mechanism is in-house. The previous-generation Python + TypeScript SDK lives under `legacy/` for reference.
+> **SDK (TypeScript-only)**: x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` npm packages. The source is maintained in a pnpm/turbo monorepo, but applications should depend on the published packages. The previous-generation Python + TypeScript SDK lives under `legacy/` for reference.
 
 ---
 

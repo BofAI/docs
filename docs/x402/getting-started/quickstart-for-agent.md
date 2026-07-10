@@ -10,7 +10,7 @@ This guide walks you through: setting up a dedicated agent wallet, configuring c
 ---
 
 :::info SDK (TypeScript-only)
-x402 is a **TypeScript-only** SDK. The `x402-payment` skill wraps the new `@bankofai/x402-*` packages and uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) for key custody — the wallet/private-key setup in this guide is unchanged. You can also drive payments directly from the runnable [MCP examples](https://github.com/BofAI/x402/tree/main/examples/typescript) (`servers/mcp` + `clients/mcp`).
+x402 is a **TypeScript-only** SDK published as `@bankofai/x402-*` npm packages. The `x402-payment` skill wraps those packages and uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) for key custody — the wallet/private-key setup in this guide is unchanged. The runnable [MCP examples](https://github.com/BofAI/x402/tree/main/examples/typescript) (`servers/mcp` + `clients/mcp`) are reference implementations.
 :::
 
 ## Prerequisites
@@ -136,9 +136,11 @@ For a detailed walkthrough of the interactive installation process, see the [Ski
 
 After completing the setup, follow these steps to verify your agent can complete payments autonomously:
 
-### 3.1 Test with a Local Paid Endpoint
+### 3.1 Test with a Paid Endpoint
 
-First, get the SDK and examples (requires **Node.js 22+** and **pnpm 11.1+**):
+Point your agent at an x402-protected endpoint built with the published npm packages, for example a service created from [Quickstart for Sellers](./quickstart-for-sellers.md).
+
+If you do not have a paid endpoint yet, you can run the repository examples as a local reference environment (requires **Node.js 22+** and **pnpm 11.1+**):
 
 ```bash
 git clone https://github.com/BofAI/x402.git
@@ -150,11 +152,11 @@ pnpm build
 
 # Examples live in a separate workspace at the repo root
 cd ../examples/typescript
-pnpm install                  # links the in-repo SDK packages + example deps
+pnpm install                  # installs the reference example dependencies
 cp .env-exact.example .env-exact   # fill AGENT_WALLET_PRIVATE_KEY + payout addresses
 ```
 
-Then start the facilitator and the resource server **in two separate terminals** (both from `examples/typescript`):
+Then start the reference facilitator and resource server **in two separate terminals** (both from `examples/typescript`):
 
 ```bash
 # Terminal 1 — facilitator (verifies + settles on-chain)

@@ -23,13 +23,13 @@ import TabItem from '@theme/TabItem';
 文档维护需遵循以下依赖关系，确保代码变更即时反映在文档中：
 
 - `typescript/packages/` 目录下的变更 $\rightarrow$ 需同步更新 TypeScript 相关文档。
-- `examples/typescript/` 目录下的变更 $\rightarrow$ 需更新「快速入门」指南与代码示例（快速入门以示例为蓝本）。
+- `examples/typescript/` 目录下的变更 $\rightarrow$ 检查「快速入门」中的参考代码是否需要更新。快速入门应以已发布 npm 包作为主要开发路径，examples 作为参考实现。
 - 端点逻辑的变更 $\rightarrow$ 需更新“快速入门”指南。
 - 底层机制的变更 $\rightarrow$ 需更新 `core-concepts` 文档。
 
 ## 4. 风格与规范 
 - 以 **TypeScript** 作为主要代码示例（SDK 仅 TypeScript；此前的 Python SDK 已移至 `legacy/`）。
-- 尽可能引用 `examples/typescript/` 目录中的可运行示例源码。
+- 优先提供可直接基于已发布 `@bankofai/x402-*` npm 包运行的代码示例。`examples/typescript/` 中的可运行代码可作为与包 API 一致时的参考实现。
 - 所有 API 调用示例必须包含完整的错误处理逻辑。
 - 内容撰写面向具有 **2–5 年经验** 的开发者。
 - 必须使用 Docusaurus MDX 组件（`<Tabs>`、`<TabItem>`）来展示多语言代码。
@@ -117,7 +117,7 @@ import TabItem from '@theme/TabItem';
 - `*/signers/` 目录中新增了签名器。
 - 客户端 (Client) 或服务端 (Server) 新增了功能特性。
 
-**注意**：SDK 仅 TypeScript。更新文档时需对照 `typescript/packages/` 的导出与 `examples/typescript/` 的源码交叉检查。
+**注意**：SDK 仅 TypeScript。更新文档时需对照已发布的 `@bankofai/x402-*` 包 API、`typescript/packages/` 的导出与 `examples/typescript/` 的参考源码交叉检查。
 
 
 ## 12.开发常用命令 
@@ -135,4 +135,3 @@ yarn build
 # 本地服务生产构建
 yarn serve
 ```
-

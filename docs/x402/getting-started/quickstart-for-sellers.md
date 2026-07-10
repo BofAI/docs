@@ -16,7 +16,7 @@ After completing this guide, you'll have a **service that charges for API calls*
 The entire flow takes **4 steps**, estimated time: **15–20 minutes**.
 
 :::info (TypeScript-only)
-x402 is a **TypeScript-only** pnpm/turbo monorepo published as granular `@bankofai/x402-*` packages. The previous Python SDK lives under `legacy/` for reference. This guide uses the runnable examples in the [`x402` repository](https://github.com/BofAI/x402) (`examples/typescript/`), which link the in-repo SDK packages and run from source.
+x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide shows how to build with the published npm packages; the runnable [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) projects are reference implementations for comparison and smoke testing.
 :::
 
 ---
@@ -112,39 +112,26 @@ You need a blockchain wallet address to receive tokens from users. Follow the st
 
 ---
 
-## Step 1: Get the SDK and Examples
+## Step 1: Install the SDK Packages
 
-The examples workspace links the in-repo `@bankofai/x402-*` packages and builds from source, so you get the latest SDK without publishing to a registry.
-
-```bash
-git clone https://github.com/BofAI/x402.git
-cd x402/typescript            # the pnpm/turbo monorepo root (SDK packages)
-
-# Install + link the SDK packages, then build their dist
-pnpm install
-pnpm build
-
-# Examples live in a separate workspace at the repo root
-cd ../examples/typescript
-pnpm install                  # links the in-repo SDK packages + example deps
-```
-
-Verify the install by starting the example resource server (it will print a port and the chains it accepts):
+Install the server, chain, and wallet packages in your TypeScript API project:
 
 ```bash
-pnpm dev:server
+pnpm add @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
 ```
 
-> ✅ **Success:** The server boots and prints a startup line. With no payout address set yet it exits with `❌ No payout address configured (set EVM_ADDRESS and/or TRON_ADDRESS)` — that's expected and confirms the toolchain works. You'll set those in Step 2.
+Use the framework package that matches your server (`@bankofai/x402-express`, `@bankofai/x402-hono`, `@bankofai/x402-fastify`, or `@bankofai/x402-next`). Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
+
+The repository examples remain useful as working references, but application development should depend on the published packages instead of linking the monorepo source.
 
 ---
 
 ## Step 2: Configure Your Environment
 
-All three processes in the main line (facilitator, server, client) share one file: `.env-exact`. Copy the template and fill it in:
+Create a local `.env-exact` file for your API and fill it in:
 
 ```bash
-cp .env-exact.example .env-exact
+touch .env-exact
 ```
 
 Open `.env-exact` in your editor and set the wallet + payout variables:
