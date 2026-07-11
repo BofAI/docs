@@ -16,7 +16,7 @@ After completing this guide, you'll have a **service that charges for API calls*
 The entire flow takes **4 steps**, estimated time: **15–20 minutes**.
 
 :::info (TypeScript-only)
-x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide shows how to build with the published npm packages; the runnable [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) projects are reference implementations for comparison and smoke testing.
+x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide shows how to build with the published npm packages.
 :::
 
 ---
@@ -114,153 +114,90 @@ You need a blockchain wallet address to receive tokens from users. Follow the st
 
 ## Step 1: Install the SDK Packages
 
-Install the server, chain, and wallet packages in your TypeScript API project:
+Install the Express adapter and TRON payment scheme in your TypeScript API project:
 
 ```bash
-pnpm add @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
+pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron
 ```
 
 Use the framework package that matches your server (`@bankofai/x402-express`, `@bankofai/x402-hono`, `@bankofai/x402-fastify`, or `@bankofai/x402-next`). Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
 
-The repository examples remain useful as working references, but application development should depend on the published packages instead of linking the monorepo source.
+If you want a more complete client → server → facilitator example, refer to the repository [examples](https://github.com/BofAI/x402/tree/main/examples/typescript). Application development should still depend on the published packages instead of linking the monorepo source.
 
 ---
 
-## Step 2: Configure Your Environment
+## Step 2: Prepare Configuration Values
 
-Create a local `.env-exact` file for your API and fill it in:
+The minimal server needs only two values:
 
-```bash
-touch .env-exact
-```
+| Configuration | Description | Example |
+|------|------|------|
+| `HTTPFacilitatorClient.url` | Payment verification and settlement service URL | `https://facilitator.example.com` |
+| `payTo` | Your TRON receiving address | `T...` |
 
-Open `.env-exact` in your editor and set the wallet + payout variables:
+> 💡 **Keyless server:** The resource server never signs or holds a private key — it only advertises your public receiving address (`payTo`). Signing and settlement happen on the client and facilitator side.
 
-```bash
-# ── SHARED · client + facilitator (the same key pays and settles here) ────
-AGENT_WALLET_PRIVATE_KEY=0x...   # your test wallet private key
-
-# TronGrid API key — both client and facilitator touch TRON. Optional on testnet.
-TRON_GRID_API_KEY=
-
-# ── SERVER · the resource provider (this is what YOU configure) ───────────
-EVM_ADDRESS=0x...   # your BSC payout address (eip155:97)
-TRON_ADDRESS=T...    # your TRON payout address (tron:nile)
-
-# Where the server binds, and where it reaches the facilitator.
-SERVER_PORT=4021
-FACILITATOR_URL=http://localhost:4022
-
-# ── FACILITATOR · settlement ─────────────────────────────────────────────
-FACILITATOR_PORT=4022
-```
-
-> 💡 **Keyless server:** The resource server never signs or holds a key — it only advertises your public payout address (`EVM_ADDRESS` / `TRON_ADDRESS`). Signing and settlement happen at the client and facilitator. `AGENT_WALLET_PRIVATE_KEY` is used by the client (to pay) and the facilitator (to settle), not by the server.
-
-> ⚠️ **Security reminder:** Keep your private key only in `.env` (which is gitignored) or as an environment variable. **Never commit a file containing a private key to Git or share it with anyone.**
+> ⚠️ **Security reminder:** Keep your private key only in a local env file or as an environment variable. **Never commit a file containing a private key to Git or share it with anyone.**
 
 ---
 
 ## Step 3: Create a Payment-Protected API Server
 
-The example resource server is an Express app that protects `GET /weather` behind x402 payment. It is **chain-agnostic** — each chain's tokens and `accepts` entries live in `src/chains/{evm,tron}.ts`, and a chain is advertised only when its `*_ADDRESS` is set.
-
-Here is the server entry point (`examples/typescript/servers/express/src/index.ts`):
+Here is a minimal Express resource server. `GET /credit` requires a `1 USDT` payment before it returns the credit payload.
 
 ```typescript
 import express from "express";
-import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
 import { createResourceServer } from "@bankofai/x402-core";
+import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
 import {
   x402HTTPResourceServer,
   paymentMiddlewareFromHTTPServer,
 } from "@bankofai/x402-express";
+import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
 
-import { hasEvm, registerEvm, evmAccepts, evmExtensions } from "./chains/evm.js";
-import { hasTron, registerTron, tronAccepts } from "./chains/tron.js";
+const server = createResourceServer(
+  new HTTPFacilitatorClient({
+    url: "https://facilitator.example.com",
+  })
+);
 
-const PORT = parseInt(process.env.SERVER_PORT || "4021", 10);
-const FACILITATOR_URL = process.env.FACILITATOR_URL || "http://localhost:4022";
+server.register("tron:nile", new ExactTronScheme());
 
-// The server delegates verify/settle to a facilitator over HTTP.
-const facilitatorClient = new HTTPFacilitatorClient({ url: FACILITATOR_URL });
-// Logging pre-attached: verify/settle results print via the SDK logger.
-const resourceServer = createResourceServer(facilitatorClient);
-
-// Register each chain (and advertise its tokens) only when its payout is set.
-type Accept = ReturnType<typeof evmAccepts>[number] | ReturnType<typeof tronAccepts>[number];
-const accepts: Accept[] = [];
-let extensions: Record<string, unknown> = {};
-if (hasEvm()) {
-  registerEvm(resourceServer);
-  accepts.push(...evmAccepts());
-  extensions = { ...extensions, ...evmExtensions() };
-}
-if (hasTron()) {
-  registerTron(resourceServer);
-  accepts.push(...tronAccepts());
-}
-
-// The route you protect — `accepts` is the price list, `extensions` carries
-// the gas-sponsoring hint for plain-ERC20 (permit2) tokens like BSC USDC.
-const routes = {
-  "GET /weather": {
-    accepts,
-    extensions,
-    description: "Current weather (paid)",
-    mimeType: "application/json",
-  },
-};
-
-const httpServer = new x402HTTPResourceServer(resourceServer, routes);
-
-const app = express();
-app.use(paymentMiddlewareFromHTTPServer(httpServer));
-
-app.get("/weather", (_req, res) => {
-  res.json({ report: { weather: "sunny", temperature: 70 } });
-});
-
-app.listen(PORT, () => {
-  console.log(`🌤️  Resource server on http://localhost:${PORT}`);
-});
+express()
+  .use(
+    paymentMiddlewareFromHTTPServer(
+      new x402HTTPResourceServer(server, {
+        "GET /credit": {
+          accepts: [
+            {
+              scheme: "exact",
+              network: "tron:nile",
+              payTo: "T...",
+              price: "1 USDT",
+            },
+          ],
+        },
+      })
+    )
+  )
+  .get("/credit", (_req, res) =>
+    res.json({
+      status: "success",
+      credit: 1000000,
+    })
+  )
+  .listen(4021);
 ```
-
-### How pricing works per chain
-
-Each chain module builds the `accepts` entries (price + `payTo` + token). The two chain families price differently:
-
-- **TRON** uses a `"<amount> <symbol>"` string, so the scheme resolves each token from its registry:
-  ```typescript
-  // src/chains/tron.ts — USDT and USDD on tron:nile
-  export function tronAccepts() {
-    const payTo = process.env.TRON_ADDRESS as string;
-    return ["tron:nile", "tron:mainnet"].flatMap((network) =>
-      ["0.001 USDT", "0.001 USDD"].map((price) => ({ scheme: "exact", network, payTo, price })),
-    );
-  }
-  ```
-- **EVM** advertises explicit `{ amount, asset, extra }` objects, because BSC has no default-token registry entry. ERC-3009 tokens (e.g. DHLU) carry their domain `name`/`version`; plain ERC-20 tokens (e.g. USDC/USDT) set `extra.assetTransferMethod: "permit2"` and need a one-time Permit2 `approve`:
-  ```typescript
-  // src/chains/evm.ts
-  const EVM_TOKENS = {
-    "eip155:97": [
-      { asset: "0x375cADdd…B816", amount: "1000", extra: { name: "DA HULU", version: "1" } },       // DHLU, ERC-3009
-      { asset: "0x64544969…8930", amount: "1000000000000000", extra: { assetTransferMethod: "permit2" } }, // USDC
-      { asset: "0x337610d2…4dDd", amount: "1000000000000000", extra: { assetTransferMethod: "permit2" } }, // USDT
-    ],
-  };
-  ```
 
 **Key configuration parameters:**
 
 | Parameter | Description | Example |
 |------|------|--------|
-| `EVM_ADDRESS` / `TRON_ADDRESS` | Your receiving (payout) wallet address | `0xAbc…` / `TXyz…` |
-| `accepts[].price` | Price per request (token amount, or `"<amount> <symbol>"`) | `"0.001 USDT"` |
-| `accepts[].network` | Network to use | Testnet: `tron:nile` / `eip155:97` |
+| `payTo` | Your receiving wallet address | `T...` |
+| `accepts[].price` | Price per request | `"1 USDT"` |
+| `accepts[].network` | Network to use | Testnet: `tron:nile` |
 | `accepts[].scheme` | Payment scheme | `"exact"` |
-| `routes` | Map of `"METHOD /path"` → `{ accepts, extensions, description, mimeType }` | `"GET /weather"` |
+| `routes` | Map of `"METHOD /path"` → `{ accepts }` | `"GET /credit"` |
 
 **How it works:** When an unpaid request reaches your API, the middleware automatically returns an HTTP `402 Payment Required` response with payment instructions. The client SDK pays automatically and re-sends the request — the process is nearly invisible to the end user.
 
@@ -270,7 +207,7 @@ Each chain module builds the `accepts` entries (price + `payTo` + token). The tw
 
 ### What is a Facilitator?
 
-A Facilitator is an **automated settlement service**: when someone pays your API, the Facilitator verifies the payment is genuine and settles it on-chain, ensuring funds reach your payout wallet. The server you built in Step 3 only points at a Facilitator via `FACILITATOR_URL` — it does not settle on its own.
+A Facilitator is an **automated settlement service**: when someone pays your API, the Facilitator verifies the payment is genuine and settles it on-chain, ensuring funds reach your payout wallet. The server you built in Step 3 only points at a Facilitator through `HTTPFacilitatorClient` — it does not settle on its own.
 
 **You must have a Facilitator reachable before starting your API server.**
 
@@ -290,10 +227,14 @@ The officially hosted Facilitator service requires **no infrastructure to mainta
 
 #### 4.1 Configure the Service Endpoint
 
-Set `FACILITATOR_URL` in your `.env-exact` to the official endpoint:
+Set the `url` in `HTTPFacilitatorClient` to the official endpoint:
 
-```
-FACILITATOR_URL=https://facilitator.bankofai.io
+```typescript
+const server = createResourceServer(
+  new HTTPFacilitatorClient({
+    url: "https://facilitator.bankofai.io",
+  })
+);
 ```
 
 This is the address your x402 server uses to verify and settle payments — **for API calls only**, no need to open it in a browser.
@@ -310,10 +251,9 @@ With an API Key, the rate limit increases to **1,000 requests/minute**, sufficie
 
 #### 4.3 Wire the API Key into Your Server
 
-The official key is sent as the `X-API-KEY` header on every facilitator call. The example server already supports it via `FACILITATOR_API_KEY`:
+The official key is sent as the `X-API-KEY` header on every facilitator call. Keep it in an environment variable or secret manager, and pass it with facilitator requests in production.
 
 ```bash
-# Append to .env-exact
 FACILITATOR_API_KEY=paste_your_api_key_here
 ```
 
@@ -386,26 +326,20 @@ pnpm dev:facilitator
 
 ### 5.1 Start the API Server
 
-Open a **new terminal window** (do not close the facilitator), and from `examples/typescript` run:
+Open a **new terminal window** (do not close the facilitator), and run your server entry point from your API project:
 
 ```bash
-pnpm dev:server
+pnpm tsx src/server.ts
 ```
 
-**After a successful start, you should see:**
-
-```
-🌤️  Resource server on http://localhost:4021  (evm=true, tron=true) → facilitator http://localhost:4022
-```
-
-> ✅ **Success:** Terminal shows the resource server on `http://localhost:4021`
+> ✅ **Success:** The process keeps running and the resource server listens on `http://localhost:4021`
 
 ### 5.2 Test Unpaid Access (Should Be Rejected)
 
 In any terminal, run:
 
 ```bash
-curl http://localhost:4021/weather
+curl http://localhost:4021/credit
 ```
 
 **Expected result:** The server returns an HTTP `402` response with the payment requirements (an `accepts` array listing scheme, network, price, and your payout address).
@@ -414,31 +348,11 @@ curl http://localhost:4021/weather
 
 ### 5.3 Test the Full Payment Flow
 
-To test the complete pay → receive content flow, start the example client in a **third terminal**. From `examples/typescript`, first set which chain/token to pay:
+To test the complete pay → receive content flow, use the minimal client in [Quickstart for Human Users](./quickstart-for-human.md). Point it at `http://localhost:4021/credit`; the expected response is:
 
-```bash
-# Append to .env-exact (or export in the client terminal)
-PAY_TARGETS=tron:nile@USDT        # TRON Nile USDT; or eip155:97@DHLU for BSC
-RESOURCE_URL=http://localhost:4021/weather
+```json
+{ "status": "success", "credit": 1000000 }
 ```
-
-Then run:
-
-```bash
-pnpm dev:client
-```
-
-**Expected output:**
-
-```
-→ [tron:nile@USDT] GET http://localhost:4021/weather
-← 200 OK
-{ "report": { "weather": "sunny", "temperature": 70 } }
-```
-
-> ✅ **Success:** The client automatically detected the `402`, signed a payment, settled on-chain via the facilitator, and received the protected content.
-
-> 💡 The client wraps `fetch` with `wrapFetchWithPayment(fetch, client)` so 402 challenges are paid automatically — see [Quickstart for Human Users](./quickstart-for-human.md) for the client-side walkthrough.
 
 ---
 
@@ -446,11 +360,10 @@ pnpm dev:client
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
-| `No payout address configured` | Neither `EVM_ADDRESS` nor `TRON_ADDRESS` is set | Set at least one in `.env-exact` and restart the server |
-| `Failed to fetch` / connection refused | Facilitator or server not running | Start the facilitator first (`pnpm dev:facilitator`), then the server (`pnpm dev:server`) |
-| Client `server offered no payment option matching "…"` | `PAY_TARGETS` doesn't match an advertised option | Check the server's `accepts` (network + token) and align `PAY_TARGETS`, e.g. `tron:nile@USDT` or `eip155:97@DHLU` |
+| `Failed to fetch` / connection refused | Facilitator or server not running | Start the facilitator first, then run your API server entry point |
+| Client `server offered no payment option matching "…"` | The client selected a network or token that the server does not advertise | Check the server's `accepts` (network + token), e.g. `tron:nile` + `USDT` |
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` under `npx tsx` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
-| `UnsupportedNetworkError` / `No mechanism registered` | The network in `PAY_TARGETS` has no registered scheme | Ensure the client's `EVM_NETWORKS`/`TRON_NETWORKS` includes your target, and the wallet for that chain resolved |
+| `UnsupportedNetworkError` / `No mechanism registered` | The selected client network has no registered scheme | Ensure the client includes your target network, such as `tron:nile` |
 | `Insufficient balance` / allowance error | Test wallet lacks test tokens, or Permit2 allowance too low | Claim test tokens from the faucet; the client auto-approves Permit2 on first payment |
 | `Connection timeout` | Network or request timeout | Check your connection, or set a reliable `EVM_RPC_URL` (e.g. `https://bsc-testnet-rpc.publicnode.com`) |
 
@@ -462,15 +375,15 @@ After fully validating on the testnet, only a few steps are needed to go live an
 
 ### 1. Point the Client and Server at Mainnet
 
-The example registers testnet **and** mainnet in the same tables — no uncommenting needed. Switch by setting mainnet values in `.env-exact`:
+Switch the server registration and receiving address to mainnet:
 
-```bash
-# Server payout addresses → your mainnet wallets
-EVM_ADDRESS=0xYourMainnetBscAddress
-TRON_ADDRESS=TYourMainnetTronAddress
+```typescript
+server.register("tron:mainnet", new ExactTronScheme());
 
-# Client pays on mainnet
-PAY_TARGETS=tron:mainnet@USDT      # or eip155:56@USDT
+// In accepts, update:
+network: "tron:mainnet",
+payTo: "TYourMainnetTronAddress",
+price: "1 USDT",
 ```
 
 ### 2. Set a Reliable EVM RPC
@@ -493,7 +406,7 @@ pnpm dev:facilitator
 
 ### 4. (Official Facilitator) No Local Change Needed
 
-If you use the official facilitator, keep `FACILITATOR_URL=https://facilitator.bankofai.io` and your `FACILITATOR_API_KEY`. Only your server's payout addresses move to mainnet.
+If you use the official facilitator, keep `HTTPFacilitatorClient`'s `url` as `https://facilitator.bankofai.io` and continue using your `FACILITATOR_API_KEY`. Only your server's payout addresses move to mainnet.
 
 ### 5. Confirm and Do a Small Real Test
 
@@ -509,7 +422,7 @@ If you use the official facilitator, keep `FACILITATOR_URL=https://facilitator.b
 
 ## Next Steps
 
-- Explore the [runnable examples](https://github.com/BofAI/x402/tree/main/examples/typescript) for the full client → server → facilitator loop, plus the `gasfree`, `upto`, and `batch-settlement` scenarios
+- If you want a more complete example, refer to the repository [examples](https://github.com/BofAI/x402/tree/main/examples/typescript), which include the client → server → facilitator loop plus the `gasfree`, `upto`, and `batch-settlement` scenarios
 - Read the [core concepts](../core-concepts/http-402.md) to understand how the x402 protocol works
 - Want detailed configuration for both Facilitator options? See the [Facilitator documentation](../core-concepts/facilitator.md)
 - Experience calling a paid API from the [user perspective](./quickstart-for-human.md), or configure an [AI agent](./quickstart-for-agent.md) to call your service automatically
@@ -523,8 +436,8 @@ Congratulations 🎉! You've completed the Seller Quickstart. Here's everything 
 | Step | What You Did |
 |------|----------|
 | **Prerequisites** | Created a receiving wallet, obtained test tokens, reviewed configuration parameters |
-| **Step 1** | Cloned the SDK repo and installed the example workspace |
-| **Step 2** | Configured `.env-exact` with your wallet and payout addresses |
+| **Step 1** | Installed the x402 SDK packages |
+| **Step 2** | Prepared the facilitator URL and receiving address |
 | **Step 3** | Ran a keyless Express resource server with payment protection |
 | **Step 4** | Connected to a Facilitator (official or self-hosted) for settlement |
 | **Step 5** | Verified payment protection and the full client → server → facilitator payment flow |
