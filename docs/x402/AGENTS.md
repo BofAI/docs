@@ -68,7 +68,7 @@ Documentation must reflect code changes immediately. Follow these dependency map
 <Tabs>
   <TabItem value="TRON" label="TRON">
 
-- **Network Identifier**: Must follow the `tron:<network>` format (supports `mainnet`, `nile`, `shasta`).
+- **Network Identifier**: Must follow the `tron:<hex_chain_id>` CAIP-2 format. Use exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NILE`, `TRON_SHASTA`) instead of hard-coding names.
 - **Signature Standard**: TRON signatures must reference the **TIP-712** standard (do not confuse with EIP-712).
 - **Address Format**: Token addresses must use Base58 encoding (must start with `T`).
 - **Node Access**: Must connect to TronGrid endpoints.

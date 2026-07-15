@@ -62,7 +62,7 @@ For a paid POST endpoint, or to pin the payment chain, token, and scheme, pass t
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
   --method POST \
-  --network tron:mainnet \
+  --network tron:0x2b6653dc \
   --token USDT \
   --scheme exact \
   --max-amount 0.000001 \
@@ -73,7 +73,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | Flag | Purpose |
 |---|---|
 | `--method` | HTTP method (defaults to `GET`) |
-| `--network` | CAIP-2 payment chain, e.g. `tron:mainnet`, `eip155:56` |
+| `--network` | CAIP-2 payment chain, e.g. `tron:0x2b6653dc`, `eip155:56` |
 | `--token` | Settlement token, e.g. `USDT` |
 | `--scheme` | x402 payment scheme declared by the route, e.g. `exact` |
 | `--max-amount` | Spend ceiling in USD; the call aborts if the quote exceeds it |

@@ -55,7 +55,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   "accepts": [
     {
       "scheme": "exact",
-      "network": "tron:nile",
+      "network": "tron:0xcd8690dc",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
       "payTo": "<SELLER_TRON_ADDRESS>",
@@ -128,7 +128,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `resource`          | 关于请求资源的信息                                |
 | `accepts`           | 接受的支付选项数组                                |
 | `scheme`            | 支付方案（`exact`、`upto`、`batch-settlement`、`auth-capture`、`exact_gasfree`）  |
-| `network`           | 网络标识符（`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`） |
+| `network`           | 网络标识符（`tron:0xcd8690dc`, `tron:0x2b6653dc`, `eip155:56`, `eip155:97`） |
 | `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
 | `asset`             | TRC-20/BEP-20 代币合约地址                               |
 | `payTo`             | 卖家的钱包地址                              |
@@ -148,7 +148,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   "x402Version": 2,
   "accepted": {
     "scheme": "exact",
-    "network": "tron:nile",
+    "network": "tron:0xcd8690dc",
     "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
     "amount": "100",
     "payTo": "<SELLER_TRON_ADDRESS>",

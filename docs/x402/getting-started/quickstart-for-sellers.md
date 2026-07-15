@@ -107,8 +107,8 @@ You need a blockchain wallet address to receive tokens from users. Follow the st
 
 **Testnet vs. Mainnet:**
 
-- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:nile` / `eip155:97`
-- **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:mainnet` / `eip155:56`
+- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:0xcd8690dc` / `eip155:97`
+- **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:0x2b6653dc` / `eip155:56`
 
 ---
 
@@ -153,6 +153,7 @@ import {
   x402HTTPResourceServer,
   paymentMiddlewareFromHTTPServer,
 } from "@bankofai/x402-express";
+import { TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
 
 const server = createResourceServer(
@@ -161,7 +162,7 @@ const server = createResourceServer(
   })
 );
 
-server.register("tron:nile", new ExactTronScheme());
+server.register(TRON_NILE, new ExactTronScheme());
 
 express()
   .use(
@@ -171,7 +172,7 @@ express()
           accepts: [
             {
               scheme: "exact",
-              network: "tron:nile",
+              network: TRON_NILE,
               payTo: "T...",
               price: "1 USDT",
             },
@@ -195,7 +196,7 @@ express()
 |------|------|--------|
 | `payTo` | Your receiving wallet address | `T...` |
 | `accepts[].price` | Price per request | `"1 USDT"` |
-| `accepts[].network` | Network to use | Testnet: `tron:nile` |
+| `accepts[].network` | Network to use | Testnet: `TRON_NILE` (`tron:0xcd8690dc`) |
 | `accepts[].scheme` | Payment scheme | `"exact"` |
 | `routes` | Map of `"METHOD /path"` → `{ accepts }` | `"GET /credit"` |
 
@@ -311,7 +312,7 @@ pnpm dev:facilitator
 
 ```
 [evm] facilitator registered eip155:97 (0x…)
-[tron] facilitator registered tron:nile (T…)
+[tron] facilitator registered tron:0xcd8690dc (T…)
 🚀 Facilitator on http://localhost:4022  (evm=true, tron=true)
 ```
 
@@ -361,9 +362,9 @@ To test the complete pay → receive content flow, use the minimal client in [Qu
 | Problem | Cause | Solution |
 |---------|-------|----------|
 | `Failed to fetch` / connection refused | Facilitator or server not running | Start the facilitator first, then run your API server entry point |
-| Client `server offered no payment option matching "…"` | The client selected a network or token that the server does not advertise | Check the server's `accepts` (network + token), e.g. `tron:nile` + `USDT` |
+| Client `server offered no payment option matching "…"` | The client selected a network or token that the server does not advertise | Check the server's `accepts` (network + token), e.g. `TRON_NILE` + `USDT` |
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` under `npx tsx` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
-| `UnsupportedNetworkError` / `No mechanism registered` | The selected client network has no registered scheme | Ensure the client includes your target network, such as `tron:nile` |
+| `UnsupportedNetworkError` / `No mechanism registered` | The selected client network has no registered scheme | Ensure the client includes your target network, such as `TRON_NILE` |
 | `Insufficient balance` / allowance error | Test wallet lacks test tokens, or Permit2 allowance too low | Claim test tokens from the faucet; the client auto-approves Permit2 on first payment |
 | `Connection timeout` | Network or request timeout | Check your connection, or set a reliable `EVM_RPC_URL` (e.g. `https://bsc-testnet-rpc.publicnode.com`) |
 
@@ -378,10 +379,12 @@ After fully validating on the testnet, only a few steps are needed to go live an
 Switch the server registration and receiving address to mainnet:
 
 ```typescript
-server.register("tron:mainnet", new ExactTronScheme());
+import { TRON_MAINNET } from "@bankofai/x402-tron";
+
+server.register(TRON_MAINNET, new ExactTronScheme());
 
 // In accepts, update:
-network: "tron:mainnet",
+network: TRON_MAINNET,
 payTo: "TYourMainnetTronAddress",
 price: "1 USDT",
 ```
@@ -396,7 +399,7 @@ EVM_RPC_URL=https://bsc-rpc.publicnode.com
 
 ### 3. (Self-Hosted) Switch the Facilitator to Mainnet
 
-The facilitator's `TRON_NETWORKS` already includes `tron:mainnet`, and `EVM_NETWORKS` includes `eip155:56`. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
+The facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:0x2b6653dc`), and `EVM_NETWORKS` includes `eip155:56`. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
 
 ```bash
 pnpm dev:facilitator

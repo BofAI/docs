@@ -107,8 +107,8 @@ git --version     # 版本控制工具
 
 **测试网 vs. 主网：**
 
-- **测试网**：使用免费测试代币，不涉及真实资金，适合开发调试。网络标识：`tron:nile` / `eip155:97`
-- **主网**：涉及真实支付，上线时使用。网络标识：`tron:mainnet` / `eip155:56`
+- **测试网**：使用免费测试代币，不涉及真实资金，适合开发调试。网络标识：`tron:0xcd8690dc` / `eip155:97`
+- **主网**：涉及真实支付，上线时使用。网络标识：`tron:0x2b6653dc` / `eip155:56`
 
 ---
 
@@ -153,6 +153,7 @@ import {
   x402HTTPResourceServer,
   paymentMiddlewareFromHTTPServer,
 } from "@bankofai/x402-express";
+import { TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
 
 const server = createResourceServer(
@@ -161,7 +162,7 @@ const server = createResourceServer(
   })
 );
 
-server.register("tron:nile", new ExactTronScheme());
+server.register(TRON_NILE, new ExactTronScheme());
 
 express()
   .use(
@@ -171,7 +172,7 @@ express()
           accepts: [
             {
               scheme: "exact",
-              network: "tron:nile",
+              network: TRON_NILE,
               payTo: "T...",
               price: "1 USDT",
             },
@@ -195,7 +196,7 @@ express()
 |------|------|--------|
 | `payTo` | 您的收款钱包地址 | `T...` |
 | `accepts[].price` | 每次请求价格 | `"1 USDT"` |
-| `accepts[].network` | 使用的网络 | 测试网：`tron:nile` |
+| `accepts[].network` | 使用的网络 | 测试网：`TRON_NILE`（`tron:0xcd8690dc`） |
 | `accepts[].scheme` | 付款方式 | `"exact"` |
 | `routes` | `"METHOD /path"` → `{ accepts }` 的映射 | `"GET /credit"` |
 
@@ -311,7 +312,7 @@ pnpm dev:facilitator
 
 ```
 [evm] facilitator registered eip155:97 (0x…)
-[tron] facilitator registered tron:nile (T…)
+[tron] facilitator registered tron:0xcd8690dc (T…)
 🚀 Facilitator on http://localhost:4022  (evm=true, tron=true)
 ```
 
@@ -367,9 +368,9 @@ curl http://localhost:4021/credit
 | 问题 | 原因 | 解决方案 |
 |---------|-------|----------|
 | `Failed to fetch` / connection refused | facilitator 或 server 未运行 | 先启动 facilitator，再运行您的 API server 入口文件 |
-| client `server offered no payment option matching "…"` | 客户端选择的网络或代币与 server 公布的选项不匹配 | 检查 server 的 `accepts`（网络 + 代币），例如 `tron:nile` + `USDT` |
+| client `server offered no payment option matching "…"` | 客户端选择的网络或代币与 server 公布的选项不匹配 | 检查 server 的 `accepts`（网络 + 代币），例如 `TRON_NILE` + `USDT` |
 | `npx tsx` 下出现 `ERR_PACKAGE_PATH_NOT_EXPORTED` | 项目未声明为 ESM | 在 `package.json` 中添加 `"type": "module"` |
-| `UnsupportedNetworkError` / `No mechanism registered` | 客户端选择的网络没有注册的 scheme | 确保 client 包含目标网络，例如 `tron:nile` |
+| `UnsupportedNetworkError` / `No mechanism registered` | 客户端选择的网络没有注册的 scheme | 确保 client 包含目标网络，例如 `TRON_NILE` |
 | `Insufficient balance` / allowance 错误 | 测试钱包缺少测试代币，或 Permit2 授权额度过低 | 从水龙头领取测试代币；client 在首次付款时会自动批准 Permit2 |
 | `Connection timeout` | 网络或请求超时 | 检查连接，或设置可靠的 `EVM_RPC_URL`（如 `https://bsc-testnet-rpc.publicnode.com`） |
 
@@ -384,10 +385,12 @@ curl http://localhost:4021/credit
 将 server 注册的网络和收款地址切换到主网：
 
 ```typescript
-server.register("tron:mainnet", new ExactTronScheme());
+import { TRON_MAINNET } from "@bankofai/x402-tron";
+
+server.register(TRON_MAINNET, new ExactTronScheme());
 
 // accepts 中同步改为：
-network: "tron:mainnet",
+network: TRON_MAINNET,
 payTo: "TYourMainnetTronAddress",
 price: "1 USDT",
 ```
@@ -402,7 +405,7 @@ EVM_RPC_URL=https://bsc-rpc.publicnode.com
 
 ### 3.（自托管）将 Facilitator 切换到主网
 
-facilitator 的 `TRON_NETWORKS` 已包含 `tron:mainnet`，`EVM_NETWORKS` 已包含 `eip155:56`。向 Facilitator 钱包充入足够的真实 TRX/BNB 以支付结算 gas，然后重启：
+facilitator 的 `TRON_NETWORKS` 已包含 `TRON_MAINNET`（`tron:0x2b6653dc`），`EVM_NETWORKS` 已包含 `eip155:56`。向 Facilitator 钱包充入足够的真实 TRX/BNB 以支付结算 gas，然后重启：
 
 ```bash
 pnpm dev:facilitator

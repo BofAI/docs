@@ -55,7 +55,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
   "accepts": [
     {
       "scheme": "exact",
-      "network": "tron:nile",
+      "network": "tron:0xcd8690dc",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
       "payTo": "<SELLER_TRON_ADDRESS>",
@@ -129,7 +129,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 | `resource`          | Information about the requested resource                                    |
 | `accepts`           | Array of accepted payment options                                           |
 | `scheme`            | Payment scheme (`exact`, `upto`, `batch-settlement`, `auth-capture`, or `exact_gasfree`)  |
-| `network`           | Network identifier (`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`)  |
+| `network`           | Network identifier (`tron:0xcd8690dc`, `tron:0x2b6653dc`, `eip155:56`, `eip155:97`)  |
 | `amount`            | Payment amount in the smallest unit (e.g., 100 = 0.0001 USDT)              |
 | `asset`             | TRC-20/BEP-20 token contract address                                        |
 | `payTo`             | Seller's wallet address                                                     |
@@ -149,7 +149,7 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
   "x402Version": 2,
   "accepted": {
     "scheme": "exact",
-    "network": "tron:nile",
+    "network": "tron:0xcd8690dc",
     "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
     "amount": "100",
     "payTo": "<SELLER_TRON_ADDRESS>",

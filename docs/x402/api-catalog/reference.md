@@ -60,7 +60,7 @@ An endpoint may serve the same capability across several chains, each settling t
 
 | Field | Type | Description |
 |---|---|---|
-| `network` | string | CAIP-2 chain ID this route settles on (e.g. `tron:mainnet`, `eip155:56`) |
+| `network` | string | CAIP-2 chain ID this route settles on (e.g. `tron:0x2b6653dc`, `eip155:56`) |
 | `provider` | string | The gateway provider `fqn` that handles this network |
 | `scheme` | string | x402 payment scheme for this route, e.g. `exact` — each route declares its own |
 | `url` | string | Full gateway URL for this network's route |
@@ -72,7 +72,7 @@ For example, a token-launch endpoint might expose one route per supported chain 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --method POST \
-  --network tron:mainnet \
+  --network tron:0x2b6653dc \
   --token USDT \
   --scheme exact \
   --max-amount 0.000001 \
@@ -111,9 +111,9 @@ security   shopping    storage     translation
 
 | Chain | ID |
 |---|---|
-| TRON mainnet | `tron:mainnet` |
-| TRON Nile testnet | `tron:nile` |
-| TRON Shasta testnet | `tron:shasta` |
+| TRON mainnet | `tron:0x2b6653dc` |
+| TRON Nile testnet | `tron:0xcd8690dc` |
+| TRON Shasta testnet | `tron:0x94a9059e` |
 | BNB Chain (BSC) | `eip155:56` |
 | BNB Smart Chain testnet | `eip155:97` |
 

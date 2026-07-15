@@ -115,22 +115,15 @@ This guide uses the environment variable method.
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
-
-# TronGrid API key — optional on testnet, recommended for production TRON.
-export TRON_GRID_API_KEY=
 ```
 
-> 💡 **Tip:** This quickstart pays on `tron:nile`. The client chooses the payment option where `network === "tron:nile"` from the server's `accepts` list.
+> 💡 **Tip:** This quickstart pays on `TRON_NILE` (`tron:0xcd8690dc`). The client chooses the payment option where `network === TRON_NILE` from the server's `accepts` list.
 
-**Optional:** For production TRON workloads, configure a TronGrid API Key for better RPC reliability:
+For production TRON workloads, set a TronGrid API Key for better RPC reliability:
 
 ```bash
 export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 ```
-
-:::note
-When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy workloads. For production, set your own `TRON_GRID_API_KEY` to ensure reliability.
-:::
 
 > ⚠️ **Security reminder:** Keep your private key only in an environment variable or a secure secret manager. **Never commit files containing private keys to Git or share them with anyone.**
 
@@ -143,22 +136,22 @@ The client wraps `fetch` so HTTP `402 Payment Required` challenges are paid auto
 ```typescript
 import { resolveWallet } from "@bankofai/agent-wallet";
 import { x402Client, wrapFetchWithPayment } from "@bankofai/x402-fetch";
-import { createClientTronSigner } from "@bankofai/x402-tron";
+import { createClientTronSigner, TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/client";
 
 const wallet = await resolveWallet({
-  network: "tron:nile",
+  network: TRON_NILE,
 });
 
 const signer = await createClientTronSigner(wallet, {
-  network: "tron:nile",
+  network: TRON_NILE,
 });
 
 const client = new x402Client((_version, accepts) =>
-  accepts.find((a) => a.network === "tron:nile")!
+  accepts.find((a) => a.network === TRON_NILE)!
 );
 
-client.register("tron:nile", new ExactTronScheme(signer));
+client.register(TRON_NILE, new ExactTronScheme(signer));
 
 const fetchWithPay = wrapFetchWithPayment(fetch, client);
 
@@ -194,7 +187,7 @@ pnpm tsx src/index.ts   # or your app's dev script
 | `No wallet configured for TRON` | `AGENT_WALLET_PRIVATE_KEY` is not set or empty | Set the environment variable and re-run; run the `export` command in **the same terminal window** where you run the script |
 | `WalletNotFoundError: No active wallet set` | agent-wallet has no wallet configured | Run `agent-wallet start` and follow the prompts to import your private key |
 | `Insufficient balance` / balance error | Test wallet doesn't have enough USDT/USDD | Go back to Prerequisites and claim test tokens from the faucet |
-| `server offered no payment option matching "…"` | The client-selected network does not match what the server advertises | Check that the server's `accepts` includes `network: "tron:nile"` |
+| `server offered no payment option matching "…"` | The client-selected network does not match what the server advertises | Check that the server's `accepts` includes `network: TRON_NILE` |
 | `InsufficientAllowanceError` / allowance error | Token allowance too low | The SDK auto-broadcasts the one-time Permit2 `approve` on first payment; if it persists, check your wallet balance |
 | `Connection timeout` | Network or request timeout | Check the API service, facilitator, and TRON RPC connection |
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
@@ -212,7 +205,7 @@ try {
   }
 } catch (error) {
   if (error instanceof Error && error.message.includes("no payment option")) {
-    console.error("No matching payment option — check tron:nile vs the server's accepts");
+    console.error("No matching payment option — check TRON_NILE vs the server's accepts");
   } else if (error instanceof Error && error.message.includes("allowance")) {
     console.error("Insufficient token allowance — check wallet balance");
   } else {

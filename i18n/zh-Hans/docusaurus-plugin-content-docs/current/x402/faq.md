@@ -84,11 +84,11 @@ x402 支持五种支付方案：
 
 | 网络                          | 代币          | 状态        |
 | ----------------------------- | ------------- | ----------- |
-| TRON 主网 (`tron:mainnet`)    | USDT (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:nile`)       | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:shasta`)   | USDT (TRC-20) | **Testnet** |
-| TRON Mainnet (`tron:mainnet`) | USDD (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:nile`)       | USDD (TRC-20) | **Testnet** |
+| TRON 主网 (`tron:0x2b6653dc`)    | USDT (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:0xcd8690dc`)       | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **Testnet** |
+| TRON Mainnet (`tron:0x2b6653dc`) | USDD (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:0xcd8690dc`)       | USDD (TRC-20) | **Testnet** |
 | BSC 主网 (`eip155:56`) | USDT (BEP-20) | **Mainnet** |
 | BSC 主网 (`eip155:56`) | USDC (BEP-20) | **Mainnet** |
 | BSC 主网 (`eip155:56`) | EPS (BEP-20) | **Mainnet** |

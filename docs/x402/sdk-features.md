@@ -48,13 +48,13 @@ This page tracks the feature support of the x402 SDK.
 
 ## Networks
 
-| Network | Status |
-|-----------|--------|
-| `tron:mainnet` | ✅ |
-| `tron:nile` | ✅ |
-| `tron:shasta` | ✅ |
-| `eip155:56` (BSC Mainnet) | ✅ |
-| `eip155:97` (BSC Testnet) | ✅ |
+| Network | SDK Constant | Status |
+|-----------|--------------|--------|
+| `tron:0x2b6653dc` | `TRON_MAINNET` | ✅ |
+| `tron:0xcd8690dc` | `TRON_NILE` | ✅ |
+| `tron:0x94a9059e` | `TRON_SHASTA` | ✅ |
+| `eip155:56` (BSC Mainnet) | - | ✅ |
+| `eip155:97` (BSC Testnet) | - | ✅ |
 
 > Upstream EVM chains (Base, Base Sepolia, MegaETH, Monad, Hyperliquid) are also wired in the EVM default-asset registry. Adding a chain is a config-table edit in the examples — no SDK changes.
 
@@ -137,8 +137,8 @@ Key custody is in [`@bankofai/agent-wallet`](https://github.com/BofAI/agent-wall
 
 | Token | Network | Status |
 |--------|---------|--------|
-| USDT (TRC-20) | `tron:mainnet`, `tron:nile` | ✅ |
-| USDD (TRC-20) | `tron:mainnet`, `tron:nile` | ✅ |
+| USDT (TRC-20) | `tron:0x2b6653dc`, `tron:0xcd8690dc` | ✅ |
+| USDD (TRC-20) | `tron:0x2b6653dc`, `tron:0xcd8690dc` | ✅ |
 | USDT (BEP-20) | `eip155:56`, `eip155:97` | ✅ |
 | USDC (BEP-20) | `eip155:56`, `eip155:97` | ✅ |
 | DHLU (BSC testnet, ERC-3009) | `eip155:97` | ✅ |

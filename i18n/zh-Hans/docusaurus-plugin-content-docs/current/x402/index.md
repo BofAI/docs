@@ -61,9 +61,9 @@ x402 支持广泛的应用场景，包括：
 
 x402 目前支持以下网络环境：
 
-- **TRON 主网** (`tron:mainnet`)
-- **TRON Shasta 测试网** (`tron:shasta`)
-- **TRON Nile 测试网** (`tron:nile`)
+- **TRON 主网** (`tron:0x2b6653dc`)
+- **TRON Shasta 测试网** (`tron:0x94a9059e`)
+- **TRON Nile 测试网** (`tron:0xcd8690dc`)
 - **BSC 主网** （`eip155:56`）
 - **BSC 测试网** （`eip155:97`)
 

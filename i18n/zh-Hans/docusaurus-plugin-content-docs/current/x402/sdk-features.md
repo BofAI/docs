@@ -48,13 +48,13 @@ description: 'x402 TypeScript SDK 的功能支持矩阵，以颗粒化 @bankofai
 
 ## 网络
 
-| 网络 | 状态 |
-|-----------|--------|
-| `tron:mainnet` | ✅ |
-| `tron:nile` | ✅ |
-| `tron:shasta` | ✅ |
-| `eip155:56`（BSC 主网） | ✅ |
-| `eip155:97`（BSC 测试网） | ✅ |
+| 网络 | SDK 常量 | 状态 |
+|-----------|----------|--------|
+| `tron:0x2b6653dc` | `TRON_MAINNET` | ✅ |
+| `tron:0xcd8690dc` | `TRON_NILE` | ✅ |
+| `tron:0x94a9059e` | `TRON_SHASTA` | ✅ |
+| `eip155:56`（BSC 主网） | - | ✅ |
+| `eip155:97`（BSC 测试网） | - | ✅ |
 
 > 上游 EVM 链（Base、Base Sepolia、MegaETH、Monad、Hyperliquid）也已接入 EVM 默认资产注册表。在示例中添加一条链仅需编辑配置表——无需改动 SDK。
 
@@ -137,8 +137,8 @@ x402 支持五种付款方案。每种方案按链族实现为 client + server +
 
 | 代币 | 网络 | 状态 |
 |--------|---------|--------|
-| USDT（TRC-20） | `tron:mainnet`、`tron:nile` | ✅ |
-| USDD（TRC-20） | `tron:mainnet`、`tron:nile` | ✅ |
+| USDT（TRC-20） | `tron:0x2b6653dc`、`tron:0xcd8690dc` | ✅ |
+| USDD（TRC-20） | `tron:0x2b6653dc`、`tron:0xcd8690dc` | ✅ |
 | USDT（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
 | USDC（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
 | EPS（BEP-20） | `eip155:56` | ✅ |

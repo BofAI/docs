@@ -62,7 +62,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
   --method POST \
-  --network tron:mainnet \
+  --network tron:0x2b6653dc \
   --token USDT \
   --scheme exact \
   --max-amount 0.000001 \
@@ -73,7 +73,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | 参数 | 作用 |
 |---|---|
 | `--method` | HTTP 方法（默认 `GET`） |
-| `--network` | CAIP-2 支付链，如 `tron:mainnet`、`eip155:56` |
+| `--network` | CAIP-2 支付链，如 `tron:0x2b6653dc`、`eip155:56` |
 | `--token` | 结算代币，如 `USDT` |
 | `--scheme` | 路由声明的 x402 支付方案，如 `exact` |
 | `--max-amount` | 美元支出上限；报价超出即中止调用 |
