@@ -68,12 +68,11 @@ Common pricing models include:
 
 #### What payment schemes does x402 support?
 
-x402 supports five payment schemes:
+x402 supports four payment schemes:
 
 - **`exact`**: Pay the exact advertised amount. ERC-3009 tokens (e.g. BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
 - **`upto`**: Usage-based billing — the client signs a Permit2 authorization for up to a **maximum**; the server settles only the **real usage** (≤ max). Ideal for **metered billing**, **LLM token usage**.
 - **`batch-settlement`**: Payment-channel for high-frequency micro-payments — deposit once, pay many requests with off-chain vouchers, settle in one batch tx. Includes a refund path.
-- **`auth-capture`** (EVM only): Escrow-style authorization capture.
 - **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. A relayer pays the on-chain energy via the GasFree API — no API keys required on the client side.
 
 #### Can this SDK interoperate with the x402 Foundation (formerly Coinbase) v2 reference implementation?

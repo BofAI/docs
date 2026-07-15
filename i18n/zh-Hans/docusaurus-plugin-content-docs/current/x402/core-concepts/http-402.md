@@ -127,7 +127,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `error`             | 人类可读的错误提示                                |
 | `resource`          | 关于请求资源的信息                                |
 | `accepts`           | 接受的支付选项数组                                |
-| `scheme`            | 支付方案（`exact`、`upto`、`batch-settlement`、`auth-capture`、`exact_gasfree`）  |
+| `scheme`            | 支付方案（`exact`、`upto`、`batch-settlement`、`exact_gasfree`）  |
 | `network`           | 网络标识符（`tron:0xcd8690dc`, `tron:0x2b6653dc`, `eip155:56`, `eip155:97`） |
 | `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
 | `asset`             | TRC-20/BEP-20 代币合约地址                               |

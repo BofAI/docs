@@ -90,7 +90,7 @@ x402 采用类型化数据签名来处理所有支付相关的签名授权。
 
 ### 支付方案
 
-x402 支持五种支付方案。每种方案按链族实现为 client + server + facilitator 三件套。
+x402 支持四种支付方案。每种方案按链族实现为 client + server + facilitator 三件套。
 
 #### `exact` 方案
 
@@ -108,10 +108,6 @@ x402 支持五种支付方案。每种方案按链族实现为 client + server +
 #### `batch-settlement` 方案
 
 面向高频微支付（如 AI 代理每 token 计费）的支付通道方案。客户端链上**一次性存入**，然后用链下**凭证**支付多次请求；facilitator **批量 claim** 并在一笔交易中结算到 `payTo`——因此 N 次请求约仅花费一次存入的 gas。含**退款**路径，可退回通道中未使用的余额。EVM 和 TRON 均支持。
-
-#### `auth-capture` 方案
-
-托管式授权捕获（仅 EVM）。资金被授权进入托管合约，并按业务逻辑释放。
 
 #### `exact_gasfree` 方案
 
@@ -166,7 +162,7 @@ Facilitator 作为协议的中间件，承担以下核心职责：
 | **网络环境** | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97` |
 | **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）,BEP-20 代币 |
 | **签名机制** | TIP-712 / EIP-712 类型化数据签名                     |
-| **支付方案** | `exact`、`upto`、`batch-settlement`、`auth-capture`（EVM）、`exact_gasfree`（TRON） |
+| **支付方案** | `exact`、`upto`、`batch-settlement`、`exact_gasfree`（TRON） |
 
 ### 添加自定义代币
 

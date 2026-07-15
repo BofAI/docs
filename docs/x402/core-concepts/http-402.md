@@ -128,7 +128,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 | `error`             | Human-readable error message                                                |
 | `resource`          | Information about the requested resource                                    |
 | `accepts`           | Array of accepted payment options                                           |
-| `scheme`            | Payment scheme (`exact`, `upto`, `batch-settlement`, `auth-capture`, or `exact_gasfree`)  |
+| `scheme`            | Payment scheme (`exact`, `upto`, `batch-settlement`, or `exact_gasfree`)  |
 | `network`           | Network identifier (`tron:0xcd8690dc`, `tron:0x2b6653dc`, `eip155:56`, `eip155:97`)  |
 | `amount`            | Payment amount in the smallest unit (e.g., 100 = 0.0001 USDT)              |
 | `asset`             | TRC-20/BEP-20 token contract address                                        |

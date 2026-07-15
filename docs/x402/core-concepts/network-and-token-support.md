@@ -108,7 +108,7 @@ When configuring an `HTTP 402` payment request on the server side, you must expl
 
 ## Payment Schemes
 
-x402 supports five payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
+x402 supports four payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
 
 ### `exact` Scheme
 
@@ -126,10 +126,6 @@ Usage-based billing. The client signs a Permit2 authorization for up to a **maxi
 ### `batch-settlement` Scheme
 
 A payment-channel scheme for high-frequency micro-payments (e.g. AI agent per-token billing). The payer **deposits once** on-chain, then pays many requests with off-chain **vouchers**; the facilitator **claims** a batch and **settles** to `payTo` in a single tx — so N requests cost ~one deposit's worth of gas. Includes a **refund** path for the unused balance. Available on EVM and TRON.
-
-### `auth-capture` Scheme
-
-Escrow-style authorization capture (EVM only). Funds are authorized into an escrow contract and released per business logic.
 
 ### `exact_gasfree` Scheme
 
@@ -193,7 +189,7 @@ You may deploy your own Facilitator to gain full control over payment verificati
 | **Networks**   | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97` |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20 |
 | **Signing Mechanism** | TIP-712 / EIP-712 typed data signing |
-| **Payment Schemes** | `exact`, `upto`, `batch-settlement`, `auth-capture` (EVM), `exact_gasfree` (TRON) |
+| **Payment Schemes** | `exact`, `upto`, `batch-settlement`, `exact_gasfree` (TRON) |
 
 ---
 

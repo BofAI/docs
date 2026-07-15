@@ -67,7 +67,7 @@ x402 目前支持以下网络环境：
 - **BSC 主网** （`eip155:56`）
 - **BSC 测试网** （`eip155:97`)
 
-> **SDK（仅 TypeScript）**：x402 是仅 TypeScript 的 SDK，以颗粒化 `@bankofai/x402-*` npm 包发布（`core`、`evm`、`tron`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）。源码由 pnpm/turbo monorepo 维护，但应用开发应安装已发布的包。支持的方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`auth-capture`（EVM）、`exact_gasfree`（TRON）。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。完整对比详见 [SDK 功能特性](./sdk-features.md)。
+> **SDK（仅 TypeScript）**：x402 是仅 TypeScript 的 SDK，以颗粒化 `@bankofai/x402-*` npm 包发布（`core`、`evm`、`tron`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）。源码由 pnpm/turbo monorepo 维护，但应用开发应安装已发布的包。支持的方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`exact_gasfree`（TRON）。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。完整对比详见 [SDK 功能特性](./sdk-features.md)。
 
 
 ## 快速开始
