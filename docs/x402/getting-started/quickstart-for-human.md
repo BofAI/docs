@@ -10,7 +10,7 @@ This guide is for developers who want to **call an x402-protected API from code*
 > **Testnet first:** This guide uses testnet by default. You can safely follow every step without spending real money.
 
 :::info (TypeScript-only)
-x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide shows how to integrate the published npm packages directly; the runnable [`examples/typescript/clients/fetch`](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/fetch) project is a reference implementation, not the required development path.
+x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide shows how to integrate the published npm packages directly.
 :::
 
 ---
@@ -34,7 +34,7 @@ x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packa
 - [ ] **Node.js 22+** and **pnpm 11.1+** installed
 - [ ] A dedicated **test wallet** created (see below)
 - [ ] Test tokens claimed (free)
-- [ ] A target x402-protected API URL (or run the example server)
+- [ ] A target x402-protected API URL, such as the `/credit` endpoint from [Quickstart for Sellers](./quickstart-for-sellers.md)
 
 ### Create a Test Wallet and Get Test Tokens
 
@@ -94,7 +94,7 @@ x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packa
 Install the published npm packages in your TypeScript application:
 
 ```bash
-pnpm add @bankofai/x402-fetch @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
+pnpm add @bankofai/agent-wallet @bankofai/x402-fetch @bankofai/x402-tron
 ```
 
 Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
@@ -111,164 +111,54 @@ This guide uses the environment variable method.
 
 ## Step Two: Configure Your Private Key
 
-**Never put your private key in code.** Store it as an environment variable so it stays out of your source files. Copy the env template and fill in your key:
+**Never put your private key in code.** Set it as an environment variable so it stays out of your source files:
 
 ```bash
-cp .env-exact.example .env-exact
+export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-Open `.env-exact` and set the payer variables:
+> 💡 **Tip:** This quickstart pays on `TRON_NILE` (`tron:0xcd8690dc`). The client chooses the payment option where `network === TRON_NILE` from the server's `accepts` list.
+
+For production TRON workloads, set a TronGrid API Key for better RPC reliability:
 
 ```bash
-# ── SHARED · client (you are the payer) ──────────────────────────────────
-AGENT_WALLET_PRIVATE_KEY=your_private_key_here
-
-# TronGrid API key — optional on testnet, recommended for production TRON.
-TRON_GRID_API_KEY=
-
-# ── CLIENT · which chains/tokens to pay ──────────────────────────────────
-# <network>[@<token>]  e.g. tron:nile@USDT or eip155:97@DHLU
-PAY_TARGETS=tron:nile@USDT
-
-# The x402-protected API you want to call.
-RESOURCE_URL=http://localhost:4021/weather
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 ```
 
-> 💡 **Tip:** `PAY_TARGETS` controls which chain/token the client pays with, one payment per entry, in order. Omit the token to use that network's first advertised token. Use `@` (not `#`) — dotenv treats `#` as a comment.
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-**Optional:** For production TRON workloads, configure a TronGrid API Key for better RPC reliability:
-
-```bash
-TRON_GRID_API_KEY="your_trongrid_api_key_here"
-```
-
-:::note
-When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy workloads. For production, set your own `TRON_GRID_API_KEY` to ensure reliability.
-:::
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-For BSC testnet, the default viem RPC endpoint is frequently unreachable. Set a reliable RPC:
-
-```bash
-EVM_RPC_URL=https://bsc-testnet-rpc.publicnode.com
-```
-
-</TabItem>
-</Tabs>
-
-> ⚠️ **Security reminder:** Keep your private key only in `.env-exact` (gitignored) or as an environment variable. **Never commit files containing private keys to Git or share them with anyone.**
+> ⚠️ **Security reminder:** Keep your private key only in an environment variable or a secure secret manager. **Never commit files containing private keys to Git or share them with anyone.**
 
 ---
 
 ## Step Three: Write and Run the Client Code
 
-The client wraps `fetch` so HTTP `402 Payment Required` challenges are paid automatically. The runnable example at `examples/typescript/clients/fetch/src/index.ts` follows the same structure; the essentials are:
+The client wraps `fetch` so HTTP `402 Payment Required` challenges are paid automatically. Here is a minimal TRON client:
 
 ```typescript
+import { resolveWallet } from "@bankofai/agent-wallet";
 import { x402Client, wrapFetchWithPayment } from "@bankofai/x402-fetch";
+import { createClientTronSigner, TRON_NILE } from "@bankofai/x402-tron";
+import { ExactTronScheme } from "@bankofai/x402-tron/exact/client";
 
-import { registerEvm } from "./chains/evm.js";
-import { registerTron } from "./chains/tron.js";
-
-const RESOURCE_URL = process.env.RESOURCE_URL || "http://localhost:4021/weather";
-
-// The selector is the payment-selection policy: pick which advertised option to pay.
-// PAY_TARGETS drives this in the full example; here we accept the first option.
-let target: { prefix: string; asset?: string } | null = null;
-const client = new x402Client((_x402Version, accepts) => {
-  const t = target;
-  if (!t) return accepts[0]!;
-  const match = accepts.find(
-    (a) =>
-      a.network.startsWith(t.prefix) &&
-      (!t.asset || a.asset.toLowerCase() === t.asset.toLowerCase()),
-  );
-  if (!match) throw new Error(`server offered no payment option matching "${t.prefix}"`);
-  return match;
+const wallet = await resolveWallet({
+  network: TRON_NILE,
 });
 
-// Register each chain only if its wallet resolves (EVM-only, TRON-only, or both).
-const evm = await registerEvm(client);
-const tron = await registerTron(client);
+const signer = await createClientTronSigner(wallet, {
+  network: TRON_NILE,
+});
+
+const client = new x402Client((_version, accepts) =>
+  accepts.find((a) => a.network === TRON_NILE)!
+);
+
+client.register(TRON_NILE, new ExactTronScheme(signer));
 
 const fetchWithPay = wrapFetchWithPayment(fetch, client);
 
-// Pay the resource once per target, in order.
-const targets = [{ prefix: "tron:", asset: undefined }]; // simplified
-for (const t of targets) {
-  target = t;
-  console.log(`\n→ GET ${RESOURCE_URL}`);
-  const res = await fetchWithPay(RESOURCE_URL);
-  console.log(`← ${res.status} ${res.statusText}`);
-  console.log(JSON.stringify(await res.json(), null, 2));
-}
+const res = await fetchWithPay("http://localhost:4021/credit");
+
+console.log(await res.json());
 ```
-
-### How each chain is registered
-
-Each chain lives in its own module under `src/chains/`. A chain registers only if its agent-wallet resolves — so you can pay from EVM-only, TRON-only, or both.
-
-<Tabs>
-<TabItem value="tron" label="TRON">
-
-```typescript
-// src/chains/tron.ts
-import { createClientTronSigner } from "@bankofai/x402-tron";
-import { ExactTronScheme } from "@bankofai/x402-tron/exact/client";
-import type { x402Client } from "@bankofai/x402-fetch";
-import { tryResolveWallet } from "../env.js";
-
-export async function registerTron(client: x402Client): Promise<boolean> {
-  const wallet = await tryResolveWallet("tron");
-  if (!wallet) return false;
-
-  for (const network of ["tron:nile", "tron:mainnet"] as const) {
-    // The factory builds TronWeb internally and auto-broadcasts the one-time
-    // Permit2 approve that USDT/USDD need before their first payment.
-    const signer = await createClientTronSigner(wallet, {
-      network,
-      apiKey: process.env.TRON_GRID_API_KEY,
-    });
-    client.register(network, new ExactTronScheme(signer));
-  }
-  return true;
-}
-```
-
-</TabItem>
-<TabItem value="bsc" label="BSC">
-
-```typescript
-// src/chains/evm.ts
-import { createClientEvmSigner } from "@bankofai/x402-evm/adapters/agent-wallet";
-import { ExactEvmScheme } from "@bankofai/x402-evm/exact/client";
-import type { x402Client } from "@bankofai/x402-fetch";
-import { tryResolveWallet } from "../env.js";
-
-export async function registerEvm(client: x402Client): Promise<boolean> {
-  const wallet = await tryResolveWallet("evm");
-  if (!wallet) return false;
-
-  for (const network of ["eip155:97", "eip155:56"] as const) {
-    // The factory builds the viem client internally; ERC-3009 tokens (e.g. DHLU)
-    // sign offline and need no RPC, while permit2 tokens read the chain.
-    const signer = await createClientEvmSigner(wallet, {
-      network,
-      rpcUrl: process.env.EVM_RPC_URL?.trim() || undefined,
-    });
-    client.register(network, new ExactEvmScheme(signer));
-  }
-  return true;
-}
-```
-
-</TabItem>
-</Tabs>
 
 ### Run the client
 
@@ -278,19 +168,15 @@ First, make sure a resource server + facilitator are running (see [Quickstart fo
 pnpm tsx src/index.ts   # or your app's dev script
 ```
 
-If you are comparing against the reference example, run `pnpm dev:client` from `examples/typescript`.
-
 **Expected output:**
 
 ```
-→ [tron:nile@USDT] GET http://localhost:4021/weather
-← 200 OK
-{ "report": { "weather": "sunny", "temperature": 70 } }
+{ "status": "success", "credit": 1000000 }
 ```
 
 > ✅ **Success:** The SDK detected the `402`, signed a payment, settled on-chain, and returned the protected content.
 
-> 💡 To pay a BSC token instead, set `PAY_TARGETS=eip155:97@DHLU` (ERC-3009, gasless) or `eip155:97@USDC` (permit2, one-time `approve`).
+> 💡 To pay with another network or token, adjust the `accepts.find(...)` selector and register the matching network scheme.
 
 ---
 
@@ -298,19 +184,19 @@ If you are comparing against the reference example, run `pnpm dev:client` from `
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
-| `No wallet configured for EVM or TRON` | `AGENT_WALLET_PRIVATE_KEY` is not set or empty | Set it in `.env-exact` and re-run; run the `export` command in **the same terminal window** where you run the script |
+| `No wallet configured for TRON` | `AGENT_WALLET_PRIVATE_KEY` is not set or empty | Set the environment variable and re-run; run the `export` command in **the same terminal window** where you run the script |
 | `WalletNotFoundError: No active wallet set` | agent-wallet has no wallet configured | Run `agent-wallet start` and follow the prompts to import your private key |
 | `Insufficient balance` / balance error | Test wallet doesn't have enough USDT/USDD | Go back to Prerequisites and claim test tokens from the faucet |
-| `server offered no payment option matching "…"` | `PAY_TARGETS` doesn't match what the server advertises | Check the server's `accepts` (network + token) and align `PAY_TARGETS`, e.g. `tron:nile@USDT` or `eip155:97@DHLU` |
+| `server offered no payment option matching "…"` | The client-selected network does not match what the server advertises | Check that the server's `accepts` includes `network: TRON_NILE` |
 | `InsufficientAllowanceError` / allowance error | Token allowance too low | The SDK auto-broadcasts the one-time Permit2 `approve` on first payment; if it persists, check your wallet balance |
-| `Connection timeout` | Network or request timeout | Check your connection; for BSC set a reliable `EVM_RPC_URL=https://bsc-testnet-rpc.publicnode.com` |
+| `Connection timeout` | Network or request timeout | Check the API service, facilitator, and TRON RPC connection |
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
 
 If you need finer-grained error handling in your code:
 
 ```typescript
 try {
-  const res = await fetchWithPay(RESOURCE_URL);
+  const res = await fetchWithPay("http://localhost:4021/credit");
   if (res.status === 200) {
     console.log("Success:", await res.json());
   } else {
@@ -319,7 +205,7 @@ try {
   }
 } catch (error) {
   if (error instanceof Error && error.message.includes("no payment option")) {
-    console.error("No matching payment option — check PAY_TARGETS vs the server's accepts");
+    console.error("No matching payment option — check TRON_NILE vs the server's accepts");
   } else if (error instanceof Error && error.message.includes("allowance")) {
     console.error("Insufficient token allowance — check wallet balance");
   } else {
@@ -352,5 +238,5 @@ Through this guide you:
 ## References
 
 - [x402 npm packages](https://www.npmjs.com/package/@bankofai/x402-tron) — published packages for application development
-- [Fetch client example](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/fetch) — reference implementation for the client flow
+- [Fetch client example](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/fetch) — if you want a more complete client example, refer to the examples
 - [Agent Wallet](https://github.com/BofAI/agent-wallet) — key custody used by the SDK

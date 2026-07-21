@@ -7,16 +7,20 @@
     "message": "BANK OF AI",
     "description": "The alt text of navbar logo"
   },
-  "item.label.GitHub": {
-    "message": "GitHub",
-    "description": "Navbar item with label GitHub"
+  "item.label.Docs": {
+    "message": "文档",
+    "description": "Navbar item with label Docs"
+  },
+  "item.label.Best Practices": {
+    "message": "最佳实践",
+    "description": "Navbar item with label Best Practices"
+  },
+  "item.label.Changelogs": {
+    "message": "更新日志",
+    "description": "Navbar item with label Changelogs"
   },
   "item.label.Demo": {
     "message": "Demo",
     "description": "Navbar item with label Demo"
-  },
-  "item.label.TRON": {
-    "message": "TRON",
-    "description": "Navbar item with label TRON"
   }
 }

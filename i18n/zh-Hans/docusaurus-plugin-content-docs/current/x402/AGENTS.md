@@ -58,7 +58,7 @@ import TabItem from '@theme/TabItem';
 <Tabs>
   <TabItem value="TRON" label="TRON">
 
-- **网络标识**：必须遵循 `tron:<network>` 格式（支持 `mainnet`, `nile`, `shasta`）。
+- **网络标识**：必须遵循 `tron:<hex_chain_id>` CAIP-2 格式。优先使用 `@bankofai/x402-tron` 导出的常量（`TRON_MAINNET`、`TRON_NILE`、`TRON_SHASTA`），不要硬编码旧的名称。
 - **签名标准**：TRON 签名必须引用 **TIP-712** 标准（请勿混淆为 EIP-712）。
 - **地址格式**：Token 地址必须使用 Base58 编码格式（即以 `T` 开头的地址）。
 - **节点接入**：节点访问需指向 TronGrid 端点。

@@ -8,6 +8,7 @@ on:
       - update-mcp-server
       - ai-bankofai-patch-1
       - x402-sdk-1.0.0-update
+      - Refactor
     tags:
       - 'test'
   pull_request:
@@ -17,6 +18,7 @@ on:
       - update-mcp-server
       - ai-bankofai-patch-1
       - x402-sdk-1.0.0-update
+      - Refactor
   workflow_dispatch: # Intentionally unrestricted — allows manual builds from any branch for flexibility
 
 env:

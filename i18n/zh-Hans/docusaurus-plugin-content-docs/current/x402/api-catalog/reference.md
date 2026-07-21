@@ -60,7 +60,7 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| `network` | string | 该路由结算所在的 CAIP-2 链 ID（如 `tron:mainnet`、`eip155:56`） |
+| `network` | string | 该路由结算所在的 CAIP-2 链 ID（如 `tron:0x2b6653dc`、`eip155:56`） |
 | `provider` | string | 处理该网络的 gateway provider `fqn` |
 | `scheme` | string | 该路由的 x402 支付方案，如 `exact` —— 由每条路由各自声明 |
 | `url` | string | 该网络路由的完整 gateway URL |
@@ -72,7 +72,7 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --method POST \
-  --network tron:mainnet \
+  --network tron:0x2b6653dc \
   --token USDT \
   --scheme exact \
   --max-amount 0.000001 \
@@ -111,9 +111,9 @@ security   shopping    storage     translation
 
 | 链 | ID |
 |---|---|
-| TRON 主网 | `tron:mainnet` |
-| TRON Nile 测试网 | `tron:nile` |
-| TRON Shasta 测试网 | `tron:shasta` |
+| TRON 主网 | `tron:0x2b6653dc` |
+| TRON Nile 测试网 | `tron:0xcd8690dc` |
+| TRON Shasta 测试网 | `tron:0x94a9059e` |
 | BNB Chain (BSC) | `eip155:56` |
 | BNB 测试网 | `eip155:97` |
 

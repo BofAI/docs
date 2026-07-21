@@ -4,15 +4,27 @@ const sidebars = {
     {
       type: 'category',
       label: 'BANK OF AI',
+      className: 'sidebar-icon sidebar-icon-bankofai',
       collapsed: false,
       items: [
         'BANK-OF-AI/Intro',
         'BANK-OF-AI/QuickStart',
+        {
+          type: 'link',
+          label: 'Official Website',
+          href: 'https://bankofai.io/',
+        },
+        {
+          type: 'link',
+          label: 'GitHub',
+          href: 'https://github.com/BofAI',
+        },
       ],
     },
     {
       type: 'category',
       label: 'x402 Payment Protocol',
+      className: 'sidebar-icon sidebar-icon-x402',
       collapsed: false,
       items: [
         {
@@ -23,12 +35,13 @@ const sidebars = {
         {
           type: 'category',
           label: 'Getting Started',
+          collapsed: true,
           items: [
             'x402/getting-started/quickstart-for-sellers',
             {
               type: 'category',
               label: 'Quickstart for Buyers',
-              collapsed: false,
+              collapsed: true,
               items: ['x402/getting-started/quickstart-for-human', 'x402/getting-started/quickstart-for-agent'],
             },
           ],
@@ -45,7 +58,7 @@ const sidebars = {
             {
               type: 'category',
               label: 'API Catalog',
-              collapsed: false,
+              collapsed: true,
               items: [
                 'x402/api-catalog/index',
                 'x402/api-catalog/get-started',
@@ -63,6 +76,21 @@ const sidebars = {
           label: 'SDK Features',
         },
         {
+          type: 'category',
+          label: 'x402 CLI',
+          collapsed: true,
+          items: [
+            {
+              type: 'doc',
+              id: 'x402/cli/index',
+              label: 'Overview',
+            },
+            'x402/cli/quickstart',
+            'x402/cli/command-reference',
+            'x402/cli/faq',
+          ],
+        },
+        {
           type: 'doc',
           id: 'x402/faq',
           label: 'FAQ',
@@ -71,123 +99,21 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: '8004 Protocol',
+      label: 'SKILLS',
+      className: 'sidebar-icon sidebar-icon-skills',
       collapsed: false,
       items: [
-        {
-          type: 'doc',
-          id: '8004/general',
-          label: 'Introduction',
-        },
-        {
-          type: 'doc',
-          id: '8004/contract',
-        },
-        {
-          type: 'doc',
-          id: '8004/QuickStart',
-        },
-        {
-          type: 'doc',
-          id: '8004/SupportedNetworks',
-        },
-        {
-          type: 'category',
-          label: 'Usage',
-          collapsed: false,
-          items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
-        },
-      ],
-    },
-    {
-      type: 'category',
-      label: 'MCP Server & SKILLS',
-      collapsed: false,
-      items: [
-        {
-          type: 'doc',
-          id: 'McpServer-Skills/Intro',
-          label: 'Introduction',
-        },
-        {
-          type: 'category',
-          label: 'MCP Server',
-          collapsed: false,
-          items: [
-            'McpServer-Skills/MCP/Intro',
-            {
-              type: 'category',
-              label: 'TRON MCP Server',
-              collapsed: true,
-              items: [
-                'McpServer-Skills/MCP/TRONMCPServer/Intro',
-                'McpServer-Skills/MCP/TRONMCPServer/QuickStart',
-                'McpServer-Skills/MCP/TRONMCPServer/OfficialServerAccess',
-                'McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment',
-                'McpServer-Skills/MCP/TRONMCPServer/ToolList',
-                'McpServer-Skills/MCP/TRONMCPServer/FAQ',
-              ],
-            },
-            {
-              type: 'category',
-              label: 'SUN MCP Server',
-              collapsed: true,
-              items: [
-                'McpServer-Skills/MCP/SUNMCPServer/Intro',
-                'McpServer-Skills/MCP/SUNMCPServer/QuickStart',
-                'McpServer-Skills/MCP/SUNMCPServer/OfficialServerAccess',
-                'McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment',
-                'McpServer-Skills/MCP/SUNMCPServer/ToolList',
-                'McpServer-Skills/MCP/SUNMCPServer/FAQ',
-              ],
-            },
-            {
-              type: 'category',
-              label: 'BSC MCP Server',
-              collapsed: true,
-              items: [
-                'McpServer-Skills/MCP/BSCMCPServer/Intro',
-                'McpServer-Skills/MCP/BSCMCPServer/Features',
-                'McpServer-Skills/MCP/BSCMCPServer/Installation',
-              ],
-            },
-          ],
-        },
-        {
-          type: 'category',
-          label: 'SKILLS',
-          collapsed: false,
-          items: [
-            'McpServer-Skills/SKILLS/Intro',
-            'McpServer-Skills/SKILLS/QuickStart',
-            'McpServer-Skills/SKILLS/BANKOFAISkill',
-            'McpServer-Skills/SKILLS/Faq',
-          ],
-        },
-        {
-          type: 'category',
-          label: 'TOOLS',
-          collapsed: false,
-          items: [
-            {
-              type: 'category',
-              label: 'SUN CLI',
-              collapsed: true,
-              items: [
-                'McpServer-Skills/Tools/SUNCli/Intro',
-                'McpServer-Skills/Tools/SUNCli/QuickStart',
-                'McpServer-Skills/Tools/SUNCli/CommandGuide',
-                'McpServer-Skills/Tools/SUNCli/FAQ',
-              ],
-            },
-          ],
-        },
+        'McpServer-Skills/SKILLS/Intro',
+        'McpServer-Skills/SKILLS/QuickStart',
+        'McpServer-Skills/SKILLS/BANKOFAISkill',
+        'McpServer-Skills/SKILLS/Faq',
       ],
     },
     {
       type: 'category',
       label: 'Agent Wallet',
-      collapsed: false,
+      className: 'sidebar-icon sidebar-icon-wallet',
+      collapsed: true,
       items: [
         'Agent-Wallet/Intro',
         'Agent-Wallet/QuickStart',
@@ -206,15 +132,9 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'Openclaw Extension',
-      collapsed: false,
-      items: ['Openclaw-extension/Intro', 'Openclaw-extension/QuickStart', 'Openclaw-extension/FAQ'],
-    },
-
-    {
-      type: 'category',
       label: 'LLM Service',
-      collapsed: false,
+      className: 'sidebar-icon sidebar-icon-llm',
+      collapsed: true,
       items: [
         { type: 'doc', id: 'llmservice/introduction', label: 'Introduction' },
         { type: 'doc', id: 'llmservice/quick-start', label: 'Quick Start' },
@@ -253,6 +173,7 @@ const sidebars = {
             'llmservice/models/gemini-3-flash',
             'llmservice/models/glm-5-2',
             'llmservice/models/glm-5-1',
+            'llmservice/models/kimi-k3',
             'llmservice/models/kimi-k2.6',
             'llmservice/models/kimi-k2.5',
             'llmservice/models/qwen3.6-27b',
@@ -280,6 +201,76 @@ const sidebars = {
           items: ['llmservice/api/API'],
         },
       ],
+    },
+    {
+      type: 'category',
+      label: 'MCP Server',
+      className: 'sidebar-icon sidebar-icon-mcp',
+      collapsed: true,
+      items: [
+        'McpServer-Skills/MCP/Intro',
+        {
+          type: 'category',
+          label: 'TRON MCP Server',
+          collapsed: true,
+          items: [
+            'McpServer-Skills/MCP/TRONMCPServer/Intro',
+            'McpServer-Skills/MCP/TRONMCPServer/QuickStart',
+            'McpServer-Skills/MCP/TRONMCPServer/OfficialServerAccess',
+            'McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment',
+            'McpServer-Skills/MCP/TRONMCPServer/ToolList',
+            'McpServer-Skills/MCP/TRONMCPServer/FAQ',
+          ],
+        },
+        {
+          type: 'category',
+          label: 'BSC MCP Server',
+          collapsed: true,
+          items: [
+            'McpServer-Skills/MCP/BSCMCPServer/Intro',
+            'McpServer-Skills/MCP/BSCMCPServer/Features',
+            'McpServer-Skills/MCP/BSCMCPServer/Installation',
+          ],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: '8004 Protocol',
+      className: 'sidebar-icon sidebar-icon-8004',
+      collapsed: true,
+      items: [
+        {
+          type: 'doc',
+          id: '8004/general',
+          label: 'Introduction',
+        },
+        {
+          type: 'doc',
+          id: '8004/contract',
+        },
+        {
+          type: 'doc',
+          id: '8004/QuickStart',
+        },
+        {
+          type: 'doc',
+          id: '8004/SupportedNetworks',
+        },
+        {
+          type: 'category',
+          label: 'Usage',
+          collapsed: true,
+          items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
+        },
+      ],
+    },
+    {
+      type: 'category',
+      label: 'Openclaw Extension',
+      className: 'sidebar-icon sidebar-icon-openclaw',
+      collapsed: true,
+      items: ['Openclaw-extension/Intro', 'Openclaw-extension/QuickStart', 'Openclaw-extension/FAQ'],
     },
   ],
 }

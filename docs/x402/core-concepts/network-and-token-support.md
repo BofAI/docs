@@ -5,16 +5,16 @@ import TabItem from '@theme/TabItem';
 
 ## TRON Network Identifiers
 
-x402 adopts a standardized network identifier format: `tron:<network_name>`.
-The `<network_name>` can be `mainnet`, `shasta`, or `nile`.
+x402 adopts the CAIP-2 network identifier format `tron:<hex_chain_id>`.
+Use the exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NILE`, `TRON_SHASTA`) in application code instead of copying opaque hex strings.
 
 ### Identifier Reference
 
-| Network Name | Network        | Description                     |
-| :----------- | :------------- | :------------------------------ |
-| **TRON Mainnet** | `tron:mainnet` | TRON Mainnet (Production)      |
-| **TRON Shasta**  | `tron:shasta`  | TRON Shasta Testnet            |
-| **TRON Nile**    | `tron:nile`    | TRON Nile Testnet              |
+| Network Name | CAIP-2 ID | SDK Constant | Description |
+| :----------- | :-------- | :----------- | :---------- |
+| **TRON Mainnet** | `tron:0x2b6653dc` | `TRON_MAINNET` | TRON Mainnet (Production) |
+| **TRON Shasta**  | `tron:0x94a9059e`  | `TRON_SHASTA`  | TRON Shasta Testnet |
+| **TRON Nile**    | `tron:0xcd8690dc`  | `TRON_NILE`    | TRON Nile Testnet |
 
 ---
 
@@ -57,10 +57,10 @@ By default, **USDT** and **USDD** are used as primary settlement currencies.
 
 | Symbol | Network        | Contract Address |
 | :------ | :------------- | :--------------- |
-| **USDT** | `tron:mainnet` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
-| **USDT** | `tron:nile`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
-| **USDD** | `tron:mainnet` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
-| **USDD** | `tron:nile`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
+| **USDT** | `tron:0x2b6653dc` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
+| **USDT** | `tron:0xcd8690dc`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
+| **USDD** | `tron:0x2b6653dc` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
+| **USDD** | `tron:0xcd8690dc`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56`    | `0x55d398326f99059fF775485246999027B3197955` |
 | **USDC** | `eip155:56`    | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
 | **EPS**  | `eip155:56`    | `0xA7f552078dcC247C2684336020c03648500C6d9F` |
@@ -95,7 +95,7 @@ x402 uses typed data signing for all payment-related signatures.
 
 When configuring an `HTTP 402` payment request on the server side, you must explicitly define:
 
-1. **Network** – The unique network identifier (e.g., `tron:nile`)
+1. **Network** – The unique network identifier (e.g., `tron:0xcd8690dc`)
 2. **Asset** – The TRC-20/BEP-20 token **contract address**
 3. **Amount** – The integer value in the token’s **smallest unit (raw amount)**
 
@@ -108,7 +108,7 @@ When configuring an `HTTP 402` payment request on the server side, you must expl
 
 ## Payment Schemes
 
-x402 supports five payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
+x402 supports four payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
 
 ### `exact` Scheme
 
@@ -127,13 +127,9 @@ Usage-based billing. The client signs a Permit2 authorization for up to a **maxi
 
 A payment-channel scheme for high-frequency micro-payments (e.g. AI agent per-token billing). The payer **deposits once** on-chain, then pays many requests with off-chain **vouchers**; the facilitator **claims** a batch and **settles** to `payTo` in a single tx — so N requests cost ~one deposit's worth of gas. Includes a **refund** path for the unused balance. Available on EVM and TRON.
 
-### `auth-capture` Scheme
-
-Escrow-style authorization capture (EVM only). Funds are authorized into an escrow contract and released per business logic.
-
 ### `exact_gasfree` Scheme
 
-TRON-specific. Allows buyers to pay with USDT/USDD **without holding TRX for gas fees**. The payer signs a TIP-712 GasFree permit and a relayer pays the on-chain energy via the official GasFree Proxy — no TRX for the payer, no one-time `approve`. Funds come from the payer's GasFree custodial wallet (not the main wallet). Available on `tron:mainnet` and `tron:nile`.
+TRON-specific. Allows buyers to pay with USDT/USDD **without holding TRX for gas fees**. The payer signs a TIP-712 GasFree permit and a relayer pays the on-chain energy via the official GasFree Proxy — no TRX for the payer, no one-time `approve`. Funds come from the payer's GasFree custodial wallet (not the main wallet). Available on `tron:0x2b6653dc` and `tron:0xcd8690dc`.
 
 #### GasFree Account Management (via x402-payment skill)
 
@@ -190,10 +186,10 @@ You may deploy your own Facilitator to gain full control over payment verificati
 
 | Core Component | TRON/BSC Implementation |
 | :------------- | :---------------------- |
-| **Networks**   | `tron:mainnet`, `tron:shasta`, `tron:nile`, `eip155:56`, `eip155:97` |
+| **Networks**   | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97` |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20 |
 | **Signing Mechanism** | TIP-712 / EIP-712 typed data signing |
-| **Payment Schemes** | `exact`, `upto`, `batch-settlement`, `auth-capture` (EVM), `exact_gasfree` (TRON) |
+| **Payment Schemes** | `exact`, `upto`, `batch-settlement`, `exact_gasfree` (TRON) |
 
 ---
 
@@ -202,9 +198,9 @@ You may deploy your own Facilitator to gain full control over payment verificati
 On the **client / facilitator** side, register a custom TRC-20 token via the TRON token registry (`@bankofai/x402-tron`):
 
 ```typescript
-import { registerToken } from "@bankofai/x402-tron";
+import { registerToken, TRON_NILE } from "@bankofai/x402-tron";
 
-registerToken("tron:nile", {
+registerToken(TRON_NILE, {
   address: "<YOUR_TOKEN_CONTRACT_ADDRESS>",
   decimals: 6,
   name: "My Token",

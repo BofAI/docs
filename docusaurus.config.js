@@ -27,6 +27,11 @@ module.exports = {
   projectName: 'x402-tron',
   scripts: [{ src: '/hideErrorBanner.js', async: false }],
   themeConfig: {
+    docs: {
+      sidebar: {
+        autoCollapseCategories: false,
+      },
+    },
     image: 'img/logo.png',
     prism: {
       theme: require('prism-react-renderer/themes/github'),
@@ -44,22 +49,31 @@ module.exports = {
         width: 154,
       },
       items: [
+        // 顶部左侧页签：Docs / Changelogs
+        {
+          type: 'docSidebar',
+          sidebarId: 'docsSidebar',
+          position: 'left',
+          label: 'Docs',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'devnotesSidebar',
+          docsPluginId: 'devnotes',
+          position: 'left',
+          label: 'Best Practices',
+        },
+        {
+          type: 'docSidebar',
+          sidebarId: 'changelogSidebar',
+          docsPluginId: 'changelog',
+          position: 'left',
+          label: 'Changelogs',
+        },
         // 多语言选项
         {
           type: 'localeDropdown',
           position: 'right',
-        },
-        {
-          label: 'GitHub',
-          href: 'https://github.com/BofAI',
-          position: 'right',
-          className: 'persistent',
-        },
-        {
-          label: 'TRON',
-          href: 'https://tron.network',
-          position: 'right',
-          className: 'persistent',
         },
       ],
     },
@@ -83,6 +97,9 @@ module.exports = {
           rehypePlugins: [katex],
           includeCurrentVersion: true,
         },
+        theme: {
+          customCss: require.resolve('./src/css/sidebar.css'),
+        },
         blog: false,
       },
     ],
@@ -97,6 +114,40 @@ module.exports = {
   ],
   plugins: [
     require.resolve('./docusaurus-plugin-global-style'),
+    // Changelog：独立 docs 实例，路径 /changelog，对应顶部 Changelogs 页签
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'changelog',
+        path: 'changelog',
+        routeBasePath: 'changelog',
+        sidebarPath: require.resolve('./sidebarsChangelog.js'),
+      },
+    ],
+    // Developer Notes：独立 docs 实例，路径 /devnotes，对应顶部 Developer Notes 页签
+    [
+      '@docusaurus/plugin-content-docs',
+      {
+        id: 'devnotes',
+        path: 'devnotes',
+        routeBasePath: 'devnotes',
+        sidebarPath: require.resolve('./sidebarsDevnotes.js'),
+      },
+    ],
+    // Offline full-text search (no Algolia account needed). Indexes both locales.
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        language: ['en', 'zh'],
+        indexBlog: false,
+        docsRouteBasePath: '/',
+        highlightSearchTermsOnTargetPage: true,
+        searchResultLimits: 10,
+        searchResultContextMaxLength: 80,
+        explicitSearchResultPath: true,
+      },
+    ],
     function webpackFallbackPlugin() {
       return {
         name: 'custom-webpack-fallback-plugin',

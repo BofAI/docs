@@ -16,7 +16,7 @@ This page tracks the feature support of the x402 SDK.
 | Package | Purpose |
 |---------|---------|
 | `@bankofai/x402-core` | Protocol types, client/facilitator/server engines, `HTTPFacilitatorClient`, observability |
-| `@bankofai/x402-evm` | EVM mechanism: `exact`, `upto`, `batch-settlement`, `auth-capture` |
+| `@bankofai/x402-evm` | EVM mechanism: `exact`, `upto`, `batch-settlement` |
 | `@bankofai/x402-tron` | TRON mechanism: `exact`, `upto`, `batch-settlement`, `exact_gasfree` |
 | `@bankofai/x402-fetch` | Wrapped-`fetch` client (`wrapFetchWithPayment`) |
 | `@bankofai/x402-express` | Express server middleware |
@@ -48,13 +48,13 @@ This page tracks the feature support of the x402 SDK.
 
 ## Networks
 
-| Network | Status |
-|-----------|--------|
-| `tron:mainnet` | ✅ |
-| `tron:nile` | ✅ |
-| `tron:shasta` | ✅ |
-| `eip155:56` (BSC Mainnet) | ✅ |
-| `eip155:97` (BSC Testnet) | ✅ |
+| Network | SDK Constant | Status |
+|-----------|--------------|--------|
+| `tron:0x2b6653dc` | `TRON_MAINNET` | ✅ |
+| `tron:0xcd8690dc` | `TRON_NILE` | ✅ |
+| `tron:0x94a9059e` | `TRON_SHASTA` | ✅ |
+| `eip155:56` (BSC Mainnet) | - | ✅ |
+| `eip155:97` (BSC Testnet) | - | ✅ |
 
 > Upstream EVM chains (Base, Base Sepolia, MegaETH, Monad, Hyperliquid) are also wired in the EVM default-asset registry. Adding a chain is a config-table edit in the examples — no SDK changes.
 
@@ -62,14 +62,13 @@ This page tracks the feature support of the x402 SDK.
 
 ## Payment Schemes
 
-x402 supports five payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
+x402 supports four payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
 
 | Scheme | EVM | TRON | Description |
 |--------|-----|------|-------------|
 | `exact` | ✅ | ✅ | Pay the exact amount. ERC-3009 `transferWithAuthorization` (gasless) or Permit2 (one-time `approve(Permit2)`) for plain ERC-20s. |
 | `upto` | ✅ | ✅ | Usage-based billing — the client signs a Permit2 authorization for up to a maximum; the server settles only the real usage (≤ max). |
 | `batch-settlement` | ✅ | ✅ | Payment-channel: deposit once on-chain, then pay many requests with off-chain vouchers; the facilitator claims a batch and settles in one tx. Includes a refund path. |
-| `auth-capture` | ✅ | ❌ | Escrow-style authorization capture (EVM only). |
 | `exact_gasfree` | ❌ | ✅ | TRON-only. Pay with USDT/USDD **without holding TRX for gas** — a relayer pays the on-chain energy via the GasFree API. |
 
 > **x402 Foundation v2 compatibility**: The `exact` scheme (EVM and TRON) conforms to the v2 wire format published by the **x402 Foundation**. Stock v2 clients interoperate with this SDK's server and vice versa. See [Network & Token Support → `exact` Scheme](./core-concepts/network-and-token-support.md#exact-scheme) for details.
@@ -137,8 +136,8 @@ Key custody is in [`@bankofai/agent-wallet`](https://github.com/BofAI/agent-wall
 
 | Token | Network | Status |
 |--------|---------|--------|
-| USDT (TRC-20) | `tron:mainnet`, `tron:nile` | ✅ |
-| USDD (TRC-20) | `tron:mainnet`, `tron:nile` | ✅ |
+| USDT (TRC-20) | `tron:0x2b6653dc`, `tron:0xcd8690dc` | ✅ |
+| USDD (TRC-20) | `tron:0x2b6653dc`, `tron:0xcd8690dc` | ✅ |
 | USDT (BEP-20) | `eip155:56`, `eip155:97` | ✅ |
 | USDC (BEP-20) | `eip155:56`, `eip155:97` | ✅ |
 | DHLU (BSC testnet, ERC-3009) | `eip155:97` | ✅ |

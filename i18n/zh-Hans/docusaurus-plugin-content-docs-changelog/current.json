@@ -1,0 +1,22 @@
+{
+  "version.label": {
+    "message": "当前",
+    "description": "The label for version current"
+  },
+  "sidebar.changelogSidebar.doc.All Products": {
+    "message": "全部产品",
+    "description": "The label for the doc item All Products in sidebar changelogSidebar"
+  },
+  "sidebar.changelogSidebar.doc.x402 Payment Protocol": {
+    "message": "x402支付协议",
+    "description": "The label for the doc item x402 Payment Protocol in sidebar changelogSidebar"
+  },
+  "sidebar.changelogSidebar.doc.LLM Service": {
+    "message": "LLM 服务",
+    "description": "The label for the doc item LLM Service in sidebar changelogSidebar"
+  },
+  "sidebar.changelogSidebar.doc.8004 Protocol": {
+    "message": "8004协议",
+    "description": "The label for the doc item 8004 Protocol in sidebar changelogSidebar"
+  }
+}

@@ -57,111 +57,23 @@
 
 ## 目前 Skills 能帮你干什么？
 
-一共 14 个技能——覆盖 TRON 生态最常用的场景以及 X/Twitter 工具，外加一个专属的引导辅助技能。每个技能都配了一句"参考话术"——复制到 AI 对话框里回车就能体验。
+一共 14 个技能，覆盖 TRON 生态最常用的场景与 X/Twitter 工具。下表一眼看全：每个技能配一句"参考话术"，复制进 AI 对话框回车就能体验；点技能名查看完整文档。
 
-### 🔑 安全钱包管理
-
-创建加密钱包、签名交易和消息、管理多个钱包——全程不暴露你的私钥。这是其他交易和支付技能的底层依赖。同时支持 EVM（BSC、Ethereum、Polygon 等）和 TRON 网络。
-
-> 🗣️ "帮我创建一个新的 agent 钱包" 或 "帮我列出所有钱包和它们的地址。"
-
-💡 如需了解设置与进阶用法，请查看：[**agent-wallet**](./BANKOFAISkill.md#agent-wallet)
-
-### 💱 执行 DEX 交易
-
-查价格、比报价、甚至一键换币。
-
-> 🗣️ "帮我算算现在 100 USDT 在 SunSwap 上能换多少 TRX？"
-
-💡 如需了解更多进阶玩法，请查看：[**sunswap**](./BANKOFAISkill.md#sunswap)
-
-### 🚀 玩转 SunPump meme 币：发币 + 交易
-
-一句话发行自己的 meme 币，在 TRON 的 meme 代币发射台 SunPump 上买卖、查行情。发币在**服务端完成，无需钱包**——给出名称、符号、描述和 logo 即可。交易时 AI 会自动判断该走哪条路：还没在 SunSwap V2 上创建交易对的「发射前」代币在 SunPump 上买卖，已在 SunSwap V2 建好交易对的「发射后」代币走普通兑换。还能查代币详情、排行榜、持有人分布和钱包持仓。**sunpump-agent-skill 的所有功能都只支持 TRON 主网**。
-
-> 🗣️ "帮我在 SunPump 上发一个 meme 币，名称、符号、描述和 logo 我发给你。" 或 "帮我看看 SunPump 上 24 小时涨幅前 10 的 meme 币，再查一下第一名的持有人集中度。"
-
-💡 如需了解交易与风控细节，请查看：[**sunpump-agent-skill**](./BANKOFAISkill.md#sunpump-agent-skill)
-
-### 📈 进行永续合约交易
-
-在 SunPerp 看行情、开平仓。内置安全锁：最高只允许 20 倍杠杆（可在配置里调整），且每次开仓都**强制带止损**——没指定时默认设在距开仓价 5% 的位置，超过 25% 会被直接拒绝。帮你管住手，防爆仓。
-
-> 🗣️ "现在 BTC 资金费率是多少？帮我开一张 5 倍杠杆的多单，亏损 5% 自动止损。"
-
-💡 如需了解更多参数设置，请查看：[**sunperp-skill**](./BANKOFAISkill.md#sunperp-skill)
-
-### 🕵️ 查询链上数据
-
-查账户、查交易、查新币靠不靠谱。纯查询，绝对安全，不花一分钱。
-
-> 🗣️ "帮我查一下昨天那个土狗币现在的持仓分布，有没有被庄家控盘？"
-
-💡 如需了解更多查询维度，请查看：[**tronscan-skill**](./BANKOFAISkill.md#tronscan-skill)
-
-### 💸 转账与管理 TRC20 代币
-
-查余额、转代币、管理授权——支持 USDT、USDD、SUN 等常见代币，也能通过合约地址操作任意 TRC20 代币。支持批量查余额。
-
-> 🗣️ "帮我查一下 USDT、USDD 和 SUN 的余额，然后转 10 USDT 到 TRecipientAddress。"
-
-💡 如需了解更多代币操作，请查看：[**trc20-toolkit-skill**](./BANKOFAISkill.md#trc20-toolkit-skill)
-
-### 💵 USDD 稳定币与 JUST 协议
-
-通过 PSM（Peg Stability Module）进行 1:1 的 USDT ↔ USDD 兑换（目前零手续费），查看 USDD/USDT/USDC/TRX/JST 余额，以及查询金库（CDP）仓位和协议参数。
-
-> 🗣️ "帮我通过 PSM 用 1000 USDT 换成 USDD" 或 "帮我列出所有 USDD 金库类型和它们的稳定费率。"
-
-💡 如需了解 PSM 兑换和金库查询，请查看：[**usdd-skill**](./BANKOFAISkill.md#usdd-skill)
-
-### 🗳️ TRX 质押与超级代表投票
-
-质押 TRX 换取 TRON Power，给超级代表投票，领取投票奖励。兼容 Stake 2.0——得票前 27 名的超级代表每 6 小时按得票比例分配区块奖励给投票人。
-
-> 🗣️ "查一下我的 TRON Power 和当前投票情况，然后列出前 10 名超级代表。" 或 "帮我领取待结算的投票奖励。"
-
-💡 如需了解质押、投票与奖励流程，请查看：[**trx-staking-skill**](./BANKOFAISkill.md#trx-staking-skill)
-
-### 🔐 多签与账户权限管理
-
-给你的 TRON 账户加上多重签名保护——配置密钥、设定阈值、协调多方共签。非常适合团队钱包，或者限制 AI 只能执行 DeFi 操作。
-
-> 🗣️ "帮我查一下账户当前的权限配置，然后给 owner 权限设置 2-of-3 多签。"
-
-💡 如需了解权限模板和多签流程，请查看：[**multisig-permissions**](./BANKOFAISkill.md#multisig-permissions)
-
-### ☕ 自动结算链上付费服务
-
-当 AI 需要调用付费的链上服务或数据接口时，会通过 x402 协议自动完成"先付费、再获取"的链上结算，无需你手动扫码或切换钱包。支持多条链付款：TRON（TRC20：USDT、USDD，含 GasFree）和 BSC（ERC20：USDT、USDC）都能用，切 `--network` 参数即可。
-
-> 🗣️ "使用 x402 协议调用这个付费智能体端点：https://api.example.com"（请替换为你实际要调用的付费端点地址）
-
-💡 如需了解支付与授权细节，请查看：[**x402-payment**](./BANKOFAISkill.md#x402-payment)
-
-### 🏦 管理 BANK OF AI 账户
-
-查看你的 BANK OF AI 余额，一句话完成充值。
-
-> 🗣️ "帮我看看我的账户还有多少余额，顺便再充 5 个 U 进去。"
-
-💡 如需了解充值与提现规则，请查看：[**recharge-skill**](./BANKOFAISkill.md#recharge-skill)
-
-### 🐦 X/Twitter 每日日报
-
-把你自己的 X/Twitter 账号变成每日简报——提及、主页时间线与可回复机会，一并帮你汇总。
-
-> 🗣️ "生成我账号今天的 X/Twitter 日报。"
-
-💡 两种运行方式：纯 API 的 [**twitter-digest**](./BANKOFAISkill.md#twitter-digest)，或基于本地 `xurl` CLI 的 [**twitter-mcp**](./BANKOFAISkill.md#twitter-mcp)。
-
-### 🧭 引导辅助（bankofai-guide）
-
-一个轻量的辅助技能，负责跑完安装后的首次上手流程、帮你创建第一个 AgentWallet，并在任何链上操作之前充当"钱包守门员"——如果还没配钱包会提醒你先配一个。你通常不需要主动调用它，安装器和其他技能会在需要时自动把它唤醒。
-
-> 🗣️ "带我走一遍 BANK OF AI 的新手引导。" 或 "运行 bankofai-guide，帮我配第一个钱包。"
-
-💡 如需了解完整的引导流程，请查看：[**bankofai-guide**](./BANKOFAISkill.md#bankofai-guide)
+| 技能 | 一句话能干嘛 | 试试这句话 |
+| :-- | :-- | :-- |
+| 🔑 [agent-wallet](./BANKOFAISkill.md#agent-wallet) | 创建/管理加密钱包、签名交易，私钥全程不暴露；其它技能的底层依赖（EVM + TRON） | "帮我创建一个新的 agent 钱包" |
+| 💱 [sunswap](./BANKOFAISkill.md#sunswap) | 查价格、比报价、一键换币 | "100 USDT 在 SunSwap 能换多少 TRX？" |
+| 🚀 [sunpump-agent-skill](./BANKOFAISkill.md#sunpump-agent-skill) | 一句话发 meme 币、SunPump 买卖与行情（仅 TRON 主网；发币无需钱包） | "帮我在 SunPump 上发一个 meme 币" |
+| 📈 [sunperp-skill](./BANKOFAISkill.md#sunperp-skill) | SunPerp 永续合约看行情、开平仓；内置风控：≤20 倍杠杆、强制止损 | "开一张 5 倍多单，亏 5% 自动止损" |
+| 🕵️ [tronscan-skill](./BANKOFAISkill.md#tronscan-skill) | 查账户、交易、代币安全；纯查询零风险、不花钱 | "查查这个币有没有被庄家控盘" |
+| 💸 [trc20-toolkit-skill](./BANKOFAISkill.md#trc20-toolkit-skill) | TRC20 查余额、转账、管理授权，支持批量与任意合约地址 | "转 10 USDT 到 TRecipientAddress" |
+| 💵 [usdd-skill](./BANKOFAISkill.md#usdd-skill) | PSM 1:1 兑换 USDT↔USDD（现零手续费）、查金库（CDP）仓位 | "用 1000 USDT 通过 PSM 换成 USDD" |
+| 🗳️ [trx-staking-skill](./BANKOFAISkill.md#trx-staking-skill) | 质押 TRX、给超级代表投票、领奖励（Stake 2.0） | "帮我领取待结算的投票奖励" |
+| 🔐 [multisig-permissions](./BANKOFAISkill.md#multisig-permissions) | 账户多签与权限管理，适合团队钱包或限制 AI 权限 | "给 owner 权限设置 2-of-3 多签" |
+| ☕ [x402-payment](./BANKOFAISkill.md#x402-payment) | 调用付费接口时经 x402 自动"先付费再获取"（TRON / BSC 多链） | "用 x402 调用这个付费端点：https://…" |
+| 🏦 [recharge-skill](./BANKOFAISkill.md#recharge-skill) | 查 BANK OF AI 余额、一句话充值 | "查下余额，顺便再充 5 个 U" |
+| 🐦 [twitter-digest](./BANKOFAISkill.md#twitter-digest) / [twitter-mcp](./BANKOFAISkill.md#twitter-mcp) | 你的 X/Twitter 每日简报：提及、时间线、可回复机会 | "生成我账号今天的 X 日报" |
+| 🧭 [bankofai-guide](./BANKOFAISkill.md#bankofai-guide) | 新手引导 + "钱包守门员"，通常由安装器自动唤醒 | "带我走一遍新手引导" |
 
 ---
 
