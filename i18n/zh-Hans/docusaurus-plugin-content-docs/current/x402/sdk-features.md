@@ -16,7 +16,7 @@ description: 'x402 TypeScript SDK 的功能支持矩阵，以颗粒化 @bankofai
 | 包 | 用途 |
 |---------|---------|
 | `@bankofai/x402-core` | 协议类型、client/facilitator/server 引擎、`HTTPFacilitatorClient`、可观测性 |
-| `@bankofai/x402-evm` | EVM 机制：`exact`、`upto`、`batch-settlement`、`auth-capture` |
+| `@bankofai/x402-evm` | EVM 机制：`exact`、`upto`、`batch-settlement` |
 | `@bankofai/x402-tron` | TRON 机制：`exact`、`upto`、`batch-settlement`、`exact_gasfree` |
 | `@bankofai/x402-fetch` | 包装 `fetch` 的 client（`wrapFetchWithPayment`） |
 | `@bankofai/x402-express` | Express server 中间件 |
@@ -48,13 +48,13 @@ description: 'x402 TypeScript SDK 的功能支持矩阵，以颗粒化 @bankofai
 
 ## 网络
 
-| 网络 | 状态 |
-|-----------|--------|
-| `tron:mainnet` | ✅ |
-| `tron:nile` | ✅ |
-| `tron:shasta` | ✅ |
-| `eip155:56`（BSC 主网） | ✅ |
-| `eip155:97`（BSC 测试网） | ✅ |
+| 网络 | SDK 常量 | 状态 |
+|-----------|----------|--------|
+| `tron:0x2b6653dc` | `TRON_MAINNET` | ✅ |
+| `tron:0xcd8690dc` | `TRON_NILE` | ✅ |
+| `tron:0x94a9059e` | `TRON_SHASTA` | ✅ |
+| `eip155:56`（BSC 主网） | - | ✅ |
+| `eip155:97`（BSC 测试网） | - | ✅ |
 
 > 上游 EVM 链（Base、Base Sepolia、MegaETH、Monad、Hyperliquid）也已接入 EVM 默认资产注册表。在示例中添加一条链仅需编辑配置表——无需改动 SDK。
 
@@ -62,14 +62,13 @@ description: 'x402 TypeScript SDK 的功能支持矩阵，以颗粒化 @bankofai
 
 ## 付款方案
 
-x402 支持五种付款方案。每种方案按链族实现为 client + server + facilitator 三件套。
+x402 支持四种付款方案。每种方案按链族实现为 client + server + facilitator 三件套。
 
 | 方案 | EVM | TRON | 说明 |
 |--------|-----|------|-------------|
 | `exact` | ✅ | ✅ | 支付精确金额。ERC-3009 `transferWithAuthorization`（无 gas）或 Permit2（一次性 `approve(Permit2)`）用于普通 ERC-20。 |
 | `upto` | ✅ | ✅ | 按量计费——client 签署最高至最大金额的 Permit2 授权；server 仅结算实际用量（≤ max）。 |
 | `batch-settlement` | ✅ | ✅ | 支付通道：链上一次性存入，然后用链下凭证支付多次请求；facilitator 批量 claim 并在一笔交易中结算。含退款路径。 |
-| `auth-capture` | ✅ | ❌ | 托管式授权捕获（仅 EVM）。 |
 | `exact_gasfree` | ❌ | ✅ | 仅 TRON。用 USDT/USDD 付款**无需持有 TRX 支付 gas**——由 relayer 通过 GasFree API 支付链上 energy。 |
 
 > **x402 Foundation v2 兼容性**：`exact` 方案（EVM 和 TRON）符合 **x402 Foundation** 发布的 v2 线格式。标准 v2 client 可与本 SDK 的 server 互通，反之亦然。详见[网络与代币支持 → `exact` 方案](./core-concepts/network-and-token-support.md#exact-scheme)。
@@ -137,8 +136,8 @@ x402 支持五种付款方案。每种方案按链族实现为 client + server +
 
 | 代币 | 网络 | 状态 |
 |--------|---------|--------|
-| USDT（TRC-20） | `tron:mainnet`、`tron:nile` | ✅ |
-| USDD（TRC-20） | `tron:mainnet`、`tron:nile` | ✅ |
+| USDT（TRC-20） | `tron:0x2b6653dc`、`tron:0xcd8690dc` | ✅ |
+| USDD（TRC-20） | `tron:0x2b6653dc`、`tron:0xcd8690dc` | ✅ |
 | USDT（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
 | USDC（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
 | EPS（BEP-20） | `eip155:56` | ✅ |

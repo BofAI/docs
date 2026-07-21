@@ -75,13 +75,13 @@ Our goal is to build a low-barrier, permissionless, developer-friendly programma
 
 x402 currently supports the following networks:
 
-- **TRON Mainnet** (`tron:mainnet`)
-- **TRON Shasta Testnet** (`tron:shasta`)
-- **TRON Nile Testnet** (`tron:nile`)
+- **TRON Mainnet** (`tron:0x2b6653dc`)
+- **TRON Shasta Testnet** (`tron:0x94a9059e`)
+- **TRON Nile Testnet** (`tron:0xcd8690dc`)
 - **BSC Mainnet** (`eip155:56`)
 - **BSC Testnet** (`eip155:97`)
 
-> **SDK (TypeScript-only)**: x402 is a TypeScript-only SDK published as granular `@bankofai/x402-*` npm packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The source is maintained in a pnpm/turbo monorepo, but application development should install the published packages. Supported schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, `auth-capture` (EVM), and `exact_gasfree` (TRON). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
+> **SDK (TypeScript-only)**: x402 is a TypeScript-only SDK published as granular `@bankofai/x402-*` npm packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The source is maintained in a pnpm/turbo monorepo, but application development should install the published packages. Supported schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, and `exact_gasfree` (TRON). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
 
 ---
 
