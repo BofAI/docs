@@ -256,6 +256,7 @@ const sidebars = {
             'llmservice/models/gemini-3-flash',
             'llmservice/models/glm-5-2',
             'llmservice/models/glm-5-1',
+            'llmservice/models/kimi-k3',
             'llmservice/models/kimi-k2.6',
             'llmservice/models/kimi-k2.5',
             'llmservice/models/qwen3.6-27b',
