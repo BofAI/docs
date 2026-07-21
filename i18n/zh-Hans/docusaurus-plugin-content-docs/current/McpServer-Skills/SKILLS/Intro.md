@@ -57,7 +57,7 @@
 
 ## 目前 Skills 能帮你干什么？
 
-一共 12 个技能——覆盖 TRON 生态最常用的场景，外加一个专属的引导辅助技能。每个技能都配了一句"参考话术"——复制到 AI 对话框里回车就能体验。
+一共 14 个技能——覆盖 TRON 生态最常用的场景以及 X/Twitter 工具，外加一个专属的引导辅助技能。每个技能都配了一句"参考话术"——复制到 AI 对话框里回车就能体验。
 
 ### 🔑 安全钱包管理
 
@@ -146,6 +146,14 @@
 > 🗣️ "帮我看看我的账户还有多少余额，顺便再充 5 个 U 进去。"
 
 💡 如需了解充值与提现规则，请查看：[**recharge-skill**](./BANKOFAISkill.md#recharge-skill)
+
+### 🐦 X/Twitter 每日日报
+
+把你自己的 X/Twitter 账号变成每日简报——提及、主页时间线与可回复机会，一并帮你汇总。
+
+> 🗣️ "生成我账号今天的 X/Twitter 日报。"
+
+💡 两种运行方式：纯 API 的 [**twitter-digest**](./BANKOFAISkill.md#twitter-digest)，或基于本地 `xurl` CLI 的 [**twitter-mcp**](./BANKOFAISkill.md#twitter-mcp)。
 
 ### 🧭 引导辅助（bankofai-guide）
 

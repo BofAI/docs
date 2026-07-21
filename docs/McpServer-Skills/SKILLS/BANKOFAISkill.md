@@ -27,6 +27,8 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | **multisig-permissions** | Multi-sig permission setup, key management, co-signed proposals | Wallet credentials (owner key for permission changes) |
 | **x402-payment** | On-chain "pay-first" auto-settlement on TRON (TRC20) & BSC (ERC20), with GasFree support | Wallet credentials (via agent-wallet) |
 | **recharge-skill** | Balance, order history, account top-up | BANK OF AI API key |
+| **twitter-digest** | Generate a daily digest from your own X/Twitter account — mentions, home timeline, and reply opportunities (API-only) | X/Twitter API credentials |
+| **twitter-mcp** | Install/authorize the `xurl` CLI for X/Twitter and generate digests from it; optional hosted X MCP bridge | X/Twitter OAuth (via `xurl`) |
 | **bankofai-guide** | Onboarding helper — post-install setup, first AgentWallet creation, wallet guard for other skills | None (runs automatically when needed) |
 
 ### 🔑 Where Do I Get These Keys? How Do I Set Them Up?
@@ -439,7 +441,7 @@ Some APIs and AI agents require on-chain payment before use. This skill uses the
 > Activate my GasFree account on nile with USDT.
 
 :::tip GasFree support (TRON)
-The skill prefers the `exact_gasfree` scheme over `exact_permit` when paying on TRON. GasFree requires an activated account with enough token balance in the GasFree wallet — use `--gasfree-info` to check, and `--gasfree-activate` if it's not active yet.
+When paying on TRON, the skill prefers `exact_gasfree` and automatically falls back to `exact` if GasFree payment creation fails. GasFree requires sufficient token balance in the GasFree wallet; inactive accounts can be activated on first payment when the advertised fees permit it. Use `--gasfree-info` to check wallet address, activation status, balance, and nonce; use `--gasfree-activate` to activate manually.
 :::
 
 :::caution Wallet credentials come from agent-wallet
@@ -461,6 +463,38 @@ Check your balance, view order history, or top up your account.
 **Requires your confirmation:**
 
 > Recharge 1 USDT to my BANK OF AI account.
+
+---
+
+## twitter-digest {#twitter-digest}
+
+Generate a concise daily digest from your own X/Twitter account. This skill is **API-only** — it reads your mentions, home timeline, and reply opportunities to produce a daily social-media summary. Trigger it with phrases like "生成X日报", "X日报", "推特日报", or "Twitter digest".
+
+**What it does:**
+
+> Generate today's X/Twitter digest for my account.
+
+> Summarize my mentions and reply opportunities from the last day.
+
+:::caution Requires X/Twitter API access
+This skill pulls data through the X/Twitter API, so it needs valid API credentials configured for your account.
+:::
+
+---
+
+## twitter-mcp {#twitter-mcp}
+
+Install and authorize `@xdevplatform/xurl`, then generate X/Twitter daily digests directly from the local `xurl` CLI (commands like `whoami`, `timeline`, `mentions`, `posts`, `search`). Unlike `twitter-digest`, the data source here is the local `xurl` CLI rather than an API collector. The hosted X MCP bridge can optionally be registered as `xapi` on request.
+
+**What it does:**
+
+> Install and authorize xurl for my X/Twitter account.
+
+> Generate my X/Twitter daily digest from the xurl CLI.
+
+:::tip xurl vs. twitter-digest
+Use `twitter-mcp` when you want digests driven by the local `xurl` CLI; use `twitter-digest` for the API-only digest flow.
+:::
 
 ---
 

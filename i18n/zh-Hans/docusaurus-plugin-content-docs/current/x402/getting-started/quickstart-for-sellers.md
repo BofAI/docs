@@ -3,17 +3,21 @@ import TabItem from '@theme/TabItem';
 
 # 卖家快速入门
 
-> **测试网优先：** 本指南默认使用测试网，所有操作均使用免费测试代币，**不会涉及任何真实资金**。待测试通过后，再参考文末的[切换到主网](#在主网运行)章节进行上线。
+> **测试网优先：** 本指南默认使用测试网，所有操作均使用免费的测试代币——**不涉及真实资金**。测试完成后，请参考本指南末尾的[切换到主网](#在主网运行)部分。
 
 ## 您将实现什么
 
-完成本指南后，您将拥有一个**可对 API 调用收费的服务**：
+完成本指南后，您将拥有一个**对 API 调用收费的服务**：
 
-- 当用户或 AI 代理调用您的 API 时，系统自动要求对方支付指定代币 
-- 支持按请求收费、计量使用、动态定价等多种收费模式
-- 付款验证和区块链结算全程自动完成，收款直接到您的钱包
+- 当用户或 AI 代理调用您的 API 时，系统自动要求支付指定代币
+- 支持按次计费、按量计费、动态定价等
+- 付款验证与链上结算全自动完成——资金直接进入您的钱包
 
-整个流程分为 **4 步**，预计耗时 **15–20 分钟**。
+整个流程共 **4 步**，预计耗时 **15–20 分钟**。
+
+:::info SDK（仅 TypeScript）
+x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发布。本指南展示如何基于已发布的 npm 包开发。
+:::
 
 ---
 
@@ -21,72 +25,72 @@ import TabItem from '@theme/TabItem';
 
 ### 确认运行环境
 
-请在终端（macOS/Linux 的 Terminal，或 Windows 的 PowerShell/命令提示符）中依次运行以下命令，确认相关工具已安装：
+在终端（macOS/Linux 的 Terminal，或 Windows 的 PowerShell/命令提示符）中运行以下命令，确认所需工具已安装：
 
 ```bash
-python --version   # 需要 3.11 或以上版本
-pip --version      # 随 Python 一起安装
-git --version      # 版本控制工具
+node --version    # 需要 Node.js 22 或更高版本
+pnpm --version    # 需要 pnpm 11.1 或更高版本
+git --version     # 版本控制工具
 ```
 
-如果任何一个命令提示"找不到命令"，请先安装：
-- Python：前往 [python.org](https://www.python.org/downloads/) 下载安装包
+如果提示"command not found"，请先安装：
+- Node.js：前往 [nodejs.org](https://nodejs.org/zh-cn/download) 下载安装程序（包含 `npm`）
+- pnpm：安装 Node.js 后运行 `npm install -g pnpm`
 - Git：前往 [git-scm.com](https://git-scm.com/) 下载
 
 ---
 
 ### 创建收款钱包
 
-您需要一个区块链钱包地址，用于接收用户支付的代币。请根据您选择的网络按照以下步骤操作：
-
+您需要一个区块链钱包地址来接收用户的代币。根据所选网络，按以下步骤操作：
 
 <Tabs>
 <TabItem value="TRON" label="TRON（推荐）">
 
 **创建 TronLink 钱包（约 3 分钟）：**
 
-1. 在浏览器中安装 [TronLink 插件](https://www.tronlink.org/)（支持 Chrome/Firefox），或在手机上下载 TronLink App
-2. 打开插件，点击"创建钱包"
-3. 设置登录密码（用于解锁钱包，只存在本地）
-4. **重要：** 系统会显示一串助记词（12个英文单词）——将它们**抄写在纸上**并妥善保管，这是找回钱包的唯一方式
-5. 按提示验证助记词后，钱包创建完成
-6. 在首页复制您的钱包地址（以字母 **`T`** 开头，如 `TXyz1234...`）
+1. 在浏览器中安装 [TronLink 扩展](https://www.tronlink.org/)（支持 Chrome/Firefox），或在手机上下载 TronLink App
+2. 打开扩展，点击"创建钱包"
+3. 设置登录密码（用于解锁钱包，仅本地存储）
+4. **重要：** 系统会显示一组助记词（12 个英文单词）——**请抄写在纸上并妥善保管**；这是恢复钱包的唯一方式
+5. 按提示验证助记词，完成钱包创建
+6. 在主界面复制您的钱包地址（以字母 **`T`** 开头，例如 `TXyz1234...`）
 
 **领取免费测试代币（约 2 分钟）：**
 
 1. 前往 [Nile 测试网水龙头](https://nileex.io/join/getJoinPage)
-2. 将您的 TRON 钱包地址粘贴到输入框
+2. 在输入框粘贴您的 TRON 钱包地址
 3. 点击领取，等待约 1–2 分钟
-4. 在 TronLink 中切换到"Nile 测试网"，刷新后确认 TRX 和 USDT/USDD 余额已到账
+4. 在 TronLink 切换到"Nile 测试网"，刷新并确认 TRX 和 USDT/USDD 余额已到账
 
-> ✅ **成功标志：** 钱包显示测试 TRX 和测试 USDT（或 USDD）余额大于 0
+> ✅ **成功：** 钱包显示测试 TRX 和测试 USDT（或 USDD）余额大于 0
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
 **创建 MetaMask 钱包（约 3 分钟）：**
 
-1. 在浏览器中安装 [MetaMask 插件](https://metamask.io/)（支持 Chrome/Firefox/Edge）
-2. 打开插件，点击"创建新钱包"
-3. 设置密码，然后**将助记词（12个英文单词）抄写到纸上保管好**
+1. 在浏览器中安装 [MetaMask 扩展](https://metamask.io/)（支持 Chrome/Firefox/Edge）
+2. 打开扩展，点击"创建新钱包"
+3. 设置密码，然后**将助记词（12 个英文单词）抄写在纸上并妥善保管**
 4. 按提示验证助记词，完成创建
-5. 在首页复制您的钱包地址（以 **`0x`** 开头，如 `0xAbc123...`）
+5. 在主界面复制您的钱包地址（以 **`0x`** 开头，例如 `0xAbc123...`）
 
 **领取免费测试代币（约 2 分钟）：**
 
 1. 前往 [BSC 测试网水龙头](https://www.bnbchain.org/en/testnet-faucet)
 2. 粘贴您的钱包地址，领取测试 BNB 和测试 USDT
-3. 在 MetaMask 中切换到 BSC 测试网，确认余额到账
+3. 在 MetaMask 切换到 BSC 测试网并确认余额已到账
 
-> ✅ **成功标志：** 钱包显示测试 BNB 和测试 USDT 余额大于 0
+> ✅ **成功：** 钱包显示测试 BNB 和测试 USDT 余额大于 0
 
 </TabItem>
 </Tabs>
 
-> ⚠️ **钱包安全提示：**
-> - 助记词和私钥是您钱包的"万能钥匙"，**任何人（包括平台客服）都不应该要求您提供**
-> - 请将助记词抄在纸上，存放在安全的物理位置，不要存在手机相册或云盘
-> - 本教程使用测试钱包，建议专门创建一个新钱包用于测试，不要使用存有真实资产的钱包
+> ⚠️ **钱包安全提醒：**
+> - 助记词和私钥是您钱包的"总钥匙"——**任何人（包括平台客服）都不应向您索要**
+> - 将助记词抄写在纸上，存放在安全的物理位置——不要保存在手机相册或云存储中
+> - 本教程使用测试钱包；建议创建一个专用的新钱包用于测试，不要使用持有真实资产的钱包
 
 ---
 
@@ -94,686 +98,357 @@ git --version      # 版本控制工具
 
 | 配置项 | 说明 | 获取方式 |
 |--------|------|----------|
-| **TRON 收款地址** | 以 `T` 开头的钱包地址 | 从 TronLink 复制 |
-| **BSC 收款地址** | 以 `0x` 开头的钱包地址 | 从 MetaMask 复制 |
-| **测试 TRX** | TRON 测试网手续费代币 | [Nile 水龙头](https://nileex.io/join/getJoinPage) |
-| **测试 USDT/USDD（TRON）** | TRON 测试付款代币（USDT 和 USDD 均支持） | [Nile 水龙头](https://nileex.io/join/getJoinPage) |
-| **测试 BNB** | BSC 测试网手续费代币 | [BSC Testnet 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
-| **测试 USDT（BSC）** | BSC 测试付款代币 | [BSC Testnet 水龙头](https://www.bnbchain.org/en/testnet-faucet) |
+| **TRON 钱包地址** | 以 `T` 开头的钱包地址（您的收款地址） | 从 TronLink 复制 |
+| **BSC 钱包地址** | 以 `0x` 开头的钱包地址（您的收款地址） | 从 MetaMask 复制 |
+| **测试 TRX** | TRON 测试网费率代币 | [Nile 水龙头](https://nileex.io/join/getJoinPage) |
+| **测试 USDT/USDD（TRON）** | TRON 测试支付代币（USDT 和 USDD 均支持） | [Nile 水龙头](https://nileex.io/join/getJoinPage) |
+| **测试 BNB** | BSC 测试网费率代币 | [BSC 测试网水龙头](https://www.bnbchain.org/en/testnet-faucet) |
+| **测试 USDT（BSC）** | BSC 测试支付代币 | [BSC 测试网水龙头](https://www.bnbchain.org/en/testnet-faucet) |
 
-**测试网 vs. 主网的区别：**
+**测试网 vs. 主网：**
 
-- **测试网**：使用免费的测试代币，不涉及真实资金，适合开发和调试。网络标识符：`tron:nile` / `eip155:97`
-- **主网**：涉及真实支付，正式上线时使用。网络标识符：`tron:mainnet` / `eip155:56`
-
----
-
-## 第一步：安装 x402 SDK
-
-打开终端，执行以下安装命令：
-
-**推荐方式（直接从 GitHub 安装，适合快速上手）：**
-
-```bash
-pip install "bankofai-x402[tron,fastapi] @ git+https://github.com/BofAI/x402.git#subdirectory=python/x402"
-```
-
-安装完成后，运行以下命令验证是否成功：
-
-```bash
-python -c "import bankofai.x402; print('SDK 安装成功！')"
-```
-
-> ✅ **成功标志：** 终端输出 `SDK 安装成功！`
-
-**另一种方式（从源码安装，适合需要修改源码的开发者）：**
-
-```bash
-# 克隆代码仓库
-git clone https://github.com/BofAI/x402.git
-cd x402/python/x402
-
-# 安装（含 FastAPI 支持）
-pip install -e ".[fastapi]"
-```
-
-> 💡 **遇到权限错误？** 在命令前加 `sudo`（macOS/Linux），或以管理员身份运行 PowerShell（Windows）。
+- **测试网**：使用免费测试代币，不涉及真实资金，适合开发调试。网络标识：`tron:0xcd8690dc` / `eip155:97`
+- **主网**：涉及真实支付，上线时使用。网络标识：`tron:0x2b6653dc` / `eip155:56`
 
 ---
 
-## 第二步：创建付费 API 服务器
+## 第一步：安装 SDK 包
 
-现在，我们来创建一个带有付款保护的 API 服务器。x402 SDK 提供了 `@x402_protected` 装饰器，只需加在您想要收费的接口上，SDK 就会自动处理所有付款验证逻辑。
+在您的 TypeScript API 项目中安装 Express 适配器和 TRON 支付 scheme：
 
-在您的项目目录下，新建一个名为 `server.py` 的文件，将以下代码复制进去：
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```python
-from fastapi import FastAPI, Request
-from bankofai.x402.server import X402Server
-from bankofai.x402.fastapi import x402_protected
-from bankofai.x402.facilitator import FacilitatorClient
-from bankofai.x402.config import NetworkConfig
-
-app = FastAPI()
-
-# ========== 请修改以下两项配置 ==========
-# 将下方地址替换为您在"前置准备"中创建的 TRON 钱包地址（用于接收付款）
-PAY_TO_ADDRESS = "在此填入您的TRON钱包地址"
-
-# 结算服务地址（第三步中会启动，地址默认不用改）
-FACILITATOR_URL = "http://localhost:8001"
-# ========================================
-
-# 初始化 x402 服务器
-server = X402Server()
-server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
-
-# 为这个 API 接口添加付款保护
-@app.get("/protected")
-@x402_protected(
-    server=server,
-    prices=["0.0001 USDT"],          # 每次请求收费金额（可根据需要调整）
-    schemes=["exact_permit"],         # 付款方式
-    network=NetworkConfig.TRON_NILE, # 当前使用测试网（上线时改为 TRON_MAINNET）
-    pay_to=PAY_TO_ADDRESS,           # 您的收款钱包地址
-)
-async def protected_endpoint(request: Request):
-    return {"data": "这是需要付款才能获取的内容！"}
-
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+```bash
+pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron
 ```
 
-</TabItem>
-<TabItem value="BSC" label="BSC">
+请根据服务框架选择对应包（`@bankofai/x402-express`、`@bankofai/x402-hono`、`@bankofai/x402-fastify` 或 `@bankofai/x402-next`）。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
 
-```python
-from fastapi import FastAPI, Request
-from bankofai.x402.server import X402Server
-from bankofai.x402.fastapi import x402_protected
-from bankofai.x402.facilitator import FacilitatorClient
-from bankofai.x402.config import NetworkConfig
-from bankofai.x402.mechanisms.evm.exact_permit import ExactPermitEvmServerMechanism
-from bankofai.x402.mechanisms.evm.exact import ExactEvmServerMechanism
+如果开发者想要一个更完整的 client → server → facilitator 例子，可以参考仓库中的 [examples](https://github.com/BofAI/x402/tree/main/examples/typescript)；应用开发仍应依赖已发布的 npm 包，而不是链接 monorepo 源码。
 
-app = FastAPI()
+---
 
-# ========== 请修改以下两项配置 ==========
-# 将下方地址替换为您在"前置准备"中创建的 BSC 钱包地址（用于接收付款）
-PAY_TO_ADDRESS = "在此填入您的BSC钱包地址（0x开头）"
+## 第二步：准备配置值
 
-# 结算服务地址（第三步中会启动，地址默认不用改）
-FACILITATOR_URL = "http://localhost:8001"
-# ========================================
+最小接入只需要两个值：
 
-# 初始化 x402 服务器，并注册 BSC 付款机制
-server = X402Server()
-server.register(NetworkConfig.BSC_TESTNET, ExactPermitEvmServerMechanism())
-server.register(NetworkConfig.BSC_TESTNET, ExactEvmServerMechanism())
-server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
+| 配置 | 说明 | 示例 |
+|------|------|------|
+| `HTTPFacilitatorClient.url` | 付款验证与结算服务地址 | `https://facilitator.example.com` |
+| `payTo` | 您的 TRON 收款地址 | `T...` |
 
-# 为这个 API 接口添加付款保护
-@app.get("/protected")
-@x402_protected(
-    server=server,
-    prices=["0.0001 USDT"],            # 每次请求收费金额
-    network=NetworkConfig.BSC_TESTNET, # 当前使用测试网（上线时改为 BSC_MAINNET）
-    pay_to=PAY_TO_ADDRESS,             # 您的收款钱包地址
-    schemes=["exact_permit"],
-)
-async def protected_endpoint(request: Request):
-    return {"data": "这是需要付款才能获取的内容！"}
+> 💡 **无密钥 server：** 资源服务器从不签名、不持有私钥——它只公布您的公开收款地址（`payTo`）。签名与结算发生在 client 和 facilitator 侧。
 
+> ⚠️ **安全提醒：** 私钥仅保存在本地环境文件或环境变量中。**切勿将含私钥的文件提交到 Git 或分享给任何人。**
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+---
+
+## 第三步：创建付费 API 服务器
+
+下面是一个最小 Express 资源服务器：`GET /credit` 需要先支付 `1 USDT`，付款成功后返回信用额度数据。
+
+```typescript
+import express from "express";
+import { createResourceServer } from "@bankofai/x402-core";
+import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
+import {
+  x402HTTPResourceServer,
+  paymentMiddlewareFromHTTPServer,
+} from "@bankofai/x402-express";
+import { TRON_NILE } from "@bankofai/x402-tron";
+import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
+
+const server = createResourceServer(
+  new HTTPFacilitatorClient({
+    url: "https://facilitator.example.com",
+  })
+);
+
+server.register(TRON_NILE, new ExactTronScheme());
+
+express()
+  .use(
+    paymentMiddlewareFromHTTPServer(
+      new x402HTTPResourceServer(server, {
+        "GET /credit": {
+          accepts: [
+            {
+              scheme: "exact",
+              network: TRON_NILE,
+              payTo: "T...",
+              price: "1 USDT",
+            },
+          ],
+        },
+      })
+    )
+  )
+  .get("/credit", (_req, res) =>
+    res.json({
+      status: "success",
+      credit: 1000000,
+    })
+  )
+  .listen(4021);
 ```
 
-</TabItem>
-</Tabs>
+**关键配置参数：**
 
-**主要配置说明：**
-
-| 参数 | 说明 | 示例值 |
+| 参数 | 说明 | 示例 |
 |------|------|--------|
-| `PAY_TO_ADDRESS` | 您的收款钱包地址 | `TXyz...`（TRON）或 `0xAbc...`（BSC） |
-| `prices` | 每次请求的价格 | `["0.0001 USDT"]` |
-| `network` | 使用的网络 | 测试：`TRON_NILE` / `BSC_TESTNET` |
-| `schemes` | 付款方式 | `["exact_permit"]` |
+| `payTo` | 您的收款钱包地址 | `T...` |
+| `accepts[].price` | 每次请求价格 | `"1 USDT"` |
+| `accepts[].network` | 使用的网络 | 测试网：`TRON_NILE`（`tron:0xcd8690dc`） |
+| `accepts[].scheme` | 付款方式 | `"exact"` |
+| `routes` | `"METHOD /path"` → `{ accepts }` 的映射 | `"GET /credit"` |
 
-**工作原理：** 当未付款的请求到达您的 API 时，服务器自动返回 HTTP 402（需要付款）响应，并在响应头中附上付款指引。客户端 SDK 会自动完成付款并重新发起请求，整个过程用户几乎无感知。
+**工作原理：** 当未付款请求到达您的 API 时，中间件自动返回 HTTP `402 Payment Required` 响应并携带付款要求。client SDK 自动完成付款并重发请求——对终端用户几乎不可见。
 
 ---
 
-## 第三步：接入结算服务（Facilitator）
+## 第四步：接入结算服务（Facilitator）
 
 ### 什么是 Facilitator？
 
-简单来说，Facilitator 是一个**自动公证服务**：当有人向您的 API 付款时，Facilitator 负责核实这笔付款是否真实，并在区块链上完成结算，确保资金记录到链上。
+Facilitator 是一个**自动结算服务**：当有人为您的 API 付款时，Facilitator 验证付款是否真实并将其结算到链上，确保资金到达您的收款钱包。您在第三步构建的 server 仅通过 `HTTPFacilitatorClient` 指向 Facilitator——它不自行结算。
 
-**您需要先完成 Facilitator 配置，再启动您的 API 服务器。**
+**启动 API 服务器之前，必须有一个可达的 Facilitator。**
 
 ### 两种接入方式，如何选择？
 
-| | 官方 Facilitator（推荐）| 自托管 Facilitator |
+| | 官方 Facilitator（推荐） | 自托管 Facilitator |
 |---|---|---|
-| **是否需要维护服务** | 不需要，官方托管 | 需要自行运行 |
-| **是否需要钱包私钥** | 不需要 | 需要（用于支付手续费）|
-| **上手难度** | 低（申请 API Key 即可）| 中（需部署配置）|
-| **适合场景** | 快速上线、大多数用户 | 需要完全自定义费率策略 |
+| **是否需要维护** | 否——官方托管 | 是——您自行运行 |
+| **是否需要钱包私钥** | 否 | 是（用于链上结算） |
+| **难度** | 低（仅需申请 API Key） | 中（运行示例 facilitator） |
+| **适合** | 快速部署、大多数用户 | 需要完全控制费率策略 |
 
 <Tabs>
 <TabItem value="official" label="✅ 官方 Facilitator（推荐）">
 
-官方托管的 Facilitator 服务，**无需维护任何基础设施**。 详细信息也可参考 [官方 Facilitator](../core-concepts/OfficialFacilitator.md)
+官方托管的 Facilitator 服务**无需维护基础设施**。完整步骤请参见 [官方 Facilitator](../core-concepts/OfficialFacilitator.md)。
 
-#### 3.1 配置服务端点
+#### 4.1 配置服务端点
 
-将您的 `FACILITATOR_URL` 设置为官方 Facilitator 服务地址：
+在 `HTTPFacilitatorClient` 中将 `url` 设为官方端点：
 
+```typescript
+const server = createResourceServer(
+  new HTTPFacilitatorClient({
+    url: "https://facilitator.bankofai.io",
+  })
+);
 ```
-https://facilitator.bankofai.io
-```
 
-这是您的 x402 服务端用来验证和结算支付的地址，**仅供 API 调用**，无需用浏览器访问。
+这是您的 x402 server 用于验证和结算付款的地址——**仅供 API 调用**，无需在浏览器中打开。
 
-> ⚠️ **未配置 API Key 时，此端点按 IP 地址限速为每分钟 1 次请求。** 测试够用，但生产环境中会直接卡住您的 API。请继续第 3.2 步申请 API Key。
+> ⚠️ **未配置 API Key 时，该端点受速率限制**（每个 IP 每分钟一次 `/settle`）。仅适合测试。
 
-#### 3.2 申请 API Key
+#### 4.2 申请 API Key
 
-在管理后台免费申请 API Key：
+1. 在浏览器中打开[管理后台](https://admin-facilitator.bankofai.io)，使用钱包登录
+2. 在 Dashboard 上点击 **"Create API Key"**
+3. 确认后，在 Dashboard 点击 **View** 查看并复制您的 API Key
 
-[https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io)
+配置 API Key 后，速率限制提升到 **每分钟 1,000 次**，足以满足生产需求。
 
-1. 在浏览器中打开上方链接
-2. 点击 **TronLink**，使用钱包登录（仅用于身份验证，**不会扣款**）
-3. 登录后进入 Dashboard，点击**"创建 API Key"**
-4. 点击确认，然后在 Dashboard 中点击 **View** 查看并复制您的 API Key
+#### 4.3 将 API Key 接入您的 server
 
-配置 API Key 后，限速提升至 **1000 次/分钟**，足以支撑生产环境。
-
-> 📖 **详细图文步骤**请参见：[官方 Facilitator](../core-concepts/OfficialFacilitator.md)
-
-> ⚠️ **安全提示：** API Key 是您的服务凭证，**请像对待密码一样保护它，绝不提交到 Git**
-
-#### 3.3 配置 `.env` 文件
-
-在您的项目目录（存放 `server.py` 的目录）中，创建或编辑 `.env` 文件，添加以下内容：
+官方 key 以 `X-API-KEY` 头的形式随每次 facilitator 调用发送。生产环境中，请将它保存在环境变量或密钥管理系统中，并随 facilitator 请求发送。
 
 ```bash
-# 官方 Facilitator 服务地址
-FACILITATOR_URL=https://facilitator.bankofai.io
-
-# API Key（在 admin-facilitator.bankofai.io 申请）— SDK 自动通过 X-API-KEY 请求头传递
-FACILITATOR_API_KEY=在此填入您的API Key
+FACILITATOR_API_KEY=paste_your_api_key_here
 ```
 
-#### 3.4 更新 server.py 连接官方 Facilitator
+> ⚠️ **安全提醒：** API Key 是服务凭据——**像密码一样保管，切勿提交到 Git**。
 
-将 `server.py` 中的 Facilitator 初始化部分修改为从环境变量读取配置（在文件顶部添加 `import os`）：
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```python
-import os
-# ... 其他 import 保持不变 ...
-
-# 官方 Facilitator 服务地址（从环境变量读取）
-# SDK 会自动从环境变量读取 FACILITATOR_API_KEY，无需显式传参
-FACILITATOR_URL = os.getenv("FACILITATOR_URL", "https://facilitator.bankofai.io")
-
-# 初始化 x402 服务器，连接官方 Facilitator
-server = X402Server()
-server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```python
-import os
-# ... 其他 import 保持不变 ...
-
-# 官方 Facilitator 服务地址（从环境变量读取）
-# SDK 会自动从环境变量读取 FACILITATOR_API_KEY，无需显式传参
-FACILITATOR_URL = os.getenv("FACILITATOR_URL", "https://facilitator.bankofai.io")
-
-# 初始化 x402 服务器，注册 BSC 机制，连接官方 Facilitator
-server = X402Server()
-server.register(NetworkConfig.BSC_TESTNET, ExactPermitEvmServerMechanism())
-server.register(NetworkConfig.BSC_TESTNET, ExactEvmServerMechanism())
-server.set_facilitator(FacilitatorClient(FACILITATOR_URL))
-```
-
-</TabItem>
-</Tabs>
-
-> ✅ **完成！** 官方 Facilitator 已配置好，**不需要启动任何本地服务**，直接进入第四步测试即可。
+> ✅ **完成！** 官方 Facilitator 已配置——**无需启动本地服务**。直接进入第五步测试。
 
 </TabItem>
 <TabItem value="selfhost" label="自托管 Facilitator">
 
-自托管方式让您完全掌控费用策略和网络配置，适合有特定定制需求的高级用户。
+自托管方式让您完全控制费率策略。它运行示例 facilitator（`examples/typescript/facilitator/basic`），通过 HTTP 暴露 `/verify`、`/settle`、`/supported`，并按付款的 `network` 字段分发。
 
-> ⚠️ **安全提示——请先阅读：**
-> - 需要一个**专用钱包**的私钥用于支付区块链手续费，**该钱包应与收款钱包分开**
-> - Facilitator 钱包只需少量代币（用于手续费），不要存入大量资金
-> - 私钥通过环境变量设置，**绝不要提交到 Git 或分享给他人**
+> ⚠️ **安全提醒——请先阅读：**
+> - 自托管 Facilitator 使用您的钱包提交链上结算交易——**此钱包应与您的收款钱包分开**
+> - 仅向 Facilitator 钱包充入少量代币（足够支付手续费）——不要存放大量资金
+> - 私钥仅保存在 `.env-exact` 中——**切勿提交到 Git 或分享给任何人**
 
-#### 3.1 准备前置依赖
+#### 4.1 自托管 Facilitator 的工作原理
 
-启动前，请确认以下条件已就绪：
+facilitator 验证签名并在链上结算。它按链注册 `exact` scheme 并附带 signer：
 
-- **Python 3.11+** 和 **Git**（前置准备中已确认）
-- **PostgreSQL** — Facilitator 使用数据库持久化支付记录。
+```typescript
+// examples/typescript/facilitator/basic/src/index.ts（节选）
+import { x402Facilitator } from "@bankofai/x402-core/facilitator";
 
-  <Tabs>
-  <TabItem value="mac" label="macOS">
+const facilitator = new x402Facilitator()
+  .onBeforeSettle(async ctx => console.log("[settle] before", ctx.requirements.network))
+  .onAfterSettle(async ctx => console.log("[settle] after", ctx.requirements.network))
+  .onSettleFailure(async ctx => console.log("[settle] failure", ctx));
 
-  ```bash
-  brew install postgresql@16
-  brew services start postgresql@16
-  createdb x402
-  ```
+// 仅当钱包解析成功时才注册该链（可仅 EVM、仅 TRON，或两者）。
+const evm = await registerEvm(facilitator);
+const tron = await registerTron(facilitator);
 
-  </TabItem>
-  <TabItem value="linux" label="Linux">
+// 在 FACILITATOR_PORT 上暴露 POST /verify、POST /settle、GET /supported。
+app.listen(PORT, () => console.log(`🚀 Facilitator on http://localhost:${PORT}`));
+```
 
-  **Ubuntu / Debian：**
-  ```bash
-  sudo apt install -y postgresql
-  sudo systemctl start postgresql
-  sudo -u postgres createdb x402
-  ```
+每个链模块将 agent-wallet 适配为 facilitator signer：
 
-  **Amazon Linux / CentOS / RHEL / Fedora：**
-  ```bash
-  sudo dnf install -y postgresql15 postgresql15-server   # Amazon Linux 2023；其他发行版使用 postgresql-server
-  sudo postgresql-setup --initdb
-  sudo systemctl start postgresql
-  sudo systemctl enable postgresql
-  sudo -u postgres createdb x402
-  ```
+- **EVM** —— `createFacilitatorEvmSigner(wallet, { network, rpcUrl })`，然后 `facilitator.register(network, new ExactEvmScheme(signer))`
+- **TRON** —— `createFacilitatorTronSigner(wallet, { network, apiKey })`，然后 `facilitator.register(network, new ExactTronScheme(signer))`
 
-  **Arch Linux：**
-  ```bash
-  sudo pacman -S postgresql
-  sudo -u postgres initdb -D /var/lib/postgres/data
-  sudo systemctl start postgresql
-  sudo -u postgres createdb x402
-  ```
+signer 工厂内部构建 viem client / TronWeb；示例**从不读取原始私钥**——`AGENT_WALLET_PRIVATE_KEY` 由 `@bankofai/agent-wallet` 消费。
 
-  </TabItem>
-  <TabItem value="windows" label="Windows">
+#### 4.2 启动 Facilitator
 
-  从 [postgresql.org/download/windows](https://www.postgresql.org/download/windows/) 下载并运行安装程序，然后通过 pgAdmin 或 psql 创建名为 `x402` 的数据库。
-
-  </TabItem>
-  </Tabs>
-
-  **为 `postgres` 用户设置密码**（连接字符串中需要用到）：
-
-  ```bash
-  sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'yourpassword';"
-  ```
-
-  > 将 `yourpassword` 替换为您自定义的密码，后续配置文件中会用到。
-
-  **开启密码认证**（仅 Linux — 大多数发行版需要此步骤）：
-
-  Linux 上 PostgreSQL 默认使用 `ident` 认证，要求操作系统用户名与数据库用户名一致，否则连接会被拒绝。需要将认证方式改为 `md5`（密码认证），Facilitator 才能正常连接：
-
-  ```bash
-  # 查找 pg_hba.conf 文件位置
-  sudo find / -name pg_hba.conf 2>/dev/null
-  # 常见路径：/var/lib/pgsql/data/pg_hba.conf（Amazon Linux / CentOS）
-  #           /etc/postgresql/*/main/pg_hba.conf（Ubuntu / Debian）
-  ```
-
-  打开文件，将 IPv4 和 IPv6 本地连接的 `ident` 改为 `md5`：
-
-  ```
-  # IPv4 local connections:
-  host    all             all             127.0.0.1/32            md5
-  # IPv6 local connections:
-  host    all             all             ::1/128                 md5
-  ```
-
-  修改后重启 PostgreSQL 使配置生效：
-
-  ```bash
-  sudo systemctl restart postgresql
-  ```
-
-  连接字符串：`postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402`
-
-
-- **Facilitator 专用钱包** — 单独创建一个新钱包（与收款钱包隔离，步骤与前置准备相同），并从水龙头领取测试代币用于支付手续费。
-
-#### 3.2 克隆并安装
-
-打开一个**新的终端窗口**，执行：
+您的 `.env-exact` 中的 `FACILITATOR_URL` 已默认为 `http://localhost:4022`，与示例 facilitator 一致。从 `examples/typescript` 运行：
 
 ```bash
-# 克隆 Facilitator 服务仓库
-git clone https://github.com/BofAI/x402-facilitator.git
-cd x402-facilitator
-
-# 安装依赖
-pip install -r requirements.txt
+pnpm dev:facilitator
 ```
 
-#### 3.3 配置服务
-
-复制示例配置文件并用文本编辑器打开：
-
-```bash
-cp config/facilitator.config.example.yaml config/facilitator.config.yaml
-```
-
-填写必填字段：
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```yaml
-database:
-  url: "postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402"
-
-facilitator:
-  networks:
-    tron:nile:                   # 上线时改为 tron:mainnet
-      base_fee:
-        USDT: 100                # 每笔结算收 0.0001 USDT（可按需调整）
-        USDD: 100000000000000  # 0.0001 USDD（18位精度；按需调整）
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```yaml
-database:
-  url: "postgresql+asyncpg://postgres:yourpassword@localhost:5432/x402"
-
-facilitator:
-  networks:
-    bsc:testnet:                 # 上线时改为 bsc:mainnet
-      base_fee:
-        USDT: 100                # 每笔结算收 0.0001 USDT（可按需调整）
-```
-
-</TabItem>
-</Tabs>
-
-然后通过环境变量设置 Facilitator 专用钱包的私钥：
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-```bash
-# 获取方式：TronLink → 设置 → 账户管理 → 导出私钥
-export AGENT_WALLET_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
-
-# TronGrid API Key（推荐配置，确保 RPC 稳定访问）
-# 申请地址：https://www.trongrid.io/
-export TRON_GRID_API_KEY=在此填入TronGrid API Key
-```
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-```bash
-# 获取方式：MetaMask → 账户详情 → 导出私钥
-export AGENT_WALLET_PRIVATE_KEY=在此填入Facilitator专用钱包的私钥
-```
-
-</TabItem>
-</Tabs>
-
-#### 3.4 启动 Facilitator 服务
-
-```bash
-python src/main.py
-```
-
-**成功启动后，您应该看到类似以下输出：**
+**启动成功后，应看到类似输出：**
 
 ```
-INFO:     Started server process
-INFO:     Waiting for application startup.
-INFO:     Application startup complete.
-INFO:     Uvicorn running on http://0.0.0.0:8001 (Press CTRL+C to quit)
+[evm] facilitator registered eip155:97 (0x…)
+[tron] facilitator registered tron:0xcd8690dc (T…)
+🚀 Facilitator on http://localhost:4022  (evm=true, tron=true)
 ```
 
-> ✅ **成功标志：** Uvicorn 已在 8001 端口运行，**保持此终端窗口开启，不要关闭**
-
-#### 3.5 注册 API Key（可选）
-
-如需按卖家维度追踪支付记录，可用内置脚本生成 API Key：
-
-```bash
-python scripts/register_seller.py
-# 会自动生成并打印一个随机 API Key，请妥善保存
-```
-
-将此 Key 配置到您的服务端：
-```bash
-export FACILITATOR_API_KEY=生成的API Key
-```
-
-`server.py` 中的 `FACILITATOR_URL = "http://localhost:8001"` 已是自托管配置，**无需修改**，直接进入第四步。
+> ✅ **成功：** Facilitator 在 4022 端口运行——**保持此终端窗口打开，不要关闭**
 
 </TabItem>
 </Tabs>
 
 ---
 
-## 第四步：启动并测试您的 API
+## 第五步：启动并测试您的 API
 
-### 4.1 启动 API 服务器
+### 5.1 启动 API 服务器
 
-打开**第三个终端窗口**（前两个不要关），进入存放 `server.py` 的目录，执行：
-
-```bash
-python server.py
-```
-
-**成功启动后，您应该看到：**
-
-```
-INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Application startup complete.
-```
-
-> ✅ **成功标志：** 终端显示 `Uvicorn running on http://0.0.0.0:8000`
-
-### 4.2 测试未付款访问（应被拒绝）
-
-打开任意终端，执行：
+打开**新终端窗口**（不要关闭 facilitator），在您的 API 项目中运行服务器入口文件：
 
 ```bash
-curl http://localhost:8000/protected
+pnpm tsx src/server.ts
 ```
 
-**预期结果：** 服务器返回 HTTP 402 响应，内容类似：
+**启动成功后，应看到：**
+
+```
+Resource server on http://localhost:4021
+```
+
+> ✅ **成功：** 终端显示资源服务器在 `http://localhost:4021`
+
+### 5.2 测试未付款访问（应被拒绝）
+
+在任意终端运行：
+
+```bash
+curl http://localhost:4021/credit
+```
+
+**预期结果：** 服务器返回 HTTP `402` 响应，携带付款要求（一个 `accepts` 数组，列出 scheme、网络、价格和您的收款地址）。
+
+> ✅ **这正是我们想要的！** 确认付款保护已生效——未付款请求被成功拦截。
+
+### 5.3 测试完整付款流程
+
+要测试完整的 付款 → 获取内容 流程，请使用[用户快速入门](./quickstart-for-human.md)中的最小 client。将 client 请求地址设为 `http://localhost:4021/credit`，预期返回：
 
 ```json
-{"error": "Payment required", "x402Version": 1}
+{ "status": "success", "credit": 1000000 }
 ```
-
-> ✅ **这正是我们想要的！** 说明付款保护正常工作——未付款的请求被成功拦截了。
-
-### 4.3 测试完整付款流程
-
-要测试完整的付款→获取内容流程，您需要一个能够签名付款的客户端：
-
-- [人类用户快速入门](./quickstart-for-human.md) — 使用代码方式调用您的付费 API
-- [AI 代理快速入门](./quickstart-for-agent.md) — 配置 AI 代理自动付款调用
 
 ---
 
 ## 故障排查
 
-| 问题 | 解决方案 |
-|------|----------|
-| `Connection refused` 连接 Facilitator 失败 | 使用**自托管**方式时，确认第三步的 Facilitator 终端仍在运行（`python src/main.py`），监听 8001 端口；使用**官方**方式时，检查 `FACILITATOR_URL` 是否正确配置为 `https://facilitator.bankofai.io` |
-| `ModuleNotFoundError: bankofai` | 重新执行第一步的安装命令 |
-| 钱包地址格式错误 | TRON 地址以 `T` 开头；BSC 地址以 `0x` 开头，检查是否完整复制 |
-| Facilitator 启动失败——数据库报错（自托管）| 确认 `config/facilitator.config.yaml` 中 `database.url` 填写正确，且 PostgreSQL 实例正在运行 |
-| Facilitator 启动失败——钱包报错（自托管）| 确认 `AGENT_WALLET_PRIVATE_KEY` 已在当前终端 `export`，且无多余空格或换行 |
-| API Key 无效或频率受限（官方）| 确认 `FACILITATOR_API_KEY` 已正确设置，前往 [admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) 检查 Key 状态 |
-| `server.py` 启动报错 | 确认 `PAY_TO_ADDRESS` 已替换为真实钱包地址（不要保留占位文字） |
-
-**需要更多示例和参考？**
-
-- [完整服务器示例代码](https://github.com/BofAI/x402-demo/tree/main/server)
-- [Facilitator 示例代码](https://github.com/BofAI/x402-demo/tree/main/facilitator)
-- [Facilitator 详细说明](../core-concepts/facilitator.md) — 两种方式的完整安装步骤对比
-- [官方 Facilitator](../core-concepts/OfficialFacilitator.md) — 官方服务 API Key 图文教程
+| 问题 | 原因 | 解决方案 |
+|---------|-------|----------|
+| `Failed to fetch` / connection refused | facilitator 或 server 未运行 | 先启动 facilitator，再运行您的 API server 入口文件 |
+| client `server offered no payment option matching "…"` | 客户端选择的网络或代币与 server 公布的选项不匹配 | 检查 server 的 `accepts`（网络 + 代币），例如 `TRON_NILE` + `USDT` |
+| `npx tsx` 下出现 `ERR_PACKAGE_PATH_NOT_EXPORTED` | 项目未声明为 ESM | 在 `package.json` 中添加 `"type": "module"` |
+| `UnsupportedNetworkError` / `No mechanism registered` | 客户端选择的网络没有注册的 scheme | 确保 client 包含目标网络，例如 `TRON_NILE` |
+| `Insufficient balance` / allowance 错误 | 测试钱包缺少测试代币，或 Permit2 授权额度过低 | 从水龙头领取测试代币；client 在首次付款时会自动批准 Permit2 |
+| `Connection timeout` | 网络或请求超时 | 检查连接，或设置可靠的 `EVM_RPC_URL`（如 `https://bsc-testnet-rpc.publicnode.com`） |
 
 ---
 
 ## 在主网运行
 
-在测试网完整验证后，只需以下几步即可上线接收真实付款：
+在测试网充分验证后，只需几步即可上线并接受真实付款：
 
-### 1. 更新服务器配置
+### 1. 将 client 和 server 指向主网
 
-修改 `server.py` 中 `@x402_protected` 装饰器的 `network` 参数：
+将 server 注册的网络和收款地址切换到主网：
 
-<Tabs>
-<TabItem value="TRON" label="TRON">
+```typescript
+import { TRON_MAINNET } from "@bankofai/x402-tron";
 
-```python
-@x402_protected(
-    server=server,
-    prices=["0.0001 USDT"],
-    schemes=["exact_permit"],
-    network=NetworkConfig.TRON_MAINNET,  # 从 TRON_NILE 改为 TRON_MAINNET
-    pay_to=PAY_TO_ADDRESS,
-)
+server.register(TRON_MAINNET, new ExactTronScheme());
+
+// accepts 中同步改为：
+network: TRON_MAINNET,
+payTo: "TYourMainnetTronAddress",
+price: "1 USDT",
 ```
 
-</TabItem>
-<TabItem value="BSC" label="BSC">
+### 2. 设置可靠的 EVM RPC
 
-```python
-@x402_protected(
-    server=server,
-    prices=["0.0001 USDT"],
-    schemes=["exact_permit"],
-    network=NetworkConfig.BSC_MAINNET,  # 从 BSC_TESTNET 改为 BSC_MAINNET
-    pay_to=PAY_TO_ADDRESS,
-)
+BSC 主网需要稳定端点。为 client 和 facilitator 都设置：
+
+```bash
+EVM_RPC_URL=https://bsc-rpc.publicnode.com
 ```
 
-</TabItem>
-</Tabs>
+### 3.（自托管）将 Facilitator 切换到主网
 
-### 2. 更新 Facilitator 配置
+facilitator 的 `TRON_NETWORKS` 已包含 `TRON_MAINNET`（`tron:0x2b6653dc`），`EVM_NETWORKS` 已包含 `eip155:56`。向 Facilitator 钱包充入足够的真实 TRX/BNB 以支付结算 gas，然后重启：
 
-<Tabs>
-<TabItem value="TRON" label="TRON">
+```bash
+pnpm dev:facilitator
+```
 
-1. **申请 TronGrid API Key**：前往 [TronGrid](https://www.trongrid.io/) 注册并创建 API Key，然后通过环境变量设置：
+> 生产 TRON 负载请设置自己的 `TRON_GRID_API_KEY` 以避免速率限制。
 
-   ```bash
-   export TRON_GRID_API_KEY=your_trongrid_api_key
-   ```
+### 4.（官方 Facilitator）无需本地改动
 
-   :::note
-   未配置 `TRON_GRID_API_KEY` 时，在高负载下可能会被限速。生产环境请配置 `TRON_GRID_API_KEY`，以确保可靠性。
-   :::
+若使用官方 facilitator，保持 `HTTPFacilitatorClient` 的 `url` 为 `https://facilitator.bankofai.io`，并继续使用您的 `FACILITATOR_API_KEY`。仅 server 的收款地址切换到主网。
 
-2. **替换私钥**：将环境变量更新为主网 Facilitator 钱包的私钥：
+### 5. 确认并做小额真实测试
 
-   ```bash
-   export AGENT_WALLET_PRIVATE_KEY=your_mainnet_facilitator_private_key
-   ```
-
-3. **充值手续费**：向 Facilitator 主网钱包转入足够的真实 TRX（用于支付 Energy 和 Bandwidth 费用）。
-
-4. **更新网络配置**：打开 `config/facilitator.config.yaml`，将网络键从 `tron:nile` 改为 `tron:mainnet`：
-
-   ```yaml
-   facilitator:
-     networks:
-       tron:mainnet:              # 从 tron:nile 改为 tron:mainnet
-         base_fee:
-           USDT: 100
-           USDD: 100000000000000  # 0.0001 USDD（18位精度；按需调整）
-   ```
-
-5. **重启服务**：`python src/main.py`
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-1. **充值手续费**：向 Facilitator 主网钱包转入足够的真实 BNB（用于支付 Gas 费用）。
-
-2. **替换私钥**：将环境变量更新为主网 Facilitator 钱包的私钥：
-
-   ```bash
-   export AGENT_WALLET_PRIVATE_KEY=your_mainnet_facilitator_private_key
-   ```
-
-3. **更新网络配置**：打开 `config/facilitator.config.yaml`，将网络键从 `bsc:testnet` 改为 `bsc:mainnet`：
-
-   ```yaml
-   facilitator:
-     networks:
-       bsc:mainnet:               # 从 bsc:testnet 改为 bsc:mainnet
-         base_fee:
-           USDT: 100
-   ```
-
-4. **重启服务**：`python src/main.py`
-
-</TabItem>
-</Tabs>
-
-### 3. 确认您的收款钱包地址
-
-确保 `PAY_TO_ADDRESS` 填写的是您控制的**真实主网钱包地址**，并确认您持有该钱包的助记词或私钥备份。
-
-### 4. 上线前进行小额真实测试
-
-> ⚠️ **主网上线警告——涉及真实资金，请严格执行以下步骤：**
+> ⚠️ **主网警告——涉及真实资金。请仔细遵循以下步骤：**
 >
-> 1. 确保已在测试网完整验证所有功能（付款、收款、错误处理）
-> 2. 主网上线后，**先发起一笔最小金额（如 0.0001 USDT）的真实测试**
-> 3. 在区块链浏览器（[TronScan](https://tronscan.org) 或 [BscScan](https://bscscan.com)）上确认交易成功
-> 4. 打开您的收款钱包，确认资金已到账
-> 5. 确认无误后，再正式对外开放 API
+> 1. 确保所有功能（付款、收款、错误处理）已在测试网充分验证
+> 2. 上线主网后，**先用一个最小金额的真实测试（如 `0.001 USDT`）**
+> 3. 在区块链浏览器（[TronScan](https://tronscan.org) 或 [BscScan](https://bscscan.com)）确认交易成功
+> 4. 打开收款钱包，确认资金已到账
+> 5. 确认一切正常后，再将 API 对外公开
 
 ---
 
 ## 下一步
 
-- 查看[演示示例](https://github.com/BofAI/x402-demo/tree/main/server)了解更多复杂的付款流程
-- 深入阅读[核心概念](../core-concepts/http-402.md)，理解 x402 协议的工作原理
-- 想深入了解 Facilitator 两种接入方式的详细配置？参见 [Facilitator 说明文档](../core-concepts/facilitator.md)
-- 以[用户视角](./quickstart-for-human.md)体验调用付费 API，或配置 [AI 代理](./quickstart-for-agent.md)自动调用您的服务
+- 如果开发者想要一个更完整的例子，可以参考仓库中的 [examples](https://github.com/BofAI/x402/tree/main/examples/typescript)，其中包含 client → server → facilitator 循环，以及 `gasfree`、`upto`、`batch-settlement` 场景
+- 阅读[核心概念](../core-concepts/http-402.md)了解 x402 协议的工作原理
+- 想了解两种 Facilitator 选项的详细配置？参见 [Facilitator 文档](../core-concepts/facilitator.md)
+- 从[用户视角](./quickstart-for-human.md)体验调用付费 API，或配置 [AI 代理](./quickstart-for-agent.md)自动调用您的服务
 
 ---
 
 ## 完成总结
 
-恭喜 🎉！您已完成卖家快速入门。以下是您完成的所有步骤：
+恭喜 🎉！您已完成卖家快速入门。以下是您完成的所有内容：
 
-| 步骤 | 完成内容 |
+| 步骤 | 您做了什么 |
 |------|----------|
-| **前置准备** | 创建收款钱包，获取测试代币，熟悉配置参数 |
-| **第一步** | 安装 x402 SDK |
-| **第二步** | 创建带付款保护的 API 服务器 |
-| **第三步** | 配置并启动 Facilitator 结算服务 |
-| **第四步** | 验证付款保护和完整付款流程 |
+| **前置准备** | 创建收款钱包、领取测试代币、了解配置参数 |
+| **第一步** | 安装 x402 SDK 包 |
+| **第二步** | 准备 facilitator 地址与收款地址 |
+| **第三步** | 运行无密钥 Express 资源服务器（带付款保护） |
+| **第四步** | 接入 Facilitator（官方或自托管）进行结算 |
+| **第五步** | 验证付款保护与完整的 client → server → facilitator 付款流程 |
 
-您的 API 现在已经可以通过 x402 协议接收区块链支付了！
+您的 API 现在已准备好通过 x402 协议接受区块链付款！

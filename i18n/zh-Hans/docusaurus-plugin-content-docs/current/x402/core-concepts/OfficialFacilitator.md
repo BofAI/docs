@@ -62,7 +62,7 @@ Facilitator 由官方持续维护和升级，包括：
 
 | 模式 |限速 |说明 |
 |-----|-----|-----|
-| **匿名调用（Anonymous Mode）** | 1 次 / 分钟 | 不需要 API Key，适用于本地开发和功能测试 |
+| **匿名调用（Anonymous Mode）** | 10 次 / 分钟（默认值，可配置） | 不需要 API Key，适用于本地开发和功能测试 |
 | **API Key 调用（API Key Mode）** | 1000 次 / 分钟 | 需要 API Key，适用于生产环境和高频支付请求 |
 
 两种模式的调用方式完全相同，但在 **身份识别与接口限速策略** 上有所不同。 
@@ -78,8 +78,8 @@ Facilitator 由官方持续维护和升级，包括：
 
 在匿名模式下：
 
-- `/settle` 接口会启用 **严格限速**
-- **每分钟最多 1 次调用**
+- `/settle` 接口会启用 **限速**
+- **每分钟最多 10 次调用（默认值，可配置）**
 
 该模式主要用于：
 
@@ -256,21 +256,27 @@ curl -X POST https://facilitator.bankofai.io/settle \
 |------|------|------|
 | GET | `/health` | 服务健康检查 |
 | GET | `/supported` | 查询支持的支付能力和配置 |
-| POST | `/fee/quote` | 获取支付要求的费用预估 |
 | POST | `/verify` | 验证支付载荷有效性 |
 | POST | `/settle` | 执行链上结算（**受限速保护**） |
-| GET | `/payments/{payment_id}` | 按支付 ID 查询支付记录 |
-| GET | `/payments/tx/{tx_hash}` | 按交易哈希查询支付记录 |
+| GET | `/payments/tx/{tx_hash}` | 按结算交易哈希查询支付记录 |
+| GET | `/payments?network=&nonce=[&asset=&payer=]` | 按链上授权身份查询支付记录 |
+| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`） |
 
-> 限速仅作用于 `/settle` 接口，其他接口不受限速影响。
+> **不存在** `/fee/quote` 端点——费用条款随支付要求的 `extra` 字段一起下发。限速仅作用于 `/settle` 接口，其他接口不受限速影响。
 
 ### 支付记录查询
 
-`/payments/{payment_id}` 和 `/payments/tx/{tx_hash}` 两个接口均返回按时间倒序排列的 JSON 数组。每条记录包含：
+`/payments/tx/{tx_hash}` 和 `/payments?network=&nonce=[&asset=&payer=]` 接口均返回按时间倒序排列的 JSON 数组。记录以链上授权身份为键，而非客户端提供的 payment ID。每条记录包含：
 
-- `paymentId` — 支付唯一标识符（可能为空）
+- `network` — CAIP-2 网络标识符
+- `scheme` — 支付方案（例如 `exact`）
+- `asset` — 代币合约地址
+- `payer` — 付款方地址
+- `nonce` — 授权 nonce
+- `amount` — 结算金额（最小单位）
 - `txHash` — 链上交易哈希
 - `status` — `"success"` 或 `"failed"`
+- `errorReason` — 失败原因（如有）
 - `createdAt` — 时间戳
 
 > 提供 API Key 时，这两个接口只返回与你的账户关联的支付记录，不会看到其他卖家的数据。
@@ -281,7 +287,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 **Q：不配置 API Key 能正常运行吗？**
 
-可以运行，但 `/settle` 接口每 IP 每分钟只能调用 1 次。这只适合测试，任何真实流量都必须配置 API Key。
+可以运行，但 `/settle` 接口默认每 IP 每分钟最多调用 10 次。这只适合测试，任何真实流量都必须配置 API Key。
 
 **Q：API Key 会过期吗？**
 

@@ -9,6 +9,10 @@ This guide walks you through: setting up a dedicated agent wallet, configuring c
 
 ---
 
+:::info SDK (TypeScript-only)
+x402 is a **TypeScript-only** SDK published as `@bankofai/x402-*` npm packages. The `x402-payment` skill wraps those packages and uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) for key custody — the wallet/private-key setup in this guide is unchanged. The runnable [MCP examples](https://github.com/BofAI/x402/tree/main/examples/typescript) (`servers/mcp` + `clients/mcp`) are reference implementations.
+:::
+
 ## Prerequisites
 
 ### 1. Create a Dedicated Agent Wallet
@@ -89,7 +93,11 @@ When `TRON_GRID_API_KEY` is not set, requests may be rate-limited under heavy wo
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
-No additional configuration needed for BSC.
+For BSC testnet, the default viem RPC endpoint is frequently unreachable. Set a reliable RPC:
+
+```bash
+export EVM_RPC_URL="https://bsc-testnet-rpc.publicnode.com"
+```
 
 </TabItem>
 </Tabs>
@@ -128,17 +136,41 @@ For a detailed walkthrough of the interactive installation process, see the [Ski
 
 After completing the setup, follow these steps to verify your agent can complete payments autonomously:
 
-### 3.1 Test with the Demo Endpoint
+### 3.1 Test with a Paid Endpoint
 
-Instruct your AI agent to access the following demo URL (this is a test endpoint that requires payment):
+Point your agent at an x402-protected endpoint built with the published npm packages, for example a service created from [Quickstart for Sellers](./quickstart-for-sellers.md).
 
+If you do not have a paid endpoint yet, you can run the repository examples as a local reference environment (requires **Node.js 22+** and **pnpm 11.1+**):
+
+```bash
+git clone https://github.com/BofAI/x402.git
+cd x402/typescript            # the pnpm/turbo monorepo root (SDK packages)
+
+# Install + link the SDK packages, then build their dist
+pnpm install
+pnpm build
+
+# Examples live in a separate workspace at the repo root
+cd ../examples/typescript
+pnpm install                  # installs the reference example dependencies
+cp .env-exact.example .env-exact   # fill AGENT_WALLET_PRIVATE_KEY + payout addresses
 ```
-https://x402-demo.bankofai.io/protected-nile
+
+Then start the reference facilitator and resource server **in two separate terminals** (both from `examples/typescript`):
+
+```bash
+# Terminal 1 — facilitator (verifies + settles on-chain)
+pnpm dev:facilitator          # http://localhost:4022
+
+# Terminal 2 — resource server (sells GET /weather behind 402)
+pnpm dev:server               # http://localhost:4021
 ```
+
+Once both are running, instruct your agent to access `http://localhost:4021/weather`.
 
 **The agent should automatically complete the following flow (no human intervention required):**
 
-1. Send a GET request to the demo URL
+1. Send a GET request to the endpoint
 2. Receive an HTTP 402 (Payment Required) response from the server
 3. Read the payment requirements from the response headers (amount, network, recipient address)
 4. Sign a payment authorization using the configured private key
@@ -186,7 +218,7 @@ Before deploying your agent to production, make sure to review the following:
 | `Private key not found` or signing fails | Environment variable not set or misconfigured | Re-run Step 1, and make sure you run the agent **in the same terminal session** |
 | Insufficient balance error | No test tokens in the agent wallet | Go back to Prerequisites and claim test tokens from the faucet |
 | Request times out | Network issue or RPC rate limiting | Configure `TRON_GRID_API_KEY` for better performance |
-| Agent accesses successfully but balance doesn't change | May have accessed a free endpoint | Confirm the URL path is `/protected-nile`, not another path |
+| Agent accesses successfully but balance doesn't change | May have accessed a free endpoint | Confirm the URL path is `/weather` (the paid route), not another path |
 
 ---
 
@@ -200,6 +232,7 @@ Before deploying your agent to production, make sure to review the following:
 
 ## References
 
+- [x402 repository](https://github.com/BofAI/x402) — SDK source and runnable examples (`examples/typescript/`)
+- [MCP examples](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/mcp) — agent payments over MCP transport
 - [OpenClaw Extension Repository](https://github.com/BofAI/openclaw-extension)
 - [x402-payment on ClawHub](https://github.com/BofAI/skills/tree/main/x402-payment)
-- [x402 Demo Project](https://github.com/BofAI/x402-demo)

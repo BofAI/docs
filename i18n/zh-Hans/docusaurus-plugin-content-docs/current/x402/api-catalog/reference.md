@@ -6,7 +6,7 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 
 # 数据格式与 API 参考
 
-本页是 API 目录 的数据契约：服务方向[目录仓库](https://github.com/BofAI/x402-catelog)提交的 `catalog.json` 字段、合法取值，以及目录构建后对外暴露的 `/api/*` 接口结构。
+本页是 API 目录 的数据契约：服务方向[目录仓库](https://github.com/BofAI/x402-catalog)提交的 `catalog.json` 字段、合法取值，以及目录构建后对外暴露的 `/api/*` 接口结构。
 
 ## provider catalog.json 字段
 
@@ -60,9 +60,9 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| `network` | string | 该路由结算所在的 CAIP-2 链 ID（如 `tron:mainnet`、`eip155:56`） |
+| `network` | string | 该路由结算所在的 CAIP-2 链 ID（如 `tron:0x2b6653dc`、`eip155:56`） |
 | `provider` | string | 处理该网络的 gateway provider `fqn` |
-| `scheme` | string | 该路由的 x402 支付方案，如 `exact_permit` 或 `exact_gasfree` —— 由每条路由各自声明 |
+| `scheme` | string | 该路由的 x402 支付方案，如 `exact` —— 由每条路由各自声明 |
 | `url` | string | 该网络路由的完整 gateway URL |
 
 构建时该字段以 `x402_routes` 透传到产物。存在时，调用方/Agent 按目标支付链选择对应路由；顶层 `url` 仍是默认路由。
@@ -72,9 +72,9 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --method POST \
-  --network tron:mainnet \
+  --network tron:0x2b6653dc \
   --token USDT \
-  --scheme exact_permit \
+  --scheme exact \
   --max-amount 0.000001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
@@ -111,9 +111,9 @@ security   shopping    storage     translation
 
 | 链 | ID |
 |---|---|
-| TRON 主网 | `tron:mainnet` |
-| TRON Nile 测试网 | `tron:nile` |
-| TRON Shasta 测试网 | `tron:shasta` |
+| TRON 主网 | `tron:0x2b6653dc` |
+| TRON Nile 测试网 | `tron:0xcd8690dc` |
+| TRON Shasta 测试网 | `tron:0x94a9059e` |
 | BNB Chain (BSC) | `eip155:56` |
 | BNB 测试网 | `eip155:97` |
 

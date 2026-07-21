@@ -40,7 +40,7 @@ Run this in your terminal:
 ls ~/.agents/skills
 ```
 
-You should see 12 directory names: `agent-wallet`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`, and `bankofai-guide`.
+You should see 14 directory names: `agent-wallet`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`, `twitter-digest`, `twitter-mcp`, and `bankofai-guide`.
 
 Then verify in your AI chat:
 

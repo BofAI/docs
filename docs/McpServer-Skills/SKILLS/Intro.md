@@ -57,7 +57,7 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Twelve skills in total — covering the most common scenarios in the TRON ecosystem, plus a dedicated onboarding helper. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+Fourteen skills in total — covering the most common scenarios in the TRON ecosystem plus X/Twitter tooling, and a dedicated onboarding helper. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
 
 ### 🔑 Secure Wallet Management
 
@@ -146,6 +146,14 @@ Check your BANK OF AI balance and top up with a single sentence.
 > 🗣️ "How much balance do I have? Go ahead and recharge 5 USDT."
 
 💡 For top-up and withdrawal rules, see: [**recharge-skill**](./BANKOFAISkill.md#recharge-skill)
+
+### 🐦 X/Twitter Daily Digest
+
+Turn your own X/Twitter account into a daily briefing — mentions, home timeline, and reply opportunities, summarized for you.
+
+> 🗣️ "Generate today's X/Twitter digest for my account."
+
+💡 Two ways to run it: API-only via [**twitter-digest**](./BANKOFAISkill.md#twitter-digest), or from the local `xurl` CLI via [**twitter-mcp**](./BANKOFAISkill.md#twitter-mcp).
 
 ### 🧭 Onboarding Guide (bankofai-guide)
 

@@ -41,6 +41,8 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
+> **Note:** On TRON, `accepted.asset` and `accepted.payTo` use Base58 addresses, but the addresses inside `permit2Authorization` (`permitted.token`, `spender`, `witness.to`, `from`) are converted to `0x` hex form for EIP-712/TIP-712 signing.
+
 ```json
 {
   "x402Version": 2,
@@ -52,40 +54,29 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
-      "network": "tron:nile",
+      "scheme": "exact",
+      "network": "tron:0xcd8690dc",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
       "payTo": "<SELLER_TRON_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "name": "Tether USD",
-        "version": "1",
+        "assetTransferMethod": "permit2",
         "fee": {
-          "facilitatorId": "<FACILITATOR_URL>",
           "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
           "feeAmount": "100",
           "caller": "<FACILITATOR_CALLER_ADDRESS>"
         }
       }
     }
-  ],
-  "extensions": {
-    "paymentPermitContext": {
-      "meta": {
-        "kind": "PAYMENT_ONLY",
-        "paymentId": "0xb08d71cabc27d5552e36a7f60084e130",
-        "nonce": "11984290373079535093514815017206530944",
-        "validAfter": 1770816589,
-        "validBefore": 1770820189
-      }
-    }
-  }
+  ]
 }
 ```
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
+
+> **Note:** `extensions.erc20ApprovalGasSponsoring` carries `info` (description + version) and a `schema` (JSON Schema for the clients pre-signed `approve(Permit2)` payload). The `schema.properties` declarations are abbreviated below for brevity.
 
 ```json
 {
@@ -98,32 +89,28 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
   },
   "accepts": [
     {
-      "scheme": "exact_permit",
+      "scheme": "exact",
       "network": "eip155:97",
       "amount": "100000000000000",
       "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
       "payTo": "<SELLER_BSC_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "name": "Tether USD",
-        "version": "1",
-        "fee": {
-          "facilitatorId": "<FACILITATOR_URL>",
-          "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-          "feeAmount": "100000000000000",
-          "caller": "<FACILITATOR_CALLER_ADDRESS>"
-        }
+        "assetTransferMethod": "permit2"
       }
     }
   ],
   "extensions": {
-    "paymentPermitContext": {
-      "meta": {
-        "kind": "PAYMENT_ONLY",
-        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
-        "nonce": "94261896388554187915350651456800860604",
-        "validAfter": 1770817158,
-        "validBefore": 1770820758
+    "erc20ApprovalGasSponsoring": {
+      "info": {
+        "description": "The facilitator broadcasts a pre-signed ERC-20 approve() transaction to grant Permit2 allowance.",
+        "version": "1"
+      },
+      "schema": {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "type": "object",
+        "properties": "...",
+        "required": ["from", "asset", "spender", "amount", "signedTransaction", "version"]
       }
     }
   }
@@ -141,14 +128,14 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 | `error`             | Human-readable error message                                                |
 | `resource`          | Information about the requested resource                                    |
 | `accepts`           | Array of accepted payment options                                           |
-| `scheme`            | Payment scheme (`exact_permit` or `exact`)                                  |
-| `network`           | Network identifier (`tron:nile`, `tron:mainnet`, `eip155:56`, `eip155:97`)  |
+| `scheme`            | Payment scheme (`exact`, `upto`, `batch-settlement`, or `exact_gasfree`)  |
+| `network`           | Network identifier (`tron:0xcd8690dc`, `tron:0x2b6653dc`, `eip155:56`, `eip155:97`)  |
 | `amount`            | Payment amount in the smallest unit (e.g., 100 = 0.0001 USDT)              |
 | `asset`             | TRC-20/BEP-20 token contract address                                        |
 | `payTo`             | Seller's wallet address                                                     |
 | `maxTimeoutSeconds` | Maximum validity duration of the payment                                    |
-| `extra.fee`         | Facilitator fee information (includes `facilitatorId`, `feeTo`, `feeAmount`, `caller`) |
-| `extensions`        | Additional context for the payment scheme (e.g., `paymentPermitContext` with nonce, validity window) |
+| `extra.fee`         | Facilitator fee information (includes `feeTo`, `feeAmount`, `caller`) |
+| `extensions`        | Additional context for the payment scheme (e.g., gas-sponsoring, payment-identifier) |
 
 ## Payment Signature Structure
 
@@ -160,29 +147,24 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
-  "network": "tron:nile",
+  "accepted": {
+    "scheme": "exact",
+    "network": "tron:0xcd8690dc",
+    "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
+    "amount": "100",
+    "payTo": "<SELLER_TRON_ADDRESS>",
+    "maxTimeoutSeconds": 3600,
+    "extra": { "assetTransferMethod": "permit2" }
+  },
   "payload": {
     "signature": "0x...",
-    "permit": {
-      "meta": {
-        "kind": 0,
-        "paymentId": "0x65f9d4ca3fb5f6dd14930055aa5ccbc4",
-        "nonce": "241054476753796864345738420545497456919",
-        "validAfter": 1770817311,
-        "validBefore": 1770820911
-      },
-      "buyer": "<CLIENT_TRON_ADDRESS>",
-      "caller": "<FACILITATOR_CALLER_ADDRESS>",
-      "payment": {
-        "payToken": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
-        "payAmount": 100,
-        "payTo": "<SELLER_TRON_ADDRESS>"
-      },
-      "fee": {
-        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-        "feeAmount": 100
-      }
+    "permit2Authorization": {
+      "permitted": { "token": "0x...", "amount": "100" },
+      "spender": "0x...",
+      "nonce": "0",
+      "deadline": "1770820911",
+      "witness": { "to": "0x...", "validAfter": "1770817311" },
+      "from": "0x..."
     }
   }
 }
@@ -194,29 +176,24 @@ The client responds via the `PAYMENT-SIGNATURE` header with a signed payload:
 ```json
 {
   "x402Version": 2,
-  "scheme": "exact_permit",
-  "network": "eip155:97",
+  "accepted": {
+    "scheme": "exact",
+    "network": "eip155:97",
+    "asset": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
+    "amount": "100000000000000",
+    "payTo": "<SELLER_BSC_ADDRESS>",
+    "maxTimeoutSeconds": 3600,
+    "extra": { "assetTransferMethod": "permit2" }
+  },
   "payload": {
     "signature": "0x...",
-    "permit": {
-      "meta": {
-        "kind": 0,
-        "paymentId": "0xc00fc79b9a26084ad078b71ffcaa07fd",
-        "nonce": "94261896388554187915350651456800860604",
-        "validAfter": 1770817158,
-        "validBefore": 1770820758
-      },
-      "buyer": "<CLIENT_BSC_ADDRESS>",
-      "caller": "<FACILITATOR_CALLER_ADDRESS>",
-      "payment": {
-        "payToken": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd",
-        "payAmount": 100000000000000,
-        "payTo": "<SELLER_BSC_ADDRESS>"
-      },
-      "fee": {
-        "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-        "feeAmount": 100000000000000
-      }
+    "permit2Authorization": {
+      "permitted": { "token": "0x337610d27c682E347C9cD60BD4b3b107C9d34dDd", "amount": "100000000000000" },
+      "spender": "<X402_PERMIT2_PROXY_ADDRESS>",
+      "nonce": "0",
+      "deadline": "1770820758",
+      "witness": { "to": "<SELLER_BSC_ADDRESS>", "validAfter": "1770817158" },
+      "from": "<CLIENT_BSC_ADDRESS>"
     }
   }
 }
@@ -237,5 +214,5 @@ HTTP 402 is the foundation of the x402 protocol. It enables servers to integrate
 
 Next, explore:
 
-- [Client / Server](./client-server.md) — Understand the roles and responsibilities of clients and servers  
-- [Facilitator](./facilitator.md) — Learn how servers verify and settle payments  
+- [Client / Server](./client-server.md) — Understand the roles and responsibilities of clients and servers
+- [Facilitator](./facilitator.md) — Learn how servers verify and settle payments

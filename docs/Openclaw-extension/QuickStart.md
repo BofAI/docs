@@ -115,9 +115,9 @@ After confirming, the installer automatically removes old skills:
 ```
 Running cleanup...
 
-◇  Found 11 unique installed skill(s)
+◇  Found 14 unique installed skill(s)
 ◇  Removal process complete
-◆  Successfully removed 11 skill(s)
+◆  Successfully removed 14 skill(s)
 
 ✓ Clean install cleanup completed.
 
@@ -295,12 +295,13 @@ Press Enter (or type `1`) to install globally — this way all your OpenClaw wor
 Then the skill picker launches:
 
 ```
-◇  Found 11 skills
+◇  Found 14 skills
 │
 ◇  Select skills to install (space to toggle)
 │  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions, recharge-skill,
-│  SunPerp Perpetual Futures Trading, SunSwap DEX Trading, TRC20 Token Toolkit,
-│  TronScan Data Lookup, TRX Staking & SR Voting, USDD / JUST Protocol, x402-payment
+│  SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit, SunSwap DEX Trading,
+│  TRC20 Token Toolkit, TronScan Data Lookup, TRX Staking & SR Voting, USDD / JUST Protocol,
+│  twitter-digest, twitter-mcp, x402-payment
 ```
 
 Here's what each skill does:
@@ -311,11 +312,14 @@ Here's what each skill does:
 | **bankofai-guide** | Onboarding helper that walks the AI through next steps after installation |
 | **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
 | **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
+| **SunPump Meme Token Toolkit** | Create and trade meme tokens on SunPump; query token info, rankings, holders, and trade history |
 | **TronScan Data Lookup** | Query blockchain data via TronScan |
 | **TRC20 Token Toolkit** | Common TRC20 token operations like sending tokens |
 | **TRX Staking & SR Voting** | Stake TRX, get energy/bandwidth, and vote for Super Representatives |
 | **USDD / JUST Protocol** | Manage USDD stablecoin and JUST Protocol positions |
 | **Multi-Sig & Account Permissions** | Multi-signature wallet and account permission management |
+| **twitter-digest** | Generate X/Twitter daily digests (mentions, home timeline, reply opportunities) |
+| **twitter-mcp** | Install/authorize xurl for X/Twitter and generate digests from the local xurl CLI |
 | **x402-payment** | x402 protocol payments (agent-to-agent) |
 | **recharge-skill** | Check and top up your BANK OF AI balance |
 
@@ -328,11 +332,14 @@ After selecting, the installer shows a security risk assessment:
 │  Multi-Sig & Account Permissions    --                --                --
 │  recharge-skill                     Safe              1 alert           Med Risk
 │  SunPerp Perpetual Futures Trading  --                --                --
+│  SunPump Meme Token Toolkit         --                --                --
 │  SunSwap DEX Trading                --                --                --
 │  TRC20 Token Toolkit                --                --                --
 │  TronScan Data Lookup               --                --                --
 │  TRX Staking & SR Voting            --                --                --
 │  USDD / JUST Protocol               --                --                --
+│  twitter-digest                     --                --                --
+│  twitter-mcp                        --                --                --
 │  x402-payment                       Safe              1 alert           Med Risk
 │  agent-wallet                       Safe              1 alert           High Risk
 ```
@@ -340,18 +347,21 @@ After selecting, the installer shows a security risk assessment:
 Review the report, then confirm to proceed. When installation completes:
 
 ```
-◇  Installed 11 skills
+◇  Installed 14 skills
 │
 │  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
 │  ✓ bankofai-guide → ~/.openclaw/skills/bankofai-guide
 │  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
+│  ✓ SunPump Meme Token Toolkit → ~/.openclaw/skills/sunpump-meme-token-toolkit
 │  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
 │  ✓ TRC20 Token Toolkit → ~/.openclaw/skills/trc20-token-toolkit
 │  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
 │  ✓ TRX Staking & SR Voting → ~/.openclaw/skills/trx-staking-sr-voting
 │  ✓ USDD / JUST Protocol → ~/.openclaw/skills/usdd-just-protocol
+│  ✓ twitter-digest → ~/.openclaw/skills/twitter-digest
+│  ✓ twitter-mcp → ~/.openclaw/skills/twitter-mcp
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 

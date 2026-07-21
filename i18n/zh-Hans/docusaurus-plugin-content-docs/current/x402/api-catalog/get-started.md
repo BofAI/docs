@@ -8,14 +8,14 @@ description: 3 分钟把你的 Agent 接入 API 目录 —— 安装 Agent Walle
 
 只需两步、不到 3 分钟，你的 Agent 就能接入整个目录：装好钱包，再装上 x402 CLI。完成后，Agent 就能发现并调用目录里的任意服务，按次在链上付费。
 
-**前提**：Node.js（用于钱包）和带 `pip` 的 Python（用于 CLI）。
+**前提**：Node.js 和 npm。
 
 ## 第 1 步：安装 Agent Wallet
 
 运行下面这行命令，你会装上一个在 TRON 与 BNB Chain 上管理稳定币的本地钱包。之后 Agent 发起的每一次付费调用，都由它在本地签名。
 
 ```bash
-npm i @bankofai/agent-wallet
+npm i -g @bankofai/agent-wallet
 agent-wallet --help
 ```
 
@@ -24,7 +24,7 @@ agent-wallet --help
 一次安装，就把 Agent 接入了目录 —— 它通过 x402 发现并调用全部服务、按次付费。无需账号，也无需管理任何 API Key。
 
 ```bash
-pip install bankofai-x402-cli
+npm install -g @bankofai/x402-cli
 x402-cli --version
 ```
 
@@ -35,30 +35,36 @@ x402-cli --version
 装好后，Agent 就能通过 CLI 发现并调用服务。先按服务名或关键字搜索，看看目录里有什么：
 
 ```bash
-x402-cli catalog search <keyword> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
+x402-cli catalog search <keyword> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
 ```
 
 查看某个服务的详情与可用端点：
 
 ```bash
-x402-cli catalog show <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
-x402-cli catalog endpoints <fqn> --catalog https://x402-catelog.bankofai.io/api/catalog.json --json
+x402-cli catalog show <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
+x402-cli catalog endpoints <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
 ```
 
-确认后，直接对目标端点发起一次付费调用——报价、付款、取回结果一步完成。简单的 GET 端点只需给出 URL：
+**免费端点**（服务方未定价的端点）用普通 `curl` 即可拿到结果——无需 CLI、也无需付费：
+
+```bash
+curl -sS 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
+```
+
+对于**付费端点**，使用 `x402-cli pay`——它一步完成报价、付款和取回结果。简单的 GET 只需给出 URL：
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
 ```
 
-如果是 POST 端点，或想指定支付链、代币与方案，显式传入对应参数：
+如果是付费 POST 端点，或想指定支付链、代币与方案，显式传入对应参数：
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
   --method POST \
-  --network tron:mainnet \
+  --network tron:0x2b6653dc \
   --token USDT \
-  --scheme exact_permit \
+  --scheme exact \
   --max-amount 0.000001 \
   --header 'Content-Type: application/json' \
   --body '{ ... }'
@@ -67,9 +73,9 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | 参数 | 作用 |
 |---|---|
 | `--method` | HTTP 方法（默认 `GET`） |
-| `--network` | CAIP-2 支付链，如 `tron:mainnet`、`eip155:56` |
+| `--network` | CAIP-2 支付链，如 `tron:0x2b6653dc`、`eip155:56` |
 | `--token` | 结算代币，如 `USDT` |
-| `--scheme` | 路由声明的 x402 支付方案，如 `exact_permit` 或 `exact_gasfree` |
+| `--scheme` | 路由声明的 x402 支付方案，如 `exact` |
 | `--max-amount` | 美元支出上限；报价超出即中止调用 |
 | `--header` / `--body` | 转发到上游的请求头与请求体 |
 

@@ -1,635 +1,242 @@
-# 人类用户快速入门
-
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
-## 本指南适合谁？
+# 用户快速入门
 
-本指南适合想要通过代码**调用 x402 付费 API** 的开发者。完成后，您将能够用 Python 或 TypeScript 编写脚本，自动完成"付款 → 获取 API 内容"的完整流程，无需手动操作。
+## 本指南面向谁？
 
-> **测试优先：** 本指南默认使用测试网，不涉及真实资金。您可以安全地跟着步骤操作，熟悉整个流程后再连接真实钱包。
+本指南面向希望**通过代码调用 x402 保护的 API 并自动完成付款**的开发者。完成后，您将拥有一个可工作的 TypeScript 脚本：它能检测 402 响应、为访问付费、并获取受保护的内容——全程无需手动操作。
+
+> **测试网优先：** 本指南默认使用测试网，您可以安全地完成每一步而不花费真实资金。
+
+:::info SDK（仅 TypeScript）
+x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发布。本指南展示如何直接集成已发布的 npm 包。
+:::
 
 ---
 
 ## 前置准备
 
-### 第一件事：私钥安全
+### 首先：私钥安全
 
-> 🔴 **私钥安全警告——请务必先读这一节：**
+> 🔴 **私钥安全警告——开始前请阅读：**
 >
-> - **私钥** 是控制您钱包的唯一凭证，相当于银行卡的密码+卡号合一，**获取私钥的人即可完全控制您的资产**
-> - 本指南需要您配置私钥，请务必遵守以下规则：
->   1. **永远不要**将私钥直接写进代码文件（如 `client.py`）
->   2. **永远不要**将含有私钥的文件提交到 Git 或上传到 GitHub
->   3. **永远不要**通过微信、邮件、聊天记录发送私钥
->   4. 私钥应只存放在本地的 `.env` 文件或系统环境变量中
->   5. 测试时，请专门创建一个只含少量测试代币的**测试钱包**，不要使用存有真实资产的钱包
+> - 您的**私钥**是控制钱包的唯一凭据。任何拥有它的人都可以完全访问您的资金。
+> - 本指南要求您配置私钥。请严格遵守以下规则：
+>   1. **切勿**将私钥直接写在代码文件中
+>   2. **切勿**将含私钥的文件提交到 Git 或推送到 GitHub
+>   3. **切勿**通过消息应用、邮件或聊天发送私钥
+>   4. 仅将其保存在本地 `.env` 文件或系统环境变量中
+>   5. 测试时请创建一个**专用测试钱包**，仅持有少量测试代币——切勿使用持有真实资产的钱包
 
-### 准备工作清单
+### 开始前清单
 
-在开始之前，请确认以下条件：
+- [ ] 已安装 **Node.js 22+** 和 **pnpm 11.1+**
+- [ ] 已创建专用**测试钱包**（见下文）
+- [ ] 已领取测试代币（免费）
+- [ ] 有一个目标 x402 保护的 API URL（例如按[卖家快速入门](./quickstart-for-sellers.md)启动的 `/credit` 接口）
 
-- [ ] 已安装 **Python 3.11+** 或 **Node.js 20+**（根据您选择的语言）
-- [ ] 已创建一个专用**测试钱包**（见下方说明）
-- [ ] 已获取测试代币（免费）
-- [ ] 知道要访问的 x402 付费 API 地址（或使用我们提供的演示地址）
-
-### 创建测试钱包并获取测试代币
+### 创建测试钱包并领取测试代币
 
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
 **创建测试钱包：**
 
-1. 安装 [TronLink 浏览器插件](https://www.tronlink.org/) 或手机 App
-2. 点击"创建钱包"，设置密码，**将助记词抄写在纸上保管好**
-3. 钱包创建后，复制您的地址（以 `T` 开头）
+1. 安装 [TronLink 浏览器扩展](https://www.tronlink.org/) 或手机 App
+2. 点击"创建钱包"，设置密码，并**将助记词抄写在纸上并妥善保管**
+3. 创建后，复制您的钱包地址（以 `T` 开头）
 
-**获取测试代币（免费）：**
+**领取免费测试代币：**
 
 1. 前往 [Nile 测试网水龙头](https://nileex.io/join/getJoinPage)
-2. 粘贴您的 TRON 测试钱包地址，领取测试 TRX 和测试 USDT/USDD
-3. 在 TronLink 中切换到"Nile 测试网"，确认余额到账
+2. 粘贴您的 TRON 测试钱包地址，领取测试 TRX 和 USDT/USDD
+3. 在 TronLink 切换到"Nile 测试网"并确认余额
 
 **导出私钥：**
 
-1. 在 TronLink 中进入"设置 → 账户管理 → 导出私钥"
+1. 在 TronLink 中，前往 设置 → 账户管理 → 导出私钥
 2. 输入密码确认
-3. 复制这串私钥（64位十六进制字符），下一步会用到
+3. 复制 64 位十六进制字符串——下一步将用到
 
-> ✅ **成功标志：** 拥有 TRON 测试钱包地址和对应私钥，钱包中有测试 TRX 和 USDT（或 USDD）
+> ✅ **成功检查：** 您拥有 TRON 测试钱包地址、其私钥，以及测试 TRX 和 USDT（或 USDD）余额
 
 </TabItem>
 <TabItem value="BSC" label="BSC">
 
 **创建测试钱包：**
 
-1. 安装 [MetaMask 浏览器插件](https://metamask.io/)
-2. 点击"创建新钱包"，设置密码，**将助记词抄写在纸上保管好**
-3. 复制您的钱包地址（以 `0x` 开头）
+1. 安装 [MetaMask 浏览器扩展](https://metamask.io/)
+2. 点击"创建新钱包"，设置密码，并**将助记词抄写在纸上并妥善保管**
+3. 创建后，复制您的钱包地址（以 `0x` 开头）
 
-**获取测试代币（免费）：**
+**领取免费测试代币：**
 
 1. 前往 [BSC 测试网水龙头](https://www.bnbchain.org/en/testnet-faucet)
-2. 粘贴 BSC 测试钱包地址，领取测试 BNB 和测试 USDT
-3. 在 MetaMask 中切换到 BSC 测试网，确认余额到账
+2. 粘贴您的 BSC 测试钱包地址，领取测试 BNB 和 USDT
+3. 在 MetaMask 切换到 BSC 测试网并确认余额
 
 **导出私钥：**
 
-1. 在 MetaMask 中点击账户图标 → "账户详情" → "导出私钥"
+1. 在 MetaMask 中，点击 账户详情 → 导出私钥
 2. 输入 MetaMask 密码确认
-3. 复制这串私钥（64位十六进制字符），下一步会用到
+3. 复制 64 位十六进制字符串——下一步将用到
 
-> ✅ **成功标志：** 拥有 BSC 测试钱包地址和对应私钥，钱包中有测试 BNB 和 USDT
-
-</TabItem>
-</Tabs>
-
----
-
-## 第一步：安装 SDK
-
-根据您使用的编程语言，选择对应的安装方式：
-
-<Tabs groupId="language">
-<TabItem value="python" label="Python">
-
-打开终端，执行以下命令安装 x402 Python SDK：
-
-```bash
-pip install "bankofai-x402[tron] @ git+https://github.com/BofAI/x402.git#subdirectory=python/x402"
-```
-
-再安装 EVM（BSC）所需的额外依赖：
-
-```bash
-pip install eth_account web3
-```
-
-验证安装：
-
-```bash
-python -c "import bankofai.x402; print('安装成功！')"
-```
-
-> ✅ **成功标志：** 终端输出 `安装成功！`
-
-如遇安装问题，也可从源码安装：
-
-```bash
-git clone https://github.com/BofAI/x402.git
-cd x402/python/x402
-pip install -e .
-```
-
-</TabItem>
-<TabItem value="ts" label="TypeScript">
-
-打开终端，在您的项目目录下执行：
-
-```bash
-npm install @bankofai/x402 tronweb dotenv
-```
-
-由于 `@bankofai/x402` 是 ESM 模块，请在您的 `package.json` 中添加以下字段（如果没有则添加）：
-
-```json
-{
-  "type": "module"
-}
-```
-
-> 💡 如果在使用 `npx tsx` 运行时遇到 `ERR_PACKAGE_PATH_NOT_EXPORTED` 错误，通常是因为缺少这个 `"type": "module"` 配置。
-
-> ✅ **成功标志：** `npm install` 执行完毕，`node_modules` 目录中出现 `@bankofai` 文件夹
+> ✅ **成功检查：** 您拥有 BSC 测试钱包地址、其私钥，以及测试 BNB 和 USDT 余额
 
 </TabItem>
 </Tabs>
 
 ---
+
+## 第一步：安装 SDK 包
+
+在您的 TypeScript 应用中安装已发布的 npm 包：
+
+```bash
+pnpm add @bankofai/agent-wallet @bankofai/x402-fetch @bankofai/x402-tron
+```
+
+如果您的项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
 
 :::info 钱包管理
-x402 SDK 通过 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 来解析和管理钱包凭证，安装 x402 时会自动安装 agent-wallet 作为依赖。私钥解析优先级为：
+x402 使用 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 解析和管理钱包凭据。Agent Wallet 会随上面的包一起安装。私钥解析优先级：
 1. 加密钱包文件（通过 Agent Wallet CLI 导入）
 2. 环境变量 `AGENT_WALLET_PRIVATE_KEY`
 
-本文使用环境变量方式。
+本指南使用环境变量方式。
 :::
+
+---
 
 ## 第二步：配置私钥
 
-**不要将私钥写进代码！** 请将私钥存储为环境变量，这样代码从环境中读取，私钥不会出现在代码文件里。将 `your_private_key_here` 替换为前置准备中导出的私钥。
+**切勿将私钥写在代码中。** 将其设为环境变量以使其远离源文件：
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-> 💡 **提示：** 如需在每次打开终端时自动生效，可将其写入 shell 配置文件：
-> ```bash
-> echo 'export AGENT_WALLET_PRIVATE_KEY=你的私钥' >> ~/.zshrc   # zsh（macOS 默认）
-> echo 'export AGENT_WALLET_PRIVATE_KEY=你的私钥' >> ~/.bashrc  # bash（Linux 默认）
-> source ~/.zshrc   # 或 source ~/.bashrc — 无需重启终端即可立即生效
-> ```
+> 💡 **提示：** 本快速入门使用 `TRON_NILE`（`tron:0xcd8690dc`）付款。client 会从 server 返回的 `accepts` 中选择 `network === TRON_NILE` 的付款选项。
 
-验证环境变量已生效：
-
-```bash
-echo $AGENT_WALLET_PRIVATE_KEY
-```
-
-> ✅ **成功标志：** 终端输出您的私钥字符串（不是空白）
-
-<Tabs>
-<TabItem value="TRON" label="TRON">
-
-**可选：** 生产环境的 TRON 项目建议配置 TronGrid API Key 以获得更稳定的 RPC 服务：
+生产 TRON 负载建议设置 TronGrid API Key，以获得更可靠的 RPC：
 
 ```bash
 export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 ```
 
-> 💡 **如何获取 TronGrid API Key：** 前往 [TronGrid 官网](https://www.trongrid.io/) 免费注册，创建 API Key 后粘贴到上方。
-
-:::note
-未配置 `TRON_GRID_API_KEY` 时，在高负载下可能会被限速。生产环境请配置 `TRON_GRID_API_KEY`，以确保可靠性。
-:::
-
-</TabItem>
-<TabItem value="BSC" label="BSC">
-
-BSC 无需额外配置。
-
-</TabItem>
-</Tabs>
+> ⚠️ **安全提醒：** 私钥仅保存在环境变量或安全的密钥管理系统中。**切勿将含私钥的文件提交到 Git 或分享给任何人。**
 
 ---
 
-## 第三步：编写并运行调用代码
+## 第三步：编写并运行客户端代码
 
-新建一个文件（如 `client.py` 或 `client.ts`），复制对应的代码：
-
-<Tabs groupId="chain">
-<TabItem value="tron" label="TRON">
-<Tabs groupId="language">
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-import httpx
-
-from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
-from bankofai.x402.mechanisms.tron.exact_permit import ExactPermitTronClientMechanism
-from bankofai.x402.mechanisms.tron.exact_gasfree.client import ExactGasFreeClientMechanism
-from bankofai.x402.signers.client import TronClientSigner
-from bankofai.x402.utils.gasfree import GasFreeAPIClient
-from bankofai.x402.config import NetworkConfig
-
-
-# ========== 配置项 ==========
-# 您要访问的 x402 付费 API 地址
-# 下方是我们提供的测试地址，您可以先用它验证流程是否通畅
-SERVER_URL = "https://x402-demo.bankofai.io/protected-nile"
-# ===========================
-
-# GasFree API 客户端（通过 BANK OF AI 代理路由，无需 API 密钥）
-gasfree_clients = {
-    "tron:nile": GasFreeAPIClient(NetworkConfig.get_gasfree_api_base_url("tron:nile")),
-    "tron:mainnet": GasFreeAPIClient(NetworkConfig.get_gasfree_api_base_url("tron:mainnet")),
-}
-
-
-async def main():
-    # 通过 agent-wallet 初始化签名器（自动从环境变量解析钱包）
-    signer = await TronClientSigner.create()
-
-    # 创建 x402 客户端，注册付款机制和余额检查策略
-    x402_client = X402Client()
-    x402_client.register("tron:*", ExactPermitTronClientMechanism(signer))
-    x402_client.register("tron:*", ExactGasFreeClientMechanism(signer, clients=gasfree_clients))
-    x402_client.register_policy(SufficientBalancePolicy)
-
-    async with httpx.AsyncClient(timeout=120) as http_client:
-        client = X402HttpClient(http_client, x402_client)
-
-        # 发起请求——SDK 会自动处理付款，您无需手动操作
-        response = await client.get(SERVER_URL)
-
-        print(f"状态码: {response.status_code}")
-        print("响应内容:", response.text)
-
-
-asyncio.run(main())
-```
-
-**运行代码：**
-
-```bash
-python client.py
-```
-
-**预期输出：**
-
-```
-状态码: 200
-响应内容: {"data": "这是需要付款才能获取的内容！"}
-```
-
-</TabItem>
-<TabItem value="ts" label="TypeScript">
+客户端会包装 `fetch`，使 HTTP `402 Payment Required` 挑战自动支付。下面是一个最小 TRON client：
 
 ```typescript
-import 'dotenv/config'
-import {
-  X402Client, X402FetchClient,
-  ExactPermitTronClientMechanism, ExactGasFreeClientMechanism,
-  TronClientSigner, SufficientBalancePolicy,
-  GasFreeAPIClient, getGasFreeApiBaseUrl,
-} from '@bankofai/x402'
+import { resolveWallet } from "@bankofai/agent-wallet";
+import { x402Client, wrapFetchWithPayment } from "@bankofai/x402-fetch";
+import { createClientTronSigner, TRON_NILE } from "@bankofai/x402-tron";
+import { ExactTronScheme } from "@bankofai/x402-tron/exact/client";
 
-// ========== 配置项 ==========
-// 您要访问的 x402 付费 API 地址
-// 下方是我们提供的测试地址，您可以先用它验证流程是否通畅
-const SERVER_URL = 'https://x402-demo.bankofai.io/protected-nile'
-// ===========================
+const wallet = await resolveWallet({
+  network: TRON_NILE,
+});
 
-async function main(): Promise<void> {
-  // 通过 agent-wallet 初始化签名器（自动从环境变量解析钱包）
-  const signer = await TronClientSigner.create()
+const signer = await createClientTronSigner(wallet, {
+  network: TRON_NILE,
+});
 
-  // 创建 x402 客户端，注册付款机制和余额检查策略
-  const x402 = new X402Client()
-  x402.register('tron:*', new ExactPermitTronClientMechanism(signer))
-  x402.register('tron:*', new ExactGasFreeClientMechanism(signer, {
-    'tron:nile': new GasFreeAPIClient(getGasFreeApiBaseUrl('tron:nile')),
-    'tron:mainnet': new GasFreeAPIClient(getGasFreeApiBaseUrl('tron:mainnet')),
-  }))
-  x402.registerPolicy(SufficientBalancePolicy)
+const client = new x402Client((_version, accepts) =>
+  accepts.find((a) => a.network === TRON_NILE)!
+);
 
-  const client = new X402FetchClient(x402)
+client.register(TRON_NILE, new ExactTronScheme(signer));
 
-  // 发起请求——SDK 会自动处理付款，您无需手动操作
-  const response = await client.get(SERVER_URL)
+const fetchWithPay = wrapFetchWithPayment(fetch, client);
 
-  console.log(`状态码: ${response.status}`)
+const res = await fetchWithPay("http://localhost:4021/credit");
 
-  // 解析付款回执（可选）
-  const paymentResponse = response.headers.get('payment-response')
-  if (paymentResponse) {
-    const jsonString = Buffer.from(paymentResponse, 'base64').toString('utf8')
-    const settleResponse = JSON.parse(jsonString)
-    console.log(`交易哈希: ${settleResponse.transaction}`)
-  }
-
-  // 打印响应内容
-  const contentType = response.headers.get('content-type') ?? ''
-  if (contentType.includes('application/json')) {
-    const body = await response.json()
-    console.log('响应内容:', body)
-  }
-}
-
-main().catch(console.error)
+console.log(await res.json());
 ```
 
-**运行代码：**
+### 运行 client
+
+首先确保资源服务器 + facilitator 正在运行（参见[卖家快速入门](./quickstart-for-sellers.md)），然后用同一组环境变量运行您的客户端应用：
 
 ```bash
-npx tsx client.ts
+pnpm tsx src/index.ts   # 或您的应用 dev 脚本
 ```
 
 **预期输出：**
 
 ```
-状态码: 200
-交易哈希: abc123...
-响应内容: { data: '这是需要付款才能获取的内容！' }
+{ "status": "success", "credit": 1000000 }
 ```
 
-</TabItem>
-</Tabs>
-</TabItem>
-<TabItem value="bsc" label="BSC">
-<Tabs groupId="language">
-<TabItem value="python" label="Python">
+> ✅ **成功：** SDK 检测到 `402`，签署付款，在链上结算，并返回了受保护的内容。
 
-```python
-import asyncio
-import httpx
-
-from bankofai.x402.clients import X402Client, X402HttpClient, SufficientBalancePolicy
-from bankofai.x402.mechanisms.evm.exact_permit import ExactPermitEvmClientMechanism
-from bankofai.x402.mechanisms.evm.exact import ExactEvmClientMechanism
-from bankofai.x402.signers.client import EvmClientSigner
-
-
-# ========== 配置项 ==========
-# 您要访问的 x402 付费 API 地址
-SERVER_URL = "https://x402-demo.bankofai.io/protected-bsc-testnet"
-# ===========================
-
-
-async def main():
-    # 通过 agent-wallet 初始化签名器（自动从环境变量解析钱包）
-    signer = await EvmClientSigner.create()
-
-    # 创建 x402 客户端，注册付款机制和余额检查策略
-    x402_client = X402Client()
-    x402_client.register("eip155:*", ExactPermitEvmClientMechanism(signer))
-    x402_client.register("eip155:*", ExactEvmClientMechanism(signer))
-    x402_client.register_policy(SufficientBalancePolicy)
-
-    async with httpx.AsyncClient(timeout=120) as http_client:
-        client = X402HttpClient(http_client, x402_client)
-
-        # 发起请求——SDK 会自动处理付款，您无需手动操作
-        response = await client.get(SERVER_URL)
-
-        print(f"状态码: {response.status_code}")
-        print("响应内容:", response.text)
-
-
-asyncio.run(main())
-```
-
-**运行代码：**
-
-```bash
-python client.py
-```
-
-**预期输出：**
-
-```
-状态码: 200
-响应内容: {"data": "这是需要付款才能获取的内容！"}
-```
-
-</TabItem>
-<TabItem value="ts" label="TypeScript">
-
-```typescript
-import 'dotenv/config'
-import {
-  X402Client, X402FetchClient,
-  ExactPermitEvmClientMechanism, ExactEvmClientMechanism,
-  EvmClientSigner, SufficientBalancePolicy,
-} from '@bankofai/x402'
-
-// ========== 配置项 ==========
-// 您要访问的 x402 付费 API 地址
-const SERVER_URL = 'https://x402-demo.bankofai.io/protected-bsc-testnet'
-// ===========================
-
-async function main(): Promise<void> {
-  // 通过 agent-wallet 初始化签名器（自动从环境变量解析钱包）
-  const signer = await EvmClientSigner.create()
-
-  // 创建 x402 客户端，注册付款机制和余额检查策略
-  const x402 = new X402Client()
-  x402.register('eip155:*', new ExactPermitEvmClientMechanism(signer))
-  x402.register('eip155:*', new ExactEvmClientMechanism(signer))
-  x402.registerPolicy(SufficientBalancePolicy)
-
-  const client = new X402FetchClient(x402)
-
-  // 发起请求——SDK 会自动处理付款，您无需手动操作
-  const response = await client.get(SERVER_URL)
-
-  console.log(`状态码: ${response.status}`)
-
-  // 解析付款回执（可选）
-  const paymentResponse = response.headers.get('payment-response')
-  if (paymentResponse) {
-    const jsonString = Buffer.from(paymentResponse, 'base64').toString('utf8')
-    const settleResponse = JSON.parse(jsonString)
-    console.log(`交易哈希: ${settleResponse.transaction}`)
-  }
-
-  // 打印响应内容
-  const contentType = response.headers.get('content-type') ?? ''
-  if (contentType.includes('application/json')) {
-    const body = await response.json()
-    console.log('响应内容:', body)
-  }
-}
-
-main().catch(console.error)
-```
-
-**运行代码：**
-
-```bash
-npx tsx client.ts
-```
-
-**预期输出：**
-
-```
-状态码: 200
-交易哈希: abc123...
-响应内容: { data: '这是需要付款才能获取的内容！' }
-```
-
-</TabItem>
-</Tabs>
-</TabItem>
-</Tabs>
+> 💡 要改为支付其他网络或代币，请调整 selector 中的 `accepts.find(...)` 条件，并注册对应网络的 scheme。
 
 ---
 
 ## 第四步：错误排查
 
-运行代码时如果出现报错，参考以下常见原因和解决方法：
+| 问题 | 原因 | 解决方案 |
+|---------|-------|----------|
+| `No wallet configured for TRON` | 未设置或为空 `AGENT_WALLET_PRIVATE_KEY` | 设置环境变量并重新运行；确保在**运行脚本的同一终端窗口**中执行 `export` |
+| `WalletNotFoundError: No active wallet set` | agent-wallet 未配置钱包 | 运行 `agent-wallet start` 并按提示导入私钥 |
+| `Insufficient balance` / 余额错误 | 测试钱包 USDT/USDD 不足 | 返回前置准备，从水龙头领取测试代币 |
+| `server offered no payment option matching "…"` | client 选择的网络与 server 公布的不匹配 | 检查 server 的 `accepts` 是否包含 `network: TRON_NILE` |
+| `InsufficientAllowanceError` / 授权错误 | 代币授权额度过低 | SDK 在首次付款时自动广播一次性 Permit2 `approve`；若仍存在，检查钱包余额 |
+| `Connection timeout` | 网络或请求超时 | 检查 API 服务、facilitator 和 TRON RPC 连接 |
+| `ERR_PACKAGE_PATH_NOT_EXPORTED` | 项目未声明为 ESM | 在 `package.json` 中添加 `"type": "module"` |
 
-| 错误信息 | 原因 | 解决方法 |
-|----------|------|----------|
-| `环境变量未设置` 或 `None` | 私钥环境变量没有正确设置 | 重新执行第二步的 `export` 命令，注意是在**同一个终端窗口**中运行 |
-| `WalletNotFoundError: No active wallet set` | agent-wallet 未配置钱包 | 运行 `agent-wallet start`，按提示导入您的私钥 |
-| `Insufficient balance` / 余额不足 | 测试钱包里没有足够的测试 USDT/USDD | 回到前置准备，从水龙头重新领取测试代币 |
-| `UnsupportedNetworkError` | 代码中注册的网络与服务器不匹配 | 确认 `SERVER_URL` 对应的网络与您注册的 mechanism 一致（TRON 对应 `tron:*`，BSC 对应 `eip155:*`） |
-| `InsufficientAllowanceError` | 代币授权额度不足 | SDK 通常会自动处理授权，如持续出现请检查钱包余额 |
-| `Connection timeout` | 网络请求超时 | 检查网络连接，或将代码中的 `timeout=60.0` 改为更大的值 |
-| `ModuleNotFoundError` | SDK 未正确安装 | 重新执行第一步的安装命令 |
-
-
-<Tabs groupId="chain">
-<TabItem value="tron" label="TRON">
-<Tabs groupId="language">
-<TabItem value="python" label="Python">
-
-```python
-from bankofai.x402.exceptions import (
-    X402Error,
-    InsufficientAllowanceError,
-    SignatureCreationError,
-    UnsupportedNetworkError,
-)
-
-try:
-    response = await client.get(SERVER_URL)
-    print(f"状态码: {response.status_code}")
-    print("响应内容:", response.text)
-
-except UnsupportedNetworkError as e:
-    print(f"网络不支持（请检查是否注册了正确的 mechanism）: {e}")
-
-except InsufficientAllowanceError as e:
-    print(f"代币授权额度不足（请检查钱包余额）: {e}")
-
-except SignatureCreationError as e:
-    print(f"签名失败（请检查私钥是否正确）: {e}")
-
-except X402Error as e:
-    print(f"付款出错: {e}")
-```
-
-</TabItem>
-<TabItem value="ts" label="TypeScript">
+如需更细粒度的错误处理：
 
 ```typescript
 try {
-  const response = await client.get(SERVER_URL)
-  if (response.status === 200) {
-    console.log('成功:', await response.json())
+  const res = await fetchWithPay("http://localhost:4021/credit");
+  if (res.status === 200) {
+    console.log("Success:", await res.json());
   } else {
-    console.error(`请求失败，状态码: ${response.status}`)
-    console.error(await response.text())
+    console.error(`Request failed: ${res.status}`);
+    console.error(await res.text());
   }
 } catch (error) {
-  if (error.message.includes('No mechanism registered')) {
-    console.error('网络不支持——请检查是否注册了正确的 mechanism')
-  } else if (error.message.includes('allowance')) {
-    console.error('代币授权额度不足——请检查钱包余额')
+  if (error instanceof Error && error.message.includes("no payment option")) {
+    console.error("No matching payment option — check TRON_NILE vs the server's accepts");
+  } else if (error instanceof Error && error.message.includes("allowance")) {
+    console.error("Insufficient token allowance — check wallet balance");
   } else {
-    console.error('付款出错:', error.message)
+    console.error("Payment error:", error);
   }
 }
 ```
-
-</TabItem>
-</Tabs>
-</TabItem>
-<TabItem value="bsc" label="BSC">
-<Tabs groupId="language">
-<TabItem value="python" label="Python">
-
-```python
-from bankofai.x402.exceptions import (
-    X402Error,
-    InsufficientAllowanceError,
-    SignatureCreationError,
-    UnsupportedNetworkError,
-)
-
-try:
-    response = await client.get(SERVER_URL)
-    print(f"状态码: {response.status_code}")
-    print("响应内容:", response.text)
-
-except UnsupportedNetworkError as e:
-    print(f"网络不支持（请检查是否注册了正确的 mechanism）: {e}")
-
-except InsufficientAllowanceError as e:
-    print(f"代币授权额度不足（请检查钱包余额）: {e}")
-
-except SignatureCreationError as e:
-    print(f"签名失败（请检查私钥是否正确）: {e}")
-
-except X402Error as e:
-    print(f"付款出错: {e}")
-```
-
-</TabItem>
-<TabItem value="ts" label="TypeScript">
-
-```typescript
-try {
-  const response = await client.get(SERVER_URL)
-  if (response.status === 200) {
-    console.log('成功:', await response.json())
-  } else {
-    console.error(`请求失败，状态码: ${response.status}`)
-    console.error(await response.text())
-  }
-} catch (error) {
-  if (error.message.includes('No mechanism registered')) {
-    console.error('网络不支持——请检查是否注册了正确的 mechanism')
-  } else if (error.message.includes('allowance')) {
-    console.error('代币授权额度不足——请检查钱包余额')
-  } else {
-    console.error('付款出错:', error.message)
-  }
-}
-```
-
-</TabItem>
-</Tabs>
-</TabItem>
-</Tabs>
 
 ---
 
-## 总结
+## 完成总结
 
-通过本指南，您完成了以下步骤：
+通过本指南，您：
 
-- **创建测试钱包** 并领取了测试代币，理解了私钥安全的重要性
-- **安装 SDK** 并配置了私钥环境变量（而非写入代码）
-- **编写并运行**了自动付款的客户端代码
-- **理解了整个付款流程**：SDK 自动检测 402 响应 → 自动签名 → 自动付款 → 获取内容
+- **创建了测试钱包**并领取了测试代币，理解了私钥安全的重要性
+- **安装了 SDK** 并将私钥配置为环境变量（而非写在代码中）
+- **编写并运行了**自动付款客户端代码
+- **理解了完整流程**：SDK 检测 402 → 签署授权 → 付款 → 获取内容
 
 ---
 
 ## 下一步
 
 - 阅读[核心概念](../core-concepts/http-402.md)深入了解 x402 协议
-- 查看[网络支持](../core-concepts/network-and-token-support.md)了解支持的代币和网络
-- 想搭建自己的付费 API？参见[卖家快速入门](./quickstart-for-sellers.md)
+- 查看[网络与代币支持](../core-concepts/network-and-token-support.md)了解支持的代币与网络
+- 想构建自己的付费 API？参见[卖家快速入门](./quickstart-for-sellers.md)
 
 ---
 
 ## 参考资料
 
-- [npm 包](https://www.npmjs.com/package/@bankofai/x402) — x402 TypeScript SDK
-- [Python SDK 源码](https://github.com/BofAI/x402/tree/main/python/x402) — x402 Python SDK（从 GitHub 安装）
-- [示例代码仓库](https://github.com/BofAI/x402-demo) — 完整集成演示
+- [x402 npm 包](https://www.npmjs.com/package/@bankofai/x402-tron) —— 应用开发应优先安装的发布包
+- [fetch client example](https://github.com/BofAI/x402/tree/main/examples/typescript/clients/fetch) —— 如果开发者想要一个更完整的 client 例子，可以参考 examples
+- [Agent Wallet](https://github.com/BofAI/agent-wallet) —— SDK 使用的密钥托管

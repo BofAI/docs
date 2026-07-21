@@ -11,7 +11,7 @@ Facilitator 是一种中间件服务，主要负责：
 
 - **验证载荷**：校验客户端提交的支付载荷的有效性。
 - **执行结算**：代表服务端将交易提交至区块链进行结算。
-- **代币转移**：通过调用 `PaymentPermit` 合约的 `permitTransferFrom` 方法来执行代币转移。
+- **代币转移**：执行对应方案的链上结算——ERC-3009 `transferWithAuthorization`、通过 `x402ExactPermit2Proxy`（`exact`）或 `x402UptoPermit2Proxy`（`upto`）的 Permit2 转账、批量 settlement claim，或 GasFree relay。
 
 通过引入 Facilitator，服务端无需维护与区块链节点的直连，也无需自行实现复杂的签名验证逻辑。这不仅降低了运维复杂度，还能确保交易验证的准确性与实时性。
 
@@ -91,11 +91,15 @@ Facilitator 是一种中间件服务，主要负责：
 |------|------|------|
 | GET | `/health` | 服务健康检查 |
 | GET | `/supported` | 查询支持的支付能力和配置 |
-| POST | `/fee/quote` | 获取支付要求的费用预估 |
 | POST | `/verify` | 验证支付载荷有效性 |
-| POST | `/settle` | 执行链上结算（官方 Facilitator 下**受限速保护**） |
-| GET | `/payments/{payment_id}` | 按支付 ID 查询支付记录（认证后仅返回当前卖家的记录） |
-| GET | `/payments/tx/{tx_hash}` | 按交易哈希查询支付记录（认证后仅返回当前卖家的记录） |
+| POST | `/settle` | 执行链上结算（官方 Facilitator 下**受限速保护**）；并持久化一条结算记录 |
+| GET | `/payments/tx/{tx_hash}` | 按结算交易哈希查询支付记录（认证后仅返回当前卖家的记录） |
+| GET | `/payments?network=&nonce=[&asset=&payer=]` | 按链上授权身份查询支付记录（认证后仅返回当前卖家的记录） |
+| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`） |
+| GET | `/metrics` | Prometheus 指标（运维用途；仅当监控与主端口共用时才在主端口暴露） |
+| ALL | `/mainnet/*` · `/nile/*` | GasFree Open API 透明代理（HMAC 签名）——由 TRON `exact_gasfree` 方案内部使用 |
+
+> **不存在** `/fee/quote` 端点。费用条款随支付要求的 `extra` 字段一起下发；支付记录以链上授权身份（`network` + `scheme` + `asset` + `payer` + `nonce`）为键，而非客户端提供的 payment ID。
 
 ---
 
@@ -106,9 +110,9 @@ Facilitator 是一种中间件服务，主要负责：
 | 模式 | 限速 | 认证方式 |
 |------|------|----------|
 | **已认证** | 1000 次 / 分钟 | 请求头携带 `X-API-KEY: <your_key>` |
-| **匿名** | 1 次 / 分钟 | 不携带 API Key |
+| **匿名** | 10 次 / 分钟（默认值，可配置） | 不携带 API Key |
 
-其他端点（`/verify`、`/fee/quote`、`/supported`、`/payments/*`）不单独限速。
+其他端点（`/verify`、`/supported`、`/payments/*`）不单独限速。
 
 > **提示**：任何生产级别的工作负载都建议通过[管理后台](https://admin-facilitator.bankofai.io)申请 API Key，以解锁更高的限速配额。
 
@@ -116,7 +120,7 @@ Facilitator 是一种中间件服务，主要负责：
 
 ## 支付记录查询
 
-`/payments/{payment_id}` 和 `/payments/tx/{tx_hash}` 端点支持查询历史支付记录。
+`/payments/tx/{tx_hash}` 和 `/payments?network=&nonce=[&asset=&payer=]` 端点支持查询历史支付记录；`/payments` 单独返回已认证卖家的结算记录流。记录以链上授权身份（`network` + `scheme` + `asset` + `payer` + `nonce`）为键，而非客户端提供的 payment ID。
 
 当请求携带有效的 `X-API-KEY` 时，返回结果会**自动按该 API Key 关联的卖家进行过滤**——您只能看到自己名下的支付记录。匿名请求（不带 API Key）只能访问未绑定任何卖家的记录。
 
@@ -126,11 +130,10 @@ Facilitator 是一种中间件服务，主要负责：
 
 Facilitator 支持灵活配置服务费用：
 
-- **固定费用 (Base Fee)**：每笔交易收取固定的服务费（例如 `1 USDT`）。
-- **按比例收费 (Percentage Fee)**：按交易金额的一定百分比收取费用。
-- **免费模式 (No Fee)**：支持零费率运营模式。
+- **固定费用 (Base Fee)**：每笔交易按网络和资产收取固定的服务费（例如 `1 USDT`）。
+- **免费模式 (No Fee)**：支持零费率运营模式（例如 EVM `exact` 不收取 Facilitator 费用）。
 
-具体的费用明细将通过 `/fee/quote` 端点返回，并包含在服务端下发给客户端的支付要求（Payment Requirements）中。
+费用条款包含在服务端下发给客户端的支付要求（Payment Requirements）的 `extra` 字段中；不存在单独的 `/fee/quote` 端点。
 
 ---
 
