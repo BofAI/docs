@@ -1,6 +1,5 @@
 ---
 title: 'Introduction'
-slug: /
 description: >-
   BANK OF AI is the infrastructure connecting AI and Web3. Install it, and your AI can pay, prove its identity, and execute on-chain — you describe the goal, the AI gets it done.
 ---

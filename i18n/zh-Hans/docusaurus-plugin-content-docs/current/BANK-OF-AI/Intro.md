@@ -1,6 +1,5 @@
 ---
 title: '简介'
-slug: /
 description: >-
   BANK OF AI 是连接 AI 与 Web3 的基础设施。装上它，你的 AI 就能付款、验证身份、执行链上操作——你负责说想做什么，AI 负责做成。
 ---

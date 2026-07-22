@@ -1,5 +1,6 @@
 ---
 title: 'Welcome to x402'
+slug: /
 description: >-
   This guide introduces the x402 open payment standard on blockchain and helps you start building or integrating x402-powered services.
 ---

@@ -44,7 +44,7 @@ module.exports = {
         alt: 'BANK OF AI',
         src: 'img/logo.png', // 浅色模式
         srcDark: 'img/logo_dark.png', // 深色模式
-        href: '/',
+        href: '/BANK-OF-AI/Intro/',
         height: 36,
         width: 154,
       },
@@ -114,6 +114,18 @@ module.exports = {
   ],
   plugins: [
     require.resolve('./docusaurus-plugin-global-style'),
+    // 兼容旧链接：/McpServer-Skills/Intro/ 已并入 MCP 简介，重定向过去（自动覆盖各 locale）
+    [
+      '@docusaurus/plugin-client-redirects',
+      {
+        createRedirects(existingPath) {
+          if (existingPath.endsWith('/McpServer-Skills/MCP/Intro/') || existingPath.endsWith('/McpServer-Skills/MCP/Intro')) {
+            return [existingPath.replace('/McpServer-Skills/MCP/Intro', '/McpServer-Skills/Intro')]
+          }
+          return undefined
+        },
+      },
+    ],
     // Changelog：独立 docs 实例，路径 /changelog，对应顶部 Changelogs 页签
     [
       '@docusaurus/plugin-content-docs',
