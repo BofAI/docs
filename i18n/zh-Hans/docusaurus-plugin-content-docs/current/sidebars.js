@@ -267,7 +267,9 @@ const sidebars = {
               label: 'Google（Gemini）',
               collapsed: true,
               items: [
+                'llmservice/models/gemini-3-6-flash',
                 'llmservice/models/gemini-3-5-flash',
+                'llmservice/models/gemini-3-5-flash-lite',
                 'llmservice/models/gemini-3-1-pro',
                 'llmservice/models/gemini-3-flash',
               ],
@@ -280,6 +282,14 @@ const sidebars = {
                 'llmservice/models/deepseek-v4-pro',
                 'llmservice/models/deepseek-v4-flash',
                 'llmservice/models/deepseek-v3.2',
+              ],
+            },
+            {
+              type: 'category',
+              label: 'SpaceXAI（Grok）',
+              collapsed: true,
+              items: [
+                'llmservice/models/grok-4.5',
               ],
             },
             {
