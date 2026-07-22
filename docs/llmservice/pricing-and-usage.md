@@ -25,7 +25,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
 | DeepSeek V4 Flash |                  0.28 |                        0.28 |                     0.0056 |                   0.56 |                        - |
 | DeepSeek V4 Pro   |                  0.87 |                        0.87 |                     0.0087 |                   1.74 |                        - |
-| Grok-4.5          |                  2.00 |                        2.00 |                       0.30 |                   6.00 |                        - |
+| Grok 4.5          |                  2.00 |                        2.00 |                       0.30 |                   6.00 |                        - |
 | GPT-5.6 Sol       |                  5.00 |                        6.25 |                       0.50 |                  30.00 |                   10,000 |
 | GPT-5.6 Terra     |                  2.50 |                       3.125 |                       0.25 |                  15.00 |                   10,000 |
 | GPT-5.6 Luna      |                  1.00 |                        1.25 |                       0.10 |                   6.00 |                   10,000 |
@@ -47,8 +47,10 @@ The platform uses a unified Credits system to measure and settle usage across al
 | Claude Sonnet 4.6 |                  3.00 |                        3.75 |                       0.30 |                  15.00 |                   10,000 |
 | Claude Sonnet 4.5 |                  3.00 |                        3.75 |                       0.30 |                  15.00 |                   10,000 |
 | Claude Haiku 4.5  |                  1.00 |                        1.25 |                       0.10 |                   5.00 |                   10,000 |
-| Gemini 3.1 Pro    |                  2.00 |                        2.00 |                       0.20 |                  12.00 |                   14,000 |
+| Gemini 3.6 Flash  |                  1.50 |                        1.50 |                       0.15 |                   7.50 |                   14,000 |
 | Gemini 3.5 Flash  |                  1.50 |                        1.50 |                       0.15 |                   9.00 |                   14,000 |
+| Gemini 3.5 Flash-Lite |               0.30 |                        0.30 |                       0.03 |                   2.50 |                   14,000 |
+| Gemini 3.1 Pro    |                  2.00 |                        2.00 |                       0.20 |                  12.00 |                   14,000 |
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 :::caution Main table scope
