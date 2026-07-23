@@ -5,6 +5,13 @@ Want your AI client to gain BANK OF AI's on-chain capabilities? Just **two steps
 1. **Paste the install command** → AI installs every Skill, checks wallet status, and asks whether to create a wallet
 2. **Confirm wallet creation** → AI automatically creates your local encrypted wallet
 
+**No coding, no pre-existing wallet needed** — all you'll actually do is copy one message and reply with one letter.
+
+**Before you start, you need:**
+
+- An AI client that supports Skills: **OpenClaw / Claude Code / Cursor / Codex** — whichever you already use
+- **Node.js** on your machine (the AI runs `npx` during install). Not sure if you have it? Just start Step 1 — if the AI reports `npx` is unavailable, install it from [nodejs.org](https://nodejs.org/) and retry
+
 ---
 
 ## Step 1: Paste the Install Command
@@ -84,7 +91,9 @@ The AI will install the Skills and then ask whether to create a wallet.
 
 ## Step 2: Confirm Wallet Creation
 
-Confirm wallet creation however the AI prompts you (e.g. reply "create", "go ahead", or whichever option the AI offers). The AI will create your local encrypted wallet and, in one message, show your wallet info, addresses, master password, and suggested next steps.
+Confirm wallet creation however the AI prompts you (e.g. reply "A", "create", or whichever option the AI offers). The AI will create your local encrypted wallet and, in one message, show your wallet info, addresses, master password, and suggested next steps.
+
+⚠️ **When the master password appears, pause:** it is shown **only this once** — it's the one and only key to your safe. Copy it into a password manager (1Password / Bitwarden / etc.) right now, then continue. See [Safety First](#a-few-reminders) below.
 
 <details>
 <summary>Show example AI output</summary>
@@ -156,7 +165,7 @@ Open your AI chat and send:
 Check the TRX and USDT balances of the wallet address you just created.
 ```
 
-If the AI returns the balance — **congrats, the full stack is live and ready to use.**
+If the AI returns the balance — **congrats, you now have an AI butler that can work on-chain!** Everything is in place; from here on, just tell it what you want.
 
 :::note What a brand-new wallet may show
 A TRON address that has never received any transfer is considered **not activated**, so the query may report **balance 0 / account not activated**. This is completely normal for a fresh wallet and doesn't prevent you from using BANK OF AI.
@@ -196,31 +205,28 @@ Just describe what you want in plain language:
 
 ## A Few Reminders
 
-:::warning Three Rules for Beginners · On-chain transactions are irreversible
+:::warning Safety First · On-chain transactions are irreversible
+
+**Three rules for beginners:**
+
 1. **Always practice on testnet first.** Run 1–2 transactions on Nile testnet, confirm the AI behaves exactly as expected, *then* switch to mainnet.
 2. **Review the AI's bill before every spending action.**
 3. **Start small.** Even for operations you've tested, use a small amount the first time you run them on mainnet.
+
+**Back up the master password immediately:** it is shown **exactly once in Step 2**. It's auto-saved to `~/.agent-wallet/runtime_secrets.json` locally, but we strongly recommend **also saving it manually in a password manager** (1Password / Bitwarden / etc.). If the local file is ever lost or corrupted *and* you have no external backup, your wallet becomes **permanently unrecoverable** (no recovery mechanism, no support, no backdoors). **Never** paste this password into chat tools, emails, screenshots, or public repos.
+
 :::
 
-:::caution The master password is critical — back it up immediately
-The master password is shown **exactly once in Step 2**. It's auto-saved to `~/.agent-wallet/runtime_secrets.json` locally, but we strongly recommend **also saving it manually in a password manager** (1Password / Bitwarden / etc.). If the local file is ever lost or corrupted *and* you have no external backup, your wallet becomes **permanently unrecoverable** (no recovery mechanism, no support, no backdoors).
+**If you skip wallet creation in Step 2** — the AI skips wallet creation. When you're ready, you can trigger **conversational wallet creation** right in the AI chat at any time, no need to re-run the install command. See [Agent-Wallet Quick Start · Option 1: Conversational Creation](../Agent-Wallet/QuickStart.md).
 
-⚠️ **Never** paste this password into chat tools, emails, screenshots, or public repos.
-:::
+### Want to use the other products independently, or self-host?
 
-:::info If you skip wallet creation in Step 2
-The AI skips wallet creation. When you're ready, you can trigger **conversational wallet creation** right in the AI chat at any time — no need to re-run the install command. See [Agent-Wallet Quick Start · Option 1: Conversational Creation](../Agent-Wallet/QuickStart.md).
-:::
-
-:::tip Want to use the other products independently, or self-host?
-**The full BANK OF AI product matrix is more than Skills.** To use the other products independently or to self-host the lower layers, see:
+The full BANK OF AI product matrix is more than Skills. To use the other products independently or to self-host the lower layers, see:
 
 - **LLM Service** (model-access layer): use BANKOFAI APP directly, or connect to the unified API Gateway → [LLM Service Introduction](../llmservice/introduction.md)
 - **x402 Payment** (payment protocol): let AI auto-settle micropayments on-chain → [x402 Protocol Introduction](../x402/index.md)
 - **8004 Protocol** (identity + reputation): on-chain reputation lookup for Agents → [8004 Protocol Introduction](../8004/general.md)
-- **MCP Server local private deployment**: Skills call MCP Server through BANK OF AI's official cloud endpoints by default — no separate install needed. For local deployment, see [TRON MCP — Local Private Deployment](../McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment.md) · [SUN MCP — Local Private Deployment](../McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment.md) · [BSC MCP — Installation](../McpServer-Skills/MCP/BSCMCPServer/Installation.md)
-- **SUN CLI**: a command-line tool with capabilities equivalent to SUN MCP Server, for scripting / automation / CI-CD → [SUN CLI Quick Start](../McpServer-Skills/Tools/SUNCli/QuickStart.md)
-:::
+- **MCP Server local private deployment**: Skills call MCP Server through BANK OF AI's official cloud endpoints by default — no separate install needed. For local deployment, see [TRON MCP — Local Private Deployment](../McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment.md) · [BSC MCP — Installation](../McpServer-Skills/MCP/BSCMCPServer/Installation.md)
 
 ---
 

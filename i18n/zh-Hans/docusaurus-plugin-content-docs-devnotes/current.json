@@ -1,0 +1,10 @@
+{
+  "version.label": {
+    "message": "当前",
+    "description": "The label for version current"
+  },
+  "sidebar.devnotesSidebar.doc.Overview": {
+    "message": "总览",
+    "description": "The label for the doc item Overview in sidebar devnotesSidebar"
+  }
+}

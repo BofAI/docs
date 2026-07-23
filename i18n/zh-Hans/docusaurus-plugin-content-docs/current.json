@@ -7,6 +7,10 @@
     "message": "BANK OF AI",
     "description": "The label for category BANK OF AI in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.link.Official Website": {
+    "message": "官网",
+    "description": "The label for link Official Website in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.category.x402 Payment Protocol": {
     "message": "x402支付协议",
     "description": "The label for category x402 Payment Protocol in sidebar docsSidebar"
@@ -46,6 +50,10 @@
   "sidebar.docsSidebar.doc.OverView": {
     "message": "简介",
     "description": "The label for the doc item OverView in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Overview": {
+    "message": "简介",
+    "description": "The label for the doc item Overview in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.LLM Service": {
     "message": "LLM 服务",

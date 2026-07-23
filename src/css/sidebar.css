@@ -1,0 +1,320 @@
+/* ============================================================
+   Sidebar: separate top-level sections with spacing + a divider
+   so each major group reads as its own block instead of one
+   cramped list. (Getting Started / Trade / Liquidity style)
+
+   Loaded via preset `theme.customCss` so it is webpack-bundled
+   (content-hashed → cache-proof, hot-reloads in dev).
+
+   NOTE: this project swizzles DocSidebarItem to wrap every item
+   in a <div>, so `.theme-doc-sidebar-menu > .menu__list-item`
+   does NOT match. We match the wrapper <div> via :has() and use
+   the adjacent-sibling (+) combinator between two top-level
+   sections. (Mirrors sunio-docs-site.)
+   ============================================================ */
+
+/* Divider + gap ONLY between two consecutive top-level sections
+   (naturally skips the first section, never draws inside a section). */
+.theme-doc-sidebar-menu > div:has(> .theme-doc-sidebar-item-category-level-1) + div:has(> .theme-doc-sidebar-item-category-level-1),
+.theme-doc-sidebar-menu > div:has(> .theme-doc-sidebar-item-category-level-1) + div:has(> .theme-doc-sidebar-item-link-level-1),
+.theme-doc-sidebar-menu > div:has(> .theme-doc-sidebar-item-link-level-1) + div:has(> .theme-doc-sidebar-item-category-level-1),
+.theme-doc-sidebar-menu > div:has(> .theme-doc-sidebar-item-link-level-1) + div:has(> .theme-doc-sidebar-item-link-level-1) {
+  border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+  margin-top: 1.2rem !important;
+  padding-top: 1.2rem !important;
+}
+
+html[data-theme='dark'] .theme-doc-sidebar-menu > div:has(> .theme-doc-sidebar-item-category-level-1) + div:has(> .theme-doc-sidebar-item-category-level-1),
+html[data-theme='dark'] .theme-doc-sidebar-menu > div:has(> .theme-doc-sidebar-item-category-level-1) + div:has(> .theme-doc-sidebar-item-link-level-1),
+html[data-theme='dark'] .theme-doc-sidebar-menu > div:has(> .theme-doc-sidebar-item-link-level-1) + div:has(> .theme-doc-sidebar-item-category-level-1),
+html[data-theme='dark'] .theme-doc-sidebar-menu > div:has(> .theme-doc-sidebar-item-link-level-1) + div:has(> .theme-doc-sidebar-item-link-level-1) {
+  border-top-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* Fallback for browsers without :has() — put a divider above every
+   top-level section, then remove it from the first one. */
+@supports not selector(:has(*)) {
+  .theme-doc-sidebar-item-category-level-1,
+  .theme-doc-sidebar-item-link-level-1 {
+    border-top: 1px solid rgba(0, 0, 0, 0.08) !important;
+    margin-top: 1.2rem !important;
+    padding-top: 1.2rem !important;
+  }
+  html[data-theme='dark'] .theme-doc-sidebar-item-category-level-1,
+  html[data-theme='dark'] .theme-doc-sidebar-item-link-level-1 {
+    border-top-color: rgba(255, 255, 255, 0.12) !important;
+  }
+  .theme-doc-sidebar-menu > div:first-child > .theme-doc-sidebar-item-category-level-1,
+  .theme-doc-sidebar-menu > div:first-child > .theme-doc-sidebar-item-link-level-1 {
+    border-top: none !important;
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+
+/* Breathing room between EVERY sidebar block, at every nesting level.
+   The swizzle wraps each item in a <div>, so adjacent wrapper divs are
+   the unit of spacing; the plain `li + li` selector covers any
+   non-wrapped rendering (e.g. if the swizzle is removed later). */
+.menu__list > div + div,
+.menu__list > .menu__list-item + .menu__list-item {
+  margin-top: 0.45rem;
+}
+
+/* Slightly more air around an expanded sub-list so a category's
+   children read as one group */
+.menu__list .menu__list {
+  margin-top: 0.45rem;
+  padding-bottom: 0.2rem;
+}
+
+/* Make each top-level label read as a section header (bolder, brighter) */
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link,
+.theme-doc-sidebar-item-link-level-1 > .menu__link {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--ifm-color-emphasis-900);
+}
+
+/* Sub-items keep the normal weight so the hierarchy is obvious */
+.theme-doc-sidebar-item-category-level-1 .menu__list .menu__link {
+  font-weight: 400;
+}
+
+/* Top-level sections are collapsible (collapsed by default) so users can
+   scan every major section at a glance and expand only what they need.
+   Keep the caret visible so it's obvious each section expands. */
+.theme-doc-sidebar-item-category-level-1 > .menu__list-item-collapsible > .menu__link--sublist-caret::after {
+  display: inline-block;
+}
+
+
+/* ============================================================
+   Section icons for top-level sidebar categories.
+   Monochrome Lucide icons injected via CSS mask so they inherit
+   the label color (currentColor) and adapt to light/dark themes.
+   Class names are set per category in sidebars.js.
+   ============================================================ */
+.sidebar-icon > .menu__list-item-collapsible > .menu__link::before {
+  content: '';
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  margin-right: 9px;
+  vertical-align: -4px;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.sidebar-icon-bankofai > .menu__list-item-collapsible > .menu__link::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpolygon%20points%3D%2712%202%202%207%2022%207%27%2F%3E%3Cline%20x1%3D%272%27%20y1%3D%2722%27%20x2%3D%2722%27%20y2%3D%2722%27%2F%3E%3Cline%20x1%3D%274%27%20y1%3D%2710%27%20x2%3D%274%27%20y2%3D%2718%27%2F%3E%3Cline%20x1%3D%279%27%20y1%3D%2710%27%20x2%3D%279%27%20y2%3D%2718%27%2F%3E%3Cline%20x1%3D%2715%27%20y1%3D%2710%27%20x2%3D%2715%27%20y2%3D%2718%27%2F%3E%3Cline%20x1%3D%2720%27%20y1%3D%2710%27%20x2%3D%2720%27%20y2%3D%2718%27%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpolygon%20points%3D%2712%202%202%207%2022%207%27%2F%3E%3Cline%20x1%3D%272%27%20y1%3D%2722%27%20x2%3D%2722%27%20y2%3D%2722%27%2F%3E%3Cline%20x1%3D%274%27%20y1%3D%2710%27%20x2%3D%274%27%20y2%3D%2718%27%2F%3E%3Cline%20x1%3D%279%27%20y1%3D%2710%27%20x2%3D%279%27%20y2%3D%2718%27%2F%3E%3Cline%20x1%3D%2715%27%20y1%3D%2710%27%20x2%3D%2715%27%20y2%3D%2718%27%2F%3E%3Cline%20x1%3D%2720%27%20y1%3D%2710%27%20x2%3D%2720%27%20y2%3D%2718%27%2F%3E%3C%2Fsvg%3E");
+}
+
+.sidebar-icon-x402 > .menu__list-item-collapsible > .menu__link::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272%27%20y%3D%276%27%20width%3D%2720%27%20height%3D%2712%27%20rx%3D%272%27%2F%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%272%27%2F%3E%3Cpath%20d%3D%27M6%2012h.01%27%2F%3E%3Cpath%20d%3D%27M18%2012h.01%27%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272%27%20y%3D%276%27%20width%3D%2720%27%20height%3D%2712%27%20rx%3D%272%27%2F%3E%3Ccircle%20cx%3D%2712%27%20cy%3D%2712%27%20r%3D%272%27%2F%3E%3Cpath%20d%3D%27M6%2012h.01%27%2F%3E%3Cpath%20d%3D%27M18%2012h.01%27%2F%3E%3C%2Fsvg%3E");
+}
+
+.sidebar-icon-8004 > .menu__list-item-collapsible > .menu__link::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M15%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7z%27%2F%3E%3Cpolyline%20points%3D%2714%202%2014%208%2020%208%27%2F%3E%3Cline%20x1%3D%279%27%20y1%3D%2713%27%20x2%3D%2715%27%20y2%3D%2713%27%2F%3E%3Cline%20x1%3D%279%27%20y1%3D%2717%27%20x2%3D%2715%27%20y2%3D%2717%27%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M15%202H6a2%202%200%200%200-2%202v16a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2V7z%27%2F%3E%3Cpolyline%20points%3D%2714%202%2014%208%2020%208%27%2F%3E%3Cline%20x1%3D%279%27%20y1%3D%2713%27%20x2%3D%2715%27%20y2%3D%2713%27%2F%3E%3Cline%20x1%3D%279%27%20y1%3D%2717%27%20x2%3D%2715%27%20y2%3D%2717%27%2F%3E%3C%2Fsvg%3E");
+}
+
+.sidebar-icon-skills > .menu__list-item-collapsible > .menu__link::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9.937%2015.5A2%202%200%200%200%208.5%2014.063l-6.135-1.582a.5.5%200%200%201%200-.962L8.5%209.936A2%202%200%200%200%209.937%208.5l1.582-6.135a.5.5%200%200%201%20.962%200L14.063%208.5A2%202%200%200%200%2015.5%209.937l6.135%201.581a.5.5%200%200%201%200%20.964L15.5%2014.063a2%202%200%200%200-1.437%201.437l-1.582%206.135a.5.5%200%200%201-.962%200z%27%2F%3E%3Cpath%20d%3D%27M20%203v4%27%2F%3E%3Cpath%20d%3D%27M22%205h-4%27%2F%3E%3Cpath%20d%3D%27M4%2017v2%27%2F%3E%3Cpath%20d%3D%27M5%2018H3%27%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M9.937%2015.5A2%202%200%200%200%208.5%2014.063l-6.135-1.582a.5.5%200%200%201%200-.962L8.5%209.936A2%202%200%200%200%209.937%208.5l1.582-6.135a.5.5%200%200%201%20.962%200L14.063%208.5A2%202%200%200%200%2015.5%209.937l6.135%201.581a.5.5%200%200%201%200%20.964L15.5%2014.063a2%202%200%200%200-1.437%201.437l-1.582%206.135a.5.5%200%200%201-.962%200z%27%2F%3E%3Cpath%20d%3D%27M20%203v4%27%2F%3E%3Cpath%20d%3D%27M22%205h-4%27%2F%3E%3Cpath%20d%3D%27M4%2017v2%27%2F%3E%3Cpath%20d%3D%27M5%2018H3%27%2F%3E%3C%2Fsvg%3E");
+}
+
+.sidebar-icon-mcp > .menu__list-item-collapsible > .menu__link::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272%27%20y%3D%272%27%20width%3D%2720%27%20height%3D%278%27%20rx%3D%272%27%2F%3E%3Crect%20x%3D%272%27%20y%3D%2714%27%20width%3D%2720%27%20height%3D%278%27%20rx%3D%272%27%2F%3E%3Cline%20x1%3D%276%27%20y1%3D%276%27%20x2%3D%276.01%27%20y2%3D%276%27%2F%3E%3Cline%20x1%3D%276%27%20y1%3D%2718%27%20x2%3D%276.01%27%20y2%3D%2718%27%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Crect%20x%3D%272%27%20y%3D%272%27%20width%3D%2720%27%20height%3D%278%27%20rx%3D%272%27%2F%3E%3Crect%20x%3D%272%27%20y%3D%2714%27%20width%3D%2720%27%20height%3D%278%27%20rx%3D%272%27%2F%3E%3Cline%20x1%3D%276%27%20y1%3D%276%27%20x2%3D%276.01%27%20y2%3D%276%27%2F%3E%3Cline%20x1%3D%276%27%20y1%3D%2718%27%20x2%3D%276.01%27%20y2%3D%2718%27%2F%3E%3C%2Fsvg%3E");
+}
+
+.sidebar-icon-wallet > .menu__list-item-collapsible > .menu__link::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M21%2012V7H5a2%202%200%200%201%200-4h14v4%27%2F%3E%3Cpath%20d%3D%27M3%205v14a2%202%200%200%200%202%202h16v-5%27%2F%3E%3Cpath%20d%3D%27M18%2012a2%202%200%200%200%200%204h4v-4z%27%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M21%2012V7H5a2%202%200%200%201%200-4h14v4%27%2F%3E%3Cpath%20d%3D%27M3%205v14a2%202%200%200%200%202%202h16v-5%27%2F%3E%3Cpath%20d%3D%27M18%2012a2%202%200%200%200%200%204h4v-4z%27%2F%3E%3C%2Fsvg%3E");
+}
+
+.sidebar-icon-llm > .menu__list-item-collapsible > .menu__link::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%208V4H8%27%2F%3E%3Crect%20x%3D%274%27%20y%3D%278%27%20width%3D%2716%27%20height%3D%2712%27%20rx%3D%272%27%2F%3E%3Cpath%20d%3D%27M2%2014h2%27%2F%3E%3Cpath%20d%3D%27M20%2014h2%27%2F%3E%3Cpath%20d%3D%27M15%2013v2%27%2F%3E%3Cpath%20d%3D%27M9%2013v2%27%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M12%208V4H8%27%2F%3E%3Crect%20x%3D%274%27%20y%3D%278%27%20width%3D%2716%27%20height%3D%2712%27%20rx%3D%272%27%2F%3E%3Cpath%20d%3D%27M2%2014h2%27%2F%3E%3Cpath%20d%3D%27M20%2014h2%27%2F%3E%3Cpath%20d%3D%27M15%2013v2%27%2F%3E%3Cpath%20d%3D%27M9%2013v2%27%2F%3E%3C%2Fsvg%3E");
+}
+
+.sidebar-icon-openclaw > .menu__list-item-collapsible > .menu__link::before {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M19.439%207.85c-.049.322.059.648.289.878l1.568%201.568c.47.47.706%201.087.706%201.704s-.235%201.233-.706%201.704l-1.611%201.611a.98.98%200%200%201-.837.276c-.47-.07-.802-.48-.968-.925a2.501%202.501%200%201%200-3.214%203.214c.446.166.855.497.925.968a.979.979%200%200%201-.276.837l-1.61%201.61a2.404%202.404%200%200%201-1.705.707%202.402%202.402%200%200%201-1.704-.706l-1.568-1.568a1.026%201.026%200%200%200-.877-.29c-.493.074-.84.504-1.02.968a2.5%202.5%200%201%201-3.237-3.237c.464-.18.894-.527.967-1.02a1.026%201.026%200%200%200-.289-.877l-1.568-1.568A2.402%202.402%200%200%201%201.998%2012c0-.617.236-1.234.706-1.704L4.23%208.77c.24-.24.581-.353.917-.303.515.077.877.528%201.073%201.01a2.5%202.5%200%201%200%203.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402%202.402%200%200%201%2012%201.998c.617%200%201.234.236%201.704.706l1.568%201.568c.23.23.556.338.877.29.493-.074.84-.504%201.02-.968a2.5%202.5%200%201%201%203.237%203.237c-.464.18-.894.527-.967%201.02z%27%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2724%27%20height%3D%2724%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27black%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpath%20d%3D%27M19.439%207.85c-.049.322.059.648.289.878l1.568%201.568c.47.47.706%201.087.706%201.704s-.235%201.233-.706%201.704l-1.611%201.611a.98.98%200%200%201-.837.276c-.47-.07-.802-.48-.968-.925a2.501%202.501%200%201%200-3.214%203.214c.446.166.855.497.925.968a.979.979%200%200%201-.276.837l-1.61%201.61a2.404%202.404%200%200%201-1.705.707%202.402%202.402%200%200%201-1.704-.706l-1.568-1.568a1.026%201.026%200%200%200-.877-.29c-.493.074-.84.504-1.02.968a2.5%202.5%200%201%201-3.237-3.237c.464-.18.894-.527.967-1.02a1.026%201.026%200%200%200-.289-.877l-1.568-1.568A2.402%202.402%200%200%201%201.998%2012c0-.617.236-1.234.706-1.704L4.23%208.77c.24-.24.581-.353.917-.303.515.077.877.528%201.073%201.01a2.5%202.5%200%201%200%203.259-3.259c-.482-.196-.933-.558-1.01-1.073-.05-.336.062-.676.303-.917l1.525-1.525A2.402%202.402%200%200%201%2012%201.998c.617%200%201.234.236%201.704.706l1.568%201.568c.23.23.556.338.877.29.493-.074.84-.504%201.02-.968a2.5%202.5%200%201%201%203.237%203.237c-.464.18-.894.527-.967%201.02z%27%2F%3E%3C%2Fsvg%3E");
+}
+
+/* ============================================================
+   Center the search box in the middle of the top navbar
+   (desktop only; mobile keeps Docusaurus default placement).
+   Bundled here (customCss) so it is content-hashed and reliably
+   hot-reloads, unlike the static /css/custom.css link.
+   The search container rendered by the search plugin is
+   `.navbar__search`; we lift it out of the right-hand item group
+   and absolutely center it over the navbar inner width.
+   ============================================================ */
+@media (min-width: 997px) {
+  .navbar__inner {
+    position: relative;
+  }
+  /* Centered, fixed-width tidy pill (Coinbase-style) rather than a wide
+     floating bar. The input fills the container so it reads as one pill. */
+  .navbar__search {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    margin: 0 !important;
+    width: 360px;
+    z-index: 1;
+  }
+  /* Fixed width (not %) so the input stays 360px even after autocomplete.js
+     wraps it on focus; otherwise it collapses and the ⌘K hint detaches. */
+  .navbar__search .navbar__search-input {
+    width: 360px !important;
+    max-width: 360px !important;
+    height: 38px;
+    box-sizing: border-box;
+    border-radius: 999px;
+  }
+}
+
+/* ============================================================
+   Wide-screen doc layout: the stock doc container centers at
+   ~1440px, which on large monitors leaves a big empty gap
+   between the sidebar and the article. Widen the doc-page
+   container so content fills the space beside the sidebar.
+   Scoped to doc pages (docMainContainer) with high specificity
+   + !important to win over the theme's own container rule.
+   ============================================================ */
+@media (min-width: 997px) {
+  [class*='docMainContainer'] .container.padding-bottom--lg {
+    max-width: 95% !important;
+  }
+}
+
+/* ============================================================
+   Changelog entries (Coinbase-style): date pill in a left rail,
+   product heading + tag pills + bullets on the right.
+   Used by the /changelog docs instance via MDX class names.
+   ============================================================ */
+.changelog-entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 2.5rem;
+  padding: 2.25rem 0;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+.changelog-entry:first-of-type {
+  border-top: none;
+  padding-top: 0.5rem;
+}
+.changelog-date {
+  flex: 0 0 130px;
+  display: inline-block;
+  padding: 0.3rem 0.9rem;
+  border-radius: 8px;
+  background: rgba(36, 88, 255, 0.09);
+  color: var(--ifm-color-primary);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+  white-space: nowrap;
+}
+html[data-theme='dark'] .changelog-date {
+  background: rgba(96, 133, 255, 0.18);
+}
+.changelog-body {
+  flex: 1;
+  min-width: 0;
+}
+.changelog-body h3:first-child {
+  margin-top: 0;
+}
+.changelog-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.4rem 0 1rem;
+}
+.changelog-tag {
+  font-size: 0.75rem;
+  line-height: 1.6;
+  padding: 0.12rem 0.65rem;
+  border-radius: 999px;
+  background: var(--ifm-color-emphasis-100);
+  color: var(--ifm-color-emphasis-700);
+  white-space: nowrap;
+}
+@media (max-width: 768px) {
+  .changelog-entry {
+    flex-direction: column;
+    gap: 0.9rem;
+  }
+  .changelog-date {
+    flex: none;
+  }
+}
+
+/* ============================================================
+   Intro capability cards: 2×2 grid of capability cards used on
+   the BANK OF AI intro page (icon + title, one-liner, component
+   links in the footer). Single column on mobile.
+   ============================================================ */
+.intro-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin: 1.5rem 0;
+}
+.intro-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  padding: 1.15rem 1.3rem;
+  background: var(--ifm-background-surface-color);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.intro-card:hover {
+  border-color: var(--ifm-color-emphasis-300);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+html[data-theme='dark'] .intro-card:hover {
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+.intro-card-title {
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 0.4rem;
+}
+.intro-card p {
+  margin: 0 0 0.6rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--ifm-color-emphasis-800);
+}
+.intro-card-links {
+  margin-top: auto;
+  padding-top: 0.55rem;
+  border-top: 1px dashed var(--ifm-color-emphasis-200);
+  font-size: 0.85rem;
+}
+.intro-card-links p {
+  margin: 0;
+  font-size: 0.85rem;
+}
+@media (max-width: 768px) {
+  .intro-cards {
+    grid-template-columns: 1fr;
+  }
+}

@@ -57,111 +57,23 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Fourteen skills in total — covering the most common scenarios in the TRON ecosystem plus X/Twitter tooling, and a dedicated onboarding helper. Each one comes with a ready-to-use sample prompt — copy it into your AI chat and hit enter to try it out.
+Fourteen skills covering the most common TRON scenarios plus X/Twitter tooling — the table below shows everything at a glance. Each comes with a sample prompt you can paste straight into your AI chat; click a skill name for its full docs.
 
-### 🔑 Secure Wallet Management
-
-Create encrypted wallets, sign transactions and messages, manage multiple wallets — all without exposing your private key. This is the foundation that other trading and payment skills rely on. Supports both EVM (BSC, Ethereum, Polygon, etc.) and TRON networks.
-
-> 🗣️ "Create a new agent wallet for me" or "List all my wallets and show their addresses."
-
-💡 For setup and advanced usage, see: [**agent-wallet**](./BANKOFAISkill.md#agent-wallet)
-
-### 💱 Execute DEX Trades
-
-Check prices, compare rates, even swap tokens in one go.
-
-> 🗣️ "How much TRX can I get for 100 USDT on SunSwap right now?"
-
-💡 For more advanced features, see: [**sunswap**](./BANKOFAISkill.md#sunswap)
-
-### 🚀 Launch & Trade SunPump Meme Coins
-
-Create your own meme token in one sentence, buy and sell on SunPump — TRON's meme-token launchpad — and check market data. Token creation happens **server-side, no wallet needed**: just give a name, symbol, description, and logo. For trading, the AI automatically picks the right path: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") trade on the bonding curve, while tokens that already have a SunSwap V2 pair ("post-launch") go through a regular swap. You can also look up token detail, rankings, holder distribution, and wallet portfolios. TRON mainnet only.
-
-> 🗣️ "Launch a meme token on SunPump — here are the name, symbol, description, and logo." or "Show me the top 10 SunPump meme coins by 24h gain, then check the holder concentration of the top one."
-
-💡 For trading and risk details, see: [**sunpump-agent-skill**](./BANKOFAISkill.md#sunpump-agent-skill)
-
-### 📈 Trade Perpetual Contracts
-
-View market data, open and close positions on SunPerp. Built-in safety locks: max 20x leverage (configurable) and a mandatory stop-loss on every position-opening order — auto-set to 5% from entry if omitted, and rejected if wider than 25%. Keeps you from blowing up your account.
-
-> 🗣️ "What's BTC's funding rate right now? Open a 5x long position with a 5% stop-loss."
-
-💡 For more parameter settings, see: [**sunperp-skill**](./BANKOFAISkill.md#sunperp-skill)
-
-### 🕵️ Query On-Chain Data
-
-Look up accounts, transactions, and check if a new token is legit. Pure read-only, completely safe, costs nothing.
-
-> 🗣️ "Check the holder distribution for that new token — is it controlled by a whale?"
-
-💡 For more query dimensions, see: [**tronscan-skill**](./BANKOFAISkill.md#tronscan-skill)
-
-### 💸 Transfer & Manage TRC20 Tokens
-
-Check balances, transfer tokens, manage approvals — supports common tokens like USDT, USDD, SUN, and can also operate any TRC20 token via its contract address. Supports batch balance checks.
-
-> 🗣️ "Check my USDT, USDD, and SUN balances. Then transfer 10 USDT to TRecipientAddress."
-
-💡 For more token operations, see: [**trc20-toolkit-skill**](./BANKOFAISkill.md#trc20-toolkit-skill)
-
-### 💵 USDD Stablecoin & JUST Protocol
-
-Swap USDT ↔ USDD at 1:1 via the Peg Stability Module (zero fee currently), check USDD/USDT/USDC/TRX/JST balances, and read vault (CDP) positions and protocol parameters.
-
-> 🗣️ "Sell 1000 USDT for USDD via the PSM" or "Show me all USDD vault types and their stability fees."
-
-💡 For PSM swaps and vault queries, see: [**usdd-skill**](./BANKOFAISkill.md#usdd-skill)
-
-### 🗳️ TRX Staking & SR Voting
-
-Stake TRX for TRON Power, vote for Super Representatives, and claim voting rewards. Stake 2.0 compatible — top 27 SRs distribute block rewards every 6 hours proportionally to their voters.
-
-> 🗣️ "Show my TRON Power and current votes, then list the top 10 SRs." or "Claim my pending voting rewards."
-
-💡 For staking, voting, and reward flows, see: [**trx-staking-skill**](./BANKOFAISkill.md#trx-staking-skill)
-
-### 🔐 Multi-Sig & Account Permissions
-
-Set up multi-signature security for your TRON account — configure keys, thresholds, and co-sign transactions. Perfect for teams or for restricting your AI agent to DeFi-only operations.
-
-> 🗣️ "Check my account's current permission setup. Then set up a 2-of-3 multi-sig on owner permission."
-
-💡 For permission templates and multi-sig workflows, see: [**multisig-permissions**](./BANKOFAISkill.md#multisig-permissions)
-
-### ☕ Auto-Settle On-Chain Paid Services
-
-When the AI needs to call a paid on-chain service or data API, it uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — no manual QR scanning or wallet switching needed. Multi-chain support — TRON (TRC20: USDT, USDD, with GasFree) and BSC (ERC20: USDT, USDC) both work; just switch the `--network` parameter.
-
-> 🗣️ "Use the x402 protocol to call this paid agent endpoint: https://api.example.com" (replace with the actual paid endpoint URL you want to call)
-
-💡 For payment and authorization details, see: [**x402-payment**](./BANKOFAISkill.md#x402-payment)
-
-### 🏦 Manage BANK OF AI Account
-
-Check your BANK OF AI balance and top up with a single sentence.
-
-> 🗣️ "How much balance do I have? Go ahead and recharge 5 USDT."
-
-💡 For top-up and withdrawal rules, see: [**recharge-skill**](./BANKOFAISkill.md#recharge-skill)
-
-### 🐦 X/Twitter Daily Digest
-
-Turn your own X/Twitter account into a daily briefing — mentions, home timeline, and reply opportunities, summarized for you.
-
-> 🗣️ "Generate today's X/Twitter digest for my account."
-
-💡 Two ways to run it: API-only via [**twitter-digest**](./BANKOFAISkill.md#twitter-digest), or from the local `xurl` CLI via [**twitter-mcp**](./BANKOFAISkill.md#twitter-mcp).
-
-### 🧭 Onboarding Guide (bankofai-guide)
-
-A lightweight companion skill that runs the post-install setup flow, helps you create your first AgentWallet, and acts as a "wallet guard" before any on-chain operation — reminding you to set up a wallet if none exists. You don't usually call it directly; it gets invoked automatically by the installer and by other skills when needed.
-
-> 🗣️ "Walk me through BANK OF AI onboarding." or "Run bankofai-guide so I can set up my first wallet."
-
-💡 For the full onboarding flow, see: [**bankofai-guide**](./BANKOFAISkill.md#bankofai-guide)
+| Skill | What it does | Try saying |
+| :-- | :-- | :-- |
+| 🔑 [agent-wallet](./BANKOFAISkill.md#agent-wallet) | Create/manage encrypted wallets and sign transactions without exposing your key; the foundation other skills rely on (EVM + TRON) | "Create a new agent wallet for me" |
+| 💱 [sunswap](./BANKOFAISkill.md#sunswap) | Check prices, compare rates, swap tokens in one go | "How much TRX can I get for 100 USDT?" |
+| 🚀 [sunpump-agent-skill](./BANKOFAISkill.md#sunpump-agent-skill) | Launch a meme token in one sentence, trade and track SunPump (TRON mainnet only; creation needs no wallet) | "Launch a meme token on SunPump" |
+| 📈 [sunperp-skill](./BANKOFAISkill.md#sunperp-skill) | SunPerp perpetuals — market data, open/close positions; built-in guardrails: ≤20x leverage, mandatory stop-loss | "Open a 5x long with a 5% stop-loss" |
+| 🕵️ [tronscan-skill](./BANKOFAISkill.md#tronscan-skill) | Look up accounts, transactions, token safety; read-only, free, zero risk | "Is that new token whale-controlled?" |
+| 💸 [trc20-toolkit-skill](./BANKOFAISkill.md#trc20-toolkit-skill) | TRC20 balances, transfers, approvals — batch checks and any contract address | "Transfer 10 USDT to TRecipientAddress" |
+| 💵 [usdd-skill](./BANKOFAISkill.md#usdd-skill) | 1:1 USDT ↔ USDD via the PSM (currently zero fee), read vault (CDP) positions | "Sell 1000 USDT for USDD via the PSM" |
+| 🗳️ [trx-staking-skill](./BANKOFAISkill.md#trx-staking-skill) | Stake TRX, vote for SRs, claim rewards (Stake 2.0) | "Claim my pending voting rewards" |
+| 🔐 [multisig-permissions](./BANKOFAISkill.md#multisig-permissions) | Multi-sig and permission management — great for teams or limiting your AI | "Set up a 2-of-3 multi-sig on owner" |
+| ☕ [x402-payment](./BANKOFAISkill.md#x402-payment) | Auto "pay first, then receive" settlement via x402 when calling paid APIs (TRON / BSC) | "Use x402 to call this paid endpoint: https://…" |
+| 🏦 [recharge-skill](./BANKOFAISkill.md#recharge-skill) | Check your BANK OF AI balance and top up in one sentence | "Check my balance, then recharge 5 USDT" |
+| 🐦 [twitter-digest](./BANKOFAISkill.md#twitter-digest) / [twitter-mcp](./BANKOFAISkill.md#twitter-mcp) | Your X/Twitter daily briefing: mentions, timeline, reply opportunities | "Generate today's X digest for my account" |
+| 🧭 [bankofai-guide](./BANKOFAISkill.md#bankofai-guide) | Onboarding + "wallet guard"; usually invoked automatically by the installer | "Walk me through BANK OF AI onboarding" |
 
 ---
 

@@ -5,6 +5,13 @@
 1. **粘贴安装指令** → AI 自动完成 Skills 安装 + 检查钱包状态，询问是否创建钱包
 2. **确认创建钱包** → AI 自动创建本地加密钱包
 
+全程**不需要懂代码，也不需要提前准备钱包**——你要做的只有两个动作：复制一段话，然后回复一个字母。
+
+**开始前你需要：**
+
+- 一个支持 Skills 的 AI 客户端：**OpenClaw / Claude Code / Cursor / Codex** 任选其一（你平时用哪个就用哪个）
+- 电脑上装有 **Node.js**（AI 执行安装时会用到 `npx` 命令）。不确定装没装？没关系——直接开始第 1 步，若 AI 提示 `npx` 不可用，去 [nodejs.org](https://nodejs.org/) 装一个再试即可
+
 ---
 
 ## 第 1 步：粘贴安装指令
@@ -84,7 +91,9 @@ AI 会自动安装 Skills，随后问你是否创建钱包。
 
 ## 第 2 步：确认创建钱包
 
-根据 AI 的提示确认创建钱包（比如回复「创建」「继续」或 AI 给出的选项），AI 会自动创建本地加密钱包，并展示钱包信息、地址、主密码和后续可做的事情。
+根据 AI 的提示确认创建钱包（比如回复「A」「创建」或 AI 给出的选项），AI 会自动创建本地加密钱包，并展示钱包信息、地址、主密码和后续可做的事情。
+
+⚠️ **看到主密码后，先停一下：** 它**只展示这一次**，相当于保险箱的唯一钥匙。请立刻复制并保存到密码管理器（1Password / Bitwarden 等），再继续下一步。详见下方[安全须知](#几条提醒)。
 
 <details>
 <summary>展开 AI 输出示例</summary>
@@ -156,7 +165,7 @@ AI 会自动安装 Skills，随后问你是否创建钱包。
 查一下刚刚创建钱包地址的 TRX 和 USDT 余额。
 ```
 
-如果 AI 能返回余额结果——**恭喜，所有组件已经就位，可以开始使用。**
+如果 AI 能返回余额结果——**恭喜，你已经拥有了一个能上链干活的 AI 管家！** 所有组件就位，接下来想让它做什么，直接说就行。
 
 :::note 新钱包可能出现的情况
 刚创建的 TRON 地址在首次收到转账前处于「未激活」状态，查询结果可能会显示 **余额 0 / 账户未激活**——这都是正常的，不影响你继续使用 BANK OF AI。
@@ -196,31 +205,28 @@ AI 会自动安装 Skills，随后问你是否创建钱包。
 
 ## 几条提醒
 
-:::warning 新手三条铁律 · 链上交易不可逆
+:::warning 安全须知 · 链上交易不可逆
+
+**新手三条铁律：**
+
 1. **务必先在测试网验证。** 在 Nile 测试网上先执行 1-2 笔测试交易，确认 AI 行为完全符合预期后，再切换到主网。
 2. **每一笔花费操作前，请仔细核对 AI 给出的账单。**
 3. **从小额开始。** 即便是已经测试过的操作，首次在主网执行时也建议使用小额资金验证。
+
+**主密码请立即备份：** 主密码**仅在第 2 步展示一次**。虽然会自动保存到本地的 `~/.agent-wallet/runtime_secrets.json`，但强烈建议你**同时手动保存到密码管理器**（1Password / Bitwarden 等）——一旦本地文件丢失或损坏，且没有外部备份，你的钱包将**永久无法解锁**（没有备份找回机制，没有客服，没有后门）。**切勿**把这个密码发到聊天工具、邮件、截图或公开仓库中。
+
 :::
 
-:::caution 主密码非常重要，请立即备份
-主密码**仅在第 2 步展示一次**。虽然会自动保存到本地的 `~/.agent-wallet/runtime_secrets.json`，但强烈建议你**同时手动保存到密码管理器**（1Password / Bitwarden 等）——一旦本地文件丢失或损坏，且没有外部备份，你的钱包将**永久无法解锁**（没有备份找回机制，没有客服，没有后门）。
+**如果你在第 2 步暂时不想创建钱包** —— AI 会跳过钱包创建流程。等你准备好时，随时可以在 AI 对话框里触发**对话式创建**，无需重新运行安装指令。详见 [Agent-Wallet 快速开始 · 方式一：对话式创建](../Agent-Wallet/QuickStart.md)。
 
-⚠️ **切勿**把这个密码发到聊天工具、邮件、截图或公开仓库中。
-:::
+### 想独立使用其他产品或自行部署？
 
-:::info 如果你在第 2 步暂时不想创建钱包
-AI 会跳过钱包创建流程。等你准备好时，随时可以在 AI 对话框里触发**对话式创建**——无需重新运行安装指令。详见 [Agent-Wallet 快速开始 · 方式一：对话式创建](../Agent-Wallet/QuickStart.md)。
-:::
-
-:::tip 想独立使用其他产品或自行部署？
-**BANK OF AI 的完整产品矩阵不止 Skills**——如需独立使用其他产品或对底层做私有化部署，请分别参考：
+BANK OF AI 的完整产品矩阵不止 Skills——如需独立使用其他产品或对底层做私有化部署，请分别参考：
 
 - **LLM Service**（模型接入层）：直接使用 BANKOFAI APP 或接入统一 API Gateway → [LLM Service 简介](../llmservice/introduction.md)
 - **x402 Payment**（支付协议）：让 AI 自动在链上完成小额付款 → [x402 协议简介](../x402/index.md)
 - **8004 Protocol**（身份与信誉）：Agent 链上征信查询 → [8004 协议简介](../8004/general.md)
-- **MCP Server 本地私有化部署**：Skills 默认通过 BANK OF AI 官方云端点调用 MCP Server，无需单独安装；若需本地部署，参考 [TRON MCP 本地私有化部署](../McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment.md) · [SUN MCP 本地私有化部署](../McpServer-Skills/MCP/SUNMCPServer/LocalPrivatizedDeployment.md) · [BSC MCP 安装](../McpServer-Skills/MCP/BSCMCPServer/Installation.md)
-- **SUN CLI**：与 SUN MCP Server 能力对等的命令行工具，面向脚本/自动化/CI-CD 场景 → [SUN CLI 快速开始](../McpServer-Skills/Tools/SUNCli/QuickStart.md)
-:::
+- **MCP Server 本地私有化部署**：Skills 默认通过 BANK OF AI 官方云端点调用 MCP Server，无需单独安装；若需本地部署，参考 [TRON MCP 本地私有化部署](../McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment.md) · [BSC MCP 安装](../McpServer-Skills/MCP/BSCMCPServer/Installation.md)
 
 ---
 
