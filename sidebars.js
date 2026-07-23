@@ -299,9 +299,13 @@ const sidebars = {
           ],
         },
         {
-          type: 'doc',
-          id: 'McpServer-Skills/MCP/SUNMCPServer/Intro',
+          type: 'category',
           label: 'SUN MCP Server',
+          collapsed: true,
+          items: [
+            'McpServer-Skills/MCP/SUNMCPServer/Intro',
+            'McpServer-Skills/MCP/SUNMCPServer/ToolList',
+          ],
         },
         {
           type: 'doc',
