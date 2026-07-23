@@ -298,6 +298,16 @@ const sidebars = {
             'McpServer-Skills/MCP/BSCMCPServer/Installation',
           ],
         },
+        {
+          type: 'doc',
+          id: 'McpServer-Skills/MCP/SUNMCPServer/Intro',
+          label: 'SUN MCP Server',
+        },
+        {
+          type: 'doc',
+          id: 'McpServer-Skills/Tools/SUNCli/Intro',
+          label: 'SUN CLI',
+        },
       ],
     },
     {

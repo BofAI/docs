@@ -114,13 +114,13 @@ module.exports = {
   ],
   plugins: [
     require.resolve('./docusaurus-plugin-global-style'),
-    // 兼容旧链接：/McpServer-Skills/Intro/ 已并入 MCP 简介，重定向过去（自动覆盖各 locale）
+    // 兼容旧链接：/McpServer-Skills/Intro/ 重定向到 Skills 简介（自动覆盖各 locale）
     [
       '@docusaurus/plugin-client-redirects',
       {
         createRedirects(existingPath) {
-          if (existingPath.endsWith('/McpServer-Skills/MCP/Intro/') || existingPath.endsWith('/McpServer-Skills/MCP/Intro')) {
-            return [existingPath.replace('/McpServer-Skills/MCP/Intro', '/McpServer-Skills/Intro')]
+          if (existingPath.endsWith('/McpServer-Skills/SKILLS/Intro/') || existingPath.endsWith('/McpServer-Skills/SKILLS/Intro')) {
+            return [existingPath.replace('/McpServer-Skills/SKILLS/Intro', '/McpServer-Skills/Intro')]
           }
           return undefined
         },
