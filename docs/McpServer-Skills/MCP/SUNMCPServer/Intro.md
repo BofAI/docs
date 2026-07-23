@@ -1,5 +1,6 @@
 ---
 title: 'SUN MCP Server'
+sidebar_label: 'Introduction'
 description: 'SUN MCP Server connects AI assistants to SunSwap on TRON. The full documentation now lives on the SUN docs site.'
 ---
 

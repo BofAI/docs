@@ -1,5 +1,6 @@
 ---
 title: 'SUN MCP Server'
+sidebar_label: '简介'
 description: 'SUN MCP Server 连接 AI 助手与 TRON 上的 SunSwap。完整文档已迁移至 SUN 文档站。'
 ---
 
