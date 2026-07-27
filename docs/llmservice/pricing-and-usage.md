@@ -38,6 +38,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | GPT-5 Mini        |                  0.25 |                        0.25 |                      0.025 |                   2.00 |                   10,000 |
 | GPT-5.4 Nano      |                  0.20 |                        0.20 |                       0.02 |                   1.25 |                   10,000 |
 | GPT-5 Nano        |                  0.05 |                        0.05 |                      0.005 |                   0.40 |                        - |
+| Claude Opus 5     |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Fable 5    |                 10.00 |                       12.50 |                       1.00 |                  50.00 |                   10,000 |
 | Claude Opus 4.8   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.7   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
@@ -134,7 +135,7 @@ The platform uses a prepaid model, so you need to top up your account to obtain 
 The platform now supports both fiat and on-chain top-up flows end to end. You can follow the on-screen instructions to top up with Stripe-supported card payments, WeChat Pay, Alipay, UnionPay, and other available fiat payment methods, or use supported blockchain networks and tokens for on-chain payment.
 
 :::caution Security reminder
-Before topping up, make sure the address bar shows an official B.AI access URL, such as `https://chat.b.ai/chat`, `https://chat.ainft.com/chat`, or `https://chat.bankofai.io/chat`. Do not continue from unfamiliar links, search ads, or pages with a different domain.
+Before topping up, make sure the address bar shows an official B.AI access URL, such as `https://chat.b.ai/chat` or `https://chat.bankofai.io/chat`. Do not continue from unfamiliar links, search ads, or pages with a different domain.
 
 Complete fund-related operations only in a trusted network environment. Avoid topping up on public or shared Wi-Fi, and always review the payment details shown by your wallet before confirming.
 :::
