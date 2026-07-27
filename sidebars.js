@@ -138,6 +138,7 @@ const sidebars = {
       items: [
         { type: 'doc', id: 'llmservice/introduction', label: 'Introduction' },
         { type: 'doc', id: 'llmservice/quick-start', label: 'Quick Start' },
+        { type: 'doc', id: 'llmservice/auto-mode', label: 'Auto Mode' },
         { type: 'doc', id: 'llmservice/pricing-and-usage', label: 'Pricing and Usage' },
         {
           type: 'category',

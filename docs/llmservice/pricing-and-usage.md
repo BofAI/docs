@@ -62,6 +62,10 @@ The main pricing table shows the currently effective standard reference price fo
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
 :::
 
+:::info Auto Mode billing
+Auto Mode is not a separately billable model. Each request is billed based on the model actually used, token usage, and any tool usage. Review the request usage details or the **Usage** page for the final cost. See [Auto Mode](./auto-mode.md) for details.
+:::
+
 ### Cache Pricing Notes
 
 - **Cache Write:** The cost when tokens are first written into the prompt cache. Most providers charge no premium and use the same rate as standard input pricing. Claude models and GPT-5.6 models apply a 25% premium on cache writes; GPT-5.6 long-context cache write rates follow the corresponding long-context input tier.
