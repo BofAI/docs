@@ -140,6 +140,7 @@ const sidebars = {
         { type: 'doc', id: 'llmservice/quick-start', label: 'Quick Start' },
         { type: 'doc', id: 'llmservice/auto-mode', label: 'Auto Mode' },
         { type: 'doc', id: 'llmservice/pricing-and-usage', label: 'Pricing and Usage' },
+        { type: 'doc', id: 'llmservice/invitation-rewards', label: 'Invitation Rewards' },
         {
           type: 'category',
           label: 'Models',
