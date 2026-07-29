@@ -85,6 +85,10 @@ Top-up Credits are suitable for flexible, on-demand usage. Subscription plans ar
 Free bonus Credits are valid for 30 days from the date they are issued, including Credits granted for new-user registration and Credits granted through top-up promotions. Any unused portion automatically expires after the validity period.
 :::
 
+:::info Invitation rewards
+Invite friends to register and earn Coin from eligible top-ups and subscriptions. Invitation registration Credits and Credits redeemed from Coin are valid for 30 days from the date they are issued. See [Invitation Rewards](./invitation-rewards.md) for eligibility, settlement, redemption, and adjustment rules.
+:::
+
 ### Subscription Plans
 
 Two subscription plans are currently available:
@@ -106,7 +110,6 @@ Two subscription plans are currently available:
 - Higher subscription allowance and priority access to beta models
 - Dedicated support
 - Includes curated BAIclaw skills such as Justin Sun Perspective Skill, HTX/Binance, Web3, and more
-- Promotions can earn Credits rewards
 
 ### Subscription Usage & Charge Order
 
