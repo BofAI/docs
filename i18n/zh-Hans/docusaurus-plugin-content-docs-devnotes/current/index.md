@@ -9,4 +9,4 @@ BANK OF AI 团队沉淀的实战经验——动手演练，以及让 AI 上链�
 
 ## 实践列表
 
-- [**手把手完成第一笔链上兑换**](./first-onchain-swap/) —— 在 Nile 测试网上完整走一遍真实任务，包括每一步该确认什么、出错了怎么办。
+- [**BANK OF AI x402：面向 AI 智能体的稳定币支付方案**](./x402-stablecoin-payments-for-agents/) —— HTTP 402 挑战—响应流程如何运作、`exact` / `exact_gasfree` / `upto` / `batch-settlement` 四种方案怎么选，以及一个基于 TRON 的端到端付费推理案例。

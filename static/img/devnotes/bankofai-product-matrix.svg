@@ -1,0 +1,161 @@
+<svg width="1280" height="1210" viewBox="0 0 1280 1210" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', Arial, sans-serif" role="img" aria-labelledby="title desc">
+  <title id="title">BANK OF AI 五层架构</title>
+  <desc id="desc">BANK OF AI 由生态与应用、Agent 平台服务、开发工具与 SDK、协议和基础设施五层组成。浅灰色模块代表外部生态与依赖。</desc>
+  <defs>
+    <filter id="shadow" x="-8%" y="-12%" width="116%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="5" flood-color="#101828" flood-opacity=".055"/></filter>
+  </defs>
+
+  <rect width="1280" height="1210" rx="24" fill="#F7F8FC"/>
+  <text x="56" y="58" font-size="30" font-weight="750" fill="#101828">BANK OF AI: 面向AI Agent的Web3基础设施</text>
+  <g>
+    <rect x="874" y="39" width="18" height="18" rx="4" fill="#FFFFFF" stroke="#BFC9D8" stroke-width="1.3"/>
+    <text x="902" y="53" font-size="12.5" font-weight="650" fill="#667085">BANK OF AI</text>
+    <rect x="1037" y="39" width="18" height="18" rx="4" fill="#ECEFF3" stroke="#D0D5DD" stroke-width="1.3"/>
+    <text x="1065" y="53" font-size="12.5" font-weight="650" fill="#667085">External / Standard</text>
+  </g>
+  <line x1="56" y1="87" x2="1224" y2="87" stroke="#E1E6EE"/>
+
+  <!-- 生态与应用层 -->
+  <rect x="48" y="122" width="1184" height="154" rx="18" fill="#FFFFFF" stroke="#D7DEE9" stroke-width="1.4"/>
+  <g filter="url(#shadow)">
+    <rect x="72" y="106" width="170" height="32" rx="16" fill="#FFFFFF" stroke="#D7DEE9"/>
+    <circle cx="89" cy="122" r="6" fill="#315BE8"/>
+    <text x="104" y="128" font-size="18" font-weight="720" fill="#1D2939">生态与应用层</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="76" y="164" width="360" height="80" rx="13" fill="#ECEFF3" stroke="#D0D5DD"/>
+    <rect x="76" y="164" width="5" height="80" rx="2.5" fill="#98A2B3"/>
+    <text x="100" y="197" font-size="18" font-weight="720" fill="#1D2939">Agent Harness</text>
+    <text x="100" y="222" font-size="13.5" fill="#667085">Claude Code · Cursor · Codex</text>
+
+    <rect x="460" y="164" width="360" height="80" rx="13" fill="#ECEFF3" stroke="#D0D5DD"/>
+    <rect x="460" y="164" width="5" height="80" rx="2.5" fill="#98A2B3"/>
+    <text x="484" y="197" font-size="18" font-weight="720" fill="#1D2939">Agent Applications</text>
+    <text x="484" y="222" font-size="13.5" fill="#667085">Payment Agent · DeFi Agent</text>
+
+    <rect x="844" y="164" width="360" height="80" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="844" y="164" width="5" height="80" rx="2.5" fill="#315BE8"/>
+    <text x="868" y="197" font-size="18" font-weight="720" fill="#1D2939">Marketplaces</text>
+    <text x="868" y="222" font-size="13.5" fill="#667085">x402 Marketplace · Skill Catalog</text>
+  </g>
+
+  <!-- Agent 平台服务层 -->
+  <rect x="48" y="304" width="1184" height="218" rx="18" fill="#FFFFFF" stroke="#D7DEE9" stroke-width="1.4"/>
+  <g filter="url(#shadow)">
+    <rect x="72" y="288" width="214" height="32" rx="16" fill="#FFFFFF" stroke="#D7DEE9"/>
+    <circle cx="89" cy="304" r="6" fill="#694CD3"/>
+    <text x="104" y="310" font-size="18" font-weight="720" fill="#1D2939">Agent 平台服务层</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="76" y="346" width="548" height="66" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="76" y="346" width="5" height="66" rx="2.5" fill="#315BE8"/>
+    <text x="100" y="375" font-size="17" font-weight="720" fill="#1D2939">Agent Integration &amp; Skills</text>
+    <text x="100" y="398" font-size="13" fill="#667085">BAIclaw · OpenClaw Extension · BANK OF AI Skills</text>
+
+    <rect x="656" y="346" width="548" height="66" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="656" y="346" width="5" height="66" rx="2.5" fill="#315BE8"/>
+    <text x="680" y="375" font-size="17" font-weight="720" fill="#1D2939">Agent Wallet</text>
+    <text x="680" y="398" font-size="13" fill="#667085">Privy · wallet-cli</text>
+
+    <rect x="76" y="432" width="548" height="66" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="76" y="432" width="5" height="66" rx="2.5" fill="#E54B4B"/>
+    <text x="100" y="461" font-size="17" font-weight="720" fill="#1D2939">x402 Payment Services</text>
+    <text x="100" y="484" font-size="13" fill="#667085">x402 Gateway · x402 Facilitator · x402 Recharge Server</text>
+
+    <rect x="656" y="432" width="548" height="66" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="656" y="432" width="5" height="66" rx="2.5" fill="#694CD3"/>
+    <text x="680" y="461" font-size="17" font-weight="720" fill="#1D2939">MCP Services</text>
+    <text x="680" y="484" font-size="13" fill="#667085">TRON MCP Server · SUN MCP Server · JustLend MCP Server · TronScan MCP Server</text>
+  </g>
+
+  <!-- 开发工具与 SDK 层 -->
+  <rect x="48" y="550" width="1184" height="136" rx="18" fill="#FFFFFF" stroke="#D7DEE9" stroke-width="1.4"/>
+  <g filter="url(#shadow)">
+    <rect x="72" y="534" width="188" height="32" rx="16" fill="#FFFFFF" stroke="#D7DEE9"/>
+    <circle cx="89" cy="550" r="6" fill="#2D8B70"/>
+    <text x="104" y="556" font-size="18" font-weight="720" fill="#1D2939">开发工具与 SDK</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="76" y="590" width="360" height="64" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="76" y="590" width="5" height="64" rx="2.5" fill="#2D8B70"/>
+    <text x="100" y="618" font-size="17" font-weight="720" fill="#1D2939">x402 SDK</text>
+    <text x="100" y="640" font-size="12.5" fill="#667085">Client SDK · Server SDK</text>
+
+    <rect x="460" y="590" width="360" height="64" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="460" y="590" width="5" height="64" rx="2.5" fill="#2D8B70"/>
+    <text x="484" y="618" font-size="17" font-weight="720" fill="#1D2939">8004 SDK</text>
+    <text x="484" y="640" font-size="12.5" fill="#667085">Identity Registration · Credentials</text>
+
+    <rect x="844" y="590" width="360" height="64" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="844" y="590" width="5" height="64" rx="2.5" fill="#2D8B70"/>
+    <text x="868" y="618" font-size="17" font-weight="720" fill="#1D2939">CLI Tooling</text>
+    <text x="868" y="640" font-size="12.5" fill="#667085">x402 CLI · SUN CLI · wallet-cli</text>
+  </g>
+
+  <!-- 协议层 -->
+  <rect x="48" y="714" width="1184" height="136" rx="18" fill="#FFFFFF" stroke="#D7DEE9" stroke-width="1.4"/>
+  <g filter="url(#shadow)">
+    <rect x="72" y="698" width="120" height="32" rx="16" fill="#FFFFFF" stroke="#D7DEE9"/>
+    <circle cx="89" cy="714" r="6" fill="#A66A18"/>
+    <text x="104" y="720" font-size="18" font-weight="720" fill="#1D2939">协议层</text>
+  </g>
+  <g filter="url(#shadow)">
+    <rect x="76" y="754" width="360" height="64" rx="13" fill="#ECEFF3" stroke="#D0D5DD"/>
+    <rect x="76" y="754" width="5" height="64" rx="2.5" fill="#98A2B3"/>
+    <text x="100" y="782" font-size="17" font-weight="720" fill="#1D2939">MCP</text>
+    <text x="100" y="804" font-size="12.5" fill="#667085">Model Context Protocol</text>
+
+    <rect x="460" y="754" width="360" height="64" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="460" y="754" width="5" height="64" rx="2.5" fill="#E54B4B"/>
+    <text x="484" y="782" font-size="17" font-weight="720" fill="#1D2939">x402 Protocol</text>
+    <text x="484" y="804" font-size="12.5" fill="#667085">HTTP-native Payment Standard</text>
+
+    <rect x="844" y="754" width="360" height="64" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="844" y="754" width="5" height="64" rx="2.5" fill="#694CD3"/>
+    <text x="868" y="782" font-size="17" font-weight="720" fill="#1D2939">8004 Protocol</text>
+    <text x="868" y="804" font-size="12.5" fill="#667085">On-chain Agent Identity &amp; Trust</text>
+  </g>
+
+  <!-- 基础设施层 -->
+  <rect x="48" y="878" width="1184" height="270" rx="18" fill="#FFFFFF" stroke="#D7DEE9" stroke-width="1.4"/>
+  <g filter="url(#shadow)">
+    <rect x="72" y="862" width="144" height="32" rx="16" fill="#FFFFFF" stroke="#D7DEE9"/>
+    <circle cx="89" cy="878" r="6" fill="#344054"/>
+    <text x="104" y="884" font-size="18" font-weight="720" fill="#1D2939">基础设施层</text>
+  </g>
+  <line x1="640" y1="910" x2="640" y2="1120" stroke="#E1E6EE" stroke-width="1.2" stroke-dasharray="6 7"/>
+  <g filter="url(#shadow)">
+    <rect x="76" y="916" width="164" height="88" rx="12" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="76" y="916" width="5" height="88" rx="2.5" fill="#315BE8"/>
+    <text x="96" y="948" font-size="15.5" font-weight="720" fill="#1D2939">Wallet-cli</text>
+    <text x="96" y="972" font-size="10.5" fill="#667085">Wallet · Transfer</text>
+    <text x="96" y="989" font-size="10.5" fill="#667085">Staking · Governance</text>
+
+    <rect x="258" y="916" width="164" height="88" rx="12" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="258" y="916" width="5" height="88" rx="2.5" fill="#E54B4B"/>
+    <text x="278" y="953" font-size="15.5" font-weight="720" fill="#1D2939">Contracts</text>
+    <text x="278" y="980" font-size="11.5" fill="#667085">x402 · 8004</text>
+
+    <rect x="440" y="916" width="164" height="88" rx="12" fill="#ECEFF3" stroke="#D0D5DD"/>
+    <rect x="440" y="916" width="5" height="88" rx="2.5" fill="#98A2B3"/>
+    <text x="460" y="953" font-size="15.5" font-weight="720" fill="#1D2939">Assets</text>
+    <text x="460" y="980" font-size="11.5" fill="#667085">USDT · USDD · USDC</text>
+
+    <rect x="76" y="1026" width="528" height="88" rx="13" fill="#ECEFF3" stroke="#D0D5DD"/>
+    <rect x="76" y="1026" width="5" height="88" rx="2.5" fill="#98A2B3"/>
+    <text x="100" y="1063" font-size="17" font-weight="720" fill="#1D2939">Blockchain Networks</text>
+    <text x="100" y="1090" font-size="12.5" fill="#667085">TRON · BNB Chain · Base</text>
+
+    <rect x="676" y="916" width="528" height="88" rx="13" fill="#FFFFFF" stroke="#BFC9D8"/>
+    <rect x="676" y="916" width="5" height="88" rx="2.5" fill="#694CD3"/>
+    <text x="700" y="953" font-size="17" font-weight="720" fill="#1D2939">LLM Service</text>
+    <text x="700" y="980" font-size="12.5" fill="#667085">Unified OpenAI-compatible API · Model Routing · x402 Billing</text>
+
+    <rect x="676" y="1026" width="528" height="88" rx="13" fill="#ECEFF3" stroke="#D0D5DD"/>
+    <rect x="676" y="1026" width="5" height="88" rx="2.5" fill="#98A2B3"/>
+    <text x="700" y="1063" font-size="17" font-weight="720" fill="#1D2939">Foundation Models</text>
+    <text x="700" y="1090" font-size="12.5" fill="#667085">GPT · Claude · Gemini · Kimi · GLM · DeepSeek</text>
+  </g>
+
+  <line x1="56" y1="1176" x2="1224" y2="1176" stroke="#E1E6EE"/>
+</svg>

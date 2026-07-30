@@ -6,7 +6,8 @@ const sidebars = {
       id: 'index',
       label: 'Overview',
     },
-    'first-onchain-swap',
+    'x402-stablecoin-payments-for-agents',
+    // 'first-onchain-swap', // 暂时隐藏（文件保留）
   ],
 }
 
