@@ -138,7 +138,9 @@ const sidebars = {
       items: [
         { type: 'doc', id: 'llmservice/introduction', label: 'Introduction' },
         { type: 'doc', id: 'llmservice/quick-start', label: 'Quick Start' },
+        { type: 'doc', id: 'llmservice/auto-mode', label: 'Auto Mode' },
         { type: 'doc', id: 'llmservice/pricing-and-usage', label: 'Pricing and Usage' },
+        { type: 'doc', id: 'llmservice/invitation-rewards', label: 'Invitation Rewards' },
         {
           type: 'category',
           label: 'Models',
@@ -168,6 +170,7 @@ const sidebars = {
               label: 'Anthropic (Claude)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/claude-opus-5', label: 'Claude Opus 5' },
                 { type: 'doc', id: 'llmservice/models/claude-sonnet-5', label: 'Claude Sonnet 5' },
                 { type: 'doc', id: 'llmservice/models/claude-fable-5', label: 'Claude Fable 5' },
                 { type: 'doc', id: 'llmservice/models/claude-opus-4-8', label: 'Claude Opus 4.8' },

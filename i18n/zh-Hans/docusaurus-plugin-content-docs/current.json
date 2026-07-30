@@ -63,9 +63,17 @@
     "message": "快速入门",
     "description": "The label for the doc item Quick Start in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.doc.Auto Mode": {
+    "message": "Auto 模式",
+    "description": "The label for the doc item Auto Mode in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.doc.Pricing and Usage": {
     "message": "定价与用量",
     "description": "The label for the doc item Pricing and Usage in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Invitation Rewards": {
+    "message": "邀请返利规则",
+    "description": "The label for the doc item Invitation Rewards in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.Models": {
     "message": "模型列表",

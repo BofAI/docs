@@ -38,6 +38,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 | GPT-5 Mini        |                  0.25 |                        0.25 |                      0.025 |                   2.00 |                   10,000 |
 | GPT-5.4 Nano      |                  0.20 |                        0.20 |                       0.02 |                   1.25 |                   10,000 |
 | GPT-5 Nano        |                  0.05 |                        0.05 |                      0.005 |                   0.40 |                        - |
+| Claude Opus 5     |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Fable 5    |                 10.00 |                       12.50 |                       1.00 |                  50.00 |                   10,000 |
 | Claude Opus 4.8   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.7   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
@@ -61,6 +62,10 @@ The main pricing table shows the currently effective standard reference price fo
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
 :::
 
+:::info Auto Mode billing
+Auto Mode is not a separately billable model. Each request is billed based on the model actually used, token usage, and any tool usage. Review the request usage details or the **Usage** page for the final cost. See [Auto Mode](./auto-mode.md) for details.
+:::
+
 ### Cache Pricing Notes
 
 - **Cache Write:** The cost when tokens are first written into the prompt cache. Most providers charge no premium and use the same rate as standard input pricing. Claude models and GPT-5.6 models apply a 25% premium on cache writes; GPT-5.6 long-context cache write rates follow the corresponding long-context input tier.
@@ -78,6 +83,10 @@ Top-up Credits are suitable for flexible, on-demand usage. Subscription plans ar
 
 :::caution Free bonus Credits validity
 Free bonus Credits are valid for 30 days from the date they are issued, including Credits granted for new-user registration and Credits granted through top-up promotions. Any unused portion automatically expires after the validity period.
+:::
+
+:::info Invitation rewards
+Invite friends to register and earn Coin from eligible top-ups and subscriptions. Invitation registration Credits and Credits redeemed from Coin are valid for 30 days from the date they are issued. See [Invitation Rewards](./invitation-rewards.md) for eligibility, settlement, redemption, and adjustment rules.
 :::
 
 ### Subscription Plans
@@ -101,7 +110,6 @@ Two subscription plans are currently available:
 - Higher subscription allowance and priority access to beta models
 - Dedicated support
 - Includes curated BAIclaw skills such as Justin Sun Perspective Skill, HTX/Binance, Web3, and more
-- Promotions can earn Credits rewards
 
 ### Subscription Usage & Charge Order
 
@@ -134,7 +142,7 @@ The platform uses a prepaid model, so you need to top up your account to obtain 
 The platform now supports both fiat and on-chain top-up flows end to end. You can follow the on-screen instructions to top up with Stripe-supported card payments, WeChat Pay, Alipay, UnionPay, and other available fiat payment methods, or use supported blockchain networks and tokens for on-chain payment.
 
 :::caution Security reminder
-Before topping up, make sure the address bar shows an official B.AI access URL, such as `https://chat.b.ai/chat`, `https://chat.ainft.com/chat`, or `https://chat.bankofai.io/chat`. Do not continue from unfamiliar links, search ads, or pages with a different domain.
+Before topping up, make sure the address bar shows an official B.AI access URL, such as `https://chat.b.ai/chat` or `https://chat.bankofai.io/chat`. Do not continue from unfamiliar links, search ads, or pages with a different domain.
 
 Complete fund-related operations only in a trusted network environment. Avoid topping up on public or shared Wi-Fi, and always review the payment details shown by your wallet before confirming.
 :::
