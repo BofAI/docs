@@ -201,7 +201,7 @@ In this case the inference metering, the agent's budget, and the payment channel
 
 ### 6.4 A minimal reference implementation
 
-The repository's [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) provides a runnable reference with the same **TRON Nile** structure described above: it substitutes `GET /weather` for the inference endpoint, but the path through the first TRC-20 deposit, subsequent vouchers, and background claim/settle is identical. To use it for an inference service, replace the route's business logic with a model call and keep the `batch-settlement` TRON payment registration and channel management.
+The repository's [examples/typescript](https://github.com/BofAI/x402/tree/main/examples/typescript) provides a runnable reference with the same **TRON Nile** structure described above: it substitutes `GET /weather` for the inference endpoint, but the path through the first TRC-20 deposit, subsequent vouchers, and background claim/settle is identical. To use it for an inference service, replace the route's business logic with a model call and keep the `batch-settlement` TRON payment registration and channel management.
 
 The Facilitator is an indispensable settlement service on this TRON path. For a minimal integration, prefer the official BANK OF AI hosted Facilitator: on the Nile testnet set `FACILITATOR_URL` to `https://tn-facilitator.bankofai.io`, and switch to `https://facilitator.bankofai.io` for production. It handles the on-chain execution of verification, deposit, claim, settle, and refund.
 
