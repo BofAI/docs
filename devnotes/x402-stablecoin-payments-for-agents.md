@@ -38,7 +38,7 @@ BANK OF AI x402 is fully compatible with the core HTTP payment protocol and inte
 
 Within the TRON ecosystem, [BANK OF AI](/BANK-OF-AI/Intro/) positions itself as "your Web3 AI gateway," giving agents the ability to pay, prove identity, act, and reason. The product matrix uses a three-layer architecture. The **application layer** is where agents run and get used — agent harnesses, agent applications, and marketplaces. The **middle layer** is what BANK OF AI provides — agent integration and Skills, Agent Wallet, x402 payment services, and MCP services, plus the x402 SDK, 8004 SDK, and the CLI tooling. The **infrastructure and standards layer** holds the protocol standards and the chain and model foundations they depend on — MCP / x402 / 8004, on-chain contracts and assets, and LLM services and foundation models.
 
-![BANK OF AI product matrix](/img/devnotes/bankofai-product-matrix.svg)
+![BANK OF AI product matrix](/img/devnotes/bankofai-product-matrix-en.svg)
 
 In this layering, x402 is the open payment protocol in the infrastructure and standards layer, sitting alongside 8004 which handles agent identity and reputation; MCP defines how agents and tools exchange context. The x402 Gateway, x402 Facilitator, x402 Recharge Server, Agent Wallet, Skills, and the various MCP Servers live in the middle layer, turning those protocols into directly callable capabilities. Each layer can be used on its own or combined as the scenario requires: x402 when you need to pay, 8004 when you need to verify identity or reputation, MCP when you need to connect to tools or on-chain services.
 
@@ -53,7 +53,7 @@ In this layering, x402 is the open payment protocol in the infrastructure and st
 
 ### 3.2 One complete x402 payment
 
-![One complete BANK OF AI x402 payment](/img/devnotes/tron-x402-payment-flow.svg)
+![One complete BANK OF AI x402 payment](/img/devnotes/tron-x402-payment-flow-en.svg)
 
 1. The agent sends an ordinary HTTP request to a paid endpoint.
 2. The Resource Server returns `402 Payment Required`, publishing the acceptable payment options.
@@ -126,7 +126,7 @@ Cumulative vouchers are also the key to replay protection. The cap on call N equ
 
 ### 5.3 The full flow
 
-![Batch Settlement payment channel and cumulative vouchers](/img/devnotes/batch-settlement-channel.svg)
+![Batch Settlement payment channel and cumulative vouchers](/img/devnotes/batch-settlement-channel-en.svg)
 
 The flow in the diagram splits into three phases. The first two solve "how to establish a payable balance" and "how to call continuously without waiting for on-chain confirmation"; only the third formally settles the accumulated charges.
 

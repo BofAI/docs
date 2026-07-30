@@ -5,7 +5,7 @@
     <marker id="p3" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#7e22ce"/></marker>
   </defs>
   <rect width="1280" height="860" rx="24" fill="#F7F8FC"/>
-  <text x="640" y="44" text-anchor="middle" font-size="28" font-weight="700" fill="#17213A">Bank of AI x402 Batch Settlement：单向支付通道 + 累积凭证</text>
+  <text x="640" y="44" text-anchor="middle" font-size="28" font-weight="700" fill="#17213A">BANK OF AI x402 Batch Settlement：单向支付通道 + 累积凭证</text>
   <rect x="60" y="80" width="220" height="52" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2"/><text x="170" y="113" text-anchor="middle" font-size="17" font-weight="700" fill="#1e3a8a">客户端（payer）</text>
   <rect x="430" y="80" width="220" height="52" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/><text x="540" y="113" text-anchor="middle" font-size="17" font-weight="700" fill="#14532d">资源服务器</text>
   <rect x="800" y="80" width="200" height="52" rx="10" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/><text x="900" y="113" text-anchor="middle" font-size="17" font-weight="700" fill="#78350f">Facilitator</text>
