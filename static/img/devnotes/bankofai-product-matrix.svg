@@ -11,8 +11,8 @@
   <rect width="1680" height="1070" fill="#F7F8FA"/>
 
   <!-- 页眉 -->
-  <text x="28" y="44" font-size="14" font-weight="700" letter-spacing="2.4" fill="#98A2B3">BANK OF AI · ARCHITECTURE</text>
-  <text x="28" y="100" font-size="40" font-weight="800" fill="#101828">面向 AI Agent 的 Web3 基础设施</text>
+  <text x="28" y="44" font-size="14" font-weight="700" letter-spacing="2.4" fill="#98A2B3">ARCHITECTURE</text>
+  <text x="28" y="100" font-size="40" font-weight="800" fill="#101828">BANK OF AI: 面向 AI Agent 的 Web3 基础设施</text>
 
   <!-- ══════════ 01 应用层 ══════════ -->
   <g filter="url(#panel)">
