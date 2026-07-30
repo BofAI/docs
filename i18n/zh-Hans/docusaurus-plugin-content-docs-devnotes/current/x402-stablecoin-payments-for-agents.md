@@ -36,11 +36,11 @@ TRON 为 x402 提供了面向稳定币的结算环境。对于以美元计价的
 
 BANK OF AI x402 完全兼容 Coinbase x402 的核心 HTTP 支付协议与交互模型：服务端以 `402 Payment Required` 发布支付要求，客户端签署支付凭证后重试请求，并通过标准化的验证与结算流程完成交付。因此，支持 x402 的 Agent、Resource Server 和 Facilitator 可以复用相同的协议模型。BANK OF AI 的扩展重点位于多网络、稳定币资产以及相应的签名和结算实现层；TRON 则是本文重点展开的结算网络。
 
-在 TRON 生态中，[BANK OF AI](/zh-Hans/BANK-OF-AI/Intro/) 将自身定位为「你的 Web3 AI 门户」，为 Agent 提供付款、身份、行动与认知能力。其架构可分为四层：基础设施层提供区块链网络、基础模型、稳定币资产与合约；协议层由 MCP、x402 和 8004 构成，分别定义 Agent 的工具交互、链上支付以及身份与信誉；Agent 能力与平台服务层覆盖 Agent 集成与 Skills、钱包签名、开发工具与 SDK、x402 支付服务及 MCP 服务；生态与应用层则面向 AI Agent、Agent 应用和 Marketplace。
+在 TRON 生态中，[BANK OF AI](/zh-Hans/BANK-OF-AI/Intro/) 将自身定位为「你的 Web3 AI 门户」，为 Agent 提供付款、身份、行动与认知能力。产品矩阵采用三层架构：**生态与应用层**面向 Agent Harness、Agent 应用与 Marketplace；**中间层**包含 Agent 平台服务、开发工具与 SDK，以及 MCP、x402、8004 等协议；**基础设施层**提供多链网络、稳定币资产、链上合约与 LLM 能力。
 
 ![BANK OF AI 产品矩阵](/img/devnotes/bankofai-product-matrix.svg)
 
-在这套分层中，x402 是协议层的开放支付协议，与负责 Agent 身份和信誉的 8004 并列；MCP 则定义 Agent 与工具之间的上下文交互方式。x402 Gateway、x402 Facilitator、Agent Wallet、Skills 及各类 MCP Server 位于平台服务层，将这些协议转化为可直接调用的能力。各层可独立使用，也可按场景组合：需要支付时使用 x402，需要验证身份或信誉时使用 8004，需要连接工具或链上服务时通过 MCP。
+在这套分层中，x402 是中间层协议栈里的开放支付协议，与负责 Agent 身份和信誉的 8004 并列；MCP 则定义 Agent 与工具之间的上下文交互方式。x402 Gateway、x402 Facilitator、x402 Recharge Server、Agent Wallet、Skills 及各类 MCP Server 位于平台服务层，将这些协议转化为可直接调用的能力。各层可独立使用，也可按场景组合：需要支付时使用 x402，需要验证身份或信誉时使用 8004，需要连接工具或链上服务时通过 MCP。
 
 ## 3. BANK OF AI x402 的架构与支付流程
 
