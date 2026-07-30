@@ -201,7 +201,7 @@ BANK OF AI x402 完全兼容 Coinbase x402 的核心 HTTP 支付协议与交互�
 
 ### 6.4 最小参考实现
 
-仓库的 `examples/typescript` 提供了与上述 **TRON Nile** 结构相同的可运行参考实现：它以 `GET /weather` 代替推理端点，但首笔 TRC-20 Deposit、后续 Voucher 与后台 Claim/Settle 的路径完全一致。要将它用于推理服务，只需把路由业务替换为模型调用，并保留 `batch-settlement` 的 TRON 支付注册与通道管理。
+仓库的 [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) 提供了与上述 **TRON Nile** 结构相同的可运行参考实现：它以 `GET /weather` 代替推理端点，但首笔 TRC-20 Deposit、后续 Voucher 与后台 Claim/Settle 的路径完全一致。要将它用于推理服务，只需把路由业务替换为模型调用，并保留 `batch-settlement` 的 TRON 支付注册与通道管理。
 
 Facilitator 是这条 TRON 路径中不可缺少的结算服务。最小接入建议优先使用 BANK OF AI 官方托管 Facilitator：在 Nile 测试网将 `FACILITATOR_URL` 配置为 `https://tn-facilitator.bankofai.io`；切换生产环境时使用 `https://facilitator.bankofai.io`。它负责验证、Deposit、Claim、Settle 与 Refund 的链上执行。
 
