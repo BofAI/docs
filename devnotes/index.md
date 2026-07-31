@@ -9,4 +9,4 @@ Practical, battle-tested guidance from the BANK OF AI team — hands-on walkthro
 
 ## Practices
 
-- [**Your First On-Chain Swap, Step by Step**](./first-onchain-swap/) — a complete walkthrough of one real task on the Nile testnet, including what to check at each step and what to do when it fails.
+- [**BANK OF AI x402: Stablecoin Payments for AI Agents**](./x402-stablecoin-payments-for-agents/) — how the HTTP 402 challenge–response works, when to choose `exact` / `exact_gasfree` / `upto` / `batch-settlement`, and an end-to-end paid-inference case study on TRON.
