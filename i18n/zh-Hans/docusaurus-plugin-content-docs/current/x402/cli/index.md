@@ -14,10 +14,12 @@ x402 CLI（`@bankofai/x402-cli`）把 [x402 支付协议](../index.md)搬进了�
 
 ```bash
 # 支付任意受 x402 保护的接口
-x402-cli pay https://api.example.com/paid --network tron:nile --token USDT
+x402-cli pay https://api.example.com/paid --network tron:0xcd8690dc --token USDT
 ```
 
-它完全构建在已发布的 TypeScript SDK 包之上——`@bankofai/x402-core`、`@bankofai/x402-evm`、`@bankofai/x402-tron`——每一笔稳定币支付都使用 `scheme=exact` 配合 Permit2 授权（`extra.assetTransferMethod=permit2`）。
+它完全构建在已发布的 TypeScript SDK 包之上——`@bankofai/x402-core`、`@bankofai/x402-evm`、`@bankofai/x402-fetch`、`@bankofai/x402-tron`。稳定币支付使用 `scheme=exact`：TRON 与 BSC 走 Permit2 授权，Base USDC 走 EIP-3009。TRON 上还支持 `scheme=exact_gasfree`——由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需持有 TRX。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
+
+默认情况下，`pay` 使用你当前激活的 [Agent Wallet](../../Agent-Wallet/Intro.md) 签名——不需要把私钥放进环境变量。详见 [用 Agent Wallet 付款](./command-reference.md#paying-with-agent-wallet)。
 
 ---
 
@@ -27,7 +29,7 @@ CLI 把能力归为五条命令。
 
 | 命令 | 作用 | 示例 |
 | :--- | :--- | :--- |
-| **`pay`** | 支付一个受 x402 保护的 URL：探测接口、读取 `402` 支付要求、签名并重试。 | `x402-cli pay <url> --network tron:nile --token USDT` |
+| **`pay`** | 支付一个受 x402 保护的 URL：探测接口、读取 `402` 支付要求、签名并重试。 | `x402-cli pay <url> --network tron:0xcd8690dc --token USDT` |
 | **`serve`** | 启动本地 x402 付费端点，返回 `402 Payment Required` 并通过 Facilitator 结算。 | `x402-cli serve --pay-to <address> --amount 0.0001` |
 | **`roundtrip`** | 启动临时服务、立即支付、随后退出——端到端冒烟测试的最快方式。 | `x402-cli roundtrip --pay-to <address>` |
 | **`gateway`** | 管理本地网关的 provider 文件：校验、脚手架、启动、构建目录资产。 | `x402-cli gateway check ./providers` |
@@ -49,7 +51,7 @@ x402-cli pay https://api.example.com/paid --dry-run --json
 {
   "ok": true,
   "command": "client",
-  "network": "tron:nile",
+  "network": "tron:0xcd8690dc",
   "scheme": "exact",
   "result": {
     "url": "https://api.example.com/paid",
@@ -68,23 +70,28 @@ CLI 内置了代币注册表。用 `--network` 指定网络，用 `--token` 指�
 
 | 网络 | 标识符 | 内置代币 |
 | :--- | :--- | :--- |
-| **TRON 主网** | `tron:mainnet` | USDT、USDD |
-| **TRON Nile 测试网** | `tron:nile` | USDT、USDD |
-| **TRON Shasta 测试网** | `tron:shasta` | USDT |
+| **TRON 主网** | `tron:0x2b6653dc` | USDT、USDD |
+| **TRON Nile 测试网** | `tron:0xcd8690dc` | USDT、USDD |
+| **TRON Shasta 测试网** | `tron:0x94a9059e` | USDT |
 | **BSC 主网** | `eip155:56` | USDT |
 | **BSC 测试网** | `eip155:97` | USDT、USDC |
+| **Base 主网** | `eip155:8453` | USDC |
+| **Base Sepolia 测试网** | `eip155:84532` | USDC |
 
-以下简写别名会被自动接受并归一化：
+TRON 网络必须使用标准的 CAIP-2 标识符（`tron:0x…`）。旧的别名如 `tron-mainnet`、`tron:nile`、`mainnet` 等**已不再被接受**——CLI 会直接拒绝，并提示应改用的标准标识符。只有 EVM 别名仍会被自动接受并归一化：
 
 | 别名 | 标准标识符 |
 | :--- | :--- |
-| `tron-mainnet` | `tron:mainnet` |
-| `tron-nile` | `tron:nile` |
-| `tron-shasta` | `tron:shasta` |
 | `bsc-mainnet` | `eip155:56` |
 | `bsc-testnet` | `eip155:97` |
+| `base-mainnet` | `eip155:8453` |
+| `base-sepolia` | `eip155:84532` |
 
-如果代币不在注册表里，用 `--asset <address>` 搭配 `--decimals <count>` 传入。
+已注册代币的精度以注册表为准，不可覆盖。只有未注册的非 Base 资产，才需要用 `--asset <address>` 搭配 `--decimals <count>` 传入。
+
+:::note 不同链的授权方式不同
+TRON 与 BSC 的稳定币支付走 **Permit2** 授权，Base USDC 走 **EIP-3009**（`transferWithAuthorization`）。两者都在同一个 `exact` 方案下——CLI 会按网络自动选用，你不需要自己配置。
+:::
 
 ---
 
@@ -110,10 +117,11 @@ CLI 内置了代币注册表。用 `--network` 指定网络，用 `--token` 指�
 :::warning
 支付会转移真实的链上资产，且不可撤销。请牢记以下原则：
 
-- **绝不硬编码私钥。** 在共享环境中，优先用环境变量（`TRON_PRIVATE_KEY`、`EVM_PRIVATE_KEY`、`PRIVATE_KEY`）或一个 [agent-wallet](../../Agent-Wallet/Intro.md) 付款钱包，而不是 `--private-key` 参数。
-- **先在测试网上验证。** 上主网前，先用 `tron:nile` 或 `eip155:97` 跑通。
+- **让 Agent Wallet 保管私钥。** 它是默认付款方、在本地完成签名——你不需要把私钥写进配置文件或环境变量。`--private-key` 与 `*_PRIVATE_KEY` 变量仅用于开发和 CI。
+- **先在测试网上验证。** 上主网前，先用 `tron:0xcd8690dc`、`eip155:97` 或 `eip155:84532` 跑通。
 - **付款前先预览。** 用 `pay --dry-run` 在签名前看清确切的支付要求。
 - **给金额设上限。** 用 `--max-amount` 或 `--max-raw-amount`，让定价异常的接口无法超额扣款。
+- **不要盲目跟随重定向。** CLI 有意不自动跟随付费请求的 HTTP 重定向，以确保 `PAYMENT-SIGNATURE` 不会被转发到其他源。遇到重定向时，先确认目标地址，再显式请求最终 URL。
 - **只放最小额度。** 付款方地址里只保留当前任务所需的资金。
 :::
 

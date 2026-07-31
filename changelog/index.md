@@ -8,6 +8,21 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
+<div className="changelog-date">Jul 30, 2026</div>
+<div className="changelog-body">
+
+### x402 CLI v1.0.2 · Catalog — Base support
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">Base</span></div>
+
+- **Base is live** — `eip155:8453` and `eip155:84532` with USDC, in both the CLI and the service catalog. Base settles under `exact` using EIP-3009 authorization instead of Permit2.
+- **Agent Wallet is now the CLI's default payer** — `pay` signs with your active wallet, so no private key in an environment variable. With wallets configured but none active, the CLI stops before signing rather than choosing for you. [Details](./x402/)
+- Paid requests no longer follow HTTP redirects, keeping `PAYMENT-SIGNATURE` from reaching another origin.
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Jul 21, 2026</div>
 <div className="changelog-body">
 
@@ -21,6 +36,20 @@ Product updates and announcements for BANK OF AI.
 - **New model**: Kimi K3 pricing docs added to LLM Service.
 - **Rewritten BANK OF AI introduction** — restructured around what your AI actually gains, with a capability overview and an end-to-end execution example.
 - **New section — Best Practices**: hands-on walkthroughs and habits worth keeping, alongside the product docs. [Read the first one](../devnotes/first-onchain-swap/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Jul 20, 2026</div>
+<div className="changelog-body">
+
+### x402 CLI v1.0.1 · Catalog
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">TRON</span></div>
+
+- **x402 CLI v1.0.1** — TRON **GasFree** payments (`exact_gasfree`, no TRX needed), canonical CAIP-2 network IDs (legacy `tron:nile` rejected), and `settled` vs `delivered` reporting. Built on x402 SDK 1.0.1. [Details](./x402/)
+- **x402 Catalog** — routes now support `exact_gasfree` on TRON; canonical CAIP-2 required; legacy `fee` / `feeConfig` fields dropped. [Details](./x402/)
 
 </div>
 </div>

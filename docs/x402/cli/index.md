@@ -14,10 +14,12 @@ Think of it this way: the [x402 SDK](../sdk-features.md) is what you embed insid
 
 ```bash
 # Pay any x402-protected endpoint
-x402-cli pay https://api.example.com/paid --network tron:nile --token USDT
+x402-cli pay https://api.example.com/paid --network tron:0xcd8690dc --token USDT
 ```
 
-It is built entirely on the published TypeScript SDK packages — `@bankofai/x402-core`, `@bankofai/x402-evm`, and `@bankofai/x402-tron` — and every stablecoin payment uses `scheme=exact` with Permit2 authorization (`extra.assetTransferMethod=permit2`).
+It is built entirely on the published TypeScript SDK packages — `@bankofai/x402-core`, `@bankofai/x402-evm`, `@bankofai/x402-fetch`, and `@bankofai/x402-tron`. Stablecoin payments use `scheme=exact`: Permit2 authorization on TRON and BSC, EIP-3009 on Base USDC. TRON also supports `scheme=exact_gasfree`, where a relayer pays the network energy and deducts its fee from the payment token — so the payer doesn't need to hold TRX. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
+
+By default, `pay` signs with your active [Agent Wallet](../../Agent-Wallet/Intro.md) — no private key in an environment variable. See [Paying with Agent Wallet](./command-reference.md#paying-with-agent-wallet).
 
 ---
 
@@ -27,7 +29,7 @@ The CLI groups its capabilities into five commands.
 
 | Command | What it does | Example |
 | :--- | :--- | :--- |
-| **`pay`** | Pay an x402-protected URL. Probes the endpoint, reads the `402` challenge, signs a payment, and retries. | `x402-cli pay <url> --network tron:nile --token USDT` |
+| **`pay`** | Pay an x402-protected URL. Probes the endpoint, reads the `402` challenge, signs a payment, and retries. | `x402-cli pay <url> --network tron:0xcd8690dc --token USDT` |
 | **`serve`** | Run a local x402 paywall that returns `402 Payment Required` and settles through a facilitator. | `x402-cli serve --pay-to <address> --amount 0.0001` |
 | **`roundtrip`** | Start a temporary server, immediately pay it, then exit — the fastest way to smoke-test end to end. | `x402-cli roundtrip --pay-to <address>` |
 | **`gateway`** | Manage local gateway provider files: validate, scaffold, start, and build catalog assets. | `x402-cli gateway check ./providers` |
@@ -49,7 +51,7 @@ x402-cli pay https://api.example.com/paid --dry-run --json
 {
   "ok": true,
   "command": "client",
-  "network": "tron:nile",
+  "network": "tron:0xcd8690dc",
   "scheme": "exact",
   "result": {
     "url": "https://api.example.com/paid",
@@ -68,23 +70,28 @@ The CLI ships a built-in token registry. Pass a network with `--network` and a t
 
 | Network | Identifier | Built-in tokens |
 | :--- | :--- | :--- |
-| **TRON Mainnet** | `tron:mainnet` | USDT, USDD |
-| **TRON Nile Testnet** | `tron:nile` | USDT, USDD |
-| **TRON Shasta Testnet** | `tron:shasta` | USDT |
+| **TRON Mainnet** | `tron:0x2b6653dc` | USDT, USDD |
+| **TRON Nile Testnet** | `tron:0xcd8690dc` | USDT, USDD |
+| **TRON Shasta Testnet** | `tron:0x94a9059e` | USDT |
 | **BSC Mainnet** | `eip155:56` | USDT |
 | **BSC Testnet** | `eip155:97` | USDT, USDC |
+| **Base Mainnet** | `eip155:8453` | USDC |
+| **Base Sepolia Testnet** | `eip155:84532` | USDC |
 
-Convenience aliases are accepted and normalized automatically:
+Always pass TRON networks as their canonical CAIP-2 identifiers (`tron:0x…`). Legacy aliases like `tron-mainnet`, `tron:nile`, or `mainnet` are **rejected** — the CLI reports the canonical identifier to use instead. Only the EVM aliases are still accepted and normalized automatically:
 
 | Alias | Canonical identifier |
 | :--- | :--- |
-| `tron-mainnet` | `tron:mainnet` |
-| `tron-nile` | `tron:nile` |
-| `tron-shasta` | `tron:shasta` |
 | `bsc-mainnet` | `eip155:56` |
 | `bsc-testnet` | `eip155:97` |
+| `base-mainnet` | `eip155:8453` |
+| `base-sepolia` | `eip155:84532` |
 
-For a token that isn't in the registry, pass `--asset <address>` together with `--decimals <count>`.
+Registered token decimals are authoritative and can't be overridden. For an unregistered, non-Base asset, pass `--asset <address>` together with `--decimals <count>`.
+
+:::note Authorization differs by chain
+TRON and BSC stablecoin payments use **Permit2** authorization; Base USDC uses **EIP-3009** (`transferWithAuthorization`). Both run through the same `exact` scheme — the CLI picks the right one for the network, so you don't configure it yourself.
+:::
 
 ---
 
@@ -110,10 +117,11 @@ Use the CLI to explore, test, and script against x402 endpoints, or to give an A
 :::warning
 Payments move real on-chain assets and cannot be reversed. Keep these principles in mind:
 
-- **Never hardcode private keys.** Prefer environment variables (`TRON_PRIVATE_KEY`, `EVM_PRIVATE_KEY`, `PRIVATE_KEY`) or an [agent-wallet](../../Agent-Wallet/Intro.md) payer wallet over the `--private-key` flag in shared environments.
-- **Test on testnet first.** Use `tron:nile` or `eip155:97` before running any payment on mainnet.
+- **Let Agent Wallet hold the key.** It is the default payer and signs locally — you never put a private key in a config file or environment variable. `--private-key` and the `*_PRIVATE_KEY` variables exist for development and CI only.
+- **Test on testnet first.** Use `tron:0xcd8690dc`, `eip155:97`, or `eip155:84532` before running any payment on mainnet.
 - **Preview before you pay.** Run `pay --dry-run` to inspect the exact requirement before signing.
 - **Cap the amount.** Use `--max-amount` or `--max-raw-amount` so a mispriced endpoint can't overcharge you.
+- **Don't follow redirects blindly.** The CLI deliberately won't auto-follow an HTTP redirect on a paid request, so `PAYMENT-SIGNATURE` is never forwarded to another origin. If an endpoint redirects, verify the destination and call the final URL explicitly.
 - **Fund the minimum.** Only keep the funds the current task needs in the payer address.
 :::
 

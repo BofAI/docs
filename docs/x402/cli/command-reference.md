@@ -46,18 +46,35 @@ x402-cli pay <url> [options]
 | `--method <method>` | HTTP method (default: `GET`) |
 | `--header "Name: Value"` | Request header; repeatable |
 | `--body <body>` | Request body for non-`GET`/`HEAD` methods |
-| `--network <caip2>` | Require a specific network (e.g. `tron:nile`) |
-| `--token <symbol>` | Require a specific token (e.g. `USDT`) |
-| `--scheme <scheme>` | Require a specific x402 scheme (e.g. `exact`) |
+| `--network <caip2>` | Require a specific network (e.g. `tron:0xcd8690dc`, `base-mainnet`) |
+| `--token <symbol>` | Require a specific token (e.g. `USDT`, `USDC`) |
+| `--asset <address>` | Require a specific asset address |
+| `--decimals <count>` | Decimals for an unregistered explicit asset |
+| `--scheme <scheme>` | Require a specific x402 scheme: `exact` or `exact_gasfree` |
+| `--gasfree-api-url <url>` | Override the TRON GasFree relayer API URL (env `X402_GASFREE_API_URL`) |
+| `--max-gasfree-fee <amount>` | Maximum GasFree relayer fee, in token units |
+| `--max-gasfree-fee-raw <n>` | Maximum GasFree relayer fee, in smallest units |
 | `--max-amount <amount>` | Maximum human-readable amount you'll pay |
 | `--max-raw-amount <amount>` | Maximum amount in smallest units |
 | `--dry-run` | Read the requirement but do not sign or pay |
-| `--private-key <hex>` | Explicit payer key (or use the env vars below) |
+| `--wallet-id <id>` | Explicitly select a configured Agent Wallet (env `AGENT_WALLET_ID`) |
+| `--private-key <hex>` | Override Agent Wallet — development and CI only |
 | `--rpc-url <url>` | Explicit network RPC URL |
 | `--timeout-ms <ms>` | Network timeout in ms (default: `30000`) |
 | `--json` | Print the JSON envelope |
 
-The payer key is read from `--private-key`, or from an environment variable: `TRON_PRIVATE_KEY` for TRON networks and `EVM_PRIVATE_KEY` for EVM networks, with `PRIVATE_KEY` accepted as a fallback for either network.
+Registered token decimals are authoritative and can't be overridden with `--decimals`. Pass `--asset` and `--decimals` together only for an unregistered, non-Base asset.
+
+### Paying with Agent Wallet {#paying-with-agent-wallet}
+
+By default `pay` resolves the **active [Agent Wallet](../../Agent-Wallet/Intro.md)** for the selected network and delegates signing to it — no private key in a config file or environment variable.
+
+- If wallets are configured but none is active, the CLI **stops before signing** rather than silently picking the first one. Set an active wallet, or select one explicitly with `--wallet-id` / `AGENT_WALLET_ID`.
+- Use `AGENT_WALLET_DIR` to point at a non-default Agent Wallet directory.
+- The CLI never reads private keys out of `wallets_config.json`.
+- On EVM networks it checks the payer's token balance before signing, and returns the resolved wallet ID, address, and raw balance in the result. The EIP-712 payer must match that address.
+
+For **development and CI only**, `--private-key` or the `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` environment variables override Agent Wallet. Prefer the environment variables over the flag in shared environments — command-line arguments can be visible to other local processes.
 
 **Examples:**
 
@@ -68,8 +85,8 @@ x402-cli pay https://api.example.com/paid --dry-run --json
 
 ```bash
 # Pay, but never spend more than 0.01 USDT
-TRON_PRIVATE_KEY=<hex> x402-cli pay https://api.example.com/paid \
-  --network tron:nile --token USDT --max-amount 0.01
+x402-cli pay https://api.example.com/paid \
+  --network tron:0xcd8690dc --token USDT --max-amount 0.01
 ```
 
 ```bash
@@ -79,6 +96,59 @@ x402-cli pay https://api.example.com/paid \
 ```
 
 If the endpoint does not return `402`, the CLI reports the actual status and response instead of paying.
+
+### GasFree payments (TRON) {#gasfree-payments-tron}
+
+On TRON, `scheme=exact_gasfree` lets a relayer pay the network energy and deduct its fee from the payment token, so the payer doesn't need to hold TRX. The CLI normally selects this scheme automatically when the server's `402` challenge advertises it; pass `--scheme exact_gasfree` to require it explicitly.
+
+GasFree fees are **separate** from the advertised payment amount. Set a fee limit so the CLI estimates the relayer fee and rejects the payment before signing if the estimate is too high:
+
+```bash
+x402-cli pay https://api.example.com/pay \
+  --network tron:0xcd8690dc --token USDT \
+  --scheme exact_gasfree \
+  --max-amount 0.01 \
+  --max-gasfree-fee 0.5 \
+  --json
+```
+
+`--max-gasfree-fee` and `--max-gasfree-fee-raw` are mutually exclusive, and only apply to an `exact_gasfree` requirement. Override the relayer endpoint with `--gasfree-api-url <url>` or `X402_GASFREE_API_URL`.
+
+A paid response distinguishes `settled` (the payment cleared on-chain) from `delivered` (the upstream HTTP business response succeeded). A settled upstream failure reports `paid=true`, `settled=true`, `delivered=false` and still includes its transaction information — inspect the transaction and provider behavior before retrying.
+
+### Paying on Base {#paying-on-base}
+
+Base settles USDC through the standard `exact` EVM flow, using **EIP-3009** (`transferWithAuthorization`) rather than Permit2. You don't select that — the CLI applies the right authorization for the network.
+
+```bash
+x402-cli pay https://api.example.com/pay \
+  --network base-mainnet \
+  --token USDC \
+  --max-amount 0.01 \
+  --rpc-url <production-rpc-url>
+```
+
+The built-in public RPC is meant for development only. In production, supply an RPC endpoint via `--rpc-url`, `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532`, or `EVM_RPC_URL`.
+
+:::caution Redirects are not followed
+The probe and the signed retry deliberately do **not** follow HTTP redirects, so `PAYMENT-SIGNATURE` is never forwarded to another origin. If an endpoint redirects, inspect the destination and call the final trusted URL explicitly.
+:::
+
+### Environment variables {#pay-environment-variables}
+
+Some settings have no flag and are configured through the environment only:
+
+| Variable | Purpose |
+| :--- | :--- |
+| `AGENT_WALLET_DIR` | Use a non-default Agent Wallet directory |
+| `AGENT_WALLET_ID` | Select a configured wallet (same as `--wallet-id`) |
+| `TRON_RPC_URL` | TRON RPC endpoint (falls back from `--rpc-url`) |
+| `TRON_GRID_API_KEY` | TronGrid API key — set this to avoid public rate limits |
+| `X402_TRON_ALLOWANCE_MODE` | TRON allowance handling; defaults to `auto` |
+| `EVM_RPC_URL` | Default EVM RPC endpoint |
+| `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` | Per-network RPC for Base Mainnet / Base Sepolia |
+| `X402_GASFREE_API_URL` | Override the TRON GasFree relayer API |
+| `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` | Override Agent Wallet — development and CI only |
 
 ---
 
@@ -95,7 +165,8 @@ x402-cli serve --pay-to <address> [options]
 | `--pay-to <address>` | **(required)** Recipient wallet address |
 | `--amount <amount>` | Human-readable token amount (default: `0.0001`) |
 | `--raw-amount <amount>` | Amount in smallest units (mutually exclusive with `--amount`) |
-| `--network <caip2>` | Payment network (default: `tron:nile`) |
+| `--network <caip2>` | Payment network (default: `tron:0xcd8690dc`) |
+| `--scheme <scheme>` | Payment scheme: `exact` or `exact_gasfree` (default: `exact`) |
 | `--token <symbol>` | Token symbol (default: `USDT`) |
 | `--asset <address>` | Explicit token address for an unregistered token |
 | `--decimals <count>` | Token decimals, required with an unregistered `--asset` |
@@ -103,6 +174,7 @@ x402-cli serve --pay-to <address> [options]
 | `--port <port>` | Bind port (default: `4020`) |
 | `--resource-url <url>` | URL advertised in the payment requirement |
 | `--facilitator-url <url>` | Facilitator base URL (default: `https://facilitator.bankofai.io`) |
+| `--valid-for-seconds <n>` | How long the payment requirement stays valid (default: `300`) |
 | `--timeout-ms <ms>` | Facilitator timeout in ms (default: `30000`) |
 | `-d, --daemon` | Run in the background and print the child pid |
 | `--json` | Print the JSON envelope |
@@ -119,7 +191,7 @@ The server exposes four routes:
 **Examples:**
 
 ```bash
-x402-cli serve --pay-to T... --network tron:nile --token USDT
+x402-cli serve --pay-to T... --network tron:0xcd8690dc --token USDT
 ```
 
 ```bash
@@ -139,9 +211,11 @@ x402-cli roundtrip --pay-to <address> [serve/pay options]
 **Example:**
 
 ```bash
-TRON_PRIVATE_KEY=<hex> x402-cli roundtrip \
-  --pay-to T... --amount 0.0001 --network tron:nile --token USDT
+x402-cli roundtrip \
+  --pay-to T... --amount 0.0001 --network tron:0xcd8690dc --token USDT
 ```
+
+With `--json`, `roundtrip` emits a single JSON document containing separate `serve` and `pay` results.
 
 ---
 

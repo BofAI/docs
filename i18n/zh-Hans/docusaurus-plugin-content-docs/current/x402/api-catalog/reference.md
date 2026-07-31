@@ -60,12 +60,17 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| `network` | string | 该路由结算所在的 CAIP-2 链 ID（如 `tron:0x2b6653dc`、`eip155:56`） |
+| `network` | string | 该路由结算所在的标准 CAIP-2 链 ID（如 `tron:0x2b6653dc`、`tron:0xcd8690dc`、`eip155:56`）。旧的 TRON 别名如 `tron:nile` 会被 schema 校验拒绝。 |
 | `provider` | string | 处理该网络的 gateway provider `fqn` |
-| `scheme` | string | 该路由的 x402 支付方案，如 `exact` —— 由每条路由各自声明 |
+| `scheme` | string | 该路由的 x402 支付方案：`exact`，或在 TRON 上 `exact_gasfree` —— 由每条路由各自声明 |
+| `assetTransferMethod` | string | `exact` 路由使用的授权方式：TRON 与 BSC 填 `permit2`，Base USDC 填 `eip3009`；`exact_gasfree` 路由**不要**带该字段。 |
 | `url` | string | 该网络路由的完整 gateway URL |
 
 构建时该字段以 `x402_routes` 透传到产物。存在时，调用方/Agent 按目标支付链选择对应路由；顶层 `url` 仍是默认路由。
+
+:::note GasFree 路由
+在 TRON 上，可以为同一端点在 `exact` 路由之外再加一条 `exact_gasfree` 路由：由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需 TRX。GasFree 路由仅限 TRON，且不能带 `assetTransferMethod`。在 x402 SDK 1.0.1 下，relayer 费用由客户端估算，因此目录路由**不得**再发布旧的 `fee` 或 `feeConfig` 字段。
+:::
 
 例如一个发币端点可能为每条支持的链各提供一条路由 —— TRON 主网与 BSC 主网，各有自己的 `provider` 和 `scheme`。调用时把 `x402-cli pay` 指向所选路由的 `url`，并传入匹配的 `--network` / `--scheme`：
 
@@ -116,6 +121,8 @@ security   shopping    storage     translation
 | TRON Shasta 测试网 | `tron:0x94a9059e` |
 | BNB Chain (BSC) | `eip155:56` |
 | BNB 测试网 | `eip155:97` |
+| Base 主网 | `eip155:8453` |
+| Base Sepolia 测试网 | `eip155:84532` |
 
 构建时会把每个链 ID 解析为展示元数据（`kind` / `label` / `label_zh`），前端无需自己解析 CAIP-2 —— 见[前端展示字段](#前端展示字段)。
 

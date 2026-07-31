@@ -34,20 +34,23 @@ Yes. From a project that has it installed, run `node dist/cli.js <command>`, or 
 
 ### Do I need a wallet to use the CLI?
 
-Only for actual payments. Read-only commands — `pay --dry-run`, `catalog search`, `catalog show`, `gateway check` — need no wallet. A real `pay` or `roundtrip` requires a payer private key.
+Only for actual payments. Read-only commands — `pay --dry-run`, `catalog search`, `catalog show`, `gateway check` — need no wallet. A real `pay` or `roundtrip` signs with your active [Agent Wallet](../../Agent-Wallet/Intro.md).
 
-### How do I provide my private key?
+### How does the CLI choose which wallet to sign with?
 
-Set one of these environment variables:
+It resolves the **active Agent Wallet** for the payment network. If wallets are configured but none is marked active, the CLI stops before signing instead of guessing — set one active, or select one explicitly:
 
-- **TRON networks** → `TRON_PRIVATE_KEY`
-- **EVM networks** (BSC) → `EVM_PRIVATE_KEY`
-- **Either network** → `PRIVATE_KEY`, used as a fallback when the network-specific variable isn't set
+- `--wallet-id <id>` or `AGENT_WALLET_ID` — pick a specific configured wallet
+- `AGENT_WALLET_DIR` — use a non-default Agent Wallet directory
 
-You can also pass `--private-key <hex>` for a single command, but avoid this in shared shells or committed scripts — command-line arguments are recorded in shell history and process listings.
+The CLI never reads private keys out of `wallets_config.json`. On EVM networks it also checks the payer's token balance before signing, and returns the resolved wallet ID, address, and raw balance in the result.
+
+### Can I still use a raw private key?
+
+Yes, but only for development and CI: `--private-key <hex>`, or the `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` environment variables. Prefer the environment variable over the flag in shared environments — command-line arguments are recorded in shell history and process listings.
 
 :::caution
-For anything beyond throwaway testing, use an [agent-wallet](../../Agent-Wallet/Intro.md) payer wallet rather than raw environment keys, and keep only the minimum funds the current task needs in the payer address.
+For anything beyond throwaway testing, use Agent Wallet rather than raw keys, and keep only the minimum funds the current task needs in the payer address.
 :::
 
 ### Will a payment ever spend more than I expect?
@@ -56,7 +59,17 @@ Not if you cap it. Use `--max-amount <human>` or `--max-raw-amount <smallest-uni
 
 ### Which networks and tokens are supported?
 
-TRON (`tron:mainnet`, `tron:nile`, `tron:shasta`) and BSC (`eip155:56`, `eip155:97`), with a built-in registry for USDT, USDD, and USDC depending on the network. See [x402 CLI overview](./index.md#supported-networks--tokens) for the full table. For a token that isn't registered, pass `--asset <address>` with `--decimals <count>`.
+TRON (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`), BSC (`eip155:56`, `eip155:97`), and Base (`eip155:8453`, `eip155:84532`), with a built-in registry for USDT, USDD, and USDC depending on the network. See [x402 CLI overview](./index.md#supported-networks--tokens) for the full table. Registered token decimals are authoritative; pass `--asset <address>` with `--decimals <count>` only for an unregistered, non-Base asset.
+
+Pass TRON networks as their canonical CAIP-2 identifiers (`tron:0x…`). Legacy identifiers such as `tron:nile`, `tron:mainnet`, or `mainnet` are no longer accepted — the CLI rejects them and tells you the canonical identifier to use. EVM aliases (`bsc-mainnet`, `bsc-testnet`, `base-mainnet`, `base-sepolia`) are accepted.
+
+### How is paying on Base different?
+
+Base settles USDC with **EIP-3009** (`transferWithAuthorization`) instead of Permit2, still under the `exact` scheme. You don't configure this — the CLI applies the right authorization per network. The one thing to set yourself is RPC: the built-in public endpoint is for development only, so in production pass `--rpc-url`, or set `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` / `EVM_RPC_URL`. See [Paying on Base](./command-reference.md#paying-on-base).
+
+### Can I pay without holding TRX?
+
+Yes, on TRON, using GasFree. With `scheme=exact_gasfree`, a relayer pays the network energy and deducts its fee from the payment token, so the payer wallet needs only the stablecoin — no TRX. The CLI selects `exact_gasfree` automatically when the endpoint advertises it, or you can require it with `--scheme exact_gasfree`. Because the relayer fee is separate from the payment amount, cap it with `--max-gasfree-fee <amount>`. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
 
 ---
 
@@ -66,7 +79,16 @@ Every failure prints a stable error `code`, a message, and a `hint`. Add `--json
 
 | Code | What happened | How to fix it |
 | :--- | :--- | :--- |
-| `WALLET_NOT_CONFIGURED` | No payer key found | Set `TRON_PRIVATE_KEY` / `EVM_PRIVATE_KEY` / `PRIVATE_KEY`, or configure an agent-wallet payer |
+| `WALLET_NOT_CONFIGURED` | No active Agent Wallet for this network | Set an active wallet, or select one with `--wallet-id` / `AGENT_WALLET_ID`. For dev/CI, use `--private-key` or a `*_PRIVATE_KEY` variable |
+| `WALLET_PASSWORD_REQUIRED` | Agent Wallet needs its unlock password | Provide the password through Agent Wallet's supported secure configuration |
+| `WALLET_DECRYPTION_FAILED` | Wrong password for the Agent Wallet | Unlock with the correct password and retry |
+| `WALLET_CONFIG_CORRUPT` | Agent Wallet configuration is unreadable | Check `~/.agent-wallet/wallets_config.json`, or recreate the local configuration |
+| `WALLET_NETWORK_ERROR` | Can't reach the Agent Wallet backend | Check connectivity to the configured wallet backend |
+| `WALLET_SIGNING_FAILED` | The wallet couldn't produce the signature | Confirm the active wallet supports this network and typed-data request |
+| `WALLET_UNSUPPORTED_OPERATION` | The wallet backend can't sign typed data for this network | Switch to a wallet backend that supports typed-data signing here |
+| `WALLET_AUTH_FAILED` | Remote wallet authentication was rejected | Check the remote wallet's authentication configuration |
+| `WALLET_ERROR` | Other Agent Wallet failure | Inspect the active wallet configuration and backend status |
+| `TOKEN_TRANSFER_FAILED` | The token `transferFrom` reverted | Check token balance, the token contract, and the payer's allowance |
 | `TRON_ACCOUNT_NOT_ACTIVATED` | The TRON address has never been used on-chain | Send it a small amount of TRX to activate it before signing |
 | `INSUFFICIENT_TOKEN_BALANCE` | Payer lacks the token being charged | Fund the payer with the exact token and network the provider advertises |
 | `INSUFFICIENT_GAS` | Not enough native gas / energy | Fund the payer with the network's native gas token (TRX / BNB) |

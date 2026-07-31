@@ -60,12 +60,17 @@ An endpoint may serve the same capability across several chains, each settling t
 
 | Field | Type | Description |
 |---|---|---|
-| `network` | string | CAIP-2 chain ID this route settles on (e.g. `tron:0x2b6653dc`, `eip155:56`) |
+| `network` | string | Canonical CAIP-2 chain ID this route settles on (e.g. `tron:0x2b6653dc`, `tron:0xcd8690dc`, `eip155:56`). Legacy TRON aliases such as `tron:nile` are rejected by schema validation. |
 | `provider` | string | The gateway provider `fqn` that handles this network |
-| `scheme` | string | x402 payment scheme for this route, e.g. `exact` — each route declares its own |
+| `scheme` | string | x402 payment scheme for this route: `exact` or, on TRON, `exact_gasfree` — each route declares its own |
+| `assetTransferMethod` | string | Authorization used by an `exact` route: `permit2` on TRON and BSC, `eip3009` on Base USDC. **Omit** it on `exact_gasfree` routes. |
 | `url` | string | Full gateway URL for this network's route |
 
 The build passes this through to outputs as `x402_routes`. When present, callers/agents pick the route matching their intended payment chain; the top-level `url` remains the default route.
+
+:::note GasFree routes
+On TRON you can add an `exact_gasfree` route alongside the `exact` one for the same endpoint: a relayer pays the network energy and deducts its fee from the payment token, so the payer needs no TRX. GasFree routes are TRON-only and must not carry `assetTransferMethod`. With x402 SDK 1.0.1 the relayer cost is estimated client-side, so catalog routes must **not** publish the legacy `fee` or `feeConfig` fields.
+:::
 
 For example, a token-launch endpoint might expose one route per supported chain — TRON Mainnet and BSC Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
 
@@ -116,6 +121,8 @@ security   shopping    storage     translation
 | TRON Shasta testnet | `tron:0x94a9059e` |
 | BNB Chain (BSC) | `eip155:56` |
 | BNB Smart Chain testnet | `eip155:97` |
+| Base mainnet | `eip155:8453` |
+| Base Sepolia testnet | `eip155:84532` |
 
 The build resolves each chain ID into display metadata (`kind` / `label` / `label_zh`) so the frontend doesn't have to parse CAIP-2 itself — see [Frontend display fields](#frontend-display-fields).
 

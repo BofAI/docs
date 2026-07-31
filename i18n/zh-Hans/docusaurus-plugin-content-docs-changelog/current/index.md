@@ -8,6 +8,21 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-07-30</div>
+<div className="changelog-body">
+
+### x402 CLI v1.0.2 · Catalog —— 支持 Base
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">x402</span><span className="changelog-tag">Base</span></div>
+
+- **Base 上线**——`eip155:8453` 与 `eip155:84532`，均支持 USDC，CLI 与服务目录同步支持。Base 在 `exact` 方案下使用 EIP-3009 授权，而非 Permit2。
+- **Agent Wallet 成为 CLI 默认付款方**——`pay` 用你当前激活的钱包签名，私钥不再进环境变量。若配置了钱包但没有激活项，CLI 会在签名前停下而不是替你选。[详情](./x402/)
+- 付费请求不再跟随 HTTP 重定向，避免 `PAYMENT-SIGNATURE` 流向其他源。
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-07-21</div>
 <div className="changelog-body">
 
@@ -21,6 +36,20 @@ BANK OF AI 各产品的更新与公告。
 - **新增模型**：LLM Service 增加 Kimi K3 定价文档。
 - **BANK OF AI 简介重写**——围绕"你的 AI 究竟多了什么"重新组织，配四项能力概览与端到端执行示例。
 - **新增板块——最佳实践**：产品文档之外的动手演练与操作习惯沉淀。[阅读第一篇](../devnotes/first-onchain-swap/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-07-20</div>
+<div className="changelog-body">
+
+### x402 CLI v1.0.1 · Catalog
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">x402</span><span className="changelog-tag">TRON</span></div>
+
+- **x402 CLI v1.0.1**——TRON **GasFree** 支付（`exact_gasfree`，无需 TRX）、标准 CAIP-2 网络标识（旧的 `tron:nile` 被拒绝）、`settled` 与 `delivered` 状态区分。基于 x402 SDK 1.0.1。[详情](./x402/)
+- **x402 Catalog**——目录路由现支持 TRON 上的 `exact_gasfree`；网络标识必须用标准 CAIP-2；旧的 `fee` / `feeConfig` 字段已移除。[详情](./x402/)
 
 </div>
 </div>

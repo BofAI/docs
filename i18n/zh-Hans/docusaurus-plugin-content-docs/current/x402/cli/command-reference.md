@@ -46,18 +46,35 @@ x402-cli pay <url> [options]
 | `--method <method>` | HTTP 方法（默认：`GET`） |
 | `--header "Name: Value"` | 请求头，可重复 |
 | `--body <body>` | 非 `GET`/`HEAD` 方法的请求体 |
-| `--network <caip2>` | 要求特定网络（如 `tron:nile`） |
-| `--token <symbol>` | 要求特定代币（如 `USDT`） |
-| `--scheme <scheme>` | 要求特定 x402 scheme（如 `exact`） |
+| `--network <caip2>` | 要求特定网络（如 `tron:0xcd8690dc`、`base-mainnet`） |
+| `--token <symbol>` | 要求特定代币（如 `USDT`、`USDC`） |
+| `--asset <address>` | 要求特定资产合约地址 |
+| `--decimals <count>` | 未注册资产的精度 |
+| `--scheme <scheme>` | 要求特定 x402 scheme：`exact` 或 `exact_gasfree` |
+| `--gasfree-api-url <url>` | 覆盖 TRON GasFree relayer API 地址（环境变量 `X402_GASFREE_API_URL`） |
+| `--max-gasfree-fee <amount>` | GasFree relayer 手续费上限（代币单位） |
+| `--max-gasfree-fee-raw <n>` | GasFree relayer 手续费上限（最小单位） |
 | `--max-amount <amount>` | 允许支付的最大人类可读金额 |
 | `--max-raw-amount <amount>` | 允许支付的最大最小单位金额 |
 | `--dry-run` | 只读取支付要求，不签名、不付款 |
-| `--private-key <hex>` | 显式付款方私钥（或用下方环境变量） |
+| `--wallet-id <id>` | 显式指定已配置的 Agent Wallet（环境变量 `AGENT_WALLET_ID`） |
+| `--private-key <hex>` | 覆盖 Agent Wallet——仅限开发与 CI |
 | `--rpc-url <url>` | 显式网络 RPC URL |
 | `--timeout-ms <ms>` | 网络超时（毫秒，默认：`30000`） |
 | `--json` | 打印结构化 JSON 输出 |
 
-付款方私钥来自 `--private-key`，或环境变量：TRON 网络用 `TRON_PRIVATE_KEY`，EVM 网络用 `EVM_PRIVATE_KEY`，`PRIVATE_KEY` 作为两种网络通用的回退。
+已注册代币的精度以注册表为准，不能用 `--decimals` 覆盖。只有未注册的非 Base 资产，才需要同时传 `--asset` 和 `--decimals`。
+
+### 用 Agent Wallet 付款 {#paying-with-agent-wallet}
+
+默认情况下，`pay` 会为所选网络解析出**当前激活的 [Agent Wallet](../../Agent-Wallet/Intro.md)** 并交由它签名——不需要把私钥放进配置文件或环境变量。
+
+- 如果配置了钱包但没有激活项，CLI 会**在签名前停下**，而不是默认选第一个。请设置激活钱包，或用 `--wallet-id` / `AGENT_WALLET_ID` 显式指定。
+- 用 `AGENT_WALLET_DIR` 指向非默认的 Agent Wallet 目录。
+- CLI 不会从 `wallets_config.json` 里读取私钥。
+- 在 EVM 网络上，它会在签名前检查付款方的代币余额，并在结果中返回解析出的钱包 ID、地址与原始余额。EIP-712 的付款方必须与该地址一致。
+
+**仅在开发与 CI 场景下**，可以用 `--private-key` 或 `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` 环境变量覆盖 Agent Wallet。共享环境中优先用环境变量而非命令行参数——命令行参数可能被本机其他进程看到。
 
 **示例：**
 
@@ -68,8 +85,8 @@ x402-cli pay https://api.example.com/paid --dry-run --json
 
 ```bash
 # 支付，但绝不超过 0.01 USDT
-TRON_PRIVATE_KEY=<hex> x402-cli pay https://api.example.com/paid \
-  --network tron:nile --token USDT --max-amount 0.01
+x402-cli pay https://api.example.com/paid \
+  --network tron:0xcd8690dc --token USDT --max-amount 0.01
 ```
 
 ```bash
@@ -79,6 +96,59 @@ x402-cli pay https://api.example.com/paid \
 ```
 
 如果接口没有返回 `402`，CLI 会报告实际状态与响应，而不会付款。
+
+### GasFree 支付（TRON） {#gasfree-payments-tron}
+
+在 TRON 上，`scheme=exact_gasfree` 让一个 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需持有 TRX。当服务端的 `402` 支付要求宣告了该 scheme 时，CLI 通常会自动选用；也可以用 `--scheme exact_gasfree` 显式要求。
+
+GasFree 手续费与宣告的支付金额是**分开**的。设一个手续费上限，CLI 会先估算 relayer 手续费，若估值过高则在签名前拒绝：
+
+```bash
+x402-cli pay https://api.example.com/pay \
+  --network tron:0xcd8690dc --token USDT \
+  --scheme exact_gasfree \
+  --max-amount 0.01 \
+  --max-gasfree-fee 0.5 \
+  --json
+```
+
+`--max-gasfree-fee` 与 `--max-gasfree-fee-raw` 互斥，且仅对 `exact_gasfree` 支付要求生效。用 `--gasfree-api-url <url>` 或 `X402_GASFREE_API_URL` 覆盖 relayer 地址。
+
+已付款的响应会区分 `settled`（支付已在链上结算）与 `delivered`（上游 HTTP 业务响应成功）。一次"结算成功但上游失败"的情况会返回 `paid=true`、`settled=true`、`delivered=false`，并仍带上交易信息——重试前请先核查交易与 provider 行为。
+
+### 在 Base 上付款 {#paying-on-base}
+
+Base 通过标准的 `exact` EVM 流程结算 USDC，使用的是 **EIP-3009**（`transferWithAuthorization`）而非 Permit2。这一点不需要你选择——CLI 会按网络自动采用正确的授权方式。
+
+```bash
+x402-cli pay https://api.example.com/pay \
+  --network base-mainnet \
+  --token USDC \
+  --max-amount 0.01 \
+  --rpc-url <生产环境-RPC-地址>
+```
+
+内置的公共 RPC 仅供开发使用。生产环境请通过 `--rpc-url`，或 `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` / `EVM_RPC_URL` 提供 RPC 端点。
+
+:::caution 不跟随重定向
+探测请求与带签名的重试都**不会**自动跟随 HTTP 重定向，以确保 `PAYMENT-SIGNATURE` 不被转发到其他源。如果接口发生重定向，请先确认目标地址，再显式请求最终可信的 URL。
+:::
+
+### 环境变量 {#pay-environment-variables}
+
+有些配置没有对应的命令行参数，只能通过环境变量设置：
+
+| 变量 | 用途 |
+| :--- | :--- |
+| `AGENT_WALLET_DIR` | 使用非默认的 Agent Wallet 目录 |
+| `AGENT_WALLET_ID` | 指定已配置的钱包（等同 `--wallet-id`） |
+| `TRON_RPC_URL` | TRON RPC 地址（`--rpc-url` 未传时使用） |
+| `TRON_GRID_API_KEY` | TronGrid API Key——设置后可避免公共节点限流 |
+| `X402_TRON_ALLOWANCE_MODE` | TRON 授权额度处理方式，默认 `auto` |
+| `EVM_RPC_URL` | 默认 EVM RPC 地址 |
+| `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` | Base 主网 / Base Sepolia 的专用 RPC |
+| `X402_GASFREE_API_URL` | 覆盖 TRON GasFree relayer 接口地址 |
+| `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` | 覆盖 Agent Wallet——仅限开发与 CI |
 
 ---
 
@@ -95,7 +165,8 @@ x402-cli serve --pay-to <address> [options]
 | `--pay-to <address>` | **（必填）** 收款钱包地址 |
 | `--amount <amount>` | 人类可读的代币金额（默认：`0.0001`） |
 | `--raw-amount <amount>` | 最小单位金额（与 `--amount` 互斥） |
-| `--network <caip2>` | 支付网络（默认：`tron:nile`） |
+| `--network <caip2>` | 支付网络（默认：`tron:0xcd8690dc`） |
+| `--scheme <scheme>` | 支付 scheme：`exact` 或 `exact_gasfree`（默认：`exact`） |
 | `--token <symbol>` | 代币符号（默认：`USDT`） |
 | `--asset <address>` | 未注册代币的显式合约地址 |
 | `--decimals <count>` | 代币精度，配合未注册的 `--asset` 时必填 |
@@ -103,6 +174,7 @@ x402-cli serve --pay-to <address> [options]
 | `--port <port>` | 绑定端口（默认：`4020`） |
 | `--resource-url <url>` | 在支付要求中对外宣告的 URL |
 | `--facilitator-url <url>` | Facilitator 基础 URL（默认：`https://facilitator.bankofai.io`） |
+| `--valid-for-seconds <n>` | 支付要求的有效时长（默认：`300`） |
 | `--timeout-ms <ms>` | Facilitator 超时（毫秒，默认：`30000`） |
 | `-d, --daemon` | 在后台运行并打印子进程 pid |
 | `--json` | 打印结构化 JSON 输出 |
@@ -119,7 +191,7 @@ x402-cli serve --pay-to <address> [options]
 **示例：**
 
 ```bash
-x402-cli serve --pay-to T... --network tron:nile --token USDT
+x402-cli serve --pay-to T... --network tron:0xcd8690dc --token USDT
 ```
 
 ```bash
@@ -139,9 +211,11 @@ x402-cli roundtrip --pay-to <address> [serve/pay 选项]
 **示例：**
 
 ```bash
-TRON_PRIVATE_KEY=<hex> x402-cli roundtrip \
-  --pay-to T... --amount 0.0001 --network tron:nile --token USDT
+x402-cli roundtrip \
+  --pay-to T... --amount 0.0001 --network tron:0xcd8690dc --token USDT
 ```
+
+加上 `--json` 时，`roundtrip` 会输出单个 JSON 文档，其中分别包含 `serve` 与 `pay` 的结果。
 
 ---
 
