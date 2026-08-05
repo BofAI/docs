@@ -35,7 +35,7 @@ CLI 把能力归为五条命令。
 | **`gateway`** | 管理本地网关的 provider 文件：校验、脚手架、启动、构建目录资产。 | `x402-cli gateway check ./providers` |
 | **`catalog`** | 搜索、缓存、查看、导出托管的服务目录。 | `x402-cli catalog search "weather"` |
 
-只读命令（`pay --dry-run`、`catalog search`、`gateway check`）无需钱包，只有真正发起支付时才需要付款方私钥。
+只读命令（`pay --dry-run`、`catalog search`、`gateway check`）无需钱包。真正发起支付时需要配置可签名的钱包；原始私钥仅作为开发和 CI 的覆盖手段。
 
 ---
 
@@ -44,17 +44,34 @@ CLI 把能力归为五条命令。
 输出默认是人类友好的文本。给任意命令加上 `--json`，就能得到一份稳定的、机器可读的结构化 JSON 输出——非常适合脚本和 AI Agent：
 
 ```bash
-x402-cli pay https://api.example.com/paid --dry-run --json
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols' \
+  --network tron:0x2b6653dc \
+  --token USDT \
+  --dry-run \
+  --json
 ```
 
 ```json
 {
   "ok": true,
-  "command": "client",
-  "network": "tron:0xcd8690dc",
+  "command": "pay",
+  "component": "client",
+  "network": "tron:0x2b6653dc",
   "scheme": "exact",
   "result": {
-    "url": "https://api.example.com/paid",
+    "url": "https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols",
+    "resource": "https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols",
+    "selected": {
+      "scheme": "exact",
+      "network": "tron:0x2b6653dc",
+      "amount": "1",
+      "asset": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+      "payTo": "TLXPgJVJFgL97gc49j8w8kC22mDTpH9EGa",
+      "maxTimeoutSeconds": 300,
+      "extra": {
+        "assetTransferMethod": "permit2"
+      }
+    },
     "message": "Dry run - no payment submitted"
   }
 }
@@ -117,7 +134,7 @@ TRON 与 BSC 的稳定币支付走 **Permit2** 授权，Base USDC 走 **EIP-3009
 :::warning
 支付会转移真实的链上资产，且不可撤销。请牢记以下原则：
 
-- **让 Agent Wallet 保管私钥。** 它是默认付款方、在本地完成签名——你不需要把私钥写进配置文件或环境变量。`--private-key` 与 `*_PRIVATE_KEY` 变量仅用于开发和 CI。
+- **让 Agent Wallet 保管私钥。** 它是默认付款方，并把签名交给配置的钱包后端完成；该后端可以是本地或远程。你不需要把私钥写进 CLI 配置或环境变量。`--private-key` 与 `*_PRIVATE_KEY` 变量仅用于开发和 CI。
 - **先在测试网上验证。** 上主网前，先用 `tron:0xcd8690dc`、`eip155:97` 或 `eip155:84532` 跑通。
 - **付款前先预览。** 用 `pay --dry-run` 在签名前看清确切的支付要求。
 - **给金额设上限。** 用 `--max-amount` 或 `--max-raw-amount`，让定价异常的接口无法超额扣款。

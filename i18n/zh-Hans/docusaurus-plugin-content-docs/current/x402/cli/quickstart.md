@@ -49,17 +49,17 @@ x402-cli --help
 
 ## 第 2 步：先不花钱试一试
 
-看到接口真实返回的 `402` 支付要求的最快方式是**空跑（dry run）**。它会探测接口、读取支付要求，并原样打印出你将被要求支付的内容——但不签名、不花钱：
+看到接口真实返回的 `402` 支付要求的最快方式是**空跑（dry run）**。它会探测一个真实的 TRON 主网接口、读取支付要求，并原样打印出你将被要求支付的内容——但不签名、不花钱：
 
 ```bash
-x402-cli pay https://api.example.com/paid \
-  --network tron:0xcd8690dc \
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols' \
+  --network tron:0x2b6653dc \
   --token USDT \
   --dry-run \
   --json
 ```
 
-`--dry-run` 的输出包含被选中的支付要求（网络、资产、金额、收款地址）。这就是你的安全网：支付一个陌生接口前，永远先空跑一次。
+这一步读取 TRON 主网支付要求，但 `--dry-run` 不会签名或提交支付。它的输出包含被选中的支付要求（网络、资产、金额、收款地址）。这就是你的安全网：支付一个陌生接口前，永远先空跑一次。
 
 ---
 
@@ -85,12 +85,12 @@ CLI 使用你当前激活的 [Agent Wallet](../../Agent-Wallet/QuickStart.md) �
 
 ## 第 4 步：支付真实的 x402 接口
 
-回路跑通后，支付任意受 x402 保护的 URL，就是同一条 `pay` 命令指向真实资源：
+回路跑通后，支付任意受 x402 保护的 URL 都使用同一条命令。请将下面的占位符替换为 provider 公布的 URL、网络与代币：
 
 ```bash
-x402-cli pay https://api.example.com/paid \
-  --network tron:0xcd8690dc \
-  --token USDT \
+x402-cli pay '<x402-url>' \
+  --network <network> \
+  --token <token> \
   --max-amount 0.01
 ```
 

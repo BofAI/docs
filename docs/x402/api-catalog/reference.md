@@ -122,7 +122,6 @@ security   shopping    storage     translation
 | BNB Chain (BSC) | `eip155:56` |
 | BNB Smart Chain testnet | `eip155:97` |
 | Base mainnet | `eip155:8453` |
-| Base Sepolia testnet | `eip155:84532` |
 
 The build resolves each chain ID into display metadata (`kind` / `label` / `label_zh`) so the frontend doesn't have to parse CAIP-2 itself — see [Frontend display fields](#frontend-display-fields).
 

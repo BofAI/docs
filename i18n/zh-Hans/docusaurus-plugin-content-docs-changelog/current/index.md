@@ -15,7 +15,7 @@ BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">x402</span><span className="changelog-tag">Base</span></div>
 
-- **Base 上线**——`eip155:8453` 与 `eip155:84532`，均支持 USDC，CLI 与服务目录同步支持。Base 在 `exact` 方案下使用 EIP-3009 授权，而非 Permit2。
+- **CLI 已支持 Base**——`eip155:8453` 与 `eip155:84532` 均支持 USDC；服务目录目前只发布 `eip155:8453` Base 主网路由。Base 在 `exact` 方案下使用 EIP-3009 授权，而非 Permit2。
 - **Agent Wallet 成为 CLI 默认付款方**——`pay` 用你当前激活的钱包签名，私钥不再进环境变量。若配置了钱包但没有激活项，CLI 会在签名前停下而不是替你选。[详情](./x402/)
 - 付费请求不再跟随 HTTP 重定向，避免 `PAYMENT-SIGNATURE` 流向其他源。
 

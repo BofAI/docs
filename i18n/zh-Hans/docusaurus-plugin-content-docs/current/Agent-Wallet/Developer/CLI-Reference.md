@@ -58,6 +58,33 @@ agent-wallet start -p Abc12345! -k 你的私钥十六进制
 agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 ```
 
+#### 跳过交互：直接指定钱包类型
+
+`start` 和 `add` 也可以把钱包类型作为子命令传入。这种形式不会有任何提问——正是 CI 或后台服务需要的：
+
+```bash
+agent-wallet start local_secure -p Abc12345! -g      # 加密存储，生成新私钥
+agent-wallet start raw_secret -k 你的私钥            # 明文，仅限开发
+agent-wallet start privy --app-id <id> --app-secret <secret> --privy-wallet-id <wallet>
+```
+
+`add` 用法相同（`add local_secure` / `add raw_secret` / `add privy`），用于再加一个钱包。
+
+| 选项 | 适用类型 | 说明 |
+| :--- | :--- | :--- |
+| `-w, --wallet-id <id>` | 全部 | 要创建的钱包 ID |
+| `-g, --generate` | `local_secure` | 生成一个新的随机私钥 |
+| `-k, --private-key <hex>` | `local_secure`、`raw_secret` | 导入私钥 |
+| `-m, --mnemonic <words>` | `local_secure`、`raw_secret` | 导入助记词 |
+| `--mnemonic-index <n>` | `local_secure`、`raw_secret` | 从助记词派生时的账户索引 |
+| `-p, --password <pass>` | `local_secure` | 主密码 |
+| `--app-id` / `--app-secret` / `--privy-wallet-id` | `privy` | Privy 应用凭证与钱包 ID |
+| `-d, --dir <path>` | 全部 | 密钥目录（默认 `~/.agent-wallet`） |
+| `--save-runtime-secrets` | 全部 | 把密码写入 `runtime_secrets.json` |
+| `--override` | 仅 `start` | 覆盖已有配置 |
+
+用 `agent-wallet start local_secure --help` 或 `agent-wallet add privy --help` 查看某个模式的确切选项。
+
 ### `agent-wallet sign`（核心签名操作）
 
 每条 `sign` 子命令都需要 `--network` / `-n` 来指定链。

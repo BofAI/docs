@@ -122,7 +122,6 @@ security   shopping    storage     translation
 | BNB Chain (BSC) | `eip155:56` |
 | BNB 测试网 | `eip155:97` |
 | Base 主网 | `eip155:8453` |
-| Base Sepolia 测试网 | `eip155:84532` |
 
 构建时会把每个链 ID 解析为展示元数据（`kind` / `label` / `label_zh`），前端无需自己解析 CAIP-2 —— 见[前端展示字段](#前端展示字段)。
 

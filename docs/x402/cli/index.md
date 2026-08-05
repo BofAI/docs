@@ -35,7 +35,7 @@ The CLI groups its capabilities into five commands.
 | **`gateway`** | Manage local gateway provider files: validate, scaffold, start, and build catalog assets. | `x402-cli gateway check ./providers` |
 | **`catalog`** | Search, cache, inspect, and export the hosted provider catalog. | `x402-cli catalog search "weather"` |
 
-Read-only commands (`pay --dry-run`, `catalog search`, `gateway check`) need no wallet. Only an actual payment requires a payer private key.
+Read-only commands (`pay --dry-run`, `catalog search`, `gateway check`) need no wallet. An actual payment requires a configured signing wallet; raw private keys are only a development/CI override.
 
 ---
 
@@ -44,17 +44,34 @@ Read-only commands (`pay --dry-run`, `catalog search`, `gateway check`) need no 
 Output is human-friendly text by default. Add `--json` to any command for a stable, machine-readable envelope — ideal for scripts and AI agents:
 
 ```bash
-x402-cli pay https://api.example.com/paid --dry-run --json
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols' \
+  --network tron:0x2b6653dc \
+  --token USDT \
+  --dry-run \
+  --json
 ```
 
 ```json
 {
   "ok": true,
-  "command": "client",
-  "network": "tron:0xcd8690dc",
+  "command": "pay",
+  "component": "client",
+  "network": "tron:0x2b6653dc",
   "scheme": "exact",
   "result": {
-    "url": "https://api.example.com/paid",
+    "url": "https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols",
+    "resource": "https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols",
+    "selected": {
+      "scheme": "exact",
+      "network": "tron:0x2b6653dc",
+      "amount": "1",
+      "asset": "TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t",
+      "payTo": "TLXPgJVJFgL97gc49j8w8kC22mDTpH9EGa",
+      "maxTimeoutSeconds": 300,
+      "extra": {
+        "assetTransferMethod": "permit2"
+      }
+    },
     "message": "Dry run - no payment submitted"
   }
 }
@@ -117,7 +134,7 @@ Use the CLI to explore, test, and script against x402 endpoints, or to give an A
 :::warning
 Payments move real on-chain assets and cannot be reversed. Keep these principles in mind:
 
-- **Let Agent Wallet hold the key.** It is the default payer and signs locally — you never put a private key in a config file or environment variable. `--private-key` and the `*_PRIVATE_KEY` variables exist for development and CI only.
+- **Let Agent Wallet hold the key.** It is the default payer and delegates signing to the configured wallet backend, which may be local or remote. You never need to put a private key in the CLI configuration or environment. `--private-key` and the `*_PRIVATE_KEY` variables exist for development and CI only.
 - **Test on testnet first.** Use `tron:0xcd8690dc`, `eip155:97`, or `eip155:84532` before running any payment on mainnet.
 - **Preview before you pay.** Run `pay --dry-run` to inspect the exact requirement before signing.
 - **Cap the amount.** Use `--max-amount` or `--max-raw-amount` so a mispriced endpoint can't overcharge you.

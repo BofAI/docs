@@ -195,6 +195,10 @@ If both a password and a private key exist in your environment variables, the SD
 | `AGENT_WALLET_MNEMONIC` | Plaintext mnemonic phrase | ⚠️ Static Injection | Choose one (with private key) |
 | `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | BIP-44 derivation index (default `0`) | ⚠️ Static Injection | Optional |
 
+:::note Legacy variable names
+The SDK still accepts the older `TRON_PRIVATE_KEY`, `TRON_MNEMONIC`, and `TRON_ACCOUNT_INDEX` variables, which map to `AGENT_WALLET_PRIVATE_KEY`, `AGENT_WALLET_MNEMONIC`, and `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX`. They work on EVM networks too, despite the name. Prefer the `AGENT_WALLET_*` names in new setups.
+:::
+
 ---
 
 ## Usage Examples

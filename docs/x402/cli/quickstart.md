@@ -49,17 +49,17 @@ You should see the version number and the list of commands (`pay`, `serve`, `rou
 
 ## Step 2: Try it without spending anything
 
-The fastest way to see a real `402` challenge is a **dry run**. This probes an endpoint, reads its payment requirement, and prints exactly what you'd be asked to pay — without signing or spending:
+The fastest way to see a real `402` challenge is a **dry run**. This probes a live TRON Mainnet endpoint, reads its payment requirement, and prints exactly what you'd be asked to pay — without signing or spending:
 
 ```bash
-x402-cli pay https://api.example.com/paid \
-  --network tron:0xcd8690dc \
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols' \
+  --network tron:0x2b6653dc \
   --token USDT \
   --dry-run \
   --json
 ```
 
-The `--dry-run` output includes the selected requirement (network, asset, amount, recipient). This is your safety net: always dry-run an unfamiliar endpoint before paying it.
+This step reads a TRON Mainnet requirement, but `--dry-run` never signs or submits a payment. Its output includes the selected requirement (network, asset, amount, recipient). This is your safety net: always dry-run an unfamiliar endpoint before paying it.
 
 ---
 
@@ -85,12 +85,12 @@ The CLI signs with your active [Agent Wallet](../../Agent-Wallet/QuickStart.md),
 
 ## Step 4: Pay a real x402 endpoint
 
-Once the roundtrip works, paying any x402-protected URL is the same `pay` command pointed at a real resource:
+Once the roundtrip works, paying any x402-protected URL uses the same command. Replace the placeholders below with the URL, network, and token advertised by the provider:
 
 ```bash
-x402-cli pay https://api.example.com/paid \
-  --network tron:0xcd8690dc \
-  --token USDT \
+x402-cli pay '<x402-url>' \
+  --network <network> \
+  --token <token> \
   --max-amount 0.01
 ```
 
