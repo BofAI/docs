@@ -62,7 +62,7 @@ Providers turn calls into cash flow. Agents turn calls into capabilities. The ga
 ### For API providers: list your API, earn on every call
 
 - **Straight to your wallet** — payments settle to your payout wallet in real time; no platform escrow, no payout cycle.
-- **Native multi-chain** — settle on TRON or BNB Chain, the provider's choice.
+- **Native multi-chain** — settle on TRON, BNB Chain, or Base Mainnet, according to the provider's published route.
 - **Zero-touch onboarding** — your existing API stays exactly as it is, not one line changes.
 - **You set the price** — flexible per-endpoint, per-tier pricing; free routes stay free.
 

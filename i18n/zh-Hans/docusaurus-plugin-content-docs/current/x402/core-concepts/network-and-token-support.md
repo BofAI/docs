@@ -29,6 +29,18 @@ x402 采用 CAIP-2 网络标识符格式：`tron:<hex_chain_id>`。
 > **注意**：在自托管 Facilitator 的 YAML 配置文件中，使用更易读的格式：`bsc:mainnet` 和 `bsc:testnet`。Facilitator 启动时会自动将其映射为协议层对应的 EIP-155 链 ID。
 
 
+## Base 网络标识符
+
+Base 在 x402 链路中使用标准 EIP-155 标识符：
+
+| 网络名称 | 协议标识符 | 说明 |
+| :------- | :--------- | :--- |
+| **Base Mainnet** | `eip155:8453` | 生产网络；API Catalog 发布该网络路由 |
+| **Base Sepolia** | `eip155:84532` | CLI/SDK 测试网络 |
+
+Base 主网使用官方 USDC，通过 `exact` 方案和 EIP-3009 授权完成支付。付款方在链下签署 `transferWithAuthorization`，无需 Permit2 approve。
+
+
 ## 概览
 
 x402 专为区块链生态设计，实现了原生的链上支付验证与结算功能。协议底层采用安全的签名机制，确保消息授权的安全性与防篡改能力。
@@ -42,10 +54,12 @@ x402 专为区块链生态设计，实现了原生的链上支付验证与结算
 | **TRON Shasta**  | **Testnet**   | **备用测试网**：长期稳定的测试环境。   |
 | **BSC Mainnet**        | **Mainnet**   | **生产网络**：用于处理真实价值资产。   |
 | **BSC Testnet**         | **Testnet**   | **推荐测试网**：BSC 首选的开发与调试环境。 |
+| **Base Mainnet**       | **Mainnet**   | **生产网络**：使用官方 USDC。 |
+| **Base Sepolia**       | **Testnet**   | CLI/SDK 测试；不在 API Catalog 发布。 |
 
 ### 支持的代币
 
-x402 协议全面支持 **TRC-20/BEP-20** 标准代币，并默认将 **USDT** 和 **USDD** 作为主要结算货币。
+x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自配置的稳定币；Base 使用官方 USDC。
 
 #### 支持的代币列表
 
@@ -61,10 +75,12 @@ x402 协议全面支持 **TRC-20/BEP-20** 标准代币，并默认将 **USDT** �
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 | **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
 | **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
+| **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
+| **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
 > **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或 server 的 `EVM_TOKENS` 配置表，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
 
-> **关于 `exact` 方案的代币选择**：ERC-3009 代币（如 BSC 测试网 **DHLU**）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`。每代币的结算方式由 server `accepts[].price.extra` 中的数据决定：ERC-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。
+> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`。每种代币的结算方式由 server `accepts[].price.extra` 中的数据决定：EIP-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。
 
 #### 安全签名
 
@@ -80,8 +96,8 @@ x402 采用类型化数据签名来处理所有支付相关的签名授权。
 
 在服务端配置 `HTTP 402` 支付要求时，您需要明确指定以下三个核心参数：
 
-1.  **网络 (Network)**：目标网络的唯一标识符（例如 `tron:0xcd8690dc`）。
-2.  **资产 (Asset)**：目标 TRC-20/BEP-20 代币的**合约地址**。
+1.  **网络 (Network)**：目标网络的唯一标识符（例如 `tron:0xcd8690dc` 或 `eip155:8453`）。
+2.  **资产 (Asset)**：目标 TRC-20/BEP-20/ERC-20 代币的**合约地址**。
 3.  **金额 (Amount)**：基于代币**最小单位**（Raw Amount）的整数值。
 
 > **精度换算示例**：
@@ -96,7 +112,7 @@ x402 支持四种支付方案。每种方案按链族实现为 client + server +
 
 `exact` 方案支付公布的准确金额，覆盖两种代币转账路径：
 
-- **ERC-3009 `transferWithAuthorization`**：适用于原生支持该标准的代币（如 BSC 测试网 DHLU）。无 gas：无需 `approve`；客户端签署类型化数据授权，facilitator 在链上调用 `transferWithAuthorization`。
+- **EIP-3009 `transferWithAuthorization`**：适用于原生支持该标准的代币（如 Base 官方 USDC、BSC 测试网 DHLU）。无 gas：无需 `approve`；客户端签署类型化数据授权，facilitator 在链上调用 `transferWithAuthorization`。
 - **Permit2**：适用于不实现 ERC-3009 的普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）。客户端签署 Permit2 witness，facilitator 通过 `x402ExactPermit2Proxy` 合约结算。需要一次性 `approve(Permit2)`；客户端首次付款时自动广播。
 
 `exact` 方案遵循 **x402 Foundation** 发布的 **v2 链路格式**：标准 v2 客户端可直接向本 SDK 的服务端发起付款请求，本 SDK 客户端也可直接访问任何 v2 兼容的服务端——无需项目特定的转换。转账授权数据位于 `payload.authorization` 中。
@@ -149,18 +165,18 @@ Facilitator 作为协议的中间件，承担以下核心职责：
 
 **部署先决条件**
 
-- **节点访问权限**：稳定的 RPC 访问（例如 TronGrid 或公共 BSC 端点）。
-- **Gas 资源储备**：一个持有充足 **TRX/BNB** 的钱包，用于支付结算 gas 费用。
+- **节点访问权限**：稳定的 RPC 访问（例如 TronGrid，或 BSC/Base 的 EVM JSON-RPC 端点）。
+- **Gas 资源储备**：一个持有充足 **TRX/BNB/ETH** 的钱包，用于支付结算 gas 费用。
 - **代码部署**：运行 `examples/typescript/facilitator/basic` 示例 facilitator。
 
 > **深入了解**：请查阅 [Facilitator](./facilitator.md) 文档以获取详细的配置指南与 API 参考，以及[卖家快速入门](../getting-started/quickstart-for-sellers.md)。
 
 ### 快速参考
 
-| 核心组件     | TRON/BSC 实现详情                              |
+| 核心组件     | TRON/BSC/Base 实现详情                              |
 | :----------- | :----------------------------------------- |
-| **网络环境** | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97` |
-| **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）,BEP-20 代币 |
+| **网络环境** | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532` |
+| **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）、BEP-20 代币、ERC-20 代币（Base 官方 USDC） |
 | **签名机制** | TIP-712 / EIP-712 类型化数据签名                     |
 | **支付方案** | `exact`、`upto`、`batch-settlement`、`exact_gasfree`（TRON） |
 
@@ -185,11 +201,11 @@ registerToken(TRON_NILE, {
 
 ### 总结
 
-x402 专为区块链架构深度定制，提供了原生的 TRC-20/BEP-20 代币集成与安全签名支持。
+x402 专为区块链架构深度定制，提供了原生的 TRC-20/BEP-20/ERC-20 代币集成与安全签名支持。
 
 **核心要点：**
 
 - **开发环境**：推荐优先使用 **测试网** 进行开发与调试。
-- **原生资产**：**USDT** 为默认的首选结算代币，且 SDK 已预置相关合约地址配置。
+- **默认结算资产**：TRON/BSC 路由使用各自配置的稳定币；Base 使用官方 **USDC**。
 - **安全机制**：TIP-712 / EIP-712 类型化数据签名机制确保了安全且最小化信任 (Trust-minimized) 的支付授权流程。
 - **扩展能力**：可通过 TRON 代币注册表（`registerToken`）或 server 的 `EVM_TOKENS` 配置表灵活扩展支持任意自定义的 **TRC-20/BEP-20 代币**。

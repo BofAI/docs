@@ -65,13 +65,22 @@ import TabItem from '@theme/TabItem';
 - **测试示例**：Nile 测试网 USDT 地址为 `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf`。
 
 </TabItem>
-    <TabItem value="BSC" label="BSC">
+<TabItem value="BSC" label="BSC">
 
 - **网络标识**：必须遵循 `eip<id>:<id>` 格式。
 - **签名标准**：BSC 签名完全兼容以太坊 **EIP-712** 标准（无需特殊适配，直接使用通用 EVM 签名库）。
 - **地址格式**：Token 地址必须使用十六进制（Hex）编码格式（即以 `0x` 开头的地址）。
 - **节点接入**：节点访问需指向兼容 EVM 的 JSON-RPC 端点。
 - **测试示例**：BSC Testnet 模拟 USDT 地址为 `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd`。
+
+</TabItem>
+<TabItem value="BASE" label="Base">
+
+- **Network Identifier**: Base Mainnet must use canonical CAIP-2 ID `eip155:8453`.
+- **Settlement Asset**: Use official Base USDC at `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`.
+- **Payment Scheme**: Use `exact` with EIP-3009 authorization; do not describe Base USDC as Permit2.
+- **Address Format**: Payout and token addresses use EVM hexadecimal (`0x`) format.
+- **Catalog Scope**: Public catalog examples use Base Mainnet only. Base Sepolia (`eip155:84532`) may appear only in explicit CLI/SDK testing documentation.
 
 </TabItem>
 </Tabs>

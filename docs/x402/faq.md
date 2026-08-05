@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 #### What is x402 in one sentence?
 
-x402 revives the long-unused HTTP `402 Payment Required` status code and transforms it into a fully functional on-chain payment layer designed for APIs, websites, and autonomous AI agents. It is currently supported on TRON and BSC, with plans to expand to additional blockchain networks in the future.
+x402 revives the long-unused HTTP `402 Payment Required` status code and transforms it into a fully functional on-chain payment layer designed for APIs, websites, and autonomous AI agents. It currently supports TRON, BSC, and Base, with plans to expand to additional blockchain networks in the future.
 
 #### Is x402 a commercial product?
 
@@ -70,7 +70,7 @@ Common pricing models include:
 
 x402 supports four payment schemes:
 
-- **`exact`**: Pay the exact advertised amount. ERC-3009 tokens (e.g. BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
+- **`exact`**: Pay the exact advertised amount. EIP-3009 tokens (e.g. official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
 - **`upto`**: Usage-based billing — the client signs a Permit2 authorization for up to a **maximum**; the server settles only the **real usage** (≤ max). Ideal for **metered billing**, **LLM token usage**.
 - **`batch-settlement`**: Payment-channel for high-frequency micro-payments — deposit once, pay many requests with off-chain vouchers, settle in one batch tx. Includes a refund path.
 - **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. A relayer pays the on-chain energy via the GasFree API — no API keys required on the client side.
@@ -83,6 +83,7 @@ x402 supports four payment schemes:
 - This SDK's client can pay v2-compatible servers directly.
 - In the V2 structure, transfer authorization data is carried in the `payload.authorization` field (a structured object). As a migration fallback, the client also populates `extensions.transferAuthorization` so that servers still running older versions can parse the payload.
 - BSC USDT/USDC are plain ERC-20s (no ERC-3009). They settle via the Permit2 path under the `exact` scheme — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. ERC-3009 tokens like BSC testnet **DHLU** settle gaslessly with no approve.
+- Base Mainnet official USDC uses EIP-3009 under `exact`: the payer signs `transferWithAuthorization`, so no Permit2 approval is required.
 - The `examples/bsc-testnet-smoke/` directory contains smoke tests for bidirectional interoperability (Coinbase official client → BANK OF AI server, BANK OF AI client → Coinbase official server) that you can use as a debugging and integration reference.
 
 ---
@@ -103,6 +104,8 @@ x402 supports four payment schemes:
 | BSC Testnet (`eip155:97`)     | USDT (BEP-20) | **Testnet** |
 | BSC Testnet (`eip155:97`)     | USDC (BEP-20) | **Testnet** |
 | BSC Testnet (`eip155:97`)     | DHLU (BEP-20, for `exact` interop tests) | **Testnet** |
+| Base Mainnet (`eip155:8453`) | Official USDC (ERC-20, EIP-3009) | **Mainnet** |
+| Base Sepolia (`eip155:84532`) | USDC (ERC-20, EIP-3009) | **Testnet** |
 
 Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` from `@bankofai/x402-tron`); custom BEP-20 tokens are advertised by adding an entry to the server's `EVM_TOKENS` config table.
 
@@ -111,6 +114,7 @@ Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` f
 - **Network Fees**:
   - TRON: TRX for Energy and Bandwidth (paid by the Facilitator)
   - BSC: BNB for gas (paid by the Facilitator)
+  - Base: ETH for gas (paid by the Facilitator)
 - **Facilitator Service Fee**: Configurable by each Facilitator (can be set to zero)
 
 ---

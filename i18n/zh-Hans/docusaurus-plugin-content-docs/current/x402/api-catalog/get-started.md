@@ -12,7 +12,7 @@ description: 3 分钟把你的 Agent 接入 API 目录 —— 安装 Agent Walle
 
 ## 第 1 步：安装 Agent Wallet
 
-运行下面这行命令，你会装上一个在 TRON 与 BNB Chain 上管理稳定币的本地钱包。之后 Agent 发起的每一次付费调用，都由它在本地签名。
+运行下面这行命令，你会装上一个在 TRON、BNB Chain 与 Base 上管理稳定币的本地钱包。之后 Agent 发起的每一次付费调用，都由它在本地签名。
 
 ```bash
 npm i -g @bankofai/agent-wallet
@@ -73,8 +73,8 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | 参数 | 作用 |
 |---|---|
 | `--method` | HTTP 方法（默认 `GET`） |
-| `--network` | CAIP-2 支付链，如 `tron:0x2b6653dc`、`eip155:56` |
-| `--token` | 结算代币，如 `USDT` |
+| `--network` | CAIP-2 支付链，如 `tron:0x2b6653dc`、`eip155:56`、`eip155:8453` |
+| `--token` | 结算代币，如 `USDT` 或 Base 主网 `USDC` |
 | `--scheme` | 路由声明的 x402 支付方案，如 `exact` |
 | `--max-amount` | 美元支出上限；报价超出即中止调用 |
 | `--header` / `--body` | 转发到上游的请求头与请求体 |

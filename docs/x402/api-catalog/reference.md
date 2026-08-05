@@ -60,7 +60,7 @@ An endpoint may serve the same capability across several chains, each settling t
 
 | Field | Type | Description |
 |---|---|---|
-| `network` | string | Canonical CAIP-2 chain ID this route settles on (e.g. `tron:0x2b6653dc`, `tron:0xcd8690dc`, `eip155:56`). Legacy TRON aliases such as `tron:nile` are rejected by schema validation. |
+| `network` | string | Canonical CAIP-2 chain ID this route settles on (e.g. `tron:0x2b6653dc`, `eip155:56`, `eip155:8453`). Legacy TRON aliases such as `tron:nile` are rejected by schema validation. |
 | `provider` | string | The gateway provider `fqn` that handles this network |
 | `scheme` | string | x402 payment scheme for this route: `exact` or, on TRON, `exact_gasfree` — each route declares its own |
 | `assetTransferMethod` | string | Authorization used by an `exact` route: `permit2` on TRON and BSC, `eip3009` on Base USDC. **Omit** it on `exact_gasfree` routes. |
@@ -72,7 +72,7 @@ The build passes this through to outputs as `x402_routes`. When present, callers
 On TRON you can add an `exact_gasfree` route alongside the `exact` one for the same endpoint: a relayer pays the network energy and deducts its fee from the payment token, so the payer needs no TRX. GasFree routes are TRON-only and must not carry `assetTransferMethod`. With x402 SDK 1.0.1 the relayer cost is estimated client-side, so catalog routes must **not** publish the legacy `fee` or `feeConfig` fields.
 :::
 
-For example, a token-launch endpoint might expose one route per supported chain — TRON Mainnet and BSC Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
+For example, an endpoint may expose one route per supported chain — TRON Mainnet, BSC Mainnet, and Base Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
@@ -191,7 +191,7 @@ To save the frontend from parsing raw IDs and picking translations, the build al
 | `sub_title` | Secondary display line (from `subTitle`, falls back to `subtitle`) |
 | `sub_title_zh` | Chinese secondary display line (from `i18n.zh-CN.subtitle` / `subTitle`, falls back to `subtitle`) |
 | `category_meta` | `{ id, label, label_zh }` for the category |
-| `chain_kinds` | De-duplicated friendly chain kinds, e.g. `["tron"]`, `["bnb"]` |
+| `chain_kinds` | De-duplicated friendly chain kinds, e.g. `["tron"]`, `["bnb"]`, `["base"]` |
 | `chains_meta` | Per-chain `{ id, kind, label, label_zh }`, so the frontend never parses CAIP-2 |
 
 These are additive — the raw `title`, `subtitle`, `category`, `chains`, and `i18n.zh-CN` are still present.

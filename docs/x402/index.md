@@ -9,7 +9,7 @@ description: >-
 
 x402 is an open blockchain payment standard built on the HTTP `402 Payment Required` status code. It enables web services to charge for APIs or content through a “pay-before-response” mechanism — without relying on traditional account systems or session management.  
 
-x402 currently supports the **TRON** and **BSC** networks, with plans to expand to a broader multi-chain ecosystem in the future.
+x402 currently supports **TRON**, **BNB Smart Chain (BSC)**, and **Base**, with plans to expand to a broader multi-chain ecosystem in the future.
 
 **Interested in contributing to the documentation?**  
 Feel free to submit a PR to the [GitHub repository](https://github.com/BofAI/docs). Our only principle is to maintain neutrality — aside from essential resource links, please avoid promotional or branded content.
@@ -80,6 +80,9 @@ x402 currently supports the following networks:
 - **TRON Nile Testnet** (`tron:0xcd8690dc`)
 - **BSC Mainnet** (`eip155:56`)
 - **BSC Testnet** (`eip155:97`)
+- **Base Mainnet** (`eip155:8453`)
+
+Base Mainnet payments use official USDC with the `exact` scheme and EIP-3009 authorization.
 
 > **SDK (TypeScript-only)**: x402 is a TypeScript-only SDK published as granular `@bankofai/x402-*` npm packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The source is maintained in a pnpm/turbo monorepo, but application development should install the published packages. Supported schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, and `exact_gasfree` (TRON). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
 

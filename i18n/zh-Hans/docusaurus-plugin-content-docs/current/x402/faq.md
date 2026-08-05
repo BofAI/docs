@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 
 #### 一句话概括 x402 是什么？
 
-x402 唤醒了长期闲置的 HTTP `402 Payment Required` 状态码，将其转化为一个基于区块链的功能完备的链上支付层，专为 API、网站及自主 AI 代理设计。目前，x402 已在 TRON 和 BSC 网络上支持，并计划在未来扩展至多链生态，实现广泛的区块链网络覆盖。
+x402 唤醒了长期闲置的 HTTP `402 Payment Required` 状态码，将其转化为一个基于区块链的功能完备的链上支付层，专为 API、网站及自主 AI 代理设计。目前，x402 已支持 TRON、BSC 和 Base，并计划在未来扩展至更广泛的多链生态。
 
 #### x402 是商业产品吗？
 
@@ -62,7 +62,7 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 
 x402 支持四种支付方案：
 
-- **`exact`**：支付公布的准确金额。ERC-3009 代币（如 BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算；普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，首次付款需一次性 `approve(Permit2)`。`exact` 的协议 payload 遵循 **x402 Foundation** 的 v2 规范。
+- **`exact`**：支付公布的准确金额。EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算；普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，首次付款需一次性 `approve(Permit2)`。`exact` 的协议 payload 遵循 **x402 Foundation** 的 v2 规范。
 - **`upto`**：按量计费——客户端签署最高至最大金额的 Permit2 授权，服务端仅结算**实际用量**（≤ max）。非常适合**按量计费**、**LLM Token 消耗**等场景。
 - **`batch-settlement`**：面向高频微支付的支付通道——一次性链上存入，然后用链下凭证支付多次请求，一笔交易批量结算。含退款路径。
 - **`exact_gasfree`**（仅限 TRON）：允许买家使用 USDT/USDD 付款而无需持有 TRX 来支付 gas。由 relayer 通过 GasFree API 支付链上 energy——客户端无需配置 API 密钥。
@@ -75,6 +75,7 @@ x402 支持四种支付方案：
 - 本 SDK 的客户端可以直接向 v2 兼容的服务端付款。
 - V2 结构中转账授权数据位于 `payload.authorization` 字段（结构化对象）；作为迁移过渡，客户端还会同时填充 `extensions.transferAuthorization`，以便仍在运行旧版本的服务端也能解析。
 - BSC USDT/USDC 是普通 ERC-20（无 ERC-3009），在 `exact` 方案下通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`。ERC-3009 代币（如 BSC 测试网 DHLU）则无 gas 结算，无需 approve。
+- Base 主网官方 USDC 在 `exact` 下使用 EIP-3009：付款方签署 `transferWithAuthorization`，无需 Permit2 approve。
 - 仓库中的 `examples/bsc-testnet-smoke/` 目录提供了双向互通的烟雾测试示例（Coinbase 官方客户端 → BANK OF AI 服务端、BANK OF AI 客户端 → Coinbase 官方服务端），可作为调试与集成参考。
 
 ### 资产、网络及费用
@@ -94,6 +95,8 @@ x402 支持四种支付方案：
 | BSC testnet (`eip155:97`)      | USDT (BEP-20) | **Testnet** |
 | BSC testnet (`eip155:97`)      | USDC (BEP-20) | **Testnet** |
 | BSC testnet (`eip155:97`)      | DHLU (BEP-20, 用于 `exact` 互通测试) | **Testnet** |
+| Base 主网 (`eip155:8453`) | 官方 USDC（ERC-20，EIP-3009） | **Mainnet** |
+| Base Sepolia (`eip155:84532`) | USDC（ERC-20，EIP-3009） | **Testnet** |
 
 此外，可通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）添加自定义 TRC-20 代币；自定义 BEP-20 代币则通过在 server 的 `EVM_TOKENS` 配置表中添加条目来公布。
 
@@ -102,6 +105,7 @@ x402 支持四种支付方案：
 - **网络费用**：
   - 在 TRON 链上用于支付能量 (Energy) 和带宽 (Bandwidth) 消耗的 TRX（由 Facilitator 承担）。
   - 在 BSC 链上用于支付 gas 消耗的 BNB（由 Facilitator 承担）。
+  - 在 Base 链上用于支付 gas 的 ETH（由 Facilitator 承担）。
 - **Facilitator 服务费**：每个 Facilitator 可独立配置的服务费用（支持设置为零）。
 
 ### 安全性

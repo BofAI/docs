@@ -84,6 +84,15 @@ Documentation must reflect code changes immediately. Follow these dependency map
 - **Test Example**: BSC Testnet mock USDT address — `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd`.
 
 </TabItem>
+<TabItem value="BASE" label="Base">
+
+- **Network Identifier**: Base Mainnet must use canonical CAIP-2 ID `eip155:8453`.
+- **Settlement Asset**: Use official Base USDC at `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`.
+- **Payment Scheme**: Use `exact` with EIP-3009 authorization; do not describe Base USDC as Permit2.
+- **Address Format**: Payout and token addresses use EVM hexadecimal (`0x`) format.
+- **Catalog Scope**: Public catalog examples use Base Mainnet only. Base Sepolia (`eip155:84532`) may appear only in explicit CLI/SDK testing documentation.
+
+</TabItem>
 </Tabs>
 
 ---

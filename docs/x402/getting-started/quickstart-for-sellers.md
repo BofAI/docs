@@ -85,6 +85,22 @@ You need a blockchain wallet address to receive tokens from users. Follow the st
 > ✅ **Success:** Wallet shows test BNB and test USDT balance greater than 0
 
 </TabItem>
+<TabItem value="BASE" label="Base">
+
+**Create a Base Wallet (approx. 3 minutes):**
+
+1. Install [Coinbase Wallet](https://www.coinbase.com/wallet) or [MetaMask](https://metamask.io/)
+2. Create a dedicated wallet and store its recovery phrase securely
+3. Switch to Base Mainnet
+4. Copy the `0x` wallet address that will receive USDC payments
+
+**Fund the payout wallet:**
+
+Deposit a small amount of official USDC on Base Mainnet. The resource server only publishes this address and never needs its private key. Mainnet payments use real funds.
+
+> ✅ **Success:** Wallet shows official Base USDC and the payout address starts with `0x`
+
+</TabItem>
 </Tabs>
 
 > ⚠️ **Wallet Security Reminder:**
@@ -100,24 +116,26 @@ You need a blockchain wallet address to receive tokens from users. Follow the st
 |--------|------|----------|
 | **TRON Wallet Address** | Wallet address starting with `T` (your payout address) | Copy from TronLink |
 | **BSC Wallet Address** | Wallet address starting with `0x` (your payout address) | Copy from MetaMask |
+| **Base Wallet Address** | Wallet address starting with `0x` (your payout address) | Copy from Coinbase Wallet or MetaMask |
 | **Test TRX** | TRON testnet fee token | [Nile Faucet](https://nileex.io/join/getJoinPage) |
 | **Test USDT/USDD (TRON)** | TRON test payment token (both USDT and USDD supported) | [Nile Faucet](https://nileex.io/join/getJoinPage) |
 | **Test BNB** | BSC testnet fee token | [BSC Testnet Faucet](https://www.bnbchain.org/en/testnet-faucet) |
 | **Test USDT (BSC)** | BSC test payment token | [BSC Testnet Faucet](https://www.bnbchain.org/en/testnet-faucet) |
+| **USDC (Base)** | Official Base Mainnet settlement token | Bridge or transfer official USDC to Base Mainnet |
 
 **Testnet vs. Mainnet:**
 
 - **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:0xcd8690dc` / `eip155:97`
-- **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:0x2b6653dc` / `eip155:56`
+- **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:0x2b6653dc` / `eip155:56` / Base `eip155:8453`
 
 ---
 
 ## Step 1: Install the SDK Packages
 
-Install the Express adapter and TRON payment scheme in your TypeScript API project:
+Install the Express adapter and the TRON/EVM payment schemes in your TypeScript API project:
 
 ```bash
-pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron
+pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm
 ```
 
 Use the framework package that matches your server (`@bankofai/x402-express`, `@bankofai/x402-hono`, `@bankofai/x402-fastify`, or `@bankofai/x402-next`). Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
@@ -133,7 +151,7 @@ The minimal server needs only two values:
 | Configuration | Description | Example |
 |------|------|------|
 | `HTTPFacilitatorClient.url` | Payment verification and settlement service URL | `https://facilitator.example.com` |
-| `payTo` | Your TRON receiving address | `T...` |
+| `payTo` | Your receiving address on the selected network | TRON: `T...`; BSC/Base: `0x...` |
 
 > 💡 **Keyless server:** The resource server never signs or holds a private key — it only advertises your public receiving address (`payTo`). Signing and settlement happen on the client and facilitator side.
 
@@ -143,7 +161,10 @@ The minimal server needs only two values:
 
 ## Step 3: Create a Payment-Protected API Server
 
-Here is a minimal Express resource server. `GET /credit` requires a `1 USDT` payment before it returns the credit payload.
+Here are minimal Express resource servers for TRON and Base. `GET /credit` requires payment before it returns the credit payload.
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
 
 ```typescript
 import express from "express";
@@ -190,13 +211,63 @@ express()
   .listen(4021);
 ```
 
+</TabItem>
+<TabItem value="BASE" label="Base Mainnet">
+
+```typescript
+import express from "express";
+import { createResourceServer } from "@bankofai/x402-core";
+import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
+import {
+  x402HTTPResourceServer,
+  paymentMiddlewareFromHTTPServer,
+} from "@bankofai/x402-express";
+import { ExactEvmScheme } from "@bankofai/x402-evm/exact/server";
+
+const server = createResourceServer(
+  new HTTPFacilitatorClient({
+    url: "https://facilitator.example.com",
+  })
+);
+
+server.register("eip155:8453", new ExactEvmScheme());
+
+express()
+  .use(
+    paymentMiddlewareFromHTTPServer(
+      new x402HTTPResourceServer(server, {
+        "GET /credit": {
+          accepts: [
+            {
+              scheme: "exact",
+              network: "eip155:8453",
+              payTo: "0x...",
+              price: "1 USDC",
+            },
+          ],
+        },
+      })
+    )
+  )
+  .get("/credit", (_req, res) =>
+    res.json({
+      status: "success",
+      credit: 1000000,
+    })
+  )
+  .listen(4021);
+```
+
+</TabItem>
+</Tabs>
+
 **Key configuration parameters:**
 
 | Parameter | Description | Example |
 |------|------|--------|
-| `payTo` | Your receiving wallet address | `T...` |
-| `accepts[].price` | Price per request | `"1 USDT"` |
-| `accepts[].network` | Network to use | Testnet: `TRON_NILE` (`tron:0xcd8690dc`) |
+| `payTo` | Your receiving wallet address | TRON: `T...`; Base: `0x...` |
+| `accepts[].price` | Price per request | TRON: `"1 USDT"`; Base: `"1 USDC"` |
+| `accepts[].network` | Network to use | TRON Nile: `tron:0xcd8690dc`; Base Mainnet: `eip155:8453` |
 | `accepts[].scheme` | Payment scheme | `"exact"` |
 | `routes` | Map of `"METHOD /path"` → `{ accepts }` | `"GET /credit"` |
 

@@ -8,7 +8,7 @@ description: BANK OF AI's wallet-native service catalog — where AI Agents disc
 
 Traditional API onboarding is designed for humans: create an account, request an API key, link a credit card, subscribe monthly. When an AI Agent wants to call an API on its own, it fails at the very first step — it has no email, no credit card, and it shouldn't be holding a pile of secret keys for you anyway.
 
-The **API Catalog** is BANK OF AI's wallet-native service catalog. AI Agents discover services here, call them by name, and pay per call — every call settles on-chain via x402. No accounts, no API keys: **your wallet is your identity**. The catalog covers both TRON and BNB Chain.
+The **API Catalog** is BANK OF AI's wallet-native service catalog. AI Agents discover services here, call them by name, and pay per call — every call settles on-chain via x402. No accounts, no API keys: **your wallet is your identity**. The catalog covers TRON, BNB Chain, and Base Mainnet.
 
 ## What it solves
 
@@ -41,7 +41,7 @@ Three consumers share the same data:
 
 ## What's in the catalog
 
-The first live services cover token creation plus DeFi market data and on-chain security — all settling across TRON and BNB Chain, with more being added over time:
+The first live services cover token creation plus DeFi market data and on-chain security, with routes settling across TRON, BNB Chain, and Base Mainnet as published by each provider:
 
 | Service | What it does | Billing |
 |---|---|---|
@@ -51,7 +51,7 @@ The first live services cover token creation plus DeFi market data and on-chain 
 | DIA | Decentralized, multi-source oracle prices by symbol or by chain + contract address | $0.000001 / call |
 | GoPlus | Token and address security checks — honeypot/scam screening, malicious-address and risky-approval detection | $0.000001 / call |
 
-All of the above are in the **Finance** category and available on both TRON and BNB Chain.
+All of the above are in the **Finance** category. Check each endpoint's `x402Routes` for its currently published TRON, BNB Chain, and Base Mainnet routes.
 
 :::note
 The live service list and statistics (service count, chain count, etc.) are **generated dynamically** from catalog data — treat `/api/catalog.json` as the source of truth; this page hard-codes no numbers, and the catalog grows as new services are listed.
