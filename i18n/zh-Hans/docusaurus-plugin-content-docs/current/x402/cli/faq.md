@@ -59,13 +59,13 @@ CLI 不会从 `wallets_config.json` 里读取私钥。在 EVM 网络上，它还
 
 ### 支持哪些网络和代币？
 
-TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）、BSC（`eip155:56`、`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`），并按网络内置 USDT、USDD、USDC 的注册表。完整表格见 [x402 CLI 概览](./index.md#支持的网络与代币)。已注册代币的精度以注册表为准；只有未注册的非 Base 资产，才需要用 `--asset <address>` 搭配 `--decimals <count>`。
+TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）、BSC（`eip155:56`、`eip155:97`）与 Base（`eip155:8453`），并按网络内置 USDT、USDD、USDC 的注册表。完整表格见 [x402 CLI 概览](./index.md#支持的网络与代币)。已注册代币的精度以注册表为准；只有未注册的非 Base 资产，才需要用 `--asset <address>` 搭配 `--decimals <count>`。
 
-TRON 网络必须传标准的 CAIP-2 标识符（`tron:0x…`）。旧标识如 `tron:nile`、`tron:mainnet`、`mainnet` 等已不再被接受——CLI 会拒绝并提示应改用的标准标识符。EVM 别名（`bsc-mainnet`、`bsc-testnet`、`base-mainnet`、`base-sepolia`）仍可使用。
+TRON 网络必须传标准的 CAIP-2 标识符（`tron:0x…`）。旧标识如 `tron:nile`、`tron:mainnet`、`mainnet` 等已不再被接受——CLI 会拒绝并提示应改用的标准标识符。EVM 别名（`bsc-mainnet`、`bsc-testnet`、`base-mainnet`）仍可使用。
 
 ### 在 Base 上付款有什么不同？
 
-Base 结算 USDC 用的是 **EIP-3009**（`transferWithAuthorization`）而非 Permit2，但仍属于 `exact` 方案。这一点不需要你配置——CLI 会按网络自动采用正确的授权方式。唯一需要你自己设置的是 RPC：内置的公共端点仅供开发使用，生产环境请传 `--rpc-url`，或设置 `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` / `EVM_RPC_URL`。详见 [在 Base 上付款](./command-reference.md#paying-on-base)。
+Base 结算 USDC 用的是 **EIP-3009**（`transferWithAuthorization`）而非 Permit2，但仍属于 `exact` 方案。这一点不需要你配置——CLI 会按网络自动采用正确的授权方式。唯一需要你自己设置的是 RPC：内置的公共端点仅供开发使用，生产环境请传 `--rpc-url`，或设置 `EVM_RPC_URL_8453` / `EVM_RPC_URL`。详见 [在 Base 上付款](./command-reference.md#paying-on-base)。
 
 ### 可以在不持有 TRX 的情况下付款吗？
 

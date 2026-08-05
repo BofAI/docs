@@ -59,13 +59,13 @@ Not if you cap it. Use `--max-amount <human>` or `--max-raw-amount <smallest-uni
 
 ### Which networks and tokens are supported?
 
-TRON (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`), BSC (`eip155:56`, `eip155:97`), and Base (`eip155:8453`, `eip155:84532`), with a built-in registry for USDT, USDD, and USDC depending on the network. See [x402 CLI overview](./index.md#supported-networks--tokens) for the full table. Registered token decimals are authoritative; pass `--asset <address>` with `--decimals <count>` only for an unregistered, non-Base asset.
+TRON (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`), BSC (`eip155:56`, `eip155:97`), and Base (`eip155:8453`), with a built-in registry for USDT, USDD, and USDC depending on the network. See [x402 CLI overview](./index.md#supported-networks--tokens) for the full table. Registered token decimals are authoritative; pass `--asset <address>` with `--decimals <count>` only for an unregistered, non-Base asset.
 
-Pass TRON networks as their canonical CAIP-2 identifiers (`tron:0x…`). Legacy identifiers such as `tron:nile`, `tron:mainnet`, or `mainnet` are no longer accepted — the CLI rejects them and tells you the canonical identifier to use. EVM aliases (`bsc-mainnet`, `bsc-testnet`, `base-mainnet`, `base-sepolia`) are accepted.
+Pass TRON networks as their canonical CAIP-2 identifiers (`tron:0x…`). Legacy identifiers such as `tron:nile`, `tron:mainnet`, or `mainnet` are no longer accepted — the CLI rejects them and tells you the canonical identifier to use. EVM aliases (`bsc-mainnet`, `bsc-testnet`, `base-mainnet`) are accepted.
 
 ### How is paying on Base different?
 
-Base settles USDC with **EIP-3009** (`transferWithAuthorization`) instead of Permit2, still under the `exact` scheme. You don't configure this — the CLI applies the right authorization per network. The one thing to set yourself is RPC: the built-in public endpoint is for development only, so in production pass `--rpc-url`, or set `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` / `EVM_RPC_URL`. See [Paying on Base](./command-reference.md#paying-on-base).
+Base settles USDC with **EIP-3009** (`transferWithAuthorization`) instead of Permit2, still under the `exact` scheme. You don't configure this — the CLI applies the right authorization per network. The one thing to set yourself is RPC: the built-in public endpoint is for development only, so in production pass `--rpc-url`, or set `EVM_RPC_URL_8453` / `EVM_RPC_URL`. See [Paying on Base](./command-reference.md#paying-on-base).
 
 ### Can I pay without holding TRX?
 

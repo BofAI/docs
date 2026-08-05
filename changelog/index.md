@@ -15,7 +15,7 @@ Product updates and announcements for BANK OF AI.
 
 <div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">Base</span></div>
 
-- **Base is live in the CLI** — `eip155:8453` and `eip155:84532` both support USDC. The service catalog currently publishes Base Mainnet routes on `eip155:8453` only. Base settles under `exact` using EIP-3009 authorization instead of Permit2.
+- **Base is live** — USDC on `eip155:8453` (Base Mainnet), in both the CLI and the service catalog. Base settles under `exact` using EIP-3009 authorization instead of Permit2.
 - **Agent Wallet is now the CLI's default payer** — `pay` signs with your active wallet, so no private key in an environment variable. With wallets configured but none active, the CLI stops before signing rather than choosing for you. [Details](./x402/)
 - Paid requests no longer follow HTTP redirects, keeping `PAYMENT-SIGNATURE` from reaching another origin.
 
