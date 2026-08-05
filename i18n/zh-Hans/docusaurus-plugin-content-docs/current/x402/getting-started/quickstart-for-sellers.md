@@ -85,6 +85,22 @@ git --version     # 版本控制工具
 > ✅ **成功：** 钱包显示测试 BNB 和测试 USDT 余额大于 0
 
 </TabItem>
+<TabItem value="BASE" label="Base">
+
+**创建 Base 钱包（约 3 分钟）：**
+
+1. 安装 [Coinbase Wallet](https://www.coinbase.com/wallet) 或 [MetaMask](https://metamask.io/)
+2. 创建专用钱包并妥善保存助记词
+3. 切换到 Base 主网
+4. 复制用于接收 USDC 的 `0x` 钱包地址
+
+**为收款钱包充值：**
+
+向钱包转入少量 Base 主网官方 USDC。资源服务器只公布该地址，不需要钱包私钥。主网支付会使用真实资金。
+
+> ✅ **成功：** 钱包已显示 Base 官方 USDC，且收款地址以 `0x` 开头
+
+</TabItem>
 </Tabs>
 
 > ⚠️ **钱包安全提醒：**
@@ -100,24 +116,26 @@ git --version     # 版本控制工具
 |--------|------|----------|
 | **TRON 钱包地址** | 以 `T` 开头的钱包地址（您的收款地址） | 从 TronLink 复制 |
 | **BSC 钱包地址** | 以 `0x` 开头的钱包地址（您的收款地址） | 从 MetaMask 复制 |
+| **Base 钱包地址** | 以 `0x` 开头的钱包地址（您的收款地址） | 从 Coinbase Wallet 或 MetaMask 复制 |
 | **测试 TRX** | TRON 测试网费率代币 | [Nile 水龙头](https://nileex.io/join/getJoinPage) |
 | **测试 USDT/USDD（TRON）** | TRON 测试支付代币（USDT 和 USDD 均支持） | [Nile 水龙头](https://nileex.io/join/getJoinPage) |
 | **测试 BNB** | BSC 测试网费率代币 | [BSC 测试网水龙头](https://www.bnbchain.org/en/testnet-faucet) |
 | **测试 USDT（BSC）** | BSC 测试支付代币 | [BSC 测试网水龙头](https://www.bnbchain.org/en/testnet-faucet) |
+| **USDC（Base）** | Base 主网官方结算代币 | 将官方 USDC 跨链或转入 Base 主网 |
 
 **测试网 vs. 主网：**
 
 - **测试网**：使用免费测试代币，不涉及真实资金，适合开发调试。网络标识：`tron:0xcd8690dc` / `eip155:97`
-- **主网**：涉及真实支付，上线时使用。网络标识：`tron:0x2b6653dc` / `eip155:56`
+- **主网**：涉及真实支付，上线时使用。网络标识：`tron:0x2b6653dc` / `eip155:56` / Base `eip155:8453`
 
 ---
 
 ## 第一步：安装 SDK 包
 
-在您的 TypeScript API 项目中安装 Express 适配器和 TRON 支付 scheme：
+在您的 TypeScript API 项目中安装 Express 适配器以及 TRON/EVM 支付 scheme：
 
 ```bash
-pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron
+pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm
 ```
 
 请根据服务框架选择对应包（`@bankofai/x402-express`、`@bankofai/x402-hono`、`@bankofai/x402-fastify` 或 `@bankofai/x402-next`）。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
@@ -133,7 +151,7 @@ pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron
 | 配置 | 说明 | 示例 |
 |------|------|------|
 | `HTTPFacilitatorClient.url` | 付款验证与结算服务地址 | `https://facilitator.example.com` |
-| `payTo` | 您的 TRON 收款地址 | `T...` |
+| `payTo` | 所选网络上的收款地址 | TRON：`T...`；BSC/Base：`0x...` |
 
 > 💡 **无密钥 server：** 资源服务器从不签名、不持有私钥——它只公布您的公开收款地址（`payTo`）。签名与结算发生在 client 和 facilitator 侧。
 
@@ -143,7 +161,10 @@ pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron
 
 ## 第三步：创建付费 API 服务器
 
-下面是一个最小 Express 资源服务器：`GET /credit` 需要先支付 `1 USDT`，付款成功后返回信用额度数据。
+下面分别给出 TRON 和 Base 的最小 Express 资源服务器。`GET /credit` 需要先完成支付，成功后返回信用额度数据。
+
+<Tabs>
+<TabItem value="TRON" label="TRON">
 
 ```typescript
 import express from "express";
@@ -190,13 +211,63 @@ express()
   .listen(4021);
 ```
 
+</TabItem>
+<TabItem value="BASE" label="Base 主网">
+
+```typescript
+import express from "express";
+import { createResourceServer } from "@bankofai/x402-core";
+import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
+import {
+  x402HTTPResourceServer,
+  paymentMiddlewareFromHTTPServer,
+} from "@bankofai/x402-express";
+import { ExactEvmScheme } from "@bankofai/x402-evm/exact/server";
+
+const server = createResourceServer(
+  new HTTPFacilitatorClient({
+    url: "https://facilitator.example.com",
+  })
+);
+
+server.register("eip155:8453", new ExactEvmScheme());
+
+express()
+  .use(
+    paymentMiddlewareFromHTTPServer(
+      new x402HTTPResourceServer(server, {
+        "GET /credit": {
+          accepts: [
+            {
+              scheme: "exact",
+              network: "eip155:8453",
+              payTo: "0x...",
+              price: "1 USDC",
+            },
+          ],
+        },
+      })
+    )
+  )
+  .get("/credit", (_req, res) =>
+    res.json({
+      status: "success",
+      credit: 1000000,
+    })
+  )
+  .listen(4021);
+```
+
+</TabItem>
+</Tabs>
+
 **关键配置参数：**
 
 | 参数 | 说明 | 示例 |
 |------|------|--------|
-| `payTo` | 您的收款钱包地址 | `T...` |
-| `accepts[].price` | 每次请求价格 | `"1 USDT"` |
-| `accepts[].network` | 使用的网络 | 测试网：`TRON_NILE`（`tron:0xcd8690dc`） |
+| `payTo` | 您的收款钱包地址 | TRON：`T...`；Base：`0x...` |
+| `accepts[].price` | 每次请求价格 | TRON：`"1 USDT"`；Base：`"1 USDC"` |
+| `accepts[].network` | 使用的网络 | TRON Nile：`tron:0xcd8690dc`；Base 主网：`eip155:8453` |
 | `accepts[].scheme` | 付款方式 | `"exact"` |
 | `routes` | `"METHOD /path"` → `{ accepts }` 的映射 | `"GET /credit"` |
 

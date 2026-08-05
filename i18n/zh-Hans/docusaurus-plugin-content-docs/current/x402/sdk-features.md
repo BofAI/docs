@@ -55,8 +55,10 @@ description: 'x402 TypeScript SDK 的功能支持矩阵，以颗粒化 @bankofai
 | `tron:0x94a9059e` | `TRON_SHASTA` | ✅ |
 | `eip155:56`（BSC 主网） | - | ✅ |
 | `eip155:97`（BSC 测试网） | - | ✅ |
+| `eip155:8453`（Base 主网） | - | ✅ |
+| `eip155:84532`（Base Sepolia） | - | ✅（CLI/SDK 测试） |
 
-> 上游 EVM 链（Base、Base Sepolia、MegaETH、Monad、Hyperliquid）也已接入 EVM 默认资产注册表。在示例中添加一条链仅需编辑配置表——无需改动 SDK。
+> 其他上游 EVM 链（MegaETH、Monad、Hyperliquid）也已接入 EVM 默认资产注册表。公开 API Catalog 只发布 Base 主网路由；Base Sepolia 保留用于 CLI/SDK 测试。
 
 ---
 
@@ -142,6 +144,7 @@ x402 支持四种付款方案。每种方案按链族实现为 client + server +
 | USDC（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
 | EPS（BEP-20） | `eip155:56` | ✅ |
 | DHLU（BSC 测试网，ERC-3009） | `eip155:97` | ✅ |
+| 官方 USDC（ERC-20，EIP-3009） | `eip155:8453`、`eip155:84532` | ✅ |
 | 自定义 TRC-20 / BEP-20 | 任意 | ✅（通过代币注册表 / `EVM_TOKENS` 配置） |
 
 ---

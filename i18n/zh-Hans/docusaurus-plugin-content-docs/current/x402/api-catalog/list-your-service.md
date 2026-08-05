@@ -8,7 +8,7 @@ description: 把你的 API 上架到 API 目录 —— 填表申请或直接提�
 
 上架一次，此后每一次 AI Agent 调用都是一笔入账。
 
-把你的 API 接到网关之后，它就会出现在目录里：任意 Agent 都能发现它、调用它、为它付费。款项实时结算到你指定的钱包，**无平台托管、无结算周期**；可在 TRON 或 BNB Chain 上结算；现有 API 保持原样，**无需改动任何代码**，定价也由你自己说了算。
+把你的 API 接到网关之后，它就会出现在目录里：任意 Agent 都能发现它、调用它、为它付费。款项实时结算到你指定的钱包，**无平台托管、无结算周期**；可在 TRON、BNB Chain 或 Base 主网上结算；现有 API 保持原样，**无需改动任何代码**，定价也由你自己说了算。
 
 ## 先看懂全景：上架到底是在做什么
 
@@ -233,7 +233,7 @@ CI 会强制以下规则，建议提交前逐条对照：
 - `version` 必须为 `1`。
 - `fqn` 为小写字母/数字/连字符，且与目录名一致。
 - `category` 必须是合法类目之一（见[参考](./reference.md#合法类目)）。
-- `chains` 至少一条，使用 CAIP-2 风格的链 ID —— 主网或测试网均可（如 `tron:0x2b6653dc`、`tron:0xcd8690dc`、`eip155:56`、`eip155:97`）。
+- `chains` 至少一条，使用 CAIP-2 风格的链 ID。公开目录发布主网路由，例如 `tron:0x2b6653dc`、`eip155:56` 和 Base 主网 `eip155:8453`。
 - `isFirstParty`、`isFeatured`（布尔值）与 `featuredTags`（字符串数组，可为空 `[]`）为**必填**，缺一即校验失败。
 - 每个 endpoint 的 `method` 必须大写、`path` 以 `/` 开头、`maxPriceUsd` 不小于 `minPriceUsd`。
 - _（选填）_ 跨多条链结算的端点可加 `x402Routes`，每个网络一条（`network`、`provider`、`scheme`、`url`）。详见[参考](./reference.md#x402routes--多网络路由)。

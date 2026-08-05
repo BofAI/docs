@@ -8,7 +8,7 @@ description: List your API in the API Catalog — apply via the form or open a P
 
 List once — every AI Agent call after that is revenue in.
 
-Put your API behind the Gateway and it appears in the catalog: any Agent can discover it, call it, and pay for it. Payments settle to the wallet you specify in real time — **no platform escrow, no payout cycle**; settle on TRON or BNB Chain; your existing API stays exactly as it is, **not one line of code changes**, and you set the prices.
+Put your API behind the Gateway and it appears in the catalog: any Agent can discover it, call it, and pay for it. Payments settle to the wallet you specify in real time — **no platform escrow, no payout cycle**; settle on TRON, BNB Chain, or Base Mainnet; your existing API stays exactly as it is, **not one line of code changes**, and you set the prices.
 
 ## The big picture: what listing actually means
 
@@ -233,7 +233,7 @@ CI enforces the following rules — go through them before submitting:
 - `version` must be `1`.
 - `fqn` is lowercase letters/digits/hyphens and must match the directory name.
 - `category` must be one of the allowed values (see [reference](./reference.md#allowed-categories)).
-- `chains` needs at least one entry, using CAIP-2 style chain IDs — mainnets or testnets (e.g. `tron:0x2b6653dc`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97`).
+- `chains` needs at least one entry, using CAIP-2 style chain IDs. The public catalog publishes mainnet routes such as `tron:0x2b6653dc`, `eip155:56`, and Base Mainnet `eip155:8453`.
 - `isFirstParty`, `isFeatured` (booleans) and `featuredTags` (string array, may be empty `[]`) are **required** — missing any of them fails validation.
 - For every endpoint: `method` must be uppercase, `path` must start with `/`, and `maxPriceUsd` must not be less than `minPriceUsd`.
 - _(Optional)_ An endpoint that settles across multiple chains can add `x402Routes` — one entry per network (`network`, `provider`, `scheme`, `url`). See the [reference](./reference.md#x402routes--multi-network-routing).

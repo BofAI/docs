@@ -195,6 +195,10 @@ export AGENT_WALLET_MNEMONIC='word1 word2 word3 ...'
 | `AGENT_WALLET_MNEMONIC` | 明文助记词短语 | ⚠️ 静态注入 | 二选一（与私钥） |
 | `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | BIP-44 派生索引（默认 `0`） | ⚠️ 静态注入 | 可选 |
 
+:::note 遗留变量名
+SDK 仍然接受早期的 `TRON_PRIVATE_KEY`、`TRON_MNEMONIC`、`TRON_ACCOUNT_INDEX`，它们分别对应 `AGENT_WALLET_PRIVATE_KEY`、`AGENT_WALLET_MNEMONIC`、`AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX`。虽然名字里带 TRON，但在 EVM 网络上同样生效。新项目建议统一用 `AGENT_WALLET_*` 这套名字。
+:::
+
 ---
 
 ## 使用示例

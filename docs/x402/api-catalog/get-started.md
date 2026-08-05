@@ -12,7 +12,7 @@ Two steps and under 3 minutes to plug your Agent into the whole catalog: install
 
 ## Step 1: Install the Agent Wallet
 
-Run the command below to install a local wallet that manages stablecoins on TRON & BNB Chain. Every paid call your Agent makes from now on is signed locally by this wallet.
+Run the command below to install a local wallet that manages stablecoins on TRON, BNB Chain, and Base. Every paid call your Agent makes from now on is signed locally by this wallet.
 
 ```bash
 npm i -g @bankofai/agent-wallet
@@ -73,8 +73,8 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | Flag | Purpose |
 |---|---|
 | `--method` | HTTP method (defaults to `GET`) |
-| `--network` | CAIP-2 payment chain, e.g. `tron:0x2b6653dc`, `eip155:56` |
-| `--token` | Settlement token, e.g. `USDT` |
+| `--network` | CAIP-2 payment chain, e.g. `tron:0x2b6653dc`, `eip155:56`, `eip155:8453` |
+| `--token` | Settlement token, e.g. `USDT` or Base Mainnet `USDC` |
 | `--scheme` | x402 payment scheme declared by the route, e.g. `exact` |
 | `--max-amount` | Spend ceiling in USD; the call aborts if the quote exceeds it |
 | `--header` / `--body` | Request headers and body for the upstream call |

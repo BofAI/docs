@@ -58,6 +58,33 @@ agent-wallet start -p Abc12345! -k your-private-key-hex
 agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 ```
 
+#### Skip the prompts: name the wallet type directly
+
+`start` and `add` also take the wallet type as a subcommand. That form asks nothing, which is what you want in CI or any background service:
+
+```bash
+agent-wallet start local_secure -p Abc12345! -g      # encrypted, generate a new key
+agent-wallet start raw_secret -k your-private-key    # plaintext, dev only
+agent-wallet start privy --app-id <id> --app-secret <secret> --privy-wallet-id <wallet>
+```
+
+`add` works the same way (`add local_secure` / `add raw_secret` / `add privy`) for a second wallet.
+
+| Option | Applies to | Description |
+| :--- | :--- | :--- |
+| `-w, --wallet-id <id>` | all | Wallet ID to create |
+| `-g, --generate` | `local_secure` | Generate a new random key |
+| `-k, --private-key <hex>` | `local_secure`, `raw_secret` | Import a private key |
+| `-m, --mnemonic <words>` | `local_secure`, `raw_secret` | Import a mnemonic |
+| `--mnemonic-index <n>` | `local_secure`, `raw_secret` | Account index when deriving from the mnemonic |
+| `-p, --password <pass>` | `local_secure` | Master password |
+| `--app-id` / `--app-secret` / `--privy-wallet-id` | `privy` | Privy app credentials and wallet ID |
+| `-d, --dir <path>` | all | Secrets directory (default `~/.agent-wallet`) |
+| `--save-runtime-secrets` | all | Persist the password to `runtime_secrets.json` |
+| `--override` | `start` only | Overwrite an existing setup |
+
+Run `agent-wallet start local_secure --help` or `agent-wallet add privy --help` for the exact options of one mode.
+
 ### `agent-wallet sign` (Core Signing Operations)
 
 Every `sign` subcommand requires `--network` / `-n` to specify the chain.

@@ -7,7 +7,7 @@ description: >-
 
 # 欢迎使用 x402
 
-x402 是一种基于 HTTP `402 Payment Required` 状态码的区块链开放支付标准。它允许 Web 服务通过“先付费后响应”的机制直接对 API 或内容进行收费，无需依赖传统的账户或会话体系。目前，x402 已在 **TRON** 和 **BSC** 网络上支持，并计划在未来扩展至多链生态，实现广泛的区块链网络覆盖。
+x402 是一种基于 HTTP `402 Payment Required` 状态码的区块链开放支付标准。它允许 Web 服务通过“先付费后响应”的机制直接对 API 或内容进行收费，无需依赖传统的账户或会话体系。目前，x402 已支持 **TRON**、**BNB Smart Chain（BSC）** 和 **Base**，并计划在未来扩展至更广泛的多链生态。
 
 **有意参与文档共建？** 欢迎在 [GitHub 仓库](https://github.com/BofAI/docs)提交 PR！我们唯一的原则是保持文档的中立性：除必要的资源链接外，请避免包含任何品牌推广内容。
 
@@ -66,6 +66,9 @@ x402 目前支持以下网络环境：
 - **TRON Nile 测试网** (`tron:0xcd8690dc`)
 - **BSC 主网** （`eip155:56`）
 - **BSC 测试网** （`eip155:97`)
+- **Base 主网**（`eip155:8453`）
+
+Base 主网使用官方 USDC，通过 `exact` 方案和 EIP-3009 授权完成支付。
 
 > **SDK（仅 TypeScript）**：x402 是仅 TypeScript 的 SDK，以颗粒化 `@bankofai/x402-*` npm 包发布（`core`、`evm`、`tron`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）。源码由 pnpm/turbo monorepo 维护，但应用开发应安装已发布的包。支持的方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`exact_gasfree`（TRON）。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。完整对比详见 [SDK 功能特性](./sdk-features.md)。
 

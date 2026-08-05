@@ -55,8 +55,10 @@ This page tracks the feature support of the x402 SDK.
 | `tron:0x94a9059e` | `TRON_SHASTA` | ✅ |
 | `eip155:56` (BSC Mainnet) | - | ✅ |
 | `eip155:97` (BSC Testnet) | - | ✅ |
+| `eip155:8453` (Base Mainnet) | - | ✅ |
+| `eip155:84532` (Base Sepolia) | - | ✅ (CLI/SDK testing) |
 
-> Upstream EVM chains (Base, Base Sepolia, MegaETH, Monad, Hyperliquid) are also wired in the EVM default-asset registry. Adding a chain is a config-table edit in the examples — no SDK changes.
+> Other upstream EVM chains (MegaETH, Monad, Hyperliquid) are also wired in the EVM default-asset registry. The public API Catalog publishes Base Mainnet routes only; Base Sepolia remains available for CLI/SDK testing.
 
 ---
 
@@ -141,6 +143,7 @@ Key custody is in [`@bankofai/agent-wallet`](https://github.com/BofAI/agent-wall
 | USDT (BEP-20) | `eip155:56`, `eip155:97` | ✅ |
 | USDC (BEP-20) | `eip155:56`, `eip155:97` | ✅ |
 | DHLU (BSC testnet, ERC-3009) | `eip155:97` | ✅ |
+| Official USDC (ERC-20, EIP-3009) | `eip155:8453`, `eip155:84532` | ✅ |
 | Custom TRC-20 / BEP-20 | any | ✅ (via token registry / `EVM_TOKENS` config) |
 
 ---

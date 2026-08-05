@@ -34,20 +34,23 @@ npm update -g @bankofai/x402-cli
 
 ### 使用 CLI 一定要钱包吗？
 
-只有真正付款时才需要。只读命令——`pay --dry-run`、`catalog search`、`catalog show`、`gateway check`——都无需钱包。真正的 `pay` 或 `roundtrip` 才需要付款方私钥。
+只有真正付款时才需要。只读命令——`pay --dry-run`、`catalog search`、`catalog show`、`gateway check`——都无需钱包。真正的 `pay` 或 `roundtrip` 会用你当前激活的 [Agent Wallet](../../Agent-Wallet/Intro.md) 签名。
 
-### 如何提供私钥？
+### CLI 怎么决定用哪个钱包签名？
 
-设置以下环境变量之一：
+它会为支付网络解析出**当前激活的 Agent Wallet**。如果配置了钱包但没有标记激活项，CLI 会在签名前停下、而不是替你猜——请设置激活钱包，或显式指定：
 
-- **TRON 网络** → `TRON_PRIVATE_KEY`
-- **EVM 网络**（BSC） → `EVM_PRIVATE_KEY`
-- **两种网络通用** → `PRIVATE_KEY`，当没有设置对应网络的专用变量时作为回退
+- `--wallet-id <id>` 或 `AGENT_WALLET_ID` —— 指定某个已配置的钱包
+- `AGENT_WALLET_DIR` —— 使用非默认的 Agent Wallet 目录
 
-你也可以用 `--private-key <hex>` 为单条命令传入，但请避免在共享 Shell 或提交到版本库的脚本里这样做——命令行参数会被记录到 Shell 历史和进程列表中。
+CLI 不会从 `wallets_config.json` 里读取私钥。在 EVM 网络上，它还会在签名前检查付款方的代币余额，并在结果中返回解析出的钱包 ID、地址与原始余额。
+
+### 还能用裸私钥吗？
+
+可以，但仅限开发与 CI：`--private-key <hex>`，或 `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` 环境变量。共享环境中请优先用环境变量而非命令行参数——后者会被记录到 Shell 历史和进程列表中。
 
 :::caution
-任何超出一次性测试范围的场景，请使用 [agent-wallet](../../Agent-Wallet/Intro.md) 付款钱包，而不是裸露的环境变量私钥；并且付款方地址里只保留当前任务所需的最小额度。
+任何超出一次性测试范围的场景，请使用 Agent Wallet 而不是裸私钥；并且付款方地址里只保留当前任务所需的最小额度。
 :::
 
 ### 支付会超出我的预期金额吗？
@@ -56,7 +59,17 @@ npm update -g @bankofai/x402-cli
 
 ### 支持哪些网络和代币？
 
-TRON（`tron:mainnet`、`tron:nile`、`tron:shasta`）与 BSC（`eip155:56`、`eip155:97`），并按网络内置 USDT、USDD、USDC 的注册表。完整表格见 [x402 CLI 概览](./index.md#支持的网络与代币)。若代币未注册，用 `--asset <address>` 搭配 `--decimals <count>`。
+TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）、BSC（`eip155:56`、`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`），并按网络内置 USDT、USDD、USDC 的注册表。完整表格见 [x402 CLI 概览](./index.md#支持的网络与代币)。已注册代币的精度以注册表为准；只有未注册的非 Base 资产，才需要用 `--asset <address>` 搭配 `--decimals <count>`。
+
+TRON 网络必须传标准的 CAIP-2 标识符（`tron:0x…`）。旧标识如 `tron:nile`、`tron:mainnet`、`mainnet` 等已不再被接受——CLI 会拒绝并提示应改用的标准标识符。EVM 别名（`bsc-mainnet`、`bsc-testnet`、`base-mainnet`、`base-sepolia`）仍可使用。
+
+### 在 Base 上付款有什么不同？
+
+Base 结算 USDC 用的是 **EIP-3009**（`transferWithAuthorization`）而非 Permit2，但仍属于 `exact` 方案。这一点不需要你配置——CLI 会按网络自动采用正确的授权方式。唯一需要你自己设置的是 RPC：内置的公共端点仅供开发使用，生产环境请传 `--rpc-url`，或设置 `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` / `EVM_RPC_URL`。详见 [在 Base 上付款](./command-reference.md#paying-on-base)。
+
+### 可以在不持有 TRX 的情况下付款吗？
+
+可以，在 TRON 上通过 GasFree 实现。使用 `scheme=exact_gasfree` 时，由一个 relayer 代付网络能量、并从支付代币里扣除手续费，所以付款钱包只需要稳定币、无需 TRX。当接口宣告了该 scheme 时 CLI 会自动选用，也可以用 `--scheme exact_gasfree` 显式要求。由于 relayer 手续费与支付金额分开，用 `--max-gasfree-fee <amount>` 给它封顶。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
 
 ---
 
@@ -66,7 +79,16 @@ TRON（`tron:mainnet`、`tron:nile`、`tron:shasta`）与 BSC（`eip155:56`、`e
 
 | 错误码 | 发生了什么 | 如何修复 |
 | :--- | :--- | :--- |
-| `WALLET_NOT_CONFIGURED` | 找不到付款方私钥 | 设置 `TRON_PRIVATE_KEY` / `EVM_PRIVATE_KEY` / `PRIVATE_KEY`，或配置 agent-wallet 付款钱包 |
+| `WALLET_NOT_CONFIGURED` | 该网络没有激活的 Agent Wallet | 设置激活钱包，或用 `--wallet-id` / `AGENT_WALLET_ID` 指定。开发/CI 场景可用 `--private-key` 或 `*_PRIVATE_KEY` 变量 |
+| `WALLET_PASSWORD_REQUIRED` | Agent Wallet 需要解锁密码 | 通过 Agent Wallet 支持的安全配置方式提供密码 |
+| `WALLET_DECRYPTION_FAILED` | Agent Wallet 密码错误 | 用正确的密码解锁后重试 |
+| `WALLET_CONFIG_CORRUPT` | Agent Wallet 配置无法读取 | 检查 `~/.agent-wallet/wallets_config.json`，或重建本地配置 |
+| `WALLET_NETWORK_ERROR` | 连不上 Agent Wallet 后端 | 检查到所配置钱包后端的网络连通性 |
+| `WALLET_SIGNING_FAILED` | 钱包未能生成签名 | 确认激活钱包支持该网络与本次 typed-data 签名请求 |
+| `WALLET_UNSUPPORTED_OPERATION` | 钱包后端不支持该网络的 typed-data 签名 | 换用支持该网络 typed-data 签名的钱包后端 |
+| `WALLET_AUTH_FAILED` | 远程钱包认证被拒绝 | 检查远程钱包的认证配置 |
+| `WALLET_ERROR` | 其他 Agent Wallet 故障 | 检查激活钱包的配置与后端状态 |
+| `TOKEN_TRANSFER_FAILED` | 代币 `transferFrom` 回滚 | 检查代币余额、代币合约，以及付款方的授权额度 |
 | `TRON_ACCOUNT_NOT_ACTIVATED` | 该 TRON 地址从未在链上使用过 | 先给它转一小笔 TRX 激活，再签名 |
 | `INSUFFICIENT_TOKEN_BALANCE` | 付款方缺少被收取的代币 | 用服务方宣告的确切代币和网络给付款方充值 |
 | `INSUFFICIENT_GAS` | 原生 gas / 能量不足 | 给付款方充值该网络的原生 gas 代币（TRX / BNB） |

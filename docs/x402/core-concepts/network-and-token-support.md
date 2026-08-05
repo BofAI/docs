@@ -31,6 +31,19 @@ In the x402 protocol (on-the-wire), BSC uses the EIP-155 chain ID format:
 
 ---
 
+## Base Network Identifiers
+
+Base uses canonical EIP-155 identifiers on the x402 wire:
+
+| Network Name | Protocol ID | Description |
+| :----------- | :---------- | :---------- |
+| **Base Mainnet** | `eip155:8453` | Production network; published by the API Catalog |
+| **Base Sepolia** | `eip155:84532` | CLI/SDK test network |
+
+Base Mainnet uses official USDC and the `exact` scheme with EIP-3009 authorization. The payer signs a `transferWithAuthorization` message off-chain; no Permit2 approval is required.
+
+---
+
 ## Overview
 
 x402 is purpose-built for blockchain ecosystems, enabling native on-chain payment verification and settlement.
@@ -45,13 +58,14 @@ The protocol uses secure signing mechanisms to ensure tamper-resistant message a
 | **TRON Shasta**     | **Testnet** | Long-running alternative testnet |
 | **BSC Mainnet**     | **Mainnet** | **Production network** for real-value assets |
 | **BSC Testnet**     | **Testnet** | **Recommended testnet** for BSC development |
+| **Base Mainnet**    | **Mainnet** | **Production network** using official USDC |
+| **Base Sepolia**    | **Testnet** | CLI/SDK testing; not published in the API Catalog |
 
 ---
 
 ## Supported Tokens
 
-x402 fully supports **TRC-20 and BEP-20** standard tokens.
-By default, **USDT** and **USDD** are used as primary settlement currencies.
+x402 supports **TRC-20, BEP-20, and ERC-20** tokens. TRON/BSC routes use their configured stablecoins; Base uses official USDC.
 
 ### Supported Token List
 
@@ -67,10 +81,12 @@ By default, **USDT** and **USDD** are used as primary settlement currencies.
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 | **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
 | **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
+| **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
+| **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
 > **Extensibility**: The protocol is highly extensible. By registering tokens in the `TokenRegistry`, you can easily support any custom TRC-20 or BEP-20 token.
 
-> **Token selection for the `exact` scheme**: ERC-3009 tokens (e.g. BSC testnet **DHLU**) settle gaslessly via `transferWithAuthorization`. Plain ERC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. The per-token method is data in the server's `accepts[].price.extra`: ERC-3009 → `{ name, version }`; plain ERC-20 → `{ assetTransferMethod: "permit2" }`.
+> **Token selection for the `exact` scheme**: EIP-3009 tokens (for example official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`. Plain ERC-20 tokens (for example BSC USDC/USDT and TRON USDT/USDD) settle via the Permit2 path — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. The per-token method is data in the server's `accepts[].price.extra`: EIP-3009 → `{ name, version }`; plain ERC-20 → `{ assetTransferMethod: "permit2" }`.
 
 ---
 
@@ -95,8 +111,8 @@ x402 uses typed data signing for all payment-related signatures.
 
 When configuring an `HTTP 402` payment request on the server side, you must explicitly define:
 
-1. **Network** – The unique network identifier (e.g., `tron:0xcd8690dc`)
-2. **Asset** – The TRC-20/BEP-20 token **contract address**
+1. **Network** – The unique network identifier (e.g., `tron:0xcd8690dc` or `eip155:8453`)
+2. **Asset** – The TRC-20/BEP-20/ERC-20 token **contract address**
 3. **Amount** – The integer value in the token’s **smallest unit (raw amount)**
 
 > **Precision Example**
@@ -114,7 +130,7 @@ x402 supports four payment schemes. Each is implemented as a client + server + f
 
 The `exact` scheme pays the exact amount advertised. It covers two token transfer paths:
 
-- **ERC-3009 `transferWithAuthorization`** — for tokens that natively support it (e.g. BSC testnet DHLU). Gasless: no `approve` needed; the client signs a typed-data authorization and the facilitator calls `transferWithAuthorization` on-chain.
+- **EIP-3009 `transferWithAuthorization`** — for tokens that natively support it (e.g. official Base USDC and BSC testnet DHLU). Gasless: no `approve` needed; the client signs a typed-data authorization and the facilitator calls `transferWithAuthorization` on-chain.
 - **Permit2** — for plain ERC-20 / TRC-20 tokens that do not implement ERC-3009 (e.g. BSC USDC/USDT, TRON USDT/USDD). The client signs a Permit2 witness and the facilitator settles via the `x402ExactPermit2Proxy` contract. A one-time `approve(Permit2)` is required; the client auto-broadcasts it on first payment.
 
 The `exact` scheme conforms to the **v2 wire format** published by the **x402 Foundation**: a stock v2 client can pay a protected endpoint on this SDK's server directly, and this SDK's client can pay any v2-compliant server — no project-specific translation required. Transfer authorization data is carried in `payload.authorization`.
@@ -174,8 +190,8 @@ You may deploy your own Facilitator to gain full control over payment verificati
 
 ### Deployment Requirements
 
-- **Node Access** – Reliable RPC access (e.g. TronGrid or a public BSC endpoint)
-- **Gas Funding** – A wallet with sufficient **TRX/BNB** to cover settlement gas fees
+- **Node Access** – Reliable RPC access (e.g. TronGrid or an EVM JSON-RPC endpoint for BSC/Base)
+- **Gas Funding** – A wallet with sufficient **TRX/BNB/ETH** to cover settlement gas fees
 - **Service Deployment** – Run the example facilitator from `examples/typescript/facilitator/basic`
 
 > For detailed configuration and API references, see the [Facilitator](./facilitator.md) documentation and the [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md).
@@ -184,10 +200,10 @@ You may deploy your own Facilitator to gain full control over payment verificati
 
 ## Quick Reference
 
-| Core Component | TRON/BSC Implementation |
+| Core Component | TRON/BSC/Base Implementation |
 | :------------- | :---------------------- |
-| **Networks**   | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97` |
-| **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20 |
+| **Networks**   | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532` |
+| **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20, ERC-20 (Base official USDC) |
 | **Signing Mechanism** | TIP-712 / EIP-712 typed data signing |
 | **Payment Schemes** | `exact`, `upto`, `batch-settlement`, `exact_gasfree` (TRON) |
 
@@ -216,11 +232,11 @@ Once registered, you can use the custom token symbol in TRON prices (e.g., `"0.0
 
 ## Summary
 
-x402 is deeply tailored for blockchain-native architectures, providing seamless TRC-20/BEP-20 integration and secure signature support.
+x402 is deeply tailored for blockchain-native architectures, providing seamless TRC-20/BEP-20/ERC-20 integration and secure signature support.
 
 ### Key Takeaways
 
 - **Development Environment**: Use testnets for development and debugging.
-- **Default Settlement Asset**: **USDT** is the primary default token with preconfigured SDK support.
+- **Default Settlement Asset**: TRON/BSC routes use their configured stablecoins; Base uses official **USDC**.
 - **Security Model**: TIP-712 / EIP-712 typed data signing ensures secure, trust-minimized payment authorization.
 - **Extensibility**: Expand support for any custom TRC-20/BEP-20 token via the TRON token registry (`registerToken`) or the server's `EVM_TOKENS` config table.

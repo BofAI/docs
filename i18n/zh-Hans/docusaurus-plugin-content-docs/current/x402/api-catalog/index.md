@@ -8,7 +8,7 @@ description: BANK OF AI 的钱包原生服务目录 —— AI Agent 在这里发
 
 传统 API 的门槛是为人设计的：注册账号、申请 API Key、绑定信用卡、按月订阅。可一个 AI Agent 想自主调用一个接口时，光是「开户」这一步就走不通——它没有邮箱、没有信用卡，也不该替你保管一长串密钥。
 
-**API 目录**（API Catalog）是 BANK OF AI 的钱包原生服务目录。AI Agent 在这里发现服务、按名称调用、按次付费，每一笔调用都通过 x402 在链上结算。没有账号，没有 API Key，**钱包即身份**。目录同时覆盖 TRON 与 BNB Chain。
+**API 目录**（API Catalog）是 BANK OF AI 的钱包原生服务目录。AI Agent 在这里发现服务、按名称调用、按次付费，每一笔调用都通过 x402 在链上结算。没有账号，没有 API Key，**钱包即身份**。目录覆盖 TRON、BNB Chain 和 Base 主网。
 
 ## 它解决什么
 
@@ -41,7 +41,7 @@ pay.md                        构建静态快照 dist/          /api/providers/<
 
 ## 目录里有什么
 
-首批上线服务覆盖发币、DeFi 市场数据与链上安全 —— 全部支持 TRON 与 BNB Chain 结算，后续会陆续增加：
+首批上线服务覆盖发币、DeFi 市场数据与链上安全；每个服务根据其已发布路由支持 TRON、BNB Chain 或 Base 主网结算：
 
 | 服务 | 它能做什么 | 计费 |
 |---|---|---|
@@ -51,7 +51,7 @@ pay.md                        构建静态快照 dist/          /api/providers/<
 | DIA | 去中心化、多源预言机价格，按符号或链 + 合约地址查询 | $0.000001 / 次 |
 | GoPlus | 代币与地址安全检测 —— 蜜罐/诈骗筛查、恶意地址与高风险授权识别 | $0.000001 / 次 |
 
-以上服务均属 **金融（Finance）** 类目，TRON 与 BNB Chain 均可用。
+以上服务均属 **金融（Finance）** 类目。请查看各端点的 `x402Routes`，确认当前已发布的 TRON、BNB Chain 和 Base 主网路由。
 
 :::note
 在架服务清单与统计数字（服务数、链数等）均由目录数据**动态生成**，以 `/api/catalog.json` 的实时内容为准，本文不写死具体数量；目录会随新服务上架而增长。

@@ -16,7 +16,8 @@ description: >-
 
 1. **Node.js** >= 20（[下载](https://nodejs.org/)）
 2. **npm**（随 Node.js 一起安装）
-3. 用于支付步骤的一个有余额的测试网地址——一个 TRON **Nile** 地址，持有少量测试 **USDT** 和 **TRX**（用于能量）。参见 [钱包](../core-concepts/wallet.md)。
+3. 一个 **[Agent Wallet](../../Agent-Wallet/QuickStart.md)**，并为你要付款的网络设置好激活钱包——CLI 默认用它签名
+4. 用于支付步骤的一个有余额的测试网地址——一个 TRON **Nile** 地址，持有少量测试 **USDT** 和 **TRX**（用于能量）。参见 [钱包](../core-concepts/wallet.md)。
 
 验证你的环境：
 
@@ -48,54 +49,56 @@ x402-cli --help
 
 ## 第 2 步：先不花钱试一试
 
-看到接口真实返回的 `402` 支付要求的最快方式是**空跑（dry run）**。它会探测接口、读取支付要求，并原样打印出你将被要求支付的内容——但不签名、不花钱：
+看到接口真实返回的 `402` 支付要求的最快方式是**空跑（dry run）**。它会探测一个真实的 TRON 主网接口、读取支付要求，并原样打印出你将被要求支付的内容——但不签名、不花钱：
 
 ```bash
-x402-cli pay https://api.example.com/paid \
-  --network tron:nile \
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols' \
+  --network tron:0x2b6653dc \
   --token USDT \
   --dry-run \
   --json
 ```
 
-`--dry-run` 的输出包含被选中的支付要求（网络、资产、金额、收款地址）。这就是你的安全网：支付一个陌生接口前，永远先空跑一次。
+这一步读取 TRON 主网支付要求，但 `--dry-run` 不会签名或提交支付。它的输出包含被选中的支付要求（网络、资产、金额、收款地址）。这就是你的安全网：支付一个陌生接口前，永远先空跑一次。
 
 ---
 
 ## 第 3 步：在测试网跑一次完整回路
 
-`roundtrip` 会启动一个临时的本地付费端点、支付它、然后退出——一次完整的端到端测试。你需要一个 Nile 测试网的付款方私钥。
+`roundtrip` 会启动一个临时的本地付费端点、支付它、然后退出——一次完整的端到端测试。签名由你在 Nile 上激活的 Agent Wallet 完成。
 
 ```bash
-TRON_PRIVATE_KEY=<你的-nile-十六进制私钥> \
 x402-cli roundtrip \
   --pay-to <你的-nile-收款地址> \
   --amount 0.0001 \
-  --network tron:nile \
+  --network tron:0xcd8690dc \
   --token USDT
 ```
 
 成功时，CLI 会打印出已结算的交易。那串交易哈希，就是这笔支付已在链上清算的凭证——恭喜，你的环境端到端跑通了。
 
 :::caution 保管好你的私钥
-私钥请通过环境变量传入（TRON 用 `TRON_PRIVATE_KEY`，EVM 用 `EVM_PRIVATE_KEY`，`PRIVATE_KEY` 是两种网络通用的回退），绝不要在共享 Shell 或提交到版本库的脚本里以明文命令行参数传递——命令行参数可能被本机其它进程看到。任何超出一次性测试范围的场景，请使用 [agent-wallet](../../Agent-Wallet/QuickStart.md) 付款钱包。
+CLI 使用你当前激活的 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 签名，私钥不会进入 Shell 或配置文件。如果配置了钱包但没有激活项，CLI 会在签名前停下——请设置激活钱包，或用 `--wallet-id` 指定。`--private-key` 参数与 `*_PRIVATE_KEY` 变量仅供开发和 CI 使用；共享环境中请优先用环境变量而非命令行参数，后者可能被本机其它进程看到。
 :::
 
 ---
 
 ## 第 4 步：支付真实的 x402 接口
 
-回路跑通后，支付任意受 x402 保护的 URL，就是同一条 `pay` 命令指向真实资源：
+回路跑通后，支付任意受 x402 保护的 URL 都使用同一条命令。请将下面的占位符替换为 provider 公布的 URL、网络与代币：
 
 ```bash
-TRON_PRIVATE_KEY=<你的十六进制私钥> \
-x402-cli pay https://api.example.com/paid \
-  --network tron:nile \
-  --token USDT \
+x402-cli pay '<x402-url>' \
+  --network <network> \
+  --token <token> \
   --max-amount 0.01
 ```
 
-`--max-amount` 给你愿意支付的金额封顶：如果接口价格超过它，CLI 会在签名前中止。EVM 网络请使用 `EVM_PRIVATE_KEY`（或通用回退 `PRIVATE_KEY`）以及像 `eip155:97` 这样的 EVM 网络。
+`--max-amount` 给你愿意支付的金额封顶：如果接口价格超过它，CLI 会在签名前中止。同一条命令在 EVM 网络上同样适用——把 `--network` 指向 `eip155:97`（BSC 测试网）或 `base-sepolia`（Base Sepolia，USDC）即可。
+
+:::tip 没有 TRX？用 GasFree
+在 TRON 上，如果接口宣告了 `exact_gasfree`，CLI 可以在钱包里没有 TRX 的情况下付款——由一个 relayer 代付网络能量、并从支付代币里扣除手续费。CLI 会自动选用，你也可以用 `--scheme exact_gasfree` 显式要求，并用 `--max-gasfree-fee` 给 relayer 手续费封顶。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
+:::
 
 ---
 
@@ -107,7 +110,7 @@ x402-cli pay https://api.example.com/paid \
 x402-cli serve \
   --pay-to <你的收款地址> \
   --amount 0.0001 \
-  --network tron:nile \
+  --network tron:0xcd8690dc \
   --token USDT \
   --port 4020
 ```
@@ -122,7 +125,7 @@ x402-cli serve \
 在另一个终端里支付它：
 
 ```bash
-TRON_PRIVATE_KEY=<hex> x402-cli pay http://127.0.0.1:4020/pay --network tron:nile --token USDT
+x402-cli pay http://127.0.0.1:4020/pay --network tron:0xcd8690dc --token USDT
 ```
 
 用 `--facilitator-url` 指向特定的 Facilitator（默认 `https://facilitator.bankofai.io`），加上 `--daemon` 可让服务在后台运行并打印子进程 id。
