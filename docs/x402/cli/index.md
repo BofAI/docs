@@ -93,6 +93,7 @@ The CLI ships a built-in token registry. Pass a network with `--network` and a t
 | **BSC Mainnet** | `eip155:56` | USDT |
 | **BSC Testnet** | `eip155:97` | USDT, USDC |
 | **Base Mainnet** | `eip155:8453` | USDC |
+| **Base Sepolia Testnet** | `eip155:84532` | USDC |
 
 Always pass TRON networks as their canonical CAIP-2 identifiers (`tron:0x…`). Legacy aliases like `tron-mainnet`, `tron:nile`, or `mainnet` are **rejected** — the CLI reports the canonical identifier to use instead. Only the EVM aliases are still accepted and normalized automatically:
 
@@ -101,6 +102,7 @@ Always pass TRON networks as their canonical CAIP-2 identifiers (`tron:0x…`). 
 | `bsc-mainnet` | `eip155:56` |
 | `bsc-testnet` | `eip155:97` |
 | `base-mainnet` | `eip155:8453` |
+| `base-sepolia` | `eip155:84532` |
 
 Registered token decimals are authoritative and can't be overridden. For an unregistered, non-Base asset, pass `--asset <address>` together with `--decimals <count>`.
 
@@ -133,7 +135,7 @@ Use the CLI to explore, test, and script against x402 endpoints, or to give an A
 Payments move real on-chain assets and cannot be reversed. Keep these principles in mind:
 
 - **Let Agent Wallet hold the key.** It is the default payer and delegates signing to the configured wallet backend, which may be local or remote. You never need to put a private key in the CLI configuration or environment. `--private-key` and the `*_PRIVATE_KEY` variables exist for development and CI only.
-- **Test on testnet first.** Use `tron:0xcd8690dc` or `eip155:97` before running any payment on mainnet.
+- **Test on testnet first.** Use `tron:0xcd8690dc`, `eip155:97`, or `eip155:84532` before running any payment on mainnet.
 - **Preview before you pay.** Run `pay --dry-run` to inspect the exact requirement before signing.
 - **Cap the amount.** Use `--max-amount` or `--max-raw-amount` so a mispriced endpoint can't overcharge you.
 - **Don't follow redirects blindly.** The CLI deliberately won't auto-follow an HTTP redirect on a paid request, so `PAYMENT-SIGNATURE` is never forwarded to another origin. If an endpoint redirects, verify the destination and call the final URL explicitly.

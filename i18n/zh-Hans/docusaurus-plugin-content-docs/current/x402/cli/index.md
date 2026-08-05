@@ -93,6 +93,7 @@ CLI 内置了代币注册表。用 `--network` 指定网络，用 `--token` 指�
 | **BSC 主网** | `eip155:56` | USDT |
 | **BSC 测试网** | `eip155:97` | USDT、USDC |
 | **Base 主网** | `eip155:8453` | USDC |
+| **Base Sepolia 测试网** | `eip155:84532` | USDC |
 
 TRON 网络必须使用标准的 CAIP-2 标识符（`tron:0x…`）。旧的别名如 `tron-mainnet`、`tron:nile`、`mainnet` 等**已不再被接受**——CLI 会直接拒绝，并提示应改用的标准标识符。只有 EVM 别名仍会被自动接受并归一化：
 
@@ -101,6 +102,7 @@ TRON 网络必须使用标准的 CAIP-2 标识符（`tron:0x…`）。旧的别�
 | `bsc-mainnet` | `eip155:56` |
 | `bsc-testnet` | `eip155:97` |
 | `base-mainnet` | `eip155:8453` |
+| `base-sepolia` | `eip155:84532` |
 
 已注册代币的精度以注册表为准，不可覆盖。只有未注册的非 Base 资产，才需要用 `--asset <address>` 搭配 `--decimals <count>` 传入。
 
@@ -133,7 +135,7 @@ TRON 与 BSC 的稳定币支付走 **Permit2** 授权，Base USDC 走 **EIP-3009
 支付会转移真实的链上资产，且不可撤销。请牢记以下原则：
 
 - **让 Agent Wallet 保管私钥。** 它是默认付款方，并把签名交给配置的钱包后端完成；该后端可以是本地或远程。你不需要把私钥写进 CLI 配置或环境变量。`--private-key` 与 `*_PRIVATE_KEY` 变量仅用于开发和 CI。
-- **先在测试网上验证。** 上主网前，先用 `tron:0xcd8690dc` 或 `eip155:97` 跑通。
+- **先在测试网上验证。** 上主网前，先用 `tron:0xcd8690dc`、`eip155:97` 或 `eip155:84532` 跑通。
 - **付款前先预览。** 用 `pay --dry-run` 在签名前看清确切的支付要求。
 - **给金额设上限。** 用 `--max-amount` 或 `--max-raw-amount`，让定价异常的接口无法超额扣款。
 - **不要盲目跟随重定向。** CLI 有意不自动跟随付费请求的 HTTP 重定向，以确保 `PAYMENT-SIGNATURE` 不会被转发到其他源。遇到重定向时，先确认目标地址，再显式请求最终 URL。

@@ -128,7 +128,7 @@ x402-cli pay https://api.example.com/pay \
   --rpc-url <生产环境-RPC-地址>
 ```
 
-内置的公共 RPC 仅供开发使用。生产环境请通过 `--rpc-url`，或 `EVM_RPC_URL_8453` / `EVM_RPC_URL` 提供 RPC 端点。
+内置的公共 RPC 仅供开发使用。生产环境请通过 `--rpc-url`，或 `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` / `EVM_RPC_URL` 提供 RPC 端点。
 
 :::caution 不跟随重定向
 探测请求与带签名的重试都**不会**自动跟随 HTTP 重定向，以确保 `PAYMENT-SIGNATURE` 不被转发到其他源。如果接口发生重定向，请先确认目标地址，再显式请求最终可信的 URL。
@@ -146,7 +146,7 @@ x402-cli pay https://api.example.com/pay \
 | `TRON_GRID_API_KEY` | TronGrid API Key——设置后可避免公共节点限流 |
 | `X402_TRON_ALLOWANCE_MODE` | TRON 授权额度处理方式，默认 `auto` |
 | `EVM_RPC_URL` | 默认 EVM RPC 地址 |
-| `EVM_RPC_URL_8453` | Base 主网的专用 RPC |
+| `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` | Base 主网 / Base Sepolia 的专用 RPC |
 | `X402_GASFREE_API_URL` | 覆盖 TRON GasFree relayer 接口地址 |
 | `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` | 覆盖 Agent Wallet——仅限开发与 CI |
 

@@ -128,7 +128,7 @@ x402-cli pay https://api.example.com/pay \
   --rpc-url <production-rpc-url>
 ```
 
-The built-in public RPC is meant for development only. In production, supply an RPC endpoint via `--rpc-url`, `EVM_RPC_URL_8453`, or `EVM_RPC_URL`.
+The built-in public RPC is meant for development only. In production, supply an RPC endpoint via `--rpc-url`, `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532`, or `EVM_RPC_URL`.
 
 :::caution Redirects are not followed
 The probe and the signed retry deliberately do **not** follow HTTP redirects, so `PAYMENT-SIGNATURE` is never forwarded to another origin. If an endpoint redirects, inspect the destination and call the final trusted URL explicitly.
@@ -146,7 +146,7 @@ Some settings have no flag and are configured through the environment only:
 | `TRON_GRID_API_KEY` | TronGrid API key — set this to avoid public rate limits |
 | `X402_TRON_ALLOWANCE_MODE` | TRON allowance handling; defaults to `auto` |
 | `EVM_RPC_URL` | Default EVM RPC endpoint |
-| `EVM_RPC_URL_8453` | Per-network RPC for Base Mainnet |
+| `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` | Per-network RPC for Base Mainnet / Base Sepolia |
 | `X402_GASFREE_API_URL` | Override the TRON GasFree relayer API |
 | `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` | Override Agent Wallet — development and CI only |
 

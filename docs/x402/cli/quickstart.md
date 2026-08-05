@@ -94,7 +94,7 @@ x402-cli pay '<x402-url>' \
   --max-amount 0.01
 ```
 
-`--max-amount` caps what you're willing to pay: if the endpoint's price exceeds it, the CLI aborts before signing. The same command works on EVM networks — just point `--network` at one, such as `eip155:97` (BSC Testnet).
+`--max-amount` caps what you're willing to pay: if the endpoint's price exceeds it, the CLI aborts before signing. The same command works on EVM networks — just point `--network` at one, such as `eip155:97` (BSC Testnet) or `base-sepolia` (Base Sepolia, USDC).
 
 :::tip No TRX? Use GasFree
 On TRON, if the endpoint advertises `exact_gasfree`, the CLI can pay without any TRX in your wallet — a relayer covers the network energy and takes its fee from the payment token. The CLI selects it automatically, or you can require it with `--scheme exact_gasfree` and cap the relayer fee with `--max-gasfree-fee`. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
