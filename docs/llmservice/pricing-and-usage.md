@@ -12,6 +12,16 @@ The platform uses a unified Credits system to measure and settle usage across al
 
 **Model pricing:** Different AI models have different pricing based on their capabilities and compute cost. In general, more capable models consume more Credits. Cache-enabled requests may incur separate cache write and cache read usage. Web search incurs an additional per-use charge. Some models do not support web search and are marked with `-`. See the table below for detailed pricing:
 
+:::tip 🎁 Limited-time offer: GLM-5.2 API calls at 40% off
+Offer starts August 12, 2026.
+
+**Eligibility:** This offer applies only to GLM-5.2 requests made through the B.AI API. Non-API usage is not eligible.
+
+For a limited time, eligible API requests are billed at 60% of the standard reference price: Input `0.84`, Cache Write `0.84`, Cache Read `0.168`, and Output `2.64` Credits/Token.
+
+The table below continues to show standard reference prices. Offer end time, eligibility, actual settlement price, and final billing are subject to the platform display and final billing records.
+:::
+
 | Model             | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
 | :---------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
 | MiniMax M3        |                  0.30 |                        0.30 |                       0.06 |                   1.20 |                        - |

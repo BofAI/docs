@@ -4,6 +4,16 @@
 
 GLM-5.2 is a GLM-family text foundation model developed by Z.AI and released on June 16, 2026. It is positioned for long-horizon coding and engineering tasks, with a 1M-token context window, 128K maximum output, and a `reasoning_effort` control for adjusting reasoning depth.
 
+:::tip Limited-time offer: GLM-5.2 API calls at 40% off
+Offer starts August 12, 2026.
+
+**Eligibility:** This offer applies only to GLM-5.2 requests made through the B.AI API. Non-API usage is not eligible.
+
+For a limited time, eligible API requests are billed at 60% of the standard reference price: Input `0.84`, Cache Write `0.84`, Cache Read `0.168`, and Output `2.64` Credits/Token.
+
+The pricing table on this page continues to show standard reference prices. Offer end time, eligibility, actual settlement price, and final billing are subject to the platform display and final billing records.
+:::
+
 ## Key Features
 
 * **1M Context Window**: Supports up to 1M tokens of context for project-scale codebases, long documents, and multi-step engineering workflows.
