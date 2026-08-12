@@ -42,8 +42,7 @@ GPT-5.6 Luna is OpenAI's cost-oriented GPT-5.6 tier, made generally available on
 
 | Context | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| Short context | `1.00` | `1.25` | `0.10` | `6.00` | `10,000` | Standard GPT-5.6 Luna pricing |
-| Long context (>272K input tokens) | `2.00` | `2.50` | `0.20` | `9.00` | `10,000` | Long-context pricing tier |
+| Short context | `0.20` | `0.25` | `0.02` | `1.20` | `10,000` | Standard GPT-5.6 Luna pricing |
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.

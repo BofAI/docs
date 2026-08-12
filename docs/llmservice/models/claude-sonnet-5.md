@@ -40,11 +40,10 @@ Claude Sonnet 5, released by Anthropic on June 30, 2026, is the next generation 
 
 ## Credits Usage
 
-| Model | Pricing Period | Input (Credits/Token) | 5m Cache Write (Credits/Token) | 1h Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :--- | :--- | --------------------: | -----------------------------: | -----------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| **Claude Sonnet 5** | Through Aug 31, 2026 | `2.00` | `2.50` | `4.00` | `0.20` | `10.00` | `10,000` |
-| **Claude Sonnet 5** | From Sep 1, 2026 | `3.00` | `3.75` | `6.00` | `0.30` | `15.00` | `10,000` |
+| Model | Input (Credits/Token) | 5m Cache Write (Credits/Token) | 1h Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
+| :--- | --------------------: | -----------------------------: | -----------------------------: | -------------------------: | ---------------------: | -----------------------: |
+| **Claude Sonnet 5** | `2.00` | `2.50` | `4.00` | `0.20` | `10.00` | `10,000` |
 
 :::info Pricing note
-The main pricing table shows the currently effective standard reference price. For Claude Sonnet 5, the current standard reference price applies through August 31, 2026. Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+The main pricing table shows the current standard reference price. Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
 :::
