@@ -519,7 +519,7 @@ except SigningError as e:
 WalletError
 ├── WalletNotFoundError        # 指定钱包不存在
 ├── DecryptionError            # 密码错误或密钥文件损坏
-├── SigningError                # 签名操作失败
+├── SigningError               # 签名操作失败
 ├── NetworkError               # 网络标识符不匹配
 ├── InsufficientBalanceError   # 余额不足
 ├── UnsupportedOperationError  # 该钱包类型不支持此操作

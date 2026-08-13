@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # Network & Token Support
 
 import Tabs from '@theme/Tabs';
@@ -175,6 +177,14 @@ npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --toke
 
 3. **Settle**
    The Facilitator submits the on-chain transaction — `transferWithAuthorization`, Permit2 `permitTransferFrom`, a batch claim, or a GasFree relay — based on the scheme.
+
+<ThemedImage
+  alt="How payment schemes work: authorize, execute, settle"
+  sources={{
+    light: '/img/diagrams/x402-payment-scheme-flow.light.svg',
+    dark: '/img/diagrams/x402-payment-scheme-flow.svg',
+  }}
+/>
 
 ---
 

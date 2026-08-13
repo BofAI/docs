@@ -519,7 +519,7 @@ Error type hierarchy:
 WalletError
 ├── WalletNotFoundError        # Specified wallet not found
 ├── DecryptionError            # Wrong password or corrupted key file
-├── SigningError                # Signing operation failed
+├── SigningError               # Signing operation failed
 ├── NetworkError               # Network identifier mismatch
 ├── InsufficientBalanceError   # Insufficient balance
 ├── UnsupportedOperationError  # Operation not supported by this wallet type

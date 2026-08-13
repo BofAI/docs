@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # 网络与代币支持
 
 import Tabs from '@theme/Tabs';
@@ -152,6 +154,14 @@ npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --toke
 1.  **预授权 (Authorize)**：客户端签署类型化数据消息，授权付款（精确金额，或 `upto`/`batch-settlement` 的最大金额）。
 2.  **执行服务 (Execute)**：服务端执行请求任务，并（对于按量计费方案）计算**实际成本**。
 3.  **最终结算 (Settle)**：Facilitator 根据方案发起链上交易——`transferWithAuthorization`、Permit2 `permitTransferFrom`、批量 claim 或 GasFree relay。
+
+<ThemedImage
+  alt="支付方案如何运作：授权、执行、结算"
+  sources={{
+    light: '/img/diagrams/x402-payment-scheme-flow.zh.light.svg',
+    dark: '/img/diagrams/x402-payment-scheme-flow.zh.svg',
+  }}
+/>
 
 ### 部署私有 Facilitator
 

@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # 客户端与服务器
 
 深入理解这些角色，对于在区块链上设计、构建或集成基于 x402 的程序化支付服务至关重要。
@@ -56,6 +58,14 @@
 4.  **服务端验证支付**：调用 Facilitator 服务对接收到的支付载荷进行验证。
 5.  **服务端执行结算**：通过 Facilitator 将交易提交至区块链完成结算。
 6.  **服务端交付资源**：返回请求的资源，并在 `PAYMENT-RESPONSE` 标头中包含结算确认信息（内含交易哈希）。
+
+<ThemedImage
+  alt="x402 中客户端、服务端与 Facilitator 的通信流程"
+  sources={{
+    light: '/img/diagrams/x402-payment-flow.zh.light.svg',
+    dark: '/img/diagrams/x402-payment-flow.zh.svg',
+  }}
+/>
 
 ## 总结
 

@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 # Client and Server
 
 Understanding these roles in depth is essential when designing, building, or integrating x402-based programmable payment services on-chain.
@@ -62,6 +64,14 @@ In the x402 protocol, a typical interaction between client and server proceeds a
 4. **Server Validates Payment**: Calls the Facilitator service to verify the received payment payload.
 5. **Server Executes Settlement**: Submits the transaction to the blockchain via the Facilitator.
 6. **Server Delivers Resource**: Returns the requested resource and includes settlement confirmation (with transaction hash) in the `PAYMENT-RESPONSE` header.
+
+<ThemedImage
+  alt="x402 communication flow between client, server and Facilitator"
+  sources={{
+    light: '/img/diagrams/x402-payment-flow.light.svg',
+    dark: '/img/diagrams/x402-payment-flow.svg',
+  }}
+/>
 
 ---
 

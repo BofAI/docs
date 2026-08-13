@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 372" width="880" height="372" font-family="'JetBrains Mono','SFMono-Regular',Menlo,Consolas,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans CJK SC','Noto Sans SC','Source Han Sans SC',monospace" role="img">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="ah-slate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="ah-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+    </marker>
+    <marker id="ah-emerald" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/>
+    </marker>
+    <marker id="ah-violet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+    </marker>
+    <marker id="ah-amber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/>
+    </marker>
+    <marker id="ah-rose" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fb7185"/>
+    </marker>
+  </defs>
+  <rect width="880" height="372" rx="14" fill="#020617"/>
+  <rect width="880" height="372" rx="14" fill="url(#grid)"/>
+  <rect x="0.5" y="0.5" width="879" height="371" rx="14" fill="none" stroke="#1e293b"/>
+  <circle cx="28" cy="33" r="6" fill="#a78bfa"/>
+  <text x="46" y="39" fill="#f8fafc" font-size="17" font-weight="700">API Catalog — from a pull request to three consumers</text>
+  <text x="46" y="60" fill="#94a3b8" font-size="11">The catalog keeps no database and holds no upstream secrets. It makes services discoverable; it never touches calls or funds.</text>
+  <text x="40" y="88" fill="#34d399" font-size="10" font-weight="700">PROVIDER</text>
+  <rect x="40" y="100" width="225" height="94" rx="8" fill="#0f172a"/>
+  <rect x="40" y="100" width="225" height="94" rx="8" fill="rgba(6, 78, 59, 0.4)" stroke="#34d399" stroke-width="1.5"/>
+  <text x="56" y="128" fill="#e2e8f0" font-size="10">catalog.json</text>
+  <text x="56" y="144" fill="#e2e8f0" font-size="10">pay.md</text>
+  <text x="56" y="160" fill="#e2e8f0" font-size="10">(two public files)</text>
+  <line x1="271" y1="147.0" x2="321" y2="147.0" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-emerald)"/>
+  <text x="296.0" y="138.0" fill="#94a3b8" font-size="10" text-anchor="middle">open PR</text>
+  <text x="327" y="88" fill="#a78bfa" font-size="10" font-weight="700">CATALOG REPO (CI)</text>
+  <rect x="327" y="100" width="225" height="78" rx="8" fill="#0f172a"/>
+  <rect x="327" y="100" width="225" height="78" rx="8" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="343" y="128" fill="#e2e8f0" font-size="10">field &amp; sensitive-data scan</text>
+  <text x="343" y="144" fill="#e2e8f0" font-size="10">build static snapshot dist/</text>
+  <line x1="558" y1="139.0" x2="608" y2="139.0" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ah-violet)"/>
+  <text x="583.0" y="130.0" fill="#94a3b8" font-size="10" text-anchor="middle">publish</text>
+  <text x="614" y="88" fill="#fbbf24" font-size="10" font-weight="700">DISTRIBUTION</text>
+  <rect x="614" y="100" width="225" height="94" rx="8" fill="#0f172a"/>
+  <rect x="614" y="100" width="225" height="94" rx="8" fill="rgba(120, 53, 15, 0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="630" y="128" fill="#e2e8f0" font-size="10">/api/catalog.json</text>
+  <text x="630" y="144" fill="#e2e8f0" font-size="10">/api/providers/&lt;fqn&gt;.json</text>
+  <text x="630" y="160" fill="#e2e8f0" font-size="10">/api/pay/&lt;fqn&gt;.json · .md</text>
+  <line x1="726.5" y1="198" x2="726.5" y2="236" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#ah-amber)"/>
+  <text x="714.5" y="218" fill="#94a3b8" font-size="10" text-anchor="end">same data, three ways in</text>
+  <line x1="152.5" y1="240" x2="726.5" y2="240" stroke="#64748b" stroke-width="1.5"/>
+  <line x1="152.5" y1="240" x2="152.5" y2="280" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <rect x="40" y="284" width="225" height="58" rx="8" fill="#0f172a"/>
+  <rect x="40" y="284" width="225" height="58" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="152.5" y="309" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">Catalog website</text>
+  <text x="152.5" y="328" fill="#94a3b8" font-size="10" text-anchor="middle">humans browse &amp; compare</text>
+  <line x1="439.5" y1="240" x2="439.5" y2="280" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <rect x="327" y="284" width="225" height="58" rx="8" fill="#0f172a"/>
+  <rect x="327" y="284" width="225" height="58" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="439.5" y="309" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">x402-cli</text>
+  <text x="439.5" y="328" fill="#94a3b8" font-size="10" text-anchor="middle">search, inspect, paid calls</text>
+  <line x1="726.5" y1="240" x2="726.5" y2="280" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <rect x="614" y="284" width="225" height="58" rx="8" fill="#0f172a"/>
+  <rect x="614" y="284" width="225" height="58" rx="8" fill="rgba(30, 41, 59, 0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="726.5" y="309" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">MCP</text>
+  <text x="726.5" y="328" fill="#94a3b8" font-size="10" text-anchor="middle">Agents call services by name</text>
+</svg>

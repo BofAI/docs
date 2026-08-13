@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 394" width="880" height="394" font-family="'JetBrains Mono','SFMono-Regular',Menlo,Consolas,'PingFang SC','Hiragino Sans GB','Microsoft YaHei','Noto Sans CJK SC','Noto Sans SC','Source Han Sans SC',monospace" role="img">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="ah-slate" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+    </marker>
+    <marker id="ah-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22d3ee"/>
+    </marker>
+    <marker id="ah-emerald" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#34d399"/>
+    </marker>
+    <marker id="ah-violet" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a78bfa"/>
+    </marker>
+    <marker id="ah-amber" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fbbf24"/>
+    </marker>
+    <marker id="ah-rose" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#fb7185"/>
+    </marker>
+  </defs>
+  <rect width="880" height="394" rx="14" fill="#020617"/>
+  <rect width="880" height="394" rx="14" fill="url(#grid)"/>
+  <rect x="0.5" y="0.5" width="879" height="393" rx="14" fill="none" stroke="#1e293b"/>
+  <circle cx="28" cy="33" r="6" fill="#a78bfa"/>
+  <text x="46" y="39" fill="#f8fafc" font-size="17" font-weight="700">BANK OF AI —— 整体架构</text>
+  <text x="46" y="60" fill="#94a3b8" font-size="11">夹在 AI 与链上世界之间的一套平台。</text>
+  <rect x="320.0" y="96" width="240" height="58" rx="10" fill="#0f172a"/>
+  <rect x="320.0" y="96" width="240" height="58" rx="10" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="2"/>
+  <text x="440.0" y="130.0" fill="#f8fafc" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="0.5">AI</text>
+  <line x1="440.0" y1="154" x2="440.0" y2="192" stroke="#64748b" stroke-width="1.5"/>
+  <rect x="270.0" y="192" width="340" height="72" rx="10" fill="#0f172a"/>
+  <rect x="270.0" y="192" width="340" height="72" rx="10" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="2"/>
+  <text x="440.0" y="234.0" fill="#f8fafc" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="0.5">BANK OF AI</text>
+  <line x1="440.0" y1="264" x2="440.0" y2="302" stroke="#64748b" stroke-width="1.5"/>
+  <rect x="320.0" y="302" width="240" height="58" rx="10" fill="#0f172a"/>
+  <rect x="320.0" y="302" width="240" height="58" rx="10" fill="rgba(8, 51, 68, 0.4)" stroke="#22d3ee" stroke-width="2"/>
+  <text x="440.0" y="336.0" fill="#f8fafc" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="0.5">Web3</text>
+</svg>
