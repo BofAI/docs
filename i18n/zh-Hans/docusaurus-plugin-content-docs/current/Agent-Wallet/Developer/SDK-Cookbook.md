@@ -1,3 +1,5 @@
+import ThemedImage from '@theme/ThemedImage';
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -37,9 +39,13 @@ Agent-wallet 专注做好最核心的安全签名步骤（第 2 步）。本页�
 
 TRON 交易不能由客户端直接从零构建。流程必须从调用 TronGrid 的 `createtransaction` 接口开始——该接口返回一个包含 `txID` 和 `raw_data` 的未签名交易对象，由网络节点生成。然后把这个对象传给 Agent-wallet 进行本地签名——签名过程完全离线，私钥不会离开本机。最后，把签名后的交易提交给 TronGrid 的 `broadcasttransaction` 接口，发布到链上。
 
-```
-TronGrid（构建）→ Agent-wallet（签名）→ TronGrid（广播）
-```
+<ThemedImage
+  alt="TRON 转账：TronGrid 构建 → Agent-wallet 签名 → TronGrid 广播"
+  sources={{
+    light: '/img/diagrams/agent-wallet-tron-flow.zh.light.svg',
+    dark: '/img/diagrams/agent-wallet-tron-flow.zh.svg',
+  }}
+/>
 
 Agent-wallet 只参与中间的签名步骤，不需要 RPC 连接，也不感知交易的业务含义。
 
@@ -258,9 +264,13 @@ asyncio.run(
 
 EVM 交易需要调用方自己构建交易对象。与 TRON 不同，EVM 交易的字段（`nonce`、`gas`、`chainId` 等）需要通过 RPC 查询当前链状态后手动填入，没有集中式 API 帮你生成。未签名交易构建完成后，传给 Agent-wallet 进行本地签名，返回十六进制编码的已签名交易，最后通过 `sendRawTransaction` 广播。
 
-```
-RPC 查询 nonce/gas（构建）→ Agent-wallet（签名）→ RPC sendRawTransaction（广播）
-```
+<ThemedImage
+  alt="EVM 转账：RPC 构建 → Agent-wallet 签名 → RPC 广播"
+  sources={{
+    light: '/img/diagrams/agent-wallet-evm-flow.zh.light.svg',
+    dark: '/img/diagrams/agent-wallet-evm-flow.zh.svg',
+  }}
+/>
 
 示例使用 BSC 测试网，切换到 Ethereum、Polygon、Base 或其他 EVM 链只需改 `RPC_URL` 和 `CHAIN_ID`——Agent-wallet 的调用代码一行不变。
 
@@ -445,9 +455,13 @@ asyncio.run(
 
 x402 支付不是直接发一笔转账，而是"先签名、验证后放行"的模型。代理对一个 `TransferWithAuthorization` 结构（EIP-712 格式）进行签名，把得到的签名随请求一起发给服务器作为支付凭证。服务器验证签名有效后才返回内容。代理不需要等待链上确认——延迟极低。
 
-```
-服务器返回 402 → 代理构建 PaymentPermit → Agent-wallet 签名 → 携带签名重发请求 → 服务器验证通过并响应
-```
+<ThemedImage
+  alt="x402 PaymentPermit：先签名，验证通过再放行"
+  sources={{
+    light: '/img/diagrams/agent-wallet-x402-permit-flow.zh.light.svg',
+    dark: '/img/diagrams/agent-wallet-x402-permit-flow.zh.svg',
+  }}
+/>
 
 PaymentPermit 数据由 x402 SDK 根据服务器返回的支付参数自动构建，Agent-wallet 只负责最后的签名步骤。下面的示例展示了底层签名逻辑，适用于需要自定义集成或绕过 x402 SDK 的场景。
 

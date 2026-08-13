@@ -4,6 +4,8 @@ sidebar_label: Gateway
 description: The Gateway turns any API into a pay-per-call service for AI Agents — Agents discover, call, and pay on their own, with every call settled on-chain to your wallet.
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+
 # Gateway
 
 Turn any API into a pay-per-call service for AI Agents.
@@ -24,11 +26,13 @@ Think of the gateway as a **cashier + relay** standing in front of your API (tec
 - **Upstream keys stay isolated.** If your upstream API needs auth, that API key lives only on the side running the gateway — in your local YAML / env for a self-hosted gateway, or held by us for the official gateway. Either way the caller never sees it, and it never enters the public catalog.
 - **You decide pricing per endpoint.** Price an endpoint in the config and it takes the paid flow; leave it unpriced (price 0) and it's forwarded directly — free endpoints stay free.
 
-```text
-Agent ──► Gateway ──► your upstream API
-          │ quote / verify / settle (paid endpoints only)
-          └ forwards the request
-```
+<ThemedImage
+  alt="Gateway topology: Agent to gateway to your upstream API"
+  sources={{
+    light: '/img/diagrams/x402-gateway-topology.light.svg',
+    dark: '/img/diagrams/x402-gateway-topology.svg',
+  }}
+/>
 
 ## Anatomy of a call
 

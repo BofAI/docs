@@ -5,6 +5,8 @@ description: >-
   This guide introduces the x402 open payment standard on blockchain and helps you start building or integrating x402-powered services.
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+
 # Welcome to x402
 
 x402 is an open blockchain payment standard built on the HTTP `402 Payment Required` status code. It enables web services to charge for APIs or content through a “pay-before-response” mechanism — without relying on traditional account systems or session management.  
@@ -58,8 +60,17 @@ At a high level, the workflow is straightforward:
 1. **Request Initiated:** The buyer requests a protected resource from the server.
 2. **Payment Required:** If payment is required, the server returns a `402 Payment Required` response along with payment instructions.
 3. **Payment Submitted:** The buyer generates and submits a signed payment payload.
-4. **Verification & Settlement:** The server calls the x402 Facilitator’s `/verify` and `/settle` endpoints to validate and settle the payment.
-5. **Resource Delivered:** Once verification succeeds, the server delivers the requested resource.
+4. **Payment Verified:** The server calls the Facilitator’s `/verify` endpoint to validate the signed payload.
+5. **Settlement Executed:** The server calls the Facilitator’s `/settle` endpoint to submit the transaction on-chain.
+6. **Resource Delivered:** Once settlement succeeds, the server delivers the requested resource.
+
+<ThemedImage
+  alt="x402 payment flow, from the first request to the delivered resource"
+  sources={{
+    light: '/img/diagrams/x402-payment-flow.light.svg',
+    dark: '/img/diagrams/x402-payment-flow.svg',
+  }}
+/>
 
 To explore further:
 

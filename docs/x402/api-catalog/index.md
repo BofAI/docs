@@ -4,6 +4,8 @@ sidebar_label: Introduction
 description: BANK OF AI's wallet-native service catalog — where AI Agents discover, call, and pay for any API, settled on-chain via x402.
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+
 # API Catalog
 
 Traditional API onboarding is designed for humans: create an account, request an API key, link a credit card, subscribe monthly. When an AI Agent wants to call an API on its own, it fails at the very first step — it has no email, no credit card, and it shouldn't be holding a pile of secret keys for you anyway.
@@ -21,17 +23,13 @@ The catalog itself is just a public list of services: it keeps no database and a
 
 To get listed, a provider submits two **public** files to the catalog repository (you can start with the application form and we'll help you through); the call addresses inside the files point to the gateway of your choice — BANK OF AI hosted or self-hosted. The platform validates, scans for sensitive data, then publishes:
 
-```text
-Provider                     Catalog repo (CI)                Distribution
-────────                     ─────────────────                ────────────
-catalog.json  ──open PR──►   field & sensitive-data scan ──►  /api/catalog.json
-pay.md                       build static snapshot dist/      /api/providers/<fqn>.json
-                                                              /api/pay/<fqn>.json · .md
-                                                                        │
-                                                ┌───────────────────────┼───────────────────────┐
-                                                ▼                       ▼                        ▼
-                                          Catalog website           x402-cli              MCP (Agent access)
-```
+<ThemedImage
+  alt="API Catalog: from a provider pull request through CI to three consumers"
+  sources={{
+    light: '/img/diagrams/x402-api-catalog-pipeline.light.svg',
+    dark: '/img/diagrams/x402-api-catalog-pipeline.svg',
+  }}
+/>
 
 Three consumers share the same data:
 

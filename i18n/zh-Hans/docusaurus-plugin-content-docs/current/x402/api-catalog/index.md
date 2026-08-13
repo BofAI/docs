@@ -4,6 +4,8 @@ sidebar_label: 介绍
 description: BANK OF AI 的钱包原生服务目录 —— AI Agent 在这里发现、调用并为任意 API 按次付费，通过 x402 在链上结算。
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+
 # API 目录
 
 传统 API 的门槛是为人设计的：注册账号、申请 API Key、绑定信用卡、按月订阅。可一个 AI Agent 想自主调用一个接口时，光是「开户」这一步就走不通——它没有邮箱、没有信用卡，也不该替你保管一长串密钥。
@@ -21,17 +23,13 @@ description: BANK OF AI 的钱包原生服务目录 —— AI Agent 在这里发
 
 服务方向目录仓库提交两份**公开**文件即可上架（可先填表申请，由我们联系协助）；文件里的调用地址指向所选网关——BANK OF AI 官方托管或自建均可。平台自动校验、扫描敏感信息后对外发布：
 
-```text
-服务方                         目录仓库 (CI)                 分发
-─────────                     ─────────────                ────────
-catalog.json   ──提交 PR──►   字段校验 + 敏感信息扫描 ──►   /api/catalog.json
-pay.md                        构建静态快照 dist/          /api/providers/<fqn>.json
-                                                          /api/pay/<fqn>.json · .md
-                                                                    │
-                                            ┌───────────────────────┼───────────────────────┐
-                                            ▼                       ▼                        ▼
-                                       前端目录站              x402-cli                 MCP（Agent 接入）
-```
+<ThemedImage
+  alt="API Catalog：从服务方提交 PR，经 CI 校验发布，到三个消费入口"
+  sources={{
+    light: '/img/diagrams/x402-api-catalog-pipeline.zh.light.svg',
+    dark: '/img/diagrams/x402-api-catalog-pipeline.zh.svg',
+  }}
+/>
 
 三个消费入口共用同一份数据：
 

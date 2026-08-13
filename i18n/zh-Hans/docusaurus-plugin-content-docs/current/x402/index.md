@@ -5,6 +5,8 @@ description: >-
   本指南将帮助您了解 x402 区块链上的开放支付标准，并帮助您开始构建或集成 x402 服务。
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+
 # 欢迎使用 x402
 
 x402 是一种基于 HTTP `402 Payment Required` 状态码的区块链开放支付标准。它允许 Web 服务通过“先付费后响应”的机制直接对 API 或内容进行收费，无需依赖传统的账户或会话体系。目前，x402 已支持 **TRON**、**BNB Smart Chain（BSC）** 和 **Base**，并计划在未来扩展至更广泛的多链生态。
@@ -46,8 +48,17 @@ x402 支持广泛的应用场景，包括：
 1. **发起请求**：买家向服务端请求受保护的资源。
 2. **支付要求**：若该资源需要付费，服务端返回 `402 Payment Required` 状态码及支付指引。
 3. **提交支付**：买家生成并提交签名的支付载荷。
-4. **验证结算**：服务端调用 x402 Facilitator 的 `/verify` 和 `/settle` 接口，完成支付的验证与结算。
-5. **交付资源**：支付验证通过后，服务端交付请求的资源。
+4. **校验支付**：服务端调用 Facilitator 的 `/verify` 接口，校验签名载荷的有效性。
+5. **执行结算**：服务端调用 Facilitator 的 `/settle` 接口，将交易提交上链。
+6. **交付资源**：结算成功后，服务端交付请求的资源。
+
+<ThemedImage
+  alt="x402 支付流程：从第一次请求到资源交付"
+  sources={{
+    light: '/img/diagrams/x402-payment-flow.zh.light.svg',
+    dark: '/img/diagrams/x402-payment-flow.zh.svg',
+  }}
+/>
 
 如需深入了解，请参考：
 

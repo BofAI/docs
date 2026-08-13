@@ -4,6 +4,8 @@ description: >-
   BANK OF AI is the infrastructure connecting AI and Web3. Install it, and your AI can pay, prove its identity, and execute on-chain — you describe the goal, the AI gets it done.
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+
 # Introduction
 
 Today's AI can write code, analyze data, build presentations — it can even deliver an entire software project on its own.
@@ -119,21 +121,13 @@ Once installed, you say:
 
 The whole path, at a glance:
 
-```text
-User
- ↓
-AI interprets the request
- ↓
-Selects a Skill or calls an MCP Server
- ↓
-Agent Wallet signs
- ↓
-Transaction broadcast
- ↓
-Blockchain
- ↓
-Result
-```
+<ThemedImage
+  alt="BANK OF AI: one execution from your instruction to the on-chain result"
+  sources={{
+    light: '/img/diagrams/bank-of-ai-execution-flow.light.svg',
+    dark: '/img/diagrams/bank-of-ai-execution-flow.svg',
+  }}
+/>
 
 If anything goes wrong along the way — insufficient balance, a malformed address — the AI stops immediately and tells you why. And anything that spends money always needs your confirmation first.
 
@@ -143,13 +137,13 @@ If anything goes wrong along the way — insufficient balance, a malformed addre
 
 Abstract that path into a diagram, and you have all of BANK OF AI:
 
-```text
-    AI
-    │
-BANK OF AI
-    │
-   Web3
-```
+<ThemedImage
+  alt="BANK OF AI architecture: AI on top, Web3 below, BANK OF AI in between"
+  sources={{
+    light: '/img/diagrams/bank-of-ai-architecture.light.svg',
+    dark: '/img/diagrams/bank-of-ai-architecture.svg',
+  }}
+/>
 
 Internally it's four layers, each with a single job:
 

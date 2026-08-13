@@ -4,6 +4,8 @@ sidebar_label: 网关
 description: 网关把任意 API 变成面向 AI Agent 的按次计费服务 —— Agent 自主发现、调用、付费，每一笔在链上结算到你的钱包。
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+
 # 网关
 
 将任意 API 转化为面向 AI Agent 的按次计费服务。
@@ -24,11 +26,13 @@ description: 网关把任意 API 变成面向 AI Agent 的按次计费服务 —
 - **上游密钥不外泄**。如果你的上游接口需要鉴权，那个 API Key 只待在运行网关的那一侧——自建网关时留在你本地的 yaml 或环境变量，用官方网关时由我们托管。无论哪种，调用方全程接触不到，密钥也不会进入公开目录。
 - **收不收费由你按端点决定**。在配置中为端点定价即走付费流程；不定价（价格为 0）的端点直接转发，免费接口依然免费。
 
-```text
-Agent ──► 网关 ──► 你的上游 API
-          │ 报价 / 验款 / 结算（仅付费端点）
-          └ 转发请求
-```
+<ThemedImage
+  alt="Gateway 拓扑：Agent → 网关 → 你的上游 API"
+  sources={{
+    light: '/img/diagrams/x402-gateway-topology.zh.light.svg',
+    dark: '/img/diagrams/x402-gateway-topology.zh.svg',
+  }}
+/>
 
 ## 一次调用的完整流程
 

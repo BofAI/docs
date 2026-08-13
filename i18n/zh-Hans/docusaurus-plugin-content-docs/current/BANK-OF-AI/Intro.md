@@ -4,6 +4,8 @@ description: >-
   BANK OF AI 是连接 AI 与 Web3 的基础设施。装上它，你的 AI 就能付款、验证身份、执行链上操作——你负责说想做什么，AI 负责做成。
 ---
 
+import ThemedImage from '@theme/ThemedImage';
+
 # 简介
 
 今天的 AI 已经会写代码、分析数据、制作演示文稿，甚至能独立完成一个完整的软件项目。
@@ -119,21 +121,13 @@ AI 拥有可验证的链上身份，Agent 之间可以互信协作。
 
 整条链路一目了然：
 
-```text
-用户
- ↓
-AI 理解需求
- ↓
-选择 Skill 或调用 MCP Server
- ↓
-Agent Wallet 签名
- ↓
-广播交易
- ↓
-区块链
- ↓
-返回结果
-```
+<ThemedImage
+  alt="BANK OF AI：从你的一句话到链上结果的完整执行链路"
+  sources={{
+    light: '/img/diagrams/bank-of-ai-execution-flow.zh.light.svg',
+    dark: '/img/diagrams/bank-of-ai-execution-flow.zh.svg',
+  }}
+/>
 
 执行过程中，任何一步出现问题（余额不足、地址有误），AI 都会立即停下并说明原因；任何涉及资金支出的动作，都必须先经过你的确认。
 
@@ -143,13 +137,13 @@ Agent Wallet 签名
 
 把上面那条链路抽象成一张图，就是 BANK OF AI 的全部：
 
-```text
-    AI
-    │
-BANK OF AI
-    │
-   Web3
-```
+<ThemedImage
+  alt="BANK OF AI 整体架构：AI 在上，Web3 在下，BANK OF AI 居中"
+  sources={{
+    light: '/img/diagrams/bank-of-ai-architecture.zh.light.svg',
+    dark: '/img/diagrams/bank-of-ai-architecture.zh.svg',
+  }}
+/>
 
 内部分为四层，每层只负责一件事：
 
