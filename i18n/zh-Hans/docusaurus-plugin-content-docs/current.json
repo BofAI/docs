@@ -71,6 +71,10 @@
     "message": "定价与用量",
     "description": "The label for the doc item Pricing and Usage in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.doc.Promotions and Pricing Updates": {
+    "message": "活动与调整公告",
+    "description": "The label for the doc item Promotions and Pricing Updates in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.doc.Invitation Rewards": {
     "message": "邀请返利规则",
     "description": "The label for the doc item Invitation Rewards in sidebar docsSidebar"
