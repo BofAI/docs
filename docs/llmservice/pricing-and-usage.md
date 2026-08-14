@@ -26,7 +26,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Qwen3.8-Max       |                  2.00 |                        2.00 |                       0.25 |                   6.00 |                        - |
 | Qwen3.7-Max       |                  1.65 |                        1.65 |                       0.33 |                  4.951 |                        - |
 | Qwen3.6-27B       |                  0.19 |                        0.19 |                      0.019 |                   2.99 |                        - |
-| GLM-5.3           |                  1.40 |                        1.40 |                       0.26 |                   4.40 |                        - |
+| GLM-5.3           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.2           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |

@@ -1,10 +1,17 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # GLM-5.2
 
 ## Overview
 
 GLM-5.2 is a GLM-family text foundation model developed by Z.AI and released on June 16, 2026. It is positioned for long-horizon coding and engineering tasks, with a 1M-token context window, 128K maximum output, and a `reasoning_effort` control for adjusting reasoning depth.
 
-:::note Limited-time offer: GLM-5.2 at 40% off
+<ActivityCard
+  variant="discount"
+  title="GLM-5.2"
+  status="Limited-Time Discount"
+  detail="60% of Standard Price"
+>
 Offer starts August 12, 2026.
 
 **Eligibility:** This offer applies to GLM-5.2 requests made through the B.AI API and B.AI web app.
@@ -12,7 +19,7 @@ Offer starts August 12, 2026.
 For a limited time, eligible requests are billed at 60% of the standard reference price: Input `0.84`, Cache Write `0.84`, Cache Read `0.168`, and Output `2.64` Credits/Token.
 
 The pricing table on this page continues to show standard reference prices. Offer end time, eligibility, actual settlement price, and final billing are subject to the platform display and final billing records.
-:::
+</ActivityCard>
 
 ## Key Features
 

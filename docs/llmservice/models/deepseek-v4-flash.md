@@ -1,17 +1,24 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # DeepSeek-V4-Flash
 
 ## Overview
 
 DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly 3.1x lower cost, making it one of the most cost-effective models available.
 
-:::tip 🔥 Limited-Time Free Access
+<ActivityCard
+  variant="free"
+  title="DeepSeek-V4-Flash"
+  status="Free Offer"
+  detail="0 Credits"
+>
 Offer starts August 17, 2026, and applies to DeepSeek-V4-Flash on B.AI Chat and API.
 
 * **Chat:** Usage is billed at `0 Credits` during the offer.
 * **API:** Usage is billed at `0 Credits` during the offer. No per-request, input, cache write, cache read, or output token fees apply.
 
 After the offer ends, the model will return to standard pricing. Offer end time, eligibility, actual charges, and final billing are subject to the platform display.
-:::
+</ActivityCard>
 
 ## Key Features
 

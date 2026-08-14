@@ -1,10 +1,17 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # GLM-5.2
 
 ## 概述
 
 GLM-5.2 是由 Z.AI 开发的 GLM 系列文本基础模型，于 2026 年 6 月 16 日发布。该模型面向长周期代码和工程任务，支持 1M tokens 上下文窗口、128K 最大输出，并提供 `reasoning_effort` 参数用于调整推理深度。
 
-:::note 限时活动：GLM-5.2 6 折
+<ActivityCard
+  variant="discount"
+  title="GLM-5.2"
+  status="限时折扣"
+  detail="标准价 6 折"
+>
 活动开始时间：2026 年 8 月 12 日。
 
 **适用范围：** 本活动适用于通过 B.AI API 和 B.AI 网页端发起的 GLM-5.2 调用。
@@ -12,7 +19,7 @@ GLM-5.2 是由 Z.AI 开发的 GLM 系列文本基础模型，于 2026 年 6 月 
 限时活动期间，符合条件的调用按标准参考价的 60% 结算：输入 `0.84`、缓存写入 `0.84`、缓存读取 `0.168`、输出 `2.64` Credits/Token。
 
 本页价格表继续展示标准参考价；活动结束时间、适用规则、实际结算价格及最终账单以平台页面展示为准。
-:::
+</ActivityCard>
 
 ## 核心特性
 
