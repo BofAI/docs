@@ -1,17 +1,24 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # DeepSeek-V4-Flash
 
 ## 概述
 
 DeepSeek-V4-Flash 是 DeepSeek 于 2026 年 4 月 24 日与 V4-Pro 同步发布的高效率开源大语言模型，采用 MIT License。该模型总参数量为 284B，但每次前向仅激活 13B 参数，以仅为 V4-Pro 约 1/3.1 的成本提供接近旗舰模型的性能，是当前极具性价比的模型之一。
 
-:::tip 🔥 限时免费开放
+<ActivityCard
+  variant="free"
+  title="DeepSeek-V4-Flash"
+  status="免费活动"
+  detail="0 Credits"
+>
 活动开始时间：2026 年 8 月 17 日，适用于 B.AI Chat 和 API 中的 DeepSeek-V4-Flash。
 
 * **Chat：** 活动期间使用按 `0 Credits` 结算。
 * **API：** 活动期间使用按 `0 Credits` 结算，不收取单次请求、输入、缓存写入、缓存读取或输出的费用。
 
 活动结束后，模型将恢复标准价格。活动结束时间、适用规则、实际结算结果及最终账单以平台页面展示为准。
-:::
+</ActivityCard>
 
 ## 核心特性
 
