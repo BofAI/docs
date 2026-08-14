@@ -140,6 +140,7 @@ const sidebars = {
         { type: 'doc', id: 'llmservice/quick-start', label: 'Quick Start' },
         { type: 'doc', id: 'llmservice/auto-mode', label: 'Auto Mode' },
         { type: 'doc', id: 'llmservice/pricing-and-usage', label: 'Pricing and Usage' },
+        { type: 'doc', id: 'llmservice/promotions-and-pricing-notices', label: 'Promotions and Pricing Updates' },
         { type: 'doc', id: 'llmservice/invitation-rewards', label: 'Invitation Rewards' },
         {
           type: 'category',
@@ -200,7 +201,7 @@ const sidebars = {
               collapsed: true,
               items: [
                 { type: 'doc', id: 'llmservice/models/deepseek-v4-pro', label: 'DeepSeek V4 Pro' },
-                { type: 'doc', id: 'llmservice/models/deepseek-v4-flash', label: 'DeepSeek V4 Flash' },
+                { type: 'doc', id: 'llmservice/models/deepseek-v4-flash', label: 'DeepSeek-V4-Flash' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v3.2', label: 'DeepSeek V3.2' },
               ],
             },
@@ -209,6 +210,7 @@ const sidebars = {
               label: 'SpaceXAI (Grok)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/grok-4.6', label: 'Grok 4.6' },
                 { type: 'doc', id: 'llmservice/models/grok-4.5', label: 'Grok 4.5' },
               ],
             },
@@ -217,6 +219,7 @@ const sidebars = {
               label: 'Z.AI (GLM)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/glm-5-3', label: 'GLM-5.3' },
                 { type: 'doc', id: 'llmservice/models/glm-5-2', label: 'GLM-5.2' },
                 { type: 'doc', id: 'llmservice/models/glm-5-1', label: 'GLM-5.1' },
               ],

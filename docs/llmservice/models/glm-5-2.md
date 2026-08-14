@@ -4,7 +4,7 @@
 
 GLM-5.2 is a GLM-family text foundation model developed by Z.AI and released on June 16, 2026. It is positioned for long-horizon coding and engineering tasks, with a 1M-token context window, 128K maximum output, and a `reasoning_effort` control for adjusting reasoning depth.
 
-:::tip Limited-time offer: GLM-5.2 at 40% off
+:::note Limited-time offer: GLM-5.2 at 40% off
 Offer starts August 12, 2026.
 
 **Eligibility:** This offer applies to GLM-5.2 requests made through the B.AI API and B.AI web app.

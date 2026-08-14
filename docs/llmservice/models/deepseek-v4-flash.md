@@ -1,8 +1,17 @@
-# DeepSeek V4 Flash
+# DeepSeek-V4-Flash
 
 ## Overview
 
 DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly 3.1x lower cost, making it one of the most cost-effective models available.
+
+:::tip 🔥 Limited-Time Free Access
+Offer starts August 17, 2026, and applies to DeepSeek-V4-Flash on B.AI Chat and API.
+
+* **Chat:** Usage is billed at `0 Credits` during the offer.
+* **API:** Usage is billed at `0 Credits` during the offer. No per-request, input, cache write, cache read, or output token fees apply.
+
+After the offer ends, the model will return to standard pricing. Offer end time, eligibility, actual charges, and final billing are subject to the platform display.
+:::
 
 ## Key Features
 
@@ -40,7 +49,7 @@ DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, rele
 
 | Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **DeepSeek V4 Flash** | `0.28` | `0.28` | `0.0056` | `0.56` | `-` | - |
+| **DeepSeek-V4-Flash** | `0.28` | `0.28` | `0.0056` | `0.56` | `-` | - |
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
