@@ -30,8 +30,8 @@ The table below lists standard reference prices only. For current limited-time o
 | GLM-5.2           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
-| DeepSeek-V4-Flash |                  0.28 |                        0.28 |                     0.0056 |                   0.56 |                        - |
-| DeepSeek V4 Pro   |                  0.87 |                        0.87 |                     0.0087 |                   1.74 |                        - |
+| DeepSeek-V4-Flash |                  0.44 |                        0.44 |                     0.0088 |                   1.32 |                        - |
+| DeepSeek V4 Pro   |                  1.32 |                        1.32 |                     0.0132 |                   3.96 |                        - |
 | Grok 4.6          |                  2.00 |                        2.00 |                       0.50 |                   6.00 |                        - |
 | Grok 4.5          |                  2.00 |                        2.00 |                       0.30 |                   6.00 |                        - |
 | GPT-5.6 Sol       |                  5.00 |                        6.25 |                       0.50 |                  30.00 |                   10,000 |
@@ -63,7 +63,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 :::caution Main table scope
-The main pricing table shows the currently effective standard reference price for each model. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
+The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro currently applies its Busy price; Idle pricing is not yet enabled. DeepSeek-V4-Flash is currently free on B.AI Chat and API under its limited-time offer, while its row shows the standard reference price. Time-based pricing is not yet enabled for either model. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
 :::
 
 :::info Pricing note
