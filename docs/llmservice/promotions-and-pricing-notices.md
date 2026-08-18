@@ -53,10 +53,10 @@ For a limited time, eligible requests are billed at 90% of the standard referenc
 <ActivityCard
   variant="adjustment"
   title="DeepSeek API Pricing"
-  status="Pricing Adjustment Notice"
-  detail="Subject to Official Notice"
+  status="Current Pricing"
+  detail="V4 Pro: Busy Rate"
 >
-Due to a recent pricing adjustment by DeepSeek, B.AI plans to make a corresponding adjustment to pricing for DeepSeek API services. Please plan your usage accordingly.
+DeepSeek-V4-Pro is currently billed at its Busy rate. Idle pricing and peak/off-peak pricing are not yet enabled.
 
-The adjustment scope, effective date, and final prices are subject to the formal announcement and platform display.
+DeepSeek-V4-Flash is currently free across B.AI Chat and API under its limited-time offer. Time-based pricing is not yet enabled. See the [DeepSeek-V4-Pro](./models/deepseek-v4-pro.md) and [DeepSeek-V4-Flash](./models/deepseek-v4-flash.md) model details for pricing information. Final billing is subject to the platform display.
 </ActivityCard>

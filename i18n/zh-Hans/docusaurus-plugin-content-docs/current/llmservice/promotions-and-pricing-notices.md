@@ -53,10 +53,10 @@ import ActivityCard from '@site/src/components/ActivityCard';
 <ActivityCard
   variant="adjustment"
   title="DeepSeek API 定价"
-  status="定价调整预告"
-  detail="以正式通知为准"
+  status="当前计费说明"
+  detail="V4 Pro：当前按忙时计费"
 >
-由于 DeepSeek 官方近期调整服务定价，B.AI 计划相应上调 DeepSeek API 服务价格。请根据业务需求合理安排使用。
+DeepSeek-V4-Pro 当前按忙时价格结算，闲时价格及峰谷定价尚未启用。
 
-具体调整范围、生效时间及最终价格以正式通知和平台页面展示为准。
+DeepSeek-V4-Flash 当前在限时免费活动期间，B.AI Chat 和 API 使用均免费；峰谷定价尚未启用。完整价格请查看 [DeepSeek-V4-Pro](./models/deepseek-v4-pro.md) 和 [DeepSeek-V4-Flash](./models/deepseek-v4-flash.md) 模型详情。最终账单以平台页面展示为准。
 </ActivityCard>
