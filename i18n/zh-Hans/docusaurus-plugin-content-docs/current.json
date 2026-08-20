@@ -83,6 +83,14 @@
     "message": "模型列表",
     "description": "The label for category Models in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.category.Tencent Hunyuan (Hy)": {
+    "message": "腾讯混元（Hy）",
+    "description": "The label for the Tencent Hunyuan model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Hy3": {
+    "message": "Hy3",
+    "description": "The label for the Hy3 model document in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.category.OpenClaw": {
     "message": "OpenClaw 集成",
     "description": "The label for category OpenClaw in sidebar docsSidebar"

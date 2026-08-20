@@ -5,6 +5,8 @@
 The platform uses a unified Credits system to measure and settle usage across all AI services.
 
 > **Platform-wide Credits conversion:** `1 USD = 1,000,000 Credits` (`1M` / `1000K` Credits)
+>
+> **How to read the pricing table:** Under this standard conversion, a price of `X Credits/Token` is numerically equivalent to a standard reference price of `USD X / 1M Tokens`. For example, `1.32 Credits/Token` corresponds to `$1.32 / 1M Tokens`. Credits remain B.AI's billing unit; promotions, bonus Credits, and account benefits may affect actual settlement or out-of-pocket top-up cost. The platform display and final billing records prevail.
 
 **How Credits are calculated:** The number of tokens consumed in each interaction is converted into Credits based on the pricing of the selected model and deducted from your account balance.
 
@@ -26,12 +28,13 @@ The table below lists standard reference prices only. For current limited-time o
 | Qwen3.8-Max       |                  2.00 |                        2.00 |                       0.25 |                   6.00 |                        - |
 | Qwen3.7-Max       |                  1.65 |                        1.65 |                       0.33 |                  4.951 |                        - |
 | Qwen3.6-27B       |                  0.19 |                        0.19 |                      0.019 |                   2.99 |                        - |
+| Hy3               |                 0.132 |                       0.132 |                      0.033 |                  0.528 |                        - |
 | GLM-5.3           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.2           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
-| DeepSeek-V4-Flash |                  0.44 |                        0.44 |                     0.0088 |                   1.32 |                        - |
-| DeepSeek V4 Pro   |                  1.32 |                        1.32 |                     0.0132 |                   3.96 |                        - |
+| DeepSeek-V4-Flash | Idle `0.22`<br/>Busy `0.44` | Idle `0.22`<br/>Busy `0.44` | Idle `0.0073`<br/>Busy `0.0147` | Idle `0.66`<br/>Busy `1.32` | - |
+| DeepSeek V4 Pro   | Idle `0.66`<br/>Busy `1.32` | Idle `0.66`<br/>Busy `1.32` | Idle `0.022`<br/>Busy `0.044` | Idle `1.98`<br/>Busy `3.96` | - |
 | Grok 4.6          |                  2.00 |                        2.00 |                       0.50 |                   6.00 |                        - |
 | Grok 4.5          |                  2.00 |                        2.00 |                       0.30 |                   6.00 |                        - |
 | GPT-5.6 Sol       |                  5.00 |                        6.25 |                       0.50 |                  30.00 |                   10,000 |
@@ -63,7 +66,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 :::caution Main table scope
-The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro currently applies its Busy price; Idle pricing is not yet enabled. DeepSeek-V4-Flash is currently free on B.AI Chat and API under its limited-time offer, while its row shows the standard reference price. Time-based pricing is not yet enabled for either model. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
+The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro and DeepSeek-V4-Flash use time-based pricing, so their rows list both **Idle** and **Busy** rates; the applicable period and final billing are subject to the platform display. DeepSeek-V4-Flash is currently free on B.AI Chat and API under its limited-time offer, while its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
 :::
 
 :::info Pricing note

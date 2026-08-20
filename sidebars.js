@@ -207,6 +207,14 @@ const sidebars = {
             },
             {
               type: 'category',
+              label: 'Tencent Hunyuan (Hy)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/models/hy3', label: 'Hy3' },
+              ],
+            },
+            {
+              type: 'category',
               label: 'SpaceXAI (Grok)',
               collapsed: true,
               items: [

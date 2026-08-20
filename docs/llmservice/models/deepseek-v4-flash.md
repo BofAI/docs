@@ -54,10 +54,11 @@ After the offer ends, the model will return to standard pricing. Offer end time,
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **DeepSeek-V4-Flash** | `0.44` | `0.44` | `0.0088` | `1.32` | `-` | Standard reference price; Cache Write: `1x` input; Cache Read: `0.02x` input |
+| Billing Period | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Idle** | `0.22` | `0.22` | `0.0073` | `0.66` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
+| **Busy** | `0.44` | `0.44` | `0.0147` | `1.32` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
 
 :::info Pricing note
-The table shows the standard reference price for DeepSeek-V4-Flash. Its current limited-time offer applies `0 Credits` to all B.AI Chat and API usage. Time-based pricing is not yet enabled; final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
+The table shows the time-based standard reference price for DeepSeek-V4-Flash. Its current limited-time offer applies `0 Credits` to all B.AI Chat and API usage. After the offer ends, the applicable Idle or Busy period, final settlement price, and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::

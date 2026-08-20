@@ -6,6 +6,10 @@ This page summarizes current limited-time offers and pricing updates. The [Prici
 
 ## Promotions
 
+:::info Promotion display order
+This section only shows currently active promotions: free offers appear first, followed by discounts from highest to lowest.
+:::
+
 <ActivityCard
   variant="free"
   title="DeepSeek-V4-Flash"
@@ -20,6 +24,22 @@ This offer applies to B.AI Chat and API:
 * **API:** Usage is billed at `0 Credits` during the offer. No per-request, input, cache write, cache read, or output token fees apply.
 
 After the offer ends, DeepSeek-V4-Flash will return to standard pricing. See the [model details](./models/deepseek-v4-flash.md).
+</ActivityCard>
+
+<ActivityCard
+  variant="free"
+  title="Hy3"
+  status="Free Offer"
+  detail="0 Credits"
+>
+Offer starts August 20, 2026.
+
+This offer applies to B.AI Chat and API:
+
+* **Chat:** Hy3 usage is billed at `0 Credits` during the offer.
+* **API:** Usage is billed at `0 Credits` during the offer. No per-request, input, cache write, cache read, or output token fees apply.
+
+After the offer ends, Hy3 will return to standard pricing. See the [model details](./models/hy3.md).
 </ActivityCard>
 
 <ActivityCard
@@ -53,10 +73,10 @@ For a limited time, eligible requests are billed at 90% of the standard referenc
 <ActivityCard
   variant="adjustment"
   title="DeepSeek API Pricing"
-  status="Current Pricing"
-  detail="V4 Pro: Busy Rate"
+  status="Time-Based Pricing"
+  detail="Idle / Busy Rates"
 >
-DeepSeek-V4-Pro is currently billed at its Busy rate. Idle pricing and peak/off-peak pricing are not yet enabled.
+DeepSeek-V4-Pro uses Idle and Busy pricing periods. The applicable period and final billing are subject to the platform display.
 
-DeepSeek-V4-Flash is currently free across B.AI Chat and API under its limited-time offer. Time-based pricing is not yet enabled. See the [DeepSeek-V4-Pro](./models/deepseek-v4-pro.md) and [DeepSeek-V4-Flash](./models/deepseek-v4-flash.md) model details for pricing information. Final billing is subject to the platform display.
+DeepSeek-V4-Flash also uses Idle and Busy pricing periods, but is currently free across B.AI Chat and API under its limited-time offer. See the [DeepSeek-V4-Pro](./models/deepseek-v4-pro.md) and [DeepSeek-V4-Flash](./models/deepseek-v4-flash.md) model details for standard pricing information. Final billing is subject to the platform display.
 </ActivityCard>
