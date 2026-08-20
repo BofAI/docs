@@ -247,6 +247,7 @@ const sidebars = {
               label: 'Qwen',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/qwen3.8-27b', label: 'Qwen3.8-27B' },
                 { type: 'doc', id: 'llmservice/models/qwen3.8-max', label: 'Qwen3.8-Max' },
                 { type: 'doc', id: 'llmservice/models/qwen3.7-max', label: 'Qwen3.7-Max' },
                 { type: 'doc', id: 'llmservice/models/qwen3.6-27b', label: 'Qwen3.6-27B' },
