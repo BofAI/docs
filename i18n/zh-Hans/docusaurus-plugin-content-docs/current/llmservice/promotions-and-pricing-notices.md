@@ -6,6 +6,10 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 ## 活动
 
+:::info 活动展示规则
+本栏目仅展示当前生效的活动：免费活动优先，折扣活动按优惠力度由高至低排列。
+:::
+
 <ActivityCard
   variant="free"
   title="DeepSeek-V4-Flash"
@@ -20,6 +24,22 @@ import ActivityCard from '@site/src/components/ActivityCard';
 * **API：** 活动期间使用按 `0 Credits` 结算，不收取单次请求、输入、缓存写入、缓存读取或输出的费用。
 
 活动结束后，DeepSeek-V4-Flash 将恢复标准价格。详见[模型详情](./models/deepseek-v4-flash.md)。
+</ActivityCard>
+
+<ActivityCard
+  variant="free"
+  title="Hy3"
+  status="免费活动"
+  detail="0 Credits"
+>
+活动开始时间：2026 年 8 月 20 日。
+
+本活动覆盖 B.AI Chat 和 API：
+
+* **Chat：** 活动期间使用 Hy3，按 `0 Credits` 结算。
+* **API：** 活动期间使用按 `0 Credits` 结算，不收取单次请求、输入、缓存写入、缓存读取或输出的费用。
+
+活动结束后，Hy3 将恢复标准价格。详见[模型详情](./models/hy3.md)。
 </ActivityCard>
 
 <ActivityCard
@@ -53,10 +73,10 @@ import ActivityCard from '@site/src/components/ActivityCard';
 <ActivityCard
   variant="adjustment"
   title="DeepSeek API 定价"
-  status="当前计费说明"
-  detail="V4 Pro：当前按忙时计费"
+  status="分时计费"
+  detail="闲时 / 忙时价格"
 >
-DeepSeek-V4-Pro 当前按忙时价格结算，闲时价格及峰谷定价尚未启用。
+DeepSeek-V4-Pro 支持闲时与忙时分时计费，具体适用时段及最终账单以平台页面展示为准。
 
-DeepSeek-V4-Flash 当前在限时免费活动期间，B.AI Chat 和 API 使用均免费；峰谷定价尚未启用。完整价格请查看 [DeepSeek-V4-Pro](./models/deepseek-v4-pro.md) 和 [DeepSeek-V4-Flash](./models/deepseek-v4-flash.md) 模型详情。最终账单以平台页面展示为准。
+DeepSeek-V4-Flash 同样支持闲时与忙时分时计费，但当前处于限时免费活动，B.AI Chat 和 API 使用均免费。标准价格请查看 [DeepSeek-V4-Pro](./models/deepseek-v4-pro.md) 和 [DeepSeek-V4-Flash](./models/deepseek-v4-flash.md) 模型详情。最终账单以平台页面展示为准。
 </ActivityCard>
