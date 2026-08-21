@@ -91,6 +91,18 @@
     "message": "Hy3",
     "description": "The label for the Hy3 model document in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.category.Xiaomi (MiMo)": {
+    "message": "小米（MiMo）",
+    "description": "The label for the Xiaomi MiMo model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.MiMo-V2.5-Pro": {
+    "message": "MiMo-V2.5-Pro",
+    "description": "The label for the MiMo-V2.5-Pro model document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.MiMo-V2.5": {
+    "message": "MiMo-V2.5",
+    "description": "The label for the MiMo-V2.5 model document in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.category.OpenClaw": {
     "message": "OpenClaw 集成",
     "description": "The label for category OpenClaw in sidebar docsSidebar"
