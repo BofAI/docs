@@ -32,7 +32,7 @@ After the offer ends, DeepSeek-V4-Flash will return to standard pricing. See the
   status="Free Offer"
   detail="0 Credits"
 >
-Offer starts August 20, 2026.
+Offer starts August 21, 2026.
 
 This offer applies to B.AI Chat and API:
 

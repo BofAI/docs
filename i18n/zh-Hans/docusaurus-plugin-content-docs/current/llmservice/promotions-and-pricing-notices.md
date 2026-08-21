@@ -32,7 +32,7 @@ import ActivityCard from '@site/src/components/ActivityCard';
   status="免费活动"
   detail="0 Credits"
 >
-活动开始时间：2026 年 8 月 20 日。
+活动开始时间：2026 年 8 月 21 日。
 
 本活动覆盖 B.AI Chat 和 API：
 

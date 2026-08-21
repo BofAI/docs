@@ -215,6 +215,15 @@ const sidebars = {
             },
             {
               type: 'category',
+              label: 'Xiaomi (MiMo)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/models/mimo-v2.5-pro', label: 'MiMo-V2.5-Pro' },
+                { type: 'doc', id: 'llmservice/models/mimo-v2.5', label: 'MiMo-V2.5' },
+              ],
+            },
+            {
+              type: 'category',
               label: 'SpaceXAI (Grok)',
               collapsed: true,
               items: [
@@ -247,6 +256,7 @@ const sidebars = {
               label: 'Qwen',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/qwen3.8-27b', label: 'Qwen3.8-27B' },
                 { type: 'doc', id: 'llmservice/models/qwen3.8-max', label: 'Qwen3.8-Max' },
                 { type: 'doc', id: 'llmservice/models/qwen3.7-max', label: 'Qwen3.7-Max' },
                 { type: 'doc', id: 'llmservice/models/qwen3.6-27b', label: 'Qwen3.6-27B' },
