@@ -314,12 +314,7 @@ const sidebars = {
           collapsed: true,
           items: ['llmservice/Claude-Code/claudecode-bankofai-api-configuration-guide'],
         },
-        {
-          type: 'category',
-          label: 'API',
-          collapsed: true,
-          items: ['llmservice/api/API'],
-        },
+        { type: 'doc', id: 'llmservice/api/API', label: 'API Reference' },
       ],
     },
     {

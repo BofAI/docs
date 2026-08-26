@@ -159,9 +159,9 @@
     "message": "OpenClaw 集成",
     "description": "The label for category OpenClaw in sidebar docsSidebar"
   },
-  "sidebar.docsSidebar.category.API": {
+  "sidebar.docsSidebar.doc.API Reference": {
     "message": "API 参考",
-    "description": "The label for category API in sidebar docsSidebar"
+    "description": "The label for the doc item API Reference in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.Explore Further": {
     "message": "进一步探索",
