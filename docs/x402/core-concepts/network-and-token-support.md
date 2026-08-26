@@ -29,7 +29,7 @@ In the x402 protocol (on-the-wire), BSC uses the EIP-155 chain ID format:
 | **BSC Mainnet**  | `eip155:56`   | BSC Mainnet (Production)      |
 | **BSC Testnet**  | `eip155:97`   | BSC Testnet (Chapel)          |
 
-> **Note**: When configuring a self-hosted Facilitator, the YAML config file uses a human-readable format: `bsc:mainnet` and `bsc:testnet`. The Facilitator automatically maps these to the corresponding EIP-155 chain IDs used in the protocol.
+> **Note**: A self-hosted Facilitator's YAML config takes **canonical CAIP-2 identifiers only** — `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532`, `tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`. Friendly aliases such as `bsc:mainnet` or `tron:nile` are not resolved and are rejected at startup.
 
 ---
 
@@ -57,7 +57,7 @@ The protocol uses secure signing mechanisms to ensure tamper-resistant message a
 | :------------------ | :--------- | :---- |
 | **TRON Mainnet**    | **Mainnet** | **Production network** for real-value assets |
 | **TRON Nile**       | **Testnet** | **Recommended testnet** for development and debugging |
-| **TRON Shasta**     | **Testnet** | Long-running alternative testnet |
+| **TRON Shasta**     | **Testnet** | Alternative testnet — SDK/CLI only; the official facilitator does not settle Shasta, so use Nile or self-host |
 | **BSC Mainnet**     | **Mainnet** | **Production network** for real-value assets |
 | **BSC Testnet**     | **Testnet** | **Recommended testnet** for BSC development |
 | **Base Mainnet**    | **Mainnet** | **Production network** using official USDC |
@@ -75,20 +75,22 @@ x402 supports **TRC-20, BEP-20, and ERC-20** tokens. TRON/BSC routes use their c
 | :------ | :------------- | :--------------- |
 | **USDT** | `tron:0x2b6653dc` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
 | **USDT** | `tron:0xcd8690dc`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
+| **USDT** | `tron:0x94a9059e` | `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs` |
 | **USDD** | `tron:0x2b6653dc` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
 | **USDD** | `tron:0xcd8690dc`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56`    | `0x55d398326f99059fF775485246999027B3197955` |
 | **USDC** | `eip155:56`    | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
-| **EPS**  | `eip155:56`    | `0xA7f552078dcC247C2684336020c03648500C6d9F` |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 | **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
 | **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
+> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registry resolves **USDT** on TRON (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) and BSC Mainnet (`eip155:56`), and **USDC** on BSC Testnet (`eip155:97`) and Base (`eip155:8453`, `eip155:84532`). Everything else in the table above — TRON USDD, BSC Mainnet USDC, BSC Testnet USDT, DHLU, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`, and `x402-cli` pays registry tokens by default — an unregistered asset requires explicit `--asset` plus `--decimals`, and is rejected outright on Base.
+
 > **Extensibility**: The protocol is highly extensible. By registering tokens in the `TokenRegistry`, you can easily support any custom TRC-20 or BEP-20 token.
 
-> **Token selection for the `exact` scheme**: EIP-3009 tokens (for example official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`. Plain ERC-20 tokens (for example BSC USDC/USDT and TRON USDT/USDD) settle via the Permit2 path — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. The per-token method is data in the server's `accepts[].price.extra`: EIP-3009 → `{ name, version }`; plain ERC-20 → `{ assetTransferMethod: "permit2" }`.
+> **Token selection for the `exact` scheme**: EIP-3009 tokens (for example official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`. Plain ERC-20 tokens (for example BSC USDC/USDT and TRON USDT/USDD) settle via the Permit2 path — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. You set the per-token method on the server under `accepts[].price.extra`; the SDK surfaces it on the wire as `accepts[].extra`: EIP-3009 → `{ name, version }`; plain ERC-20 → `{ assetTransferMethod: "permit2" }`.
 
 ---
 
@@ -147,25 +149,25 @@ A payment-channel scheme for high-frequency micro-payments (e.g. AI agent per-to
 
 ### `exact_gasfree` Scheme
 
-TRON-specific. Allows buyers to pay with USDT/USDD **without holding TRX for gas fees**. The payer signs a TIP-712 GasFree permit and a relayer pays the on-chain energy via the official GasFree Proxy — no TRX for the payer, no one-time `approve`. Funds come from the payer's GasFree custodial wallet (not the main wallet). Available on `tron:0x2b6653dc` and `tron:0xcd8690dc`.
+TRON-specific. Allows buyers to pay with USDT/USDD **without holding TRX for gas fees**. The payer signs a TIP-712 GasFree permit and a relayer pays the on-chain energy via the official GasFree Proxy — no TRX for the payer, no one-time `approve`. Funds come from the payer's GasFree custodial wallet (not the main wallet). The SDK registers GasFree on `tron:0x2b6653dc`, `tron:0xcd8690dc`, and `tron:0x94a9059e`, but the official facilitator only proxies the relayer for TRON Mainnet and Nile — the built-in Shasta relayer URL has no upstream behind it, so Shasta GasFree needs your own relayer.
 
-#### GasFree Account Management (via x402-payment skill)
+The relayer charges its own fee in the payment token, **on top of** the payment amount, so the GasFree account must hold enough to cover both.
 
-When using the `x402-payment` skill, you can manage GasFree accounts directly from the CLI:
+:::info What the relayer fee is
+**The relayer fee is the service charge of the GasFree relayer**: instead of burning your own TRX, the relayer fronts the on-chain energy/bandwidth, and in exchange deducts a fee from your GasFree account, denominated in the payment token (e.g. USDT). It is composed of a fixed **transfer fee** per payment, plus a one-time **activation fee** on the first payment if the GasFree account is not yet activated. The rates are quoted per token by the relayer's API; the client queries and estimates them before signing (when the relayer reports no rate for the token, the client signs a default ceiling of one whole token instead), and the signed permit carries a `maxFee` ceiling the relayer cannot exceed. It is counted **separately** from the payment amount (the money the seller receives) — `--max-amount` does not cover it, so cap it with `--max-gasfree-fee`.
+:::
 
-**Query GasFree wallet info** (address, activation status, balance, nonce):
+#### Paying with GasFree from the CLI
+
 ```bash
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --network nile
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --wallet <YOUR_WALLET_ADDRESS>
+x402-cli pay <url> \
+  --scheme exact_gasfree \
+  --max-amount 0.01 \
+  --max-gasfree-fee 0.5 \
+  --json
 ```
 
-**Activate a GasFree account** (required before first use):
-```bash
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network mainnet
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --token USDT
-```
+The CLI takes the first requirement in the server's `accepts` list that matches your filters — it does not prefer GasFree — so pass `--scheme exact_gasfree` whenever the endpoint also advertises plain `exact`. `--max-amount` does not cover the relayer fee — cap that separately with `--max-gasfree-fee` (or `--max-gasfree-fee-raw`). See the [CLI command reference](../cli/command-reference.md#gasfree-payments-tron).
 
 ### How Payment Schemes Work
 

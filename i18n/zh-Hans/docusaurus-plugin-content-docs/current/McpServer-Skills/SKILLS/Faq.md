@@ -173,10 +173,10 @@ export TRON_HUMAN_PRIVATE_KEY="人类审批者的私钥"
 rm -rf ~/.agents/skills/sunswap-dex-trading
 ```
 
-**更新：** 重新运行安装命令，会自动更新所有技能到最新版本。
+**更新：** 重新运行安装命令（保留 `-g`，更新的才是全局那份），会自动更新所有技能到最新版本。
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npx skills add https://github.com/BofAI/skills -y -g
 ```
 
 ---

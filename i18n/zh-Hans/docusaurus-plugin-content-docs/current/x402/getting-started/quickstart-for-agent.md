@@ -113,19 +113,19 @@ export EVM_RPC_URL="https://bsc-testnet-rpc.publicnode.com"
 运行以下命令一次性安装所有 BANK OF AI Skills（包括 x402-payment）：
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y
+npx skills add https://github.com/BofAI/skills -y -g
 ```
 
-`-y` 参数会跳过所有交互选择，默认安装所有 Skills。安装器会自动检测你电脑上的 AI 工具（Cursor、Claude Code、Cline、OpenCode 等），并将技能复制到对应的目录中。
+`-y` 参数会跳过所有交互选择，默认安装所有 Skills；`-g` 参数把技能装到全局（用户级目录 `~/.agents/skills/`），而不是只装进当前目录。安装器会自动检测你电脑上的 AI 工具（Cursor、Claude Code、Cline、OpenCode 等），并将技能复制到对应的目录中。
 
 > ✅ **成功标志：** 终端显示 `✓ x402-payment (copied)` 以及其他已安装的技能
 
 ### 交互式安装
 
-如果你想手动选择安装哪些 Skills 或选择安装范围：
+如果你想手动选择安装哪些 Skills、装到哪些 AI 工具：
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npx skills add https://github.com/BofAI/skills -g
 ```
 
 交互式安装的完整步骤说明，请参考 [Skills 快速开始](../../McpServer-Skills/SKILLS/QuickStart.md)。
@@ -194,7 +194,7 @@ pnpm dev:server               # http://localhost:4021
 </TabItem>
 </Tabs>
 
-> ✅ **成功标志：** 代理返回了 `{"data": "..."}` 格式的内容，且区块链浏览器上出现了对应的交易记录
+> ✅ **成功标志：** 代理返回了端点的 JSON 内容——仓库自带的 Express 示例返回 `{"report":{"weather":"sunny","temperature":70}}`——且区块链浏览器上出现了对应的交易记录
 
 ---
 

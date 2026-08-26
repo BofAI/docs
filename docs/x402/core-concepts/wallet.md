@@ -15,7 +15,7 @@ Buyers use their wallet as the primary interaction anchor, responsible for:
 - **Asset Custody**: Securely storing USDT or other TRC-20/BEP-20 tokens.
 - **Signature Authorization**: Cryptographically signing payment payloads using their private key.
 - **Programmatic Payments**: Authorizing on-chain fund transfers via code (especially suitable for autonomous AI agents).
-- **Allowance Management**: Managing token allowances granted to the Facilitator contract.
+- **Allowance Management**: Managing the one-time `approve(Permit2, max)` allowance granted to the Permit2 contract — the facilitator then pulls the funds through the x402 Permit2 proxy.
 
 > **Stateless Authentication**: With wallet-based identity, buyers can initiate transactions without account registration, API keys, or login sessions.
 

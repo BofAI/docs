@@ -8,6 +8,33 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-08-25</div>
+<div className="changelog-body">
+
+### x402 SDK v1.1.0 · 文档
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">x402</span><span className="changelog-tag">文档</span></div>
+
+- **x402 SDK 1.1.0**——付款流程显式化（`upfront` / `escrow` 通过 `extra.paymentFlow` 在协议中传递，默认 `authorization`）、客户端消费管控默认开启（单笔约 `$1` 上限 + 默认资产白名单）、付款选择策略与生命周期钩子、EVM 智能账户支持（ERC-7702、白名单内 ERC-6492），`HTTPFacilitatorClient` 默认超时 90 秒。11 个包需整体升级，要求 Node.js 22+。[SDK 功能矩阵](../x402/sdk-features/)
+- **文档订正**——移除已废弃的 facilitator 计费内容（`base_fee`、`extra.fee`、`/fee/quote`）；官方部署的匿名 `/settle` 限速为每分钟 1 次；不再宣称 GasFree 会被自动优选——CLI 取第一条匹配过滤条件的支付要求，需要强制时请传 `--scheme exact_gasfree`；TRON Shasta 现已注明「SDK/CLI 可签名、但官方 facilitator 不结算」（请用 Nile 或自建）；CLI 页面标明了它的**锁定依赖**——CLI 1.0.2 内含的 `@bankofai/x402-*` SDK 包仍是 1.0.1（`x402-gateway` 为 1.0.2），因此尚不具备 1.1.0 的客户端消费管控；Skills 各页的安装命令统一改为 `npx skills add … -g`。[x402 文档](../x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-08-20</div>
+<div className="changelog-body">
+
+### Facilitator —— BSC 回执可靠性
+
+<div className="changelog-tags"><span className="changelog-tag">修复</span><span className="changelog-tag">Facilitator</span></div>
+
+- **BSC 主网**（`eip155:56`）的结算回执查询新增备用 RPC 兜底，单个节点无响应不再把已结算的付款误判为失败。[官方 Facilitator](../x402/core-concepts/OfficialFacilitator/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-07-30</div>
 <div className="changelog-body">
 
@@ -23,12 +50,28 @@ BANK OF AI 各产品的更新与公告。
 </div>
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-07-29</div>
+<div className="changelog-body">
+
+### 官方 Facilitator —— 支持 Base 结算
+
+<div className="changelog-tags"><span className="changelog-tag">更新</span><span className="changelog-tag">Facilitator</span><span className="changelog-tag">Base</span></div>
+
+- 官方 facilitator 现已结算 **Base USDC**——在 TRON 主网/Nile 与 BSC 主网/测试网之外，新增启用 `eip155:8453`（主网）与 `eip155:84532`（Sepolia）。仓库自带的示例 facilitator 在 EVM 侧仍只注册 `eip155:97` 与 `eip155:56`，自托管的 Base 卖家需自行添加。[官方 Facilitator](../x402/core-concepts/OfficialFacilitator/)
+- **自托管破坏性变更**——facilitator 配置只接受规范 CAIP-2 标识符；`bsc:mainnet`、`tron:nile` 这类友好别名不再解析，启动时直接报错。
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-07-21</div>
 <div className="changelog-body">
 
 ### 文档
 
-<div className="changelog-tags"><span className="changelog-tag">产品更新</span><span className="changelog-tag">文档</span><span className="changelog-tag">x402</span></div>
+<div className="changelog-tags"><span className="changelog-tag">产品更新</span><span className="changelog-tag">文档</span><span className="changelog-tag">x402</span><span className="changelog-tag">SKILLS</span></div>
+
+- **SKILLS —— `x402-payment` 改用 `x402-cli` 付款**（1.0.1 及以上），不再使用内置本地脚本；新增 `--dry-run` 预览、`--max-amount` 限额、GasFree 必须限费，以及规范的 CAIP-2 TRON 标识符。[详情](./skills/)
 
 - **TRON 网络标识符全面改用 CAIP-2 格式**——`tron:0x2b6653dc`（主网）、`tron:0xcd8690dc`（Nile）、`tron:0x94a9059e`（Shasta）。应用代码中建议使用 SDK 常量 `TRON_MAINNET` / `TRON_NILE` / `TRON_SHASTA`，而不是硬编码十六进制字符串。[网络与代币支持](../x402/core-concepts/network-and-token-support/)
 - **移除 `auth-capture` 方案**——x402 现记录四种支付方案：`exact`、`upto`、`batch-settlement` 与 `exact_gasfree`（TRON）。[SDK 功能](../x402/sdk-features/)

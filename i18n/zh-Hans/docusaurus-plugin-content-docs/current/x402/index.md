@@ -73,11 +73,12 @@ x402 支持广泛的应用场景，包括：
 x402 目前支持以下网络环境：
 
 - **TRON 主网** (`tron:0x2b6653dc`)
-- **TRON Shasta 测试网** (`tron:0x94a9059e`)
+- **TRON Shasta 测试网** (`tron:0x94a9059e`)——仅 SDK/CLI 可用，官方 facilitator 不结算
 - **TRON Nile 测试网** (`tron:0xcd8690dc`)
 - **BSC 主网** （`eip155:56`）
 - **BSC 测试网** （`eip155:97`)
 - **Base 主网**（`eip155:8453`）
+- **Base Sepolia 测试网**（`eip155:84532`）
 
 Base 主网使用官方 USDC，通过 `exact` 方案和 EIP-3009 授权完成支付。
 

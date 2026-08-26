@@ -56,7 +56,7 @@ Official Facilitator supports **two calling modes**.
 
 | Mode | Rate Limit | Description |
 |-----|-----|-----|
-| **Anonymous Mode** | 10 times / minute (default, configurable) | No API Key required, suitable for local development and functional testing |
+| **Anonymous Mode** | 1 time / minute on the official deployment (configurable; the code default is 10/minute when unset) | No API Key required, suitable for local development and functional testing |
 | **API Key Mode** | 1000 times / minute | API Key required, suitable for production environments and high-frequency payment requests |
 
 The calling methods for both modes are exactly the same, but they differ in **identity recognition and interface rate limiting strategies**.
@@ -70,7 +70,7 @@ If the request **does not carry an API Key**, the Facilitator will treat the req
 In anonymous mode:
 
 - The `/settle` interface is **rate-limited**
-- **Maximum 10 calls per minute** (default, configurable)
+- **1 call per minute** on the official deployment (configurable; the code default is 10/minute when unset)
 
 This mode is mainly used for:
 
@@ -252,7 +252,17 @@ After clicking **"Confirm"**, you will return to the Dashboard page, and the API
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | Query payment records by the on-chain authorization identity |
 | GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`) |
 
-> There is **no** `/fee/quote` endpoint — fee terms travel inside the payment requirements' `extra` field. Rate limiting only applies to the `/settle` interface; other interfaces are not affected by rate limiting.
+> There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee. Rate limiting only applies to the `/settle` interface; other interfaces are not affected by rate limiting.
+
+### Networks and schemes the official service settles
+
+| Network | Environment |
+|---|---|
+| `tron:0x2b6653dc` (TRON Mainnet) · `tron:0xcd8690dc` (Nile) | mainnet · testnet |
+| `eip155:56` (BSC) · `eip155:97` (BSC testnet) | mainnet · testnet |
+| `eip155:8453` (Base) · `eip155:84532` (Base Sepolia) | mainnet · testnet |
+
+Each of these networks registers `exact`, `upto`, and `batch-settlement`; TRON additionally registers `exact_gasfree` where the service holds GasFree relayer credentials (TRON Mainnet and Nile). Query `/supported` for the authoritative list of the deployment you are pointing at.
 
 ### Payment Record Query
 
@@ -277,7 +287,7 @@ The `/payments/tx/{tx_hash}` and `/payments?network=&nonce=[&asset=&payer=]` int
 
 **Q: Can it run normally without configuring an API Key?**
 
-Yes, it can run, but the `/settle` interface is limited to 10 calls per IP per minute by default. This is only suitable for testing; any real traffic must be configured with an API Key.
+Yes, it can run, but on the official deployment the `/settle` interface is limited to 1 call per IP per minute (the facilitator service's built-in default is 10/minute when the deployment does not configure it). This is only suitable for testing; any real traffic must be configured with an API Key.
 
 **Q: Does the API Key expire?**
 

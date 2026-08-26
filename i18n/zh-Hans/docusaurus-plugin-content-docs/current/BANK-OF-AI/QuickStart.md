@@ -19,7 +19,7 @@
 在你正在用的 AI 客户端（OpenClaw / Claude Code / Cursor / Codex 等）里粘贴这段指令：
 
 ```
-运行 npx skills add BofAI/skills 安装 BANK OF AI 全部技能，安装完成后使用 bankofai-guide 进行引导后续操作。
+运行 npx skills add BofAI/skills -g 安装 BANK OF AI 全部技能，安装完成后使用 bankofai-guide 进行引导后续操作。
 注意：请安装到当前 Agent 对应的 skill 目录
 ```
 

@@ -43,9 +43,9 @@ x402-cli pay <url> [options]
 
 | 选项 | 说明 |
 | :--- | :--- |
-| `--method <method>` | HTTP 方法（默认：`GET`） |
+| `--method <method>` | HTTP 方法——需大写，且为 `DELETE`、`GET`、`HEAD`、`OPTIONS`、`PATCH`、`POST`、`PUT` 之一（默认：`GET`）；其他值会以 `INVALID_ARGUMENT` 失败（退出码 2） |
 | `--header "Name: Value"` | 请求头，可重复 |
-| `--body <body>` | 非 `GET`/`HEAD` 方法的请求体 |
+| `--body <body>` | 请求体；`GET` 与 `HEAD` 会忽略该参数 |
 | `--network <caip2>` | 要求特定网络（如 `tron:0xcd8690dc`、`base-mainnet`） |
 | `--token <symbol>` | 要求特定代币（如 `USDT`、`USDC`） |
 | `--asset <address>` | 要求特定资产合约地址 |
@@ -99,9 +99,9 @@ x402-cli pay https://api.example.com/paid \
 
 ### GasFree 支付（TRON） {#gasfree-payments-tron}
 
-在 TRON 上，`scheme=exact_gasfree` 让一个 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需持有 TRX。当服务端的 `402` 支付要求宣告了该 scheme 时，CLI 通常会自动选用；也可以用 `--scheme exact_gasfree` 显式要求。
+在 TRON 上，`scheme=exact_gasfree` 让一个 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需持有 TRX。CLI **不会**优先选择 GasFree：它取服务端 `accepts` 列表中第一条通过 `--network` / `--scheme` / `--token` 过滤的支付要求。若该端点同时也宣告了普通 `exact`，请传 `--scheme exact_gasfree` 才能确保走免 gas 路径。
 
-GasFree 手续费与宣告的支付金额是**分开**的。设一个手续费上限，CLI 会先估算 relayer 手续费，若估值过高则在签名前拒绝：
+GasFree 手续费与宣告的支付金额是**分开**的——它是中继方的服务费（每笔固定转账费，GasFree 账户未激活时首笔另加一次性激活费），以支付代币从你的 GasFree 账户扣除。对 `exact_gasfree` 支付要求，CLI 一定会估算 relayer 手续费，并在结果中以 `gasfreeEstimate`（含 `fee` 与 `total`）返回；再加上手续费上限后，只要估值或最终签名中的 `maxFee` 超限，就会在签名前中止：
 
 ```bash
 x402-cli pay https://api.example.com/pay \
@@ -112,9 +112,9 @@ x402-cli pay https://api.example.com/pay \
   --json
 ```
 
-`--max-gasfree-fee` 与 `--max-gasfree-fee-raw` 互斥，且仅对 `exact_gasfree` 支付要求生效。用 `--gasfree-api-url <url>` 或 `X402_GASFREE_API_URL` 覆盖 relayer 地址。
+`--max-gasfree-fee` 与 `--max-gasfree-fee-raw` 互斥；若 CLI 选中的支付要求不是 `exact_gasfree`，传这两个参数会以 `INVALID_ARGUMENT` 报错（退出码 2）。用 `--gasfree-api-url <url>` 或 `X402_GASFREE_API_URL` 覆盖 relayer 地址。
 
-已付款的响应会区分 `settled`（支付已在链上结算）与 `delivered`（上游 HTTP 业务响应成功）。一次"结算成功但上游失败"的情况会返回 `paid=true`、`settled=true`、`delivered=false`，并仍带上交易信息——重试前请先核查交易与 provider 行为。
+已付款的响应会区分 `settled`（支付已在链上结算）与 `delivered`（上游 HTTP 业务响应成功）。「结算成功但上游失败」会以退出码 1 和错误封装返回（`ok: false`，`error.code` 为 `HTTP_ERROR`，429 时为 `RATE_LIMITED`），其中 `paid` / `settled` / `delivered` 与 `paymentResponse` 位于 `error.details` 之下。请从那里读取用于对账，切勿盲目重试。
 
 ### 在 Base 上付款 {#paying-on-base}
 
@@ -146,9 +146,12 @@ x402-cli pay https://api.example.com/pay \
 | `TRON_GRID_API_KEY` | TronGrid API Key——设置后可避免公共节点限流 |
 | `X402_TRON_ALLOWANCE_MODE` | TRON 授权额度处理方式，默认 `auto` |
 | `EVM_RPC_URL` | 默认 EVM RPC 地址 |
-| `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` | Base 主网 / Base Sepolia 的专用 RPC |
+| `EVM_RPC_URL_<chainId>` | 按链的专用 RPC，如 `EVM_RPC_URL_8453`、`EVM_RPC_URL_84532`、`EVM_RPC_URL_56`、`EVM_RPC_URL_97` |
+| `RPC_URL` | 通用 EVM RPC 兜底 |
 | `X402_GASFREE_API_URL` | 覆盖 TRON GasFree relayer 接口地址 |
 | `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` | 覆盖 Agent Wallet——仅限开发与 CI |
+
+> EVM RPC 取值优先级：`--rpc-url` → `EVM_RPC_URL_<chainId>` → `RPC_URL` → `EVM_RPC_URL` → 内置公共节点。内置节点（BSC 与 Base 都有）仅供开发使用。
 
 ---
 
@@ -174,19 +177,18 @@ x402-cli serve --pay-to <address> [options]
 | `--port <port>` | 绑定端口（默认：`4020`） |
 | `--resource-url <url>` | 在支付要求中对外宣告的 URL |
 | `--facilitator-url <url>` | Facilitator 基础 URL（默认：`https://facilitator.bankofai.io`） |
-| `--valid-for-seconds <n>` | 支付要求的有效时长（默认：`300`） |
+| `--valid-for-seconds <n>` | 支付要求的有效时长——整数，1–86400（默认：`300`） |
 | `--timeout-ms <ms>` | Facilitator 超时（毫秒，默认：`30000`） |
 | `-d, --daemon` | 在后台运行并打印子进程 pid |
 | `--json` | 打印结构化 JSON 输出 |
 
-服务暴露四个路由：
+服务暴露以下路由——付费判定看的是 `PAYMENT-SIGNATURE` 请求头，而非 HTTP 方法：
 
 | 路由 | 用途 |
 | :--- | :--- |
 | `GET /health` | 返回 `{ "ok": true }` |
 | `GET /.well-known/x402` | 机器可读的支付元数据（网络、scheme、资产、金额、`payTo`） |
-| `GET /pay` | 返回带 `PAYMENT-REQUIRED` 头的 `402 Payment Required` |
-| `POST /pay` | 校验支付、结算，并返回交易 |
+| `/pay`（任意方法） | 请求未带 `PAYMENT-SIGNATURE` 时返回带 `PAYMENT-REQUIRED` 头的 `402 Payment Required`；带该头时通过 facilitator 校验并结算，返回交易 |
 
 **示例：**
 
@@ -235,7 +237,9 @@ x402-cli gateway <search|start|check|scaffold|catalog> [options]
 | `scaffold <name>` | 生成一个起步用的 `provider.yml` |
 | `catalog <command>` | 构建/校验/搜索网关目录资产 |
 
-`start` 与 `gateway catalog` 需要 `@bankofai/x402-gateway` 运行时。请安装它（`npm install -g @bankofai/x402-gateway`）、从含有 `../x402-gateway/dist/cli.js` 的代码检出中运行，或通过 `--gateway-bin <path>` 指定。
+`gateway start` 会拉起一个 gateway 运行时，但 CLI 本身已经带了一份：发布包内含 `dist/gateway/cli.js`，并依赖 `@bankofai/x402-gateway`，因此正常 `npm install -g @bankofai/x402-cli` 之后无需额外安装。它按以下顺序解析运行时——`--gateway-bin`、`@bankofai/x402-gateway` 依赖、内置的 `dist/gateway/cli.js`、`PATH` 上的 `x402-gateway`，最后是代码检出里的 `../x402-gateway/dist/cli.js`。`gateway check`、`gateway catalog build`、`gateway catalog pay-assets` 与 `catalog build` 在进程内直接调用 gateway 库；`gateway scaffold` 只是写出一个模板文件，`gateway search` / `gateway catalog search` 则读取目录数据源。
+
+默认值：`gateway start` 绑定 `--host 127.0.0.1 --port 4020`，读取 `--providers providers`；`gateway check` 同样默认 `providers`；`gateway scaffold` 输出到 `--output-dir providers/<name>`，`--forward-url` 默认 `https://api.example.com`；直接执行 `x402-cli gateway catalog` 等同于 `build`。
 
 **校验 provider 文件：**
 
@@ -300,7 +304,9 @@ x402-cli catalog <update|search|show|endpoints|pay-json|export-gateway|build> [o
 | :--- | :--- |
 | `--catalog <source>` | `catalog.json` 路径或 URL |
 | `--provider <fqn>` | 服务 FQN（用于 `export-gateway`） |
-| `--output-dir <dir>` | 生成文件的输出目录 |
+| `--output-dir <dir>` | 生成文件的输出目录（用于 `export-gateway`） |
+| `--output <file>` | 把构建出的目录 JSON 写入该文件（用于 `build`） |
+| `--dist-dir <dir>` | 把构建结果写入 `<dir>/catalog.json`（用于 `build`） |
 | `-n, --limit <count>` | 搜索结果数量上限（默认：`10`） |
 | `--include-blocked` | 在搜索结果中包含被屏蔽的服务 |
 | `--timeout-ms <ms>` | 网络超时（毫秒，默认：`30000`） |

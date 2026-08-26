@@ -87,7 +87,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 
 ## 一次付费调用发生了什么
 
-每一笔调用都通过 x402 在链上清算，报价即为实付，始终一致：
+每一笔调用都通过 x402 在链上清算。`exact` 路由报价即为实付；TRON `exact_gasfree` 路由则会由 relayer 额外从支付代币里扣除能量费，请用 `--max-gasfree-fee` 限额：
 
 1. **Agent 发起调用** —— 请求目标端点。
 2. **网关报价** —— 返回价格（HTTP `402`）。

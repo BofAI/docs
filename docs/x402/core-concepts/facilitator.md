@@ -19,7 +19,7 @@ By introducing a Facilitator, servers no longer need to maintain direct connecti
 
 - **Payment Verification**: Ensures that the signed payload strictly complies with the server's declared payment requirements.
 - **Payment Settlement**: Submits validated transactions to the blockchain and monitors their confirmation status.
-- **Fee Management**: Supports configurable service fees (optional) for facilitating payments.
+- **Settlement Records**: Persists one record per settlement, keyed on the on-chain authorization identity, and answers seller-scoped record queries.
 - **Result Feedback**: Returns verification and settlement results to the server, enabling it to decide whether to deliver the requested resource.
 
 > **Note**: The Facilitator **does not custody funds** and does not act as an escrow. It only executes verification and on-chain operations according to the client's signed authorization.
@@ -43,12 +43,12 @@ To use x402, you need access to a Facilitator service. There are currently two o
 
 | | Official Facilitator | Self-Hosted Facilitator |
 |---|---|---|
-| **Best for** | Most sellers, especially those new to x402 | Advanced users who need full control over fee policies and energy management |
+| **Best for** | Most sellers, especially those new to x402 | Advanced users who need full control over the settlement wallet, RPC endpoints, and which networks/schemes are registered |
 | **Requires server maintenance** | No | Yes |
-| **Requires wallet private key** | No | Yes (for paying transaction fees) |
+| **Requires a settlement wallet** | No | Yes — a funded wallet resolved through `@bankofai/agent-wallet` (pays network fees) |
 | **Setup difficulty** | Low (just obtain an API Key) | Medium (requires deployment and configuration) |
-| **Fee control** | Fixed policy | Fully customizable |
-| **Recommended for** | Testing, quick launch, small to medium-scale apps | Large-scale production, custom fee structures |
+| **Network & scheme control** | Fixed set | Fully customizable |
+| **Recommended for** | Testing, quick launch, small to medium-scale apps | Large-scale production, private or compliance-bound deployments |
 
 ---
 
@@ -71,13 +71,13 @@ Quick usage examples can be found in [OfficialFacilitator](./OfficialFacilitator
 
 ## Option 2: Self-Hosted Facilitator
 
-If you need full control over fee policies and energy management, or have specific privacy or compliance requirements, you can deploy your own Facilitator service.
+If you need full control over the settlement wallet, RPC endpoints, energy management, or which networks and schemes are registered — or you have specific privacy or compliance requirements — you can deploy your own Facilitator service.
 
 > ⚠️ **Self-hosting security notes:**
-> - A self-hosted Facilitator requires a **dedicated wallet** private key to pay blockchain transaction fees
+> - A self-hosted Facilitator needs a **dedicated funded wallet** to pay blockchain transaction fees. It is resolved through `@bankofai/agent-wallet` and unlocked out-of-band (for example `AGENT_WALLET_PASSWORD`) — the raw private key never enters the service process
 > - **This Facilitator wallet should be separate from your payment recipient wallet** — create a new wallet specifically for this purpose
 > - Only deposit a small amount of tokens into the Facilitator wallet (enough for fees); do not store large amounts
-> - Keep the private key only in your `.env` file — **never upload it to GitHub or share it with anyone**
+> - Never place a raw private key in `.env`, a config file, or a shell command — **and never upload wallet material to GitHub or share it with anyone**
 
 Quick usage examples can be found in [Quickstart for Sellers](../getting-started/quickstart-for-sellers.md)
 
@@ -99,7 +99,7 @@ Whether using the official service or a self-hosted instance, the Facilitator pr
 | GET | `/metrics` | Prometheus metrics (operational; exposed on the main port only when monitoring shares it) |
 | ALL | `/mainnet/*` · `/nile/*` | GasFree Open API transparent proxy (HMAC-signed) — used internally by the TRON `exact_gasfree` scheme |
 
-> There is **no** `/fee/quote` endpoint. Fee terms travel inside the payment requirements' `extra` field, and payment records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`), not a client-supplied payment ID.
+> There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee at all. Payment records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`), not a client-supplied payment ID.
 
 ---
 
@@ -110,7 +110,7 @@ The `/settle` endpoint enforces dynamic rate limits based on the caller's authen
 | Mode | Rate Limit | How to Authenticate |
 |------|------------|---------------------|
 | **Authenticated** | 1000 requests / minute | Include `X-API-KEY: <your_key>` header |
-| **Anonymous** | 10 requests / minute (default, configurable) | No API Key provided |
+| **Anonymous** | 1 request / minute on the official deployment (configurable; the code default is 10/minute when unset) | No API Key provided |
 
 Other endpoints (`/verify`, `/supported`, `/payments/*`) are not individually rate-limited.
 
@@ -126,14 +126,14 @@ When the request includes a valid `X-API-KEY` header, the results are **automati
 
 ---
 
-## Fee Structure
+## Fees
 
-The Facilitator supports flexible service fee configurations:
+The current schemes carry **no facilitator fee**: there is no `base_fee` configuration, no fee object in the payment requirements, and no `/fee/quote` endpoint — all removed in SDK 1.0.1. A settlement transfers the signed amount to the seller — never less than the advertised amount, and exactly that amount when paying with the official SDK or CLI clients.
 
-- **Base Fee**: A fixed service fee per transaction, configured per network and asset (e.g., `1 USDT`).
-- **No Fee Mode**: Supports zero-fee operation (e.g. EVM `exact` takes no facilitator fee).
+The costs that do exist:
 
-Fee terms are included in the Payment Requirements' `extra` field sent from the server to the client; there is no separate `/fee/quote` endpoint.
+- **Network fees** (TRX energy/bandwidth, BNB or ETH gas) are paid by the Facilitator's settlement wallet.
+- **The GasFree relayer fee** on TRON `exact_gasfree` — the relayer's service charge for fronting the network energy (a per-payment transfer fee, plus a one-time activation fee for a new GasFree account) — is set by the relayer and deducted from the payment token on top of the payment amount. Clients should cap it explicitly.
 
 ---
 

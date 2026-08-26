@@ -8,6 +8,33 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
+<div className="changelog-date">Aug 25, 2026</div>
+<div className="changelog-body">
+
+### x402 SDK v1.1.0 · Docs
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">Docs</span></div>
+
+- **x402 SDK 1.1.0** — explicit payment flows (`upfront` / `escrow` on the wire as `extra.paymentFlow`, `authorization` by default), client spend controls on by default (`$1` per-payment cap, default-asset allowlist), payment-selection policies and lifecycle hooks, EVM smart-account support (ERC-7702, allowlisted ERC-6492), and a 90-second `HTTPFacilitatorClient` timeout. Upgrade all 11 packages together; Node.js 22+. [SDK Feature Matrix](../x402/sdk-features/)
+- **Docs corrections** — removed the obsolete facilitator-fee material (`base_fee`, `extra.fee`, `/fee/quote`); the anonymous `/settle` limit is 1 request/minute on the official deployment; GasFree is no longer described as auto-preferred — the CLI takes the first advertised requirement matching your filters, so pass `--scheme exact_gasfree` to force it; TRON Shasta is now documented as signed by the SDK/CLI but **not** settled by the official facilitator (use Nile or self-host); the CLI page now states its **pinned** dependencies — CLI 1.0.2 still bundles the `@bankofai/x402-*` SDK packages at 1.0.1 (`@bankofai/x402-gateway` at 1.0.2), so it does not yet carry the 1.1.0 client spend controls; and the Skills pages now install with `npx skills add … -g`. [x402 docs](../x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Aug 20, 2026</div>
+<div className="changelog-body">
+
+### Facilitator — BSC receipt reliability
+
+<div className="changelog-tags"><span className="changelog-tag">Fix</span><span className="changelog-tag">Facilitator</span></div>
+
+- Settlement receipt lookups on **BSC Mainnet** (`eip155:56`) fall back to a secondary RPC endpoint, so one unresponsive node no longer turns a settled payment into a failed one. [Official Facilitator](../x402/core-concepts/OfficialFacilitator/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Jul 30, 2026</div>
 <div className="changelog-body">
 
@@ -23,12 +50,28 @@ Product updates and announcements for BANK OF AI.
 </div>
 
 <div className="changelog-entry">
+<div className="changelog-date">Jul 29, 2026</div>
+<div className="changelog-body">
+
+### Official Facilitator — Base settlement
+
+<div className="changelog-tags"><span className="changelog-tag">Update</span><span className="changelog-tag">Facilitator</span><span className="changelog-tag">Base</span></div>
+
+- The official facilitator now settles **Base USDC** — `eip155:8453` (Mainnet) and `eip155:84532` (Sepolia) are enabled alongside TRON Mainnet/Nile and BSC Mainnet/Testnet. The bundled example facilitator still registers only `eip155:97` and `eip155:56` on the EVM side, so self-hosting Base sellers must add the Base ids themselves. [Official Facilitator](../x402/core-concepts/OfficialFacilitator/)
+- **Breaking for self-hosters** — the facilitator config now takes canonical CAIP-2 ids only; friendly aliases such as `bsc:mainnet` and `tron:nile` are no longer resolved and are rejected at startup.
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Jul 21, 2026</div>
 <div className="changelog-body">
 
 ### Docs
 
-<div className="changelog-tags"><span className="changelog-tag">Product Updates</span><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span></div>
+<div className="changelog-tags"><span className="changelog-tag">Product Updates</span><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">SKILLS</span></div>
+
+- **SKILLS — `x402-payment` now pays through `x402-cli`** (1.0.1 or newer) instead of bundled local scripts, with a `--dry-run` preview, `--max-amount` caps, a required GasFree fee cap, and canonical CAIP-2 TRON ids. [Details](./skills/)
 
 - **TRON network IDs now use CAIP-2 format** across the x402 docs — `tron:0x2b6653dc` (Mainnet), `tron:0xcd8690dc` (Nile), `tron:0x94a9059e` (Shasta). In application code, prefer the SDK constants `TRON_MAINNET` / `TRON_NILE` / `TRON_SHASTA` over hard-coded hex strings. [Network & Token Support](../x402/core-concepts/network-and-token-support/)
 - **`auth-capture` scheme removed** — x402 now documents four payment schemes: `exact`, `upto`, `batch-settlement`, and `exact_gasfree` (TRON). [SDK Features](../x402/sdk-features/)

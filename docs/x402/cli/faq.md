@@ -69,7 +69,7 @@ Base settles USDC with **EIP-3009** (`transferWithAuthorization`) instead of Per
 
 ### Can I pay without holding TRX?
 
-Yes, on TRON, using GasFree. With `scheme=exact_gasfree`, a relayer pays the network energy and deducts its fee from the payment token, so the payer wallet needs only the stablecoin — no TRX. The CLI selects `exact_gasfree` automatically when the endpoint advertises it, or you can require it with `--scheme exact_gasfree`. Because the relayer fee is separate from the payment amount, cap it with `--max-gasfree-fee <amount>`. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
+Yes, on TRON, using GasFree. With `scheme=exact_gasfree`, a relayer pays the network energy and deducts its fee from the payment token, so the payer wallet needs only the stablecoin — no TRX. The CLI takes the first advertised requirement matching your filters and does not prefer GasFree, so require it with `--scheme exact_gasfree` whenever the endpoint also offers plain `exact`. Because the relayer fee is separate from the payment amount, cap it with `--max-gasfree-fee <amount>`. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
 
 ---
 
@@ -99,7 +99,13 @@ Every failure prints a stable error `code`, a message, and a `hint`. Add `--json
 | `DEADLINE_OR_CLOCK_SKEW` | Requirement expired or clock is off | Sync your local clock and retry with a fresh requirement |
 | `RATE_LIMITED` | Upstream service or RPC is rate limiting | Wait briefly and retry |
 | `NETWORK_ERROR` | Could not reach the URL/RPC | Check the URL, local server, proxy, and connectivity |
-| `SDK_API_DRIFT` | Installed SDK packages don't match the CLI | Reinstall `@bankofai/x402-cli` and its SDK dependencies |
+| `SDK_API_DRIFT` | Installed SDK packages don't match the CLI | Reinstall `@bankofai/x402-cli` (its SDK dependencies are pinned, so don't upgrade them separately) |
+| `INVALID_SETTLEMENT` | The gateway returned a `PAYMENT-RESPONSE` that is not a successful settlement | Do not treat the request as paid; contact the gateway operator |
+| `WALLET_ADDRESS_MISMATCH` | The selected wallet doesn't match the payer in the typed data | Reselect the wallet and retry with a fresh requirement |
+| `INVALID_PAYMENT_REQUIREMENT` | The `402` requirement failed structural validation (scheme, network, amount, address, timeout, resource URL) | The endpoint is misconfigured; contact the provider |
+| `TOKEN_BALANCE_CHECK_FAILED` | The balance check on the payment token failed | Verify the RPC endpoint and the token/network pair |
+| `HTTP_ERROR` | The paid retry returned a non-2xx status | Read `error.details` for `settled` / `paymentResponse` before retrying |
+| `IO_ERROR` | Fallback code for an error the CLI could not classify (local file read/write failures land here too) | Re-run with `--json` and read the raw `message`; check the provider/gateway logs |
 
 ### "402 response missing PAYMENT-REQUIRED header"
 
@@ -115,7 +121,7 @@ The endpoint offered payment options, but none matched your `--network`, `--toke
 
 ### `gateway start` says the runtime isn't found
 
-`gateway start` and `gateway catalog` need the separate `@bankofai/x402-gateway` package. Install it (`npm install -g @bankofai/x402-gateway`), run from a checkout that has `../x402-gateway/dist/cli.js`, or point at a binary with `--gateway-bin <path>`.
+This usually means a broken or partial install: the CLI normally bundles the gateway runtime (`dist/gateway/cli.js`) and depends on `@bankofai/x402-gateway`, so reinstall `@bankofai/x402-cli` first, or point at another runtime with `--gateway-bin <path>`. Only `gateway start` needs that runtime at all: `gateway check`, `gateway catalog build`, `gateway catalog pay-assets`, and `catalog build` call the gateway library in-process, `gateway scaffold` just writes a template file, and the search commands read a catalog source.
 
 ### How do I validate my provider files before deploying?
 
