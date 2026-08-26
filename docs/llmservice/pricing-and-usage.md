@@ -12,7 +12,11 @@ The platform uses a unified Credits system to measure and settle usage across al
 
 **Token usage details:** The response details panel shows a breakdown of token usage, helping you understand where Credits are spent and optimize future usage.
 
-**Model pricing:** Different AI models have different pricing based on their capabilities and compute cost. In general, more capable models consume more Credits. Cache-enabled requests may incur separate cache write and cache read usage. Web search incurs an additional per-use charge. Some models do not support web search and are marked with `-`. See the table below for detailed pricing:
+**Model pricing:** Different AI models use different billing structures based on their capabilities and output type. Text-output models are generally billed by input and output tokens, while image generation models may be billed by token usage or by each generated image. Cache-enabled requests may incur separate cache write and cache read usage. Web search incurs an additional per-use charge. See the sections below for detailed pricing.
+
+### Text-Output Model Pricing
+
+**Image generation pricing:** Image generation models may be billed by token usage or by each generated image. See [Image Generation Model Pricing](./image-models/pricing.md) for the applicable billing unit and rates.
 
 :::info Current promotions and pricing updates
 The table below lists standard reference prices only. For current limited-time offers and pricing updates, see [Promotions and Pricing Updates](./promotions-and-pricing-notices.md). Eligibility, actual settlement prices, and final billing are subject to the platform display.
@@ -37,10 +41,11 @@ The table below lists standard reference prices only. For current limited-time o
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
 | DeepSeek-V4-Flash | Idle `0.22`<br/>Busy `0.44` | Idle `0.22`<br/>Busy `0.44` | Idle `0.0073`<br/>Busy `0.0147` | Idle `0.66`<br/>Busy `1.32` | - |
+| DeepSeek-V4-Flash-Vision-Exp | Idle `0.22`<br/>Busy `0.44` | Idle `0.22`<br/>Busy `0.44` | Idle `0.0073`<br/>Busy `0.0147` | Idle `0.66`<br/>Busy `1.32` | - |
 | DeepSeek V4 Pro   | Idle `0.66`<br/>Busy `1.32` | Idle `0.66`<br/>Busy `1.32` | Idle `0.022`<br/>Busy `0.044` | Idle `1.98`<br/>Busy `3.96` | - |
 | Grok 4.6          |                  2.00 |                        2.00 |                       0.50 |                   6.00 |                        - |
 | Grok 4.5          |                  2.00 |                        2.00 |                       0.30 |                   6.00 |                        - |
-| GPT-5.6 Sol       |                  5.00 |                        6.25 |                       0.50 |                  30.00 |                   10,000 |
+| GPT-5.6 Sol       |                  4.00 |                        5.00 |                       0.40 |                  20.00 |                   10,000 |
 | GPT-5.6 Terra     |                  2.00 |                        2.50 |                       0.20 |                  12.00 |                   10,000 |
 | GPT-5.6 Luna      |                  0.20 |                        0.25 |                       0.02 |                   1.20 |                   10,000 |
 | GPT-5.4           |                  2.50 |                        2.50 |                       0.25 |                  15.00 |                   10,000 |
@@ -69,7 +74,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 :::caution Main table scope
-The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro and DeepSeek-V4-Flash use time-based pricing, so their rows list both **Idle** and **Busy** rates; the applicable period and final billing are subject to the platform display. DeepSeek-V4-Flash is currently free on B.AI Chat and API under its limited-time offer, while its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
+The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro, DeepSeek-V4-Flash, and DeepSeek-V4-Flash-Vision-Exp use time-based pricing, so their rows list both **Idle** and **Busy** rates. Under DeepSeek's updated rule, from 00:00 UTC+8 on August 23, 2026, Saturdays and Sundays are billed at Idle rates all day; the applicable weekday period and final billing are subject to the platform display. DeepSeek-V4-Flash is currently free on B.AI Chat and API, while DeepSeek-V4-Flash-Vision-Exp is currently free for B.AI API use; both rows show standard reference prices. MiMo-V2.5 API usage is currently free, and its B.AI Chat free-access date is August 25, 2026; the exact availability time is subject to actual activation. Its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
 :::
 
 :::info Pricing note

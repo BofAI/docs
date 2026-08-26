@@ -1,8 +1,24 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # MiMo-V2.5
 
 ## 概述
 
 MiMo-V2.5 是小米 MiMo 于 2026 年 4 月 23 日进入公开测试的开放权重原生全模态模型。它将一个 3100 亿参数的稀疏 Mixture-of-Experts（MoE）语言骨干网络与专用视觉、音频编码器结合，可在长上下文 Agent 工作流中理解文本、图像、视频和音频。
+
+<ActivityCard
+  variant="free"
+  title="MiMo-V2.5"
+  status="免费活动"
+  detail="API 已免费 · Chat 8 月 25 日开放"
+>
+MiMo-V2.5 免费分阶段开放：
+
+* **API：** 自 2026 年 8 月 24 日起，MiMo-V2.5 API 调用按 `0 Credits` 结算。
+* **Chat：** 免费开放日期为 2026 年 8 月 25 日，具体开放时间以实际生效为准。开放后，使用 MiMo-V2.5 按 `0 Credits` 结算。
+
+活动结束后，MiMo-V2.5 将恢复标准价格；下方价格表展示其标准参考价。
+</ActivityCard>
 
 ## 核心特性
 

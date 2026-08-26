@@ -4,7 +4,7 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 ## Overview
 
-DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly one-third of the standard input and output price, making it one of the most cost-effective models available.
+DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly 3.1x lower cost, making it one of the most cost-effective models available.
 
 <ActivityCard
   variant="free"
@@ -60,5 +60,5 @@ After the offer ends, the model will return to standard pricing. Offer end time,
 | **Busy** | `0.44` | `0.44` | `0.0147` | `1.32` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
 
 :::info Pricing note
-The table shows the time-based standard reference price for DeepSeek-V4-Flash. Its current limited-time offer applies `0 Credits` to all B.AI Chat and API usage. After the offer ends, the applicable Idle or Busy period, final settlement price, and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
+The table shows the time-based standard reference price for DeepSeek-V4-Flash. Under DeepSeek's updated rule, from 00:00 UTC+8 on August 23, 2026, Saturdays and Sundays are billed at Idle rates all day. Its current limited-time offer applies `0 Credits` to all B.AI Chat and API usage. After the offer ends, the applicable weekday Idle or Busy period, final settlement price, and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::

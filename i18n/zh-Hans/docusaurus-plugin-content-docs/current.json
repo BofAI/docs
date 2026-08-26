@@ -79,9 +79,41 @@
     "message": "邀请返利规则",
     "description": "The label for the doc item Invitation Rewards in sidebar docsSidebar"
   },
-  "sidebar.docsSidebar.category.Models": {
-    "message": "模型列表",
-    "description": "The label for category Models in sidebar docsSidebar"
+  "sidebar.docsSidebar.category.Language Models": {
+    "message": "语言模型",
+    "description": "The label for category Language Models in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Image Generation Models": {
+    "message": "图像生成模型",
+    "description": "The label for category Image Generation Models in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Image Model Pricing": {
+    "message": "图像模型定价",
+    "description": "The label for the Image Model Pricing document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.OpenAI (GPT Image)": {
+    "message": "OpenAI（GPT Image）",
+    "description": "The label for the OpenAI image model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.SpaceXAI (Grok Imagine)": {
+    "message": "SpaceXAI（Grok Imagine）",
+    "description": "The label for the SpaceXAI image model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.OpenAI (GPT)": {
+    "message": "OpenAI（GPT）",
+    "description": "The label for the OpenAI model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Anthropic (Claude)": {
+    "message": "Anthropic（Claude）",
+    "description": "The label for the Anthropic model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Google (Gemini)": {
+    "message": "Google（Gemini）",
+    "description": "The label for the Google model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.DeepSeek": {
+    "message": "DeepSeek",
+    "description": "The label for the DeepSeek model category in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.Tencent Hunyuan (Hy)": {
     "message": "腾讯混元（Hy）",
@@ -102,6 +134,26 @@
   "sidebar.docsSidebar.doc.MiMo-V2.5": {
     "message": "MiMo-V2.5",
     "description": "The label for the MiMo-V2.5 model document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.SpaceXAI (Grok)": {
+    "message": "SpaceXAI（Grok）",
+    "description": "The label for the SpaceXAI model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Z.AI (GLM)": {
+    "message": "智谱 AI（GLM）",
+    "description": "The label for the Z.AI model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Moonshot AI (Kimi)": {
+    "message": "Moonshot AI（Kimi）",
+    "description": "The label for the Moonshot AI model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Qwen": {
+    "message": "Qwen",
+    "description": "The label for the Qwen model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.MiniMax": {
+    "message": "MiniMax",
+    "description": "The label for the MiniMax model category in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.OpenClaw": {
     "message": "OpenClaw 集成",

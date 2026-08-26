@@ -44,5 +44,5 @@ DeepSeek-V4-Pro is DeepSeek's flagship open-source large language model, release
 | **Busy** | `1.32` | `1.32` | `0.044` | `3.96` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
 
 :::info Pricing note
-DeepSeek V4 Pro uses time-based standard reference pricing. The applicable Idle or Busy period, final settlement price, and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
+DeepSeek V4 Pro uses time-based standard reference pricing. Under DeepSeek's updated rule, from 00:00 UTC+8 on August 23, 2026, Saturdays and Sundays are billed at Idle rates all day. The applicable weekday Idle or Busy period, final settlement price, and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::
