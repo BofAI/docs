@@ -144,7 +144,7 @@ const sidebars = {
         { type: 'doc', id: 'llmservice/invitation-rewards', label: 'Invitation Rewards' },
         {
           type: 'category',
-          label: 'Models',
+          label: 'Language Models',
           collapsed: true,
           items: [
             {
@@ -269,6 +269,34 @@ const sidebars = {
               items: [
                 { type: 'doc', id: 'llmservice/models/minimax-m3', label: 'MiniMax M3' },
                 { type: 'doc', id: 'llmservice/models/minimax-m2.7', label: 'MiniMax M2.7' },
+              ],
+            },
+          ],
+        },
+        {
+          type: 'category',
+          label: 'Image Generation Models',
+          collapsed: true,
+          items: [
+            { type: 'doc', id: 'llmservice/image-models/pricing', label: 'Image Model Pricing' },
+            {
+              type: 'category',
+              label: 'OpenAI (GPT Image)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/image-models/gpt-image-2', label: 'GPT-Image-2' },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'SpaceXAI (Grok Imagine)',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'llmservice/image-models/grok-imagine-image-2-0',
+                  label: 'Grok Imagine Image 2.0',
+                },
               ],
             },
           ],

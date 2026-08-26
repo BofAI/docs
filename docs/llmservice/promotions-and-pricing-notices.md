@@ -28,6 +28,19 @@ After the offer ends, DeepSeek-V4-Flash will return to standard pricing. See the
 
 <ActivityCard
   variant="free"
+  title="DeepSeek-V4-Flash-Vision-Exp"
+  status="API Free"
+  detail="0 Credits"
+>
+This offer is currently active and applies only to `deepseek-v4-flash-vision-exp` requests made through the B.AI API.
+
+During the offer, API usage is billed at `0 Credits`. No per-request, input, cache write, cache read, or output token fees apply.
+
+After the offer ends, the model will return to standard pricing. See [Pricing and Usage](./pricing-and-usage.md) for the standard reference price.
+</ActivityCard>
+
+<ActivityCard
+  variant="free"
   title="Hy3"
   status="Free Offer"
   detail="0 Credits"
@@ -40,6 +53,20 @@ This offer applies to B.AI Chat and API:
 * **API:** Usage is billed at `0 Credits` during the offer. No per-request, input, cache write, cache read, or output token fees apply.
 
 After the offer ends, Hy3 will return to standard pricing. See the [model details](./models/hy3.md).
+</ActivityCard>
+
+<ActivityCard
+  variant="free"
+  title="MiMo-V2.5"
+  status="Free Offer"
+  detail="API Free · Chat Aug 25"
+>
+MiMo-V2.5 free access is available in phases:
+
+* **API:** MiMo-V2.5 API usage is billed at `0 Credits` from August 24, 2026.
+* **Chat:** The free-access date is August 25, 2026. The exact availability time is subject to actual activation. Once available, MiMo-V2.5 usage is billed at `0 Credits`.
+
+After the offer ends, MiMo-V2.5 will return to standard pricing. See the [model details](./models/mimo-v2.5.md).
 </ActivityCard>
 
 <ActivityCard

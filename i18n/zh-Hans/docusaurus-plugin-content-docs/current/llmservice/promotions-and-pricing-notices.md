@@ -28,6 +28,19 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 <ActivityCard
   variant="free"
+  title="DeepSeek-V4-Flash-Vision-Exp"
+  status="API 免费"
+  detail="0 Credits"
+>
+本活动当前生效，仅适用于通过 B.AI API 发起的 `deepseek-v4-flash-vision-exp` 调用。
+
+活动期间，API 调用按 `0 Credits` 结算，不收取单次请求、输入、缓存写入、缓存读取或输出费用。
+
+活动结束后，该模型将恢复标准价格；标准参考价请查看[定价与用量](./pricing-and-usage.md)。
+</ActivityCard>
+
+<ActivityCard
+  variant="free"
   title="Hy3"
   status="免费活动"
   detail="0 Credits"
@@ -40,6 +53,20 @@ import ActivityCard from '@site/src/components/ActivityCard';
 * **API：** 活动期间使用按 `0 Credits` 结算，不收取单次请求、输入、缓存写入、缓存读取或输出的费用。
 
 活动结束后，Hy3 将恢复标准价格。详见[模型详情](./models/hy3.md)。
+</ActivityCard>
+
+<ActivityCard
+  variant="free"
+  title="MiMo-V2.5"
+  status="免费活动"
+  detail="API 已免费 · Chat 8 月 25 日开放"
+>
+MiMo-V2.5 免费分阶段开放：
+
+* **API：** 自 2026 年 8 月 24 日起，MiMo-V2.5 API 调用按 `0 Credits` 结算。
+* **Chat：** 免费开放日期为 2026 年 8 月 25 日，具体开放时间以实际生效为准。开放后，使用 MiMo-V2.5 按 `0 Credits` 结算。
+
+活动结束后，MiMo-V2.5 将恢复标准价格。详见[模型详情](./models/mimo-v2.5.md)。
 </ActivityCard>
 
 <ActivityCard
