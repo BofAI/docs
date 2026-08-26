@@ -38,10 +38,11 @@ DeepSeek-V4-Pro is DeepSeek's flagship open-source large language model, release
 
 ## Credits Usage
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **DeepSeek V4 Pro** | `0.87` | `0.87` | `0.0087` | `1.74` | `-` | - |
+| Billing Period | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
+| :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
+| **Idle** | `0.66` | `0.66` | `0.022` | `1.98` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
+| **Busy** | `1.32` | `1.32` | `0.044` | `3.96` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+DeepSeek V4 Pro uses time-based standard reference pricing. The applicable Idle or Busy period, final settlement price, and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::

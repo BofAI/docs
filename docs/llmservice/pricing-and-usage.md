@@ -5,6 +5,8 @@
 The platform uses a unified Credits system to measure and settle usage across all AI services.
 
 > **Platform-wide Credits conversion:** `1 USD = 1,000,000 Credits` (`1M` / `1000K` Credits)
+>
+> **How to read the pricing table:** Under this standard conversion, a price of `X Credits/Token` is numerically equivalent to a standard reference price of `USD X / 1M Tokens`. For example, `1.32 Credits/Token` corresponds to `$1.32 / 1M Tokens`. Credits remain B.AI's billing unit; promotions, bonus Credits, and account benefits may affect actual settlement or out-of-pocket top-up cost. The platform display and final billing records prevail.
 
 **How Credits are calculated:** The number of tokens consumed in each interaction is converted into Credits based on the pricing of the selected model and deducted from your account balance.
 
@@ -12,20 +14,8 @@ The platform uses a unified Credits system to measure and settle usage across al
 
 **Model pricing:** Different AI models have different pricing based on their capabilities and compute cost. In general, more capable models consume more Credits. Cache-enabled requests may incur separate cache write and cache read usage. Web search incurs an additional per-use charge. Some models do not support web search and are marked with `-`. See the table below for detailed pricing:
 
-:::caution Planned DeepSeek API Pricing Adjustment
-Due to a recent pricing adjustment by DeepSeek, B.AI plans to make a corresponding adjustment to pricing for DeepSeek API services. Please plan your usage accordingly.
-
-The adjustment scope, effective date, and final prices are subject to the formal announcement and platform display.
-:::
-
-:::tip 🎁 Limited-time offer: GLM-5.2 at 40% off
-Offer starts August 12, 2026.
-
-**Eligibility:** This offer applies to GLM-5.2 requests made through the B.AI API and B.AI web app.
-
-For a limited time, eligible requests are billed at 60% of the standard reference price: Input `0.84`, Cache Write `0.84`, Cache Read `0.168`, and Output `2.64` Credits/Token.
-
-The table below continues to show standard reference prices. Offer end time, eligibility, actual settlement price, and final billing are subject to the platform display and final billing records.
+:::info Current promotions and pricing updates
+The table below lists standard reference prices only. For current limited-time offers and pricing updates, see [Promotions and Pricing Updates](./promotions-and-pricing-notices.md). Eligibility, actual settlement prices, and final billing are subject to the platform display.
 :::
 
 | Model             | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
@@ -35,14 +25,20 @@ The table below continues to show standard reference prices. Offer end time, eli
 | Kimi K3           |                  3.00 |                        3.00 |                       0.30 |                  15.00 |                        - |
 | Kimi K2.6         |                  0.95 |                        0.95 |                     0.1615 |                   4.00 |                        - |
 | Kimi K2.5         |                  0.59 |                        0.59 |                       0.10 |                   3.00 |                        - |
+| Qwen3.8-27B       |                  0.22 |                        0.22 |                      0.022 |                   1.60 |                        - |
 | Qwen3.8-Max       |                  2.00 |                        2.00 |                       0.25 |                   6.00 |                        - |
 | Qwen3.7-Max       |                  1.65 |                        1.65 |                       0.33 |                  4.951 |                        - |
 | Qwen3.6-27B       |                  0.19 |                        0.19 |                      0.019 |                   2.99 |                        - |
+| Hy3               |                 0.132 |                       0.132 |                      0.033 |                  0.528 |                        - |
+| MiMo-V2.5-Pro     |                 0.435 |                       0.435 |                     0.0036 |                   0.87 |                        - |
+| MiMo-V2.5         |                  0.14 |                        0.14 |                     0.0028 |                   0.28 |                        - |
+| GLM-5.3           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.2           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
-| DeepSeek V4 Flash |                  0.28 |                        0.28 |                     0.0056 |                   0.56 |                        - |
-| DeepSeek V4 Pro   |                  0.87 |                        0.87 |                     0.0087 |                   1.74 |                        - |
+| DeepSeek-V4-Flash | Idle `0.22`<br/>Busy `0.44` | Idle `0.22`<br/>Busy `0.44` | Idle `0.0073`<br/>Busy `0.0147` | Idle `0.66`<br/>Busy `1.32` | - |
+| DeepSeek V4 Pro   | Idle `0.66`<br/>Busy `1.32` | Idle `0.66`<br/>Busy `1.32` | Idle `0.022`<br/>Busy `0.044` | Idle `1.98`<br/>Busy `3.96` | - |
+| Grok 4.6          |                  2.00 |                        2.00 |                       0.50 |                   6.00 |                        - |
 | Grok 4.5          |                  2.00 |                        2.00 |                       0.30 |                   6.00 |                        - |
 | GPT-5.6 Sol       |                  5.00 |                        6.25 |                       0.50 |                  30.00 |                   10,000 |
 | GPT-5.6 Terra     |                  2.00 |                        2.50 |                       0.20 |                  12.00 |                   10,000 |
@@ -73,7 +69,7 @@ The table below continues to show standard reference prices. Offer end time, eli
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 :::caution Main table scope
-The main pricing table shows the currently effective standard reference price for each model. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
+The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro and DeepSeek-V4-Flash use time-based pricing, so their rows list both **Idle** and **Busy** rates; the applicable period and final billing are subject to the platform display. DeepSeek-V4-Flash is currently free on B.AI Chat and API under its limited-time offer, while its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
 :::
 
 :::info Pricing note
