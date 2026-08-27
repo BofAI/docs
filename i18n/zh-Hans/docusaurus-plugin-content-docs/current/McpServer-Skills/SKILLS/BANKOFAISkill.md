@@ -93,7 +93,7 @@ AI 的安全签名引擎。这个技能帮你的 AI 创建和管理加密钱包�
 
 > 第一次设置？ "帮我创建一个新的 agent 钱包"——AI 会引导你选择钱包类型（`local_secure` 是加密的本地私钥，`privy` 则是通过 API 凭证接入的托管钱包）、生成密钥并保存主密码。
 
-> 管理多条链？ "帮我看看所有钱包和它们的地址"——同一个钱包会自动生成 EVM 和 TRON 两个地址。EVM 网络使用 `eip155:<chainId>`（如 `eip155:1` 以太坊、`eip155:56` BSC、`eip155:137` Polygon、`eip155:42161` Arbitrum、`eip155:8453` Base），TRON 使用 `tron:mainnet` / `tron:nile`。
+> 管理多条链？ "帮我看看所有钱包和它们的地址"——同一个钱包会自动生成 EVM 和 TRON 两个地址。EVM 网络使用 `eip155:<chainId>`（如 `eip155:1` 以太坊、`eip155:56` BSC、`eip155:137` Polygon、`eip155:42161` Arbitrum、`eip155:8453` Base），TRON 使用规范的 CAIP-2 ID：`tron:0x2b6653dc`（主网）、`tron:0xcd8690dc`（Nile）、`tron:0x94a9059e`（Shasta）。
 
 > 需要签名？ "帮我在 BSC 上签名这笔交易"——AI 在本地完成签名，不会广播上链。支持原始交易、EIP-191 消息以及 EIP-712 typed data（仅 EVM）。
 
@@ -422,28 +422,36 @@ PSM 支持 **USDT ↔ USDD 即时 1:1 兑换**——是获取 USDD 最简单的�
 
 ## x402-payment {#x402-payment}
 
-有些高级 API 和 AI 智能体是收费的——需要你先完成链上付费才能使用。这个技能通过 x402 协议帮你自动完成"先付费、再获取"的链上结算流程：AI 发现对方要收费，自动帮你完成链上支付，拿到结果后汇报给你。每次付款前同样会先问你确认。支持多条链付款——**TRON（TRC20：USDT、USDD）**和 **BSC（ERC20：USDT、USDC）** 都可选（付款各自在对应链上结算，不是跨链桥接），主网与测试网（Nile / BSC testnet）均兼容。
+有些高级 API 和 AI 智能体是收费的——需要你先完成链上付费才能使用。这个技能通过 x402 协议帮你自动完成"先付费、再获取"的链上结算流程：AI 发现对方要收费，先预览费用，再帮你完成链上支付，拿到结果后汇报给你。每次付款前同样会先问你确认。支付统一走 `x402-cli` 命令行工具（要求 **1.0.1 及以上**）。技能会先检查你已装的版本，缺失时会告诉你如何安装（`npm install -g @bankofai/x402-cli@1.0.1`，技能锁定的版本；CLI 自身最新版为 1.0.2）——不再使用本地支付脚本。支持在 **TRON（TRC20：USDT、USDD）** 与 **BSC（ERC20：主网 USDT；测试网 USDT、USDC）** 上结算——付款各自在对应链上完成，不是跨链桥接。
 
 **绝对安全，只看不花钱：**
 
-> 验证一下我的 x402 钱包状态（地址和就绪情况）。
+> 看一下我装没装 x402-cli，版本是多少。
 
-> 查一下我的 GasFree 钱包信息（地址、激活状态、余额）。
+> 先别付款，帮我预览一下这个端点会收多少钱：https://api.example.com/protected
 
-> 帮我拉取这个 x402 智能体的 manifest：https://api.example.com/.well-known/agent.json
+> 先别付款，把这个端点会收多少钱列给我看：https://api.example.com/protected
 
 **需要你确认才会执行：**
 
-> 使用 x402 协议调用这个付费智能体端点：https://api.example.com （请替换为你实际要调用的付费端点地址）
+> 使用 x402 协议调用这个付费智能体端点，最多花 0.01 USDT：https://api.example.com （请替换为你实际要调用的付费端点地址）
 
-> 在 nile 上用 USDT 激活我的 GasFree 账户。
+> 在 Nile 上用 USDT 走 GasFree 付这个端点，付款上限 0.01，中继费上限 0.5。
+
+:::tip 先预览，再限额
+第一次调用陌生端点时，技能会先跑一次空跑预览（`x402-cli pay <url> --dry-run --json`），把网络、方案、代币和确切金额摆给你看。除非你明确认可端点公布的确切金额，真正付款时都会带上花费上限（`--max-amount`），付款本身不会超过你批准的金额——GasFree 的中继费另计，需单独限额（见下方说明）。
+:::
 
 :::tip GasFree 支持（TRON）
-在 TRON 上付款时，技能会优先选择 `exact_gasfree` 方案；如果 GasFree 创建支付载荷失败，会自动回退到 `exact`。GasFree 钱包需要有足够代币余额；未激活账户在服务端声明的费用允许时可在首次付款时激活。可用 `--gasfree-info` 查看 GasFree 地址、激活状态、余额和 nonce；需要手动激活时用 `--gasfree-activate`。
+GasFree（`scheme=exact_gasfree`）让你在 TRON 上付款时不必持有 TRX 抵扣能量——由中继方垫付网络开销，改从支付代币里收取一笔中继费（即中继服务的服务费：每笔一个固定转账费，账户首次使用另加一次性激活费，从你的 GasFree 账户扣除）。CLI 取的是端点提供的、第一条符合你条件的付款方式，并不会优先选 GasFree；只要端点同时也提供普通 TRON 付款，就直接说"必须用 GasFree"。你的 GasFree 账户需要有足够代币，**同时**覆盖付款金额和中继费。由于付款上限并不包含中继费，除非你明确认可估算值，否则每笔 GasFree 付款都会再加一道中继费上限（`--max-gasfree-fee`）。GasFree 仅支持 TRON，不能与 BSC（`eip155:*`）网络组合使用。
+:::
+
+:::info 网络统一使用规范的 CAIP-2 ID
+`tron:0x2b6653dc`（TRON 主网 —— USDT、USDD）、`tron:0xcd8690dc`（Nile —— USDT、USDD）、`tron:0x94a9059e`（Shasta —— USDT）、`eip155:56`（BSC —— USDT）、`eip155:97`（BSC 测试网 —— USDT、USDC）。`tron:mainnet` 这类简写别名已不再受支持。
 :::
 
 :::caution 钱包凭证来自 agent-wallet
-这个技能只通过 `agent-wallet` 加载签名凭证，**不会**从其他随意的配置文件里读取明文私钥。加密本地模式请设置 `AGENT_WALLET_PASSWORD`，静态模式请设置 `AGENT_WALLET_PRIVATE_KEY` 或 `AGENT_WALLET_MNEMONIC`。需要 Node.js 20+。
+这个技能只通过 `agent-wallet` 加载签名凭证，**不会**从其他随意的配置文件里读取明文私钥，也不会接受你在对话里直接输入的私钥。加密本地模式请设置 `AGENT_WALLET_PASSWORD`，静态模式请设置 `AGENT_WALLET_PRIVATE_KEY` 或 `AGENT_WALLET_MNEMONIC`。需要 Node.js 20+。
 :::
 
 ---
@@ -500,9 +508,9 @@ PSM 支持 **USDT ↔ USDD 即时 1:1 兑换**——是获取 USDD 最简单的�
 
 把整套技能串起来的引导助手。你通常不需要主动调用它——它会在下面三种场景里自动登场：
 
-1. **安装后首次配置。** 你一跑完 `npx skills add BofAI/skills`，安装器就会把控制权交给 `bankofai-guide`。它会全局安装 `@bankofai/agent-wallet` CLI，检查你是否已经有钱包，并询问你是现在就创建一个，还是稍后再说。
+1. **安装后首次配置。** 你一跑完 `npx skills add BofAI/skills -g`，安装器就会把控制权交给 `bankofai-guide`。它会全局安装 `@bankofai/agent-wallet` CLI，检查你是否已经有钱包，并询问你是现在就创建一个，还是稍后再说。
 2. **首个钱包创建。** 如果你还没钱包，它会给你两条路：**快速模式**（强烈推荐——全自动，约 10 秒搞定，生成加密的 `local_secure` 钱包和一个强随机密码）和**详细模式**（一步一步走，自定义选项更多）。钱包就绪后，它会把 EVM 地址和 TRON 地址一起展示给你，并告诉你该往哪充 USDT。
-3. **钱包守门员。** 需要签名的技能（`sunswap`、`sunperp-skill`、`trc20-toolkit-skill`、`multisig-permissions`、`x402-payment`）在执行链上操作之前会先跑 `agent-wallet list` 自查钱包状态；**只有在发现没有钱包时**，才会调用 `bankofai-guide` 暂停当前操作，用一两分钟帮你补上，然后回到原来的流程。
+3. **钱包守门员。** 需要签名的技能（`sunswap`、`sunperp-skill`、`sunpump-agent-skill`、`trc20-toolkit-skill`、`multisig-permissions`）在执行链上操作之前会先跑 `agent-wallet list` 自查钱包状态；**只有在发现没有钱包时**，才会调用 `bankofai-guide` 暂停当前操作，用一两分钟帮你补上，然后回到原来的流程。
 
 **可以触发它的参考话术：**
 

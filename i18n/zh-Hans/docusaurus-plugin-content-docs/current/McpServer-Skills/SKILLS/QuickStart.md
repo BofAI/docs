@@ -22,7 +22,7 @@
 2. 复制下面这段 prompt 发送给 AI：
 
    ```
-   运行 npx skills add BofAI/skills 安装 BANK OF AI 全部技能，安装完成后使用 bankofai-guide 进行引导后续操作。
+   运行 npx skills add BofAI/skills -g 安装 BANK OF AI 全部技能，安装完成后使用 bankofai-guide 进行引导后续操作。
    注意：请安装到当前 Agent 对应的 skill 目录
    ```
 
@@ -42,19 +42,19 @@
 如果你已经装好 Node.js 并习惯使用命令行，告诉你的 AI Agent 执行以下命令：
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y
+npx skills add https://github.com/BofAI/skills -y -g
 ```
 
-`-y` 参数会跳过所有交互选择，默认安装所有 Skills。安装完成后会显示 ✅ 安装完成！以及安装的所有 Skills 列表。
+`-y` 参数会跳过所有交互选择，默认安装所有 Skills；`-g` 参数把技能装到**全局**（用户级，目录为 `~/.agents/skills/`），所有项目都能用——这个参数请保留，否则只会装进你当前所在的目录。安装完成后会显示 ✅ 安装完成！以及安装的所有 Skills 列表。
 
 ---
 
 ### 方式三：交互式安装（最精细控制）
 
-如果你想手动选择安装哪些 Skills 以及安装范围，去掉 `-y` 参数即可：
+如果你想手动选择安装哪些 Skills、装到哪些 AI 工具，去掉 `-y` 参数、保留 `-g` 即可：
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npx skills add https://github.com/BofAI/skills -g
 ```
 
 :::tip 提示
@@ -89,16 +89,16 @@ npx skills add https://github.com/BofAI/skills
 安装器会自动检测你电脑上装了哪些 AI 工具（如 Cursor、Claude Code、Cline 等），用空格键勾选你要用的：
 
 ```
-◇  71 agents
+◇  77 agents
 ◇  Which agents do you want to install to?
 │  Amp, Antigravity, Antigravity CLI, Cline, Codex, Cursor, Deep Agents,
 │  Gemini CLI, GitHub Copilot, Kimi Code CLI, OpenCode, Warp, Zed,
-│  Claude Code, OpenClaw … （共 71 个，按空格勾选你实际在用的）
+│  Claude Code, OpenClaw … （共 77 个，按空格勾选你实际在用的）
 ```
 
-**3️⃣ 选择安装范围**
+**3️⃣ 安装范围**
 
-选择 `Project`（当前项目）或 `User`（所有项目全局可用），按需选择即可：
+因为你带了 `-g`，安装器会跳过这一步，直接装到用户级目录 `~/.agents/skills/`。不带 `-g` 时才会问你选 `Project`（当前项目）还是 `User`（所有项目全局可用）：
 
 ```
 ◇  Installation scope
@@ -273,6 +273,10 @@ npx skills add https://github.com/BofAI/skills
 
 └  Done!  Review skills before use; they run with full agent permissions.
 ```
+
+:::info 结尾出现 “Failed to install” 属正常现象
+全局安装的有时会打印 `■  Failed to install 14`，并对每个技能提示 `PromptScript: PromptScript does not support global skill installation`。这只是 PromptScript 这一个客户端没有全局安装位置，不影响其他任何工具。以它上方的 `✓ Installed 14 skills` 清单为准——Claude Code、OpenClaw、Codex 等都已安装成功。
+:::
 
 ### 验证安装
 

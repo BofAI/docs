@@ -19,7 +19,7 @@ Want your AI client to gain BANK OF AI's on-chain capabilities? Just **two steps
 Open whichever AI client you use (OpenClaw / Claude Code / Cursor / Codex / etc.) and paste this command in:
 
 ```
-Run npx skills add BofAI/skills to install every BANK OF AI Skill. After the install completes, run bankofai-guide to walk me through the next steps.
+Run npx skills add BofAI/skills -g to install every BANK OF AI Skill. After the install completes, run bankofai-guide to walk me through the next steps.
 Note: please install into this Agent's own skills directory.
 ```
 

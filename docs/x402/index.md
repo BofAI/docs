@@ -87,11 +87,12 @@ Our goal is to build a low-barrier, permissionless, developer-friendly programma
 x402 currently supports the following networks:
 
 - **TRON Mainnet** (`tron:0x2b6653dc`)
-- **TRON Shasta Testnet** (`tron:0x94a9059e`)
+- **TRON Shasta Testnet** (`tron:0x94a9059e`) — SDK/CLI only; not settled by the official facilitator
 - **TRON Nile Testnet** (`tron:0xcd8690dc`)
 - **BSC Mainnet** (`eip155:56`)
 - **BSC Testnet** (`eip155:97`)
 - **Base Mainnet** (`eip155:8453`)
+- **Base Sepolia Testnet** (`eip155:84532`)
 
 Base Mainnet payments use official USDC with the `exact` scheme and EIP-3009 authorization.
 

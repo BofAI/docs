@@ -8,6 +8,24 @@ description: 'Release notes for SKILLS.'
 Release notes for SKILLS.
 
 <div className="changelog-entry">
+<div className="changelog-date">Jul 21, 2026</div>
+<div className="changelog-body">
+
+### x402-payment now runs on the x402 CLI
+
+<div className="changelog-tags"><span className="changelog-tag">Update</span><span className="changelog-tag">x402</span></div>
+
+- **Payments go through `x402-cli`** (1.0.1 or newer) instead of bundled local TypeScript scripts. The skill checks your installed version and tells you how to install the CLI when it is missing.
+- **Every payment is previewed and capped** — a `--dry-run --json` preview before the first payment to an unfamiliar endpoint, and `--max-amount` on the real request. GasFree payments must also cap the relayer fee with `--max-gasfree-fee`, which the payment cap does not cover.
+- **Canonical CAIP-2 TRON identifiers only** — `tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`. Shorthand aliases such as `tron:mainnet` are rejected. The `agent-wallet` skill uses the same identifiers.
+- The retired `--gasfree-info` / `--gasfree-activate` script flags are gone, and uninstall now handles custom skill directories.
+
+👉 [Skill Catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Jul 10, 2026</div>
 <div className="changelog-body">
 

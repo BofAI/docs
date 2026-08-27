@@ -81,7 +81,7 @@ Its limits are equally clear: when the real cost is only known after execution, 
 
 `exact_gasfree` is a TRON-only fixed-amount scheme. The payer can pay in USDT or USDD without holding TRX in their ordinary wallet; the official GasFree Proxy/relayer path submits the transaction and pays the corresponding on-chain resource cost.
 
-This is not universally "free" payment. The scheme requires the wallet, token, GasFree service, and Facilitator to all support the flow, and the fee may surface through service rules, asset balances, or the quote structure. Production deployments should explicitly check available assets, GasFree account status, fee configuration, and the failure fallback path — you cannot decide whether payment is possible from the main wallet's TRX balance alone.
+This is not universally "free" payment. The scheme requires the wallet, token, GasFree service, and Facilitator to all support the flow, and the cost surfaces as the GasFree **relayer fee**, which the client estimates and which is deducted from the payment token on top of the payment amount — the payment requirement itself carries no fee object. Production deployments should explicitly check available assets, GasFree account status, fee configuration, and the failure fallback path — you cannot decide whether payment is possible from the main wallet's TRX balance alone.
 
 ### 4.3 Upto: paying for actual usage
 

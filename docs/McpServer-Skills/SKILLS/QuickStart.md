@@ -22,7 +22,7 @@ If you're already using a Skills-compatible AI Agent (OpenClaw, a Telegram bot, 
 2. Copy and paste the following prompt:
 
    ```
-   Run npx skills add BofAI/skills to install all BANK OF AI skills. After installation, use bankofai-guide to guide subsequent operations.
+   Run npx skills add BofAI/skills -g to install all BANK OF AI skills. After installation, use bankofai-guide to guide subsequent operations.
    Note: Please install to the skill directory corresponding to the current Agent.
    ```
 
@@ -42,19 +42,19 @@ You don't need to know what `npx`, `npm`, or "global install" mean. The AI handl
 If you have Node.js installed and prefer the command line, simply tell your AI Agent to execute the following command:
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y
+npx skills add https://github.com/BofAI/skills -y -g
 ```
 
-The `-y` flag skips all interactive prompts and installs all available Skills by default. Once complete, it will show ✅ Installation complete! along with the full list of installed Skills.
+The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag installs them **globally** (user-level, under `~/.agents/skills/`) so every project can use them — keep it, otherwise the installer only installs into the directory you happen to be in. Once complete, it will show ✅ Installation complete! along with the full list of installed Skills.
 
 ---
 
 ### Method 3: Interactive Install (Most Control)
 
-If you want to choose which Skills to install and the installation scope, remove the `-y` flag:
+If you want to choose which Skills to install and which AI tools to install them to, drop the `-y` flag but keep `-g`:
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npx skills add https://github.com/BofAI/skills -g
 ```
 
 :::tip
@@ -89,16 +89,16 @@ Unless you're sure you only need specific skills, install them all. Skills use a
 The installer auto-detects AI tools on your computer (e.g., Cursor, Claude Code, Cline, etc.). Use Space to select the ones you want:
 
 ```
-◇  71 agents
+◇  77 agents
 ◇  Which agents do you want to install to?
 │  Amp, Antigravity, Antigravity CLI, Cline, Codex, Cursor, Deep Agents,
 │  Gemini CLI, GitHub Copilot, Kimi Code CLI, OpenCode, Warp, Zed,
-│  Claude Code, OpenClaw … (71 in total — tick the ones you actually use)
+│  Claude Code, OpenClaw … (77 in total — tick the ones you actually use)
 ```
 
-**3️⃣ Choose installation scope**
+**3️⃣ Installation scope**
 
-Select `Project` (current project only) or `User` (globally available across all projects):
+Because you passed `-g`, the installer skips this question and installs at user level, under `~/.agents/skills/`. Without `-g` it asks you to choose between `Project` (current project only) and `User` (globally available across all projects):
 
 ```
 ◇  Installation scope
@@ -273,6 +273,10 @@ When you see output like this, all Skills have been successfully installed to yo
 
 └  Done!  Review skills before use; they run with full agent permissions.
 ```
+
+:::info A "Failed to install" list at the end is normal
+A global install sometimes ends with `■  Failed to install 14` and one line per skill saying `PromptScript: PromptScript does not support global skill installation`. That is a single client — PromptScript — which has no global install location. It does not affect anything else: the `✓ Installed 14 skills` list printed just above it is the real result, and Claude Code, OpenClaw, Codex and the rest are installed.
+:::
 
 ### Verify Installation
 

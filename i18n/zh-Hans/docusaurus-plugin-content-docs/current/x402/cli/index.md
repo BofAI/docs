@@ -8,7 +8,7 @@ description: >-
 
 ## 什么是 x402 CLI？
 
-x402 CLI（`@bankofai/x402-cli`）把 [x402 支付协议](../index.md)搬进了你的终端。它是一个依赖极简的命令，让人工操作者、Shell 脚本，或者一个 AI Agent 都能**支付一个受 x402 保护的 URL、启动本地付费端点、浏览服务目录**——不用写任何集成代码。
+x402 CLI（`@bankofai/x402-cli`）把 [x402 支付协议](../index.md)搬进了你的终端。它是一条命令，让人工操作者、Shell 脚本，或者一个 AI Agent 都能**支付一个受 x402 保护的 URL、启动本地付费端点、浏览服务目录**——不用写任何集成代码。
 
 可以这样理解：[x402 SDK](../sdk-features.md) 是你嵌进应用里、用来收费或付费的那层能力；而 CLI 是同一套能力，被包装成一条你现在就能敲的命令：
 
@@ -17,7 +17,7 @@ x402 CLI（`@bankofai/x402-cli`）把 [x402 支付协议](../index.md)搬进了�
 x402-cli pay https://api.example.com/paid --network tron:0xcd8690dc --token USDT
 ```
 
-它完全构建在已发布的 TypeScript SDK 包之上——`@bankofai/x402-core`、`@bankofai/x402-evm`、`@bankofai/x402-fetch`、`@bankofai/x402-tron`。稳定币支付使用 `scheme=exact`：TRON 与 BSC 走 Permit2 授权，Base USDC 走 EIP-3009。TRON 上还支持 `scheme=exact_gasfree`——由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需持有 TRX。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
+它完全构建在已发布的 TypeScript SDK 包之上，且是锁定版本打包、并不跟随 SDK 最新版：CLI 1.0.2 内含 1.0.1 的 `@bankofai/x402-core`、`-evm`、`-fetch`、`-tron`，以及 `@bankofai/x402-gateway` 1.0.2 和 `@bankofai/agent-wallet` 2.4.0。稳定币支付使用 `scheme=exact`：TRON 与 BSC 走 Permit2 授权，Base USDC 走 EIP-3009。TRON 上还支持 `scheme=exact_gasfree`——由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需持有 TRX。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
 
 默认情况下，`pay` 使用你当前激活的 [Agent Wallet](../../Agent-Wallet/Intro.md) 签名——不需要把私钥放进环境变量。详见 [用 Agent Wallet 付款](./command-reference.md#paying-with-agent-wallet)。
 
@@ -41,7 +41,7 @@ CLI 把能力归为五条命令。
 
 ## 默认给人看，需要时给机器看
 
-输出默认是人类友好的文本。给任意命令加上 `--json`，就能得到一份稳定的、机器可读的结构化 JSON 输出——非常适合脚本和 AI Agent：
+输出默认是人类友好的文本。给任意会返回结果的命令加上 `--json`，就能得到一份稳定的、机器可读的结构化 JSON 输出——非常适合脚本和 AI Agent。（`gateway start` 直接透传网关自身的输出，不产生 JSON 封装；`catalog pay-json --raw` 打印裸载荷。）
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols' \
@@ -89,7 +89,7 @@ CLI 内置了代币注册表。用 `--network` 指定网络，用 `--token` 指�
 | :--- | :--- | :--- |
 | **TRON 主网** | `tron:0x2b6653dc` | USDT、USDD |
 | **TRON Nile 测试网** | `tron:0xcd8690dc` | USDT、USDD |
-| **TRON Shasta 测试网** | `tron:0x94a9059e` | USDT |
+| **TRON Shasta 测试网** | `tron:0x94a9059e` | USDT（仅能签名，见下方说明） |
 | **BSC 主网** | `eip155:56` | USDT |
 | **BSC 测试网** | `eip155:97` | USDT、USDC |
 | **Base 主网** | `eip155:8453` | USDC |
@@ -103,6 +103,10 @@ TRON 网络必须使用标准的 CAIP-2 标识符（`tron:0x…`）。旧的别�
 | `bsc-testnet` | `eip155:97` |
 | `base-mainnet` | `eip155:8453` |
 | `base-sepolia` | `eip155:84532` |
+
+:::caution 官方 facilitator 不结算 Shasta
+CLI 接受 `tron:0x94a9059e`，但官方 facilitator（`https://facilitator.bankofai.io`）只启用了 TRON 主网/Nile、BSC 主网/测试网、Base 主网/Sepolia。因此 Shasta 上的支付无法在那里校验与结算——TRON 测试请用 `tron:0xcd8690dc`（Nile），或自建注册了 Shasta 的 facilitator。
+:::
 
 已注册代币的精度以注册表为准，不可覆盖。只有未注册的非 Base 资产，才需要用 `--asset <address>` 搭配 `--decimals <count>` 传入。
 

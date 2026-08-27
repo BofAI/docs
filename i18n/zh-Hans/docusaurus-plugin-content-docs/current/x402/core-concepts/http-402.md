@@ -61,12 +61,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
       "payTo": "<SELLER_TRON_ADDRESS>",
       "maxTimeoutSeconds": 3600,
       "extra": {
-        "assetTransferMethod": "permit2",
-        "fee": {
-          "feeTo": "<FACILITATOR_FEE_RECEIVER_ADDRESS>",
-          "feeAmount": "100",
-          "caller": "<FACILITATOR_CALLER_ADDRESS>"
-        }
+        "assetTransferMethod": "permit2"
       }
     }
   ]
@@ -128,12 +123,12 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `resource`          | 关于请求资源的信息                                |
 | `accepts`           | 接受的支付选项数组                                |
 | `scheme`            | 支付方案（`exact`、`upto`、`batch-settlement`、`exact_gasfree`）  |
-| `network`           | 网络标识符（`tron:0xcd8690dc`, `tron:0x2b6653dc`, `eip155:56`, `eip155:97`） |
+| `network`           | 网络标识符（`tron:0xcd8690dc`, `tron:0x2b6653dc`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532`） |
 | `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
 | `asset`             | TRC-20/BEP-20 代币合约地址                               |
 | `payTo`             | 卖家的钱包地址                              |
 | `maxTimeoutSeconds` | 支付有效期的最大时长                              |
-| `extra.fee`         | Facilitator 费用信息（包含 `feeTo`、`feeAmount`、`caller`） |
+| `extra`             | 方案相关数据——`assetTransferMethod`（`eip3009` / `permit2`）、EIP-3009 资产的 `name`/`version`，以及声明了非默认付款流程时的 `paymentFlow`（`upfront` 或 `escrow`）——内置方案全部使用默认的 `authorization` 流程，该字段不会写入 `extra`。其中不含费用对象：各方案不收取 facilitator 费用。 |
 | `extensions`        | 支付方案的附加上下文（如 gas 赞助、payment-identifier） |
 
 ## 支付签名结构

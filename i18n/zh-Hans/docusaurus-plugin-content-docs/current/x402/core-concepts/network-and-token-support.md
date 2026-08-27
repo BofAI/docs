@@ -28,7 +28,7 @@ x402 采用 CAIP-2 网络标识符格式：`tron:<hex_chain_id>`。
 | **BSC Mainnet**        | `eip155:56` | BSC 主网 (生产环境) |
 | **BSC Testnet**         | `eip155:97`  | BSC 测试网   |
 
-> **注意**：在自托管 Facilitator 的 YAML 配置文件中，使用更易读的格式：`bsc:mainnet` 和 `bsc:testnet`。Facilitator 启动时会自动将其映射为协议层对应的 EIP-155 链 ID。
+> **注意**：自托管 Facilitator 的 YAML 配置**只接受规范的 CAIP-2 标识符**——`eip155:56`、`eip155:97`、`eip155:8453`、`eip155:84532`、`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`。`bsc:mainnet`、`tron:nile` 这类易读别名不会被解析，启动时会直接报错。
 
 
 ## Base 网络标识符
@@ -53,48 +53,50 @@ x402 专为区块链生态设计，实现了原生的链上支付验证与结算
 | :--------------- | :------------ | :------------------------------------- |
 | **TRON Mainnet** | **Mainnet**   | **生产网络**：用于处理真实价值资产。   |
 | **TRON Nile**    | **Testnet**   | **推荐测试网**：TRON 首选的开发与调试环境。 |
-| **TRON Shasta**  | **Testnet**   | **备用测试网**：长期稳定的测试环境。   |
+| **TRON Shasta**  | **Testnet**   | 备用测试网——仅 SDK/CLI 可用；官方 facilitator 不结算 Shasta，请用 Nile 或自建。   |
 | **BSC Mainnet**        | **Mainnet**   | **生产网络**：用于处理真实价值资产。   |
 | **BSC Testnet**         | **Testnet**   | **推荐测试网**：BSC 首选的开发与调试环境。 |
 | **Base Mainnet**       | **Mainnet**   | **生产网络**：使用官方 USDC。 |
 | **Base Sepolia**       | **Testnet**   | CLI/SDK 测试；不在 API Catalog 发布。 |
 
-### 支持的代币
+## 支持的代币 {#supported-tokens}
 
 x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自配置的稳定币；Base 使用官方 USDC。
 
-#### 支持的代币列表
+### 支持的代币列表
 
 | 代币符号 | 网络环境       | 合约地址 (Contract Address)          |
 | :------- | :------------- | :----------------------------------- |
 | **USDT** | `tron:0x2b6653dc` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
 | **USDT** | `tron:0xcd8690dc`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
+| **USDT** | `tron:0x94a9059e` | `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs` |
 | **USDD** | `tron:0x2b6653dc` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
 | **USDD** | `tron:0xcd8690dc`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56` | `0x55d398326f99059fF775485246999027B3197955` |
 | **USDC** | `eip155:56` | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
-| **EPS** | `eip155:56` | `0xA7f552078dcC247C2684336020c03648500C6d9F` |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 | **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
 | **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
+> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）与 BSC 主网（`eip155:56`）上解析 **USDT**，在 BSC 测试网（`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`）上解析 **USDC**。上表中的其余代币——TRON USDD、BSC 主网 USDC、BSC 测试网 USDT、DHLU 以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付；`x402-cli` 默认只支付其注册表内的代币——未注册资产需显式传 `--asset` 与 `--decimals`，且在 Base 上一律拒绝。
+
 > **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或 server 的 `EVM_TOKENS` 配置表，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
 
-> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`。每种代币的结算方式由 server `accepts[].price.extra` 中的数据决定：EIP-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。
+> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`。每种代币的结算方式由你在 server 端 `accepts[].price.extra` 里配置，SDK 会在协议数据中以 `accepts[].extra` 下发：EIP-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。
 
-#### 安全签名
+## 安全签名
 
 x402 采用类型化数据签名来处理所有支付相关的签名授权。
 
-该机制带来了以下核心优势：
+### 核心优势
 
 - **链下授权 (Off-chain Authorization)**：买家在本地（链下）对转账意图进行签名，无需预先锁定资金。
 - **最小化信任 (Trust-minimized)**：签名包含严格的限制条件，Facilitator 无法在客户端明确授权的范围（金额、接收方、有效期）之外转移任何资金。
 - **链上可验证 (On-chain Verifiability)**：所有的签名最终都可在智能合约层面进行加密学验证，确保交易的不可篡改性。
 
-### 代币配置参数
+## 代币配置参数
 
 在服务端配置 `HTTP 402` 支付要求时，您需要明确指定以下三个核心参数：
 
@@ -106,11 +108,11 @@ x402 采用类型化数据签名来处理所有支付相关的签名授权。
 > TRON 上 USDT 的精度 (Decimals) 为 **6**。
 > 若需收取 **1.0 USDT**，配置的数值应为 `1000000`。
 
-### 支付方案
+## 支付方案
 
 x402 支持四种支付方案。每种方案按链族实现为 client + server + facilitator 三件套。
 
-#### `exact` 方案
+### `exact` 方案 {#exact-scheme}
 
 `exact` 方案支付公布的准确金额，覆盖两种代币转账路径：
 
@@ -119,37 +121,37 @@ x402 支持四种支付方案。每种方案按链族实现为 client + server +
 
 `exact` 方案遵循 **x402 Foundation** 发布的 **v2 链路格式**：标准 v2 客户端可直接向本 SDK 的服务端发起付款请求，本 SDK 客户端也可直接访问任何 v2 兼容的服务端——无需项目特定的转换。转账授权数据位于 `payload.authorization` 中。
 
-#### `upto` 方案
+### `upto` 方案
 
 按量计费。客户端签署最高至最大金额的 Permit2 授权；服务端按每次请求决定**实际用量**并仅结算该部分（≤ max）。一次签名形状，每次请求不同收费——非常适合**按量计费**（LLM Token 消耗、计算时长、带宽）。EVM 和 TRON 均支持（均走 Permit2）。
 
-#### `batch-settlement` 方案
+### `batch-settlement` 方案
 
 面向高频微支付（如 AI 代理每 token 计费）的支付通道方案。客户端链上**一次性存入**，然后用链下**凭证**支付多次请求；facilitator **批量 claim** 并在一笔交易中结算到 `payTo`——因此 N 次请求约仅花费一次存入的 gas。含**退款**路径，可退回通道中未使用的余额。EVM 和 TRON 均支持。
 
-#### `exact_gasfree` 方案
+### `exact_gasfree` 方案
 
-TRON 专属。允许用户使用 USDT/USDD 付款而**无需持有 TRX 来支付 gas 费用**。客户端签署 TIP-712 GasFree 许可，由 relayer 通过官方 GasFree 代理支付链上 energy——付款方无需 TRX，也无需一次性 `approve`。资金来自付款方的 GasFree 托管钱包（非主钱包）。支持 `tron:0x2b6653dc` 和 `tron:0xcd8690dc`。
+TRON 专属。允许用户使用 USDT/USDD 付款而**无需持有 TRX 来支付 gas 费用**。客户端签署 TIP-712 GasFree 许可，由 relayer 通过官方 GasFree 代理支付链上 energy——付款方无需 TRX，也无需一次性 `approve`。资金来自付款方的 GasFree 托管钱包（非主钱包）。SDK 在 `tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e` 上注册了 GasFree，但官方 facilitator 只为 TRON 主网与 Nile 代理中继——内置的 Shasta 中继地址背后没有对应上游，因此 Shasta 上的 GasFree 需要自备中继。
 
-##### GasFree 账户管理（通过 x402-payment skill）
+中继方会在付款金额**之外**，从支付代币中收取自己的中继费，因此 GasFree 账户余额需同时覆盖两者。
 
-使用 `x402-payment` skill 时，可直接通过 CLI 管理 GasFree 账户：
+:::info 什么是中继费
+**中继费（relayer fee）是 GasFree 中继服务收取的服务费**：你不烧自己的 TRX，改由中继方代付链上能量/带宽，作为交换，它从你的 GasFree 账户里按支付代币（如 USDT）扣一笔费用。它的构成是：每笔固定的**转账费（transferFee）**；若 GasFree 账户尚未激活，首笔再加一次性的**激活费（activateFee）**。费率由中继服务的接口按代币报价，客户端付款前会先查询估算（若中继接口未报出该代币的费率，客户端会改签一个 1 枚整代币的默认上限）；签名的许可里带有 `maxFee` 上限，中继方实际扣费不能超过该值。它与付款金额（给卖家的钱）**分开计**——`--max-amount` 不覆盖它，需用 `--max-gasfree-fee` 单独限额。
+:::
 
-**查询 GasFree 钱包信息**（地址、激活状态、余额、nonce）：
+#### 用 CLI 走 GasFree 付款
+
 ```bash
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --network nile
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --wallet <YOUR_WALLET_ADDRESS>
+x402-cli pay <url> \
+  --scheme exact_gasfree \
+  --max-amount 0.01 \
+  --max-gasfree-fee 0.5 \
+  --json
 ```
 
-**激活 GasFree 账户**（首次使用前需要激活）：
-```bash
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network mainnet
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --token USDT
-```
+CLI 取的是服务端 `accepts` 列表中第一条匹配你过滤条件的支付要求，并不会优先选 GasFree；只要端点同时也宣告了普通 `exact`，就请传 `--scheme exact_gasfree`。`--max-amount` 不包含中继费——请用 `--max-gasfree-fee`（或 `--max-gasfree-fee-raw`）单独限额。详见 [CLI 命令参考](../cli/command-reference.md#gasfree-payments-tron)。
 
-#### 工作原理
+### 工作原理
 
 1.  **预授权 (Authorize)**：客户端签署类型化数据消息，授权付款（精确金额，或 `upto`/`batch-settlement` 的最大金额）。
 2.  **执行服务 (Execute)**：服务端执行请求任务，并（对于按量计费方案）计算**实际成本**。
@@ -163,17 +165,17 @@ npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --toke
   }}
 />
 
-### 部署私有 Facilitator
+## 部署私有 Facilitator
 
 您可以选择部署私有的 Facilitator，以完全掌控区块链网络上的支付验证与结算流程。自托管示例（`examples/typescript/facilitator/basic`）是一个暴露 `/verify`、`/settle`、`/supported` 的 Express 服务——无需数据库。
 
-Facilitator 作为协议的中间件，承担以下核心职责：
+### 核心职责
 
 1.  **验证载荷 (Verify)**：校验类型化数据签名的加密有效性及参数完整性。
 2.  **提交交易 (Submit)**：构建并向区块链广播链上结算交易。
 3.  **监控确认 (Monitor)**：追踪交易在链上的确认状态，确保资金最终到账。
 
-**部署先决条件**
+### 部署先决条件
 
 - **节点访问权限**：稳定的 RPC 访问（例如 TronGrid，或 BSC/Base 的 EVM JSON-RPC 端点）。
 - **Gas 资源储备**：一个持有充足 **TRX/BNB/ETH** 的钱包，用于支付结算 gas 费用。
@@ -181,7 +183,7 @@ Facilitator 作为协议的中间件，承担以下核心职责：
 
 > **深入了解**：请查阅 [Facilitator](./facilitator.md) 文档以获取详细的配置指南与 API 参考，以及[卖家快速入门](../getting-started/quickstart-for-sellers.md)。
 
-### 快速参考
+## 快速参考
 
 | 核心组件     | TRON/BSC/Base 实现详情                              |
 | :----------- | :----------------------------------------- |
@@ -190,7 +192,7 @@ Facilitator 作为协议的中间件，承担以下核心职责：
 | **签名机制** | TIP-712 / EIP-712 类型化数据签名                     |
 | **支付方案** | `exact`、`upto`、`batch-settlement`、`exact_gasfree`（TRON） |
 
-### 添加自定义代币
+## 添加自定义代币
 
 在**客户端 / facilitator** 侧，通过 TRON 代币注册表（`@bankofai/x402-tron`）注册自定义 TRC-20 代币：
 
@@ -209,11 +211,11 @@ registerToken(TRON_NILE, {
 
 注册完成后，即可在 TRON 价格中使用自定义代币符号（例如 `"0.001 MYT"`）。
 
-### 总结
+## 总结
 
 x402 专为区块链架构深度定制，提供了原生的 TRC-20/BEP-20/ERC-20 代币集成与安全签名支持。
 
-**核心要点：**
+### 核心要点
 
 - **开发环境**：推荐优先使用 **测试网** 进行开发与调试。
 - **默认结算资产**：TRON/BSC 路由使用各自配置的稳定币；Base 使用官方 **USDC**。

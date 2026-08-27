@@ -113,19 +113,19 @@ export EVM_RPC_URL="https://bsc-testnet-rpc.publicnode.com"
 Run the following command to install all BANK OF AI Skills (including x402-payment) at once:
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y
+npx skills add https://github.com/BofAI/skills -y -g
 ```
 
-The `-y` flag skips all interactive prompts and installs all available Skills by default. The installer auto-detects AI tools on your computer (Cursor, Claude Code, Cline, OpenCode, etc.) and copies the skills into the correct directories.
+The `-y` flag skips all interactive prompts and installs all available Skills by default; `-g` installs them globally (user-level, under `~/.agents/skills/`) instead of into the current directory. The installer auto-detects AI tools on your computer (Cursor, Claude Code, Cline, OpenCode, etc.) and copies the skills into the correct directories.
 
 > ✅ **Success indicator:** Terminal shows `✓ x402-payment (copied)` along with other installed skills
 
 ### Interactive Installation
 
-If you prefer to select specific skills or choose the installation scope:
+If you prefer to select specific skills or the AI tools to install them to:
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npx skills add https://github.com/BofAI/skills -g
 ```
 
 For a detailed walkthrough of the interactive installation process, see the [Skills Quick Start](../../McpServer-Skills/SKILLS/QuickStart.md).
@@ -194,7 +194,7 @@ Go to the [BSC Testnet Explorer](https://testnet.bscscan.com/), search for your 
 </TabItem>
 </Tabs>
 
-> ✅ **Success indicator:** The agent returns content in `{"data": "..."}` format, and the corresponding transaction appears on the block explorer
+> ✅ **Success indicator:** The agent returns the endpoint's JSON payload — the bundled Express example answers `{"report":{"weather":"sunny","temperature":70}}` — and the corresponding transaction appears on the block explorer
 
 ---
 

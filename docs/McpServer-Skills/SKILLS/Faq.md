@@ -173,10 +173,10 @@ For example, if you think 20x leverage is still too risky for perpetual trading,
 rm -rf ~/.agents/skills/sunswap-dex-trading
 ```
 
-**Update:** Re-run the install command. It will update all skills to the latest version.
+**Update:** Re-run the install command (keep `-g` so it refreshes the global copy). It will update all skills to the latest version.
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npx skills add https://github.com/BofAI/skills -y -g
 ```
 
 ---

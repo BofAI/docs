@@ -87,7 +87,7 @@ A service that settles on multiple chains exposes one route per network (`x402Ro
 
 ## What happens during a paid call
 
-Every call clears on-chain via x402 — the quoted price is exactly what you pay, always:
+Every call clears on-chain via x402. On `exact` routes the quoted price is exactly what you pay; on TRON `exact_gasfree` routes the relayer additionally deducts its energy fee from the payment token, so cap it with `--max-gasfree-fee`:
 
 1. **Agent calls** — requests the target endpoint.
 2. **Gateway quotes** — returns the price (HTTP `402`).

@@ -93,7 +93,7 @@ Your AI's secure signing engine. This skill creates and manages encrypted wallet
 
 > Setting up for the first time? Try: "Create a new agent wallet" — the AI walks you through choosing a wallet type (`local_secure` for an encrypted local key, or `privy` for a hosted wallet via API credentials), generating keys, and saving your master password.
 
-> Managing multiple chains? Try: "Show me all my wallets and their addresses" — one wallet derives both EVM and TRON addresses from the same key. Use `eip155:<chainId>` for EVM networks (e.g. `eip155:1` Ethereum, `eip155:56` BSC, `eip155:137` Polygon, `eip155:42161` Arbitrum, `eip155:8453` Base) and `tron:mainnet` / `tron:nile` for TRON.
+> Managing multiple chains? Try: "Show me all my wallets and their addresses" — one wallet derives both EVM and TRON addresses from the same key. Use `eip155:<chainId>` for EVM networks (e.g. `eip155:1` Ethereum, `eip155:56` BSC, `eip155:137` Polygon, `eip155:42161` Arbitrum, `eip155:8453` Base) and canonical CAIP-2 IDs for TRON: `tron:0x2b6653dc` (Mainnet), `tron:0xcd8690dc` (Nile), `tron:0x94a9059e` (Shasta).
 
 > Need to sign something? Try: "Sign this transaction on BSC" — the AI handles the signing locally without broadcasting. Supports raw transactions, EIP-191 messages, and EIP-712 typed data (EVM only).
 
@@ -424,28 +424,36 @@ Changing Owner permissions is **irreversible** without the new keys. The skill v
 
 ## x402-payment {#x402-payment}
 
-Some APIs and AI agents require on-chain payment before use. This skill uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — the AI detects the charge, completes the on-chain payment, gets the result, and reports back. It always asks for your confirmation before paying. Supports payments on multiple chains — **TRON (TRC20: USDT, USDD)** and **BSC (ERC20: USDT, USDC)** (each payment settles on its own chain; this is multi-chain support, not a cross-chain bridge), covering both mainnet and testnet (Nile / BSC testnet).
+Some APIs and AI agents require on-chain payment before use. This skill uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — the AI detects the charge, previews it, completes the on-chain payment, gets the result, and reports back. It always asks for your confirmation before paying. Payments run through the `x402-cli` command-line tool (version **1.0.1 or newer**). The skill checks your installed version first and, if the CLI is missing, tells you how to install it (`npm install -g @bankofai/x402-cli@1.0.1` — the version the skill pins; the CLI's own latest release is 1.0.2) — no local payment scripts are involved. Payments settle on **TRON (TRC20: USDT, USDD)** or **BSC (ERC20: USDT on mainnet; USDT and USDC on testnet)** — each payment settles on its own chain; this is multi-chain support, not a cross-chain bridge.
 
 **Completely safe — looking only, no spending:**
 
-> Verify my x402 wallet status (addresses + readiness).
+> Check whether x402-cli is installed and which version I have.
 
-> Show my GasFree wallet info (address, activation status, balances).
+> Preview what this endpoint would charge before I pay anything: https://api.example.com/protected
 
-> Fetch the manifest for this x402 agent: https://api.example.com/.well-known/agent.json
+> Show me what this endpoint would charge, without paying: https://api.example.com/protected
 
 **Requires your confirmation:**
 
-> Use the x402 protocol to call this paid agent endpoint: https://api.example.com (replace with the actual paid endpoint URL you want to call)
+> Use the x402 protocol to call this paid agent endpoint, and don't spend more than 0.01 USDT: https://api.example.com (replace with the actual paid endpoint URL you want to call)
 
-> Activate my GasFree account on nile with USDT.
+> Pay this endpoint on Nile with USDT via GasFree — cap the payment at 0.01 and the relayer fee at 0.5.
+
+:::tip Always previewed, always capped
+Before the first payment to an unfamiliar endpoint, the skill runs a dry run (`x402-cli pay <url> --dry-run --json`) and shows you the network, scheme, token, and exact amount. Unless you explicitly approve the exact advertised amount, every real payment then carries a spending cap (`--max-amount`), so the payment itself can't exceed what you approved — on GasFree the relayer fee sits on top of it, capped separately (see below).
+:::
 
 :::tip GasFree support (TRON)
-When paying on TRON, the skill prefers `exact_gasfree` and automatically falls back to `exact` if GasFree payment creation fails. GasFree requires sufficient token balance in the GasFree wallet; inactive accounts can be activated on first payment when the advertised fees permit it. Use `--gasfree-info` to check wallet address, activation status, balance, and nonce; use `--gasfree-activate` to activate manually.
+GasFree (`scheme=exact_gasfree`) lets you pay on TRON without holding TRX for energy — a relayer covers the network cost and charges a small fee in the payment token instead (the relayer's service charge: a fixed transfer fee per payment, plus a one-time activation fee on first use, deducted from your GasFree account). The CLI takes the first payment option the endpoint offers that matches your constraints — it does not prefer GasFree — so say "require GasFree" whenever an endpoint also offers a normal TRON payment. Your GasFree account needs enough of the payment token to cover **both** the payment amount and the relayer fee. Because the spending cap doesn't include that fee, every GasFree payment also caps the fee (`--max-gasfree-fee`) unless you explicitly approve the estimate. GasFree is TRON-only — it can't be combined with a BSC (`eip155:*`) network.
+:::
+
+:::info Networks use canonical CAIP-2 IDs
+`tron:0x2b6653dc` (TRON Mainnet — USDT, USDD), `tron:0xcd8690dc` (Nile — USDT, USDD), `tron:0x94a9059e` (Shasta — USDT), `eip155:56` (BSC — USDT), `eip155:97` (BSC testnet — USDT, USDC). Shorthand aliases such as `tron:mainnet` are no longer accepted.
 :::
 
 :::caution Wallet credentials come from agent-wallet
-This skill loads signers via `agent-wallet` only — it does **not** read raw private keys from random config files. Set `AGENT_WALLET_PASSWORD` for encrypted local mode, or `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC` for static mode. Requires Node.js 20+.
+This skill loads signers via `agent-wallet` only — it does **not** read raw private keys from random config files, and never accepts a private key typed into a chat command. Set `AGENT_WALLET_PASSWORD` for encrypted local mode, or `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC` for static mode. Requires Node.js 20+.
 :::
 
 ---
@@ -502,9 +510,9 @@ Use `twitter-mcp` when you want digests driven by the local `xurl` CLI; use `twi
 
 The onboarding companion that ties the rest of the skill set together. You don't typically invoke this skill directly — it kicks in automatically in three situations:
 
-1. **Post-install setup.** Right after you run `npx skills add BofAI/skills`, the installer hands off to `bankofai-guide`. It installs the `@bankofai/agent-wallet` CLI globally, checks whether you already have a wallet, and asks whether you want to set one up now or later.
+1. **Post-install setup.** Right after you run `npx skills add BofAI/skills -g`, the installer hands off to `bankofai-guide`. It installs the `@bankofai/agent-wallet` CLI globally, checks whether you already have a wallet, and asks whether you want to set one up now or later.
 2. **First-wallet creation.** If you have no wallet yet, it offers two paths: a **quick setup** (strongly recommended — fully automated, takes ~10 seconds, generates an encrypted `local_secure` wallet and a strong random password) and a **detailed setup** (step-by-step walkthrough with custom options). Once your wallet is ready, it shows you both the EVM and TRON addresses and tells you where to deposit USDT.
-3. **Wallet guard.** Signing skills (`sunswap`, `sunperp-skill`, `trc20-toolkit-skill`, `multisig-permissions`, `x402-payment`) run `agent-wallet list` first to check wallet state before any on-chain operation. **Only when no wallet is found** do they hand off to `bankofai-guide`, which pauses the current operation, walks you through creating one in a minute or two, and then returns control to the original flow.
+3. **Wallet guard.** Signing skills (`sunswap`, `sunperp-skill`, `sunpump-agent-skill`, `trc20-toolkit-skill`, `multisig-permissions`) run `agent-wallet list` first to check wallet state before any on-chain operation. **Only when no wallet is found** do they hand off to `bankofai-guide`, which pauses the current operation, walks you through creating one in a minute or two, and then returns control to the original flow.
 
 **Sample prompts that will activate it:**
 

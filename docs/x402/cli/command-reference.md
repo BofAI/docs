@@ -43,9 +43,9 @@ x402-cli pay <url> [options]
 
 | Option | Description |
 | :--- | :--- |
-| `--method <method>` | HTTP method (default: `GET`) |
+| `--method <method>` | HTTP method — uppercase, one of `DELETE`, `GET`, `HEAD`, `OPTIONS`, `PATCH`, `POST`, `PUT` (default: `GET`); anything else fails with `INVALID_ARGUMENT` (exit 2) |
 | `--header "Name: Value"` | Request header; repeatable |
-| `--body <body>` | Request body for non-`GET`/`HEAD` methods |
+| `--body <body>` | Request body; ignored for `GET` and `HEAD` |
 | `--network <caip2>` | Require a specific network (e.g. `tron:0xcd8690dc`, `base-mainnet`) |
 | `--token <symbol>` | Require a specific token (e.g. `USDT`, `USDC`) |
 | `--asset <address>` | Require a specific asset address |
@@ -99,9 +99,9 @@ If the endpoint does not return `402`, the CLI reports the actual status and res
 
 ### GasFree payments (TRON) {#gasfree-payments-tron}
 
-On TRON, `scheme=exact_gasfree` lets a relayer pay the network energy and deduct its fee from the payment token, so the payer doesn't need to hold TRX. The CLI normally selects this scheme automatically when the server's `402` challenge advertises it; pass `--scheme exact_gasfree` to require it explicitly.
+On TRON, `scheme=exact_gasfree` lets a relayer pay the network energy and deduct its fee from the payment token, so the payer doesn't need to hold TRX. The CLI does **not** prefer GasFree: it takes the first requirement in the server's `accepts` list that passes your `--network` / `--scheme` / `--token` filters. If the endpoint also advertises plain `exact`, pass `--scheme exact_gasfree` to guarantee the gasless route.
 
-GasFree fees are **separate** from the advertised payment amount. Set a fee limit so the CLI estimates the relayer fee and rejects the payment before signing if the estimate is too high:
+GasFree fees are **separate** from the advertised payment amount — they are the relayer's service charge (a fixed per-payment transfer fee, plus a one-time activation fee if the GasFree account is not yet activated), deducted from your GasFree account in the payment token. The CLI always estimates the relayer fee for an `exact_gasfree` requirement and reports it as `gasfreeEstimate` (`fee` and `total`) in the result; adding a fee limit makes it abort before signing when either the estimate or the final signed `maxFee` exceeds your cap:
 
 ```bash
 x402-cli pay https://api.example.com/pay \
@@ -112,9 +112,9 @@ x402-cli pay https://api.example.com/pay \
   --json
 ```
 
-`--max-gasfree-fee` and `--max-gasfree-fee-raw` are mutually exclusive, and only apply to an `exact_gasfree` requirement. Override the relayer endpoint with `--gasfree-api-url <url>` or `X402_GASFREE_API_URL`.
+`--max-gasfree-fee` and `--max-gasfree-fee-raw` are mutually exclusive, and are rejected with `INVALID_ARGUMENT` (exit 2) if the requirement the CLI selects is not `exact_gasfree`. Override the relayer endpoint with `--gasfree-api-url <url>` or `X402_GASFREE_API_URL`.
 
-A paid response distinguishes `settled` (the payment cleared on-chain) from `delivered` (the upstream HTTP business response succeeded). A settled upstream failure reports `paid=true`, `settled=true`, `delivered=false` and still includes its transaction information — inspect the transaction and provider behavior before retrying.
+A paid response distinguishes `settled` (the payment cleared on-chain) from `delivered` (the upstream HTTP business response succeeded). A settled-but-undelivered request exits with code 1 and an error envelope (`ok: false`, `error.code: HTTP_ERROR`, or `RATE_LIMITED` on 429); the `paid` / `settled` / `delivered` flags and `paymentResponse` are carried under `error.details`. Read them from there for reconciliation, and do not retry blindly.
 
 ### Paying on Base {#paying-on-base}
 
@@ -146,9 +146,12 @@ Some settings have no flag and are configured through the environment only:
 | `TRON_GRID_API_KEY` | TronGrid API key — set this to avoid public rate limits |
 | `X402_TRON_ALLOWANCE_MODE` | TRON allowance handling; defaults to `auto` |
 | `EVM_RPC_URL` | Default EVM RPC endpoint |
-| `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` | Per-network RPC for Base Mainnet / Base Sepolia |
+| `EVM_RPC_URL_<chainId>` | Per-network RPC, e.g. `EVM_RPC_URL_8453`, `EVM_RPC_URL_84532`, `EVM_RPC_URL_56`, `EVM_RPC_URL_97` |
+| `RPC_URL` | Generic EVM RPC fallback |
 | `X402_GASFREE_API_URL` | Override the TRON GasFree relayer API |
 | `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` | Override Agent Wallet — development and CI only |
+
+> EVM RPC precedence: `--rpc-url` → `EVM_RPC_URL_<chainId>` → `RPC_URL` → `EVM_RPC_URL` → a built-in public endpoint. The built-in endpoints (BSC as well as Base) are for development only.
 
 ---
 
@@ -174,19 +177,18 @@ x402-cli serve --pay-to <address> [options]
 | `--port <port>` | Bind port (default: `4020`) |
 | `--resource-url <url>` | URL advertised in the payment requirement |
 | `--facilitator-url <url>` | Facilitator base URL (default: `https://facilitator.bankofai.io`) |
-| `--valid-for-seconds <n>` | How long the payment requirement stays valid (default: `300`) |
+| `--valid-for-seconds <n>` | How long the payment requirement stays valid — integer 1–86400 (default: `300`) |
 | `--timeout-ms <ms>` | Facilitator timeout in ms (default: `30000`) |
 | `-d, --daemon` | Run in the background and print the child pid |
 | `--json` | Print the JSON envelope |
 
-The server exposes four routes:
+The server exposes these routes — the paywall branches on the `PAYMENT-SIGNATURE` header, not on the HTTP method:
 
 | Route | Purpose |
 | :--- | :--- |
 | `GET /health` | Returns `{ "ok": true }` |
 | `GET /.well-known/x402` | Machine-readable payment metadata (network, scheme, asset, amount, `payTo`) |
-| `GET /pay` | Returns `402 Payment Required` with the challenge header |
-| `POST /pay` | Verifies the payment, settles it, and returns the transaction |
+| `/pay` (any method) | Returns `402 Payment Required` with the challenge header when the request carries no `PAYMENT-SIGNATURE`; with that header, verifies and settles the payment through the facilitator and returns the transaction |
 
 **Examples:**
 
@@ -235,7 +237,9 @@ x402-cli gateway <search|start|check|scaffold|catalog> [options]
 | `scaffold <name>` | Write a starter `provider.yml` |
 | `catalog <command>` | Build/check/search gateway catalog assets |
 
-`start` and `gateway catalog` require the `@bankofai/x402-gateway` runtime. Install it (`npm install -g @bankofai/x402-gateway`), run from a checkout that has `../x402-gateway/dist/cli.js`, or pass `--gateway-bin <path>`.
+`gateway start` spawns a gateway runtime, but the CLI already ships one: the published package bundles `dist/gateway/cli.js` and depends on `@bankofai/x402-gateway`, so a normal `npm install -g @bankofai/x402-cli` needs nothing extra. It resolves the runtime in order — `--gateway-bin`, the `@bankofai/x402-gateway` dependency, the bundled `dist/gateway/cli.js`, `x402-gateway` on `PATH`, then `../x402-gateway/dist/cli.js` in a checkout. `gateway check`, `gateway catalog build`, `gateway catalog pay-assets`, and `catalog build` call the gateway library in-process; `gateway scaffold` only writes a template file, and `gateway search` / `gateway catalog search` read a catalog source.
+
+Defaults: `gateway start` binds `--host 127.0.0.1 --port 4020` and reads `--providers providers`; `gateway check` also defaults to `providers`; `gateway scaffold` writes to `--output-dir providers/<name>` with `--forward-url https://api.example.com`; a bare `x402-cli gateway catalog` runs `build`.
 
 **Validate provider files:**
 
@@ -300,7 +304,9 @@ x402-cli catalog <update|search|show|endpoints|pay-json|export-gateway|build> [o
 | :--- | :--- |
 | `--catalog <source>` | `catalog.json` path or URL |
 | `--provider <fqn>` | Provider FQN (for `export-gateway`) |
-| `--output-dir <dir>` | Output directory for generated files |
+| `--output-dir <dir>` | Output directory for generated files (`export-gateway`) |
+| `--output <file>` | Write the built catalog JSON to this file (`build`) |
+| `--dist-dir <dir>` | Write the built catalog to `<dir>/catalog.json` (`build`) |
 | `-n, --limit <count>` | Search result limit (default: `10`) |
 | `--include-blocked` | Include blocked providers in search results |
 | `--timeout-ms <ms>` | Network timeout in ms (default: `30000`) |

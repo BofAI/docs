@@ -125,7 +125,7 @@ Deposit a small amount of official USDC on Base Mainnet. The resource server onl
 
 **Testnet vs. Mainnet:**
 
-- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:0xcd8690dc` / `eip155:97`
+- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:0xcd8690dc` / `eip155:97` / `eip155:84532` (Base Sepolia, USDC — test here before going to Base Mainnet)
 - **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:0x2b6653dc` / `eip155:56` / Base `eip155:8453`
 
 ---
@@ -208,7 +208,7 @@ express()
       credit: 1000000,
     })
   )
-  .listen(4021);
+  .listen(4021, () => console.log("Resource server on http://localhost:4021"));
 ```
 
 </TabItem>
@@ -255,7 +255,7 @@ express()
       credit: 1000000,
     })
   )
-  .listen(4021);
+  .listen(4021, () => console.log("Resource server on http://localhost:4021"));
 ```
 
 </TabItem>
@@ -290,7 +290,7 @@ A Facilitator is an **automated settlement service**: when someone pays your API
 | **Maintenance required** | No — officially hosted | Yes — you run it yourself |
 | **Wallet private key required** | No | Yes (to settle on-chain) |
 | **Difficulty** | Low (just apply for an API Key) | Medium (run the example facilitator) |
-| **Best for** | Fast deployment, most users | Full control over fee strategy |
+| **Best for** | Fast deployment, most users | Full control over the settlement wallet, RPC endpoints, and registered networks/schemes |
 
 <Tabs>
 <TabItem value="official" label="✅ Official Facilitator (Recommended)">
@@ -336,7 +336,9 @@ FACILITATOR_API_KEY=paste_your_api_key_here
 </TabItem>
 <TabItem value="selfhost" label="Self-Hosted Facilitator">
 
-The self-hosted option gives you full control over fee strategy. It runs the example facilitator (`examples/typescript/facilitator/basic`), which exposes `/verify`, `/settle`, `/supported` over HTTP and dispatches by the payment's `network` field.
+The self-hosted option gives you full control over the settlement wallet, RPC endpoints, and which networks and schemes you register — neither the SDK nor the facilitator charges a fee of its own. It runs the example facilitator (`examples/typescript/facilitator/basic`), which exposes `/verify`, `/settle`, `/supported` over HTTP and dispatches by the payment's `network` field.
+
+> **Base sellers:** the bundled example facilitator registers only `eip155:97` and `eip155:56` (`EVM_NETWORKS` in `facilitator/basic/src/chains/evm.ts`). To settle on Base, either use the official facilitator — which enables `eip155:8453` and `eip155:84532` — or add those ids to `EVM_NETWORKS` yourself.
 
 > ⚠️ **Security reminder — please read first:**
 > - A self-hosted Facilitator uses your wallet to submit on-chain settlement transactions — **this wallet should be separate from your receiving wallet**
@@ -402,6 +404,12 @@ Open a **new terminal window** (do not close the facilitator), and run your serv
 
 ```bash
 pnpm tsx src/server.ts
+```
+
+**On success you should see:**
+
+```
+Resource server on http://localhost:4021
 ```
 
 > ✅ **Success:** The process keeps running and the resource server listens on `http://localhost:4021`
@@ -470,7 +478,7 @@ EVM_RPC_URL=https://bsc-rpc.publicnode.com
 
 ### 3. (Self-Hosted) Switch the Facilitator to Mainnet
 
-The facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:0x2b6653dc`), and `EVM_NETWORKS` includes `eip155:56`. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
+The example facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:0x2b6653dc`), and `EVM_NETWORKS` includes `eip155:97` and `eip155:56` — Base (`eip155:8453` / `eip155:84532`) is not registered there, so add it if you settle on Base. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
 
 ```bash
 pnpm dev:facilitator

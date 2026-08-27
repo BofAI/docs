@@ -125,7 +125,7 @@ git --version     # 版本控制工具
 
 **测试网 vs. 主网：**
 
-- **测试网**：使用免费测试代币，不涉及真实资金，适合开发调试。网络标识：`tron:0xcd8690dc` / `eip155:97`
+- **测试网**：使用免费测试代币，不涉及真实资金，适合开发调试。网络标识：`tron:0xcd8690dc` / `eip155:97` / `eip155:84532`（Base Sepolia，USDC——上 Base 主网前先在这里测）
 - **主网**：涉及真实支付，上线时使用。网络标识：`tron:0x2b6653dc` / `eip155:56` / Base `eip155:8453`
 
 ---
@@ -208,7 +208,7 @@ express()
       credit: 1000000,
     })
   )
-  .listen(4021);
+  .listen(4021, () => console.log("Resource server on http://localhost:4021"));
 ```
 
 </TabItem>
@@ -255,7 +255,7 @@ express()
       credit: 1000000,
     })
   )
-  .listen(4021);
+  .listen(4021, () => console.log("Resource server on http://localhost:4021"));
 ```
 
 </TabItem>
@@ -290,7 +290,7 @@ Facilitator 是一个**自动结算服务**：当有人为您的 API 付款时�
 | **是否需要维护** | 否——官方托管 | 是——您自行运行 |
 | **是否需要钱包私钥** | 否 | 是（用于链上结算） |
 | **难度** | 低（仅需申请 API Key） | 中（运行示例 facilitator） |
-| **适合** | 快速部署、大多数用户 | 需要完全控制费率策略 |
+| **适合** | 快速部署、大多数用户 | 需要完全掌控结算钱包、RPC 节点与注册的网络/方案 |
 
 <Tabs>
 <TabItem value="official" label="✅ 官方 Facilitator（推荐）">
@@ -336,7 +336,9 @@ FACILITATOR_API_KEY=paste_your_api_key_here
 </TabItem>
 <TabItem value="selfhost" label="自托管 Facilitator">
 
-自托管方式让您完全控制费率策略。它运行示例 facilitator（`examples/typescript/facilitator/basic`），通过 HTTP 暴露 `/verify`、`/settle`、`/supported`，并按付款的 `network` 字段分发。
+自托管方式让您完全掌控结算钱包、RPC 节点以及注册哪些网络与方案——SDK 与 facilitator 本身都不收取任何费用。它运行示例 facilitator（`examples/typescript/facilitator/basic`），通过 HTTP 暴露 `/verify`、`/settle`、`/supported`，并按付款的 `network` 字段分发。
+
+> **Base 卖家注意：** 仓库自带的示例 facilitator 只注册了 `eip155:97` 与 `eip155:56`（见 `facilitator/basic/src/chains/evm.ts` 的 `EVM_NETWORKS`）。要在 Base 上结算，请使用已启用 `eip155:8453` 与 `eip155:84532` 的官方 facilitator，或自行把这两个网络加进 `EVM_NETWORKS`。
 
 > ⚠️ **安全提醒——请先阅读：**
 > - 自托管 Facilitator 使用您的钱包提交链上结算交易——**此钱包应与您的收款钱包分开**
@@ -476,7 +478,7 @@ EVM_RPC_URL=https://bsc-rpc.publicnode.com
 
 ### 3.（自托管）将 Facilitator 切换到主网
 
-facilitator 的 `TRON_NETWORKS` 已包含 `TRON_MAINNET`（`tron:0x2b6653dc`），`EVM_NETWORKS` 已包含 `eip155:56`。向 Facilitator 钱包充入足够的真实 TRX/BNB 以支付结算 gas，然后重启：
+示例 facilitator 的 `TRON_NETWORKS` 已包含 `TRON_MAINNET`（`tron:0x2b6653dc`），`EVM_NETWORKS` 已包含 `eip155:97` 与 `eip155:56`——但不含 Base（`eip155:8453` / `eip155:84532`），若在 Base 结算需自行添加。向 Facilitator 钱包充入足够的真实 TRX/BNB 以支付结算 gas，然后重启：
 
 ```bash
 pnpm dev:facilitator

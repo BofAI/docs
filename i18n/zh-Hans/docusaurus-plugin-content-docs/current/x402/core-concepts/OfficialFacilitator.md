@@ -62,7 +62,7 @@ Facilitator 由官方持续维护和升级，包括：
 
 | 模式 |限速 |说明 |
 |-----|-----|-----|
-| **匿名调用（Anonymous Mode）** | 10 次 / 分钟（默认值，可配置） | 不需要 API Key，适用于本地开发和功能测试 |
+| **匿名调用（Anonymous Mode）** | 官方部署为 1 次 / 分钟（可配置；未配置时代码默认 10 次 / 分钟） | 不需要 API Key，适用于本地开发和功能测试 |
 | **API Key 调用（API Key Mode）** | 1000 次 / 分钟 | 需要 API Key，适用于生产环境和高频支付请求 |
 
 两种模式的调用方式完全相同，但在 **身份识别与接口限速策略** 上有所不同。 
@@ -79,7 +79,7 @@ Facilitator 由官方持续维护和升级，包括：
 在匿名模式下：
 
 - `/settle` 接口会启用 **限速**
-- **每分钟最多 10 次调用（默认值，可配置）**
+- **官方部署为每分钟 1 次调用**（可配置；未配置时代码默认 10 次 / 分钟）
 
 该模式主要用于：
 
@@ -262,7 +262,17 @@ curl -X POST https://facilitator.bankofai.io/settle \
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | 按链上授权身份查询支付记录 |
 | GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`） |
 
-> **不存在** `/fee/quote` 端点——费用条款随支付要求的 `extra` 字段一起下发。限速仅作用于 `/settle` 接口，其他接口不受限速影响。
+> **不存在** `/fee/quote` 端点，各方案也不收取 facilitator 费用。限速仅作用于 `/settle` 接口，其他接口不受限速影响。
+
+### 官方服务结算的网络与方案
+
+| 网络 | 环境 |
+|---|---|
+| `tron:0x2b6653dc`（TRON 主网）· `tron:0xcd8690dc`（Nile） | 主网 · 测试网 |
+| `eip155:56`（BSC）· `eip155:97`（BSC 测试网） | 主网 · 测试网 |
+| `eip155:8453`（Base）· `eip155:84532`（Base Sepolia） | 主网 · 测试网 |
+
+以上网络均注册了 `exact`、`upto` 与 `batch-settlement`；TRON 在服务持有 GasFree 中继凭证的网络上（TRON 主网与 Nile）额外注册 `exact_gasfree`。以所连接部署的 `/supported` 返回为准。
 
 ### 支付记录查询
 
@@ -287,7 +297,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 **Q：不配置 API Key 能正常运行吗？**
 
-可以运行，但 `/settle` 接口默认每 IP 每分钟最多调用 10 次。这只适合测试，任何真实流量都必须配置 API Key。
+可以运行，但官方部署的 `/settle` 接口每 IP 每分钟仅允许 1 次调用（部署未配置时，facilitator 服务内置默认为 10 次 / 分钟）。这只适合测试，任何真实流量都必须配置 API Key。
 
 **Q：API Key 会过期吗？**
 
