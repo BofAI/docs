@@ -29,6 +29,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Kimi K3           |                  3.00 |                        3.00 |                       0.30 |                  15.00 |                        - |
 | Kimi K2.6         |                  0.95 |                        0.95 |                     0.1615 |                   4.00 |                        - |
 | Kimi K2.5         |                  0.59 |                        0.59 |                       0.10 |                   3.00 |                        - |
+| Qwen3.8-Flash     |                  0.16 |                        0.16 |                      0.016 |                   0.47 |                        - |
 | Qwen3.8-27B       |                  0.22 |                        0.22 |                      0.022 |                   1.60 |                        - |
 | Qwen3.8-Max       |                  2.00 |                        2.00 |                       0.25 |                   6.00 |                        - |
 | Qwen3.7-Max       |                  1.65 |                        1.65 |                       0.33 |                  4.951 |                        - |
@@ -36,6 +37,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Hy3               |                 0.132 |                       0.132 |                      0.033 |                  0.528 |                        - |
 | MiMo-V2.5-Pro     |                 0.435 |                       0.435 |                     0.0036 |                   0.87 |                        - |
 | MiMo-V2.5         |                  0.14 |                        0.14 |                     0.0028 |                   0.28 |                        - |
+| GLM-5.3-Flash     |                 0.075 |                       0.075 |                      0.015 |                   0.25 |                        - |
 | GLM-5.3           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.2           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |

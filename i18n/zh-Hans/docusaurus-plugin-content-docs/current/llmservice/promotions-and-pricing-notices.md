@@ -70,6 +70,34 @@ MiMo-V2.5 免费分阶段开放：
 </ActivityCard>
 
 <ActivityCard
+  variant="free"
+  title="GLM-5.3-Flash"
+  status="免费活动"
+  detail="API 已免费 · Chat 上架后免费"
+>
+本活动覆盖 B.AI API 和 Chat：
+
+* **API：** GLM-5.3-Flash API 调用目前按 `0 Credits` 结算，不收取输入、缓存写入、缓存读取或输出 Token 费用。
+* **Chat：** GLM-5.3-Flash 在 B.AI Chat 上架后免费开放，具体开放时间以模型实际上架为准；开放后，Chat 使用按 `0 Credits` 结算。
+
+活动结束后，GLM-5.3-Flash 将恢复[模型详情](./models/glm-5-3-flash.md)中展示的价格。
+</ActivityCard>
+
+<ActivityCard
+  variant="free"
+  title="Qwen3.8-Flash"
+  status="免费活动"
+  detail="API 已免费 · Chat 上架后免费"
+>
+B.AI API 和 Chat 分阶段开放免费使用：
+
+* **API：** Qwen3.8-Flash API 调用目前按 `0 Credits` 结算，不收取输入、缓存写入、缓存读取或输出 Token 费用。
+* **Chat：** Qwen3.8-Flash 在 B.AI Chat 上架后免费开放，具体免费开放日期以模型实际上架为准；开放后，Chat 使用按 `0 Credits` 结算。
+
+活动结束后，Qwen3.8-Flash 将恢复[模型详情](./models/qwen3-8-flash.md)中展示的价格。
+</ActivityCard>
+
+<ActivityCard
   variant="discount"
   title="GLM-5.2"
   status="限时折扣"

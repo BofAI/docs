@@ -70,6 +70,34 @@ After the offer ends, MiMo-V2.5 will return to standard pricing. See the [model 
 </ActivityCard>
 
 <ActivityCard
+  variant="free"
+  title="GLM-5.3-Flash"
+  status="Free Offer"
+  detail="API Free · Chat on Launch"
+>
+This offer covers B.AI API and Chat:
+
+* **API:** GLM-5.3-Flash API usage is currently billed at `0 Credits`. No input, cache write, cache read, or output token fees apply.
+* **Chat:** Free access begins when GLM-5.3-Flash becomes available in B.AI Chat. The availability time is subject to the actual model listing. Once available, Chat usage is billed at `0 Credits`.
+
+After the offer ends, GLM-5.3-Flash will return to the prices shown in the [model details](./models/glm-5-3-flash.md).
+</ActivityCard>
+
+<ActivityCard
+  variant="free"
+  title="Qwen3.8-Flash"
+  status="Free Offer"
+  detail="API Free · Chat on Launch"
+>
+Free access is available in phases across B.AI API and Chat:
+
+* **API:** Qwen3.8-Flash API usage is currently billed at `0 Credits`. No input, cache write, cache read, or output token fees apply.
+* **Chat:** Free access begins when Qwen3.8-Flash becomes available in B.AI Chat. The availability date is subject to the actual model listing. Once available, Chat usage is billed at `0 Credits`.
+
+After the offer ends, Qwen3.8-Flash will return to the prices shown in the [model details](./models/qwen3-8-flash.md).
+</ActivityCard>
+
+<ActivityCard
   variant="discount"
   title="GLM-5.2"
   status="Limited-Time Discount"
