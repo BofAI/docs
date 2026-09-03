@@ -173,6 +173,7 @@ const sidebars = {
               items: [
                 { type: 'doc', id: 'llmservice/models/claude-opus-5', label: 'Claude Opus 5' },
                 { type: 'doc', id: 'llmservice/models/claude-sonnet-5', label: 'Claude Sonnet 5' },
+                { type: 'doc', id: 'llmservice/models/claude-fable-5-1', label: 'Claude Fable 5.1' },
                 { type: 'doc', id: 'llmservice/models/claude-fable-5', label: 'Claude Fable 5' },
                 { type: 'doc', id: 'llmservice/models/claude-opus-4-8', label: 'Claude Opus 4.8' },
                 { type: 'doc', id: 'llmservice/models/claude-opus-4-7', label: 'Claude Opus 4.7' },
@@ -188,6 +189,7 @@ const sidebars = {
               label: 'Google (Gemini)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gemini-3-8-flash', label: 'Gemini 3.8 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-6-flash', label: 'Gemini 3.6 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-5-flash', label: 'Gemini 3.5 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-5-flash-lite', label: 'Gemini 3.5 Flash-Lite' },
@@ -197,11 +199,20 @@ const sidebars = {
             },
             {
               type: 'category',
+              label: 'Meta (Muse)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/models/muse-spark-1-3', label: 'Muse Spark 1.3' },
+              ],
+            },
+            {
+              type: 'category',
               label: 'DeepSeek',
               collapsed: true,
               items: [
                 { type: 'doc', id: 'llmservice/models/deepseek-v4-pro', label: 'DeepSeek V4 Pro' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v4-flash', label: 'DeepSeek-V4-Flash' },
+                { type: 'doc', id: 'llmservice/models/deepseek-v4-flash-vision-exp', label: 'DeepSeek-V4-Flash-Vision-Exp' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v3.2', label: 'DeepSeek V3.2' },
               ],
             },
@@ -210,6 +221,7 @@ const sidebars = {
               label: 'Tencent Hunyuan (Hy)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/hy4-preview', label: 'Hy4 Preview' },
                 { type: 'doc', id: 'llmservice/models/hy3', label: 'Hy3' },
               ],
             },

@@ -138,7 +138,9 @@ Responses API 与 Chat Completions 的请求结构不同：
 
 ### 模型与端点兼容性
 
-Responses 端点接受已启用该协议的模型。模型与端点不兼容时，服务器返回 HTTP `400` 及对应错误信息。
+Responses 端点支持 B.AI 提供的 GPT 与 DeepSeek 模型系列。可以通过 `GET /v1/models` 获取当前 API 凭证可用的模型 ID。不同模型支持的参数和工具可能不同；模型与端点不兼容时，服务器返回 HTTP `400` 及对应错误信息。
+
+DeepSeek 模型不支持联网搜索。通过 Responses API 调用 DeepSeek 模型时，请勿在请求中传入联网搜索工具；在 Codex 中使用 DeepSeek 模型时，需要将 Codex 顶层配置设置为 `web_search = "disabled"`。
 
 ### 请求体
 
@@ -669,7 +671,7 @@ curl https://api.b.ai/v1/messages \
 
 ## Codex CLI 接入
 
-B.AI Responses API 可以作为 Codex 的自定义模型提供商使用。以下配置适用于支持自定义模型提供商的 Codex 版本。
+B.AI Responses API 可以作为 Codex 的自定义模型提供商，并支持相应的 GPT 与 DeepSeek 模型系列。以下配置适用于支持自定义模型提供商的 Codex 版本。
 
 ### 1. 设置 API Key
 
@@ -699,6 +701,20 @@ wire_api = "responses"
 requires_openai_auth = false
 ```
 
+:::caution 使用 DeepSeek 前必须关闭 Codex 联网搜索
+Codex 默认可能启用内置联网搜索工具，但 DeepSeek 模型不支持该工具。如果没有关闭，请求可能返回“不支持 Web Search 工具”的错误。
+
+打开 `~/.codex/config.toml`，增加顶层配置 `web_search = "disabled"`：
+
+```toml
+model = "your-model-id"
+model_provider = "bai"
+web_search = "disabled"
+```
+
+请将 `web_search` 放在 `[model_providers.bai]` 配置块上方和配置块之外。保存文件后，完全退出并重新启动 Codex。该设置是使用 DeepSeek 时的必要配置；切换到需要联网搜索的模型配置时，应删除或调整此项。
+:::
+
 如果该文件已有内容，把 `[model_providers.bai]` 整块追加进去，并将顶层的 `model` 与 `model_provider` 改成上面的取值。各配置项的完整说明见文末的 Codex 文档。
 
 保存后，在已经设置 `BAI_API_KEY` 的终端中启动 Codex：
@@ -722,6 +738,7 @@ model = "your-model-id"
 | 返回 `401` | 检查 API Key 是否有效，以及是否误用了其他环境的 Key。 |
 | 返回 `403` | 检查账户状态与模型权限。 |
 | 返回模型不支持 | 确认模型 ID 拼写正确，并已为所配置的端点启用。 |
+| DeepSeek 请求提示不支持联网搜索工具 | 确认顶层配置包含 `web_search = "disabled"`，然后重启 Codex。 |
 
 ---
 
@@ -788,6 +805,7 @@ model = "your-model-id"
 | 场景 | 状态码 | 处理方式 |
 |---|---:|---|
 | 模型与端点不兼容 | `400` | 选择已为该端点启用的模型，或改用其他端点。 |
+| DeepSeek 请求包含联网搜索工具 | `400` | 移除联网搜索工具；在 Codex 中使用时，将顶层配置设为 `web_search = "disabled"`。 |
 | 使用 `max_tokens` 或 `max_completion_tokens` | `400` | 改用 `max_output_tokens`。 |
 | `max_output_tokens` 超出模型允许范围 | `400` | 按错误信息给出的范围调整取值。 |
 | 请求使用了不可用的工具 | `400` | 移除该工具，或选择兼容的模型配置。 |
