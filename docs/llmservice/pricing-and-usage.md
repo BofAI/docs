@@ -34,6 +34,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Qwen3.8-Max       |                  2.00 |                        2.00 |                       0.25 |                   6.00 |                        - |
 | Qwen3.7-Max       |                  1.65 |                        1.65 |                       0.33 |                  4.951 |                        - |
 | Qwen3.6-27B       |                  0.19 |                        0.19 |                      0.019 |                   2.99 |                        - |
+| Hy4 Preview       |                 0.834 |                       0.834 |                      0.042 |                  2.501 |                        - |
 | Hy3               |                 0.132 |                       0.132 |                      0.033 |                  0.528 |                        - |
 | MiMo-V2.5-Pro     |                 0.435 |                       0.435 |                     0.0036 |                   0.87 |                        - |
 | MiMo-V2.5         |                  0.14 |                        0.14 |                     0.0028 |                   0.28 |                        - |
@@ -60,6 +61,7 @@ The table below lists standard reference prices only. For current limited-time o
 | GPT-5.4 Nano      |                  0.20 |                        0.20 |                       0.02 |                   1.25 |                   10,000 |
 | GPT-5 Nano        |                  0.05 |                        0.05 |                      0.005 |                   0.40 |                        - |
 | Claude Opus 5     |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
+| Claude Fable 5.1  |                 10.00 |                       12.50 |                       0.25 |                  50.00 |                        - |
 | Claude Fable 5    |                 10.00 |                       12.50 |                       1.00 |                  50.00 |                   10,000 |
 | Claude Opus 4.8   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
 | Claude Opus 4.7   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
@@ -69,6 +71,8 @@ The table below lists standard reference prices only. For current limited-time o
 | Claude Sonnet 4.6 |                  3.00 |                        3.75 |                       0.30 |                  15.00 |                   10,000 |
 | Claude Sonnet 4.5 |                  3.00 |                        3.75 |                       0.30 |                  15.00 |                   10,000 |
 | Claude Haiku 4.5  |                  1.00 |                        1.25 |                       0.10 |                   5.00 |                   10,000 |
+| Muse Spark 1.3    |                  1.25 |                        1.25 |                       0.15 |                   4.25 |                        - |
+| Gemini 3.8 Flash  |                  0.75 |                        0.75 |                      0.075 |                   3.75 |                   14,000 |
 | Gemini 3.6 Flash  |                  1.50 |                        1.50 |                       0.15 |                   7.50 |                   14,000 |
 | Gemini 3.5 Flash  |                  1.50 |                        1.50 |                       0.15 |                   9.00 |                   14,000 |
 | Gemini 3.5 Flash-Lite |               0.30 |                        0.30 |                       0.03 |                   2.50 |                   14,000 |
@@ -76,7 +80,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 :::caution Main table scope
-The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro, DeepSeek-V4-Flash, and DeepSeek-V4-Flash-Vision-Exp use time-based pricing, so their rows list both **Idle** and **Busy** rates. Under DeepSeek's updated rule, from 00:00 UTC+8 on August 23, 2026, Saturdays and Sundays are billed at Idle rates all day; the applicable weekday period and final billing are subject to the platform display. DeepSeek-V4-Flash is currently free on B.AI Chat and API, while DeepSeek-V4-Flash-Vision-Exp is currently free for B.AI API use; both rows show standard reference prices. MiMo-V2.5 API usage is currently free, and its B.AI Chat free-access date is August 25, 2026; the exact availability time is subject to actual activation. Its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
+The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro, DeepSeek-V4-Flash, and DeepSeek-V4-Flash-Vision-Exp use time-based pricing, so their rows list both **Idle** and **Busy** rates. DeepSeek API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek models used in B.AI Chat are billed at Idle rates. From 17:00 on September 3, 2026 (UTC+8), eligible API usage for DeepSeek-V4-Flash and DeepSeek-V4-Flash-Vision-Exp is billed at 50% of the standard price for the applicable period; both rows continue to show standard reference prices. MiMo-V2.5 API usage is currently free, and its B.AI Chat free-access date is August 25, 2026; the exact availability time is subject to actual activation. Its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
 :::
 
 :::info Pricing note

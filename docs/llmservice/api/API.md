@@ -138,7 +138,9 @@ The request structure of the Responses API differs from Chat Completions:
 
 ### Model and Endpoint Compatibility
 
-The Responses endpoint accepts models enabled for this protocol. If the model and endpoint are incompatible, the server returns HTTP `400` with error details.
+The Responses endpoint supports GPT and DeepSeek model families available through B.AI. Use `GET /v1/models` to retrieve the model IDs available to the current API credential. Supported parameters and tools vary by model; if the model and endpoint are incompatible, the server returns HTTP `400` with error details.
+
+DeepSeek models do not support web search. When calling a DeepSeek model through the Responses API, do not include a web search tool in the request. When using a DeepSeek model in Codex, set the top-level Codex option `web_search = "disabled"`.
 
 ### Request Body
 
@@ -669,7 +671,7 @@ When `stream: true`, common events include:
 
 ## Codex CLI Integration
 
-The B.AI Responses API can be used as a custom model provider for Codex. The following configuration applies to Codex versions that support custom model providers.
+The B.AI Responses API can be used as a custom model provider for Codex with supported GPT and DeepSeek model families. The following configuration applies to Codex versions that support custom model providers.
 
 ### 1. Set the API Key
 
@@ -699,6 +701,20 @@ wire_api = "responses"
 requires_openai_auth = false
 ```
 
+:::caution Disable Codex web search before using DeepSeek
+Codex may expose its built-in web search tool by default, but DeepSeek models do not support that tool. Without this setting, the request may return an unsupported Web Search tool error.
+
+Open `~/.codex/config.toml` and add `web_search = "disabled"` as a top-level option:
+
+```toml
+model = "your-model-id"
+model_provider = "bai"
+web_search = "disabled"
+```
+
+Keep `web_search` above and outside the `[model_providers.bai]` block. Save the file, fully quit Codex, and restart it. This setting is required when using DeepSeek; remove or change it when switching to a model configuration that uses web search.
+:::
+
 If the file already contains configuration, append the complete `[model_providers.bai]` block and change the top-level `model` and `model_provider` values as shown above. See the Codex documentation at the end of this page for a full explanation of the configuration fields.
 
 After saving, start Codex from a terminal where `BAI_API_KEY` is set:
@@ -722,6 +738,7 @@ model = "your-model-id"
 | `401` response | Check whether the API Key is valid and whether a Key from another environment was used accidentally. |
 | `403` response | Check the account status and model permissions. |
 | Model not supported | Confirm that the model ID is spelled correctly and is enabled for the configured endpoint. |
+| DeepSeek request reports an unsupported web search tool | Confirm that the top-level configuration contains `web_search = "disabled"`, then restart Codex. |
 
 ---
 
@@ -788,6 +805,7 @@ Error responses include an HTTP status code and an `error` object. Applications 
 | Scenario | Status code | Handling |
 |---|---:|---|
 | Model and endpoint are incompatible | `400` | Select a model enabled for the endpoint or use another endpoint. |
+| A DeepSeek request includes web search | `400` | Remove the web search tool. In Codex, set the top-level option `web_search = "disabled"`. |
 | `max_tokens` or `max_completion_tokens` is used | `400` | Use `max_output_tokens` instead. |
 | `max_output_tokens` exceeds the model limit | `400` | Adjust the value to the range stated in the error. |
 | Request uses an unavailable tool | `400` | Remove the tool or choose a compatible model configuration. |

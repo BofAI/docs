@@ -7,17 +7,16 @@ import ActivityCard from '@site/src/components/ActivityCard';
 DeepSeek-V4-Flash 是 DeepSeek 于 2026 年 4 月 24 日与 V4-Pro 同步发布的高效率开源大语言模型，采用 MIT License。该模型总参数量为 284B，但每次前向仅激活 13B 参数，以仅为 V4-Pro 约 1/3.1 的成本提供接近旗舰模型的性能，是当前极具性价比的模型之一。
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="DeepSeek-V4-Flash"
-  status="免费活动"
-  detail="0 Credits"
+  status="API 限时折扣"
+  detail="标准价 5 折"
 >
-活动开始时间：2026 年 8 月 17 日，适用于 B.AI Chat 和 API 中的 DeepSeek-V4-Flash。
+DeepSeek-V4-Flash 5 折活动于 2026 年 9 月 3 日 17:00（UTC+8）正式生效。
 
-* **Chat：** 活动期间使用按 `0 Credits` 结算。
-* **API：** 活动期间使用按 `0 Credits` 结算，不收取单次请求、输入、缓存写入、缓存读取或输出的费用。
+自生效时间起，符合条件的 DeepSeek-V4-Flash API 使用按对应闲时或忙时标准价的 50% 结算。活动价格随 DeepSeek 闲时与忙时计费时段同步变化，各时段均保持 5 折。
 
-活动结束后，模型将恢复标准价格。活动结束时间、适用规则、实际结算结果及最终账单以平台页面展示为准。
+下方价格表继续展示标准参考价，实际结算价格及最终账单以平台页面展示为准。
 </ActivityCard>
 
 ## 核心特性
@@ -60,5 +59,5 @@ DeepSeek-V4-Flash 是 DeepSeek 于 2026 年 4 月 24 日与 V4-Pro 同步发布�
 | **忙时** | `0.44` | `0.44` | `0.0147` | `1.32` | `-` | 缓存写入：输入价的 `1x`；缓存读取：输入价的 `0.0333x` |
 
 :::info 价格说明
-本表展示 DeepSeek-V4-Flash 的分时标准参考价。根据 DeepSeek 官方最新规则，自 2026 年 8 月 23 日 00:00（UTC+8）起，周六、周日全天按闲时价格计费。当前限时活动期间，B.AI Chat 和 API 的所有使用均按 `0 Credits` 结算。活动结束后，工作日具体适用闲时或忙时时段、实际结算价格及最终账单以平台页面展示为准。B.AI 可能会通过充值赠送及账户权益等方式，为用户提供更低的实际使用成本。
+本表展示 DeepSeek-V4-Flash 的分时标准参考价。API 调用按北京时间（UTC+8）实行分时计费：忙时为周一至周五 09:00-12:00 和 14:00-18:00；其余时间（包括周六、周日全天）为闲时。B.AI Chat 中的 DeepSeek-V4-Flash 按闲时价格计费。自 2026 年 9 月 3 日 17:00（UTC+8）起，符合条件的 API 使用按调用发生时对应闲时或忙时标准价的 50% 结算。实际结算价格及最终账单以平台页面展示为准。B.AI 可能会通过充值赠送及账户权益等方式，为用户提供更低的实际使用成本。
 :::
