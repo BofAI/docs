@@ -2,6 +2,10 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 # DeepSeek-V4-Flash
 
+:::info B.AI model routing
+B.AI will progressively route requests made using the `DeepSeek-V4-Flash`, `DeepSeek-V4-Flash-Vision-Exp`, and `DeepSeek-V4-Pro` model names to [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md). After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
+:::
+
 ## Overview
 
 DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly 3.1x lower cost, making it one of the most cost-effective models available.
@@ -55,9 +59,9 @@ The pricing table below continues to show standard reference prices. Actual sett
 
 | Billing Period | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **Idle** | `0.22` | `0.22` | `0.0073` | `0.66` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
-| **Busy** | `0.44` | `0.44` | `0.0147` | `1.32` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
+| **Idle** | `0.15` | `0.15` | `0.003` | `0.60` | `-` | Cache Write: `1x` input; Cache Read: `0.02x` input |
+| **Busy** | `0.30` | `0.30` | `0.006` | `1.20` | `-` | Cache Write: `1x` input; Cache Read: `0.02x` input |
 
 :::info Pricing note
-The table shows the time-based standard reference price for DeepSeek-V4-Flash. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek-V4-Flash usage in B.AI Chat is billed at Idle rates. From 17:00 on September 3, 2026 (UTC+8), eligible API usage is billed at 50% of the standard price for the applicable period. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
+The standard reference prices above take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8). The table shows the time-based standard reference price for DeepSeek-V4-Flash. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek-V4-Flash usage in B.AI Chat is billed at Idle rates. From 17:00 on September 3, 2026 (UTC+8), eligible API usage is billed at 50% of the standard price for the applicable period. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::

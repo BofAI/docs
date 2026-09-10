@@ -1,5 +1,9 @@
 # DeepSeek V4 Pro
 
+:::info B.AI model routing
+B.AI will progressively route requests made using the `DeepSeek-V4-Flash`, `DeepSeek-V4-Flash-Vision-Exp`, and `DeepSeek-V4-Pro` model names to [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md). After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
+:::
+
 ## Overview
 
 DeepSeek-V4-Pro is DeepSeek's flagship open-source large language model, released on April 24, 2026 under the MIT License. Built on a Mixture-of-Experts (MoE) architecture with 1.6 trillion total parameters and 49 billion active parameters, it supports a 1-million-token context window and delivers frontier-level performance in coding, mathematics, and reasoning at a fraction of the cost of comparable closed-source models.

@@ -38,16 +38,18 @@ The table below lists standard reference prices only. For current limited-time o
 | Hy3               |                 0.132 |                       0.132 |                      0.033 |                  0.528 |                        - |
 | MiMo-V2.5-Pro     |                 0.435 |                       0.435 |                     0.0036 |                   0.87 |                        - |
 | MiMo-V2.5         |                  0.14 |                        0.14 |                     0.0028 |                   0.28 |                        - |
-| GLM-5.3-Flash     |                 0.075 |                       0.075 |                      0.015 |                   0.25 |                        - |
+| GLM-5.3-Flash     |                  0.15 |                        0.15 |                       0.03 |                   0.50 |                        - |
 | GLM-5.3           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.2           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
 | GLM-5.1           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
+| DeepSeek-V4.1-Flash | Idle `0.15`<br/>Busy `0.30` | Idle `0.15`<br/>Busy `0.30` | Idle `0.003`<br/>Busy `0.006` | Idle `0.60`<br/>Busy `1.20` | - |
 | DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
-| DeepSeek-V4-Flash | Idle `0.22`<br/>Busy `0.44` | Idle `0.22`<br/>Busy `0.44` | Idle `0.0073`<br/>Busy `0.0147` | Idle `0.66`<br/>Busy `1.32` | - |
-| DeepSeek-V4-Flash-Vision-Exp | Idle `0.22`<br/>Busy `0.44` | Idle `0.22`<br/>Busy `0.44` | Idle `0.0073`<br/>Busy `0.0147` | Idle `0.66`<br/>Busy `1.32` | - |
+| DeepSeek-V4-Flash | Idle `0.15`<br/>Busy `0.30` | Idle `0.15`<br/>Busy `0.30` | Idle `0.003`<br/>Busy `0.006` | Idle `0.60`<br/>Busy `1.20` | - |
+| DeepSeek-V4-Flash-Vision-Exp | Idle `0.15`<br/>Busy `0.30` | Idle `0.15`<br/>Busy `0.30` | Idle `0.003`<br/>Busy `0.006` | Idle `0.60`<br/>Busy `1.20` | - |
 | DeepSeek V4 Pro   | Idle `0.66`<br/>Busy `1.32` | Idle `0.66`<br/>Busy `1.32` | Idle `0.022`<br/>Busy `0.044` | Idle `1.98`<br/>Busy `3.96` | - |
 | Grok 4.6          |                  2.00 |                        2.00 |                       0.50 |                   6.00 |                        - |
 | Grok 4.5          |                  2.00 |                        2.00 |                       0.30 |                   6.00 |                        - |
+| GPT-6 Astra       |                 10.00 |                       12.50 |                       1.00 |                  50.00 |                   10,000 |
 | GPT-5.6 Sol       |                  4.00 |                        5.00 |                       0.40 |                  20.00 |                   10,000 |
 | GPT-5.6 Terra     |                  2.00 |                        2.50 |                       0.20 |                  12.00 |                   10,000 |
 | GPT-5.6 Luna      |                  0.20 |                        0.25 |                       0.02 |                   1.20 |                   10,000 |
@@ -80,7 +82,7 @@ The table below lists standard reference prices only. For current limited-time o
 | Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
 
 :::caution Main table scope
-The main pricing table shows the currently effective standard reference price for each model. DeepSeek V4 Pro, DeepSeek-V4-Flash, and DeepSeek-V4-Flash-Vision-Exp use time-based pricing, so their rows list both **Idle** and **Busy** rates. DeepSeek API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek models used in B.AI Chat are billed at Idle rates. From 17:00 on September 3, 2026 (UTC+8), eligible API usage for DeepSeek-V4-Flash and DeepSeek-V4-Flash-Vision-Exp is billed at 50% of the standard price for the applicable period; both rows continue to show standard reference prices. MiMo-V2.5 API usage is currently free, and its B.AI Chat free-access date is August 25, 2026; the exact availability time is subject to actual activation. Its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
+The main pricing table shows standard reference prices for each model. The new standard reference prices shown for DeepSeek-V4-Flash and DeepSeek-V4-Flash-Vision-Exp take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8). The GLM-5.3-Flash standard reference prices shown above take effect at 00:00 on September 10, 2026 (UTC+8). This standard price update does not affect current promotions; promotional billing follows the applicable promotion rules. DeepSeek-V4.1-Flash, DeepSeek V4 Pro, DeepSeek-V4-Flash, and DeepSeek-V4-Flash-Vision-Exp use time-based pricing, so their rows list both **Idle** and **Busy** rates. DeepSeek API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek models used in B.AI Chat are billed at Idle rates. B.AI will progressively route requests made using the `DeepSeek-V4-Flash`, `DeepSeek-V4-Flash-Vision-Exp`, and `DeepSeek-V4-Pro` model names to DeepSeek-V4.1-Flash. After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price. From 17:00 on September 3, 2026 (UTC+8), eligible API usage for DeepSeek-V4-Flash and DeepSeek-V4-Flash-Vision-Exp is billed at 50% of the standard price for the applicable period; both rows continue to show standard reference prices. MiMo-V2.5 API usage is currently free, and its B.AI Chat free-access date is August 25, 2026; the exact availability time is subject to actual activation. Its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
 :::
 
 :::info Pricing note
@@ -124,7 +126,7 @@ Two subscription plans are currently available:
 - Designed for individual developers and frequent AI users
 - Approximately 50-500 messages per 12 hours
 - Full-series model access
-- Includes curated BAIclaw skills such as Justin Sun Perspective Skill, HTX/Binance, Web3, and more
+- Includes curated BAIclaw skills such as Justin Sun Perspective Skill, Binance, Web3, and more
 - A valid invite code is required for purchase
 
 #### Plan Max
@@ -134,7 +136,7 @@ Two subscription plans are currently available:
 - Approximately 500-5,000 messages per 12 hours
 - Higher subscription allowance and priority access to beta models
 - Dedicated support
-- Includes curated BAIclaw skills such as Justin Sun Perspective Skill, HTX/Binance, Web3, and more
+- Includes curated BAIclaw skills such as Justin Sun Perspective Skill, Binance, Web3, and more
 
 ### Subscription Usage & Charge Order
 
