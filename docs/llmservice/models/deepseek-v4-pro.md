@@ -1,5 +1,9 @@
 # DeepSeek V4 Pro
 
+:::info B.AI model routing
+B.AI will progressively route requests made using the `DeepSeek-V4-Flash`, `DeepSeek-V4-Flash-Vision-Exp`, and `DeepSeek-V4-Pro` model names to [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md). After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
+:::
+
 ## Overview
 
 DeepSeek-V4-Pro is DeepSeek's flagship open-source large language model, released on April 24, 2026 under the MIT License. Built on a Mixture-of-Experts (MoE) architecture with 1.6 trillion total parameters and 49 billion active parameters, it supports a 1-million-token context window and delivers frontier-level performance in coding, mathematics, and reasoning at a fraction of the cost of comparable closed-source models.
@@ -44,5 +48,5 @@ DeepSeek-V4-Pro is DeepSeek's flagship open-source large language model, release
 | **Busy** | `1.32` | `1.32` | `0.044` | `3.96` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
 
 :::info Pricing note
-DeepSeek V4 Pro uses time-based standard reference pricing. The applicable Idle or Busy period, final settlement price, and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
+DeepSeek V4 Pro uses time-based standard reference pricing. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek V4 Pro usage in B.AI Chat is billed at Idle rates. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::

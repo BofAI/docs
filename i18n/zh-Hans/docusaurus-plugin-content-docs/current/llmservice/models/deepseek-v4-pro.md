@@ -1,5 +1,9 @@
 # DeepSeek V4 Pro
 
+:::info B.AI 模型路由说明
+B.AI 将逐步把使用 `DeepSeek-V4-Flash`、`DeepSeek-V4-Flash-Vision-Exp` 和 `DeepSeek-V4-Pro` 模型名称发起的请求路由至 [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md)。路由生效后，相关请求将统一按照 DeepSeek-V4.1-Flash 的适用价格计费。
+:::
+
 ## 概述
 
 DeepSeek-V4-Pro 是 DeepSeek 于 2026 年 4 月 24 日基于 MIT License 发布的旗舰级开源大语言模型。该模型采用 Mixture-of-Experts（MoE）架构，总参数量达到 1.6T，单次前向激活参数约为 49B，支持 100 万 token 上下文窗口，并以远低于同类闭源模型的成本，提供接近前沿水平的编程、数学与推理能力。
@@ -44,5 +48,5 @@ DeepSeek-V4-Pro 是 DeepSeek 于 2026 年 4 月 24 日基于 MIT License 发布�
 | **忙时** | `1.32` | `1.32` | `0.044` | `3.96` | `-` | 缓存写入：输入价的 `1x`；缓存读取：输入价的 `0.0333x` |
 
 :::info 价格说明
-DeepSeek V4 Pro 采用分时标准参考价，具体适用闲时或忙时时段、实际结算价格及最终账单以平台页面展示为准。B.AI 可能会通过充值赠送及账户权益等方式，为用户提供更低的实际使用成本。
+DeepSeek V4 Pro 采用分时标准参考价。API 调用按北京时间（UTC+8）实行分时计费：忙时为周一至周五 09:00-12:00 和 14:00-18:00；其余时间（包括周六、周日全天）为闲时。B.AI Chat 中的 DeepSeek V4 Pro 按闲时价格计费。实际结算价格及最终账单以平台页面展示为准。B.AI 可能会通过充值赠送及账户权益等方式，为用户提供更低的实际使用成本。
 :::

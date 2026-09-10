@@ -2,22 +2,25 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 # DeepSeek-V4-Flash
 
+:::info B.AI model routing
+B.AI will progressively route requests made using the `DeepSeek-V4-Flash`, `DeepSeek-V4-Flash-Vision-Exp`, and `DeepSeek-V4-Pro` model names to [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md). After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
+:::
+
 ## Overview
 
-DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly one-third of the standard input and output price, making it one of the most cost-effective models available.
+DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly 3.1x lower cost, making it one of the most cost-effective models available.
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="DeepSeek-V4-Flash"
-  status="Free Offer"
-  detail="0 Credits"
+  status="Limited-Time API Discount"
+  detail="50% of Standard Price"
 >
-Offer starts August 17, 2026, and applies to DeepSeek-V4-Flash on B.AI Chat and API.
+The DeepSeek-V4-Flash 50% offer takes effect at 17:00 on September 3, 2026 (UTC+8).
 
-* **Chat:** Usage is billed at `0 Credits` during the offer.
-* **API:** Usage is billed at `0 Credits` during the offer. No per-request, input, cache write, cache read, or output token fees apply.
+From the effective time, eligible DeepSeek-V4-Flash API usage is billed at 50% of the standard price for the applicable period. The discounted price changes in step with DeepSeek's Idle and Busy pricing periods and remains at 50% in either period.
 
-After the offer ends, the model will return to standard pricing. Offer end time, eligibility, actual charges, and final billing are subject to the platform display.
+The pricing table below continues to show standard reference prices. Actual settlement and final billing are subject to the platform display.
 </ActivityCard>
 
 ## Key Features
@@ -56,9 +59,9 @@ After the offer ends, the model will return to standard pricing. Offer end time,
 
 | Billing Period | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
 | :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **Idle** | `0.22` | `0.22` | `0.0073` | `0.66` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
-| **Busy** | `0.44` | `0.44` | `0.0147` | `1.32` | `-` | Cache Write: `1x` input; Cache Read: `0.0333x` input |
+| **Idle** | `0.15` | `0.15` | `0.003` | `0.60` | `-` | Cache Write: `1x` input; Cache Read: `0.02x` input |
+| **Busy** | `0.30` | `0.30` | `0.006` | `1.20` | `-` | Cache Write: `1x` input; Cache Read: `0.02x` input |
 
 :::info Pricing note
-The table shows the time-based standard reference price for DeepSeek-V4-Flash. Its current limited-time offer applies `0 Credits` to all B.AI Chat and API usage. After the offer ends, the applicable Idle or Busy period, final settlement price, and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
+The standard reference prices above take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8). The table shows the time-based standard reference price for DeepSeek-V4-Flash. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek-V4-Flash usage in B.AI Chat is billed at Idle rates. From 17:00 on September 3, 2026 (UTC+8), eligible API usage is billed at 50% of the standard price for the applicable period. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::

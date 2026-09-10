@@ -144,7 +144,7 @@ const sidebars = {
         { type: 'doc', id: 'llmservice/invitation-rewards', label: 'Invitation Rewards' },
         {
           type: 'category',
-          label: 'Models',
+          label: 'Language Models',
           collapsed: true,
           items: [
             {
@@ -152,6 +152,7 @@ const sidebars = {
               label: 'OpenAI (GPT)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gpt-6-astra', label: 'GPT-6 Astra' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-sol', label: 'GPT-5.6 Sol' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-terra', label: 'GPT-5.6 Terra' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-luna', label: 'GPT-5.6 Luna' },
@@ -173,6 +174,7 @@ const sidebars = {
               items: [
                 { type: 'doc', id: 'llmservice/models/claude-opus-5', label: 'Claude Opus 5' },
                 { type: 'doc', id: 'llmservice/models/claude-sonnet-5', label: 'Claude Sonnet 5' },
+                { type: 'doc', id: 'llmservice/models/claude-fable-5-1', label: 'Claude Fable 5.1' },
                 { type: 'doc', id: 'llmservice/models/claude-fable-5', label: 'Claude Fable 5' },
                 { type: 'doc', id: 'llmservice/models/claude-opus-4-8', label: 'Claude Opus 4.8' },
                 { type: 'doc', id: 'llmservice/models/claude-opus-4-7', label: 'Claude Opus 4.7' },
@@ -188,6 +190,7 @@ const sidebars = {
               label: 'Google (Gemini)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gemini-3-8-flash', label: 'Gemini 3.8 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-6-flash', label: 'Gemini 3.6 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-5-flash', label: 'Gemini 3.5 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-5-flash-lite', label: 'Gemini 3.5 Flash-Lite' },
@@ -197,11 +200,21 @@ const sidebars = {
             },
             {
               type: 'category',
+              label: 'Meta (Muse)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/models/muse-spark-1-3', label: 'Muse Spark 1.3' },
+              ],
+            },
+            {
+              type: 'category',
               label: 'DeepSeek',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/deepseek-v4-1-flash', label: 'DeepSeek-V4.1-Flash' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v4-pro', label: 'DeepSeek V4 Pro' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v4-flash', label: 'DeepSeek-V4-Flash' },
+                { type: 'doc', id: 'llmservice/models/deepseek-v4-flash-vision-exp', label: 'DeepSeek-V4-Flash-Vision-Exp' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v3.2', label: 'DeepSeek V3.2' },
               ],
             },
@@ -210,6 +223,7 @@ const sidebars = {
               label: 'Tencent Hunyuan (Hy)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/hy4-preview', label: 'Hy4 Preview' },
                 { type: 'doc', id: 'llmservice/models/hy3', label: 'Hy3' },
               ],
             },
@@ -236,6 +250,7 @@ const sidebars = {
               label: 'Z.AI (GLM)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/glm-5-3-flash', label: 'GLM-5.3-Flash' },
                 { type: 'doc', id: 'llmservice/models/glm-5-3', label: 'GLM-5.3' },
                 { type: 'doc', id: 'llmservice/models/glm-5-2', label: 'GLM-5.2' },
                 { type: 'doc', id: 'llmservice/models/glm-5-1', label: 'GLM-5.1' },
@@ -256,6 +271,7 @@ const sidebars = {
               label: 'Qwen',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/qwen3-8-flash', label: 'Qwen3.8-Flash' },
                 { type: 'doc', id: 'llmservice/models/qwen3.8-27b', label: 'Qwen3.8-27B' },
                 { type: 'doc', id: 'llmservice/models/qwen3.8-max', label: 'Qwen3.8-Max' },
                 { type: 'doc', id: 'llmservice/models/qwen3.7-max', label: 'Qwen3.7-Max' },
@@ -273,6 +289,34 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Image Generation Models',
+          collapsed: true,
+          items: [
+            { type: 'doc', id: 'llmservice/image-models/pricing', label: 'Image Model Pricing' },
+            {
+              type: 'category',
+              label: 'OpenAI (GPT Image)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/image-models/gpt-image-2', label: 'GPT-Image-2' },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'SpaceXAI (Grok Imagine)',
+              collapsed: true,
+              items: [
+                {
+                  type: 'doc',
+                  id: 'llmservice/image-models/grok-imagine-image-2-0',
+                  label: 'Grok Imagine Image 2.0',
+                },
+              ],
+            },
+          ],
+        },
         { type: 'doc', id: 'llmservice/memory', label: 'Memory' },
         {
           type: 'category',
@@ -286,12 +330,7 @@ const sidebars = {
           collapsed: true,
           items: ['llmservice/Claude-Code/claudecode-bankofai-api-configuration-guide'],
         },
-        {
-          type: 'category',
-          label: 'API',
-          collapsed: true,
-          items: ['llmservice/api/API'],
-        },
+        { type: 'doc', id: 'llmservice/api/API', label: 'API Reference' },
       ],
     },
     {
