@@ -152,6 +152,7 @@ const sidebars = {
               label: 'OpenAI (GPT)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gpt-6-astra', label: 'GPT-6 Astra' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-sol', label: 'GPT-5.6 Sol' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-terra', label: 'GPT-5.6 Terra' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-luna', label: 'GPT-5.6 Luna' },
@@ -210,6 +211,7 @@ const sidebars = {
               label: 'DeepSeek',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/deepseek-v4-1-flash', label: 'DeepSeek-V4.1-Flash' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v4-pro', label: 'DeepSeek V4 Pro' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v4-flash', label: 'DeepSeek-V4-Flash' },
                 { type: 'doc', id: 'llmservice/models/deepseek-v4-flash-vision-exp', label: 'DeepSeek-V4-Flash-Vision-Exp' },

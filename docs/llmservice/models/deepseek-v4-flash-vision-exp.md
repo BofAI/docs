@@ -2,6 +2,10 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 # DeepSeek-V4-Flash-Vision-Exp
 
+:::info B.AI model routing
+B.AI will progressively route requests made using the `DeepSeek-V4-Flash`, `DeepSeek-V4-Flash-Vision-Exp`, and `DeepSeek-V4-Pro` model names to [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md). After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
+:::
+
 <ActivityCard
   variant="discount"
   title="DeepSeek-V4-Flash-Vision-Exp"
@@ -59,8 +63,10 @@ DeepSeek-V4-Flash-Vision-Exp is DeepSeek's first experimental multimodal model i
 
 | Billing Period | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) |
 | :--- | ---: | ---: | ---: | ---: |
-| **Idle** | 0.22 | 0.22 | 0.0073 | 0.66 |
-| **Busy** | 0.44 | 0.44 | 0.0147 | 1.32 |
+| **Idle** | 0.15 | 0.15 | 0.003 | 0.60 |
+| **Busy** | 0.30 | 0.30 | 0.006 | 1.20 |
+
+The standard reference prices above take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8).
 
 API calls use UTC+8. Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods.
 

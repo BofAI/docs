@@ -2,6 +2,10 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 # DeepSeek-V4-Flash-Vision-Exp
 
+:::info B.AI 模型路由说明
+B.AI 将逐步把使用 `DeepSeek-V4-Flash`、`DeepSeek-V4-Flash-Vision-Exp` 和 `DeepSeek-V4-Pro` 模型名称发起的请求路由至 [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md)。路由生效后，相关请求将统一按照 DeepSeek-V4.1-Flash 的适用价格计费。
+:::
+
 <ActivityCard
   variant="discount"
   title="DeepSeek-V4-Flash-Vision-Exp"
@@ -59,8 +63,10 @@ DeepSeek-V4-Flash-Vision-Exp 是 DeepSeek-V4 系列的首款实验性多模态�
 
 | 计费时段 | 输入（Credits/Token） | 缓存写入（Credits/Token） | 缓存读取（Credits/Token） | 输出（Credits/Token） |
 | :--- | ---: | ---: | ---: | ---: |
-| **闲时** | 0.22 | 0.22 | 0.0073 | 0.66 |
-| **忙时** | 0.44 | 0.44 | 0.0147 | 1.32 |
+| **闲时** | 0.15 | 0.15 | 0.003 | 0.60 |
+| **忙时** | 0.30 | 0.30 | 0.006 | 1.20 |
+
+上述标准参考价自 2026 年 9 月 10 日 12:00（北京时间，UTC+8）起生效。
 
 API 调用按北京时间（UTC+8）实行分时计费：忙时为周一至周五 09:00-12:00 和 14:00-18:00；其余时间（包括周六、周日全天）为闲时。
 
