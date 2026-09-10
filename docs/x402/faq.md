@@ -68,12 +68,13 @@ Common pricing models include:
 
 #### What payment schemes does x402 support?
 
-x402 supports four payment schemes:
+x402 defines five named payment schemes. Four are available end to end; `auth-capture` currently ships client-side support only:
 
 - **`exact`**: Pay the exact advertised amount. EIP-3009 tokens (e.g. official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
 - **`upto`**: Usage-based billing — the client signs a Permit2 authorization for up to a **maximum**; the server settles only the **real usage** (≤ max). Ideal for **metered billing**, **LLM token usage**.
 - **`batch-settlement`**: Payment-channel for high-frequency micro-payments — deposit once, pay many requests with off-chain vouchers, settle in one batch tx. Includes a refund path.
 - **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. A relayer pays the on-chain energy via the GasFree API — no API keys required on the client side. The relayer deducts its own fee from the payment token, on top of the payment amount.
+- **`auth-capture`** (EVM client only): Supports refundable Base Commerce Payments authorization/capture flows. Server and facilitator implementations are not yet included in the published package.
 
 #### Can this SDK interoperate with the x402 Foundation (formerly Coinbase) v2 reference implementation?
 
@@ -96,7 +97,7 @@ x402 supports four payment schemes:
 | --------------------------- | ------------- | ----------- |
 | TRON Mainnet (`tron:0x2b6653dc`) | USDT (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:0xcd8690dc`)       | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **Testnet** (SDK/CLI only — the official facilitator does not settle Shasta; use Nile or self-host) |
 | TRON Mainnet (`tron:0x2b6653dc`) | USDD (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:0xcd8690dc`)       | USDD (TRC-20) | **Testnet** |
 | BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
@@ -114,9 +115,9 @@ Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` f
 #### What fees are involved?
 
 - **Network Fees**:
-  - TRON: TRX for Energy and Bandwidth (paid by the Facilitator)
-  - BSC: BNB for gas (paid by the Facilitator)
-  - Base: ETH for gas (paid by the Facilitator)
+  - TRON: TRX for Energy and Bandwidth (paid by the Facilitator). Since SDK 1.2.0, a Facilitator that enables `trc20ApprovalResourceSponsoring` can also cover the payer's first Permit2 `approve` by temporarily delegating its own staked Energy — and, when needed, Bandwidth — to the payer and reclaiming it after the approve is broadcast.
+  - BSC: BNB for gas (paid by the Facilitator). The payer's one-time ERC-20 `approve` can also be sponsored when the Facilitator has registered the approval gas-sponsoring extension — the official Facilitator registers it for BSC and Base; a self-hosted one must opt in. SDK clients attach the sponsoring payload only when the resource server declares the extension on the route.
+  - Base: ETH for gas (paid by the Facilitator). Sponsoring applies to Base's Permit2 paths; Base USDC under `exact` settles with EIP-3009 and needs no `approve` in the first place.
 - **Facilitator service fee**: none. The current schemes carry no fee field — `base_fee` config and the `/fee/quote` endpoint were removed in SDK 1.0.1. On TRON `exact_gasfree`, the GasFree relayer charges its own fee in the payment token; cap it with the client's GasFree fee limit.
 
 ---

@@ -15,7 +15,7 @@ Release notes for LLM Service.
 
 <div className="changelog-tags"><span className="changelog-tag">New Model</span></div>
 
-- **Kimi K3** is now available, with pricing documented. [Models](../llmservice/models/kimi-k3/)
+- **Kimi K3** is now available, with pricing documented. [Models](../../llmservice/models/kimi-k3/)
 
 </div>
 </div>

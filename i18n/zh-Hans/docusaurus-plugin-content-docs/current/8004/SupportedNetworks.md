@@ -9,9 +9,9 @@ SDK 当前支持以下网络及默认 RPC/节点端点：
 | :--- | :--- | :--- | :--- |
 | **EVM** | BSC 主网 | `eip155:56` (`chainId=56`) | `https://bsc-dataseed.binance.org` |
 | **EVM** | BSC 测试网 | `eip155:97` (`chainId=97`) | `https://data-seed-prebsc-1-s1.binance.org:8545` |
-| **TRON** | TRON 主网 | `tron:mainnet` | `https://api.trongrid.io` |
-| **TRON** | Nile 测试网 | `tron:nile` | `https://nile.trongrid.io` |
-| **TRON** | Shasta 测试网 | `tron:shasta` | `https://api.shasta.trongrid.io` |
+| **TRON** | TRON 主网 | `mainnet` | `https://api.trongrid.io` |
+| **TRON** | Nile 测试网 | `nile` | `https://nile.trongrid.io` |
+| **TRON** | Shasta 测试网 | `shasta` | `https://api.shasta.trongrid.io` |
 
 **说明：**
 

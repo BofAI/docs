@@ -45,22 +45,26 @@ x402-cli catalog show <fqn> --catalog https://x402-catalog.bankofai.io/api/catal
 x402-cli catalog endpoints <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
 ```
 
+:::caution 网关地址请从目录里取，不要自己拼
+网关地址里的是**网关 provider id**，并不是目录 FQN——`defillama` 对应的是 `defillama-tvl-tron`、`defillama-coins-price-tron` 与 `defillama-yields-tron`，而且每条链各有一个 id（`…-tron`、`…-bsc`、`…-base`）。两者之间没有替换规则；请直接复制 `catalog endpoints <fqn>` 输出里端点的 `url`，或对应的 `x402_routes[].url`。id 写错会返回 `404 {"error":"provider not found"}`。
+:::
+
 **免费端点**（服务方未定价的端点）用普通 `curl` 即可拿到结果——无需 CLI、也无需付费：
 
 ```bash
-curl -sS 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
+curl -sS 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>'
 ```
 
 对于**付费端点**，使用 `x402-cli pay`——它一步完成报价、付款和取回结果。简单的 GET 只需给出 URL：
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>'
 ```
 
 如果是付费 POST 端点，或想指定支付链、代币与方案，显式传入对应参数：
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>' \
   --method POST \
   --network tron:0x2b6653dc \
   --token USDT \
@@ -76,10 +80,10 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--network` | CAIP-2 支付链，如 `tron:0x2b6653dc`、`eip155:56`、`eip155:8453` |
 | `--token` | 结算代币，如 `USDT` 或 Base 主网 `USDC` |
 | `--scheme` | 路由声明的 x402 支付方案，如 `exact` |
-| `--max-amount` | 美元支出上限；报价超出即中止调用 |
+| `--max-amount` | 支出上限，单位是**代币数量**（按所选代币精度换算，不是美元金额）；报价超出即中止调用 |
 | `--header` / `--body` | 转发到上游的请求头与请求体 |
 
-跨多条链结算的服务会为每个网络提供一条路由（`x402Routes`）；按你想付款的链选择对应路由，以及匹配的 `--network` / `--scheme`。
+跨多条链结算的服务会为每个网络提供一条路由（服务端输出里字段名为 `x402_routes`，提交文件里写作 `x402Routes`）；按你想付款的链选择对应路由，以及匹配的 `--network` / `--scheme`。
 
 :::tip
 `--catalog` 既可以指向上面的线上地址，也可以指向你本地构建出来的 `dist/catalog.json`，方便离线调试。
@@ -91,8 +95,8 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 
 1. **Agent 发起调用** —— 请求目标端点。
 2. **网关报价** —— 返回价格（HTTP `402`）。
-3. **钱包付款** —— Agent 在链上完成支付。
-4. **验款并结算** —— 网关验款，款项结算至服务方钱包。
+3. **钱包授权** —— 客户端签署所选支付要求，并携带 `PAYMENT-SIGNATURE` 请求头重试。
+4. **验款并结算** —— 网关请求 facilitator 验证签名载荷，并在链上把款项结算至服务方钱包。
 5. **返回结果** —— 网关把上游结果返回给 Agent。
 
 上游凭证始终保留在网关侧，调用方 Agent 全程接触不到任何密钥。

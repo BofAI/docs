@@ -17,19 +17,17 @@ BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦�
 | 技能 | 能干什么 | 需要什么钥匙/密码？ |
 | :--- | :--- | :--- |
 | **agent-wallet** | 创建钱包、签名交易/消息、管理多个钱包——支持 EVM 和 TRON | `AGENT_WALLET_PASSWORD`（加密模式）或无需配置（交互模式） |
-| **sunswap** | 查价、报价、换币，管理 V2/V3/V4 流动性池 | 查询不需要；交易需要钱包凭证 |
-| **sunpump-agent-skill** | SunPump meme 币：一句话发币（服务端创建，无需钱包），查行情/排行/持有人/钱包持仓，买卖 meme 币（根据代币是否已发射自动选择兑换路线，仅 TRON 主网） | 只读查询与发币免配置；链上买卖需钱包凭证 |
-| **sunperp-skill** | 看行情、开仓、平仓、提现 | 看行情不需要；交易需要 SunPerp 密钥 |
-| **tronscan-skill** | 查账户、交易、代币、区块、全网数据 | 建议配置 TronScan API 密钥（不配可能卡顿） |
-| **trc20-toolkit-skill** | 转代币、查余额、管理授权，支持任意 TRC20 代币 | 查询不需要；转账/授权需要钱包凭证 |
-| **usdd-skill** | USDD 稳定币——PSM 1:1 USDT ↔ USDD 兑换、金库查询、余额查看 | 查询不需要；PSM 兑换需要钱包凭证 |
-| **trx-staking-skill** | 质押 TRX、投票给超级代表、领取投票奖励 | 需要钱包凭证 |
-| **multisig-permissions** | 多签权限配置、密钥管理、多方共签提案 | 需要钱包凭证（权限变更需要 Owner 密钥） |
+| **wallet-cli** | 通过锁定版 `@tron-walletcli/wallet-cli@4.13.0` 直接完成 TRON 钱包操作——转账、质押、投票、合约、签名、链上查询（机器可读 JSON） | wallet-cli 本地管理的钱包；Agent 执行时密码仅经 stdin 传入 |
+| **sunswap**<br/>安装后目录名 `sunswap-dex-trading` | 查价、报价、换币，管理 V2/V3/V4 流动性池 | 查询不需要；交易需要钱包凭证 |
+| **sunpump-agent-skill**<br/>安装后目录名 `sunpump-meme-token-toolkit` | SunPump meme 币：一句话发币（服务端创建，无需钱包），查行情/排行/持有人/钱包持仓，买卖 meme 币（根据代币是否已发射自动选择兑换路线，仅 TRON 主网） | 只读查询与发币免配置；链上买卖需钱包凭证 |
+| **sunperp-skill**<br/>安装后目录名 `sunperp-perpetual-futures-trading` | 看行情、开仓、平仓、提现 | 看行情不需要；交易需要 SunPerp 密钥；提现还需要 `TRON_PRIVATE_KEY` 用于签署确认 |
+| **tronscan-skill**<br/>安装后目录名 `tronscan-data-lookup` | 查账户、交易、代币、区块、全网数据 | 可选 TronScan API 密钥——不配时请求走无密钥的 BofAI 代理，可能被限流 |
+| **usdd-skill**<br/>安装后目录名 `usdd-just-protocol` | USDD 稳定币——PSM 1:1 USDT ↔ USDD 兑换、金库查询、余额查看 | 查询不需要；PSM 兑换需要钱包凭证 |
 | **x402-payment** | 链上"先付后用"自动结算，支持 TRON（TRC20）与 BSC（ERC20），含 GasFree | 通过 agent-wallet 提供钱包凭证 |
-| **recharge-skill** | 查余额、看订单、充值 | 需要 BANK OF AI 密钥 |
-| **twitter-digest** | 从你自己的 X/Twitter 账号生成每日日报——提及、主页时间线与可回复机会（仅 API） | X/Twitter API 凭据 |
-| **twitter-mcp** | 安装/授权 `xurl` CLI 并用它生成 X/Twitter 日报；可选注册托管的 X MCP 桥接 | X/Twitter OAuth（通过 `xurl`） |
+| **recharge-skill** | 查余额、看订单、充值 | 查余额与订单需要 BANK OF AI 密钥；充值需要钱包凭证——它由链上 x402 付款授权，而不是靠 API Key |
 | **bankofai-guide** | 引导辅助技能——安装后首次配置、首个 AgentWallet 创建、其它技能的钱包守门员 | 无需配置（需要时自动触发） |
+
+其中 5 个技能安装后的目录名与仓库目录名不同——**安装后的那个名字**才是你在 `~/.agents/skills` 里看到的名字，也是让助手读取技能文件时要引用的名字。
 
 ### 🔑 这些"钥匙"去哪领？怎么配？
 
@@ -46,7 +44,7 @@ BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦�
 
 **2. TronScan API 密钥（查数据的 VIP 通行证）**
 
-不填这个也能查数据，但查快了容易被系统拉黑限速。填了就能走 VIP 高速通道。
+不填这个也能查数据——请求会走无密钥的 BofAI 代理（`ts.bankofai.io`）——但查快了容易被限速。填了就能走 VIP 高速通道。
 
 - **去哪领（完全免费）：** 去 [TronScan 官网](https://tronscan.org/) 注册个账号，点击生成即可。
 - **怎么配：** 请参考[《快速开始》里的"想让 AI 帮你交易？"](./QuickStart.md#-想让-ai-帮你交易)，用同样的记事本大法把 `TRONSCAN_API_KEY` 贴进去就行。
@@ -56,7 +54,7 @@ BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦�
 - **去哪领：** 前往 [SunPerp 官网](https://sunperp.com/)，连接你的钱包后，在账户设置里生成 API Key 和 Secret。
 - **怎么配：** 同样使用记事本大法，把 `SUNPERP_ACCESS_KEY` 和 `SUNPERP_SECRET_KEY` 贴到系统配置文件里。
 
-**4. BANK OF AI 密钥（用来给账户充值或查余额）**
+**4. BANK OF AI 密钥（用来查余额与订单记录）**
 
 - **去哪领：** 前往 [chat.bankofai.io/key](https://chat.bankofai.io/key)，登录后即可获取。
 - **怎么配：** 使用记事本大法，贴入 `BANKOFAI_API_KEY`。
@@ -109,9 +107,41 @@ Agent Wallet 会用主密码加密你的私钥。即使别人拿到了你的文�
 
 ---
 
+## wallet-cli {#wallet-cli}
+
+一个独立的 TRON 钱包工具箱。它教你的 AI 通过锁定版 `@tron-walletcli/wallet-cli@4.13.0` npm 包完成 TRON 钱包操作：账户、质押与代理状态查询，TRX/代币转账、质押与资源代理、SR 投票与治理、合约调用、消息签名、交易状态跟踪。所有命令都走 CLI 的机器可读接口（`-o json`）——AI 先看退出码、再看结构化字段，从不靠猜文本。
+
+**绝对安全，只看不花钱：**
+
+> 用 wallet-cli 查一下我在 Nile 上的账户余额和质押状态。
+
+> 这笔交易上链了吗？用 wallet-cli 查下状态：`<你的-tx-id>`
+
+> 把 wallet-cli `tx send` 命令的参数 schema 列给我看（`--json-schema`）。
+
+**需要你确认才会执行：**
+
+> 用 wallet-cli 在主网给 T... 转 10 TRX。
+
+> 帮我质押 100 TRX 换能量——主网操作会先给你预览、等你明确确认。
+
+:::tip 与 agent-wallet 的分工
+`agent-wallet` 是给其他技能（sunswap、x402-payment 等）用的签名引擎；`wallet-cli` 则是面向 TRON 的独立钱包工具箱，直接完成转账、质押、治理等操作。换币或流动性请用 `sunswap`，不要用 wallet-cli。
+:::
+
+:::caution 密码与钱包管理的硬性边界
+Agent 执行时，钱包密码只能通过 `--password-stdin` 从受信来源传入——AI 不会把密码放进命令行参数、环境变量或对话里，也永远不会让你在聊天中粘贴密码、助记词或私钥。`import` / `backup` / `delete` / `change-password` 这几类根钱包管理命令**按技能策略仅限你本人执行**：即使你给出确认，AI 也不会代跑。这是技能层面的拒绝，而非 CLI 的强制锁——CLI 自身只对 `import` 与 `change-password` 强制要求 TTY，`backup` 甚至公开提供了 `--password-stdin` 的用法。主网上任何动钱的操作都会先预览、再等你明确确认。
+:::
+
+注意：wallet-cli 的规范网络标识是十进制 CAIP-2 ID——`tron:728126428`（主网）、`tron:3448148188`（Nile）、`tron:2494104990`（Shasta）；`tron:mainnet` / `tron:nile` / `tron:shasta` 仅作为输入别名被接受。这与 x402 系列工具要求的十六进制标识符（`tron:0x…`）是两套约定。
+
+自 Skills 2.0.0 起，已下线的 `trc20-toolkit-skill`、`trx-staking-skill`、`multisig-permissions` 三个技能覆盖的通用 TRON 操作——TRC20/TRC10 转账与代币查询、质押与 SR 投票、账户权限管理（`permission show|update`）——均由本技能承接。
+
+---
+
 ## sunswap {#sunswap}
 
-想在 SunSwap 上换币、查行情、管理流动性？对 AI 说下面的话就行。本技能基于 `@bankofai/sun-cli`，同时支持换币、V2 AMM、V3 集中流动性以及带 hooks 的 V4 池子。
+想在 SunSwap 上换币、查行情、管理流动性？对 AI 说下面的话就行。本技能基于 `@sun-protocol/sun-cli`（固定 1.2.2 版），同时支持换币、V2 AMM、V3 集中流动性以及带 hooks 的 V4 池子。
 
 **绝对安全，只看不花钱：**
 
@@ -141,7 +171,7 @@ Agent Wallet 会用主密码加密你的私钥。即使别人拿到了你的文�
 
 > 想挖矿？ "SunSwap 上哪个 V3 池子年化收益最高？帮我分析一下。"
 
-> 想抄底？ "TRX 的价格现在处于什么位置？帮我查一下最近 7 天的走势。"
+> 想抄底？ "TRX 现在什么价？再帮我看看这个池子最近 7 天的成交量变化。"
 
 :::tip V3 费率档位与 tick 对齐
 V3 仅支持 `100`、`500`、`3000`、`10000` 四档费率（对应 0.01% / 0.05% / 0.3% / 1%）。`--tick-lower` 与 `--tick-upper` 必须是对应费率的 tick 间距（1 / 10 / 60 / 200）的整数倍。AI 会在铸造前帮你校验，未对齐的 tick 会在链上直接失败。
@@ -151,7 +181,7 @@ V3 仅支持 `100`、`500`、`3000`、`10000` 四档费率（对应 0.01% / 0.05
 
 ## sunpump-agent-skill {#sunpump-agent-skill}
 
-想玩 SunPump 上的 meme 币？这个技能基于 `@bankofai/sun-cli`（≥ 1.2.1），帮你发币、查行情、做研究、买卖 meme 币。发币（`sun sunpump launch`）在**服务端完成、无需钱包**：给出名称、符号、描述和 logo，由平台签名并广播创建交易。交易时它会**自动判断交易路径**：还没在 SunSwap V2 上创建交易对的「发射前」代币走 `sun sunpump buy/sell`，已在 SunSwap V2 建好交易对的「发射后」代币走普通 `sun swap`——下单前 AI 会先用 `sunpump state` 帮你确认走哪条路。**sunpump-agent-skill 的所有功能（查询和交易）都只支持 TRON 主网，不支持测试网。**
+想玩 SunPump 上的 meme 币？这个技能基于 `@sun-protocol/sun-cli`（固定 1.2.2 版），帮你发币、查行情、做研究、买卖 meme 币。发币（`sun sunpump launch`）在**服务端完成、无需钱包**：给出名称、符号、描述和 logo，由平台签名并广播创建交易。交易时它会**自动判断交易路径**：还没在 SunSwap V2 上创建交易对的「发射前」代币走 `sun sunpump buy/sell`，已在 SunSwap V2 建好交易对的「发射后」代币走普通 `sun swap`——下单前 AI 会先用 `sunpump state` 帮你确认走哪条路。**sunpump-agent-skill 的所有功能（查询和交易）都只支持 TRON 主网，不支持测试网。**
 
 **绝对安全，只看不花钱：**
 
@@ -186,7 +216,7 @@ SunPump 代币有两种状态：**发射前**（还没在 SunSwap V2 上创建�
 :::
 
 :::caution meme 币风险高
-meme 币波动剧烈、容易被庄家控盘。AI 在给你看代币信息时会顺带提示持有人集中度——如果前几名地址合计持仓过高（如前 5 名 >40%），会明确警告你有 rug pull 风险。默认滑点 5%（meme 币跳得快），买卖前请务必看清报价再确认。
+meme 币波动剧烈、容易被庄家控盘。AI 在给你看代币信息时会顺带提示持有人集中度——如果前几名地址合计持仓过高（如前 5 名 >40%），会明确警告你有 rug pull 风险。绑定曲线路径（`sunpump buy` / `sell`）默认滑点 5%；代币发射后改走 `sun swap`，默认滑点是 0.5%，买卖前请务必看清报价再确认。
 :::
 
 :::tip 关于发币（launch）
@@ -249,51 +279,6 @@ meme 币波动剧烈、容易被庄家控盘。AI 在给你看代币信息时会
 
 ---
 
-## trc20-toolkit-skill {#trc20-toolkit-skill}
-
-想查余额、转代币、管理授权？这个技能帮你搞定任意 TRC20 代币的常见操作——支持用代币符号直接操作常见代币（USDT、USDD、SUN、JST、BTT、WIN 等），也能通过合约地址操作任何 TRC20 代币。
-
-**绝对安全，只看不花钱：**
-
-> 帮我查一下我的 USDT 余额。
-
-> 帮我批量查一下 USDT、USDD 和 SUN 的余额。
-
-> 查一下 USDT 的代币信息（名称、符号、精度、总量）。
-
-> 帮我查看地址 TSpender... 当前的 USDT 授权额度。
-
-**需要你确认才会执行（AI 会先把账单给你看）：**
-
-> 在 Nile 测试网上转 10 USDT 到 TRecipientAddress。
-
-> 给地址 TSpenderAddress 授权 100 USDT。
-
-**进阶功能：**
-
-> 一次查所有持仓："帮我查一下 USDT、USDD、SUN、JST 和 BTT 的余额。"（使用批量模式——某个代币查不到不影响其他的）
-
-> 转账前先验证："帮我 dry-run 一笔 50 USDT 转到 TXX... 的操作。"（只验证不广播，确认无误再正式发送）
-
-> 查代币元数据："代币 TXX... 的名称、符号、精度和总量是多少？"
-
-**内置安全机制：**
-
-- 自动拒绝转给自己（防误操作）
-- 禁止无限额授权（MAX_UINT256）——只允许精确额度，防止恶意合约吸干余额
-- 收款方和授权方地址都会验证是否为合法 TRON 地址
-- 金额必须大于 0，即使在 dry-run 模式下也一样
-
-**实战场景：**
-
-> 快速盘点持仓？ "帮我查一下 USDT、USDD、SUN、JST 和 BTT 的余额。"
-
-> 给朋友转账？ "帮我转 50 USDT 到 TXX..."
-
-> 为 DeFi 操作做准备？ "帮我给 SunSwap 路由合约授权 200 USDT，然后查一下授权额度。"
-
----
-
 ## usdd-skill {#usdd-skill}
 
 想玩转 TRON 生态的超额抵押稳定币 **USDD**？这个技能基于 JUST Protocol，支持通过 PSM（Peg Stability Module）进行 1:1 USDT ↔ USDD 兑换，查询金库（CDP）仓位和协议参数，查看 USDD/USDT/USDC/TRX/JST 余额。
@@ -332,97 +317,9 @@ PSM 支持 **USDT ↔ USDD 即时 1:1 兑换**——是获取 USDD 最简单的�
 
 ---
 
-## trx-staking-skill {#trx-staking-skill}
-
-想通过参与 TRON 治理赚取收益？这个技能帮你质押 TRX 换取 **TRON Power（TP）**、投票给超级代表（SR），以及领取投票奖励。TRON 采用 DPoS（委托权益证明）——得票前 27 名的超级代表负责出块，并按得票比例每 6 小时分配一次奖励给投票人。
-
-**绝对安全，只看不花钱：**
-
-> 帮我查看我的质押概况：TRON Power、冻结的 TRX、当前投票情况和待领取奖励。
-
-> 列出排名前 27 的活跃超级代表。
-
-> 列出排名前 50 的超级代表（包括合作伙伴节点）。
-
-> 查询地址 TXX... 的质押状态。
-
-**需要你确认才会执行：**
-
-> 把我的 TRON Power 全部投票给 SR 地址 TSRAddress。
-
-> 把我的票拆分：60% 给 TSR1，40% 给 TSR2。
-
-> 帮我领取待结算的投票奖励。
-
-**实战场景：**
-
-> 第一次投票？ "帮我列出前 10 名超级代表，然后 dry-run 一次投票 TSRAddress 再确认。"
-
-> 想分散投票？ "帮我把票 50/50 分给 TSR1 和 TSR2。"每次投票都会**完整替换**之前的投票——每次提交的都是新的全量投票清单。
-
-> 领取奖励？ "查一下我的待领取奖励，然后领取。"（奖励和解锁提取是两回事）
-
-:::tip 关键知识点
-- 1 个冻结的 TRX = 1 TRON Power（TP）
-- 投票奖励每 6 小时分配一次
-- 投票会**完全替换**之前的投票——每次都是新的全量清单
-- 兼容 Stake 2.0：读取 `frozenV2[]`，使用 `voteWitnessAccount`
-:::
-
-:::danger 14 天解锁期
-当 TRX 被解除质押后（通过配套的质押流程），会进入 **14 天冷冻期**——期间既不产生任何资源，也不贡献任何投票权。14 天后，你必须手动调用 `withdrawExpireUnfreeze` 才能把 TRX 取回——不会自动到账。同时，解除质押会移除对应的 TRON Power，导致依赖这部分票数的投票失效。
-:::
-
----
-
-## multisig-permissions {#multisig-permissions}
-
-想给你的 TRON 账户加上多重签名保护？这个技能帮你管理 TRON 原生的三级权限模型（Owner、Active、Witness）——配置密钥、设定签名阈值、限定操作范围，然后通过"发起提案 → 审批签名 → 执行"的流程完成多方共签。非常适合团队钱包，或者限制 AI 只能做 DeFi 操作。
-
-**绝对安全，只看不花钱：**
-
-> 帮我查一下我的账户当前的权限配置。
-
-> 查一下地址 TXk8r...xxxxx 的权限设置。
-
-> 帮我列出所有待处理的多签提案。
-
-**需要你确认才会执行：**
-
-> 用这三个密钥地址，给我的账户 owner 权限设置 2-of-3 多签。
-
-> 限制 active 权限，让 AI 只能调用智能合约（不能直接转账 TRX）。
-
-> 发起一笔 500 USDT 转到 TRecipient 的提案，等另一个签名人审批。
-
-**实战场景：**
-
-> 大额转账需要团队审批？ "设置 2-of-3 多签，然后发起一笔 10,000 TRX 转到 TVendor... 的提案，备注'Q1 预算'。"
-
-> 想给 AI 加上"安全围栏"？ "使用 agent-restricted 模板——让 AI 只能调用智能合约，但权限变更必须两个人类密钥共同签名。"
-
-> 审批待处理的提案？ "帮我查看所有待处理提案，然后共签提案 prop_xxx。"
-
-**关键细节：**
-
-- 提案默认 **24 小时后过期**——共签人必须在此时间窗口内审批
-- Active 权限可以限定操作类型范围：TransferContract、TriggerSmartContract、FreezeBalanceV2Contract、DelegateResourceContract、VoteWitnessContract 等
-- 支持**混合签名工作流**——人类审批密钥 + AI 签名密钥组合共签
-- 待处理提案存储在本地 `~/.clawdbot/multisig/pending/`，可以分享给其他签名人进行分布式签名
-
-:::tip 模板让设置变简单
-你不需要手动配置每一个密钥和阈值。内置模板如 `basic-2of3`（基础 2/3 多签）、`agent-restricted`（限制 AI 权限）、`team-tiered`（团队分级）、`weighted-authority`（加权投票）帮你搞定常见场景——只需要提供密钥地址就行。
-:::
-
-:::danger 锁定风险警告
-修改 Owner 权限是**不可逆的**——没有新密钥就无法恢复。技能会自动验证阈值以防止锁定，但在确认 Owner 权限变更前，请务必仔细核对密钥地址。
-:::
-
----
-
 ## x402-payment {#x402-payment}
 
-有些高级 API 和 AI 智能体是收费的——需要你先完成链上付费才能使用。这个技能通过 x402 协议帮你自动完成"先付费、再获取"的链上结算流程：AI 发现对方要收费，先预览费用，再帮你完成链上支付，拿到结果后汇报给你。每次付款前同样会先问你确认。支付统一走 `x402-cli` 命令行工具（要求 **1.0.1 及以上**）。技能会先检查你已装的版本，缺失时会告诉你如何安装（`npm install -g @bankofai/x402-cli@1.0.1`，技能锁定的版本；CLI 自身最新版为 1.0.2）——不再使用本地支付脚本。支持在 **TRON（TRC20：USDT、USDD）** 与 **BSC（ERC20：主网 USDT；测试网 USDT、USDC）** 上结算——付款各自在对应链上完成，不是跨链桥接。
+有些高级 API 和 AI 智能体是收费的——需要你先完成链上付费才能使用。这个技能通过 x402 协议帮你自动完成"先付费、再获取"的链上结算流程：AI 发现对方要收费，先预览费用，再帮你完成链上支付，拿到结果后汇报给你。每次付款前同样会先问你确认。支付统一走 `x402-cli` 命令行工具，本技能要求**版本必须正好是 1.0.1**。技能会先检查已安装版本；如果缺失或版本不同，会先询问你，再安装 `npm install -g @bankofai/x402-cli@1.0.1`——不再使用本地支付脚本。独立 CLI 自身最新版是 1.0.2，但它不是本技能锁定的版本。支持在 **TRON（TRC20：USDT、USDD）** 与 **BSC（ERC20：主网 USDT；测试网 USDT、USDC）** 上结算——付款各自在对应链上完成，不是跨链桥接。
 
 **绝对安全，只看不花钱：**
 
@@ -451,7 +348,7 @@ GasFree（`scheme=exact_gasfree`）让你在 TRON 上付款时不必持有 TRX �
 :::
 
 :::caution 钱包凭证来自 agent-wallet
-这个技能只通过 `agent-wallet` 加载签名凭证，**不会**从其他随意的配置文件里读取明文私钥，也不会接受你在对话里直接输入的私钥。加密本地模式请设置 `AGENT_WALLET_PASSWORD`，静态模式请设置 `AGENT_WALLET_PRIVATE_KEY` 或 `AGENT_WALLET_MNEMONIC`。需要 Node.js 20+。
+这个技能优先通过 `agent-wallet` 加载签名凭证，**不会**从其他随意的配置文件里读取明文私钥，也不会接受你在对话里直接输入的私钥。不过底层 CLI 仍会识别环境里已设置的 `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY`——这是留给开发与 CI 的出口。加密本地模式请设置 `AGENT_WALLET_PASSWORD`，静态模式请设置 `AGENT_WALLET_PRIVATE_KEY` 或 `AGENT_WALLET_MNEMONIC`。需要 Node.js 20+。
 :::
 
 ---
@@ -472,45 +369,13 @@ GasFree（`scheme=exact_gasfree`）让你在 TRON 上付款时不必持有 TRX �
 
 ---
 
-## twitter-digest {#twitter-digest}
-
-从你自己的 X/Twitter 账号生成简洁的每日日报。该技能**仅使用 API**——读取你的提及、主页时间线和可回复机会，生成每日社媒摘要。可用「生成X日报」「X日报」「推特日报」或「Twitter digest」等说法触发。
-
-**它能做什么：**
-
-> 生成我账号今天的 X/Twitter 日报。
-
-> 汇总我过去一天的提及和可回复机会。
-
-:::caution 需要 X/Twitter API 访问
-该技能通过 X/Twitter API 拉取数据，因此需要为你的账号配置有效的 API 凭据。
-:::
-
----
-
-## twitter-mcp {#twitter-mcp}
-
-安装并授权 `@xdevplatform/xurl`，然后直接用本地 `xurl` CLI（`whoami`、`timeline`、`mentions`、`posts`、`search` 等命令）生成 X/Twitter 每日日报。与 `twitter-digest` 不同，这里的数据源是本地 `xurl` CLI 而非 API 采集器。可按需将托管的 X MCP 桥接注册为 `xapi`。
-
-**它能做什么：**
-
-> 为我的 X/Twitter 账号安装并授权 xurl。
-
-> 用 xurl CLI 生成我的 X/Twitter 每日日报。
-
-:::tip xurl 与 twitter-digest 的区别
-需要由本地 `xurl` CLI 驱动的日报时使用 `twitter-mcp`；需要纯 API 的日报流程时使用 `twitter-digest`。
-:::
-
----
-
 ## bankofai-guide {#bankofai-guide}
 
 把整套技能串起来的引导助手。你通常不需要主动调用它——它会在下面三种场景里自动登场：
 
-1. **安装后首次配置。** 你一跑完 `npx skills add BofAI/skills -g`，安装器就会把控制权交给 `bankofai-guide`。它会全局安装 `@bankofai/agent-wallet` CLI，检查你是否已经有钱包，并询问你是现在就创建一个，还是稍后再说。
+1. **安装后首次配置。** 你一跑完 `npx skills add https://github.com/BofAI/skills/tree/main -g`，安装器就会把控制权交给 `bankofai-guide`。它会全局安装 `@bankofai/agent-wallet` CLI，检查你是否已经有钱包，并询问你是现在就创建一个，还是稍后再说。
 2. **首个钱包创建。** 如果你还没钱包，它会给你两条路：**快速模式**（强烈推荐——全自动，约 10 秒搞定，生成加密的 `local_secure` 钱包和一个强随机密码）和**详细模式**（一步一步走，自定义选项更多）。钱包就绪后，它会把 EVM 地址和 TRON 地址一起展示给你，并告诉你该往哪充 USDT。
-3. **钱包守门员。** 需要签名的技能（`sunswap`、`sunperp-skill`、`sunpump-agent-skill`、`trc20-toolkit-skill`、`multisig-permissions`）在执行链上操作之前会先跑 `agent-wallet list` 自查钱包状态；**只有在发现没有钱包时**，才会调用 `bankofai-guide` 暂停当前操作，用一两分钟帮你补上，然后回到原来的流程。
+3. **钱包守门员。** 需要签名的技能在执行链上操作之前会先跑 `agent-wallet list` 自查钱包状态（`sunswap`、`sunperp-skill`、`sunpump-agent-skill` 与 `x402-payment` 都会；其中前三个还会交接给 `bankofai-guide`）；**只有在发现没有钱包时**，才会调用 `bankofai-guide` 暂停当前操作，用一两分钟帮你补上，然后回到原来的流程。
 
 **可以触发它的参考话术：**
 

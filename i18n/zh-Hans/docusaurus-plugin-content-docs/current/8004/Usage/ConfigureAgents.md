@@ -14,15 +14,17 @@ import TabItem from '@theme/TabItem';
 <TabItem value="python" label="python">
 
 ```python
+import os
+
 from bankofai.sdk_8004.core.sdk import SDK
 
 # 初始化 SDK
 sdk = SDK(
     network="eip155:97",
     rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
-    signer=your_private_key,
+    signer=os.environ["EVM_PRIVATE_KEY"],
     ipfs="pinata",
-    pinataJwt=your_pinata_jwt
+    pinataJwt=os.environ["PINATA_JWT"]
 )
 
 # 创建代理
@@ -43,7 +45,7 @@ import { SDK } from '@bankofai/8004-sdk';
 const sdk = new SDK({
     network: "eip155:97",
     rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
-    signer: your_private_key
+    signer: process.env.EVM_PRIVATE_KEY!
 });
 
 // 创建代理
@@ -277,28 +279,32 @@ agent.removeEndpoints();
 
 `agentWallet` 是一个**保留的链上**属性。根据 8004，设置该属性需要经过签名验证。
 
-*   **谁发送交易**：SDK 签名者（通常是代理**所有者**或授权的**操作员**）提交链上交易。
-*   **面向开发者的 SDK API**：`agent.setWallet(...)`。
-*   **谁必须签名**：**新钱包**必须通过签署 EIP-712 类型数据 (EOA) 签名来授权此更改。
+*   **谁发送交易**：由 SDK signer 提交链上交易，合约要求它必须是 Agent **所有者**、该 Agent 的被授权地址，或获所有者全量授权的**操作员**。
+*   **面向开发者的 SDK API**：TypeScript 为 `agent.setWallet(newWallet, options)`；Python 为 `agent.setWallet(new_wallet, chainId=None, *, new_wallet_signer=None, deadline=None, signature=None)`。地址之后的参数都是可选的——但请务必阅读下文的**签名从何而来**，因为只传一个地址的调用仅在一种特定情况下才成立。
+*   **谁必须签名**：**新钱包**必须通过签署 EIP-712 类型数据来授权此更改。合约会先尝试 ECDSA 恢复（普通 EOA 以及 EIP-7702 委托的 EOA）；若恢复结果不是新钱包，则回退为对新钱包调用 [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) 的 `isValidSignature`，因此智能合约钱包同样受支持。
+*   **不能当作普通元数据设置**：`agentWallet` 是保留键——`setMetadata()` 以及 `register()` 的元数据数组都会拒绝它。
 
 
 <Tabs>
 <TabItem value="python" label="python">
 
 ```python
+import os
+
 # 你必须先注册代理，然后如果你想使用一个与所有者不同的专用钱包，再调用 setWallet()。
 tx = agent.register("https://example.com/agent-card.json")
 tx.wait_confirmed(timeout=180)
 
 # --- EOA 流程 ---
-# *新钱包* 必须签署 EIP-712 类型数据。
-# 如果新钱包与 SDK 签名者不是同一个地址，请提供 `new_wallet_signer`。
+# 交易由 SDK signer 发送，但 EIP-712 签名必须由*新钱包*产生。
+# 只要新钱包不是 SDK signer 本身，就需要通过 new_wallet_signer 传入其私钥。
 agent.setWallet(
-    new_wallet="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    chainId=97,
-    new_wallet_signer=NEW_WALLET_PRIVATE_KEY,  # 0x742d... 的私钥
+    "0x742D35CC6634C0532925a3B844Bc9E7595F2bD18",
+    new_wallet_signer=os.environ["NEW_WALLET_PRIVATE_KEY"],
 )
 
+# 如果 SDK signer *就是*新钱包，SDK 会自动签名：
+# agent.setWallet(SDK_signer_的地址)
 ```
 
 </TabItem>
@@ -310,11 +316,14 @@ const tx = await agent.register("https://example.com/agent-card.json");
 await tx.waitConfirmed();
 
 // --- EOA 流程 ---
-await agent.setWallet(
-  "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-  { newWalletSigner: NEW_WALLET_PRIVATE_KEY }
-);
+// 交易由 SDK signer 发送，但 EIP-712 签名必须由*新钱包*产生。
+// 只要新钱包不是 SDK signer 本身，就需要通过 newWalletSigner 传入其私钥。
+await agent.setWallet("0x742D35CC6634C0532925a3B844Bc9E7595F2bD18", {
+  newWalletSigner: process.env.NEW_WALLET_PRIVATE_KEY!,
+});
 
+// 如果 SDK signer *就是*新钱包，SDK 会自动签名：
+// await agent.setWallet(SDK_signer_的地址);
 ```
 
 </TabItem>
@@ -335,20 +344,36 @@ await agent.setWallet(
 
 这会清除代理在链上的 `agentWallet` 字节数据。
 
-### “我到底要签署什么？” (EOA)
+### “我到底要签署什么？”
 
 两个 SDK 都会在内部构建 EIP-712 类型数据。从概念上讲，**新钱包**签署的消息包含：
 
 *   **agentId**: 代理的 tokenId
 *   **newWallet**: 你正在设置的钱包地址
 *   **owner**: 当前代理所有者（从注册表中读取）
-*   **deadline**: 合约强制执行的短有效期窗口
-*   **domain**: 身份注册表 (Identity Registry) 的 EIP-712 域（chainId + verifyingContract，以及名称/版本）
+*   **deadline**: 合约强制执行的过期时间戳——不得已经过期，且最多只能比当前区块时间晚 **5 分钟**
+*   **domain**: 身份注册表 (Identity Registry) 的 EIP-712 域——名称 `ERC8004IdentityRegistry`、版本 `1`，以及 `chainId` 和 `verifyingContract`
 
-#### EOA
+随后合约会以下面两种方式之一校验该签名：
 
-*   **EOA 签名 (Python)**：除非 SDK 签名者就是新钱包，否则传入 `new_wallet_signer=...`（私钥 / eth-account 账户）。
-*   **EOA 签名 (TypeScript)**：除非 SDK 签名者就是新钱包，否则传入 `newWalletSigner`。
+*   **EOA**：合约从 ECDSA 签名中恢复签名者，并要求其等于 `newWallet`。
+*   **智能合约钱包**：若恢复失败或得到的地址不同，合约会对 `newWallet` 调用 `isValidSignature(digest, signature)`，并要求返回 ERC-1271 魔数 `0x1626ba7e`。
+
+### 签名从何而来
+
+SDK 会替你构造类型化数据，但它无法凭空造出新钱包的签名。获取签名的途径恰好只有三条，且按以下顺序尝试：
+
+| 你传入 | SDK 的行为 |
+| :--- | :--- |
+| `signature`（Python / TS 同名） | 直接使用你给的字节。这是智能合约钱包以及任何外部/离线签名场景的路径。 |
+| `new_wallet_signer`（Python）/ `newWalletSigner`（TS） | 用该私钥签名。SDK 会先校验该私钥对应的地址是否等于 `newWallet`，不一致则直接报错。 |
+| 两者都不传 | 回退到 SDK signer——**且仅当 SDK signer 的地址就是新钱包时才会成功**。否则抛出 `New wallet must sign. Provide new_wallet_signer (EOA) or signature (ERC-1271/external).` |
+
+:::caution 只传一个地址并不是通用写法
+不带任何签名参数的 `setWallet(address)`，**仅**在 SDK signer 本身就是该地址时才可用。又因为交易发送方还必须是所有者或获授权的操作员，所以这种写法实际上只适用于「把 Agent 指向我当前正在用来签名的这个钱包」。若要绑定一个与 SDK signer *不同*的钱包，就必须提供 `new_wallet_signer` / `newWalletSigner`，或一个已经准备好的 `signature`。
+:::
+
+另外还有两个值得注意的行为：`deadline` 默认为当前时间之后 60 秒（合约本身的上限是 5 分钟）；如果 `agentWallet` 已经就是你传入的地址，SDK 会跳过整笔交易，仅更新本地注册文件后返回 `None` / `undefined`。
 
 
 
@@ -458,8 +483,8 @@ agent.removeDomain("finance_and_business/investment_services");
 
 ```python
 agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=True)\
-     .addDomain("technology/data_science", validate_oasf=True)\
-     .addSkill("natural_language_processing/summarization", validate_oasf=True)
+     .addDomain("technology/data_science/data_science", validate_oasf=True)\
+     .addSkill("natural_language_processing/natural_language_generation/summarization", validate_oasf=True)
 ```
 
 </TabItem>
@@ -467,8 +492,8 @@ agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=Tr
 
 ```typescript
 agent.addSkill("data_engineering/data_transformation_pipeline")
-     .addDomain("technology/data_science")
-     .addSkill("natural_language_processing/summarization");
+     .addDomain("technology/data_science/data_science")
+     .addSkill("natural_language_processing/natural_language_generation/summarization");
 ```
 
 </TabItem>
@@ -480,26 +505,29 @@ agent.addSkill("data_engineering/data_transformation_pipeline")
 
 ### 注册文件中的 OASF 
 
-OASF 技能和领域存储在注册文件的 `endpoints` 数组中：
+两个 SDK 存储 OASF 技能与领域的方式不同。**Python** 把它们放在注册文件 `services` 数组里的一个 `OASF` 条目中：
 
 ```json
 {
-  "endpoints": [
+  "services": [
     {
       "name": "OASF",
       "endpoint": "https://github.com/agntcy/oasf/",
-      "version": "v0.8.0",
+      "version": "0.8",
       "skills": [
         "advanced_reasoning_planning/strategic_planning",
         "data_engineering/data_transformation_pipeline"
       ],
       "domains": [
-        "technology/data_science"
+        "finance_and_business/investment_services",
+        "technology/data_science/data_science"
       ]
     }
   ]
 }
 ```
+
+**TypeScript** 不会构建 OASF 条目：`addSkill()` 与 `addDomain()` 把同样的 slug 推入顶层的扁平 `tags` 数组，其线格式会连同 `metadata` 一并输出；而 Python 发布的文件中这两个键都不存在。当消费方要同时读取两种语言产出的注册文件时，请注意这个差异。
 
 ## 信任模型 
 
@@ -631,7 +659,7 @@ agent = sdk.createAgent(
 agent.setMCP(endpoint="https://mcp.example.com/")\
      .setENS(name="advanced-agent.eth")\
      .addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=True)\
-     .addDomain("technology/data_science", validate_oasf=True)\
+     .addDomain("technology/data_science/data_science", validate_oasf=True)\
      .setActive(True)\
      .setX402Support(True)
 
@@ -652,7 +680,7 @@ const agent = sdk.createAgent({
 agent.setMCP("https://mcp.example.com/")
      .setMetadata({ ens: "advanced-agent.eth" })
      .addSkill("advanced_reasoning_planning/strategic_planning")
-     .addDomain("technology/data_science")
+     .addDomain("technology/data_science/data_science")
      .setActive(true)
      .setX402Support(true);
 

@@ -37,13 +37,13 @@ import TabItem from '@theme/TabItem';
 
 
 :::caution 主密码非常重要，请立即备份
-主密码仅展示一次。虽然会自动保存到本地的 `~/.agent-wallet/runtime_secrets.json`，但强烈建议你同时手动保存到密码管理器（1Password / Bitwarden 等）——一旦本地文件丢失或损坏，且没有外部备份，你的钱包将永久无法解锁（没有备份找回机制，没有客服，没有后门）。
+主密码仅展示一次。引导安装执行的是带 `--save-runtime-secrets` 的 `agent-wallet start`，会把它保存到本地的 `~/.agent-wallet/runtime_secrets.json`，但强烈建议你同时手动保存到密码管理器（1Password / Bitwarden 等）——一旦本地文件丢失或损坏，且没有外部备份，你的钱包将永久无法解锁（没有备份找回机制，没有客服，没有后门）。
 
 ⚠️ 切勿把这个密码发到聊天工具、邮件、截图或公开仓库中。
 :::
 
 :::tip 完成即可用，无需配置环境变量
-对话式创建会自动把密码保存到 `~/.agent-wallet/runtime_secrets.json`，AI Agent 后续调用钱包时会自动读取，**无需手动配置 `AGENT_WALLET_PASSWORD` 环境变量**。如果你想了解环境变量配置方式，请看下面的"方式二"。
+对话式创建会传入 `--save-runtime-secrets`，把密码保存到 `~/.agent-wallet/runtime_secrets.json`，AI Agent 后续调用钱包时会自动读取，**无需手动配置 `AGENT_WALLET_PASSWORD` 环境变量**。如果你想了解环境变量配置方式，请看下面的"方式二"。
 :::
 
 ---
@@ -56,7 +56,7 @@ import TabItem from '@theme/TabItem';
 
 #### 1.1 准备环境：安装 Node.js
 
-Agent-wallet 需要你的电脑里有 Node.js（这是一个运行环境，版本需 >= 20）。
+Agent-wallet 需要你的电脑里有 Node.js（这是一个运行环境，版本需 >= 18；建议安装当前的 LTS 版本）。
 
 打开终端（Mac 用户按 `Command + 空格` 搜索"终端"），输入：
 
@@ -64,7 +64,7 @@ Agent-wallet 需要你的电脑里有 Node.js（这是一个运行环境，版�
 node -v
 ```
 
-- **如果输出 `v20.x.x` 或更高数字：** 太棒了，直接跳到 1.2！
+- **如果输出 `v18.x.x` 或更高数字：** 太棒了，直接跳到 1.2！
 - **如果没有输出或报错：** 别慌，去 **[Node.js 官方网站](https://nodejs.org)** 下载最新的 **LTS** 安装包，像装普通软件一样双击安装，一路"下一步"即可。装完后关掉终端重新打开，再输入 `node -v` 确认。
 
 <details>
@@ -77,8 +77,8 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 # 2. 重新加载终端配置
 source ~/.bashrc   # zsh 用户改成 source ~/.zshrc
 
-# 3. 安装并切换到 Node.js 20
-nvm install 20 && nvm use 20
+# 3. 安装并切换到当前的 Node.js LTS
+nvm install --lts && nvm use --lts
 ```
 
 </details>
@@ -107,9 +107,11 @@ agent-wallet start
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
-Wallet ID (e.g. my_wallet_1) (default_secure):
+Password requirements: at least 8 characters, with uppercase, lowercase, digit, and special character. e.g. Abc12345!@
+New Master Password (press Enter to auto-generate a strong password):
 
 Wallet initialized!
+Wallet ID (e.g. my_wallet_1) (default_secure):
 ? Import source: generate  — Generate a new random private key
 
 Wallets:
@@ -119,8 +121,9 @@ Wallets:
 │ default_secure │ local_secure │
 └────────────────┴──────────────┘
 
-Your master password: <此处会显示你的专属密码>
-   Save this password! You'll need it for signing and other operations.
+🔑 Your master password: <此处会显示你的专属密码>
+⚠️ Keep this password safe. You'll need it for signing and other operations.
+   （只有在你直接回车、由向导自动生成密码时才会出现这一行。）
 
 Active wallet: default_secure
 ```

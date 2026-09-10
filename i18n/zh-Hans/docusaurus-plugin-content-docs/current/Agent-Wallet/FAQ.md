@@ -21,9 +21,9 @@ agent-wallet add
 
 ## 🔌 断网了，AI 代理还能签名吗？
 
-能。**Agent-wallet 所有签名操作 100% 在你本地机器上完成。**
+对 `local_secure` 和 `raw_secret` 钱包——能：**签名 100% 在你本地机器上完成**，不调 RPC、不连云服务、不请求任何远端 API，私钥从始至终不碰网络。
 
-从设计上就没有任何网络依赖——不调 RPC、不连云服务、不请求任何远端 API。你的私钥从始至终不碰网络。
+唯一的例外是 `privy` 类型：密钥托管在 Privy，签名请求会发往 Privy 的 API——它天然依赖网络。
 
 断网只会影响交易的构建和广播（那是 MCP Server 的事），签名本身完全离线。
 
@@ -98,6 +98,8 @@ MetaMask 是给人用的浏览器钱包，有图形界面，每次签名需要�
 | `eip155:8453` | Base 主网 |
 | `eip155:42161` | Arbitrum 主网 |
 
+> 以上是常见示例，并非穷举白名单：agent-wallet 只校验前缀，任何 `eip155:<chainId>` 或 `tron:<network>` 取值都会被接受（包括 x402 系列工具要求的规范 CAIP-2 TRON ID，如 `tron:0x2b6653dc`）。
+
 ---
 
 ## 安全性
@@ -122,7 +124,7 @@ MetaMask 是给人用的浏览器钱包，有图形界面，每次签名需要�
 
 ### 密钥会通过网络发出去吗？
 
-永远不会。Agent-wallet 不发起任何网络请求。零 RPC 调用、零云服务。你的私钥永远不离开你的机器。
+对 `local_secure` 和 `raw_secret` 钱包——永远不会：零网络请求、零 RPC 调用、零云服务，私钥不离开你的机器。`privy` 类型是例外：密钥托管在 Privy（从不落在你的磁盘上），签名请求会发往 Privy 的 API。
 
 ### 主密码怎么保管才安全？
 
@@ -141,7 +143,7 @@ Agent-wallet 使用 Keystore V3 标准加密（scrypt + AES-128-CTR），这和 
 
 ### 支持哪些操作系统？
 
-macOS、Linux 和 Windows。只要能跑 Node.js >= 20 或 Python >= 3.11，就能用。Windows 支持在 v2.3.x 中添加——文件权限功能（如 `chmod 600`）在 Windows 上会被优雅地跳过，因为 Windows 不支持 Unix 风格的权限控制。
+macOS、Linux 和 Windows。只要能跑 Node.js >= 18 或 Python >= 3.11，就能用。Windows 支持在 v2.3.x 中添加——文件权限功能（如 `chmod 600`）在 Windows 上会被优雅地跳过，因为 Windows 不支持 Unix 风格的权限控制。
 
 ### `npm install -g` 报权限错误怎么办？
 

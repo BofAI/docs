@@ -18,9 +18,5 @@
   "item.label.Changelogs": {
     "message": "更新日志",
     "description": "Navbar item with label Changelogs"
-  },
-  "item.label.Demo": {
-    "message": "Demo",
-    "description": "Navbar item with label Demo"
   }
 }

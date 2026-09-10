@@ -40,7 +40,7 @@ Run this in your terminal:
 ls ~/.agents/skills
 ```
 
-You should see 14 directory names: `agent-wallet`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`, `twitter-digest`, `twitter-mcp`, and `bankofai-guide`.
+You should see 10 directory names: `agent-wallet`, `wallet-cli`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `usdd-just-protocol`, `x402-payment`, `recharge-skill`, and `bankofai-guide`.
 
 Then verify in your AI chat:
 
@@ -126,8 +126,9 @@ If you're comfortable with the command line, you can store credentials in your s
 Add the variables for the skills you need:
 
 ```bash
-# SunSwap trading, TRC20 toolkit, USDD PSM, TRX staking, multisig
-# (any skill that spends on-chain funds)
+# SunSwap trading, SunPump buy/sell, USDD PSM, SunPerp withdrawals
+# (any skill that spends on-chain funds via this key; wallet-cli manages
+# its own wallet and never reads these variables)
 export TRON_PRIVATE_KEY="your_private_key"
 export TRONGRID_API_KEY="your_TronGrid_API_key"
 export TRON_NETWORK="mainnet"   # or "nile" / "shasta" for testnet
@@ -145,15 +146,13 @@ export BANKOFAI_API_KEY="your_BANKOFAI_API_Key"
 # agent-wallet (if you use encrypted local mode for x402-payment / signing)
 export AGENT_WALLET_PASSWORD="your_master_password"
 
-# multisig-permissions hybrid flow (review.js --sign)
-export TRON_HUMAN_PRIVATE_KEY="your_human_reviewer_key"
 ```
 
 </details>
 
 ### Which AI tools support Skills?
 
-Currently: **OpenClaw** (most seamless), and any AI assistant that can read local skill files.
+The installer targets a broad set of coding agents and assistants — Claude Code, Cursor, Codex, Cline, Gemini CLI, Amp, Zed and many more — either by symlinking into the tool's own skill directory or by copying the files where the tool has no such directory. **OpenClaw** remains the most seamless. Any AI assistant that can read local skill files works too: point it at `~/.agents/skills/<skill>/SKILL.md`.
 
 ---
 
@@ -176,7 +175,7 @@ rm -rf ~/.agents/skills/sunswap-dex-trading
 **Update:** Re-run the install command (keep `-g` so it refreshes the global copy). It will update all skills to the latest version.
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y -g
+npx skills add https://github.com/BofAI/skills/tree/main -y -g
 ```
 
 ---

@@ -19,7 +19,7 @@ Want your AI client to gain BANK OF AI's on-chain capabilities? Just **two steps
 Open whichever AI client you use (OpenClaw / Claude Code / Cursor / Codex / etc.) and paste this command in:
 
 ```
-Run npx skills add BofAI/skills -g to install every BANK OF AI Skill. After the install completes, run bankofai-guide to walk me through the next steps.
+Run npx skills add https://github.com/BofAI/skills/tree/main -g to install every BANK OF AI Skill. After the install completes, run bankofai-guide to walk me through the next steps.
 Note: please install into this Agent's own skills directory.
 ```
 
@@ -32,7 +32,7 @@ The AI will install the Skills and then ask whether to create a wallet.
 >
 > The command enters interactive mode to let me pick the Skills: I'll use the `-y` flag (without `-g`) so it selects everything by default and installs into this Agent's directory:
 >
-> ✅ **12 Skills installed.** (installed into this Agent's skills directory)
+> ✅ **10 Skills installed.** (installed into this Agent's skills directory)
 >
 > Now running `bankofai-guide` to walk you through setup…
 >
@@ -51,16 +51,14 @@ The AI will install the Skills and then ask whether to create a wallet.
 > | :-- | :-- |
 > | 1 | `agent-wallet` |
 > | 2 | `bankofai-guide` |
-> | 3 | `multi-sig-account-permissions` |
-> | 4 | `recharge-skill` |
-> | 5 | `sunperp-perpetual-futures-trading` |
-> | 6 | `sunpump-meme-token-toolkit` |
-> | 7 | `sunswap-dex-trading` |
-> | 8 | `trc20-token-toolkit` |
-> | 9 | `tronscan-data-lookup` |
-> | 10 | `trx-staking-sr-voting` |
-> | 11 | `usdd-just-protocol` |
-> | 12 | `x402-payment` |
+> | 3 | `recharge-skill` |
+> | 4 | `sunperp-perpetual-futures-trading` |
+> | 5 | `sunpump-meme-token-toolkit` |
+> | 6 | `sunswap-dex-trading` |
+> | 7 | `tronscan-data-lookup` |
+> | 8 | `usdd-just-protocol` |
+> | 9 | `wallet-cli` |
+> | 10 | `x402-payment` |
 >
 > **📋 Current status**
 >
@@ -183,7 +181,7 @@ Just describe what you want in plain language:
 
 > "What's TRON's current network TPS?"
 
-### 💸 TRC20 Token Transfer
+### 💸 TRC20 Token Transfer (via wallet-cli)
 
 > "Send 10 USDT to TRecipientAddress…"
 
@@ -195,7 +193,7 @@ Just describe what you want in plain language:
 
 > "Open a 5x long on BTC-USDT with a 5% stop-loss."
 
-### 🗳️ TRX Staking & SR Voting
+### 🗳️ TRX Staking & SR Voting (via wallet-cli)
 
 > "Stake my 1,000 TRX with super representative SR XXX."
 

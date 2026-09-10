@@ -12,7 +12,7 @@ Wallet addresses are used to send, receive, and verify payments. They function a
 
 Buyers use their wallet as the primary interaction anchor, responsible for:
 
-- **Asset Custody**: Securely storing USDT or other TRC-20/BEP-20 tokens.
+- **Asset Custody**: Securely storing USDT, USDC or other TRC-20 / BEP-20 / ERC-20 tokens.
 - **Signature Authorization**: Cryptographically signing payment payloads using their private key.
 - **Programmatic Payments**: Authorizing on-chain fund transfers via code (especially suitable for autonomous AI agents).
 - **Allowance Management**: Managing the one-time `approve(Permit2, max)` allowance granted to the Permit2 contract — the facilitator then pulls the funds through the x402 Permit2 proxy.
@@ -76,7 +76,7 @@ x402 uses typed data signing for secure payment authorization.
 
 ## Token Approval
 
-For the `exact` payment scheme, plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path. The client must authorize the Permit2 contract to transfer tokens — a one-time `approve(Permit2, max)`. The x402 client SDK auto-broadcasts this approve on the first payment. ERC-3009 tokens (e.g. BSC testnet DHLU) need no approve — they settle gaslessly via `transferWithAuthorization`.
+For the `exact` payment scheme, plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path. The client must authorize the Permit2 contract to transfer tokens — a one-time `approve(Permit2, max)`. On TRON the client SDK auto-broadcasts this approve on the first payment; on EVM it never broadcasts — it attaches a signed, unbroadcast approve for the facilitator to relay when the server advertises a gas-sponsoring extension, and otherwise the allowance must be granted once out of band or verification fails with `permit2_allowance_required`. On TRON, when the resource server advertises `trc20ApprovalResourceSponsoring` (SDK 1.2.0+), the client signs the `approve(Permit2, MaxUint256)` transaction but does not broadcast it — the facilitator temporarily delegates the Energy — and, when needed, Bandwidth — that the payer lacks and broadcasts it, so the payer needs no TRX for that first approve. This requires an activated, single-signature TRON EOA. ERC-3009 tokens (e.g. BSC testnet DHLU) need no approve — they settle gaslessly via `transferWithAuthorization`.
 
 ---
 
@@ -101,16 +101,27 @@ For the `exact` payment scheme, plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, 
 
 ---
 
+### Base RPC Endpoints
+
+| Network | RPC Endpoint |
+| :------- | :------------ |
+| **Mainnet** (`eip155:8453`) | `https://mainnet.base.org` |
+| **Sepolia (Testnet)** (`eip155:84532`) | `https://sepolia.base.org` |
+
+These are the CLI's built-in defaults and are meant for development. In production supply your own endpoint with `--rpc-url` or `EVM_RPC_URL_8453` / `EVM_RPC_URL`. Base USDC settles with EIP-3009, so it needs no Permit2 approval.
+
+---
+
 ## Security Best Practices
 
 - **Never Expose Private Keys**  
-  Do not hardcode private keys in source code. Store them securely using environment variables.
+  Do not hardcode private keys in source code, and prefer not to hold them yourself at all: `x402-cli` and the SDK resolve the payer from [Agent Wallet](../../Agent-Wallet/Intro.md), which keeps the key encrypted on disk. `--private-key`, `EVM_PRIVATE_KEY`, `TRON_PRIVATE_KEY` and `PRIVATE_KEY` exist for development and CI only.
 
 - **Use Testnets First**  
   Always complete development and validation on testnet before deploying to mainnet.
 
-- **Approve Minimum Required Amounts**  
-  Follow the principle of least privilege by approving only the necessary token amount.
+- **Understand the Permit2 Approval**
+  The one-time Permit2 approval the SDK sends is always `MaxUint256` — it offers no smaller amount, and the TRON sponsoring extension rejects a sponsored approval that is not `MaxUint256`. An allowance you set yourself out of band is honoured as long as it covers the payment. Least privilege applies at the next layer instead: each payment is a separate signed authorization bound to a specific amount, recipient and deadline, so the standing approval alone cannot move funds.
 
 - **Monitor Transactions in Real Time**  
   Use TronScan/BscScan to track payment status and allowance records for enhanced security.

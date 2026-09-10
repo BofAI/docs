@@ -8,6 +8,97 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-09-09</div>
+<div className="changelog-body">
+
+### 8004 与 Openclaw 扩展校正
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span><span className="changelog-tag">8004</span><span className="changelog-tag">Openclaw</span></div>
+
+- 8004 文档内部已一致：`setWallet` 由四种互不一致的调用形态统一为每种 SDK 一种，并说明新钱包签名的三种提供方式、移除旧版 TRON `chainId`、改用 SDK 实际接受的网络标识、私钥改从环境变量读取。Openclaw 安装器不再固定在已被取代的技能标签上，并写入正确的 BANK OF AI 域名。[8004 详情](./8004/) · [Openclaw 详情](./openclaw-extension/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-09-09</div>
+<div className="changelog-body">
+
+### 第二轮文档对照源码校核
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">x402</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">SKILLS</span></div>
+
+- 对 x402 SDK、CLI、目录、Gateway、Facilitator、Agent Wallet 与 Skills 各仓库做了第二轮校核。API 目录示例按真实 provider 文件重建——此前的示例缺少现已必填的 `assetTransferMethod`，照抄会校验失败——并删除了并不存在的 `subTitle` 字段。修正了载荷字段、重试范围与仅 TRON 可用的能力描述；EVM 授权 gas 代付按真实生效条件重新说明；Agent Wallet SDK 指南补充了 `resolveWallet()` 与 `SignOptions`。[x402 详情](./x402/) · [Agent Wallet 详情](./agent-wallet/) · [SKILLS 详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-09-08</div>
+<div className="changelog-body">
+
+### 文档已与当前源代码同步
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">x402</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">SKILLS</span></div>
+
+- 已依据当前 x402 SDK、API Catalog、Gateway、CLI、Facilitator、Agent Wallet 与 Skills 仓库同步英文和简体中文文档。订正内容包括 Catalog 的 `assetTransferMethod` 契约、`auth-capture` 仅有 client 的当前状态、Gateway 的授权与结算流程、Privy 的 `--network` 例外，以及 `x402-payment` 技能必须使用准确版本 `x402-cli@1.0.1` 的要求；同时修复了仓库链接、MDX 语法与失效的站内链接。[x402 详情](./x402/) · [Agent Wallet 详情](./agent-wallet/) · [SKILLS 详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-09-07</div>
+<div className="changelog-body">
+
+### SKILLS 2.0.0 —— 破坏性目录精简
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">破坏性变更</span></div>
+
+- Skills 2.0.0 移除 `multisig-permissions`、`trc20-toolkit-skill`、`trx-staking-skill`、`twitter-digest`、`twitter-mcp`——前三者的 TRON 操作并入 **`wallet-cli`**（现锁定 `@tron-walletcli/wallet-cli@4.13.0`，规范网络标识为十进制 CAIP-2 ID），两个 X/Twitter 技能则移出这个以 DeFi 为核心的集合。目录现共 10 个技能，版本统一为 2.0.0。[详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-08-29</div>
+<div className="changelog-body">
+
+### SKILLS —— 安装源锁定 main 分支
+
+<div className="changelog-tags"><span className="changelog-tag">更新</span><span className="changelog-tag">SKILLS</span></div>
+
+- 技能安装现已锁定**稳定的 `main` 分支**——`npx skills add https://github.com/BofAI/skills/tree/main`；其他开发分支可能包含未发布内容。[详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-08-28</div>
+<div className="changelog-body">
+
+### x402 SDK v1.2.0 —— TRON 授权资源赞助
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">x402</span><span className="changelog-tag">TRON</span></div>
+
+- **x402 SDK 1.2.0** 新增 `trc20ApprovalResourceSponsoring` 扩展：在 TRON 上，付款方只签名一次性的 `approve(Permit2, MaxUint256)` 而不广播，由启用了该扩展的 facilitator 校验后临时委托付款方所缺的 Stake 2.0 能量（必要时还有带宽）、广播交易并回收资源——因此首笔 Permit2 付款或通道存入无需 TRX。`@bankofai/x402-extensions` 与 `-tron` 升至 1.2.0，四个服务端中间件升至 1.1.1，其余包保持 1.1.0。官方 facilitator 未启用该扩展。[详情](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-08-26</div>
+<div className="changelog-body">
+
+### SKILLS —— 新技能 wallet-cli
+
+<div className="changelog-tags"><span className="changelog-tag">新增</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">TRON</span></div>
+
+- **`wallet-cli`** 加入技能目录（现共 15 个技能）：通过锁定版 `@tron-walletcli/wallet-cli@4.12.0` 直接完成 TRON 钱包操作——转账、质押、治理、合约、签名、链上查询；Agent 执行时密码仅经 stdin 传入，钱包管理仅限人工。[详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-08-25</div>
 <div className="changelog-body">
 
@@ -16,7 +107,7 @@ BANK OF AI 各产品的更新与公告。
 <div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">x402</span><span className="changelog-tag">文档</span></div>
 
 - **x402 SDK 1.1.0**——付款流程显式化（`upfront` / `escrow` 通过 `extra.paymentFlow` 在协议中传递，默认 `authorization`）、客户端消费管控默认开启（单笔约 `$1` 上限 + 默认资产白名单）、付款选择策略与生命周期钩子、EVM 智能账户支持（ERC-7702、白名单内 ERC-6492），`HTTPFacilitatorClient` 默认超时 90 秒。11 个包需整体升级，要求 Node.js 22+。[SDK 功能矩阵](../x402/sdk-features/)
-- **文档订正**——移除已废弃的 facilitator 计费内容（`base_fee`、`extra.fee`、`/fee/quote`）；官方部署的匿名 `/settle` 限速为每分钟 1 次；不再宣称 GasFree 会被自动优选——CLI 取第一条匹配过滤条件的支付要求，需要强制时请传 `--scheme exact_gasfree`；TRON Shasta 现已注明「SDK/CLI 可签名、但官方 facilitator 不结算」（请用 Nile 或自建）；CLI 页面标明了它的**锁定依赖**——CLI 1.0.2 内含的 `@bankofai/x402-*` SDK 包仍是 1.0.1（`x402-gateway` 为 1.0.2），因此尚不具备 1.1.0 的客户端消费管控；Skills 各页的安装命令统一改为 `npx skills add … -g`。[x402 文档](../x402/)
+- **文档订正**——移除已废弃的 facilitator 计费内容（`base_fee`、`extra.fee`、`/fee/quote`）；官方部署的匿名 `/settle` 限速为每分钟 1 次；不再宣称 GasFree 会被自动优选——CLI 取第一条匹配过滤条件的支付要求，需要强制时请传 `--scheme exact_gasfree`；TRON Shasta 现已注明「SDK/CLI 可签名、但官方 facilitator 不结算」（请用 Nile 或自建）；CLI 页面标明了它的**锁定依赖**——CLI 1.0.2 内含的 `@bankofai/x402-*` SDK 包仍是 1.0.1（`x402-gateway` 为 1.0.2），因此尚不具备 1.1.0 的客户端消费管控；Skills 各页的安装命令统一改为 `npx skills add … -g`。[x402 文档](../)
 
 </div>
 </div>
@@ -71,10 +162,10 @@ BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-tags"><span className="changelog-tag">产品更新</span><span className="changelog-tag">文档</span><span className="changelog-tag">x402</span><span className="changelog-tag">SKILLS</span></div>
 
-- **SKILLS —— `x402-payment` 改用 `x402-cli` 付款**（1.0.1 及以上），不再使用内置本地脚本；新增 `--dry-run` 预览、`--max-amount` 限额、GasFree 必须限费，以及规范的 CAIP-2 TRON 标识符。[详情](./skills/)
+- **SKILLS —— `x402-payment` 改用 `x402-cli` 付款**（仅限 1.0.1），不再使用内置本地脚本；新增 `--dry-run` 预览、`--max-amount` 限额、GasFree 必须限费，以及规范的 CAIP-2 TRON 标识符。[详情](./skills/)
 
 - **TRON 网络标识符全面改用 CAIP-2 格式**——`tron:0x2b6653dc`（主网）、`tron:0xcd8690dc`（Nile）、`tron:0x94a9059e`（Shasta）。应用代码中建议使用 SDK 常量 `TRON_MAINNET` / `TRON_NILE` / `TRON_SHASTA`，而不是硬编码十六进制字符串。[网络与代币支持](../x402/core-concepts/network-and-token-support/)
-- **移除 `auth-capture` 方案**——x402 现记录四种支付方案：`exact`、`upto`、`batch-settlement` 与 `exact_gasfree`（TRON）。[SDK 功能](../x402/sdk-features/)
+- **明确 `auth-capture` 状态**——x402 定义了五种命名方案；`auth-capture` 目前仅提供 EVM client，server 与 facilitator 实现仍待发布。[SDK 功能](../x402/sdk-features/)
 - **x402 快速开始精简**——买家与卖家两篇均已简化。
 - **新增模型**：LLM Service 增加 Kimi K3 定价文档。
 - **BANK OF AI 简介重写**——围绕"你的 AI 究竟多了什么"重新组织，配四项能力概览与端到端执行示例。

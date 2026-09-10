@@ -35,7 +35,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 - **[前端目录站](https://bankofai.io/catalog)**：给人浏览、比较服务。
 - **x402-cli**：在命令行里搜索、查看、直接付费调用。
-- **MCP**：一次安装，让 Agent 直接「看到」并按名称调用目录内的全部服务。
+- **MCP**：`@bankofai/x402-mcp` 让 Agent 能通过 MCP 为 x402 端点付款。支持目录发现的 MCP（在 MCP 客户端里按名称浏览目录）尚未发布，当前请用 `x402-cli catalog` 做发现。
 
 ## 目录里有什么
 
@@ -44,12 +44,12 @@ import ThemedImage from '@theme/ThemedImage';
 | 服务 | 它能做什么 | 计费 |
 |---|---|---|
 | SunPump | 一次付费完成 Agent/meme 代币发行 —— 提交发币元数据（名称、符号、描述、图片），支付结算后由网关转发你的请求 | $0.000001 / 次 |
-| DefiLlama | 聚合 DeFi 数据 —— 协议 TVL、手续费、代币价格（实时与历史）、池子收益/APY | $0.000001 / 次 |
+| DefiLlama | 聚合 DeFi 数据 —— 协议 TVL、代币价格（实时与历史）、池子收益/APY | $0.000001 / 次 |
 | DexScreener | 实时 DEX 交易对、价格与流动性、代币搜索，以及最新上新档案 | $0.000001 / 次 |
 | DIA | 去中心化、多源预言机价格，按符号或链 + 合约地址查询 | $0.000001 / 次 |
 | GoPlus | 代币与地址安全检测 —— 蜜罐/诈骗筛查、恶意地址与高风险授权识别 | $0.000001 / 次 |
 
-以上服务均属 **金融（Finance）** 类目。请查看各端点的 `x402Routes`，确认当前已发布的 TRON、BNB Chain 和 Base 主网路由。
+以上服务均属 **金融（Finance）** 类目。请查看各端点的 `x402_routes`，确认当前已发布的 TRON、BNB Chain 和 Base 主网路由——该字段位于 `/api/providers/<fqn>.json`、`/api/pay/<fqn>.json` 与 `/api/search-index.json`，只含摘要的 `/api/catalog.json` 里没有。
 
 :::note
 在架服务清单与统计数字（服务数、链数等）均由目录数据**动态生成**，以 `/api/catalog.json` 的实时内容为准，本文不写死具体数量；目录会随新服务上架而增长。

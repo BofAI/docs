@@ -136,6 +136,7 @@ Install the Express adapter and the TRON/EVM payment schemes in your TypeScript 
 
 ```bash
 pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm
+pnpm add -D tsx   # to run the TypeScript entry point below
 ```
 
 Use the framework package that matches your server (`@bankofai/x402-express`, `@bankofai/x402-hono`, `@bankofai/x402-fastify`, or `@bankofai/x402-next`). Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
@@ -179,6 +180,11 @@ import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
 
 const server = createResourceServer(
   new HTTPFacilitatorClient({
+    // Replace this before running — the server syncs with the facilitator on
+    // startup, so a placeholder URL makes the first protected request fail
+    // (500 for an unreachable host or an HTTP error status; 502 when the
+    // facilitator times out or returns a body the SDK cannot parse).
+    // Official: https://facilitator.bankofai.io  ·  self-hosted example: http://localhost:4022
     url: "https://facilitator.example.com",
   })
 );
@@ -226,6 +232,11 @@ import { ExactEvmScheme } from "@bankofai/x402-evm/exact/server";
 
 const server = createResourceServer(
   new HTTPFacilitatorClient({
+    // Replace this before running — the server syncs with the facilitator on
+    // startup, so a placeholder URL makes the first protected request fail
+    // (500 for an unreachable host or an HTTP error status; 502 when the
+    // facilitator times out or returns a body the SDK cannot parse).
+    // Official: https://facilitator.bankofai.io  ·  self-hosted example: http://localhost:4022
     url: "https://facilitator.example.com",
   })
 );
@@ -266,7 +277,7 @@ express()
 | Parameter | Description | Example |
 |------|------|--------|
 | `payTo` | Your receiving wallet address | TRON: `T...`; Base: `0x...` |
-| `accepts[].price` | Price per request | TRON: `"1 USDT"`; Base: `"1 USDC"` |
+| `accepts[].price` | Price per request — a **config** key; on the wire the SDK converts it into `amount` + `asset` (+ `extra`) | TRON: `"1 USDT"`; Base: `"1 USDC"` |
 | `accepts[].network` | Network to use | TRON Nile: `tron:0xcd8690dc`; Base Mainnet: `eip155:8453` |
 | `accepts[].scheme` | Payment scheme | `"exact"` |
 | `routes` | Map of `"METHOD /path"` → `{ accepts }` | `"GET /credit"` |
@@ -327,6 +338,21 @@ The official key is sent as the `X-API-KEY` header on every facilitator call. Ke
 
 ```bash
 FACILITATOR_API_KEY=paste_your_api_key_here
+```
+
+`HTTPFacilitatorClient` sends the header only if you give it `createAuthHeaders` — without this the server silently stays on the anonymous tier:
+
+```typescript
+const apiKeyHeaders = { "X-API-KEY": process.env.FACILITATOR_API_KEY! };
+
+new HTTPFacilitatorClient({
+  url: "https://facilitator.bankofai.io",
+  createAuthHeaders: async () => ({
+    verify: apiKeyHeaders,
+    settle: apiKeyHeaders,
+    supported: apiKeyHeaders,
+  }),
+});
 ```
 
 > ⚠️ **Security reminder:** Your API Key is a service credential — **treat it like a password and never commit it to Git**.
@@ -419,10 +445,14 @@ Resource server on http://localhost:4021
 In any terminal, run:
 
 ```bash
-curl http://localhost:4021/credit
+curl -i http://localhost:4021/credit
 ```
 
-**Expected result:** The server returns an HTTP `402` response with the payment requirements (an `accepts` array listing scheme, network, price, and your payout address).
+**Expected result:** an HTTP `402` whose **body is `{}`** — under x402 v2 the payment requirements travel in the `PAYMENT-REQUIRED` response header as base64 JSON. Decode it to see the `accepts` array (each entry carries `scheme`, `network`, `asset`, `amount`, `payTo`, `maxTimeoutSeconds`, `extra`):
+
+```bash
+curl -si http://localhost:4021/credit | grep -i '^payment-required:' | cut -d' ' -f2 | tr -d '\r' | base64 -d   # older macOS: base64 -D
+```
 
 > ✅ **This is exactly what we want!** It confirms that payment protection is working — unpaid requests are successfully blocked.
 
@@ -441,11 +471,11 @@ To test the complete pay → receive content flow, use the minimal client in [Qu
 | Problem | Cause | Solution |
 |---------|-------|----------|
 | `Failed to fetch` / connection refused | Facilitator or server not running | Start the facilitator first, then run your API server entry point |
-| Client `server offered no payment option matching "…"` | The client selected a network or token that the server does not advertise | Check the server's `accepts` (network + token), e.g. `TRON_NILE` + `USDT` |
+| Client selects nothing / no matching requirement | The client selected a network or token that the server does not advertise | Check the server's `accepts` (network + token), e.g. `TRON_NILE` + `USDT` |
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` under `npx tsx` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
-| `UnsupportedNetworkError` / `No mechanism registered` | The selected client network has no registered scheme | Ensure the client includes your target network, such as `TRON_NILE` |
+| `No network/scheme registered for x402 version: 2 …` | The selected client network has no registered scheme | Ensure the client registers your target network, such as `TRON_NILE` |
 | `Insufficient balance` / allowance error | Test wallet lacks test tokens, or Permit2 allowance too low | Claim test tokens from the faucet; the client auto-approves Permit2 on first payment |
-| `Connection timeout` | Network or request timeout | Check your connection, or set a reliable `EVM_RPC_URL` (e.g. `https://bsc-testnet-rpc.publicnode.com`) |
+| `Connection timeout` | Network or request timeout | Check your connection. Note the SDK reads no environment variables — `EVM_RPC_URL` is honoured by `x402-cli` and the example apps; in your own server pass the RPC URL to the signer factory |
 
 ---
 

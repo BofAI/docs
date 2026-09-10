@@ -45,22 +45,26 @@ x402-cli catalog show <fqn> --catalog https://x402-catalog.bankofai.io/api/catal
 x402-cli catalog endpoints <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
 ```
 
+:::caution Take the URL from the catalog, don't build it
+A gateway URL contains the **gateway provider id**, which is not the catalog FQN — `defillama` is served by `defillama-tvl-tron`, `defillama-coins-price-tron` and `defillama-yields-tron`, and every provider has one id per chain (`…-tron`, `…-bsc`, `…-base`). There is no substitution rule; copy the endpoint's `url`, or the matching `x402_routes[].url`, from `catalog endpoints <fqn>`. A wrong id returns `404 {"error":"provider not found"}`.
+:::
+
 **Free endpoints** (those the provider leaves unpriced) return their result to a plain `curl` — no CLI and no payment needed:
 
 ```bash
-curl -sS 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
+curl -sS 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>'
 ```
 
 For a **paid** endpoint, use `x402-cli pay` — it handles the quote, payment, and result retrieval in one step. A simple GET needs nothing more than the URL:
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/...'
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>'
 ```
 
 For a paid POST endpoint, or to pin the payment chain, token, and scheme, pass them explicitly:
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
+x402-cli pay 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>' \
   --method POST \
   --network tron:0x2b6653dc \
   --token USDT \
@@ -76,10 +80,10 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<fqn>/<path>' \
 | `--network` | CAIP-2 payment chain, e.g. `tron:0x2b6653dc`, `eip155:56`, `eip155:8453` |
 | `--token` | Settlement token, e.g. `USDT` or Base Mainnet `USDC` |
 | `--scheme` | x402 payment scheme declared by the route, e.g. `exact` |
-| `--max-amount` | Spend ceiling in USD; the call aborts if the quote exceeds it |
+| `--max-amount` | Spend ceiling in **token units** (converted with the selected token's decimals, not a USD figure); the call aborts if the quote exceeds it |
 | `--header` / `--body` | Request headers and body for the upstream call |
 
-A service that settles on multiple chains exposes one route per network (`x402Routes`); pick the route — and the matching `--network` / `--scheme` — for the chain you want to pay on.
+A service that settles on multiple chains exposes one route per network (`x402_routes` in the served API; the submission file spells it `x402Routes`); pick the route — and the matching `--network` / `--scheme` — for the chain you want to pay on.
 
 :::tip
 `--catalog` can point to the hosted URL above or to a locally built `dist/catalog.json` for offline debugging.
@@ -91,8 +95,8 @@ Every call clears on-chain via x402. On `exact` routes the quoted price is exact
 
 1. **Agent calls** — requests the target endpoint.
 2. **Gateway quotes** — returns the price (HTTP `402`).
-3. **Wallet pays** — the Agent pays on-chain.
-4. **Verified & settled** — the gateway verifies payment and settles funds to the provider's wallet.
+3. **Wallet authorizes** — the client signs the selected payment requirement and retries with a `PAYMENT-SIGNATURE` header.
+4. **Verified & settled** — the gateway asks the facilitator to verify the signed payload and settle funds on-chain to the provider's wallet.
 5. **Response returns** — the gateway returns the upstream result to the Agent.
 
 Upstream credentials never leave the gateway — the calling Agent never touches any key.

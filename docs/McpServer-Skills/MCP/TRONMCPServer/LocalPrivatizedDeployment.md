@@ -81,11 +81,16 @@ If you don't have an existing private key, use `agent-wallet start` to generate 
 agent-wallet start
 ```
 
-Follow the interactive prompts to set your master password and generate a wallet. Once complete, the wallet is ready to use — **no additional environment variables are needed**. Agent Wallet will automatically manage the encrypted keystore.
+Follow the interactive prompts to set your master password and generate a wallet. Agent Wallet manages the encrypted keystore for you, but the server still needs the password at signing time — plain `agent-wallet start` does not persist it. Do one of:
+
+- run `agent-wallet start --save-runtime-secrets`, which writes the password to `~/.agent-wallet/runtime_secrets.json`, or
+- export `AGENT_WALLET_PASSWORD` in the environment the MCP server runs in.
+
+Without either, unlocking a `local_secure` wallet fails when a write tool is called. Use `AGENT_WALLET_DIR` if your keystore lives outside `~/.agent-wallet`.
 
 #### Path 2: Import an Existing Private Key
 
-If you already have a private key you want to use, set it via the `AGENT_WALLET_PRIVATE_KEY` environment variable:
+If you already have a private key you want to use, set it via the `AGENT_WALLET_PRIVATE_KEY` environment variable. Note the precedence: the env-var path is only reached when no password resolves (neither `runtime_secrets.json` nor `AGENT_WALLET_PASSWORD`) **and** the wallet directory holds no wallets. If you already ran Path 1, saved a runtime password, or ran the Openclaw installer, the keystore path wins and this variable is silently ignored.
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
@@ -152,7 +157,17 @@ npm run build
 
 #### Option C: Run in HTTP Mode
 
-Start the server in HTTP mode, then connect your MCP client via the HTTP endpoint:
+Start the server in HTTP mode, then connect your MCP client via the HTTP endpoint. From the published package, pass the `--http` flag — no clone needed:
+
+```bash
+npx -y @bankofai/mcp-server-tron --http
+```
+
+:::caution `-h` starts HTTP mode — it does not print help
+The launcher treats `-h` as the short alias for `--http`, and `-r` as the short alias for `--readonly`. There is no help flag; typing `-h` starts the HTTP server.
+:::
+
+From a source checkout (Option B) you can use the script instead:
 
 ```bash
 npm run start:http
@@ -167,6 +182,8 @@ export MCP_PORT=3001      # default: 3001
 export MCP_HOST=0.0.0.0   # default: 0.0.0.0
 ```
 
+The Docker and source-checkout start scripts also read `MCP_LOG_DIR` (default `/app/logs` in the container, `./logs` from a checkout). The published npm package ships only `build/` and `bin/`, so that variable does not apply to the `npx` route above.
+
 #### Option D: Docker Deployment
 
 Run TRON MCP Server in a Docker container for isolated, reproducible environments. The Docker image runs in **read-only HTTP mode** by default.
@@ -177,7 +194,8 @@ cat > .env.docker << 'EOF'
 TRONGRID_API_KEY=your-key-here
 EOF
 
-# 2. Build the image
+# 2. Build the image (requires the source checkout from Option B —
+#    the Dockerfile is not part of the published npm package)
 docker build -t mcp-server-tron .
 
 # 3. Run the container with --env-file

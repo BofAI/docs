@@ -28,7 +28,7 @@ This is the most common issue. Troubleshoot in the following order:
 
 ### "Connection refused" in HTTP mode
 
-When using HTTP mode (`npm run start:http`) and clients cannot connect, the usual causes are:
+When using HTTP mode (`npx -y @bankofai/mcp-server-tron --http`, or `npm run start:http` from a source checkout) and clients cannot connect, the usual causes are:
 
 1. **Server is not running**. Confirm first:
    ```bash
@@ -91,7 +91,7 @@ The API Key is configured but requests are still rate-limited — check the foll
 
 2. **Is the Key still active?** Log into [trongrid.io](https://www.trongrid.io/) to confirm your API Key is active.
 
-3. **Header format for cloud service**. When using the official cloud service with an API Key, the `--header` parameter format must be `TRONGRID-API-KEY:your-key` with no spaces around the colon.
+3. **The key is read from the environment, not from a request header.** The server reads `TRONGRID_API_KEY` from its own process environment and forwards it upstream as `TRON-PRO-API-KEY`; it does not inspect incoming request headers at all. A per-request API key against the hosted cloud service is therefore not possible — run a local or self-hosted instance with `TRONGRID_API_KEY` set if you need your own quota.
 
 ---
 

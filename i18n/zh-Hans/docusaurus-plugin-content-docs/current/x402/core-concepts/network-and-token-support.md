@@ -80,11 +80,11 @@ x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自�
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）与 BSC 主网（`eip155:56`）上解析 **USDT**，在 BSC 测试网（`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`）上解析 **USDC**。上表中的其余代币——TRON USDD、BSC 主网 USDC、BSC 测试网 USDT、DHLU 以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付；`x402-cli` 默认只支付其注册表内的代币——未注册资产需显式传 `--asset` 与 `--decimals`，且在 Base 上一律拒绝。
+> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）与 BSC 主网（`eip155:56`）上解析 **USDT**，在 BSC 测试网（`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`）上解析 **USDC**。注册表还为本页未列表的二十条 EVM 网络（MegaETH、Monad、Polygon、Arbitrum、Mezo、Radius、XDC、Celo、Flare 等）内置了默认资产。上表中的其余代币——TRON USDD、BSC 主网 USDC、BSC 测试网 USDT、DHLU 以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付；`x402-cli` 默认只支付其注册表内的代币——未注册资产需显式传 `--asset` 与 `--decimals`，且在 Base 上一律拒绝。
 
 > **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或 server 的 `EVM_TOKENS` 配置表，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
 
-> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`。每种代币的结算方式由你在 server 端 `accepts[].price.extra` 里配置，SDK 会在协议数据中以 `accepts[].extra` 下发：EIP-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。
+> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`；在 TRON 上，若 server 声明了 `trc20ApprovalResourceSponsoring`（SDK 1.2.0+），则改为客户端签名、由 facilitator 赞助并广播。每种代币的结算方式由你在 server 端 `accepts[].price.extra` 里配置，SDK 会在协议数据中以 `accepts[].extra` 下发：EIP-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。若某个 permit2 资产同时实现了 EIP-2612，`extra` 会在 `assetTransferMethod` 之外一并带上 `{ name, version }`；反过来，省略这对字段正是服务端告诉客户端「跳过 EIP-2612」的方式。两条代付路径都位于 permit2 分支内，因此对 EIP-3009 资产一概不适用。在 permit2 资产上，客户端签名无 gas 的 EIP-2612 permit 需要同时满足：具备 `readContract` 能力（由签名方或已配置的 RPC 提供）、服务端声明了 `eip2612GasSponsoring` 扩展、`extra` 里 `name` 与 `version` 都在、且当前 Permit2 额度尚不足以覆盖本次支付。注意这里的不对称：**缺少**读取能力会直接跳过 permit，而读取**抛错**则会被捕获、签名照常进行。否则客户端会*尝试* ERC-20 授权 gas 代付，这条路径要求 `readContract` 能力、服务端声明另一个独立的 `erc20ApprovalGasSponsoring` 扩展、签名方既能签原始交易又能报告交易计数，同样也要求现有额度不足；此时由客户端签名一笔 `MaxUint256` 的 `approve`——始终是最大值，与支付金额无关——由 facilitator 负责广播。两条路径都不满足时，载荷里不会带任何代付扩展。内置默认资产中带该标记的是 MegaETH MegaUSD（主网）以及 Mezo mUSD 与 Radius SBC（主网与测试网均有）。
 
 ## 安全签名
 
@@ -110,16 +110,16 @@ x402 采用类型化数据签名来处理所有支付相关的签名授权。
 
 ## 支付方案
 
-x402 支持四种支付方案。每种方案按链族实现为 client + server + facilitator 三件套。
+x402 定义了五种命名支付方案。其中四种按链族提供完整的 client + server + facilitator 实现；`auth-capture` 目前仅提供 EVM client。
 
 ### `exact` 方案 {#exact-scheme}
 
 `exact` 方案支付公布的准确金额，覆盖两种代币转账路径：
 
 - **EIP-3009 `transferWithAuthorization`**：适用于原生支持该标准的代币（如 Base 官方 USDC、BSC 测试网 DHLU）。无 gas：无需 `approve`；客户端签署类型化数据授权，facilitator 在链上调用 `transferWithAuthorization`。
-- **Permit2**：适用于不实现 ERC-3009 的普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）。客户端签署 Permit2 witness，facilitator 通过 `x402ExactPermit2Proxy` 合约结算。需要一次性 `approve(Permit2)`；客户端首次付款时自动广播。
+- **Permit2**：适用于不实现 ERC-3009 的普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）。客户端签署 Permit2 witness，facilitator 通过 `x402ExactPermit2Proxy` 合约结算。需要一次性 `approve(Permit2)`；客户端首次付款时自动广播。在 TRON 上，SDK 1.2.0 新增了 `trc20ApprovalResourceSponsoring` 扩展——若 server 声明了它，client 只签名而不广播该授权，由 facilitator 委托能量/带宽并广播，因此付款方授权时无需 TRX。
 
-`exact` 方案遵循 **x402 Foundation** 发布的 **v2 链路格式**：标准 v2 客户端可直接向本 SDK 的服务端发起付款请求，本 SDK 客户端也可直接访问任何 v2 兼容的服务端——无需项目特定的转换。转账授权数据位于 `payload.authorization` 中。
+`exact` 方案遵循 **x402 Foundation** 发布的 **v2 链路格式**：标准 v2 客户端可直接向本 SDK 的服务端发起付款请求，本 SDK 客户端也可直接访问任何 v2 兼容的服务端——无需项目特定的转换。转账授权数据在 EIP-3009 路径下位于 `payload.authorization`，在 Permit2 路径下位于 `payload.permit2Authorization`。
 
 ### `upto` 方案
 
@@ -128,6 +128,10 @@ x402 支持四种支付方案。每种方案按链族实现为 client + server +
 ### `batch-settlement` 方案
 
 面向高频微支付（如 AI 代理每 token 计费）的支付通道方案。客户端链上**一次性存入**，然后用链下**凭证**支付多次请求；facilitator **批量 claim** 并在一笔交易中结算到 `payTo`——因此 N 次请求约仅花费一次存入的 gas。含**退款**路径，可退回通道中未使用的余额。EVM 和 TRON 均支持。
+
+### `auth-capture` 方案
+
+面向可退款 Base Commerce Payments 的 EVM client 实现：先授权资金，之后再执行 capture、void 或 refund。当前发布的 SDK 仅提供 `@bankofai/x402-evm/auth-capture/client`；server 与 facilitator 实现尚未发布，因此暂时无法只依靠发布包完成端到端部署。
 
 ### `exact_gasfree` 方案
 
@@ -187,7 +191,7 @@ CLI 取的是服务端 `accepts` 列表中第一条匹配你过滤条件的支�
 
 | 核心组件     | TRON/BSC/Base 实现详情                              |
 | :----------- | :----------------------------------------- |
-| **网络环境** | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532` |
+| **网络环境** | 三个 TRON 标识（`tron:0x2b6653dc`、`tron:0x94a9059e`、`tron:0xcd8690dc`）以及任意 `eip155:<chainId>`——客户端与资源服务端默认注册的都是 `eip155:*`，SDK 为 `eip155:56` / `97` / `8453` / `84532` 之外的二十条 EVM 网络也内置了默认资产。但真正能结算的范围由 facilitator 显式配置的网络决定 |
 | **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）、BEP-20 代币、ERC-20 代币（Base 官方 USDC） |
 | **签名机制** | TIP-712 / EIP-712 类型化数据签名                     |
 | **支付方案** | `exact`、`upto`、`batch-settlement`、`exact_gasfree`（TRON） |

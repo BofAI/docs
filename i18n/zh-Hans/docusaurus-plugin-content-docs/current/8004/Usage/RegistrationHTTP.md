@@ -206,7 +206,7 @@ print(f"已加载名称: {loaded.registration_file.name}")
 ```typescript
 // 直接按 ID 从链上加载
 const loaded = await sdk.loadAgent(registrationFile.agentId!);
-console.log(`已加载名称: ${loaded.registrationFile.name}`);
+console.log(`已加载名称: ${loaded.toJSON().name}`);
 ```
 
 </TabItem>
@@ -221,12 +221,13 @@ console.log(`已加载名称: ${loaded.registrationFile.name}`);
 
 ```python
 from bankofai.sdk_8004.core.sdk import SDK
+import os
 
 # 初始化 SDK
 sdk = SDK(
     network="eip155:97",
     rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
-    signer=private_key
+    signer=os.environ["EVM_PRIVATE_KEY"]
 )
 
 # 1. 配置代理
@@ -239,7 +240,6 @@ agent.setMCP("https://mcp.example.com/")
 agent.setA2A("https://a2a.example.com/agent.json")
 
 # 2. 生成注册文件
-registration_data = agent.registrationFile().to_dict()
 json_content = str(agent.registrationFile())
 
 # 3. 保存并上传到您的服务器
@@ -264,7 +264,7 @@ import { SDK } from '@bankofai/8004-sdk';
 const sdk = new SDK({
     network: "eip155:97",
     rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
-    signer: private_key
+    signer: process.env.EVM_PRIVATE_KEY!
 });
 
 // 1. 配置代理
@@ -366,7 +366,7 @@ SDK 会生成符合 8004 标准的注册文件：
   "name": "我的 AI 代理",
   "description": "代理描述",
   "image": "https://example.com/image.png",
-  "endpoints": [
+  "services": [
     {
       "name": "MCP",
       "endpoint": "https://mcp.example.com/",
@@ -390,11 +390,12 @@ SDK 会生成符合 8004 标准的注册文件：
   ],
   "supportedTrust": ["reputation"],
   "active": true,
-  "x402support": false,
+  "x402Support": false,
   "updatedAt": 1234567890
 }
 ```
 
-说明：
-* Python 生成的注册 JSON 使用 `x402Support`。
-* TypeScript 当前生成的注册 JSON 使用 `x402support`。
+说明：发布这个文件时有两点需要注意。
+
+* **TypeScript 不会输出这两个键。** Python 的 `registrationFile().to_dict()`（以及 `str(...)`）产出的正是上面这种形态。而在 `@bankofai/8004-sdk` **1.1.2** 中，`agent.toJSON()` 返回的是 SDK 内部结构——`endpoints` 与 `x402support`——且 `uploadRegistrationFile()` 会把该对象原样序列化，因此 `registerIPFS()` 发布出去的同样是内部键名。在 TypeScript 中自行托管文件时，请自己把 `endpoints` → `services`、`x402support` → `x402Support` 转换好。
+* `setA2A()` 的端点版本默认值，Python 为 `0.30`，TypeScript 为 `0.3.0`。若需要两个语言一致，请显式传入版本号。

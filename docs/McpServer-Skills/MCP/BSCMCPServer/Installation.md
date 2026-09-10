@@ -3,7 +3,7 @@
 ### Prerequisites
 
 * **bun** v1.2.10 or higher  
-* **Node.js** v17 or higher  
+* **Node.js** v18 or higher (this page previously stated v17; the rest of the BANK OF AI toolchain requires 18+, and the TRON MCP server requires 20+)
 
 ### Quick Start
 
@@ -21,7 +21,7 @@
 3. **Edit the `.env` file and configure your information:**
     * `PRIVATE_KEY`: Your wallet private key (required for executing transactions)
     * `LOG_LEVEL`: Set the log level (`DEBUG`, `INFO`, `WARN`, `ERROR`)
-    * `PORT`: Server port number (default: `3001`)
+    * `PORT`: Server port number (default: `3001` — the TRON MCP server also defaults to 3001, so change one of them if you run both locally)
 
 4. **Install dependencies and start the development server:**
     ```bash

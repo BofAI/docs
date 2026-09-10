@@ -186,8 +186,8 @@ The server exposes these routes — the paywall branches on the `PAYMENT-SIGNATU
 
 | Route | Purpose |
 | :--- | :--- |
-| `GET /health` | Returns `{ "ok": true }` |
-| `GET /.well-known/x402` | Machine-readable payment metadata (network, scheme, asset, amount, `payTo`) |
+| `/health` (any method) | Returns `{ "ok": true }` |
+| `/.well-known/x402` (any method) | Machine-readable payment metadata: network, scheme, asset, amount, `rawAmount`, `payTo`, and `pay_url` |
 | `/pay` (any method) | Returns `402 Payment Required` with the challenge header when the request carries no `PAYMENT-SIGNATURE`; with that header, verifies and settles the payment through the facilitator and returns the transaction |
 
 **Examples:**
@@ -236,6 +236,8 @@ x402-cli gateway <search|start|check|scaffold|catalog> [options]
 | `check <providers>` | Validate one or more `provider.yml` files |
 | `scaffold <name>` | Write a starter `provider.yml` |
 | `catalog <command>` | Build/check/search gateway catalog assets |
+
+`gateway start` also accepts `--providers-dir` as an alias for `--providers`, and `gateway catalog search` accepts `--query` in place of the positional query.
 
 `gateway start` spawns a gateway runtime, but the CLI already ships one: the published package bundles `dist/gateway/cli.js` and depends on `@bankofai/x402-gateway`, so a normal `npm install -g @bankofai/x402-cli` needs nothing extra. It resolves the runtime in order — `--gateway-bin`, the `@bankofai/x402-gateway` dependency, the bundled `dist/gateway/cli.js`, `x402-gateway` on `PATH`, then `../x402-gateway/dist/cli.js` in a checkout. `gateway check`, `gateway catalog build`, `gateway catalog pay-assets`, and `catalog build` call the gateway library in-process; `gateway scaffold` only writes a template file, and `gateway search` / `gateway catalog search` read a catalog source.
 
@@ -296,7 +298,7 @@ x402-cli catalog <update|search|show|endpoints|pay-json|export-gateway|build> [o
 | `endpoints <provider>` | List a provider's endpoints |
 | `pay-json <provider>` | Print a provider's pay JSON (payable route details) |
 | `export-gateway <url>` | Export `catalog.json` and `pay.md` from a live gateway |
-| `build <providers>` | Build a catalog from local `provider.yml` files |
+| `build [providers]` | Build a catalog from local `provider.yml` files (defaults to `providers`) |
 
 **Common options:**
 
@@ -304,7 +306,7 @@ x402-cli catalog <update|search|show|endpoints|pay-json|export-gateway|build> [o
 | :--- | :--- |
 | `--catalog <source>` | `catalog.json` path or URL |
 | `--provider <fqn>` | Provider FQN (for `export-gateway`) |
-| `--output-dir <dir>` | Output directory for generated files (`export-gateway`) |
+| `--output-dir <dir>` | Output directory for generated files (`export-gateway`; defaults to `providers/<fqn>/`, with any `/` in the FQN replaced by `__`) |
 | `--output <file>` | Write the built catalog JSON to this file (`build`) |
 | `--dist-dir <dir>` | Write the built catalog to `<dir>/catalog.json` (`build`) |
 | `-n, --limit <count>` | Search result limit (default: `10`) |

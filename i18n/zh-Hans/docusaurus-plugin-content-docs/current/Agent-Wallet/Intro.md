@@ -55,7 +55,7 @@
 | **工作原理** | :x: 把银行卡和密码直接交给 AI 代理 | :white_check_mark: **给 AI 代理密码，文件锁在本地** |
 | **遭遇日志/环境变量泄露** | :rotating_light: **直接倾家荡产** | :shield: **只丢了密码，没有文件，黑客偷不走钱** |
 | **遭遇加密文件被窃取** | :x: 明文私钥，直接被盗 | :shield: **没有密码，黑客打不开文件** |
-| **断网能签名吗** | :warning: 看情况 | :white_check_mark: **100% 离线签名** |
+| **断网能签名吗** | :warning: 看情况 | :white_check_mark: **100% 离线签名**（`local_secure` / `raw_secret`；`privy` 类型经 Privy API 签名，需联网） |
 
 ---
 
@@ -72,14 +72,14 @@ npm install -g @bankofai/agent-wallet
 ```bash
 agent-wallet start
 ```
-运行后，系统会引导你初始化 Agent-wallet 钱包，并生成一个**主密码**。这个密码是你唯一的"开箱钥匙"：每次 AI 代理需要签名时，都要用它来解锁钱包。**请立刻用密码管理器（如 1Password、Bitwarden）保存这个密码**——它不会再次显示，丢了就无法找回，资产也将无法操作。
+运行后，向导会让你设置一个**主密码**——直接回车则自动生成一个强密码，且只显示一次。这个密码是你唯一的"开箱钥匙"：每次 AI 代理需要签名时，都要用它来解锁钱包。**请立刻用密码管理器（如 1Password、Bitwarden）保存这个密码**——丢了就无法找回，资产也将无法操作。
 
 **第三步 — 第一次签名：**
 ```bash
 agent-wallet sign msg "Hello from my AI agent" -n tron
 ```
 
-当屏幕上吐出一串哈希字符时——恭喜，你的 Agent-wallet 配置成功了。
+CLI 会先要求输入主密码——直接跑 `agent-wallet start` 不会持久化密码，签名时必须解锁密钥库。（在第 2 步加上 `--save-runtime-secrets` 即可跳过这一步，BANK OF AI 的引导技能就是这么做的。）当屏幕上吐出一串哈希字符时——恭喜，你的 Agent-wallet 配置成功了。
 
 > 想看每一步的详细说明？去 **[快速开始](./QuickStart.md)**。
 

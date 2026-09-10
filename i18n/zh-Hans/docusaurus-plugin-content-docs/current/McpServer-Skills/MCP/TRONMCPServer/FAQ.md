@@ -28,7 +28,7 @@
 
 ### HTTP 模式下"连接被拒绝"
 
-使用 HTTP 模式（`npm run start:http`）时客户端无法连接，通常是以下原因：
+使用 HTTP 模式（`npx -y @bankofai/mcp-server-tron --http`，或源码检出后的 `npm run start:http`）时客户端无法连接，通常是以下原因：
 
 1. **服务器没有在运行**。先确认一下：
    ```bash
@@ -81,7 +81,7 @@
 
 `AGENT_WALLET_PASSWORD` 必须与运行 `agent-wallet start` 时生成的主密码完全一致。请确认钱包目录存在（`ls ~/.agent-wallet/`），如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
 
-如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ.md)。
+如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset重置所有数据)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ.md)。
 
 ### TronGrid API Key 不生效
 
@@ -91,7 +91,7 @@
 
 2. **Key 是否仍然有效**。登录 [trongrid.io](https://www.trongrid.io/) 确认 API Key 处于激活状态。
 
-3. **云服务的请求头格式**。通过官方云服务使用 API Key 时，`--header` 参数的格式必须是 `TRONGRID-API-KEY:你的key`，冒号前后不能有空格。
+3. **密钥从环境变量读取，不走请求头。** 服务端从自身进程环境读取 `TRONGRID_API_KEY`，再以 `TRON-PRO-API-KEY` 转发给上游；它完全不解析进入的请求头。因此无法按请求给托管的云服务传 API Key——需要自己的配额，请在本地或自建实例上设置 `TRONGRID_API_KEY`。
 
 ---
 

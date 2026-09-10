@@ -9,7 +9,7 @@
 在开始之前，请确保你的电脑上已经装好了以下几种基础软件（如果没有，请像装普通软件一样去官网下载安装）：
 
 1. **OpenClaw**：你的 AI 助手软件。
-2. **Node.js**（请务必安装 v18 或以上版本）：这是技能包和配置工具运行的基础环境。*（极其重要，版本太低一定会报错！）*
+2. **Node.js**（v20 或以上）：安装向导会装 `@bankofai/mcp-server-tron`，它声明了 `node >= 20`。*（极其重要——两个安装器都不强制 20：macOS/Linux 脚本只检查 `node` 是否存在，Windows 脚本也只强制 18。版本过低会通过预检但在后面报错。）*
 3. **Git**：用来下载技能包的小工具。
 
 **Windows 用户额外注意：**
@@ -68,7 +68,7 @@ install.bat
 </TabItem>
 </Tabs>
 
-🚑 **急救包：敲完回车就报错了？** 如果屏幕提示 `command not found: node`（Mac/Linux）或 `node 不是内部命令`（Windows），说明你的电脑缺少上面说的基础环境。👉 [点这里看怎么解决](./FAQ.md#报错里写着-command-not-found-node-或-npm-install-失败)
+🚑 **急救包：敲完回车就报错了？** 如果屏幕提示 `command not found: node`（Mac/Linux）或 `node is not recognized`（Windows），说明你的电脑缺少上面说的基础环境。👉 [点这里看怎么解决](./FAQ.md#报错里写着-command-not-found-node-或-npm-install-失败)
 
 如果没有报错，屏幕上会跳出安装向导。请把它当成一个文字小游戏，整个流程分 4 关：
 
@@ -115,9 +115,9 @@ The following data will be permanently deleted:
 ```
 Running cleanup...
 
-◇  Found 14 unique installed skill(s)
+◇  Found 10 unique installed skill(s)
 ◇  Removal process complete
-◆  Successfully removed 14 skill(s)
+◆  Successfully removed 10 skill(s)
 
 ✓ Clean install cleanup completed.
 
@@ -153,9 +153,11 @@ Wallet data reset complete.
 ```
 Step 0: AgentWallet Setup
 
-Launching: agent-wallet start --override --save-runtime-secrets
+Launching: agent-wallet start --save-runtime-secrets
 Please complete initialization in the CLI prompts.
 ```
+
+（走 **CLEAN** 清理安装时，这一行会是 `agent-wallet start --override --save-runtime-secrets`；`--override` 用于跳过「已存在钱包」的确认提示，只出现在该路径上。普通安装不会传它，所以你原有的钱包不会被动。）
 
 **① 选钱包类型** —— 直接按回车用默认值就好：
 
@@ -242,7 +244,7 @@ Adding MCP server...
 ```
 
 :::tip 想要更快的查询速度？
-安装后你可以自行配置 `TRONGRID_API_KEY` 来获取 TronGrid 专属访问通道——没有它的话，高频查询可能会被限速。配置方法见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
+安装后你可以自行配置 `TRONGRID_API_KEY` 来获取 TronGrid 专属访问通道——没有它的话，高频查询可能会被限速。配置方法见下方「[事后怎么补填 API Key](#️-事后怎么补填-api-keyvip-通行证)」。
 :::
 
 #### bnbchain-mcp（BNB Chain 工具箱）
@@ -295,13 +297,12 @@ Select skills installation scope:
 然后技能选择器启动：
 
 ```
-◇  Found 14 skills
+◇  Found 10 skills
 │
 ◇  Select skills to install (space to toggle)
-│  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions, recharge-skill,
-│  SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit, SunSwap DEX Trading,
-│  TRC20 Token Toolkit, TronScan Data Lookup, TRX Staking & SR Voting, USDD / JUST Protocol,
-│  twitter-digest, twitter-mcp, x402-payment
+│  agent-wallet, bankofai-guide, recharge-skill, SunPerp Perpetual Futures Trading,
+│  SunPump Meme Token Toolkit, SunSwap DEX Trading, TronScan Data Lookup,
+│  USDD / JUST Protocol, wallet-cli, x402-payment
 ```
 
 每个技能是干啥的：
@@ -314,12 +315,8 @@ Select skills installation scope:
 | **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
 | **SunPump Meme Token Toolkit** | 在 SunPump 上创建与交易 meme 代币，查询代币信息、排行、持有者与交易历史 |
 | **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
-| **TRC20 Token Toolkit** | TRC20 代币发送等常用操作 |
-| **TRX Staking & SR Voting** | 质押 TRX 获取能量/带宽，并为超级代表（SR）投票 |
 | **USDD / JUST Protocol** | 管理 USDD 稳定币与 JUST 协议仓位 |
-| **Multi-Sig & Account Permissions** | 多签钱包与账户权限管理 |
-| **twitter-digest** | 生成 X/Twitter 每日日报（提及、主页时间线、可回复机会） |
-| **twitter-mcp** | 为 X/Twitter 安装/授权 xurl，并用本地 xurl CLI 生成日报 |
+| **wallet-cli** | 通过锁定版 `wallet-cli` npm 包直接完成 TRON 钱包操作（转账、质押、投票、签名） |
 | **x402-payment** | x402 协议支付（Agent 间付款） |
 | **recharge-skill** | 查询和充值 BANK OF AI 余额 |
 
@@ -329,17 +326,13 @@ Select skills installation scope:
 ◇  Security Risk Assessments
 │                                     Gen               Socket            Snyk
 │  bankofai-guide                     Safe              0 alerts          High Risk
-│  Multi-Sig & Account Permissions    --                --                --
 │  recharge-skill                     Safe              1 alert           Med Risk
 │  SunPerp Perpetual Futures Trading  --                --                --
 │  SunPump Meme Token Toolkit         --                --                --
 │  SunSwap DEX Trading                --                --                --
-│  TRC20 Token Toolkit                --                --                --
 │  TronScan Data Lookup               --                --                --
-│  TRX Staking & SR Voting            --                --                --
 │  USDD / JUST Protocol               --                --                --
-│  twitter-digest                     --                --                --
-│  twitter-mcp                        --                --                --
+│  wallet-cli                         --                --                --
 │  x402-payment                       Safe              1 alert           Med Risk
 │  agent-wallet                       Safe              1 alert           High Risk
 ```
@@ -347,21 +340,17 @@ Select skills installation scope:
 查看报告后确认继续。安装完成时：
 
 ```
-◇  Installed 14 skills
+◇  Installed 10 skills
 │
 │  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
 │  ✓ bankofai-guide → ~/.openclaw/skills/bankofai-guide
-│  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
 │  ✓ SunPump Meme Token Toolkit → ~/.openclaw/skills/sunpump-meme-token-toolkit
 │  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
-│  ✓ TRC20 Token Toolkit → ~/.openclaw/skills/trc20-token-toolkit
 │  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
-│  ✓ TRX Staking & SR Voting → ~/.openclaw/skills/trx-staking-sr-voting
 │  ✓ USDD / JUST Protocol → ~/.openclaw/skills/usdd-just-protocol
-│  ✓ twitter-digest → ~/.openclaw/skills/twitter-digest
-│  ✓ twitter-mcp → ~/.openclaw/skills/twitter-mcp
+│  ✓ wallet-cli → ~/.openclaw/skills/wallet-cli
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
@@ -377,7 +366,7 @@ Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
 
-**现在没有？直接按回车跳过。** 以后拿到了 Key 可以手动创建配置文件，详见下方「[事后怎么补填 API Key](#-事后怎么补填-api-keyvip-通行证)」。
+**现在没有？直接按回车跳过。** 以后拿到了 Key 可以手动创建配置文件，详见下方「[事后怎么补填 API Key](#️-事后怎么补填-api-keyvip-通行证)」。
 
 当屏幕底部亮起 `Installation Complete!` 时——恭喜，通关成功！
 
@@ -393,11 +382,13 @@ Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 ✓ Installed skills:
   • agent-wallet
   • bankofai-guide
-  • Multi-Sig & Account Permissions
   • recharge-skill
-  • TRC20 Token Toolkit
-  • TRX Staking & SR Voting
+  • SunPerp Perpetual Futures Trading
+  • SunPump Meme Token Toolkit
+  • SunSwap DEX Trading
+  • TronScan Data Lookup
   • USDD / JUST Protocol
+  • wallet-cli
   • x402-payment
   Verify with: npx skills list -g
 

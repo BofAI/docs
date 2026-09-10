@@ -22,13 +22,13 @@ Both installation instructions and code examples are provided for TypeScript and
 
 **Check Your Node.js Version**
 
-Requires Node.js ≥ 20. Check your current version:
+Requires Node.js ≥ 18 — that is the package's own `engines` floor. Installing the current LTS is recommended: Node 18 reached end-of-life in April 2025 and Node 20 in April 2026. Check your current version:
 
 ```bash
 node -v
 ```
 
-If the output is `v20.0.0` or higher, you can proceed directly to installation. Otherwise, follow the instructions below.
+If the output is `v18.0.0` or higher, you can proceed directly to installation. Otherwise, follow the instructions below.
 
 :::tip Install / Upgrade Node.js
 
@@ -41,9 +41,9 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 # Reload shell config
 source ~/.bashrc   # or source ~/.zshrc
 
-# Install and switch to Node.js 20 LTS
-nvm install 20
-nvm use 20
+# Install and switch to the current Node.js LTS
+nvm install --lts
+nvm use --lts
 ```
 
 You can also download the **LTS** installer directly from [nodejs.org](https://nodejs.org).
@@ -114,15 +114,10 @@ You can also download an installer from [python.org](https://www.python.org/down
 **Install the SDK**
 
 ```bash
-pip install 'bankofai-agent-wallet[evm,tron]'
+pip install bankofai-agent-wallet
 ```
 
-If you only need one chain, install the corresponding extra:
-
-```bash
-pip install 'bankofai-agent-wallet[tron]'   # TRON only
-pip install 'bankofai-agent-wallet[evm]'    # EVM only
-```
+Both chain stacks (`eth-account` for EVM and `tronpy` for TRON) are installed unconditionally — there are no per-chain extras.
 
 Verify the installation:
 
@@ -139,7 +134,7 @@ python3 -c "import agent_wallet; print('Installation successful')"
 
 Before calling the SDK, you need to tell Agent-wallet where to find your keys via environment variables.
 
-Don't be intimidated by the concepts — `resolveWalletProvider()` is extremely smart. It automatically detects which environment variables you've set and decides the mode for you. No `if/else` logic needed in your code.
+Don't be intimidated by the concepts — `resolveWalletProvider()` is extremely smart. It detects what is available — environment variables, a saved runtime-secrets password, or an existing local wallet config — and decides the mode for you. No `if/else` logic needed in your code.
 
 It supports two modes:
 
@@ -205,7 +200,7 @@ The SDK still accepts the older `TRON_PRIVATE_KEY`, `TRON_MNEMONIC`, and `TRON_A
 
 ### Initialize the Wallet Provider
 
-The starting point for all operations is `resolveWalletProvider()`. It reads the environment variables, selects the appropriate mode, and returns a wallet provider. Call `getActiveWallet()` to get the active wallet.
+The starting point for all operations is `resolveWalletProvider()`. It selects the appropriate mode and returns a wallet provider; call `getActiveWallet()` to get the active wallet. Selection is not driven by environment variables alone: a password saved in the runtime-secrets file counts too, and if the wallet directory already holds any wallet, local mode wins even with no environment variable set at all.
 
 <Tabs>
 <TabItem value="ts" label="TypeScript">
@@ -243,7 +238,67 @@ asyncio.run(main())
 </TabItem>
 </Tabs>
 
-Once you have `wallet`, you can call any of the three signing methods below. All signing methods return a hex-encoded signature string (without the `0x` prefix).
+Once you have `wallet`, you can call any of the three signing methods below. `signMessage` and `signTypedData` return a hex-encoded signature string (without the `0x` prefix); `signTransaction` returns the full serialized signed transaction — hex without `0x` on EVM, and a JSON string on TRON. `signTypedData` is declared on a separate `Eip712Capable` interface rather than on `Wallet`, in both languages. TypeScript enforces this, so cast the wallet before calling it; Python only enforces it at type-check time — the call works at runtime, and the repo's own idiom for keeping type checkers happy is an `isinstance(wallet, Eip712Capable)` guard.
+
+#### Shortcut: `resolveWallet()`
+
+When you only need the wallet and never touch the provider itself, `resolveWallet()` collapses both steps into one call. It takes the same `network` and `dir` options, plus an optional `walletId` to pick a specific wallet instead of the active one. `walletId` applies to local wallet-config mode only — in static-injection mode it is ignored and the environment wallet is returned.
+
+<Tabs>
+<TabItem value="ts" label="TypeScript">
+
+```typescript
+import { resolveWallet } from "@bankofai/agent-wallet";
+
+const wallet = await resolveWallet({ network: "tron:nile" });
+
+// Or target a specific wallet instead of the active one
+const other = await resolveWallet({ network: "tron:nile", walletId: "trading" });
+```
+
+</TabItem>
+<TabItem value="python" label="Python">
+
+```python
+import asyncio
+from agent_wallet import resolve_wallet
+
+async def main():
+    wallet = await resolve_wallet(network="tron:nile")
+
+    # Or target a specific wallet instead of the active one
+    other = await resolve_wallet(network="tron:nile", wallet_id="trading")
+
+asyncio.run(main())
+```
+
+</TabItem>
+</Tabs>
+
+Both functions also accept `dir` to point at a wallet directory other than `~/.agent-wallet`, which is the programmatic equivalent of the `AGENT_WALLET_DIR` environment variable.
+
+:::note Privy authorization keys
+Every signing method takes an optional second argument, `SignOptions`. Its only field is forwarded as the `privy-authorization-signature` header — required when a Privy wallet is governed by an authorization-key policy. Local wallets ignore it. The field is `authorizationSignature` in TypeScript and `authorization_signature` in Python:
+
+<Tabs>
+<TabItem value="ts" label="TypeScript">
+
+```typescript
+await wallet.signMessage(message, { authorizationSignature });
+```
+
+</TabItem>
+<TabItem value="python" label="Python">
+
+```python
+from agent_wallet import SignOptions
+
+await wallet.sign_message(message, SignOptions(authorization_signature=signature))
+```
+
+</TabItem>
+</Tabs>
+:::
 
 ### Sign a Message
 
@@ -317,30 +372,36 @@ print("Signed transaction:", signed_tx_json)
 <TabItem value="ts" label="TypeScript">
 
 ```typescript
-const sig = await wallet.signTransaction({
+const signedTxHex = await wallet.signTransaction({
+  type: "eip1559",
   to: "0xRecipient...",
   value: 0n,
   gas: 21000n,
   maxFeePerGas: 20000000000n,
+  maxPriorityFeePerGas: 1000000000n,
   nonce: 0,
   chainId: 56,
 });
-console.log("Signature:", sig);
+console.log("Signed tx:", signedTxHex);
 ```
 
 </TabItem>
 <TabItem value="python" label="Python">
 
 ```python
-sig = await wallet.sign_transaction({
-    "to": "0xRecipient...",
+from eth_utils import to_checksum_address
+
+signed_tx_hex = await wallet.sign_transaction({
+    "type": 2,  # optional here — what eth-account requires is BOTH fee fields, or gasPrice for a legacy tx
+    "to": to_checksum_address("0xRecipient..."),
     "value": 0,
     "gas": 21000,
     "maxFeePerGas": 20000000000,
+    "maxPriorityFeePerGas": 1000000000,
     "nonce": 0,
     "chainId": 56,
 })
-print("Signature:", sig)
+print("Signed tx:", signed_tx_hex)
 ```
 
 </TabItem>
@@ -354,7 +415,12 @@ Used for x402 protocol PaymentPermit signatures, Permit2, and similar scenarios:
 <TabItem value="ts" label="TypeScript">
 
 ```typescript
-const sig = await wallet.signTypedData({
+import type { Eip712Capable } from "@bankofai/agent-wallet";
+
+// signTypedData lives on Eip712Capable, not on the base Wallet interface
+const signer = wallet as unknown as Eip712Capable;
+
+const sig = await signer.signTypedData({
   types: {
     EIP712Domain: [
       { name: "name", type: "string" },
@@ -528,6 +594,20 @@ WalletError
 ├── PrivyRateLimitError        # Privy API rate limit exceeded
 └── PrivyAuthError             # Privy authentication failed
 ```
+
+:::note Python imports
+TypeScript exports all of the above from the package root. Python's top-level `agent_wallet` exports only `WalletError`, `WalletNotFoundError`, `DecryptionError`, `SigningError`, `NetworkError`, and `UnsupportedOperationError`. Import the remaining five from `agent_wallet.core.errors`:
+
+```python
+from agent_wallet.core.errors import (
+    InsufficientBalanceError,
+    PrivyConfigError,
+    PrivyRequestError,
+    PrivyRateLimitError,
+    PrivyAuthError,
+)
+```
+:::
 
 :::tip About InsufficientBalanceError
 `InsufficientBalanceError` is **not** thrown by the SDK itself — Agent-wallet is a sign-only tool and does not check balances. This error type is provided as a convenience for your application code to throw when you detect insufficient funds before initiating a transaction.

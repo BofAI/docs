@@ -136,6 +136,7 @@ git --version     # 版本控制工具
 
 ```bash
 pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm
+pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 ```
 
 请根据服务框架选择对应包（`@bankofai/x402-express`、`@bankofai/x402-hono`、`@bankofai/x402-fastify` 或 `@bankofai/x402-next`）。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
@@ -179,6 +180,10 @@ import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
 
 const server = createResourceServer(
   new HTTPFacilitatorClient({
+    // 运行前请替换——服务端启动时会与 facilitator 同步，
+    // 占位地址会让第一个受保护请求失败（主机不可达或返回 HTTP 错误状态时是 500；
+    // facilitator 超时、或返回 SDK 无法解析的响应体时是 502）。
+    // 官方：https://facilitator.bankofai.io  ·  自建示例：http://localhost:4022
     url: "https://facilitator.example.com",
   })
 );
@@ -226,6 +231,10 @@ import { ExactEvmScheme } from "@bankofai/x402-evm/exact/server";
 
 const server = createResourceServer(
   new HTTPFacilitatorClient({
+    // 运行前请替换——服务端启动时会与 facilitator 同步，
+    // 占位地址会让第一个受保护请求失败（主机不可达或返回 HTTP 错误状态时是 500；
+    // facilitator 超时、或返回 SDK 无法解析的响应体时是 502）。
+    // 官方：https://facilitator.bankofai.io  ·  自建示例：http://localhost:4022
     url: "https://facilitator.example.com",
   })
 );
@@ -266,7 +275,7 @@ express()
 | 参数 | 说明 | 示例 |
 |------|------|--------|
 | `payTo` | 您的收款钱包地址 | TRON：`T...`；Base：`0x...` |
-| `accepts[].price` | 每次请求价格 | TRON：`"1 USDT"`；Base：`"1 USDC"` |
+| `accepts[].price` | 每次请求价格——这是**配置**字段；SDK 会把它转换成链路上的 `amount` + `asset`（以及 `extra`） | TRON：`"1 USDT"`；Base：`"1 USDC"` |
 | `accepts[].network` | 使用的网络 | TRON Nile：`tron:0xcd8690dc`；Base 主网：`eip155:8453` |
 | `accepts[].scheme` | 付款方式 | `"exact"` |
 | `routes` | `"METHOD /path"` → `{ accepts }` 的映射 | `"GET /credit"` |
@@ -327,6 +336,21 @@ const server = createResourceServer(
 
 ```bash
 FACILITATOR_API_KEY=paste_your_api_key_here
+```
+
+只有传入 `createAuthHeaders`，`HTTPFacilitatorClient` 才会发送该请求头——否则服务端会静默停留在匿名档位：
+
+```typescript
+const apiKeyHeaders = { "X-API-KEY": process.env.FACILITATOR_API_KEY! };
+
+new HTTPFacilitatorClient({
+  url: "https://facilitator.bankofai.io",
+  createAuthHeaders: async () => ({
+    verify: apiKeyHeaders,
+    settle: apiKeyHeaders,
+    supported: apiKeyHeaders,
+  }),
+});
 ```
 
 > ⚠️ **安全提醒：** API Key 是服务凭据——**像密码一样保管，切勿提交到 Git**。
@@ -419,10 +443,14 @@ Resource server on http://localhost:4021
 在任意终端运行：
 
 ```bash
-curl http://localhost:4021/credit
+curl -i http://localhost:4021/credit
 ```
 
-**预期结果：** 服务器返回 HTTP `402` 响应，携带付款要求（一个 `accepts` 数组，列出 scheme、网络、价格和您的收款地址）。
+**预期结果：** 一个 HTTP `402`，**响应体是 `{}`**——在 x402 v2 下，付款要求放在 `PAYMENT-REQUIRED` 响应头里，内容是 base64 编码的 JSON。解码后即可看到 `accepts` 数组（每项包含 `scheme`、`network`、`asset`、`amount`、`payTo`、`maxTimeoutSeconds`、`extra`）：
+
+```bash
+curl -si http://localhost:4021/credit | grep -i '^payment-required:' | cut -d' ' -f2 | tr -d '\r' | base64 -d   # 旧版 macOS 用 base64 -D
+```
 
 > ✅ **这正是我们想要的！** 确认付款保护已生效——未付款请求被成功拦截。
 
@@ -441,11 +469,11 @@ curl http://localhost:4021/credit
 | 问题 | 原因 | 解决方案 |
 |---------|-------|----------|
 | `Failed to fetch` / connection refused | facilitator 或 server 未运行 | 先启动 facilitator，再运行您的 API server 入口文件 |
-| client `server offered no payment option matching "…"` | 客户端选择的网络或代币与 server 公布的选项不匹配 | 检查 server 的 `accepts`（网络 + 代币），例如 `TRON_NILE` + `USDT` |
+| 客户端选不出付款选项 | 客户端选择的网络或代币与 server 公布的选项不匹配 | 检查 server 的 `accepts`（网络 + 代币），例如 `TRON_NILE` + `USDT` |
 | `npx tsx` 下出现 `ERR_PACKAGE_PATH_NOT_EXPORTED` | 项目未声明为 ESM | 在 `package.json` 中添加 `"type": "module"` |
-| `UnsupportedNetworkError` / `No mechanism registered` | 客户端选择的网络没有注册的 scheme | 确保 client 包含目标网络，例如 `TRON_NILE` |
+| `No network/scheme registered for x402 version: 2 …` | 客户端选择的网络没有注册的 scheme | 确保 client 注册了目标网络，例如 `TRON_NILE` |
 | `Insufficient balance` / allowance 错误 | 测试钱包缺少测试代币，或 Permit2 授权额度过低 | 从水龙头领取测试代币；client 在首次付款时会自动批准 Permit2 |
-| `Connection timeout` | 网络或请求超时 | 检查连接，或设置可靠的 `EVM_RPC_URL`（如 `https://bsc-testnet-rpc.publicnode.com`） |
+| `Connection timeout` | 网络或请求超时 | 检查连接。注意 SDK 不读取任何环境变量——`EVM_RPC_URL` 由 `x402-cli` 和示例程序识别；在自己的服务端里请把 RPC 地址直接传给 signer 工厂函数 |
 
 ---
 

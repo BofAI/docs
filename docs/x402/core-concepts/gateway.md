@@ -20,8 +20,8 @@ Ready to dive in? Jump to [List your API](../api-catalog/list-your-service.md); 
 
 Think of the gateway as a **cashier + relay** standing in front of your API (technically, a reverse proxy):
 
-- **Agents only ever hit the gateway address** (like `https://x402-gateway.bankofai.io/providers/<fqn>/v1/...`) — they never reach your upstream API directly.
-- **The gateway forwards requests.** Once payment is verified (or the endpoint is free), it proxies the request upstream and returns the upstream result to the Agent untouched.
+- **Agents only ever hit the gateway address** (like `https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/v1/...`, where the id comes from the catalog entry's `url` — it is not the catalog FQN) — they never reach your upstream API directly.
+- **The gateway forwards requests.** Once payment is verified (or the endpoint is free), it proxies the request upstream and returns the upstream response body to the Agent unchanged — a fixed set of response headers is stripped — hop-by-hop headers plus `set-cookie`, `authorization`, `content-encoding`, `content-length` and every x402 payment header (so an upstream `PAYMENT-RESPONSE` never leaks through) — and a `PAYMENT-RESPONSE` header is added, and an operator can configure a response contract that turns an upstream `200` carrying a business error into a gateway error.
 - **Never a wallet private key.** Settlement uses a wallet **address** only; callers pay on-chain from their own wallets. Neither side of the gateway ever touches a private key.
 - **Upstream keys stay isolated.** If your upstream API needs auth, that API key lives only on the side running the gateway — in your local YAML / env for a self-hosted gateway, or held by us for the official gateway. Either way the caller never sees it, and it never enters the public catalog.
 - **You decide pricing per endpoint.** Price an endpoint in the config and it takes the paid flow; leave it unpriced (price 0) and it's forwarded directly — free endpoints stay free.
@@ -42,8 +42,8 @@ Every paid call clears on-chain via x402 — the price in the response is always
 
 1. **Agent calls** — requests the target endpoint.
 2. **Gateway quotes** — returns the price (HTTP `402`).
-3. **Wallet pays** — the Agent pays on-chain.
-4. **Verified & settled** — funds settle to your payout wallet.
+3. **Wallet authorizes** — the client signs the selected payment requirement and retries with a `PAYMENT-SIGNATURE` header.
+4. **Verified & settled** — the facilitator verifies the signed payload and settles the payment on-chain to your payout wallet.
 5. **Response returns** — the gateway forwards the request upstream and returns the result to the Agent.
 
 ### Free endpoints: straight pass-through
@@ -53,7 +53,7 @@ Unpriced endpoints skip the quote step entirely and trigger no on-chain transact
 1. **Agent calls** — requests the target endpoint.
 2. **Gateway forwards** — proxies upstream and returns the result.
 
-That means one service can mix paid and free endpoints — say `/v1/current` billed per call while `/v1/ping` stays free. Free endpoints are flagged in the catalog, so Agents can see at a glance which capabilities cost nothing.
+That means one service can mix paid and free endpoints — say `/v1/current` billed per call while `/v1/ping` stays free. An Agent tells them apart from the endpoint's `metered` flag and `min_price_usd` in the catalog output (there is no separate free-endpoint marker). Every endpoint published in the catalog today is metered, so this is a gateway capability rather than something the current listings demonstrate.
 
 :::note
 Paid or free, the caller gets access by paying on-chain and needs no API key; any upstream credentials stay gateway-side and the calling Agent can never touch them.
@@ -74,9 +74,9 @@ Providers turn calls into cash flow. Agents turn calls into capabilities. The ga
 
 ### For AI Agents: one catalog, many APIs, pay as you go
 
-- **MCP-native discovery** — find the right API and call it by name.
+- **CLI discovery today** — `x402-cli catalog search` / `show` / `endpoints` find the right API and its routes. Paying over MCP is supported via `@bankofai/x402-mcp`; catalog-aware MCP discovery is not shipped yet.
 - **Per-call pricing** — no subscriptions, no minimums.
-- **Live price transparency** — every call's price is signed by the gateway in real time; the quote is what you pay.
+- **Live price transparency** — the gateway returns the computed price in its `402` response, and the client's authorization binds the selected payment requirement. The quote itself is not a gateway cryptographic signature.
 - **No accounts, no keys** — your wallet is your identity; nothing to register or manage.
 
 → [Browse the API Catalog](../api-catalog/index.md)
@@ -93,7 +93,7 @@ Full steps: [List Your Service](../api-catalog/list-your-service.md).
 
 ### Official gateway, or run your own?
 
-- **Official gateway (hosted)**: BANK OF AI runs the gateway, proxies your API, and handles payment — you deploy nothing; the call addresses in your listing files use the official domain (like `x402-gateway.bankofai.io/providers/<fqn>`).
+- **Official gateway (hosted)**: BANK OF AI runs the gateway, proxies your API, and handles payment — you deploy nothing; the call addresses in your listing files use the official domain (like `x402-gateway.bankofai.io/providers/<gateway-provider-id>`).
 - **Run your own**: deploy the gateway on your own machine; upstream credentials and payout config stay local; the call addresses in your listing files use your own domain. For providers who want full control over credentials and infrastructure.
 
 Either way, the calling Agent's experience is identical: discovery, quoting, payment, and the call all follow the same x402 flow.

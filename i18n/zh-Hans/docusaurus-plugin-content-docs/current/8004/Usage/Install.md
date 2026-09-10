@@ -7,7 +7,7 @@
 * **Python**: 3.11 或更高版本
 * **pip**: 包管理器
 * **私钥**: 用于签署交易（若仅运行只读模式则不需要）
-* **RPC 节点**: 可访问的 Ethereum RPC 端点（例如 Alchemy, Infura）
+* **RPC 节点**: [受支持网络](/zh-Hans/8004/SupportedNetworks/)的 RPC 端点——BSC 使用 EVM 端点，TRON 使用 TRON 节点端点
 * **IPFS 提供商（可选）**: Pinata、Filecoin 账号或本地 IPFS 节点
 * **Subgraph（可选）**: 当你的部署提供 subgraph 端点时使用
 
@@ -15,13 +15,13 @@
 #### 1. 通过 GitHub 安装（当前推荐） 
 在终端窗口执行：
 ```bash
-pip install "git+https://github.com/BofAI/8004-sdk.git#subdirectory=python"
+pip install "git+https://github.com/BofAI/8004-sdk.git@main#subdirectory=python"
 ```
 > 当前 Python 包尚未发布到 PyPI。
 #### 2. 源码安装 
 在终端窗口执行：
 ```bash
-git clone https://github.com/BofAI/8004-sdk.git
+git clone -b main https://github.com/BofAI/8004-sdk.git
 cd 8004-sdk/python
 pip install -e .
 ```
@@ -43,7 +43,7 @@ pip install -e .
 * **Node.js**: 20 或更高版本
 * **npm 或 yarn**: 包管理器
 * **写入操作配置**: 写入操作需配置 `signer`（私钥字符串）
-* **RPC 节点**: 可访问的 Ethereum RPC 端点（例如 Alchemy, Infura）
+* **RPC 节点**: [受支持网络](/zh-Hans/8004/SupportedNetworks/)的 RPC 端点——BSC 使用 EVM 端点，TRON 使用 TRON 节点端点
 * **IPFS 提供商（可选）**: Pinata、Filecoin 账号或本地 IPFS 节点
 * **Subgraph（可选）**: 可按需传入 `subgraphUrl` 或 `subgraphOverrides`
 
@@ -58,7 +58,7 @@ npm install @bankofai/8004-sdk
 #### 2. 源码安装
 在终端窗口执行：
 ```bash
-git clone https://github.com/BofAI/8004-sdk.git
+git clone -b main https://github.com/BofAI/8004-sdk.git
 cd 8004-sdk/ts
 npm install
 npm run build
@@ -79,5 +79,5 @@ npm run build
 
 为了实现更强大的功能：
 
-* **Subgraph**: 可选配置；当你的部署提供端点时，可通过 `subgraphUrl` 或 `subgraphOverrides` 指定。
-* **IPFS 提供商 (IPFS Providers)**: 支持使用 Pinata JWT 或 Filecoin 私钥进行去中心化文件存储。
+* **Subgraph**: 可选。TypeScript 接受 `subgraphUrl` 或 `subgraphOverrides`；Python 只接受 `subgraphOverrides`。
+* **IPFS 提供商 (IPFS Providers)**: 可选，且两个语言的配置方式不同。Python 内置了提供方——`ipfs="pinata"`（`pinataJwt`）、`ipfs="filecoinPin"`（`filecoinPrivateKey`）或 `ipfs="node"`（`ipfsNodeUrl`）。TypeScript 没有内置提供方：需自行传入 `ipfsUploader` 回调，`registerIPFS()` 依赖它。

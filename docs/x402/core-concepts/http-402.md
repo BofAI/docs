@@ -124,13 +124,13 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 | `resource`          | Information about the requested resource                                    |
 | `accepts`           | Array of accepted payment options                                           |
 | `scheme`            | Payment scheme (`exact`, `upto`, `batch-settlement`, or `exact_gasfree`)  |
-| `network`           | Network identifier (`tron:0xcd8690dc`, `tron:0x2b6653dc`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532`)  |
+| `network`           | Network identifier — the three TRON IDs (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) or any `eip155:<chainId>`: a resource server registers `eip155:*` by default, so this field is not limited to `eip155:56` / `97` / `8453` / `84532`. Settlement is bounded separately by the networks the facilitator has configured  |
 | `amount`            | Payment amount in the smallest unit (e.g., 100 = 0.0001 USDT)              |
 | `asset`             | TRC-20/BEP-20 token contract address                                        |
 | `payTo`             | Seller's wallet address                                                     |
 | `maxTimeoutSeconds` | Maximum validity duration of the payment                                    |
-| `extra`             | Scheme-specific data — `assetTransferMethod` (`eip3009` / `permit2`), the token `name`/`version` for EIP-3009 assets, and, for a scheme that declares a non-default payment flow, `paymentFlow` (`upfront` or `escrow`) — every built-in scheme uses the default `authorization` flow, which is omitted from `extra`. It carries no fee object: the schemes take no facilitator fee. |
-| `extensions`        | Additional context for the payment scheme (e.g., gas-sponsoring, payment-identifier) |
+| `extra`             | Scheme-specific data — `assetTransferMethod` (`eip3009` / `permit2`), the token `name`/`version` for EIP-3009 assets and for permit2 assets that also support EIP-2612, and, for a scheme that declares a non-default payment flow, `paymentFlow` (`upfront` or `escrow`) — every built-in scheme uses the default `authorization` flow, which is omitted from `extra`. It carries no fee object: the schemes take no facilitator fee. |
+| `extensions`        | Additional context for the payment scheme (e.g., EVM gas-sponsoring, TRON `trc20ApprovalResourceSponsoring`, payment-identifier) |
 
 ## Payment Signature Structure
 

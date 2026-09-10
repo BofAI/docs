@@ -10,7 +10,7 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 **In short**: Your computer doesn't have Node.js installed, or the version is too old.
 
-**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v18 or higher recommended). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
+**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v20 or higher — `@bankofai/mcp-server-tron`, which the wizard installs, declares `node >= 20`). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
 
 ### Error Says "command not found: git"
 
@@ -110,7 +110,7 @@ Reinstall anytime! Don't worry about breaking your computer.
 
 ### Does the Installer Need Admin Privileges?
 
-Nope. The installer only writes to config files under your user directory. It doesn't modify system files, the registry, or Program Files.
+Not for the config files — those all land under your user directory, and the installer touches neither the registry nor Program Files. The one thing that reaches outside it is the pinned global install `npm install -g @bankofai/agent-wallet@<version>`. On Windows that goes to `%APPDATA%\npm` and needs no elevation; on macOS or Linux with a system-wide Node it writes to the global `node_modules` directory (for example `/usr/local/lib/node_modules`) and may ask for your password.
 
 ### Is the Windows Experience the Same as Mac/Linux?
 

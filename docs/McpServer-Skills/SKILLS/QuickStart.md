@@ -22,14 +22,14 @@ If you're already using a Skills-compatible AI Agent (OpenClaw, a Telegram bot, 
 2. Copy and paste the following prompt:
 
    ```
-   Run npx skills add BofAI/skills -g to install all BANK OF AI skills. After installation, use bankofai-guide to guide subsequent operations.
+   Run npx skills add https://github.com/BofAI/skills/tree/main -y -g to install all BANK OF AI skills. After installation, use bankofai-guide to guide subsequent operations.
    Note: Please install to the skill directory corresponding to the current Agent.
    ```
 
 3. The AI handles the entire flow automatically:
    - Pulls the `BofAI/skills` repository
    - Detects your current Agent's skills directory (e.g. `~/.agents/skills/`)
-   - Installs all 14 BANK OF AI skills: the 13 core skills (`agent-wallet`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `trc20-token-toolkit`, `usdd-just-protocol`, `trx-staking-sr-voting`, `multi-sig-account-permissions`, `x402-payment`, `recharge-skill`, `twitter-digest`, `twitter-mcp`) plus `bankofai-guide` (the onboarding helper)
+   - Installs all 10 BANK OF AI skills: the 9 core skills (`agent-wallet`, `wallet-cli`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `usdd-just-protocol`, `x402-payment`, `recharge-skill`) plus `bankofai-guide` (the onboarding helper)
 
 :::tip Why this is the recommended path for beginners
 You don't need to know what `npx`, `npm`, or "global install" mean. The AI handles every step including selecting the right skills directory for your platform, installing the wallet CLI, and onboarding you to your first wallet.
@@ -42,10 +42,10 @@ You don't need to know what `npx`, `npm`, or "global install" mean. The AI handl
 If you have Node.js installed and prefer the command line, simply tell your AI Agent to execute the following command:
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y -g
+npx skills add https://github.com/BofAI/skills/tree/main -y -g
 ```
 
-The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag installs them **globally** (user-level, under `~/.agents/skills/`) so every project can use them — keep it, otherwise the installer only installs into the directory you happen to be in. Once complete, it will show ✅ Installation complete! along with the full list of installed Skills.
+The `/tree/main` suffix pins the **stable `main` branch** — other development branches may contain unreleased changes. The `-y` flag skips all interactive prompts and installs all available Skills by default. The `-g` flag installs them **globally** (user-level, under `~/.agents/skills/`) so every project can use them — keep it, otherwise the installer only installs into the directory you happen to be in. Once complete, it will show ✅ Installation complete! along with the full list of installed Skills.
 
 ---
 
@@ -54,7 +54,7 @@ The `-y` flag skips all interactive prompts and installs all available Skills by
 If you want to choose which Skills to install and which AI tools to install them to, drop the `-y` flag but keep `-g`:
 
 ```bash
-npx skills add https://github.com/BofAI/skills -g
+npx skills add https://github.com/BofAI/skills/tree/main -g
 ```
 
 :::tip
@@ -70,14 +70,12 @@ The installer will guide you through a few steps — just follow along:
 The installer automatically fetches all available Skills from the repo and lists them for selection. Press **Space** to toggle each one — we recommend selecting all:
 
 ```
-◇  Found 14 skills
+◇  Found 10 skills
 │
 ◇  Select skills to install (space to toggle)
-│  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions,
-│  recharge-skill, SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit,
-│  SunSwap DEX Trading, TRC20 Token Toolkit, TronScan Data Lookup,
-│  TRX Staking & SR Voting, USDD / JUST Protocol, twitter-digest, twitter-mcp,
-│  x402-payment
+│  agent-wallet, bankofai-guide, recharge-skill, SunPerp Perpetual Futures Trading,
+│  SunPump Meme Token Toolkit, SunSwap DEX Trading, TronScan Data Lookup,
+│  USDD / JUST Protocol, wallet-cli, x402-payment
 ```
 
 :::tip Select all
@@ -98,7 +96,7 @@ The installer auto-detects AI tools on your computer (e.g., Cursor, Claude Code,
 
 **3️⃣ Installation scope**
 
-Because you passed `-g`, the installer skips this question and installs at user level, under `~/.agents/skills/`. Without `-g` it asks you to choose between `Project` (current project only) and `User` (globally available across all projects):
+Because you passed `-g`, the installer skips this question and installs at user level, under `~/.agents/skills/`. Passing `-y` alone also skips it. Otherwise it asks you to choose between `Project` (install in the current directory, committed with your project) and `Global` (install in your home directory, available across all projects):
 
 ```
 ◇  Installation scope
@@ -107,7 +105,7 @@ Because you passed `-g`, the installer skips this question and installs at user 
 
 **4️⃣ Choose installation method**
 
-Choose how skill files land in each tool — `Symlink` (recommended) or `Universal` (full copy). Just press Enter to use the recommended option:
+Choose how skill files land in each tool — `Symlink (Recommended)` or `Copy to all agents` (full copy). Just press Enter to use the recommended option. ("universal" in the summary lines is not this setting — it labels the agents that share the `.agents/skills` directory.)
 
 ```
 ◇  Installation method
@@ -116,17 +114,12 @@ Choose how skill files land in each tool — `Symlink` (recommended) or `Univers
 
 **5️⃣ Review the installation plan**
 
-The installer shows a summary of where each Skill will land, whether it'll be a full copy (`universal`) or a symlink for each target tool, and which existing files it overwrites:
+The installer shows a summary of where each Skill will land and which existing files it overwrites. In symlink mode the summary splits targets into a `universal:` line and a `symlink →` line; in copy mode it prints a single `copy →` line covering every agent:
 
 ```
 ◇  Installation Summary ─────────────────────────────────────────────────────────╮
 │                                                                                │
 │  ~/.agents/skills/bankofai-guide                                               │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/multi-sig-account-permissions                                │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
 │    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
 │    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
@@ -151,22 +144,17 @@ The installer shows a summary of where each Skill will land, whether it'll be a 
 │    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
 │    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
 │                                                                                │
-│  ~/.agents/skills/trc20-token-toolkit                                          │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
 │  ~/.agents/skills/tronscan-data-lookup                                         │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
 │    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
 │    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
 │                                                                                │
-│  ~/.agents/skills/trx-staking-sr-voting                                        │
+│  ~/.agents/skills/usdd-just-protocol                                           │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
 │    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
 │    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
 │                                                                                │
-│  ~/.agents/skills/usdd-just-protocol                                           │
+│  ~/.agents/skills/wallet-cli                                                   │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
 │    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
 │    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
@@ -184,8 +172,8 @@ The installer shows a summary of where each Skill will land, whether it'll be a 
 ├────────────────────────────────────────────────────────────────────────────────╯
 ```
 
-:::tip universal vs symlink
-Tools that follow the generic skills layout get a **universal** copy under `~/.agents/skills/`. Claude Code, OpenClaw, and similar tools use their own conventions, so the installer creates **symlinks** pointing back to the universal copy — one source of truth, everything stays in sync. `overwrites` lists the existing same-name skill files this run will replace.
+:::tip What `universal` means here
+`universal` labels the tools that read the shared `~/.agents/skills/` layout — the skill files live there directly. Claude Code, OpenClaw and similar tools use their own directories, so in symlink mode the installer points **symlinks** back at that shared copy: one source of truth, everything stays in sync. It is a category of tool, not the copy-vs-symlink setting you chose in the previous step. `overwrites` lists the existing same-name skill files this run will replace.
 :::
 
 **6️⃣ Review security assessment & confirm**
@@ -197,15 +185,13 @@ The installer runs a security scan on each Skill and shows the results. Review t
 │                                                                                    │
 │                                     Gen               Socket            Snyk       │
 │  bankofai-guide                     Safe              0 alerts          High Risk  │
-│  Multi-Sig & Account Permissions    --                --                --         │
 │  recharge-skill                     Safe              1 alert           Med Risk   │
 │  SunPerp Perpetual Futures Trading  --                --                --         │
 │  SunPump Meme Token Toolkit         --                --                --         │
 │  SunSwap DEX Trading                --                --                --         │
-│  TRC20 Token Toolkit                --                --                --         │
 │  TronScan Data Lookup               --                --                --         │
-│  TRX Staking & SR Voting            --                --                --         │
 │  USDD / JUST Protocol               --                --                --         │
+│  wallet-cli                         --                --                --         │
 │  x402-payment                       Safe              1 alert           Med Risk   │
 │  agent-wallet                       Safe              1 alert           High Risk  │
 │                                                                                    │
@@ -224,12 +210,9 @@ When you see output like this, all Skills have been successfully installed to yo
 ```
 ◇  Installation complete
 
-◇  Installed 14 skills ──────────────────────────────────────────────────╮
+◇  Installed 10 skills ──────────────────────────────────────────────────╮
 │                                                                        │
 │  ✓ ~/.agents/skills/bankofai-guide                                     │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/multi-sig-account-permissions                      │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
 │  ✓ ~/.agents/skills/recharge-skill                                     │
@@ -244,22 +227,13 @@ When you see output like this, all Skills have been successfully installed to yo
 │  ✓ ~/.agents/skills/sunswap-dex-trading                                │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/trc20-token-toolkit                                │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
 │  ✓ ~/.agents/skills/tronscan-data-lookup                               │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/trx-staking-sr-voting                              │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
 │  ✓ ~/.agents/skills/usdd-just-protocol                                 │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/twitter-digest                                     │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/twitter-mcp                                        │
+│  ✓ ~/.agents/skills/wallet-cli                                         │
 │    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
 │    symlinked: Claude Code, OpenClaw                                    │
 │  ✓ ~/.agents/skills/x402-payment                                       │
@@ -275,7 +249,7 @@ When you see output like this, all Skills have been successfully installed to yo
 ```
 
 :::info A "Failed to install" list at the end is normal
-A global install sometimes ends with `■  Failed to install 14` and one line per skill saying `PromptScript: PromptScript does not support global skill installation`. That is a single client — PromptScript — which has no global install location. It does not affect anything else: the `✓ Installed 14 skills` list printed just above it is the real result, and Claude Code, OpenClaw, Codex and the rest are installed.
+A global install sometimes ends with `■  Failed to install 10` and one line per skill saying `PromptScript: PromptScript does not support global skill installation`. That is a single client — PromptScript — which has no global install location. It does not affect anything else: the `✓ Installed 10 skills` list printed just above it is the real result, and Claude Code, OpenClaw, Codex and the rest are installed.
 :::
 
 ### Verify Installation
@@ -283,7 +257,7 @@ A global install sometimes ends with `■  Failed to install 14` and one line pe
 Open your AI chat and type:
 
 ```
-Read the sunswap skill and tell me what it can do.
+Read the sunswap-dex-trading skill and tell me what it can do.
 ```
 
 If the AI accurately describes the skill's capabilities — congratulations, installation is complete!
@@ -296,7 +270,7 @@ Open your AI chat and copy-paste any of these:
 
 > Give me a TRON network overview: current TPS, number of Super Representatives, total accounts.
 
-In seconds, the AI calls the tronscan-skill and returns a complete on-chain data report.
+In seconds, the AI calls the tronscan-data-lookup skill and returns a complete on-chain data report.
 
 **This is completely safe — it's only "looking" at data. It doesn't touch your wallet or spend a single coin.**
 
@@ -330,16 +304,16 @@ We recommend using **Agent Wallet**. Think of it as opening a dedicated payment 
 
 If you don't want to install another tool and just want to start trading right away, you can paste your private key into a simple config file on your computer — like editing a notepad:
 
-1. In Terminal (the black window), type `open -e ~/.zshrc` and press Enter.
-2. A text editor window will pop up. Scroll to the very bottom, start a new line, and paste your TRON private key:
+1. In Terminal, open your shell profile. On macOS with zsh that is `open -e ~/.zshrc`; on Linux use `nano ~/.bashrc` (or `~/.zshrc` if you use zsh); on Windows set the variable through **System Properties → Environment Variables** instead.
+2. Scroll to the very bottom, start a new line, and paste your TRON private key:
    ```bash
    export TRON_PRIVATE_KEY='your_real_or_testnet_private_key'
    ```
-   ⚠️ Important: Don't forget the double quotes on both sides!
-3. Press `Command + S` to save, then close the editor.
+   ⚠️ Important: keep the quotes on both sides — single quotes as shown are safest, since they stop the shell from interpreting characters in the key.
+3. Save the file (`Command + S` in TextEdit, `Ctrl + O` then `Ctrl + X` in nano) and close the editor.
 
 :::danger Critical Step
-No matter which option you chose, you must **completely close and reopen your AI tool** for it to pick up the new key!
+No matter which option you chose, you must **completely close and reopen your AI tool** for it to pick up the new key. On macOS, an app launched from Finder or the Dock does not read `~/.zshrc` — quit it fully and relaunch it from a terminal, or set the variable where the GUI app can see it.
 :::
 
 ---

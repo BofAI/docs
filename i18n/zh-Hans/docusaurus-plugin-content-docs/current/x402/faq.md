@@ -60,12 +60,13 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 
 #### x402 支持哪些支付方案？
 
-x402 支持四种支付方案：
+x402 定义了五种命名支付方案。其中四种可端到端使用；`auth-capture` 目前仅提供客户端支持：
 
 - **`exact`**：支付公布的准确金额。EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算；普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，首次付款需一次性 `approve(Permit2)`。`exact` 的协议 payload 遵循 **x402 Foundation** 的 v2 规范。
 - **`upto`**：按量计费——客户端签署最高至最大金额的 Permit2 授权，服务端仅结算**实际用量**（≤ max）。非常适合**按量计费**、**LLM Token 消耗**等场景。
 - **`batch-settlement`**：面向高频微支付的支付通道——一次性链上存入，然后用链下凭证支付多次请求，一笔交易批量结算。含退款路径。
 - **`exact_gasfree`**（仅限 TRON）：允许买家使用 USDT/USDD 付款而无需持有 TRX 来支付 gas。由 relayer 通过 GasFree API 支付链上 energy——客户端无需配置 API 密钥。relayer 会在付款金额之外，从支付代币中扣除自己的中继费。
+- **`auth-capture`**（仅 EVM client）：支持可退款的 Base Commerce Payments 授权/扣款流程。当前发布包尚未包含 server 与 facilitator 实现。
 
 #### 本 SDK 是否可以与 x402 Foundation（原 Coinbase）的 v2 参考实现互通？
 
@@ -86,7 +87,7 @@ x402 支持四种支付方案：
 | ----------------------------- | ------------- | ----------- |
 | TRON 主网 (`tron:0x2b6653dc`)    | USDT (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:0xcd8690dc`)       | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **测试网**（仅 SDK/CLI 支持——官方 facilitator 不结算 Shasta，请用 Nile 或自建） |
 | TRON Mainnet (`tron:0x2b6653dc`) | USDD (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:0xcd8690dc`)       | USDD (TRC-20) | **Testnet** |
 | BSC 主网 (`eip155:56`) | USDT (BEP-20) | **Mainnet** |
@@ -104,9 +105,9 @@ x402 支持四种支付方案：
 #### 涉及哪些费用？
 
 - **网络费用**：
-  - 在 TRON 链上用于支付能量 (Energy) 和带宽 (Bandwidth) 消耗的 TRX（由 Facilitator 承担）。
-  - 在 BSC 链上用于支付 gas 消耗的 BNB（由 Facilitator 承担）。
-  - 在 Base 链上用于支付 gas 的 ETH（由 Facilitator 承担）。
+  - 在 TRON 链上用于支付能量 (Energy) 和带宽 (Bandwidth) 消耗的 TRX（由 Facilitator 承担）。自 SDK 1.2.0 起，启用了 `trc20ApprovalResourceSponsoring` 的 Facilitator 还可以为付款方的首笔 Permit2 `approve` 买单：向付款方临时委托自己质押所得的能量（必要时还有带宽），并在授权交易广播后回收。
+  - 在 BSC 链上用于支付 gas 消耗的 BNB（由 Facilitator 承担）。当 Facilitator 注册了授权 gas 代付扩展时，付款方一次性的 ERC-20 `approve` 也可以被代付——官方 Facilitator 已为 BSC 与 Base 注册，自建 Facilitator 需自行启用。SDK 客户端只有在资源服务端于路由上声明了该扩展时，才会附带代付载荷。
+  - 在 Base 链上用于支付 gas 的 ETH（由 Facilitator 承担）。代付作用于 Base 的 Permit2 路径；Base USDC 在 `exact` 下走 EIP-3009，本来就不需要 `approve`。
 - **Facilitator 服务费**：无。当前各方案不带任何费用字段——`base_fee` 配置与 `/fee/quote` 端点已在 SDK 1.0.1 移除。TRON `exact_gasfree` 由 GasFree relayer 从支付代币中收取自己的中继费，请在客户端设置中继费上限。
 
 ### 安全性

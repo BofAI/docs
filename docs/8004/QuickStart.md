@@ -13,17 +13,18 @@ This example covers the full flow for SDK initialization, agent definition, MCP/
 ## TRON / BSC Switch Guide
 
 - This page uses TRON Nile testnet as the default: `network="nile"` and `rpcUrl="https://nile.trongrid.io"`.
-- To switch to BSC, replace: `network`, `rpcUrl`, and `signer` (EVM private key).
-- Recommended TRON parameters: `chainId=1`, `feeLimit=120000000`.
+- To switch to BSC, replace `network`, `rpcUrl` and `signer` (an EVM private key), add the chain's `chainId`, and drop `feeLimit` — it is TRON-only. The BSC samples below show the finished shape.
+- Recommended TRON parameter: `feeLimit=120000000`. Omit `chainId` — it is a legacy compatibility field; leaving it out lets Nile produce the current `3448148188:<tokenId>` agent-ID form.
 
 Python (TRON) initialization:
 
 ```python
+import os
+
 sdk = SDK(
-    chainId=1,
-    network="nile",  # or tron:nile; for mainnet use mainnet / tron:mainnet
+    network="nile",  # for mainnet use "mainnet"
     rpcUrl="https://nile.trongrid.io",
-    signer="YOUR_TRON_PRIVATE_KEY",
+    signer=os.environ["TRON_PRIVATE_KEY"],
     feeLimit=120000000,
 )
 ```
@@ -32,10 +33,9 @@ TypeScript (TRON) initialization:
 
 ```typescript
 const sdk = new SDK({
-  chainId: 1,
-  network: "nile", // or tron:nile; for mainnet use mainnet / tron:mainnet
+  network: "nile", // for mainnet use "mainnet"
   rpcUrl: "https://nile.trongrid.io",
-  signer: "YOUR_TRON_PRIVATE_KEY",
+  signer: process.env.TRON_PRIVATE_KEY!,
   feeLimit: 120000000,
 });
 ```
@@ -43,11 +43,13 @@ const sdk = new SDK({
 Python (BSC) initialization:
 
 ```python
+import os
+
 sdk = SDK(
     chainId=97,
     network="eip155:97",  # BSC testnet; use eip155:56 for mainnet
     rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
-    signer="0xYOUR_EVM_PRIVATE_KEY",
+    signer=os.environ["EVM_PRIVATE_KEY"],
 )
 ```
 
@@ -58,7 +60,7 @@ const sdk = new SDK({
   chainId: 97,
   network: "eip155:97", // BSC testnet; use eip155:56 for mainnet
   rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
-  signer: "0xYOUR_EVM_PRIVATE_KEY",
+  signer: process.env.EVM_PRIVATE_KEY!,
 });
 ```
 
@@ -67,15 +69,15 @@ const sdk = new SDK({
 
 ```python
 from bankofai.sdk_8004.core.sdk import SDK
+import os
 
 # Quick Start: Local Environment Variables  (Please replace with your actual values) 
 RPC_URL = "https://nile.trongrid.io"
-PRIVATE_KEY = "YOUR_TRON_PRIVATE_KEY"
-PINATA_JWT = "YOUR_PINATA_JWT"
+PRIVATE_KEY = os.environ["TRON_PRIVATE_KEY"]
+PINATA_JWT = os.environ["PINATA_JWT"]
 
 # Initialize the SDK
 sdk = SDK(
-    chainId=1,
     network="nile",
     rpcUrl=RPC_URL,
     signer=PRIVATE_KEY,
@@ -118,9 +120,11 @@ agent.setX402Support(False)
 reg_tx = agent.register("https://example.com/agent-card.json")
 reg = reg_tx.wait_confirmed(timeout=180).result
 
-# Optional: Set a dedicated agent wallet on-chain (requires signature verification);
-# By default, the agent wallet is the owner's wallet; only set if you want to use a different wallet.
-# agent.setWallet("TYourTronWalletAddress", chainId=1)
+# Optional: point the agent at a dedicated wallet (requires signature verification).
+# By default the agent wallet is the owner's wallet. The one-argument form below only
+# works when the SDK signer IS that wallet; otherwise pass new_wallet_signer.
+# See Configure Agents -> "How the signature is supplied".
+# agent.setWallet("TYourTronWalletAddress")
 
 print(f"✅ Agent registered!")
 print(f"   ID: {reg.agentId}")
@@ -141,11 +145,10 @@ import { SDK } from '@bankofai/8004-sdk';
 async function main() {
   // Quick Start: Local Environment Variables  (Please replace with your actual values) 
   const RPC_URL = "https://nile.trongrid.io";
-  const PRIVATE_KEY = "YOUR_TRON_PRIVATE_KEY";
+  const PRIVATE_KEY = process.env.TRON_PRIVATE_KEY!;
   
   // Initialize the SDK
   const sdk = new SDK({
-    chainId: 1,
     network: "nile",
     rpcUrl: RPC_URL,
     signer: PRIVATE_KEY,
@@ -172,22 +175,24 @@ async function main() {
     category: 'ai-assistant',
   });
 
-// Add OASF Skills and Domains
-agent
-  .addSkill("data_engineering/data_transformation_pipeline")
-  .addDomain("technology/data_science");
+  // Add OASF Skills and Domains
+  agent
+    .addSkill("data_engineering/data_transformation_pipeline")
+    .addDomain("technology/data_science/data_science");
 
-// Set Status
-agent.setActive(true);
-agent.setX402Support(false);
+  // Set Status
+  agent.setActive(true);
+  agent.setX402Support(false);
 
-// Register on-chain
-const tx = await agent.register("https://example.com/agent-card.json");
-const { result: registrationFile } = await tx.waitConfirmed();
+  // Register on-chain
+  const tx = await agent.register("https://example.com/agent-card.json");
+  const { result: registrationFile } = await tx.waitConfirmed();
 
-// Optional: Set a dedicated agent wallet on-chain (requires signature verification);
-// By default, the agent wallet is the owner's wallet; only set if you want to use a different wallet.
-// await agent.setWallet("TYourTronWalletAddress");
+  // Optional: point the agent at a dedicated wallet (requires signature verification).
+  // By default the agent wallet is the owner's wallet. The one-argument form below only
+  // works when the SDK signer IS that wallet; otherwise pass newWalletSigner.
+  // See Configure Agents -> "How the signature is supplied".
+  // await agent.setWallet("TYourTronWalletAddress");
 
   console.log("✅ Agent registered!");
   console.log(`   ID: ${registrationFile.agentId}`);
@@ -195,7 +200,7 @@ const { result: registrationFile } = await tx.waitConfirmed();
 
   // Load agent by ID directly from chain (works without subgraph)
   const loaded = await sdk.loadAgent(registrationFile.agentId!);
-  console.log(`✅ Loaded by ID: ${loaded.registrationFile.name}`);
+  console.log(`✅ Loaded by ID: ${loaded.toJSON().name}`);
 }
 
 main().catch(console.error);

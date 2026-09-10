@@ -260,7 +260,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 | POST | `/settle` | 执行链上结算（**受限速保护**） |
 | GET | `/payments/tx/{tx_hash}` | 按结算交易哈希查询支付记录 |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | 按链上授权身份查询支付记录 |
-| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`） |
+| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`；`limit` 默认 `50`、上限 `200`，`offset` 默认 `0`） |
 
 > **不存在** `/fee/quote` 端点，各方案也不收取 facilitator 费用。限速仅作用于 `/settle` 接口，其他接口不受限速影响。
 
@@ -272,7 +272,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 | `eip155:56`（BSC）· `eip155:97`（BSC 测试网） | 主网 · 测试网 |
 | `eip155:8453`（Base）· `eip155:84532`（Base Sepolia） | 主网 · 测试网 |
 
-以上网络均注册了 `exact`、`upto` 与 `batch-settlement`；TRON 在服务持有 GasFree 中继凭证的网络上（TRON 主网与 Nile）额外注册 `exact_gasfree`。以所连接部署的 `/supported` 返回为准。
+以上网络均注册了 `exact`、`upto` 与 `batch-settlement`；TRON 在服务持有 GasFree 中继凭证的网络上（TRON 主网与 Nile）额外注册 `exact_gasfree`。以所连接部署的 `/supported` 返回为准。官方 facilitator 目前未启用 `trc20ApprovalResourceSponsoring` 扩展——TRON 授权资源赞助需要自建 facilitator。但在其 EVM 网络（BSC 与 Base）上，官方确实为每一条 EVM 网络注册了 ERC-20 授权 gas 代付扩展——不过只有当资源服务端在路由上声明该扩展时，代付才会真正生效。
 
 ### 支付记录查询
 
@@ -290,6 +290,12 @@ curl -X POST https://facilitator.bankofai.io/settle \
 - `createdAt` — 时间戳
 
 > 提供 API Key 时，这两个接口只返回与你的账户关联的支付记录，不会看到其他卖家的数据。
+
+:::danger 不带 API Key 时
+匿名请求下，`tx_hash` 与 `network` + `nonce` 查询**不添加卖家过滤**，返回结果可能包含已绑定卖家的记录——任何持有准确标识符的人都能查到对应记录。`/payments` 列表接口仍要求身份验证，因此不存在免认证的列表接口；但这两个查询接口也没有限流（每分钟 1 次的匿名限流只覆盖 `/settle`），而结算 tx hash 又是链上公开数据。请把结算元数据视为事实上公开，而非按卖家隔离。
+
+**以上描述的是当前实现行为，不代表推荐的访问控制策略。** 想让查询限定在自己账户范围内请带上 API Key，并且绝不要把结算 tx hash 或其 nonce 当作秘密。
+:::
 
 ---
 

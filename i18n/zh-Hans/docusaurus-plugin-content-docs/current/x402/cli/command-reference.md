@@ -186,8 +186,8 @@ x402-cli serve --pay-to <address> [options]
 
 | 路由 | 用途 |
 | :--- | :--- |
-| `GET /health` | 返回 `{ "ok": true }` |
-| `GET /.well-known/x402` | 机器可读的支付元数据（网络、scheme、资产、金额、`payTo`） |
+| `/health`（任意方法） | 返回 `{ "ok": true }` |
+| `/.well-known/x402`（任意方法） | 机器可读的支付元数据：网络、scheme、资产、金额、`rawAmount`、`payTo` 与 `pay_url` |
 | `/pay`（任意方法） | 请求未带 `PAYMENT-SIGNATURE` 时返回带 `PAYMENT-REQUIRED` 头的 `402 Payment Required`；带该头时通过 facilitator 校验并结算，返回交易 |
 
 **示例：**
@@ -236,6 +236,8 @@ x402-cli gateway <search|start|check|scaffold|catalog> [options]
 | `check <providers>` | 校验一个或多个 `provider.yml` 文件 |
 | `scaffold <name>` | 生成一个起步用的 `provider.yml` |
 | `catalog <command>` | 构建/校验/搜索网关目录资产 |
+
+`gateway start` 还接受 `--providers-dir` 作为 `--providers` 的别名；`gateway catalog search` 也可以用 `--query` 代替位置参数。
 
 `gateway start` 会拉起一个 gateway 运行时，但 CLI 本身已经带了一份：发布包内含 `dist/gateway/cli.js`，并依赖 `@bankofai/x402-gateway`，因此正常 `npm install -g @bankofai/x402-cli` 之后无需额外安装。它按以下顺序解析运行时——`--gateway-bin`、`@bankofai/x402-gateway` 依赖、内置的 `dist/gateway/cli.js`、`PATH` 上的 `x402-gateway`，最后是代码检出里的 `../x402-gateway/dist/cli.js`。`gateway check`、`gateway catalog build`、`gateway catalog pay-assets` 与 `catalog build` 在进程内直接调用 gateway 库；`gateway scaffold` 只是写出一个模板文件，`gateway search` / `gateway catalog search` 则读取目录数据源。
 
@@ -296,7 +298,7 @@ x402-cli catalog <update|search|show|endpoints|pay-json|export-gateway|build> [o
 | `endpoints <provider>` | 列出某服务的接口 |
 | `pay-json <provider>` | 打印某服务的付费 JSON（可付费路由详情） |
 | `export-gateway <url>` | 从一个运行中的网关导出 `catalog.json` 和 `pay.md` |
-| `build <providers>` | 从本地 `provider.yml` 文件构建目录 |
+| `build [providers]` | 从本地 `provider.yml` 文件构建目录（默认为 `providers`） |
 
 **常用选项：**
 
@@ -304,7 +306,7 @@ x402-cli catalog <update|search|show|endpoints|pay-json|export-gateway|build> [o
 | :--- | :--- |
 | `--catalog <source>` | `catalog.json` 路径或 URL |
 | `--provider <fqn>` | 服务 FQN（用于 `export-gateway`） |
-| `--output-dir <dir>` | 生成文件的输出目录（用于 `export-gateway`） |
+| `--output-dir <dir>` | 生成文件的输出目录（用于 `export-gateway`；默认为 `providers/<fqn>/`，FQN 中的 `/` 会被替换成 `__`） |
 | `--output <file>` | 把构建出的目录 JSON 写入该文件（用于 `build`） |
 | `--dist-dir <dir>` | 把构建结果写入 `<dir>/catalog.json`（用于 `build`） |
 | `-n, --limit <count>` | 搜索结果数量上限（默认：`10`） |

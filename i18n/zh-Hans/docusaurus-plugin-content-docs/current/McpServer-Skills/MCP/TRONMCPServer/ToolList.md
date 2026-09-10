@@ -49,7 +49,7 @@ TRON MCP Server 提供 **97 个工具**、**6 个提示词模板**和 **1 个资
 | `get_chain_parameters` | 获取当前能量和带宽单价 | `network` | 读取 |
 | `get_supported_networks` | 列出所有支持的 TRON 网络 | - | 读取 |
 
-**试试这样说：** "TRON 主网当前的区块高度是多少？" · "现在能量和带宽价格是多少？"
+**试试这样说：** "TRON 主网当前的区块高度是多少？" · "现在能量和带宽价格是多少？" · "TRON MCP Server 支持哪些网络？"
 
 ---
 

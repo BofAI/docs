@@ -19,7 +19,7 @@ By introducing a Facilitator, servers no longer need to maintain direct connecti
 
 - **Payment Verification**: Ensures that the signed payload strictly complies with the server's declared payment requirements.
 - **Payment Settlement**: Submits validated transactions to the blockchain and monitors their confirmation status.
-- **Settlement Records**: Persists one record per settlement, keyed on the on-chain authorization identity, and answers seller-scoped record queries.
+- **Settlement Records**: Persists one row per settle attempt — the store applies no de-duplication and holds no unique constraint, so failures and retries accumulate. At most one *successful* row exists per authorization identity in practice, because on-chain replay protection lets a given authorization settle only once. It also answers record queries, seller-scoped when the caller authenticates. A save failure is logged but never changes the `/settle` response.
 - **Result Feedback**: Returns verification and settlement results to the server, enabling it to decide whether to deliver the requested resource.
 
 > **Note**: The Facilitator **does not custody funds** and does not act as an escrow. It only executes verification and on-chain operations according to the client's signed authorization.
@@ -31,7 +31,7 @@ Integrating a Facilitator provides significant advantages:
 - **Reduced Operational Overhead**: Servers do not need to directly manage blockchain nodes or RPC infrastructure.
 - **Protocol Standardization**: Ensures consistent payment verification and settlement processes across services.
 - **Fast Integration**: Servers can begin accepting payments with minimal blockchain development effort.
-- **Resource Fee Management**: The Facilitator covers transaction execution costs such as TRX (Energy and Bandwidth) / BNB, reducing the operational burden on the server.
+- **Resource Fee Management**: The Facilitator covers transaction execution costs such as TRX (Energy and Bandwidth) / BNB, reducing the operational burden on the server. Since SDK 1.2.0 a TRON Facilitator may additionally opt into the `trc20ApprovalResourceSponsoring` extension, temporarily delegating its own Stake 2.0 Energy — and, when needed, Bandwidth — to the payer so the payer's first `approve(Permit2)` costs them no TRX. This is opt-in: the Facilitator must register the sponsoring runtime together with a bounded sponsorship policy and a durable operation coordinator. Either way the resource server must also declare the extension on the route — that declaration is what makes an SDK client attach the sponsoring payload (the Facilitator itself does not check it, so a non-SDK client could skip that step). EVM networks have an equivalent capability — sponsoring the payer's ERC-20 `approve` gas — but the SDK does not wire it up for you: a self-hosted Facilitator must register the extension itself. The official Facilitator registers it for the EVM networks it serves; see [Official Facilitator](./OfficialFacilitator.md).
 
 Although developers may implement verification and settlement logic locally, using a Facilitator significantly accelerates development and ensures protocol-compliant implementation.
 
@@ -95,9 +95,11 @@ Whether using the official service or a self-hosted instance, the Facilitator pr
 | POST | `/settle` | Execute on-chain settlement (**rate-limited**, see below); persists a settlement record |
 | GET | `/payments/tx/{tx_hash}` | Query payment records by settlement transaction hash (seller-scoped when authenticated) |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | Query payment records by the on-chain authorization identity (seller-scoped when authenticated) |
-| GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`) |
+| GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`; `limit` defaults to `50` and is capped at `200`, `offset` defaults to `0`) |
 | GET | `/metrics` | Prometheus metrics (operational; exposed on the main port only when monitoring shares it) |
 | ALL | `/mainnet/*` · `/nile/*` | GasFree Open API transparent proxy (HMAC-signed) — used internally by the TRON `exact_gasfree` scheme |
+
+Record-query failures use these codes: `404 not_found` when no record matches, `400 invalid_identity_query` for a partial identity query (any of `network`/`nonce`/`asset`/`payer` without the required `network`+`nonce` pair), and `400 missing_identity_or_auth` when `/payments` is called with neither identity parameters nor an API Key.
 
 > There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee at all. Payment records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`), not a client-supplied payment ID.
 
@@ -122,7 +124,20 @@ Other endpoints (`/verify`, `/supported`, `/payments/*`) are not individually ra
 
 The `/payments/tx/{tx_hash}` and `/payments?network=&nonce=[&asset=&payer=]` endpoints support querying historical payment records; `/payments` alone returns the authenticated seller's settlement feed. Records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`) rather than a client-supplied payment ID.
 
-When the request includes a valid `X-API-KEY` header, the results are **automatically scoped to the seller** associated with that API Key — you will only see your own payment records. Anonymous requests (without an API Key) can only access records that are not bound to any specific seller.
+When the request includes a valid `X-API-KEY` header, the results are **automatically scoped to the seller** associated with that API Key — you will only see your own payment records.
+
+:::danger Anonymous identifier lookups are not seller-scoped
+How access currently behaves:
+
+- **With a valid `X-API-KEY`** — results are filtered to the seller that key belongs to.
+- **Anonymous `tx_hash` or `network` + `nonce` lookup** — the current implementation adds **no seller filter**, so the response may include records that are bound to a seller.
+- **The `/payments` list endpoint** — still requires authentication: with no identity parameters and no API Key it returns `400`, and a partial identity query returns `400` rather than degrading into a feed.
+- **No rate limit on these lookups** — the 1-request-per-minute anonymous limit applies to `/settle` only; the record-query endpoints are not individually rate-limited.
+
+Settlement tx hashes are public on-chain data, and the `network` + `nonce` lookup additionally resolves **failed** settlements — including pre-broadcast failures, which carry no tx hash at all and so cannot be reached any other way. The practical consequence is that **settlement metadata should be treated as effectively public**, even though no unauthenticated listing endpoint exists. The response body never includes the seller id, so what a lookup exposes is the payment metadata of a seller-bound record, not seller attribution.
+
+**This describes the current implementation, not a recommended access-control policy.** Do not design around it: never treat a settlement tx hash or its authorization nonce as a secret, and send an API Key whenever a query should be scoped to your own account. The behavior may be tightened in a future release.
+:::
 
 ---
 
@@ -142,7 +157,7 @@ The costs that do exist:
 The x402 protocol is designed around **minimal trust assumptions**:
 
 - **Signature-Based Authorization**: The Facilitator can only transfer funds within the scope explicitly authorized by the client's signature.
-- **Direct Fund Flow**: Funds move directly from the client to the seller (and partially to the Facilitator if fees apply), without passing through a pooled account.
+- **Direct Fund Flow**: Under `exact` and `upto`, funds move directly from the client to the seller without passing through a pooled account. `batch-settlement` is the deliberate exception — the payer deposits into an on-chain escrow that holds channel balances until a settle operation sweeps many claims into one transfer. No scheme takes a facilitator fee.
 - **On-Chain Transparency**: All transactions are publicly verifiable on-chain.
 
 Even a **malicious Facilitator** cannot:

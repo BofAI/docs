@@ -81,11 +81,16 @@ npm install -g @bankofai/agent-wallet
 agent-wallet start
 ```
 
-按照交互式提示设置主密码并生成钱包。完成后即可直接使用——**无需额外设置任何环境变量**。Agent Wallet 会自动管理加密密钥库。
+按照交互式提示设置主密码并生成钱包。Agent Wallet 会自动管理加密密钥库，但服务端在签名时仍然需要这个密码——而直接跑 `agent-wallet start` 并不会持久化它。请二选一：
+
+- 执行 `agent-wallet start --save-runtime-secrets`，把密码写入 `~/.agent-wallet/runtime_secrets.json`；或
+- 在 MCP 服务端运行的环境里 export `AGENT_WALLET_PASSWORD`。
+
+两者都没有时，调用写操作工具会因为无法解锁 `local_secure` 钱包而失败。密钥库不在 `~/.agent-wallet` 时请用 `AGENT_WALLET_DIR` 指定。
 
 #### 路径 2：导入已有私钥
 
-如果你已经有想使用的私钥，通过 `AGENT_WALLET_PRIVATE_KEY` 环境变量设置：
+如果你已经有想使用的私钥，通过 `AGENT_WALLET_PRIVATE_KEY` 环境变量设置。注意优先级：只有在**解析不到任何密码**（既没有 `runtime_secrets.json`，也没有 `AGENT_WALLET_PASSWORD`）**且**钱包目录里一个钱包都没有时，才会走到这条环境变量路径。如果你已经执行过「路径 1」、保存过运行时密码，或跑过 Openclaw 安装器，密钥库路径会优先生效，该变量会被静默忽略。
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY=你的私钥
@@ -151,7 +156,17 @@ npm run build
 
 #### 方式 C：以 HTTP 模式运行
 
-启动服务器的 HTTP 模式，然后通过 HTTP 端点连接你的 MCP 客户端：
+启动服务器的 HTTP 模式，然后通过 HTTP 端点连接你的 MCP 客户端。用已发布的包时传 `--http` 即可，无需克隆源码：
+
+```bash
+npx -y @bankofai/mcp-server-tron --http
+```
+
+:::caution `-h`是启动 HTTP 模式，不是显示帮助
+启动器把 `-h` 当作 `--http` 的简写，把 `-r` 当作 `--readonly` 的简写。它没有帮助参数——输入 `-h` 会直接启动 HTTP 服务器。
+:::
+
+如果已经按「方式 B」检出了源码，也可以用脚本：
 
 ```bash
 npm run start:http
@@ -166,6 +181,8 @@ export MCP_PORT=3001      # 默认：3001
 export MCP_HOST=0.0.0.0   # 默认：0.0.0.0
 ```
 
+Docker 与源码检出的启动脚本还会读取 `MCP_LOG_DIR`（容器内默认 `/app/logs`，源码检出默认 `./logs`）。已发布的 npm 包只包含 `build/` 与 `bin/`，因此该变量不适用于上面的 `npx` 方式。
+
 #### 方式 D：Docker 部署
 
 在 Docker 容器中运行 TRON MCP Server，适合隔离、可重现的环境。Docker 镜像默认以**只读 HTTP 模式**运行。
@@ -177,7 +194,7 @@ TRONGRID_API_KEY=你的key
 EOF
 
 # 2. 构建镜像
-docker build -t mcp-server-tron .
+docker build -t mcp-server-tron .   # 需要「方式 B」的源码检出——Dockerfile 不包含在已发布的 npm 包里
 
 # 3. 使用 --env-file 运行容器
 docker run -d \

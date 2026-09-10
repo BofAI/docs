@@ -21,9 +21,9 @@ And your wallet file is protected by strong encryption. Even if someone gets hol
 
 ## 🔌 Can my AI still sign if I go offline?
 
-Yes. **All Agent-wallet signing operations complete 100% on your local machine.**
+Yes, for `local_secure` and `raw_secret` wallets: **signing completes 100% on your local machine** — no RPC calls, no cloud services, no remote API requests, and your private key never touches the network.
 
-There's no network dependency by design — no RPC calls, no cloud services, no remote API requests. Your private key never touches the network.
+The one exception is the `privy` wallet type, which custodies the key with Privy and sends signing requests to Privy's API — it requires network by design.
 
 Going offline only affects transaction building and broadcasting (that's the MCP Server's job). Signing itself is fully offline.
 
@@ -98,6 +98,8 @@ The `privy` type delegates key custody to [Privy](https://privy.io)'s server-sid
 | `eip155:8453` | Base Mainnet |
 | `eip155:42161` | Arbitrum Mainnet |
 
+> These are common examples, not an exhaustive whitelist: agent-wallet validates only the family prefix, so any `eip155:<chainId>` or `tron:<network>` value is accepted (including the canonical CAIP-2 TRON ids like `tron:0x2b6653dc` that the x402 tooling requires).
+
 ---
 
 ## Security
@@ -122,7 +124,7 @@ A hacker would need to simultaneously break into your computer, locate and steal
 
 ### Does the private key ever leave my machine?
 
-Never. Agent-wallet makes zero network requests. Zero RPC calls, zero cloud services. Your private key never leaves your machine.
+For `local_secure` and `raw_secret` wallets — never: zero network requests, zero RPC calls, zero cloud services; the key never leaves your machine. `privy` wallets are the exception: the key is custodied by Privy (it never sits on your disk), and signing requests go to Privy's API.
 
 ### How should I store the master password securely?
 
@@ -141,7 +143,7 @@ Agent-wallet uses the Keystore V3 standard encryption (scrypt + AES-128-CTR), th
 
 ### What operating systems are supported?
 
-macOS, Linux, and Windows. As long as you can run Node.js >= 20 or Python >= 3.11, you're good to go. Windows support was added in v2.3.x — file permission features (like `chmod 600`) are gracefully skipped on Windows since it doesn't support Unix-style permissions.
+macOS, Linux, and Windows. As long as you can run Node.js >= 18 or Python >= 3.11, you're good to go. Windows support was added in v2.3.x — file permission features (like `chmod 600`) are gracefully skipped on Windows since it doesn't support Unix-style permissions.
 
 ### `npm install -g` gives a permission error?
 
