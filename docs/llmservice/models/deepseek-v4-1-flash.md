@@ -5,7 +5,7 @@
 DeepSeek-V4.1-Flash is a native multimodal Mixture-of-Experts model released by DeepSeek on September 10, 2026. It combines a 552-billion-parameter backbone, a 1M-token context window, and a Causal Encoder-Decoder design that activates 8 billion parameters per token during prefill and 16 billion during decoding. On B.AI, use the model name `DeepSeek-V4.1-Flash`.
 
 :::info B.AI model routing
-B.AI will progressively route requests made using the `DeepSeek-V4-Flash`, `DeepSeek-V4-Flash-Vision-Exp`, and `DeepSeek-V4-Pro` model names to DeepSeek-V4.1-Flash. After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
+B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `DeepSeek-V4-Flash-Vision-Exp` model names to DeepSeek-V4.1-Flash. After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
 :::
 
 ## Key Features

@@ -5,7 +5,7 @@
 DeepSeek-V4.1-Flash 是 DeepSeek 于 2026 年 9 月 10 日发布的原生多模态混合专家（MoE）模型。该模型采用 5520 亿参数主干和 Causal Encoder-Decoder 架构，支持 100 万 Token 上下文窗口；每个 Token 在预填充阶段激活 80 亿参数，在解码阶段激活 160 亿参数。在 B.AI 中使用模型名称：`DeepSeek-V4.1-Flash`。
 
 :::info B.AI 模型路由说明
-B.AI 将逐步把使用 `DeepSeek-V4-Flash`、`DeepSeek-V4-Flash-Vision-Exp` 和 `DeepSeek-V4-Pro` 模型名称发起的请求路由至 DeepSeek-V4.1-Flash。路由生效后，相关请求将统一按照 DeepSeek-V4.1-Flash 的适用价格计费。
+B.AI 将逐步把使用 `DeepSeek-V4-Flash` 和 `DeepSeek-V4-Flash-Vision-Exp` 模型名称发起的请求路由至 DeepSeek-V4.1-Flash。路由生效后，相关请求将统一按照 DeepSeek-V4.1-Flash 的适用价格计费。
 :::
 
 ## 核心特性

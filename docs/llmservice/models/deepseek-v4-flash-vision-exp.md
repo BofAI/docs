@@ -3,7 +3,7 @@ import ActivityCard from '@site/src/components/ActivityCard';
 # DeepSeek-V4-Flash-Vision-Exp
 
 :::info B.AI model routing
-B.AI will progressively route requests made using the `DeepSeek-V4-Flash`, `DeepSeek-V4-Flash-Vision-Exp`, and `DeepSeek-V4-Pro` model names to [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md). After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
+B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `DeepSeek-V4-Flash-Vision-Exp` model names to [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md). After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
 :::
 
 <ActivityCard
