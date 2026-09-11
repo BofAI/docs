@@ -3,7 +3,7 @@ import ActivityCard from '@site/src/components/ActivityCard';
 # DeepSeek-V4-Flash-Vision-Exp
 
 :::info B.AI 模型路由说明
-B.AI 将逐步把使用 `DeepSeek-V4-Flash`、`DeepSeek-V4-Flash-Vision-Exp` 和 `DeepSeek-V4-Pro` 模型名称发起的请求路由至 [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md)。路由生效后，相关请求将统一按照 DeepSeek-V4.1-Flash 的适用价格计费。
+B.AI 将逐步把使用 `DeepSeek-V4-Flash` 和 `DeepSeek-V4-Flash-Vision-Exp` 模型名称发起的请求路由至 [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md)。路由生效后，相关请求将统一按照 DeepSeek-V4.1-Flash 的适用价格计费。
 :::
 
 <ActivityCard
