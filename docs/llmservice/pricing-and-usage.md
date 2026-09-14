@@ -4,9 +4,9 @@
 
 The platform uses a unified Credits system to measure and settle usage across all AI services.
 
-> **Platform-wide Credits conversion:** `1 USD = 1,000,000 Credits` (`1M` / `1000K` Credits)
+> **Price display:** Input, cache write, cache read, and output prices are shown in USD per 1 million tokens. Web search prices are shown in USD per use.
 >
-> **How to read the pricing table:** Under this standard conversion, a price of `X Credits/Token` is numerically equivalent to a standard reference price of `USD X / 1M Tokens`. For example, `1.32 Credits/Token` corresponds to `$1.32 / 1M Tokens`. Credits remain B.AI's billing unit; promotions, bonus Credits, and account benefits may affect actual settlement or out-of-pocket top-up cost. The platform display and final billing records prevail.
+> **Credits settlement:** B.AI bills accounts in Credits at `1 USD = 1,000,000 Credits`. For example, an input price of `0.30` means `$0.30 / 1M input tokens`, which corresponds to `300,000 Credits` for 1 million input tokens.
 
 **How Credits are calculated:** The number of tokens consumed in each interaction is converted into Credits based on the pricing of the selected model and deducted from your account balance.
 
@@ -14,75 +14,81 @@ The platform uses a unified Credits system to measure and settle usage across al
 
 **Model pricing:** Different AI models use different billing structures based on their capabilities and output type. Text-output models are generally billed by input and output tokens, while image generation models may be billed by token usage or by each generated image. Cache-enabled requests may incur separate cache write and cache read usage. Web search incurs an additional per-use charge. See the sections below for detailed pricing.
 
-### Text-Output Model Pricing
-
 **Image generation pricing:** Image generation models may be billed by token usage or by each generated image. See [Image Generation Model Pricing](./image-models/pricing.md) for the applicable billing unit and rates.
 
+### Text-Output Model Standard Pricing
+
 :::info Current promotions and pricing updates
-The table below lists standard reference prices only. For current limited-time offers and pricing updates, see [Promotions and Pricing Updates](./promotions-and-pricing-notices.md). Eligibility, actual settlement prices, and final billing are subject to the platform display.
+The pricing table below lists standard reference prices only. For current limited-time offers and pricing updates, see [Promotions and Pricing Updates](./promotions-and-pricing-notices.md). Eligibility, actual settlement prices, and final billing are subject to the platform display.
 :::
 
-| Model             | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :---------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| MiniMax M3        |                  0.30 |                        0.30 |                       0.06 |                   1.20 |                        - |
-| MiniMax M2.7      |                  0.30 |                       0.375 |                       0.06 |                   1.20 |                        - |
-| Kimi K3           |                  3.00 |                        3.00 |                       0.30 |                  15.00 |                        - |
-| Kimi K2.6         |                  0.95 |                        0.95 |                     0.1615 |                   4.00 |                        - |
-| Kimi K2.5         |                  0.59 |                        0.59 |                       0.10 |                   3.00 |                        - |
-| Qwen3.8-Flash     |                  0.16 |                        0.16 |                      0.016 |                   0.47 |                        - |
-| Qwen3.8-27B       |                  0.22 |                        0.22 |                      0.022 |                   1.60 |                        - |
-| Qwen3.8-Max       |                  2.00 |                        2.00 |                       0.25 |                   6.00 |                        - |
-| Qwen3.7-Max       |                  1.65 |                        1.65 |                       0.33 |                  4.951 |                        - |
-| Qwen3.6-27B       |                  0.19 |                        0.19 |                      0.019 |                   2.99 |                        - |
-| Hy4 Preview       |                 0.834 |                       0.834 |                      0.042 |                  2.501 |                        - |
-| Hy3               |                 0.132 |                       0.132 |                      0.033 |                  0.528 |                        - |
-| MiMo-V2.5-Pro     |                 0.435 |                       0.435 |                     0.0036 |                   0.87 |                        - |
-| MiMo-V2.5         |                  0.14 |                        0.14 |                     0.0028 |                   0.28 |                        - |
-| GLM-5.3-Flash     |                  0.15 |                        0.15 |                       0.03 |                   0.50 |                        - |
-| GLM-5.3           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
-| GLM-5.2           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
-| GLM-5.1           |                  1.40 |                        1.40 |                       0.28 |                   4.40 |                        - |
-| DeepSeek-V4.1-Flash | Idle `0.15`<br/>Busy `0.30` | Idle `0.15`<br/>Busy `0.30` | Idle `0.003`<br/>Busy `0.006` | Idle `0.60`<br/>Busy `1.20` | - |
-| DeepSeek V3.2     |                  0.29 |                        0.29 |                      0.145 |                   0.44 |                        - |
-| DeepSeek-V4-Flash | Idle `0.15`<br/>Busy `0.30` | Idle `0.15`<br/>Busy `0.30` | Idle `0.003`<br/>Busy `0.006` | Idle `0.60`<br/>Busy `1.20` | - |
-| DeepSeek-V4-Flash-Vision-Exp | Idle `0.15`<br/>Busy `0.30` | Idle `0.15`<br/>Busy `0.30` | Idle `0.003`<br/>Busy `0.006` | Idle `0.60`<br/>Busy `1.20` | - |
-| DeepSeek V4 Pro   | Idle `0.66`<br/>Busy `1.32` | Idle `0.66`<br/>Busy `1.32` | Idle `0.022`<br/>Busy `0.044` | Idle `1.98`<br/>Busy `3.96` | - |
-| Grok 4.6          |                  2.00 |                        2.00 |                       0.50 |                   6.00 |                        - |
-| Grok 4.5          |                  2.00 |                        2.00 |                       0.30 |                   6.00 |                        - |
-| GPT-6 Astra       |                 10.00 |                       12.50 |                       1.00 |                  50.00 |                   10,000 |
-| GPT-5.6 Sol       |                  4.00 |                        5.00 |                       0.40 |                  20.00 |                   10,000 |
-| GPT-5.6 Terra     |                  2.00 |                        2.50 |                       0.20 |                  12.00 |                   10,000 |
-| GPT-5.6 Luna      |                  0.20 |                        0.25 |                       0.02 |                   1.20 |                   10,000 |
-| GPT-5.4           |                  2.50 |                        2.50 |                       0.25 |                  15.00 |                   10,000 |
-| GPT-5.5           |                  5.00 |                        5.00 |                       0.50 |                  30.00 |                   10,000 |
-| GPT-5.5 Instant   |                  5.00 |                        5.00 |                       0.50 |                  30.00 |                   10,000 |
-| GPT-5.4 Pro       |                 30.00 |                       30.00 |                       3.00 |                 180.00 |                        - |
-| GPT-5.2           |                  1.75 |                        1.75 |                      0.175 |                  14.00 |                   10,000 |
-| GPT-5.4 Mini      |                  0.75 |                        0.75 |                      0.075 |                   4.50 |                   10,000 |
-| GPT-5 Mini        |                  0.25 |                        0.25 |                      0.025 |                   2.00 |                   10,000 |
-| GPT-5.4 Nano      |                  0.20 |                        0.20 |                       0.02 |                   1.25 |                   10,000 |
-| GPT-5 Nano        |                  0.05 |                        0.05 |                      0.005 |                   0.40 |                        - |
-| Claude Opus 5     |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
-| Claude Fable 5.1  |                 10.00 |                       12.50 |                       0.25 |                  50.00 |                        - |
-| Claude Fable 5    |                 10.00 |                       12.50 |                       1.00 |                  50.00 |                   10,000 |
-| Claude Opus 4.8   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
-| Claude Opus 4.7   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
-| Claude Opus 4.6   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
-| Claude Opus 4.5   |                  5.00 |                        6.25 |                       0.50 |                  25.00 |                   10,000 |
-| Claude Sonnet 5   |                  2.00 |                        2.50 |                       0.20 |                  10.00 |                   10,000 |
-| Claude Sonnet 4.6 |                  3.00 |                        3.75 |                       0.30 |                  15.00 |                   10,000 |
-| Claude Sonnet 4.5 |                  3.00 |                        3.75 |                       0.30 |                  15.00 |                   10,000 |
-| Claude Haiku 4.5  |                  1.00 |                        1.25 |                       0.10 |                   5.00 |                   10,000 |
-| Muse Spark 1.3    |                  1.25 |                        1.25 |                       0.15 |                   4.25 |                        - |
-| Gemini 3.8 Flash  |                  0.75 |                        0.75 |                      0.075 |                   3.75 |                   14,000 |
-| Gemini 3.6 Flash  |                  1.50 |                        1.50 |                       0.15 |                   7.50 |                   14,000 |
-| Gemini 3.5 Flash  |                  1.50 |                        1.50 |                       0.15 |                   9.00 |                   14,000 |
-| Gemini 3.5 Flash-Lite |               0.30 |                        0.30 |                       0.03 |                   2.50 |                   14,000 |
-| Gemini 3.1 Pro    |                  2.00 |                        2.00 |                       0.20 |                  12.00 |                   14,000 |
-| Gemini 3 Flash    |                  0.50 |                        0.50 |                       0.05 |                   3.00 |                   14,000 |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
 
-:::caution Main table scope
-The main pricing table shows standard reference prices for each model. The new standard reference prices shown for DeepSeek-V4-Flash and DeepSeek-V4-Flash-Vision-Exp take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8). The GLM-5.3-Flash standard reference prices shown above take effect at 00:00 on September 10, 2026 (UTC+8). This standard price update does not affect current promotions; promotional billing follows the applicable promotion rules. DeepSeek-V4.1-Flash, DeepSeek V4 Pro, DeepSeek-V4-Flash, and DeepSeek-V4-Flash-Vision-Exp use time-based pricing, so their rows list both **Idle** and **Busy** rates. DeepSeek API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek models used in B.AI Chat are billed at Idle rates. B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `DeepSeek-V4-Flash-Vision-Exp` model names to DeepSeek-V4.1-Flash. After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price. From 17:00 on September 3, 2026 (UTC+8), eligible API usage for DeepSeek-V4-Flash and DeepSeek-V4-Flash-Vision-Exp is billed at 50% of the standard price for the applicable period; both rows continue to show standard reference prices. MiMo-V2.5 API usage is currently free, and its B.AI Chat free-access date is August 25, 2026; the exact availability time is subject to actual activation. Its row shows the standard reference price. The `Cache Write` column represents the billing rate when cache writing occurs; it does not imply a unified cache TTL across all models. Cache behavior, retention time, long-context pricing, and extended caching options may vary by model provider. If a model has special caching rules, long-context pricing, 1-hour cache write pricing, or time-based pricing, please refer to the corresponding model detail page.
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| MiniMax M3 | `$0.30` | `$0.30` | `$0.06` | `$1.20` | - |
+| MiniMax M2.7 | `$0.30` | `$0.375` | `$0.06` | `$1.20` | - |
+| Kimi K3 | `$3.00` | `$3.00` | `$0.30` | `$15.00` | - |
+| Kimi K2.6 | `$0.95` | `$0.95` | `$0.1615` | `$4.00` | - |
+| Kimi K2.5 | `$0.59` | `$0.59` | `$0.10` | `$3.00` | - |
+| Qwen3.8-Flash | `$0.16` | `$0.16` | `$0.016` | `$0.47` | - |
+| Qwen3.8-27B | `$0.22` | `$0.22` | `$0.022` | `$1.60` | - |
+| Qwen3.8-Max | `$2.00` | `$2.00` | `$0.25` | `$6.00` | - |
+| Qwen3.7-Max | `$1.65` | `$1.65` | `$0.33` | `$4.951` | - |
+| Qwen3.6-27B | `$0.19` | `$0.19` | `$0.019` | `$2.99` | - |
+| Hy4 Preview | `$0.834` | `$0.834` | `$0.042` | `$2.501` | - |
+| Hy3 | `$0.132` | `$0.132` | `$0.033` | `$0.528` | - |
+| MiMo-V2.5-Pro | `$0.435` | `$0.435` | `$0.0036` | `$0.87` | - |
+| MiMo-V2.5 | `$0.14` | `$0.14` | `$0.0028` | `$0.28` | - |
+| GLM-5.3-Flash | `$0.15` | `$0.15` | `$0.03` | `$0.50` | - |
+| GLM-5.3 | `$1.40` | `$1.40` | `$0.28` | `$4.40` | - |
+| GLM-5.2 | `$1.40` | `$1.40` | `$0.28` | `$4.40` | - |
+| GLM-5.1 | `$1.40` | `$1.40` | `$0.28` | `$4.40` | - |
+| DeepSeek-V4.1-Flash | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.003`<br/>Busy `$0.006` | Idle `$0.60`<br/>Busy `$1.20` | - |
+| DeepSeek V3.2 | `$0.29` | `$0.29` | `$0.145` | `$0.44` | - |
+| DeepSeek-V4-Flash | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.003`<br/>Busy `$0.006` | Idle `$0.60`<br/>Busy `$1.20` | - |
+| DeepSeek-V4-Flash-Vision-Exp | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.003`<br/>Busy `$0.006` | Idle `$0.60`<br/>Busy `$1.20` | - |
+| DeepSeek V4 Pro | Idle `$0.66`<br/>Busy `$1.32` | Idle `$0.66`<br/>Busy `$1.32` | Idle `$0.022`<br/>Busy `$0.044` | Idle `$1.98`<br/>Busy `$3.96` | - |
+| Grok 4.6 | `$2.00` | `$2.00` | `$0.50` | `$6.00` | - |
+| Grok 4.5 | `$2.00` | `$2.00` | `$0.30` | `$6.00` | - |
+| GPT-6 Astra | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
+| GPT-5.6 Sol | `$4.00` | `$5.00` | `$0.40` | `$20.00` | `$0.01` |
+| GPT-5.6 Terra | `$2.00` | `$2.50` | `$0.20` | `$12.00` | `$0.01` |
+| GPT-5.6 Luna | `$0.20` | `$0.25` | `$0.02` | `$1.20` | `$0.01` |
+| GPT-5.4 | `$2.50` | `$2.50` | `$0.25` | `$15.00` | `$0.01` |
+| GPT-5.5 | `$5.00` | `$5.00` | `$0.50` | `$30.00` | `$0.01` |
+| GPT-5.5 Instant | `$5.00` | `$5.00` | `$0.50` | `$30.00` | `$0.01` |
+| GPT-5.4 Pro | `$30.00` | `$30.00` | `$3.00` | `$180.00` | - |
+| GPT-5.2 | `$1.75` | `$1.75` | `$0.175` | `$14.00` | `$0.01` |
+| GPT-5.4 Mini | `$0.75` | `$0.75` | `$0.075` | `$4.50` | `$0.01` |
+| GPT-5 Mini | `$0.25` | `$0.25` | `$0.025` | `$2.00` | `$0.01` |
+| GPT-5.4 Nano | `$0.20` | `$0.20` | `$0.02` | `$1.25` | `$0.01` |
+| GPT-5 Nano | `$0.05` | `$0.05` | `$0.005` | `$0.40` | - |
+| Claude Opus 5 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
+| Claude Fable 5.1 | `$10.00` | `$12.50` | `$0.25` | `$50.00` | - |
+| Claude Fable 5 | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
+| Claude Opus 4.8 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
+| Claude Opus 4.7 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
+| Claude Opus 4.6 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
+| Claude Opus 4.5 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
+| Claude Sonnet 5 | `$2.00` | `$2.50` | `$0.20` | `$10.00` | `$0.01` |
+| Claude Sonnet 4.6 | `$3.00` | `$3.75` | `$0.30` | `$15.00` | `$0.01` |
+| Claude Sonnet 4.5 | `$3.00` | `$3.75` | `$0.30` | `$15.00` | `$0.01` |
+| Claude Haiku 4.5 | `$1.00` | `$1.25` | `$0.10` | `$5.00` | `$0.01` |
+| Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
+| Gemini 3.8 Flash | `$0.75` | `$0.75` | `$0.075` | `$3.75` | `$0.014` |
+| Gemini 3.6 Flash | `$1.50` | `$1.50` | `$0.15` | `$7.50` | `$0.014` |
+| Gemini 3.5 Flash | `$1.50` | `$1.50` | `$0.15` | `$9.00` | `$0.014` |
+| Gemini 3.5 Flash-Lite | `$0.30` | `$0.30` | `$0.03` | `$2.50` | `$0.014` |
+| Gemini 3.1 Pro | `$2.00` | `$2.00` | `$0.20` | `$12.00` | `$0.014` |
+| Gemini 3 Flash | `$0.50` | `$0.50` | `$0.05` | `$3.00` | `$0.014` |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
+
+:::caution Pricing table notes
+**DeepSeek time-based pricing:** DeepSeek API calls use Beijing Time (UTC+8). Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek models used in B.AI Chat are billed at Idle rates. The table lists each model's standard reference prices.
+
+**Cache pricing:** `Cache Write` indicates the price charged when cache writing occurs; it does not mean that all models use the same cache retention period. Cache policies, retention periods, long-context pricing, and extended caching capabilities may vary by model. If a model uses special caching rules, 1-hour cache write pricing, or time-based pricing, refer to its model detail page.
 :::
 
 :::info Pricing note

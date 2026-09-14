@@ -35,8 +35,12 @@ Muse Spark 1.3 is a proprietary agentic and coding model from Meta Superintellig
 - `max` reasoning was used for Meta's published Muse Spark 1.3 evaluations but was not available to API users at launch; Meta said it would ship after additional safety testing.
 - Improved self-awareness and safety calibration do not guarantee correct outputs or safe autonomous execution; applications still need approval gates for consequential actions.
 
-## Pricing
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) |
-| :--- | ---: | ---: | ---: | ---: |
-| Muse Spark 1.3 | 1.25 | 1.25 | 0.15 | 4.25 |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.

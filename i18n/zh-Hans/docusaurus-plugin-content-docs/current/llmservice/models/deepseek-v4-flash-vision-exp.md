@@ -59,12 +59,16 @@ DeepSeek-V4-Flash-Vision-Exp 是 DeepSeek-V4 系列的首款实验性多模态�
 - 在思考模式下，`temperature`、`top_p`、`presence_penalty` 和 `frequency_penalty` 不生效。包含工具调用的多轮请求需要在后续请求中完整回传此前的 `reasoning_content`。
 - DeepSeek 未公布该模型专属的知识截止时间或完整语言支持列表。
 
-## 价格
+## 标准价格
 
-| 计费时段 | 输入（Credits/Token） | 缓存写入（Credits/Token） | 缓存读取（Credits/Token） | 输出（Credits/Token） |
-| :--- | ---: | ---: | ---: | ---: |
-| **闲时** | 0.15 | 0.15 | 0.003 | 0.60 |
-| **忙时** | 0.30 | 0.30 | 0.006 | 1.20 |
+以下 Token 价格均以美元计价，单位为每 100 万 Token；网页搜索按次计费。
+
+| 计费时段 | 输入<br/>（USD / 1M Tokens） | 缓存写入<br/>（USD / 1M Tokens） | 缓存读取<br/>（USD / 1M Tokens） | 输出<br/>（USD / 1M Tokens） | 网页搜索<br/>（USD / 次） |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| **闲时** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - |
+| **忙时** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - |
+
+**Credits 结算：** B.AI 按照 `1 USD = 1,000,000 Credits` 换算，并从账户余额中扣除 Credits。
 
 上述标准参考价自 2026 年 9 月 10 日 12:00（北京时间，UTC+8）起生效。
 

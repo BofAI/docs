@@ -39,12 +39,16 @@ Grok 4.6 is a SpaceXAI reasoning model in the Grok 4 family, released on August 
 * `logprobs` and `top_logprobs` are not supported by Grok 4.20 and newer models. Reasoning requests also reject `presencePenalty`, `frequencyPenalty`, and `stop`.
 * SpaceXAI has not published a model-specific throughput figure, multilingual evaluation, or separate numeric output-token ceiling.
 
-## Credits Usage
+## Standard Pricing
 
-| Model and Context Tier | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: |
-| **Grok 4.6** | `2.00` | `2.00` | `0.50` | `6.00` |
-| **Grok 4.6** (>=200K prompt tokens) | `4.00` | `2.00` | `1.00` | `12.00` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model and Context Tier | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| **Grok 4.6** | `$2.00` | `$2.00` | `$0.50` | `$6.00` | - |
+| **Grok 4.6** (>=200K prompt tokens) | `$4.00` | `$2.00` | `$1.00` | `$12.00` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 * Once a prompt reaches 200,000 tokens, long-context rates apply to all input, cached input, reasoning, and output tokens in the request. Reasoning tokens are billed at the output-token rate.
 

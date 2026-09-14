@@ -38,14 +38,14 @@ GPT-Image-2 is billed by usage across text input, cached text input, image input
 
 ## Pricing
 
-Prices are based on token usage. Under the platform-wide conversion of `1 USD = 1,000,000 Credits`, a provider reference price of `USD X / 1M Tokens` corresponds numerically to `X Credits/Token`.
+Prices are based on token usage and are shown in USD per 1 million tokens. B.AI converts usage to Credits at `1 USD = 1,000,000 Credits`.
 
-| Billing item | Reference price (USD/1M Tokens) | B.AI rate (Credits/Token) | How it is billed |
-| :--- | ---: | ---: | :--- |
-| **Text input** | `5.00` | `5.00` | Based on text input tokens |
-| **Cached text input** | `1.25` | `1.25` | Applied when cached text input is reused |
-| **Reference-image input** | `8.00` | `8.00` | Based on image input tokens; multiple images accumulate usage |
-| **Cached image input** | `2.00` | `2.00` | Applied when cached image input is reused |
-| **Image output** | `30.00` | `30.00` | Based on generated image output tokens |
+| Billing item | Standard price (USD/1M Tokens) | How it is billed |
+| :--- | ---: | :--- |
+| **Text input** | `5.00` | Based on text input tokens |
+| **Cached text input** | `1.25` | Applied when cached text input is reused |
+| **Reference-image input** | `8.00` | Based on image input tokens; multiple images accumulate usage |
+| **Cached image input** | `2.00` | Applied when cached image input is reused |
+| **Image output** | `30.00` | Based on generated image output tokens |
 
 **Pricing note:** Documented prices are B.AI standard reference prices for basic billing guidance. B.AI may provide a lower effective usage cost through top-up rewards or account benefits. Prices, bonus Credits, account benefits, and final settlement are subject to the platform display and billing records.

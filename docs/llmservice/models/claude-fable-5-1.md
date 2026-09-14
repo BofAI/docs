@@ -10,7 +10,7 @@ Claude Fable 5.1, released by Anthropic on September 1, 2026, is a generally ava
 * **Always-On Adaptive Thinking:** Adaptive thinking cannot be disabled. The `effort` control supports `low`, `medium`, `high`, `xhigh`, and `max`, with `high` as the Claude API default.
 * **1M Context and 128K Output:** Provides a 1,000,000-token context window and up to 128,000 output tokens at standard per-token pricing across the full window.
 * **Agent-Oriented API Controls:** Supports automatic tool use, strict tool schemas, structured output, preserved thinking, per-message effort, turn-scoped system messages, readable progress updates, and content provenance. Several of these controls are beta features.
-* **Lower Cache-Read Cost:** Cache hits and refreshes cost 0.25 Credits/Token, one quarter of the Claude Fable 5 cache-read rate, while base input and output prices remain unchanged.
+* **Lower Cache-Read Cost:** Cache hits and refreshes cost $0.25 per 1 million tokens, one quarter of the Claude Fable 5 cache-read rate, while base input and output prices remain unchanged.
 
 ## Best Use Cases
 
@@ -41,11 +41,15 @@ Claude Fable 5.1, released by Anthropic on September 1, 2026, is a generally ava
 * Fable safeguards may refuse or route some cybersecurity and biology requests to another Claude model. Fable 5.1 also requires 30-day data retention by default; zero-data-retention use requires express authorization from Anthropic.
 * Priority Tier is not supported for Claude Fable 5.1.
 
-## Pricing
+## Standard Pricing
 
-| Model | Input (Credits/Token) | 5m Cache Write (Credits/Token) | 1h Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :--- | --------------------: | -----------------------------: | -----------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| **Claude Fable 5.1** | `10.00` | `12.50` | `20.00` | `0.25` | `50.00` | `-` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | 5m Cache Write<br/>(USD / 1M Tokens) | 1h Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | -----------------------------: | -----------------------------: | -------------------------: | ---------------------: | ---: |
+| **Claude Fable 5.1** | `$10.00` | `$12.50` | `$20.00` | `$0.25` | `$50.00` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Caching note
 For Claude Fable 5.1, a 5-minute cache write is billed at 1.25x the input rate and a 1-hour cache write is billed at 2x. Cache reads are billed at 0.025x the input rate.

@@ -59,12 +59,16 @@ DeepSeek-V4-Flash-Vision-Exp is DeepSeek's first experimental multimodal model i
 - In thinking mode, `temperature`, `top_p`, `presence_penalty`, and `frequency_penalty` have no effect. Tool-calling conversations must pass the full prior `reasoning_content` back on subsequent requests.
 - DeepSeek does not publish a model-specific knowledge cutoff or a complete supported-language list.
 
-## Pricing
+## Standard Pricing
 
-| Billing Period | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) |
-| :--- | ---: | ---: | ---: | ---: |
-| **Idle** | 0.15 | 0.15 | 0.003 | 0.60 |
-| **Busy** | 0.30 | 0.30 | 0.006 | 1.20 |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Billing Period | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| **Idle** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - |
+| **Busy** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 The standard reference prices above take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8).
 

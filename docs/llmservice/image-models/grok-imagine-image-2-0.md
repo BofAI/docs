@@ -38,13 +38,15 @@ Grok Imagine Image 2.0 is billed by the number of images generated. The output p
 
 ## Pricing
 
-| Resolution | Quality | Reference price per image | B.AI rate per generated image |
-| :--- | :--- | ---: | ---: |
-| **1K** | low | `$0.04` | **40,000 Credits** |
-| **2K** | low | `$0.06` | **60,000 Credits** |
-| **1K** | medium | `$0.06` | **60,000 Credits** |
-| **2K** | medium | `$0.08` | **80,000 Credits** |
+Prices are shown in USD per image. B.AI converts charges to Credits at `1 USD = 1,000,000 Credits`.
 
-Reference-image input is billed at `$0.01` or **10,000 Credits per image**. For batch generation, output Credits accumulate based on the actual number of generated images.
+| Resolution | Quality | Standard price (USD/Image) |
+| :--- | :--- | ---: |
+| **1K** | low | `$0.04` |
+| **2K** | low | `$0.06` |
+| **1K** | medium | `$0.06` |
+| **2K** | medium | `$0.08` |
+
+Reference-image input is billed at `$0.01` per image. For batch generation, charges accumulate based on the actual number of generated images.
 
 **Pricing note:** Documented prices are B.AI standard reference prices for basic billing guidance. B.AI may provide a lower effective usage cost through top-up rewards or account benefits. Prices, bonus Credits, account benefits, and final settlement are subject to the platform display and billing records.

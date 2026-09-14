@@ -23,11 +23,15 @@ Claude Opus 4.5 is the flagship AI model developed by Anthropic, integrated into
 | **Response Speed** | **Slow.** Prioritizes the highest quality and depth over response time. |
 | **Context Window** | **Huge.** Supports a context window of over 200K tokens, with potential for further expansion. |
 
-## Credits Usage
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **Claude Opus 4.5** | `5.00` | `6.25` | `0.50` | `25.00` | `10,000` | - |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| **Claude Opus 4.5** | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
