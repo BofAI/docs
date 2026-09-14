@@ -37,11 +37,15 @@ MiMo-V2.5-Pro is an open-weight text model from Xiaomi MiMo that entered public 
 * `mimo-v2.5-pro` is a text model and does not provide the full-modal understanding available in `mimo-v2.5`.
 * In thinking mode, custom `temperature` and `top_p` values are ignored; the API forces `1.0` and `0.95`. Multi-turn tool workflows that omit historical `reasoning_content` can fail with HTTP 400 or lose context quality.
 
-## Pricing
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| **MiMo-V2.5-Pro** | `0.435` | `0.435` | `0.0036` | `0.87` | `-` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| **MiMo-V2.5-Pro** | `$0.435` | `$0.435` | `$0.0036` | `$0.87` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.

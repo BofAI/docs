@@ -38,10 +38,14 @@ Gemini 3.8 Flash is a generally available Gemini 3-series model released by Goog
 - `minimal` thinking is unsupported. Legacy sampling parameters including `temperature`, `top_p`, and `top_k` are ignored, and prefilled model turns are rejected.
 - Computer Use remains a preview capability, and the model does not support native image generation or native audio generation.
 
-## Pricing
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| Gemini 3.8 Flash | 0.75 | 0.75 | 0.075 | 3.75 | 14,000 |
+| Gemini 3.8 Flash | `$0.75` | `$0.75` | `$0.075` | `$3.75` | `$0.014` |
 
-Explicit cache storage costs 0.50 Credits/Token per hour through December 31, 2026, and 1.00 Credits/Token per hour starting January 1, 2027.
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
+
+Explicit cache storage costs $0.50 per 1 million tokens per hour through December 31, 2026, and $1.00 per 1 million tokens per hour starting January 1, 2027.

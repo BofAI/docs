@@ -35,8 +35,12 @@ Muse Spark 1.3 是 Meta Superintelligence Labs 于 2026 年 9 月 2 日发布的
 - Meta 发布的 Muse Spark 1.3 评测使用了 `max` 推理，但该模式在发布时尚未向 API 用户开放；Meta 表示将在完成额外安全测试后提供。
 - 改进的自我判断和安全校准不能保证输出始终正确，也不能保证自主执行始终安全；涉及重要后果的操作仍应设置人工审批环节。
 
-## 价格
+## 标准价格
 
-| 模型 | 输入（Credits/Token） | 缓存写入（Credits/Token） | 缓存读取（Credits/Token） | 输出（Credits/Token） |
-| :--- | ---: | ---: | ---: | ---: |
-| Muse Spark 1.3 | 1.25 | 1.25 | 0.15 | 4.25 |
+以下 Token 价格均以美元计价，单位为每 100 万 Token；网页搜索按次计费。
+
+| 模型 | 输入<br/>（USD / 1M Tokens） | 缓存写入<br/>（USD / 1M Tokens） | 缓存读取<br/>（USD / 1M Tokens） | 输出<br/>（USD / 1M Tokens） | 网页搜索<br/>（USD / 次） |
+| :--- | ---: | ---: | ---: | ---: | ---: |
+| Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
+
+**Credits 结算：** B.AI 按照 `1 USD = 1,000,000 Credits` 换算，并从账户余额中扣除 Credits。

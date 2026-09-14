@@ -90,7 +90,7 @@ Offer starts August 12, 2026.
 
 **Eligibility:** This offer applies to GLM-5.2 requests made through the B.AI API and B.AI web app.
 
-For a limited time, eligible requests are billed at 60% of the standard reference price: Input `0.84`, Cache Write `0.84`, Cache Read `0.168`, and Output `2.64` Credits/Token. See the [model details](./models/glm-5-2.md).
+For a limited time, eligible requests are billed at 60% of the standard reference price. The promotional prices per 1 million tokens are: Input `$0.84`, Cache Write `$0.84`, Cache Read `$0.168`, and Output `$2.64`. See the [model details](./models/glm-5-2.md).
 </ActivityCard>
 
 <ActivityCard
@@ -103,5 +103,5 @@ Offer starts August 14, 2026.
 
 **Eligibility:** This offer applies to GLM-5.3 requests made through the B.AI API and B.AI web app.
 
-For a limited time, eligible requests are billed at 90% of the standard reference price: Input `1.26`, Cache Write `1.26`, Cache Read `0.252`, and Output `3.96` Credits/Token. See the [model details](./models/glm-5-3.md).
+For a limited time, eligible requests are billed at 90% of the standard reference price. The promotional prices per 1 million tokens are: Input `$1.26`, Cache Write `$1.26`, Cache Read `$0.252`, and Output `$3.96`. See the [model details](./models/glm-5-3.md).
 </ActivityCard>

@@ -16,7 +16,7 @@ Offer starts August 12, 2026.
 
 **Eligibility:** This offer applies to GLM-5.2 requests made through the B.AI API and B.AI web app.
 
-For a limited time, eligible requests are billed at 60% of the standard reference price: Input `0.84`, Cache Write `0.84`, Cache Read `0.168`, and Output `2.64` Credits/Token.
+For a limited time, eligible requests are billed at 60% of the standard reference price. The promotional prices per 1 million tokens are: Input `$0.84`, Cache Write `$0.84`, Cache Read `$0.168`, and Output `$2.64`.
 
 The pricing table on this page continues to show standard reference prices. Offer end time, eligibility, actual settlement price, and final billing are subject to the platform display and final billing records.
 </ActivityCard>
@@ -53,11 +53,15 @@ The pricing table on this page continues to show standard reference prices. Offe
 * Text-only model; image, video, and GUI-understanding tasks require a separate vision-language model.
 * Very long contexts and 128K outputs can increase latency and cost; cap `max_tokens` and use context caching where applicable.
 
-## Credits Usage
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **GLM-5.2** | `1.40` | `1.40` | `0.28` | `4.40` | `-` | - |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| **GLM-5.2** | `$1.40` | `$1.40` | `$0.28` | `$4.40` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.

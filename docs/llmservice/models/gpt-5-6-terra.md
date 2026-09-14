@@ -38,11 +38,15 @@ GPT-5.6 Terra is OpenAI's balanced GPT-5.6 tier, made generally available on Jul
 * Cyber and biology safeguards may refuse, block, or pause sensitive requests, including some legitimate dual-use work.
 * Prompt cache writes are billed on GPT-5.6 models, so cache breakpoints should be monitored with `cache_write_tokens` and `cached_tokens`.
 
-## Credits Usage
+## Standard Pricing
 
-| Context | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| Short context | `2.00` | `2.50` | `0.20` | `12.00` | `10,000` | Standard GPT-5.6 Terra pricing |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Context | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
+| Short context | `$2.00` | `$2.50` | `$0.20` | `$12.00` | `$0.01` | Standard GPT-5.6 Terra pricing |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.

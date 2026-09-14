@@ -38,11 +38,15 @@ GPT-5.6 Sol is OpenAI's flagship GPT-5.6 tier, made generally available on July 
 * OpenAI says GPT-5.6 does not cross the Critical threshold in cybersecurity or biology evaluations, so it should not be treated as an autonomous operator for high-risk work.
 * Prompt cache writes are billed on GPT-5.6 models, so cache breakpoints should be monitored with `cache_write_tokens` and `cached_tokens`.
 
-## Credits Usage
+## Standard Pricing
 
-| Context | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| Short context | `4.00` | `5.00` | `0.40` | `20.00` | `10,000` | Standard GPT-5.6 Sol pricing |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Context | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
+| Short context | `$4.00` | `$5.00` | `$0.40` | `$20.00` | `$0.01` | Standard GPT-5.6 Sol pricing |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.

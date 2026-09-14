@@ -57,13 +57,17 @@ After the offer ends, Qwen3.8-Flash will return to the prices shown on this page
 * QwenCloud does not publish a model-specific knowledge cutoff or complete supported-language list.
 * Thinking tokens are billed at the output-token rate and consume context. Applications should enable thinking according to task needs rather than assuming that a larger reasoning budget is always more efficient.
 
-## Pricing
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| **Qwen3.8-Flash** | `0.16` | `0.16` | `0.016` | `0.47` | `-` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
 
-Explicit cache creation costs `0.20 Credits/Token`. Both explicit and implicit cache hits cost `0.016 Credits/Token`.
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| **Qwen3.8-Flash** | `$0.16` | `$0.16` | `$0.016` | `$0.47` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
+
+Explicit cache creation costs `$0.20 per 1M tokens`. Both explicit and implicit cache hits cost `$0.016 per 1M tokens`.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through limited-time offers, top-up bonuses, and account benefits. Specific prices, bonus Credits, account benefits, and final billing are subject to the platform display and billing records.

@@ -8,7 +8,7 @@ B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `D
 
 ## Overview
 
-DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly 3.1x lower cost, making it one of the most cost-effective models available.
+DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, released alongside V4-Pro on April 24, 2026 under the MIT License. With 284 billion total parameters and only 13 billion active parameters, it delivers performance within striking distance of V4-Pro at roughly one-third of the standard input and output price, making it one of the most cost-effective models available.
 
 <ActivityCard
   variant="discount"
@@ -55,12 +55,16 @@ The pricing table below continues to show standard reference prices. Actual sett
 * Falls behind V4-Pro and frontier closed-source models on pure knowledge tasks and the most complex agentic workflows due to smaller parameter scale.
 * May require Flash-Max mode (larger thinking budget) to match Pro-level reasoning, increasing latency and cost for complex tasks.
 
-## Credits Usage
+## Standard Pricing
 
-| Billing Period | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **Idle** | `0.15` | `0.15` | `0.003` | `0.60` | `-` | Cache Write: `1x` input; Cache Read: `0.02x` input |
-| **Busy** | `0.30` | `0.30` | `0.006` | `1.20` | `-` | Cache Write: `1x` input; Cache Read: `0.02x` input |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Billing Period | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
+| :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
+| **Idle** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
+| **Busy** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 The standard reference prices above take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8). The table shows the time-based standard reference price for DeepSeek-V4-Flash. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek-V4-Flash usage in B.AI Chat is billed at Idle rates. From 17:00 on September 3, 2026 (UTC+8), eligible API usage is billed at 50% of the standard price for the applicable period. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.

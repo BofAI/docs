@@ -37,12 +37,16 @@ GPT-6 Astra is OpenAI's first 6-series model, announced on September 3, 2026, fo
 * Requests above 272K input tokens use higher rates for the entire request.
 * Production safeguards and monitoring may refuse, pause, or stop some sensitive requests, including legitimate defensive-security work.
 
-## Credits Usage
+## Standard Pricing
 
-| Context | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| Up to 272K input tokens | `10.00` | `12.50` | `1.00` | `50.00` | `10,000` |
-| More than 272K input tokens | `20.00` | `25.00` | `2.00` | `75.00` | `10,000` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Context | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| Up to 272K input tokens | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
+| More than 272K input tokens | `$20.00` | `$25.00` | `$2.00` | `$75.00` | `$0.01` |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 * For requests with more than 272K input tokens, the long-context input, cache, and output rates apply to the full request.
 * Web search is billed per use and is not affected by the input-token context tier.

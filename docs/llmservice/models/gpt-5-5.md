@@ -34,11 +34,15 @@ GPT-5.5 is OpenAI's most capable model, released on April 23, 2026. Codenamed "S
 * Lost the harder SWE-Bench Pro benchmark to Claude Opus 4.7 despite winning the standard SWE-Bench Verified headline.
 * 2x input pricing for prompts exceeding 272K tokens increases costs substantially for long-context workloads.
 
-## Credits Usage
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **GPT-5.5** | `5.00` | `5.00` | `0.50` | `30.00` | `10,000` | 2x input / 1.5x output beyond 272K tokens |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
+| **GPT-5.5** | `$5.00` | `$5.00` | `$0.50` | `$30.00` | `$0.01` | 2x input / 1.5x output beyond 272K tokens |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
