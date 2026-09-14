@@ -53,11 +53,15 @@ After the offer ends, MiMo-V2.5 will return to standard pricing. The table below
 * The hosted API provides multimodal understanding with text output; it does not generate images, audio, or video as native response modalities.
 * In thinking mode, custom `temperature` and `top_p` values are ignored; the API forces `1.0` and `0.95`. Multi-turn tool workflows that omit historical `reasoning_content` can fail with HTTP 400 or lose context quality.
 
-## Pricing
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| **MiMo-V2.5** | `0.14` | `0.14` | `0.0028` | `0.28` | `-` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| **MiMo-V2.5** | `$0.14` | `$0.14` | `$0.0028` | `$0.28` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.

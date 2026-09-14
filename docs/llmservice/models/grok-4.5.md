@@ -36,12 +36,16 @@ Grok 4.5 is a SpaceXAI reasoning model for coding, agentic tasks, engineering, a
 * Requests with more than 200,000 prompt tokens use the long-context pricing tier for the request.
 * Actual tool availability and related charges depend on the real-time options exposed by the platform.
 
-## Credits Usage
+## Standard Pricing
 
-| Model and Context Tier | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: |
-| **Grok 4.5** | `2.00` | `2.00` | `0.30` | `6.00` |
-| **Grok 4.5** (>200K prompt tokens) | `4.00` | `4.00` | `0.60` | `12.00` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model and Context Tier | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| **Grok 4.5** | `$2.00` | `$2.00` | `$0.30` | `$6.00` | - |
+| **Grok 4.5** (>200K prompt tokens) | `$4.00` | `$4.00` | `$0.60` | `$12.00` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.

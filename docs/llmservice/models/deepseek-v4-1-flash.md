@@ -42,12 +42,16 @@ B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `D
 * Images are accepted only in supported user or tool-output positions. Images in `system` or `assistant` messages return an HTTP 400 error.
 * DeepSeek does not separately publish a maximum input-token limit, knowledge cutoff, or complete supported-language list.
 
-## Credits Usage
+## Standard Pricing
 
-| Billing Period | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) | Billing Notes |
-| :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: | :--- |
-| **Idle** | `0.15` | `0.15` | `0.003` | `0.60` | `-` | Cache Write: `1x` input; Cache Read: `0.02x` input |
-| **Busy** | `0.30` | `0.30` | `0.006` | `1.20` | `-` | Cache Write: `1x` input; Cache Read: `0.02x` input |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Billing Period | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
+| :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
+| **Idle** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
+| **Busy** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
 The table shows the time-based standard reference price for DeepSeek-V4.1-Flash. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek-V4.1-Flash usage in B.AI Chat is billed at Idle rates. Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through promotions, top-up bonuses, and account benefits.

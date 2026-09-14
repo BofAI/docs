@@ -51,11 +51,15 @@ After the offer ends, GLM-5.3-Flash will return to the prices shown on this page
 
 * `thinking.type` only supports `enabled`; applications that require lighter reasoning should use `reasoning_effort: "low"` rather than disabling thinking.
 
-## Credits Usage
+## Standard Pricing
 
-| Model | Input (Credits/Token) | Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| **GLM-5.3-Flash** | `0.15` | `0.15` | `0.03` | `0.50` | `-` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| **GLM-5.3-Flash** | `$0.15` | `$0.15` | `$0.03` | `$0.50` | - |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 **Standard price effective date:** The prices above take effect at 00:00 on September 10, 2026 (UTC+8). This standard price update does not affect current promotions. During a promotion, billing follows the applicable promotion rules; after it ends, the standard reference prices above apply.
 

@@ -38,11 +38,15 @@ Claude Opus 5 is an Anthropic model designed for complex agentic coding, long-ru
 * Confirm tool availability and request parameters in a test environment before deploying a new workflow to production.
 * Cache behavior and eligibility depend on the request format and platform configuration.
 
-## Credits Usage
+## Standard Pricing
 
-| Model | Input (Credits/Token) | 5m Cache Write (Credits/Token) | 1h Cache Write (Credits/Token) | Cache Read (Credits/Token) | Output (Credits/Token) | Web Search (Credits/Use) |
-| :--- | --------------------: | -----------------------------: | -----------------------------: | -------------------------: | ---------------------: | -----------------------: |
-| **Claude Opus 5** | `5.00` | `6.25` | `10.00` | `0.50` | `25.00` | `10,000` |
+The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
+
+| Model | Input<br/>(USD / 1M Tokens) | 5m Cache Write<br/>(USD / 1M Tokens) | 1h Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | -----------------------------: | -----------------------------: | -------------------------: | ---------------------: | ---: |
+| **Claude Opus 5** | `$5.00` | `$6.25` | `$10.00` | `$0.50` | `$25.00` | `$0.01` |
+
+**Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Caching note
 For Claude Opus 5, a 5-minute cache write is billed at 1.25x the input rate and a 1-hour cache write is billed at 2x. Cache reads are billed at 0.1x the input rate. Eligible prompts must contain at least 512 tokens.

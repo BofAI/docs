@@ -38,10 +38,14 @@ Gemini 3.8 Flash 是 Google 于 2026 年 9 月 2 日正式发布的 Gemini 3 系
 - 不支持 `minimal` 思考级别。`temperature`、`top_p` 和 `top_k` 等旧版采样参数会被忽略，也不支持预填充模型回复。
 - Computer Use 仍处于预览阶段，模型不支持原生图像生成或原生音频生成。
 
-## 价格
+## 标准价格
 
-| 模型 | 输入（Credits/Token） | 缓存写入（Credits/Token） | 缓存读取（Credits/Token） | 输出（Credits/Token） | 网页搜索（Credits/次） |
+以下 Token 价格均以美元计价，单位为每 100 万 Token；网页搜索按次计费。
+
+| 模型 | 输入<br/>（USD / 1M Tokens） | 缓存写入<br/>（USD / 1M Tokens） | 缓存读取<br/>（USD / 1M Tokens） | 输出<br/>（USD / 1M Tokens） | 网页搜索<br/>（USD / 次） |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| Gemini 3.8 Flash | 0.75 | 0.75 | 0.075 | 3.75 | 14,000 |
+| Gemini 3.8 Flash | `$0.75` | `$0.75` | `$0.075` | `$3.75` | `$0.014` |
 
-显式缓存存储费用在 2026 年 12 月 31 日前为每小时 0.50 Credits/Token，自 2027 年 1 月 1 日起为每小时 1.00 Credits/Token。
+**Credits 结算：** B.AI 按照 `1 USD = 1,000,000 Credits` 换算，并从账户余额中扣除 Credits。
+
+显式缓存存储费用在 2026 年 12 月 31 日前为每 100 万 Token 每小时 `$0.50`，自 2027 年 1 月 1 日起为每 100 万 Token 每小时 `$1.00`。
