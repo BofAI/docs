@@ -107,7 +107,7 @@ BANK OF AI 各产品的更新与公告。
 <div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">x402</span><span className="changelog-tag">文档</span></div>
 
 - **x402 SDK 1.1.0**——付款流程显式化（`upfront` / `escrow` 通过 `extra.paymentFlow` 在协议中传递，默认 `authorization`）、客户端消费管控默认开启（单笔约 `$1` 上限 + 默认资产白名单）、付款选择策略与生命周期钩子、EVM 智能账户支持（ERC-7702、白名单内 ERC-6492），`HTTPFacilitatorClient` 默认超时 90 秒。11 个包需整体升级，要求 Node.js 22+。[SDK 功能矩阵](../x402/sdk-features/)
-- **文档订正**——移除已废弃的 facilitator 计费内容（`base_fee`、`extra.fee`、`/fee/quote`）；官方部署的匿名 `/settle` 限速为每分钟 1 次；不再宣称 GasFree 会被自动优选——CLI 取第一条匹配过滤条件的支付要求，需要强制时请传 `--scheme exact_gasfree`；TRON Shasta 现已注明「SDK/CLI 可签名、但官方 facilitator 不结算」（请用 Nile 或自建）；CLI 页面标明了它的**锁定依赖**——CLI 1.0.2 内含的 `@bankofai/x402-*` SDK 包仍是 1.0.1（`x402-gateway` 为 1.0.2），因此尚不具备 1.1.0 的客户端消费管控；Skills 各页的安装命令统一改为 `npx skills add … -g`。[x402 文档](../)
+- **文档订正**——移除已废弃的 facilitator 计费内容（`base_fee`、`extra.fee`、`/fee/quote`）；官方服务将匿名 `/settle` 限制为每个 IP 每分钟 1 次；不再宣称 GasFree 会被自动优选——CLI 取第一条匹配过滤条件的支付要求，需要强制时请传 `--scheme exact_gasfree`；TRON Shasta 现已注明「SDK/CLI 可签名、但官方 facilitator 不结算」（请用 Nile 或自建）；CLI 页面标明了它的**锁定依赖**——CLI 1.0.2 内含的 `@bankofai/x402-*` SDK 包仍是 1.0.1（`x402-gateway` 为 1.0.2），因此尚不具备 1.1.0 的客户端消费管控；Skills 各页的安装命令统一改为 `npx skills add … -g`。[x402 文档](../)
 
 </div>
 </div>

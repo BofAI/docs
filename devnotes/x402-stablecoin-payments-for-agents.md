@@ -210,7 +210,8 @@ import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
 
 const facilitator = new HTTPFacilitatorClient({
   url: "https://facilitator.bankofai.io", // serves TRON Mainnet and Nile
-  // In production attach your key so calls leave the 1-req/min anonymous tier:
+  // In production attach your key to leave the official /settle anonymous tier
+  // (1 request per IP per minute):
   // createAuthHeaders: async () => {
   //   const h = { "X-API-KEY": process.env.FACILITATOR_API_KEY! };
   //   return { verify: h, settle: h, supported: h };

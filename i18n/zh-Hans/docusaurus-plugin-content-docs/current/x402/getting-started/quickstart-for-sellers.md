@@ -328,7 +328,7 @@ const server = createResourceServer(
 2. 在 Dashboard 上点击 **"Create API Key"**
 3. 确认后，在 Dashboard 点击 **View** 查看并复制您的 API Key
 
-配置 API Key 后，速率限制提升到 **每分钟 1,000 次**，足以满足生产需求。
+配置 API Key 后，官方服务允许**每个 API Key 每分钟调用 `/settle` 1,000 次**，足以满足生产需求。
 
 #### 4.3 将 API Key 接入您的 server
 

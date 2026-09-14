@@ -330,7 +330,7 @@ This is the address your x402 server uses to verify and settle payments — **fo
 2. On the Dashboard, click **"Create API Key"**
 3. Confirm, then click **View** in the Dashboard to see and copy your API Key
 
-With an API Key, the rate limit increases to **1,000 requests/minute**, sufficient for production use.
+With an API Key, the official service allows **1,000 `/settle` requests per API Key per minute**, sufficient for production use.
 
 #### 4.3 Wire the API Key into Your Server
 

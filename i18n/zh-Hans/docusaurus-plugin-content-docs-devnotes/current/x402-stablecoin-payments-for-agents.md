@@ -210,7 +210,8 @@ import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
 
 const facilitator = new HTTPFacilitatorClient({
   url: "https://facilitator.bankofai.io", // 同时服务 TRON 主网与 Nile
-  // 生产环境请附上密钥，让调用脱离每分钟 1 次的匿名档位：
+  // 生产环境请附上密钥，脱离官方 /settle 的匿名档位
+  //（每个 IP 每分钟 1 次）：
   // createAuthHeaders: async () => {
   //   const h = { "X-API-KEY": process.env.FACILITATOR_API_KEY! };
   //   return { verify: h, settle: h, supported: h };

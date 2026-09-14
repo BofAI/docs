@@ -111,8 +111,8 @@ The `/settle` endpoint enforces dynamic rate limits based on the caller's authen
 
 | Mode | Rate Limit | How to Authenticate |
 |------|------------|---------------------|
-| **Authenticated** | 1000 requests / minute | Include `X-API-KEY: <your_key>` header |
-| **Anonymous** | 1 request / minute on the official deployment (configurable; the code default is 10/minute when unset) | No API Key provided |
+| **Authenticated** | Official service: 1000 requests per API Key per minute. Self-hosted deployments use the same default when `rate_limit.authenticated` is omitted (configurable). | Include `X-API-KEY: <your_key>` header |
+| **Anonymous** | Official service: 1 request per IP per minute. Self-hosted deployments default to 10 requests per IP per minute when `rate_limit.anonymous` is omitted (configurable). | No API Key provided |
 
 Other endpoints (`/verify`, `/supported`, `/payments/*`) are not individually rate-limited.
 
@@ -132,7 +132,7 @@ How access currently behaves:
 - **With a valid `X-API-KEY`** — results are filtered to the seller that key belongs to.
 - **Anonymous `tx_hash` or `network` + `nonce` lookup** — the current implementation adds **no seller filter**, so the response may include records that are bound to a seller.
 - **The `/payments` list endpoint** — still requires authentication: with no identity parameters and no API Key it returns `400`, and a partial identity query returns `400` rather than degrading into a feed.
-- **No rate limit on these lookups** — the 1-request-per-minute anonymous limit applies to `/settle` only; the record-query endpoints are not individually rate-limited.
+- **No rate limit on these lookups** — the official service's 1-request-per-IP-per-minute anonymous limit applies to `/settle` only; the record-query endpoints are not individually rate-limited.
 
 Settlement tx hashes are public on-chain data, and the `network` + `nonce` lookup additionally resolves **failed** settlements — including pre-broadcast failures, which carry no tx hash at all and so cannot be reached any other way. The practical consequence is that **settlement metadata should be treated as effectively public**, even though no unauthenticated listing endpoint exists. The response body never includes the seller id, so what a lookup exposes is the payment metadata of a seller-bound record, not seller attribution.
 
