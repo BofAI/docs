@@ -260,7 +260,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 | POST | `/settle` | 执行链上结算（**受限速保护**） |
 | GET | `/payments/tx/{tx_hash}` | 按结算交易哈希查询支付记录 |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | 按链上授权身份查询支付记录 |
-| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`；`limit` 默认 `50`、上限 `200`，`offset` 默认 `0`） |
+| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`；`limit` 默认 `50`、上限 `200`——超过 `200` 会被静默压到 `200`，不会报错；`offset` 默认 `0`） |
 
 > **不存在** `/fee/quote` 端点，各方案也不收取 facilitator 费用。限速仅作用于 `/settle` 接口，其他接口不受限速影响。
 

@@ -14,7 +14,7 @@ This example covers the full flow for SDK initialization, agent definition, MCP/
 
 - This page uses TRON Nile testnet as the default: `network="nile"` and `rpcUrl="https://nile.trongrid.io"`.
 - To switch to BSC, replace `network`, `rpcUrl` and `signer` (an EVM private key), add the chain's `chainId`, and drop `feeLimit` — it is TRON-only. The BSC samples below show the finished shape.
-- Recommended TRON parameter: `feeLimit=120000000`. Omit `chainId` — it is a legacy compatibility field; leaving it out lets Nile produce the current `3448148188:<tokenId>` agent-ID form.
+- Recommended TRON parameter: `feeLimit=120000000` — the unit is SUN, so this caps a single contract call at 120 TRX of fees. Omit `chainId` — it is a legacy compatibility field; leaving it out lets Nile produce the current `3448148188:<tokenId>` agent-ID form.
 
 Python (TRON) initialization:
 

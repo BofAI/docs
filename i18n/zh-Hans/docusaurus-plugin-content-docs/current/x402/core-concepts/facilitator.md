@@ -95,7 +95,7 @@ Facilitator 是一种中间件服务，主要负责：
 | POST | `/settle` | 执行链上结算（官方 Facilitator 下**受限速保护**）；并持久化一条结算记录 |
 | GET | `/payments/tx/{tx_hash}` | 按结算交易哈希查询支付记录（认证后仅返回当前卖家的记录） |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | 按链上授权身份查询支付记录（认证后仅返回当前卖家的记录） |
-| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`；`limit` 默认 `50`、上限 `200`，`offset` 默认 `0`） |
+| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`；`limit` 默认 `50`、上限 `200`——超过 `200` 会被静默压到 `200`，不会报错；`offset` 默认 `0`） |
 | GET | `/metrics` | Prometheus 指标（运维用途；仅当监控与主端口共用时才在主端口暴露） |
 | ALL | `/mainnet/*` · `/nile/*` | GasFree Open API 透明代理（HMAC 签名）——由 TRON `exact_gasfree` 方案内部使用 |
 

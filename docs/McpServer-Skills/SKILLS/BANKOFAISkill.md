@@ -216,7 +216,7 @@ A SunPump token has two states: **pre-launch** (no SunSwap V2 pair yet, `state` 
 :::
 
 :::caution Meme coins are high-risk
-Meme coins are highly volatile and easily manipulated. When the AI shows you token info it also surfaces holder concentration — if the top few addresses hold too much combined (e.g. top 5 > 40%), it explicitly warns you of rug-pull risk. Default slippage is 5% on the bonding-curve path (`sunpump buy` / `sell`); once a token has launched and trades through `sun swap`, the default is 0.5%; always review the quote before confirming a buy or sell.
+Meme coins are highly volatile and easily manipulated. When the AI shows you token info it also surfaces holder concentration — if the top 5 holders together hold more than 40% of supply, it explicitly warns you of rug-pull risk. Default slippage is 5% on the bonding-curve path (`sunpump buy` / `sell`); once a token has launched and trades through `sun swap`, the default is 0.5%; always review the quote before confirming a buy or sell.
 :::
 
 :::tip About token creation (launch)

@@ -18,7 +18,7 @@ Openclaw 扩展的版本发布记录。
 - 安装器此前固定在 `v1.5.14` 这个技能标签上，因此会装出 14 个技能——其中多个已在 2.0.0 下线——且从不安装 `wallet-cli`。现已改为跟随技能仓库的 `main` 分支，安装当前的 10 个技能。
 - 生成的 BANK OF AI 配置此前写入 `base_url: https://chat.ainft.com`，现改为 `https://chat.bankofai.io`，即签发 `BANKOFAI_API_KEY` 的域名。
 - TronScan 的配置提示原本声称该技能**必须**设置 `TRONSCAN_API_KEY`。实际并非如此：未配置 key 时技能会回退到 BofAI 代理（`ts.bankofai.io`），key 只用于提高速率上限。两个安装脚本的措辞均已改正。
-- 文档同步：向导要求 Node.js 20+（TRON MCP 服务声明了该下限）；且只有 macOS/Linux 脚本不检查版本，Windows 脚本会强制 18。关于是否需要管理员权限的回答也已说明：带版本号的全局安装 `agent-wallet` 是唯一会写到用户目录之外的步骤。
+- 文档同步：向导要求 Node.js 20+（TRON MCP 服务声明了该下限）；且只有 macOS/Linux 脚本不检查版本，Windows 脚本也只强制 `>=18`，低于 TRON MCP 服务声明的 `>=20`。关于是否需要管理员权限的回答也已说明：带版本号的全局安装 `agent-wallet` 是唯一会写到用户目录之外的步骤。
 
 👉 [快速上手](/zh-Hans/Openclaw-extension/QuickStart/) · [常见问题](/zh-Hans/Openclaw-extension/FAQ/)
 

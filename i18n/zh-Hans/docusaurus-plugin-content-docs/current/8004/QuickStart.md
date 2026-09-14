@@ -14,7 +14,7 @@ import TabItem from '@theme/TabItem';
 
 - 本页默认示例使用 TRON Nile 测试网：`network="nile"`，`rpcUrl="https://nile.trongrid.io"`。
 - 切换到 BSC 时，请替换 `network`、`rpcUrl` 与 `signer`（EVM 私钥），补上该链的 `chainId`，并去掉 `feeLimit`——它只适用于 TRON。下面的 BSC 示例即为完整形态。
-- TRON 推荐参数：`feeLimit=120000000`。请省略 `chainId`——它属于旧版兼容字段；不传它，Nile 才会生成当前的 `3448148188:<tokenId>` 形式的 agent ID。
+- TRON 推荐参数：`feeLimit=120000000`——单位是 SUN，即单次合约调用最多消耗 120 TRX 手续费。请省略 `chainId`——它属于旧版兼容字段；不传它，Nile 才会生成当前的 `3448148188:<tokenId>` 形式的 agent ID。
 
 Python（TRON）初始化示例：
 

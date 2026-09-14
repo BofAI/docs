@@ -54,7 +54,7 @@ x402-cli pay <url> [options]
 | `--gasfree-api-url <url>` | Override the TRON GasFree relayer API URL (env `X402_GASFREE_API_URL`) |
 | `--max-gasfree-fee <amount>` | Maximum GasFree relayer fee, in token units |
 | `--max-gasfree-fee-raw <n>` | Maximum GasFree relayer fee, in smallest units |
-| `--max-amount <amount>` | Maximum human-readable amount you'll pay |
+| `--max-amount <amount>` | Maximum you'll pay, in token units (converted with the token's decimals, not a USD figure) |
 | `--max-raw-amount <amount>` | Maximum amount in smallest units |
 | `--dry-run` | Read the requirement but do not sign or pay |
 | `--wallet-id <id>` | Explicitly select a configured Agent Wallet (env `AGENT_WALLET_ID`) |

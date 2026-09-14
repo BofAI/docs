@@ -54,7 +54,7 @@ x402-cli pay <url> [options]
 | `--gasfree-api-url <url>` | 覆盖 TRON GasFree relayer API 地址（环境变量 `X402_GASFREE_API_URL`） |
 | `--max-gasfree-fee <amount>` | GasFree relayer 手续费上限（代币单位） |
 | `--max-gasfree-fee-raw <n>` | GasFree relayer 手续费上限（最小单位） |
-| `--max-amount <amount>` | 允许支付的最大人类可读金额 |
+| `--max-amount <amount>` | 允许支付的最大金额，按代币单位计（用该代币的精度换算，不是美元金额） |
 | `--max-raw-amount <amount>` | 允许支付的最大最小单位金额 |
 | `--dry-run` | 只读取支付要求，不签名、不付款 |
 | `--wallet-id <id>` | 显式指定已配置的 Agent Wallet（环境变量 `AGENT_WALLET_ID`） |

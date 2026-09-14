@@ -95,7 +95,7 @@ Whether using the official service or a self-hosted instance, the Facilitator pr
 | POST | `/settle` | Execute on-chain settlement (**rate-limited**, see below); persists a settlement record |
 | GET | `/payments/tx/{tx_hash}` | Query payment records by settlement transaction hash (seller-scoped when authenticated) |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | Query payment records by the on-chain authorization identity (seller-scoped when authenticated) |
-| GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`; `limit` defaults to `50` and is capped at `200`, `offset` defaults to `0`) |
+| GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`; `limit` defaults to `50` and is capped at `200` — a larger value is silently reduced to `200`, not rejected; `offset` defaults to `0`) |
 | GET | `/metrics` | Prometheus metrics (operational; exposed on the main port only when monitoring shares it) |
 | ALL | `/mainnet/*` · `/nile/*` | GasFree Open API transparent proxy (HMAC-signed) — used internally by the TRON `exact_gasfree` scheme |
 

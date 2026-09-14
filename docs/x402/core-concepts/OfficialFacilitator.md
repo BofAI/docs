@@ -250,7 +250,7 @@ After clicking **"Confirm"**, you will return to the Dashboard page, and the API
 | POST | `/settle` | Perform on-chain settlement (**rate-limited**)|
 | GET | `/payments/tx/{tx_hash}` | Query payment records by settlement transaction hash |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | Query payment records by the on-chain authorization identity |
-| GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`; `limit` defaults to `50` and is capped at `200`, `offset` defaults to `0`) |
+| GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`; `limit` defaults to `50` and is capped at `200` — a larger value is silently reduced to `200`, not rejected; `offset` defaults to `0`) |
 
 > There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee. Rate limiting only applies to the `/settle` interface; other interfaces are not affected by rate limiting.
 
