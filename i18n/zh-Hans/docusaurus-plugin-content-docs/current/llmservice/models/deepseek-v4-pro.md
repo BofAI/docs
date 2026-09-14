@@ -1,9 +1,5 @@
 # DeepSeek V4 Pro
 
-:::info B.AI 模型路由说明
-B.AI 将逐步把使用 `DeepSeek-V4-Flash`、`DeepSeek-V4-Flash-Vision-Exp` 和 `DeepSeek-V4-Pro` 模型名称发起的请求路由至 [DeepSeek-V4.1-Flash](./deepseek-v4-1-flash.md)。路由生效后，相关请求将统一按照 DeepSeek-V4.1-Flash 的适用价格计费。
-:::
-
 ## 概述
 
 DeepSeek-V4-Pro 是 DeepSeek 于 2026 年 4 月 24 日基于 MIT License 发布的旗舰级开源大语言模型。该模型采用 Mixture-of-Experts（MoE）架构，总参数量达到 1.6T，单次前向激活参数约为 49B，支持 100 万 token 上下文窗口，并以远低于同类闭源模型的成本，提供接近前沿水平的编程、数学与推理能力。
