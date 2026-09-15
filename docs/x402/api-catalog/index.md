@@ -35,7 +35,7 @@ Three consumers share the same data:
 
 - **[Catalog website](https://bankofai.io/catalog)**: for humans to browse and compare services.
 - **x402-cli**: search, inspect, and make paid calls from the command line.
-- **MCP**: one install and your Agent can "see" and call every service in the catalog by name.
+- **MCP**: `@bankofai/x402-mcp` lets an Agent pay for an x402 endpoint over MCP. Catalog-aware MCP discovery — browsing the catalog by name from inside an MCP client — is not shipped yet; use `x402-cli catalog` for discovery today.
 
 ## What's in the catalog
 
@@ -44,15 +44,15 @@ The first live services cover token creation plus DeFi market data and on-chain 
 | Service | What it does | Billing |
 |---|---|---|
 | SunPump | One-call agent/meme token launch, paid via x402 — submit token metadata (name, symbol, description, image) and the gateway forwards your request after settlement | $0.000001 / call |
-| DefiLlama | Aggregated DeFi data — protocol TVL, fees, token prices (current & historical), and pool yields/APY | $0.000001 / call |
+| DefiLlama | Aggregated DeFi data — protocol TVL, token prices (current & historical), and pool yields/APY | $0.000001 / call |
 | DexScreener | Real-time DEX pairs, prices and liquidity, token search, and the latest new-listing profiles | $0.000001 / call |
 | DIA | Decentralized, multi-source oracle prices by symbol or by chain + contract address | $0.000001 / call |
 | GoPlus | Token and address security checks — honeypot/scam screening, malicious-address and risky-approval detection | $0.000001 / call |
 
-All of the above are in the **Finance** category. Check each endpoint's `x402Routes` for its currently published TRON, BNB Chain, and Base Mainnet routes.
+All of the above are in the **Finance** category. Check each endpoint's `x402_routes` for its currently published TRON, BNB Chain, and Base Mainnet routes — they appear in `/api/providers/<fqn>.json`, `/api/pay/<fqn>.json` and `/api/search-index.json`, not in the summary-only `/api/catalog.json`.
 
 :::note
-The live service list and statistics (service count, chain count, etc.) are **generated dynamically** from catalog data — treat `/api/catalog.json` as the source of truth; this page hard-codes no numbers, and the catalog grows as new services are listed.
+The live service list and statistics (service count, chain count, etc.) are **generated dynamically** from catalog data — treat `/api/catalog.json` as the source of truth for the service list and counts (it carries provider summaries only — per-endpoint routes live in the per-provider files above); this page hard-codes no numbers, and the catalog grows as new services are listed.
 :::
 
 ## Next steps

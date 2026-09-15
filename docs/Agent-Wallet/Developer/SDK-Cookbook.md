@@ -333,7 +333,7 @@ async function transferBNB(
     maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
     nonce,
     chainId: CHAIN_ID,
-    type: 2, // EIP-1559
+    type: "eip1559",
   };
 
   console.log("Transaction built, nonce:", nonce);
@@ -371,6 +371,7 @@ transferBNB(
 ```python
 import asyncio
 from agent_wallet import resolve_wallet_provider
+from eth_utils import to_checksum_address
 from web3 import AsyncWeb3
 
 # BSC Testnet
@@ -392,7 +393,8 @@ async def transfer_bnb(to_address: str, amount_ether: str):
 
     # Step 3: Build the unsigned transaction
     unsigned_tx = {
-        "to": to_address,
+        # eth-account rejects a non-checksummed address
+        "to": to_checksum_address(to_address),
         "value": w3.to_wei(amount_ether, "ether"),
         "gas": 21000,
         "maxFeePerGas": base_fee + priority_fee,
@@ -409,14 +411,14 @@ async def transfer_bnb(to_address: str, amount_ether: str):
     print("Signed")
 
     # Step 5: Broadcast
-    tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(signed_tx_hex))
+    raw = signed_tx_hex[2:] if signed_tx_hex.startswith("0x") else signed_tx_hex
+    tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(raw))
     print("Broadcast successful! txHash:", tx_hash.hex())
 
     # Optional: wait for confirmation
     # NOTE: This blocks the event loop for up to `timeout` seconds.
     # For production AI agents, consider running this in a background task
     # or using asyncio.wait_for() with a shorter timeout and retry logic.
-    import asyncio
     try:
         receipt = await asyncio.wait_for(
             w3.eth.wait_for_transaction_receipt(tx_hash),
@@ -447,13 +449,17 @@ asyncio.run(
 
 ---
 
-## x402 PaymentPermit Signing
+## x402 EIP-3009 Payment Signing
 
 **Use case**: An AI agent is accessing a paid API protected by the x402 protocol — such as fetching real-time data, calling an AI inference service, or triggering an on-chain operation. The server responds with HTTP 402, requiring the agent to provide a payment authorization before it can retrieve the content.
 
 **How it works**:
 
 x402 payments do not work by sending a direct transfer. Instead, they use a "sign first, verify to proceed" model. The agent signs a `TransferWithAuthorization` structure (EIP-712 format), and the resulting signature is sent alongside the request as a payment credential. The server verifies the signature and returns the content only if it is valid. The agent never has to wait for on-chain confirmation — latency is minimal.
+
+:::note Which structure to sign
+This walkthrough signs EIP-3009 `TransferWithAuthorization` — the authorization Base USDC uses under the x402 `exact` scheme. It is not the same as the `PaymentPermit` typed-data struct in the repository's own x402 examples (`bsc-x402-sign-typed-data.ts`, `tron-x402-sign-typed-data.ts`), whose domain is `x402PaymentPermit` with primary type `PaymentPermitDetails` and fields `{ buyer, amount, nonce }`. Match whichever structure the server advertises in its `402` challenge. Which authorization applies is per token, not per chain: TRON's USDT/USDD and BSC's USDT/USDC settle through Permit2, while EIP-3009 tokens such as official Base USDC use `transferWithAuthorization` — see [Network and token support](../../x402/core-concepts/network-and-token-support.md).
+:::
 
 <ThemedImage
   alt="x402 PaymentPermit: sign first, verify to proceed"
@@ -470,6 +476,7 @@ The PaymentPermit data is automatically constructed by the x402 SDK based on the
 
 ```typescript
 import { resolveWalletProvider } from "@bankofai/agent-wallet";
+import type { Eip712Capable } from "@bankofai/agent-wallet";
 
 async function signPaymentPermit(authorization: {
   from: string;
@@ -511,8 +518,11 @@ async function signPaymentPermit(authorization: {
     message: authorization,
   };
 
+  // signTypedData lives on Eip712Capable, not on the base Wallet interface
+  const signer = wallet as unknown as Eip712Capable;
+
   // Sign locally with Agent-wallet
-  const signature = await wallet.signTypedData(typedData);
+  const signature = await signer.signTypedData(typedData);
   console.log("PaymentPermit signature:", signature);
 
   return signature;
@@ -582,7 +592,7 @@ The Agent-wallet repository includes additional ready-to-run examples covering m
 | :--- | :--- |
 | `dual-sign-typed-data-from-private-key` | Sign EIP-712 typed data on both TRON and EVM from a single private key |
 | `switch-active-wallet` | Programmatically switch between multiple wallets |
-| `create-wallet-provider` | Direct provider instantiation without auto-resolution |
+| `create-wallet-provider` | Direct provider instantiation without auto-resolution (TypeScript only) |
 | `tron-x402-sign-typed-data` | x402 PaymentPermit signing on TRON |
 | `bsc-x402-sign-typed-data` | x402 PaymentPermit signing on BSC |
 | `verify-tron-privy-typed-data` | Verify Privy TRON EIP-712 signatures |

@@ -8,6 +8,124 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
+<div className="changelog-date">Sep 9, 2026</div>
+<div className="changelog-body">
+
+### 8004 and Openclaw Extension corrections
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span><span className="changelog-tag">8004</span><span className="changelog-tag">Openclaw</span></div>
+
+- The 8004 guides are now internally consistent: one consistent `setWallet` call shape per SDK instead of four different ones, with the rules for how the new wallet's signature is supplied, no legacy TRON `chainId`, the network names the SDK actually accepts, and private keys read from environment variables. The Openclaw installer no longer pins a superseded skills tag and writes the correct BANK OF AI host. [8004 details](./8004/) · [Openclaw details](./openclaw-extension/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Sep 9, 2026</div>
+<div className="changelog-body">
+
+### Second documentation audit against the source repositories
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">SKILLS</span></div>
+
+- A follow-up audit across the x402 SDK, CLI, Catalog, Gateway, Facilitator, Agent Wallet, and Skills repositories. The API Catalog samples were rebuilt from the real provider files — the previous ones omitted the now-required `assetTransferMethod` and would have failed validation if copied — and the invalid `subTitle` field was removed. Payload, retry-scope, and TRON-only capability claims were corrected; EVM approval gas sponsoring is now documented with its actual preconditions; `resolveWallet()` and `SignOptions` were added to the Agent Wallet SDK guide. [x402 details](./x402/) · [Agent Wallet details](./agent-wallet/) · [SKILLS details](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Sep 8, 2026</div>
+<div className="changelog-body">
+
+### Documentation synchronized with current source code
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">SKILLS</span></div>
+
+- Updated the English and Simplified Chinese docs against the current x402 SDK, API Catalog, Gateway, CLI, Facilitator, Agent Wallet, and Skills repositories. Corrections include the Catalog `assetTransferMethod` contract, the client-only status of `auth-capture`, the Gateway authorization/settlement flow, Privy's `--network` exception, and the `x402-payment` skill's exact `x402-cli@1.0.1` requirement. Repository links, MDX syntax, and broken internal links were also repaired. [x402 details](./x402/) · [Agent Wallet details](./agent-wallet/) · [SKILLS details](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Sep 7, 2026</div>
+<div className="changelog-body">
+
+### SKILLS 2.0.0 — breaking catalog cleanup
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">Breaking</span></div>
+
+- Skills 2.0.0 removes `multisig-permissions`, `trc20-toolkit-skill`, `trx-staking-skill`, `twitter-digest`, and `twitter-mcp` — the TRON workflows of the first three move into **`wallet-cli`** (now pinned to `@tron-walletcli/wallet-cli@4.13.0` with decimal CAIP-2 network ids), while the X/Twitter skills leave this DeFi-focused collection. The catalog now holds 10 skills, all versioned 2.0.0. [Details](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Aug 29, 2026</div>
+<div className="changelog-body">
+
+### SKILLS — stable installs from main
+
+<div className="changelog-tags"><span className="changelog-tag">Update</span><span className="changelog-tag">SKILLS</span></div>
+
+- Skill installs are now pinned to the stable **`main`** branch — `npx skills add https://github.com/BofAI/skills/tree/main`; other development branches may contain unreleased changes. [Details](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Aug 28, 2026</div>
+<div className="changelog-body">
+
+### x402 SDK v1.2.0 — TRON approval resource sponsoring
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">TRON</span></div>
+
+- **x402 SDK 1.2.0** adds the `trc20ApprovalResourceSponsoring` extension: on TRON the payer signs the one-time `approve(Permit2, MaxUint256)` without broadcasting it, and an opted-in facilitator validates it, temporarily delegates the Stake 2.0 Energy — and, when needed, Bandwidth — that the payer lacks, broadcasts it, and reclaims the delegation — so a first Permit2 payment or channel deposit needs no TRX. `@bankofai/x402-extensions` and `-tron` move to 1.2.0, the four server middlewares to 1.1.1, and the remaining packages stay at 1.1.0. The official facilitator does not enable the extension. [Details](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Aug 26, 2026</div>
+<div className="changelog-body">
+
+### SKILLS — new wallet-cli skill
+
+<div className="changelog-tags"><span className="changelog-tag">New</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">TRON</span></div>
+
+- **`wallet-cli`** joins the catalog (15 skills now): standalone TRON wallet operations — transfers, staking, governance, contracts, signing, chain queries — through the pinned `@tron-walletcli/wallet-cli@4.12.0`, with stdin-only passwords in agent runs and human-only wallet administration. [Details](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Aug 25, 2026</div>
+<div className="changelog-body">
+
+### x402 SDK v1.1.0 · Docs
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">Docs</span></div>
+
+- **x402 SDK 1.1.0** — explicit payment flows (`upfront` / `escrow` on the wire as `extra.paymentFlow`, `authorization` by default), client spend controls on by default (`$1` per-payment cap, default-asset allowlist), payment-selection policies and lifecycle hooks, EVM smart-account support (ERC-7702, allowlisted ERC-6492), and a 90-second `HTTPFacilitatorClient` timeout. Upgrade all 11 packages together; Node.js 22+. [SDK Feature Matrix](../x402/sdk-features/)
+- **Docs corrections** — removed the obsolete facilitator-fee material (`base_fee`, `extra.fee`, `/fee/quote`); the official service limits anonymous `/settle` calls to 1 request per IP per minute; GasFree is no longer described as auto-preferred — the CLI takes the first advertised requirement matching your filters, so pass `--scheme exact_gasfree` to force it; TRON Shasta is now documented as signed by the SDK/CLI but **not** settled by the official facilitator (use Nile or self-host); the CLI page now states its **pinned** dependencies — CLI 1.0.2 still bundles the `@bankofai/x402-*` SDK packages at 1.0.1 (`@bankofai/x402-gateway` at 1.0.2), so it does not yet carry the 1.1.0 client spend controls; and the Skills pages now install with `npx skills add … -g`. [x402 docs](../)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Aug 20, 2026</div>
+<div className="changelog-body">
+
+### Facilitator — BSC receipt reliability
+
+<div className="changelog-tags"><span className="changelog-tag">Fix</span><span className="changelog-tag">Facilitator</span></div>
+
+- Settlement receipt lookups on **BSC Mainnet** (`eip155:56`) fall back to a secondary RPC endpoint, so one unresponsive node no longer turns a settled payment into a failed one. [Official Facilitator](../x402/core-concepts/OfficialFacilitator/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Jul 30, 2026</div>
 <div className="changelog-body">
 
@@ -23,15 +141,31 @@ Product updates and announcements for BANK OF AI.
 </div>
 
 <div className="changelog-entry">
+<div className="changelog-date">Jul 29, 2026</div>
+<div className="changelog-body">
+
+### Official Facilitator — Base settlement
+
+<div className="changelog-tags"><span className="changelog-tag">Update</span><span className="changelog-tag">Facilitator</span><span className="changelog-tag">Base</span></div>
+
+- The official facilitator now settles **Base USDC** — `eip155:8453` (Mainnet) and `eip155:84532` (Sepolia) are enabled alongside TRON Mainnet/Nile and BSC Mainnet/Testnet. The bundled example facilitator still registers only `eip155:97` and `eip155:56` on the EVM side, so self-hosting Base sellers must add the Base ids themselves. [Official Facilitator](../x402/core-concepts/OfficialFacilitator/)
+- **Breaking for self-hosters** — the facilitator config now takes canonical CAIP-2 ids only; friendly aliases such as `bsc:mainnet` and `tron:nile` are no longer resolved and are rejected at startup.
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Jul 21, 2026</div>
 <div className="changelog-body">
 
 ### Docs
 
-<div className="changelog-tags"><span className="changelog-tag">Product Updates</span><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span></div>
+<div className="changelog-tags"><span className="changelog-tag">Product Updates</span><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">SKILLS</span></div>
+
+- **SKILLS — `x402-payment` now pays through `x402-cli`** (exactly version 1.0.1) instead of bundled local scripts, with a `--dry-run` preview, `--max-amount` caps, a required GasFree fee cap, and canonical CAIP-2 TRON ids. [Details](./skills/)
 
 - **TRON network IDs now use CAIP-2 format** across the x402 docs — `tron:0x2b6653dc` (Mainnet), `tron:0xcd8690dc` (Nile), `tron:0x94a9059e` (Shasta). In application code, prefer the SDK constants `TRON_MAINNET` / `TRON_NILE` / `TRON_SHASTA` over hard-coded hex strings. [Network & Token Support](../x402/core-concepts/network-and-token-support/)
-- **`auth-capture` scheme removed** — x402 now documents four payment schemes: `exact`, `upto`, `batch-settlement`, and `exact_gasfree` (TRON). [SDK Features](../x402/sdk-features/)
+- **`auth-capture` status clarified** — x402 defines five named schemes; `auth-capture` currently ships an EVM client only, while its server and facilitator implementations are still pending. [SDK Features](../x402/sdk-features/)
 - **x402 quickstarts simplified** for both buyers and sellers.
 - **New model**: Kimi K3 pricing docs added to LLM Service.
 - **Rewritten BANK OF AI introduction** — restructured around what your AI actually gains, with a capability overview and an end-to-end execution example.

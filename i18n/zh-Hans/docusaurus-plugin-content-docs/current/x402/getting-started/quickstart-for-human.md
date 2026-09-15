@@ -95,6 +95,7 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 
 ```bash
 pnpm add @bankofai/agent-wallet @bankofai/x402-fetch @bankofai/x402-tron
+pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 ```
 
 如果您的项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
@@ -119,11 +120,20 @@ export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 
 > 💡 **提示：** 本快速入门使用 `TRON_NILE`（`tron:0xcd8690dc`）付款。client 会从 server 返回的 `accepts` 中选择 `network === TRON_NILE` 的付款选项。
 
-生产 TRON 负载建议设置 TronGrid API Key，以获得更可靠的 RPC：
+生产 TRON 负载建议使用 TronGrid API Key，以获得更可靠的 RPC。SDK 不会读取任何环境变量，因此必须显式传给 signer：
 
 ```bash
 export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 ```
+
+```typescript
+const signer = await createClientTronSigner(wallet, {
+  network: TRON_NILE,
+  apiKey: process.env.TRON_GRID_API_KEY,
+});
+```
+
+不传 `apiKey` 时，signer 会继续使用无密钥的公共节点。
 
 > ⚠️ **安全提醒：** 私钥仅保存在环境变量或安全的密钥管理系统中。**切勿将含私钥的文件提交到 Git 或分享给任何人。**
 
@@ -134,14 +144,19 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 客户端会包装 `fetch`，使 HTTP `402 Payment Required` 挑战自动支付。下面是一个最小 TRON client：
 
 ```typescript
-import { resolveWallet } from "@bankofai/agent-wallet";
+import { resolveWallet, type Wallet, type Eip712Capable } from "@bankofai/agent-wallet";
 import { x402Client, wrapFetchWithPayment } from "@bankofai/x402-fetch";
 import { createClientTronSigner, TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/client";
 
-const wallet = await resolveWallet({
+// resolveWallet 的返回类型是基础的 Wallet，不声明 signTypedData；
+// 但在 tron 上它返回的是 TronSigner，该类同时实现了 Wallet 与 Eip712Capable。
+// 直接组合 SDK 自身导出的这两个类型，即可满足 createClientTronSigner 的入参要求。
+type SignerWallet = Wallet & Eip712Capable;
+
+const wallet = (await resolveWallet({
   network: TRON_NILE,
-});
+})) as SignerWallet;
 
 const signer = await createClientTronSigner(wallet, {
   network: TRON_NILE,
@@ -174,9 +189,19 @@ pnpm tsx src/index.ts   # 或您的应用 dev 脚本
 { "status": "success", "credit": 1000000 }
 ```
 
-> ✅ **成功：** SDK 检测到 `402`，签署付款，在链上结算，并返回了受保护的内容。
+> ✅ **成功：** SDK 检测到 `402` 并签署了付款；随后由资源服务端交给 facilitator 在链上结算，并返回受保护的内容。
 
 > 💡 要改为支付其他网络或代币，请调整 selector 中的 `accepts.find(...)` 条件，并注册对应网络的 scheme。
+
+:::caution 默认消费管控把每笔支付限制在 $1
+自 SDK 1.1.0 起，客户端会在你的 selector 运行之前就拒绝超过 `$1` 的支付、以及默认资产注册表之外的资产。本快速入门能跑通，是因为卖家指南把价格正好设为 `1 USDT`。金额更大时需要提高上限：
+
+```typescript
+client.setSpendControls({ maxAmountPerPayment: "$5" });
+```
+
+完整选项（含 `allowedAssets`）见 [SDK 功能矩阵](../sdk-features.md)。
+:::
 
 ---
 
@@ -184,11 +209,13 @@ pnpm tsx src/index.ts   # 或您的应用 dev 脚本
 
 | 问题 | 原因 | 解决方案 |
 |---------|-------|----------|
-| `No wallet configured for TRON` | 未设置或为空 `AGENT_WALLET_PRIVATE_KEY` | 设置环境变量并重新运行；确保在**运行脚本的同一终端窗口**中执行 `export` |
+| `WalletNotFoundError` / 解析不到钱包 | agent-wallet 里没有钱包，或当前 shell 未设置 `AGENT_WALLET_PRIVATE_KEY` | 执行 `agent-wallet start`，或确保在**运行脚本的同一终端窗口**中执行 `export` |
 | `WalletNotFoundError: No active wallet set` | agent-wallet 未配置钱包 | 运行 `agent-wallet start` 并按提示导入私钥 |
 | `Insufficient balance` / 余额错误 | 测试钱包 USDT/USDD 不足 | 返回前置准备，从水龙头领取测试代币 |
-| `server offered no payment option matching "…"` | client 选择的网络与 server 公布的不匹配 | 检查 server 的 `accepts` 是否包含 `network: TRON_NILE` |
-| `InsufficientAllowanceError` / 授权错误 | 代币授权额度过低 | SDK 在首次付款时自动广播一次性 Permit2 `approve`；若仍存在，检查钱包余额 |
+| `No network/scheme registered for x402 version: 2 …` | server 公布的网络里没有任何一个注册了 scheme——该错误在 selector 运行之前就会抛出 | 检查 server 的 `accepts` 是否包含 `network: TRON_NILE`，以及是否调用了 `client.register(TRON_NILE, …)` |
+| `permit2_allowance_required` | Permit2 授权额度缺失或过低 | 在 TRON 上 SDK 会在首次付款时自动广播一次性 `approve`；若仍存在，检查钱包是否有足够 TRX 支付这笔授权 |
+| `approval_reset_required`（TRON） | 该代币的 Permit2 授权额度非零但不足，默认的 `zero-first` 策略不会直接覆写 | 先把该代币的 Permit2 授权额度重置为 `0` 再重试——SDK 不会自动插入 `approve(0)` |
+| `approval_asset_unsupported`（TRON） | 该代币不属于已知 Permit2 资产，也没有为它配置授权策略 | 用 `createTrc20ApprovalPolicy` 为其配置策略，或改用受支持的代币付款 |
 | `Connection timeout` | 网络或请求超时 | 检查 API 服务、facilitator 和 TRON RPC 连接 |
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` | 项目未声明为 ESM | 在 `package.json` 中添加 `"type": "module"` |
 

@@ -81,7 +81,7 @@ Its limits are equally clear: when the real cost is only known after execution, 
 
 `exact_gasfree` is a TRON-only fixed-amount scheme. The payer can pay in USDT or USDD without holding TRX in their ordinary wallet; the official GasFree Proxy/relayer path submits the transaction and pays the corresponding on-chain resource cost.
 
-This is not universally "free" payment. The scheme requires the wallet, token, GasFree service, and Facilitator to all support the flow, and the fee may surface through service rules, asset balances, or the quote structure. Production deployments should explicitly check available assets, GasFree account status, fee configuration, and the failure fallback path — you cannot decide whether payment is possible from the main wallet's TRX balance alone.
+This is not universally "free" payment. The scheme requires the wallet, token, GasFree service, and Facilitator to all support the flow, and the cost surfaces as the GasFree **relayer fee**, which the client estimates and which is deducted from the payment token on top of the payment amount — the payment requirement itself carries no fee object. Production deployments should explicitly check available assets, GasFree account status, fee configuration, and the failure fallback path — you cannot decide whether payment is possible from the main wallet's TRX balance alone.
 
 ### 4.3 Upto: paying for actual usage
 
@@ -116,7 +116,7 @@ In BANK OF AI x402, Batch Settlement can use the appropriate channel implementat
 
 ### 5.2 The mechanics
 
-- **Deposit**: the payer creates or identifies a channel with an immutable `ChannelConfig` and deposits payable assets. The config binds payer, recipient, token, authorizer, withdrawal delay, and a random salt; the channel ID derives deterministically from that config, the network, and the contract address.
+- **Deposit**: the payer creates or identifies a channel with an immutable `ChannelConfig` and deposits payable assets. The config binds payer, payer authorizer, recipient, recipient authorizer, token, withdrawal delay, and a salt (the SDK defaults it to all zeros); the channel ID derives deterministically from that config, the network, and the contract address.
 - **Voucher**: each call is signed by the agent as a cumulative credential whose key field is `maxClaimableAmount`. It means "as of this call, the provider may claim at most this much" — not an isolated small transfer.
 - **Claim**: the provider submits one or more latest vouchers, registering the claimable amount on-chain as `totalClaimed`. This step confirms the debt but does not necessarily transfer tokens yet.
 - **Settle**: consolidates registered amounts for the same recipient and token into an actual transfer out. A single `settle` can cover multiple channels and a large number of requests — this is where the batch cost advantage really comes from.
@@ -203,12 +203,19 @@ In this case the inference metering, the agent's budget, and the payment channel
 
 The repository's [examples/typescript](https://github.com/BofAI/x402/tree/main/examples/typescript) provides a runnable reference with the same **TRON Nile** structure described above: it substitutes `GET /weather` for the inference endpoint, but the path through the first TRC-20 deposit, subsequent vouchers, and background claim/settle is identical. To use it for an inference service, replace the route's business logic with a model call and keep the `batch-settlement` TRON payment registration and channel management.
 
-The Facilitator is an indispensable settlement service on this TRON path. For a minimal integration, prefer the official BANK OF AI hosted Facilitator: on the Nile testnet set `FACILITATOR_URL` to `https://tn-facilitator.bankofai.io`, and switch to `https://facilitator.bankofai.io` for production. It handles the on-chain execution of verification, deposit, claim, settle, and refund.
+The Facilitator is an indispensable settlement service on this TRON path. For a minimal integration, prefer the official BANK OF AI hosted Facilitator. There is one host for both: `https://facilitator.bankofai.io` serves TRON Mainnet and Nile alike — set `FACILITATOR_URL` to it and pick the network in your scheme registration. It handles the on-chain execution of verification, deposit, claim, settle, and refund.
 
 ```ts
+import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
+
 const facilitator = new HTTPFacilitatorClient({
-  url: "https://tn-facilitator.bankofai.io", // TRON Nile
-  // In production use facilitator.bankofai.io and attach X-API-KEY to requests.
+  url: "https://facilitator.bankofai.io", // serves TRON Mainnet and Nile
+  // In production attach your key to leave the official /settle anonymous tier
+  // (1 request per IP per minute):
+  // createAuthHeaders: async () => {
+  //   const h = { "X-API-KEY": process.env.FACILITATOR_API_KEY! };
+  //   return { verify: h, settle: h, supported: h };
+  // },
 });
 ```
 
@@ -240,9 +247,11 @@ const paidFetch = wrapFetchWithPayment(fetch, client);
 const response = await paidFetch("https://inference.example.com/v1/generate");
 ```
 
-The server registers the same TRON scheme and runs the channel manager in the background:
+The server registers the same TRON scheme and runs the channel manager in the background. Note the import: client and server classes share the identifier `BatchSettlementTronScheme` and are distinguished only by the subpath, so a server file must import from `/batch-settlement/server` — the client class has no `createChannelManager`.
 
 ```ts
+import { BatchSettlementTronScheme } from "@bankofai/x402-tron/batch-settlement/server";
+
 const scheme = new BatchSettlementTronScheme(process.env.TRON_ADDRESS!);
 resourceServer.register(TRON_NILE, scheme);
 

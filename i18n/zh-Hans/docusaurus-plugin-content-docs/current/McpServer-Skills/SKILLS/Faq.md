@@ -40,7 +40,7 @@
 ls ~/.agents/skills
 ```
 
-能看到 14 个目录：`agent-wallet`、`sunswap-dex-trading`、`sunpump-meme-token-toolkit`、`sunperp-perpetual-futures-trading`、`tronscan-data-lookup`、`trc20-token-toolkit`、`usdd-just-protocol`、`trx-staking-sr-voting`、`multi-sig-account-permissions`、`x402-payment`、`recharge-skill`、`twitter-digest`、`twitter-mcp`，以及 `bankofai-guide`，就说明装好了。
+能看到 10 个目录：`agent-wallet`、`wallet-cli`、`sunswap-dex-trading`、`sunpump-meme-token-toolkit`、`sunperp-perpetual-futures-trading`、`tronscan-data-lookup`、`usdd-just-protocol`、`x402-payment`、`recharge-skill`，以及 `bankofai-guide`，就说明装好了。
 
 然后在 AI 对话中验证：
 
@@ -126,8 +126,9 @@ AI 的应对策略是：先给你看报价，你确认后在实际提交前会�
 根据你需要的技能，把对应的内容粘贴进去：
 
 ```bash
-# SunSwap 换币、TRC20 工具箱、USDD PSM、TRX 质押、多签
-# （任何需要在链上花钱的技能都会用到）
+# SunSwap 换币、SunPump 买卖、USDD PSM、SunPerp 提现
+#（任何通过该私钥在链上花钱的技能；wallet-cli 自行管理
+# 钱包，不读取这些变量）
 export TRON_PRIVATE_KEY="你的私钥"
 export TRONGRID_API_KEY="你的 TronGrid API Key"
 export TRON_NETWORK="mainnet"   # 或 "nile" / "shasta" 使用测试网
@@ -145,15 +146,13 @@ export BANKOFAI_API_KEY="你的 BANK OF AI API Key"
 # agent-wallet（用加密本地模式跑 x402-payment / 签名时需要）
 export AGENT_WALLET_PASSWORD="你的主密码"
 
-# multisig-permissions 混合签名流程（review.js --sign 使用）
-export TRON_HUMAN_PRIVATE_KEY="人类审批者的私钥"
 ```
 
 </details>
 
 ### 哪些 AI 工具能用这些技能？
 
-目前支持：**OpenClaw**（最省心），以及任何能读取本地技能文件的 AI 助手。
+安装器覆盖了相当广的一批编程助手与 AI 客户端——Claude Code、Cursor、Codex、Cline、Gemini CLI、Amp、Zed 等等——对有独立技能目录的工具建立软链接，没有的则直接复制文件。其中 **OpenClaw** 依然最省心。任何能读取本地技能文件的 AI 助手也都能用：让它读 `~/.agents/skills/<技能名>/SKILL.md` 即可。
 
 ---
 
@@ -173,10 +172,10 @@ export TRON_HUMAN_PRIVATE_KEY="人类审批者的私钥"
 rm -rf ~/.agents/skills/sunswap-dex-trading
 ```
 
-**更新：** 重新运行安装命令，会自动更新所有技能到最新版本。
+**更新：** 重新运行安装命令（保留 `-g`，更新的才是全局那份），会自动更新所有技能到最新版本。
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npx skills add https://github.com/BofAI/skills/tree/main -y -g
 ```
 
 ---

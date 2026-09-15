@@ -36,9 +36,11 @@ Privy 钱包的默认 ID 是 `default_privy`。
 
 **自定义密码：**
 ```bash
-agent-wallet start -p Abc12345!
+agent-wallet start local_secure -p Abc12345!
 ```
-密码要求：至少 8 位，包含大写、小写、数字和特殊字符。如果密码不满足要求，CLI 会持续提示你重新输入更强的密码，直到通过验证。
+`-p` 只对 `local_secure` 有效。直接跑不带类型的 `start` 再传 `-p`，只有在随后的类型选择里选 `local_secure` 才能走通；若选了 `raw_secret` 或 `privy`，CLI 会以 `--password is only valid for local_secure quick start.` 退出。像上面那样在命令行里写明类型即可避免。
+
+密码要求：至少 8 位，包含大写、小写、数字和特殊字符。在交互式提示里输入的密码会被反复要求重输直到通过；而通过 `-p`、`AGENT_WALLET_PASSWORD` 或 `runtime_secrets.json` 传入的密码不会——强度不足会直接打印校验错误并退出 1。
 
 交互式创建新密码时，需要输入两次进行确认。如果两次输入不一致，系统会要求你重新输入。
 
@@ -50,7 +52,7 @@ agent-wallet start -p Abc12345!
 
 **导入已有私钥：**
 ```bash
-agent-wallet start -p Abc12345! -k 你的私钥十六进制
+agent-wallet start -p Abc12345! -k your-private-key-hex
 ```
 
 **导入助记词：**
@@ -60,12 +62,12 @@ agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
 
 #### 跳过交互：直接指定钱包类型
 
-`start` 和 `add` 也可以把钱包类型作为子命令传入。这种形式不会有任何提问——正是 CI 或后台服务需要的：
+`start` 和 `add` 也可以把钱包类型作为子命令传入，这样会跳过类型选择。但在 CI 或后台服务里还必须带上 `-w`——否则 CLI 仍会询问钱包 ID，而在非交互环境下该提问会以 `Cannot prompt for wallet id in a non-interactive environment. Pass the required flags explicitly.` 报错并退出 1：
 
 ```bash
-agent-wallet start local_secure -p Abc12345! -g      # 加密存储，生成新私钥
-agent-wallet start raw_secret -k 你的私钥            # 明文，仅限开发
-agent-wallet start privy --app-id <id> --app-secret <secret> --privy-wallet-id <wallet>
+agent-wallet start local_secure -w default_secure -p Abc12345! -g   # 加密存储，生成新私钥
+agent-wallet start raw_secret -w default_raw -k 你的私钥            # 明文，仅限开发
+agent-wallet start privy -w default_privy --app-id <id> --app-secret <secret> --privy-wallet-id <wallet>
 ```
 
 `add` 用法相同（`add local_secure` / `add raw_secret` / `add privy`），用于再加一个钱包。
@@ -76,21 +78,22 @@ agent-wallet start privy --app-id <id> --app-secret <secret> --privy-wallet-id <
 | `-g, --generate` | `local_secure` | 生成一个新的随机私钥 |
 | `-k, --private-key <hex>` | `local_secure`、`raw_secret` | 导入私钥 |
 | `-m, --mnemonic <words>` | `local_secure`、`raw_secret` | 导入助记词 |
-| `--mnemonic-index <n>` | `local_secure`、`raw_secret` | 从助记词派生时的账户索引 |
+| `-mi, --mnemonic-index <n>` | `local_secure`、`raw_secret` | 从助记词派生时的账户索引 |
+| `--derive-as <profile>` | `local_secure`、`raw_secret` | 助记词派生方案：`eip155` 或 `tron` |
 | `-p, --password <pass>` | `local_secure` | 主密码 |
 | `--app-id` / `--app-secret` / `--privy-wallet-id` | `privy` | Privy 应用凭证与钱包 ID |
 | `-d, --dir <path>` | 全部 | 密钥目录（默认 `~/.agent-wallet`） |
-| `--save-runtime-secrets` | 全部 | 把密码写入 `runtime_secrets.json` |
-| `--override` | 仅 `start` | 覆盖已有配置 |
+| `--save-runtime-secrets` | `local_secure` | 把密码写入 `runtime_secrets.json`。`raw_secret` 与 `privy` 路径不会读取它——这两条路径根本不收集密码 |
+| `--override` | 仅 `start` | 已存在钱包时跳过确认提示 |
 
 用 `agent-wallet start local_secure --help` 或 `agent-wallet add privy --help` 查看某个模式的确切选项。
 
 ### `agent-wallet sign`（核心签名操作）
 
-每条 `sign` 子命令都需要 `--network` / `-n` 来指定链。
+对于 `local_secure` 和 `raw_secret` 钱包，每条 `sign` 子命令都需要 `--network` / `-n` 来指定链。Privy 钱包例外：链类型由 Privy 提供，EVM 交易载荷本身也包含 `chainId`，因此 Privy 签名可以省略 `--network`。
 
 :::info 密码重试机制
-使用 `local_secure` 钱包签名时，如果未通过 `-p` 或 `AGENT_WALLET_PASSWORD` 提供密码，CLI 会交互式提示输入主密码。如果密码输入错误，你有 **2 次重试机会**（共 3 次），超过后命令将以"密码错误，已失败 3 次。"（`Wrong password. 3 attempts failed.`）失败退出。
+使用 `local_secure` 钱包签名时，如果未通过 `-p`、`~/.agent-wallet/runtime_secrets.json` 或 `AGENT_WALLET_PASSWORD`（优先级从高到低）提供密码，CLI 会交互式提示输入主密码。密码错误时，`sign` 命令会立即以退出码 1 失败（`Wrong password. Please try again.`）；「3 次重试」机制只适用于 `start`、`add`、`change-password` 和 `resolve-address` 的交互提示，不适用于 `sign`。
 :::
 
 **签名消息：**
@@ -102,7 +105,8 @@ agent-wallet sign msg "Hello" -n tron
 **签名交易**（需要先通过 RPC 构建未签名交易）：
 ```bash
 agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
-# 输出: Signed tx: { "txID": "abc123...", "signature": ["..."], ... }
+# 输出：先是一行 `Signed tx:`，随后是美化格式的已签名交易 JSON
+# （只有当结果不是合法 JSON 时才会输出成一行）
 ```
 
 **签名 EIP-712 结构化数据：**
@@ -124,13 +128,13 @@ agent-wallet sign typed-data '{
 
 初始化密钥目录并设置主密码------但此时不会创建钱包。这在一些高级场景中很有用，比如你希望在添加钱包之前先准备好目录结构。
 
-``` bash
+```bash
 agent-wallet init
 ```
 
 **非交互模式：**
 
-``` bash
+```bash
 agent-wallet init -p 'Abc12345!'
 ```
 
@@ -171,14 +175,10 @@ agent-wallet use my-bsc-wallet
 agent-wallet inspect my-bsc-wallet
 ```
 
-查看钱包元数据及派生地址：
+要查看钱包的派生地址，请使用独立的 `resolve-address` 命令：
 ```bash
-agent-wallet inspect my-bsc-wallet --show-address
+agent-wallet resolve-address my-bsc-wallet
 ```
-
-| Flag | 说明 |
-| :--- | :--- |
-| `--show-address` | 派生并显示 EVM + TRON 地址（`local_secure` 钱包需要输入密码） |
 
 **用指定钱包签名**（不切换活跃钱包）：
 ```bash
@@ -190,9 +190,13 @@ agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
 agent-wallet remove my-bsc-wallet
 ```
 
+| 参数 | 简写 | 说明 |
+| :--- | :--- | :--- |
+| `--yes` | `-y` | 跳过确认提示（**非交互 / Agent 场景下必需**） |
+
 ### `agent-wallet resolve-address`（解析钱包地址）
 
-显示某个钱包关联的链上地址。对于助记词派生的钱包，会显示所有支持网络（EVM 和 TRON）的地址。对于私钥钱包，只显示对应网络的单个地址。
+显示某个钱包关联的链上地址。本地钱包（`local_secure`、`raw_secret`）都会显示 EVM 与 TRON 两个地址：`local_secure` 钱包（无论如何创建——助记词导入时只存按 `--derive-as` 方案派生出的那一把密钥）和私钥型 `raw_secret` 钱包的两个地址由同一把密钥派生；只有 `raw_secret` **助记词**钱包会按各链自己的派生路径分别从助记词派生。Privy 钱包显示 Privy 返回的单一地址。
 
 ```bash
 agent-wallet resolve-address my-wallet
@@ -206,12 +210,12 @@ agent-wallet resolve-address
 
 示例输出：
 ```
-  Wallet │ my-wallet
-    Type │ local_secure
+Wallet  my-wallet
+Type    local_secure
 
 Addresses
-     EVM │ 0x742d35Cc6634C0532925a3b844Bc9e7595f2bD18
-    TRON │ TJRyWwFs9wTFGZg3JbrVriFbNfCug5tDeC
+EVM   0x742D35CC6634C0532925a3B844Bc9E7595F2bD18
+TRON  TJRyWwFs9wTFGZg3JbrVriFbNfCug5tDeC
 ```
 
 ---
@@ -350,7 +354,7 @@ agent-wallet change-password -p 'OldPassword123!' --new-password 'NewPassword456
 
 ### `agent-wallet reset`（重置所有数据）
 
-删除 `~/.agent-wallet/` 下的所有内容。**这是核弹级操作——一旦执行，所有钱包、密钥、配置全部消失，无法恢复。** 系统会要求二次确认。
+删除 `~/.agent-wallet/` 中由 CLI 管理的文件——`master.json`、`wallets_config.json`、`runtime_secrets.json`，以及所有 `secret_*.json`。**这是核弹级操作——一旦执行，所有钱包、密钥、配置全部消失，无法恢复。** 目录本身及其中的其他文件（包括 `cred_*.json`）会保留。CLI 会要求**两次**确认；自动化场景可传 `-y/--yes` 跳过这两次提问。
 
 ```bash
 agent-wallet reset
@@ -362,7 +366,7 @@ agent-wallet reset
 
 CLI 不只是拿来手敲的——它可以完美嵌入你的自动化脚本。
 
-下面这个极简示例展示了如何在 Bash 脚本中完成一次非交互式签名，并把签名结果干净地存入变量，供后续业务使用（不涉及复杂的网络请求代码）：
+下面这个极简示例展示了如何在 Bash 脚本中完成一次非交互式签名并把签名存入变量（CLI 输出的是 `Signature: <hex>`，用 `sed` 去掉前缀）：
 
 ```bash
 #!/bin/bash
@@ -380,9 +384,9 @@ fi
 echo "正在调用本地 Agent-wallet 签名..."
 
 # 2. 核心操作：执行签名，并将终端打印出的哈希结果直接存入 SIGNATURE 变量
-SIGNATURE=$(agent-wallet sign msg "Hello from my script" -n tron)
+SIGNATURE=$(agent-wallet sign msg "Hello from my script" -n tron | sed 's/^Signature: //')
 
-# 3. 拿到干净的签名结果，继续后续流程
+# 3. 拿到干净的签名值，继续后续流程
 echo "✅ 签名成功！"
 echo "提取到的签名内容是: $SIGNATURE"
 

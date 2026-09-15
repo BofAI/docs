@@ -97,7 +97,7 @@ x402-cli pay '<x402-url>' \
 `--max-amount` 给你愿意支付的金额封顶：如果接口价格超过它，CLI 会在签名前中止。同一条命令在 EVM 网络上同样适用——把 `--network` 指向 `eip155:97`（BSC 测试网）或 `base-sepolia`（Base Sepolia，USDC）即可。
 
 :::tip 没有 TRX？用 GasFree
-在 TRON 上，如果接口宣告了 `exact_gasfree`，CLI 可以在钱包里没有 TRX 的情况下付款——由一个 relayer 代付网络能量、并从支付代币里扣除手续费。CLI 会自动选用，你也可以用 `--scheme exact_gasfree` 显式要求，并用 `--max-gasfree-fee` 给 relayer 手续费封顶。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
+在 TRON 上，如果接口宣告了 `exact_gasfree`，CLI 可以在钱包里没有 TRX 的情况下付款——由一个 relayer 代付网络能量、并从支付代币里扣除手续费。CLI 取的是第一条匹配你过滤条件的支付要求、并不会优先选 GasFree，因此端点同时提供普通 `exact` 时，请用 `--scheme exact_gasfree` 显式要求，并用 `--max-gasfree-fee` 给 relayer 手续费封顶。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
 :::
 
 ---
@@ -119,8 +119,7 @@ x402-cli serve \
 
 - `GET /health` —— 存活检查
 - `GET /.well-known/x402` —— 机器可读的支付元数据
-- `GET /pay` —— 返回 `402 Payment Required`
-- `POST /pay` —— 通过 Facilitator 校验并结算已提交的支付
+- `/pay` —— 请求未带 `PAYMENT-SIGNATURE` 时返回 `402 Payment Required`；带该头时通过 Facilitator 校验并结算（任意 HTTP 方法均可）
 
 在另一个终端里支付它：
 

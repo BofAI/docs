@@ -95,6 +95,7 @@ Install the published npm packages in your TypeScript application:
 
 ```bash
 pnpm add @bankofai/agent-wallet @bankofai/x402-fetch @bankofai/x402-tron
+pnpm add -D tsx   # to run the TypeScript entry point below
 ```
 
 Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
@@ -119,11 +120,20 @@ export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 
 > 💡 **Tip:** This quickstart pays on `TRON_NILE` (`tron:0xcd8690dc`). The client chooses the payment option where `network === TRON_NILE` from the server's `accepts` list.
 
-For production TRON workloads, set a TronGrid API Key for better RPC reliability:
+For production TRON workloads, use a TronGrid API Key for better RPC reliability. The SDK never reads environment variables, so pass it explicitly to the signer:
 
 ```bash
 export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 ```
+
+```typescript
+const signer = await createClientTronSigner(wallet, {
+  network: TRON_NILE,
+  apiKey: process.env.TRON_GRID_API_KEY,
+});
+```
+
+Without `apiKey`, the signer stays on the key-less public endpoint.
 
 > ⚠️ **Security reminder:** Keep your private key only in an environment variable or a secure secret manager. **Never commit files containing private keys to Git or share them with anyone.**
 
@@ -134,14 +144,20 @@ export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 The client wraps `fetch` so HTTP `402 Payment Required` challenges are paid automatically. Here is a minimal TRON client:
 
 ```typescript
-import { resolveWallet } from "@bankofai/agent-wallet";
+import { resolveWallet, type Wallet, type Eip712Capable } from "@bankofai/agent-wallet";
 import { x402Client, wrapFetchWithPayment } from "@bankofai/x402-fetch";
 import { createClientTronSigner, TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/client";
 
-const wallet = await resolveWallet({
+// resolveWallet is typed as the base Wallet, which does not declare
+// signTypedData — but for tron it returns a TronSigner, which implements both
+// Wallet and Eip712Capable. Combine the SDK's own types so the wallet
+// satisfies what createClientTronSigner expects.
+type SignerWallet = Wallet & Eip712Capable;
+
+const wallet = (await resolveWallet({
   network: TRON_NILE,
-});
+})) as SignerWallet;
 
 const signer = await createClientTronSigner(wallet, {
   network: TRON_NILE,
@@ -174,9 +190,19 @@ pnpm tsx src/index.ts   # or your app's dev script
 { "status": "success", "credit": 1000000 }
 ```
 
-> ✅ **Success:** The SDK detected the `402`, signed a payment, settled on-chain, and returned the protected content.
+> ✅ **Success:** The SDK detected the `402` and signed a payment; the resource server then had the facilitator settle it on-chain and returned the protected content.
 
 > 💡 To pay with another network or token, adjust the `accepts.find(...)` selector and register the matching network scheme.
+
+:::caution Default spend controls cap each payment at $1
+Since SDK 1.1.0 the client refuses any payment above `$1` and any asset outside the default-asset registry, before your selector ever runs. This quickstart works because the seller guide prices the route at exactly `1 USDT`. For anything larger, raise the cap:
+
+```typescript
+client.setSpendControls({ maxAmountPerPayment: "$5" });
+```
+
+See [SDK Feature Matrix](../sdk-features.md) for the full options, including `allowedAssets`.
+:::
 
 ---
 
@@ -184,11 +210,13 @@ pnpm tsx src/index.ts   # or your app's dev script
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
-| `No wallet configured for TRON` | `AGENT_WALLET_PRIVATE_KEY` is not set or empty | Set the environment variable and re-run; run the `export` command in **the same terminal window** where you run the script |
+| `WalletNotFoundError` / no wallet resolved | agent-wallet has no wallet, or `AGENT_WALLET_PRIVATE_KEY` is not set in this shell | Run `agent-wallet start`, or run the `export` in **the same terminal window** as the script |
 | `WalletNotFoundError: No active wallet set` | agent-wallet has no wallet configured | Run `agent-wallet start` and follow the prompts to import your private key |
 | `Insufficient balance` / balance error | Test wallet doesn't have enough USDT/USDD | Go back to Prerequisites and claim test tokens from the faucet |
-| `server offered no payment option matching "…"` | The client-selected network does not match what the server advertises | Check that the server's `accepts` includes `network: TRON_NILE` |
-| `InsufficientAllowanceError` / allowance error | Token allowance too low | The SDK auto-broadcasts the one-time Permit2 `approve` on first payment; if it persists, check your wallet balance |
+| `No network/scheme registered for x402 version: 2 …` | No scheme is registered for any network the server advertises — this is raised before your selector runs | Check that the server's `accepts` includes `network: TRON_NILE` and that you called `client.register(TRON_NILE, …)` |
+| `permit2_allowance_required` | The Permit2 allowance is missing or too low | On TRON the SDK auto-broadcasts the one-time `approve` on first payment; if it persists, check that the wallet holds enough TRX for that approve |
+| `approval_reset_required` (TRON) | The token already has a non-zero but insufficient Permit2 allowance, and the default `zero-first` strategy will not overwrite it | Set the token's Permit2 allowance back to `0`, then retry — the SDK never inserts an implicit `approve(0)` |
+| `approval_asset_unsupported` (TRON) | The token is not a known Permit2 asset and no approval strategy was configured for it | Configure it with `createTrc20ApprovalPolicy`, or pay with a supported token |
 | `Connection timeout` | Network or request timeout | Check the API service, facilitator, and TRON RPC connection |
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
 

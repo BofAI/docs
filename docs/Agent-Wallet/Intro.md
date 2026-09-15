@@ -56,7 +56,7 @@ If a hacker steals only your password through a malicious plugin, they can't do 
 | **How it works** | :x: Hand your card and PIN directly to the AI | :white_check_mark: **Give AI the password, file stays locked locally** |
 | **Log / env variable leak** | :rotating_light: **Total loss** | :shield: **Only the password leaks — no file, hacker gets nothing** |
 | **Encrypted file stolen** | :x: Plaintext key, stolen instantly | :shield: **No password, hacker can't open the file** |
-| **Works offline?** | :warning: Depends | :white_check_mark: **100% offline signing** |
+| **Works offline?** | :warning: Depends | :white_check_mark: **100% offline signing** (`local_secure` / `raw_secret`; the `privy` type signs via Privy's API and needs network) |
 
 ---
 
@@ -73,14 +73,14 @@ npm install -g @bankofai/agent-wallet
 ```bash
 agent-wallet start
 ```
-The wizard will initialize your Agent-wallet wallet and generate a **master password**. This password is your only "unlock key": every time your AI agent needs to sign, it uses this password to unlock the wallet. **Save it immediately in a password manager (e.g. 1Password, Bitwarden)** — it won't be shown again, and if lost, there's no way to recover it or access your assets.
+The wizard asks you to set a **master password** — press Enter and it auto-generates a strong one, displayed exactly once. This password is your only "unlock key": every time your AI agent needs to sign, it uses this password to unlock the wallet. **Save it immediately in a password manager (e.g. 1Password, Bitwarden)** — if lost, there's no way to recover it or access your assets.
 
 **Step 3 — Your first signature:**
 ```bash
 agent-wallet sign msg "Hello from my AI agent" -n tron
 ```
 
-When a hash string appears on screen — congratulations, your Agent-wallet is live.
+The CLI asks for your master password first — plain `agent-wallet start` does not persist it, so signing has to unlock the keystore. (Add `--save-runtime-secrets` at step 2, as the BANK OF AI onboarding skill does, to skip that prompt.) When a hash string appears on screen — congratulations, your Agent-wallet is live.
 
 > Want the full step-by-step walkthrough? Head to **[Quick Start](./QuickStart.md)**.
 

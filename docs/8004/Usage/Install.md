@@ -7,7 +7,7 @@
 *   **Python**: 3.11 or higher
 *   **pip**: Package manager
 *   **Private Key**: For signing transactions (not required for read-only mode)
-*   **RPC Node**: Accessible Ethereum RPC endpoint (e.g., Alchemy, Infura)
+*   **RPC Node**: An RPC endpoint for a [supported network](/8004/SupportedNetworks/) — an EVM endpoint for BSC, or a TRON node endpoint
 *   **IPFS Provider (Optional)**: Pinata, Filecoin account, or local IPFS node
 *   **Subgraph (Optional)**: Use this when your deployment provides a subgraph endpoint
 
@@ -16,14 +16,14 @@
 #### 1. Install via GitHub (Currently Recommended)
 Run the following command in your terminal:
 ```bash
-pip install "git+https://github.com/BofAI/8004-sdk.git#subdirectory=python"
+pip install "git+https://github.com/BofAI/8004-sdk.git@main#subdirectory=python"
 ```
 > The Python package has not yet been published to PyPI.
 
 #### 2. Install from source
 Execute in a terminal window:
 ```bash
-git clone https://github.com/BofAI/8004-sdk.git
+git clone -b main https://github.com/BofAI/8004-sdk.git
 cd 8004-sdk/python
 pip install -e .
 ```
@@ -45,7 +45,7 @@ pip install -e .
 *   **Node.js**: 20 or higher
 *   **npm or yarn**: Package manager
 *   **Write Operation Configuration**: Write operations require configuring a `signer` (private key string)
-*   **RPC Node**: Accessible Ethereum RPC endpoint (e.g., Alchemy, Infura)
+*   **RPC Node**: An RPC endpoint for a [supported network](/8004/SupportedNetworks/) — an EVM endpoint for BSC, or a TRON node endpoint
 *   **IPFS Provider (Optional)**: Pinata, Filecoin account, or local IPFS node
 *   **Subgraph (Optional)**: You may provide `subgraphUrl` or `subgraphOverrides` as needed.
 
@@ -61,7 +61,7 @@ npm install @bankofai/8004-sdk
 #### 2. Install from source
 Execute in a terminal window:
 ```bash
-git clone https://github.com/BofAI/8004-sdk.git
+git clone -b main https://github.com/BofAI/8004-sdk.git
 cd 8004-sdk/ts
 npm install
 npm run build
@@ -82,5 +82,5 @@ npm run build
 
 For enhanced functionality:
 
-*   **Subgraph**: Optional configuration; when your deployment provides an endpoint, you may specify it via `subgraphUrl` or `subgraphOverrides`
-*   **IPFS Providers**: Supports using Pinata JWT or Filecoin private key for decentralized file storage.
+*   **Subgraph**: Optional. TypeScript accepts `subgraphUrl` or `subgraphOverrides`; Python accepts `subgraphOverrides` only.
+*   **IPFS Providers**: Optional, and configured differently per language. Python has built-in providers — `ipfs="pinata"` (`pinataJwt`), `ipfs="filecoinPin"` (`filecoinPrivateKey`) or `ipfs="node"` (`ipfsNodeUrl`). TypeScript has no built-in provider: pass your own `ipfsUploader` callback, which `registerIPFS()` requires.

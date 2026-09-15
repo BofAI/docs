@@ -69,7 +69,7 @@ Base 结算 USDC 用的是 **EIP-3009**（`transferWithAuthorization`）而非 P
 
 ### 可以在不持有 TRX 的情况下付款吗？
 
-可以，在 TRON 上通过 GasFree 实现。使用 `scheme=exact_gasfree` 时，由一个 relayer 代付网络能量、并从支付代币里扣除手续费，所以付款钱包只需要稳定币、无需 TRX。当接口宣告了该 scheme 时 CLI 会自动选用，也可以用 `--scheme exact_gasfree` 显式要求。由于 relayer 手续费与支付金额分开，用 `--max-gasfree-fee <amount>` 给它封顶。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
+可以，在 TRON 上通过 GasFree 实现。使用 `scheme=exact_gasfree` 时，由一个 relayer 代付网络能量、并从支付代币里扣除手续费，所以付款钱包只需要稳定币、无需 TRX。CLI 取的是第一条匹配你过滤条件的支付要求，并不会优先选 GasFree，因此只要接口同时提供普通 `exact`，就请用 `--scheme exact_gasfree` 显式要求。由于 relayer 手续费与支付金额分开，用 `--max-gasfree-fee <amount>` 给它封顶。详见 [GasFree 支付](./command-reference.md#gasfree-payments-tron)。
 
 ---
 
@@ -99,7 +99,13 @@ Base 结算 USDC 用的是 **EIP-3009**（`transferWithAuthorization`）而非 P
 | `DEADLINE_OR_CLOCK_SKEW` | 支付要求过期或本地时钟偏差 | 校准本地时钟，用全新支付要求重试 |
 | `RATE_LIMITED` | 上游服务或 RPC 在限流 | 稍候再重试 |
 | `NETWORK_ERROR` | 无法访问 URL/RPC | 检查 URL、本地服务、代理和网络连通性 |
-| `SDK_API_DRIFT` | 已安装的 SDK 包与 CLI 不匹配 | 重装 `@bankofai/x402-cli` 及其 SDK 依赖 |
+| `SDK_API_DRIFT` | 已安装的 SDK 包与 CLI 不匹配 | 重装 `@bankofai/x402-cli`（其 SDK 依赖为锁定版本，请勿单独升级） |
+| `INVALID_SETTLEMENT` | 网关返回的 `PAYMENT-RESPONSE` 不是成功结算 | 不要按已付款处理，请联系网关运营方 |
+| `WALLET_ADDRESS_MISMATCH` | 选中的钱包与签名数据里的付款方不一致 | 重新选择钱包，并用全新的支付要求重试 |
+| `INVALID_PAYMENT_REQUIREMENT` | `402` 支付要求未通过结构校验（scheme、网络、金额、地址、超时、资源 URL） | 接口配置有误，请联系服务方 |
+| `TOKEN_BALANCE_CHECK_FAILED` | 支付代币的余额检查失败 | 检查 RPC 端点与代币/网络组合 |
+| `HTTP_ERROR` | 付款后的重试请求返回非 2xx | 重试前先读 `error.details` 中的 `settled` / `paymentResponse` |
+| `IO_ERROR` | 无法归类的错误的兜底码（本地文件读写失败也归到这里） | 加 `--json` 重跑并查看原始 `message`，同时检查 provider/网关日志 |
 
 ### "402 response missing PAYMENT-REQUIRED header"
 
@@ -115,7 +121,7 @@ Base 结算 USDC 用的是 **EIP-3009**（`transferWithAuthorization`）而非 P
 
 ### `gateway start` 提示找不到运行时
 
-`gateway start` 与 `gateway catalog` 需要独立的 `@bankofai/x402-gateway` 包。请安装它（`npm install -g @bankofai/x402-gateway`）、从含有 `../x402-gateway/dist/cli.js` 的检出中运行，或用 `--gateway-bin <path>` 指向可执行文件。
+这通常说明安装不完整：CLI 正常情况下自带 gateway 运行时（`dist/gateway/cli.js`）并依赖 `@bankofai/x402-gateway`，请先重装 `@bankofai/x402-cli`，或用 `--gateway-bin <path>` 指向别的运行时。而且只有 `gateway start` 需要这个运行时：`gateway check`、`gateway catalog build`、`gateway catalog pay-assets` 与 `catalog build` 在进程内调用 gateway 库，`gateway scaffold` 只是写一个模板文件，search 类命令则读取目录数据源。
 
 ### 部署前如何校验我的 provider 文件？
 

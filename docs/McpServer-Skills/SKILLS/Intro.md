@@ -38,10 +38,10 @@ Why? Because in the Web3 world, you must **"Approve"** a token before spending i
 After receiving your command, it doesn't just execute — it automatically runs through a standard operating procedure behind the scenes. Here's what your experience looks like:
 
 1. **Auto balance check:** "Boss, I checked — you have 100 USDT in your wallet. Plenty of funds."
-2. **Preemptive troubleshooting:** "I noticed you haven't approved USDT for SunSwap yet. I've prepared the Approve request — please confirm."
-3. **Precise quote:** "Approval successful! At the latest price, 50 USDT gets you roughly 350 TRX. I've automatically set 1% slippage protection. Ready to buy?"
+2. **Preemptive troubleshooting:** "Your USDT allowance for Permit2 doesn't cover this amount — the swap will send that approval automatically before it trades."
+3. **Precise quote:** "At the latest price, 50 USDT gets you roughly 350 TRX. I've set 1% slippage protection. Ready to buy?"
 
-In this scenario, you said one sentence, and the Skill quietly handled 5 high-barrier steps behind the scenes: check balance → detect missing approval → submit approval → calculate slippage → fetch quote. That's the difference between a **"regular chatbot AI"** and a **"professional Web3 butler."**
+In this scenario, you said one sentence, and the Skill quietly handled the steps behind the scenes: check the balance covers it → validate the pair and slippage → fetch a fresh quote → show you the bill and wait for your confirmation, with the one-time TRC-20 approval handled automatically by the underlying CLI. That's the difference between a **"regular chatbot AI"** and a **"professional Web3 butler."**
 
 ---
 
@@ -57,22 +57,19 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Fourteen skills covering the most common TRON scenarios plus X/Twitter tooling — the table below shows everything at a glance. Each comes with a sample prompt you can paste straight into your AI chat; click a skill name for its full docs.
+Ten skills covering the most common TRON scenarios — the table below shows everything at a glance. Each comes with a sample prompt you can paste straight into your AI chat; click a skill name for its full docs.
 
 | Skill | What it does | Try saying |
 | :-- | :-- | :-- |
 | 🔑 [agent-wallet](./BANKOFAISkill.md#agent-wallet) | Create/manage encrypted wallets and sign transactions without exposing your key; the foundation other skills rely on (EVM + TRON) | "Create a new agent wallet for me" |
-| 💱 [sunswap](./BANKOFAISkill.md#sunswap) | Check prices, compare rates, swap tokens in one go | "How much TRX can I get for 100 USDT?" |
-| 🚀 [sunpump-agent-skill](./BANKOFAISkill.md#sunpump-agent-skill) | Launch a meme token in one sentence, trade and track SunPump (TRON mainnet only; creation needs no wallet) | "Launch a meme token on SunPump" |
-| 📈 [sunperp-skill](./BANKOFAISkill.md#sunperp-skill) | SunPerp perpetuals — market data, open/close positions; built-in guardrails: ≤20x leverage, mandatory stop-loss | "Open a 5x long with a 5% stop-loss" |
-| 🕵️ [tronscan-skill](./BANKOFAISkill.md#tronscan-skill) | Look up accounts, transactions, token safety; read-only, free, zero risk | "Is that new token whale-controlled?" |
-| 💸 [trc20-toolkit-skill](./BANKOFAISkill.md#trc20-toolkit-skill) | TRC20 balances, transfers, approvals — batch checks and any contract address | "Transfer 10 USDT to TRecipientAddress" |
-| 💵 [usdd-skill](./BANKOFAISkill.md#usdd-skill) | 1:1 USDT ↔ USDD via the PSM (currently zero fee), read vault (CDP) positions | "Sell 1000 USDT for USDD via the PSM" |
-| 🗳️ [trx-staking-skill](./BANKOFAISkill.md#trx-staking-skill) | Stake TRX, vote for SRs, claim rewards (Stake 2.0) | "Claim my pending voting rewards" |
-| 🔐 [multisig-permissions](./BANKOFAISkill.md#multisig-permissions) | Multi-sig and permission management — great for teams or limiting your AI | "Set up a 2-of-3 multi-sig on owner" |
+| 🧰 [wallet-cli](./BANKOFAISkill.md#wallet-cli) | Standalone TRON wallet toolbox — transfers, staking, voting, contracts, signing, chain queries via the pinned `wallet-cli` npm package; agent runs pass passwords via stdin only and wallet admin stays human-only | "Check my account balance and staking state on Nile with wallet-cli" |
+| 💱 [sunswap](./BANKOFAISkill.md#sunswap)<br/>`sunswap-dex-trading` | Check prices, compare rates, swap tokens in one go | "How much TRX can I get for 100 USDT?" |
+| 🚀 [sunpump-agent-skill](./BANKOFAISkill.md#sunpump-agent-skill)<br/>`sunpump-meme-token-toolkit` | Launch a meme token in one sentence, trade and track SunPump (TRON mainnet only; creation needs no wallet) | "Launch a meme token on SunPump" |
+| 📈 [sunperp-skill](./BANKOFAISkill.md#sunperp-skill)<br/>`sunperp-perpetual-futures-trading` | SunPerp perpetuals — market data, open/close positions; built-in guardrails: ≤20x leverage, mandatory stop-loss | "Open a 5x long with a 5% stop-loss" |
+| 🕵️ [tronscan-skill](./BANKOFAISkill.md#tronscan-skill)<br/>`tronscan-data-lookup` | Look up accounts, transactions, token safety; read-only, free, zero risk | "Is that new token whale-controlled?" |
+| 💵 [usdd-skill](./BANKOFAISkill.md#usdd-skill)<br/>`usdd-just-protocol` | 1:1 USDT ↔ USDD via the PSM (currently zero fee), read vault (CDP) positions | "Sell 1000 USDT for USDD via the PSM" |
 | ☕ [x402-payment](./BANKOFAISkill.md#x402-payment) | Auto "pay first, then receive" settlement via x402 when calling paid APIs (TRON / BSC) | "Use x402 to call this paid endpoint: https://…" |
 | 🏦 [recharge-skill](./BANKOFAISkill.md#recharge-skill) | Check your BANK OF AI balance and top up in one sentence | "Check my balance, then recharge 5 USDT" |
-| 🐦 [twitter-digest](./BANKOFAISkill.md#twitter-digest) / [twitter-mcp](./BANKOFAISkill.md#twitter-mcp) | Your X/Twitter daily briefing: mentions, timeline, reply opportunities | "Generate today's X digest for my account" |
 | 🧭 [bankofai-guide](./BANKOFAISkill.md#bankofai-guide) | Onboarding + "wallet guard"; usually invoked automatically by the installer | "Walk me through BANK OF AI onboarding" |
 
 ---

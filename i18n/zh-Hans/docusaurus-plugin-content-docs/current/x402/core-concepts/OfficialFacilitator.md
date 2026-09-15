@@ -62,8 +62,8 @@ Facilitator 由官方持续维护和升级，包括：
 
 | 模式 |限速 |说明 |
 |-----|-----|-----|
-| **匿名调用（Anonymous Mode）** | 10 次 / 分钟（默认值，可配置） | 不需要 API Key，适用于本地开发和功能测试 |
-| **API Key 调用（API Key Mode）** | 1000 次 / 分钟 | 需要 API Key，适用于生产环境和高频支付请求 |
+| **匿名调用（Anonymous Mode）** | 官方服务：每个 IP 每分钟最多 1 次；自建部署未配置 `rate_limit.anonymous` 时，默认每个 IP 每分钟最多 10 次（可自行调整） | 不需要 API Key，适用于本地开发和功能测试 |
+| **API Key 调用（API Key Mode）** | 官方服务：每个 API Key 每分钟最多 1000 次；自建部署未配置 `rate_limit.authenticated` 时采用相同默认值（可自行调整） | 需要 API Key，适用于生产环境和高频支付请求 |
 
 两种模式的调用方式完全相同，但在 **身份识别与接口限速策略** 上有所不同。 
 
@@ -79,7 +79,7 @@ Facilitator 由官方持续维护和升级，包括：
 在匿名模式下：
 
 - `/settle` 接口会启用 **限速**
-- **每分钟最多 10 次调用（默认值，可配置）**
+- **官方服务按每个 IP 每分钟最多调用 1 次**；自建部署未配置 `rate_limit.anonymous` 时，默认按每个 IP 每分钟最多调用 **10 次**，且可自行调整。
 
 该模式主要用于：
 
@@ -121,7 +121,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 当 Facilitator 识别到 API Key 后：
 
-- `/settle` 接口的调用限速将提升至 **1000 次 / 分钟**
+- 在官方服务上，`/settle` 限额提升至**每个 API Key 每分钟 1000 次**
 
 这意味着你的服务可以支持 **生产级别的支付吞吐量**。
 
@@ -260,9 +260,19 @@ curl -X POST https://facilitator.bankofai.io/settle \
 | POST | `/settle` | 执行链上结算（**受限速保护**） |
 | GET | `/payments/tx/{tx_hash}` | 按结算交易哈希查询支付记录 |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | 按链上授权身份查询支付记录 |
-| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`） |
+| GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`；`limit` 默认 `50`、上限 `200`——超过 `200` 会被静默压到 `200`，不会报错；`offset` 默认 `0`） |
 
-> **不存在** `/fee/quote` 端点——费用条款随支付要求的 `extra` 字段一起下发。限速仅作用于 `/settle` 接口，其他接口不受限速影响。
+> **不存在** `/fee/quote` 端点，各方案也不收取 facilitator 费用。限速仅作用于 `/settle` 接口，其他接口不受限速影响。
+
+### 官方服务结算的网络与方案
+
+| 网络 | 环境 |
+|---|---|
+| `tron:0x2b6653dc`（TRON 主网）· `tron:0xcd8690dc`（Nile） | 主网 · 测试网 |
+| `eip155:56`（BSC）· `eip155:97`（BSC 测试网） | 主网 · 测试网 |
+| `eip155:8453`（Base）· `eip155:84532`（Base Sepolia） | 主网 · 测试网 |
+
+以上网络均注册了 `exact`、`upto` 与 `batch-settlement`；TRON 在服务持有 GasFree 中继凭证的网络上（TRON 主网与 Nile）额外注册 `exact_gasfree`。以所连接部署的 `/supported` 返回为准。官方 facilitator 目前未启用 `trc20ApprovalResourceSponsoring` 扩展——TRON 授权资源赞助需要自建 facilitator。但在其 EVM 网络（BSC 与 Base）上，官方确实为每一条 EVM 网络注册了 ERC-20 授权 gas 代付扩展——不过只有当资源服务端在路由上声明该扩展时，代付才会真正生效。
 
 ### 支付记录查询
 
@@ -281,13 +291,19 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 > 提供 API Key 时，这两个接口只返回与你的账户关联的支付记录，不会看到其他卖家的数据。
 
+:::danger 不带 API Key 时
+匿名请求下，`tx_hash` 与 `network` + `nonce` 查询**不添加卖家过滤**，返回结果可能包含已绑定卖家的记录——任何持有准确标识符的人都能查到对应记录。`/payments` 列表接口仍要求身份验证，因此不存在免认证的列表接口；但这两个查询接口也没有限流（官方服务按每个 IP 每分钟 1 次的匿名限流只覆盖 `/settle`），而结算 tx hash 又是链上公开数据。请把结算元数据视为事实上公开，而非按卖家隔离。
+
+**以上描述的是当前实现行为，不代表推荐的访问控制策略。** 想让查询限定在自己账户范围内请带上 API Key，并且绝不要把结算 tx hash 或其 nonce 当作秘密。
+:::
+
 ---
 
 ## 常见问题
 
 **Q：不配置 API Key 能正常运行吗？**
 
-可以运行，但 `/settle` 接口默认每 IP 每分钟最多调用 10 次。这只适合测试，任何真实流量都必须配置 API Key。
+可以运行，但官方服务将 `/settle` 限制为每个 IP 每分钟 1 次。自建部署未配置 `rate_limit.anonymous` 时，默认每个 IP 每分钟 10 次，且可自行调整。匿名访问只适合测试，任何真实流量都必须配置 API Key。
 
 **Q：API Key 会过期吗？**
 
@@ -295,7 +311,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 **Q：我可以在多个项目中使用同一个 API Key 吗？**
 
-可以，同一个 API Key 可以在多个服务实例中复用。每个 Key 独立享有 1000 次/分钟的频率上限，不论有多少台服务器在用。
+可以，同一个 API Key 可以在多个服务实例中复用。在官方服务上，这些实例共享该 Key 每分钟 1000 次 `/settle` 调用的限额；不会因为使用这个 Key 的服务器增多而分别重置配额。
 
 **Q：我想更换 API Key，怎么操作？**
 

@@ -23,7 +23,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 - **发起请求**：向资源服务器发送初始 HTTP 请求。
 - **处理支付要求**：解析 `402 Payment Required` 响应，并提取支付详情。
-- **管理代币授权**：为普通 ERC-20/TRC-20 代币授权 Permit2（一次性 `approve(Permit2)`）；ERC-3009 代币无需授权。SDK 在首次付款时自动广播。
+- **管理代币授权**：为普通 ERC-20/TRC-20 代币授权 Permit2（一次性 `approve(Permit2)`）；ERC-3009 代币无需授权。由谁广播因链而异。**在 TRON 上**，client 会在首次付款时自动广播该授权、能量自付——除非 server 声明了 `trc20ApprovalResourceSponsoring` 扩展（SDK 1.2.0+），此时 client 只签名不广播，由 facilitator 赞助能量/带宽并广播。**在 EVM 上 client 从不广播任何交易**：要么在 server 声明了 `eip2612GasSponsoring` 或 `erc20ApprovalGasSponsoring` 时附上一笔已签名但未广播的授权交由 facilitator 转发；要么在没有任何相关扩展时，验款直接以 `permit2_allowance_required` 失败，授权必须在首次付款前另行完成。详见 [SDK 功能矩阵](../sdk-features.md#extensions)。
 - **准备支付载荷**：根据服务端的要求，构建并签署支付载荷。
 - **携带支付凭证重发请求**：在请求头中附加 `PAYMENT-SIGNATURE` 并重新发送请求。
 
@@ -56,8 +56,7 @@ import ThemedImage from '@theme/ThemedImage';
 2.  **服务端要求付费**：响应 `402 Payment Required` 状态码，并在 `PAYMENT-REQUIRED` 标头中包含支付要求（Base64 编码）。
 3.  **客户端提交支付**：根据要求生成签名，并将签名载荷放入 `PAYMENT-SIGNATURE` 标头（Base64 编码）中重新发送请求。
 4.  **服务端验证支付**：调用 Facilitator 服务对接收到的支付载荷进行验证。
-5.  **服务端执行结算**：通过 Facilitator 将交易提交至区块链完成结算。
-6.  **服务端交付资源**：返回请求的资源，并在 `PAYMENT-RESPONSE` 标头中包含结算确认信息（内含交易哈希）。
+5.  **服务端先交付资源、再结算**：在默认的 `authorization` 付款流程下——所有内置方案声明的都是这个流程——资源服务端会先执行业务处理函数，之后再通过 Facilitator 结算，并在返回资源时于 `PAYMENT-RESPONSE` 标头中带上结算确认信息（内含交易哈希）。若服务端选用了「先结算」的流程，以及 BANK OF AI 网关，则顺序相反：先结算再转发到上游。
 
 <ThemedImage
   alt="x402 中客户端、服务端与 Facilitator 的通信流程"

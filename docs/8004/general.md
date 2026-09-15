@@ -30,8 +30,8 @@ The 8004 Protocol leverages the blockchain as a shared public registry that anyo
 
 - **Reputation System**
   
-  The 8004 Protocol defines a neutral public reputation storage standard that supports multi-dimensional feedback through structured signed data. The specific reputation algorithms, ranking aggregation, and anti-spam filtering logic are entirely left to ecosystem applications at the application layer.
+  The 8004 Protocol defines a neutral public reputation storage standard. Feedback is submitted directly by the client's own address, which is what attributes it, and it is multi-dimensional through structured tags. The registry enforces only minimal rules of its own — notably that an agent's owner and its approved operators cannot leave feedback on that agent — and exposes on-chain aggregation over a caller-supplied set of clients. Reputation algorithms, ranking, and anti-spam filtering beyond that are left to ecosystem applications at the application layer.
 
 - **Consensus Validation**
   
-  The Validation Registry integrates multiple technical approaches through smart contracts, including TEE proofs, crypto-economic staking, and zkML, enabling delegated cryptographic verification of Agent behavior.
+  The Validation Registry is a generic on-chain request/response hook: an agent requests validation from a chosen validator, and only that validator can answer, recording a 0–100 score plus a tag and a URI pointing at the evidence. The registry stays agnostic about how that verdict was reached, so approaches such as TEE proofs, crypto-economic staking, and zkML all plug into the same interface.

@@ -74,9 +74,9 @@ At a high level, the workflow is straightforward:
 
 To explore further:
 
-- [Client / Server](./core-concepts/client-server)
-- [Facilitator](./core-concepts/facilitator)
-- [HTTP 402](./core-concepts/http-402)
+- [Client / Server](./x402/core-concepts/client-server)
+- [Facilitator](./x402/core-concepts/facilitator)
+- [HTTP 402](./x402/core-concepts/http-402)
 
 Our goal is to build a low-barrier, permissionless, developer-friendly programmable commerce layer on blockchain.
 
@@ -87,15 +87,16 @@ Our goal is to build a low-barrier, permissionless, developer-friendly programma
 x402 currently supports the following networks:
 
 - **TRON Mainnet** (`tron:0x2b6653dc`)
-- **TRON Shasta Testnet** (`tron:0x94a9059e`)
+- **TRON Shasta Testnet** (`tron:0x94a9059e`) — SDK/CLI only; not settled by the official facilitator
 - **TRON Nile Testnet** (`tron:0xcd8690dc`)
 - **BSC Mainnet** (`eip155:56`)
 - **BSC Testnet** (`eip155:97`)
 - **Base Mainnet** (`eip155:8453`)
+- **Base Sepolia Testnet** (`eip155:84532`)
 
 Base Mainnet payments use official USDC with the `exact` scheme and EIP-3009 authorization.
 
-> **SDK (TypeScript-only)**: x402 is a TypeScript-only SDK published as granular `@bankofai/x402-*` npm packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The source is maintained in a pnpm/turbo monorepo, but application development should install the published packages. Supported schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, and `exact_gasfree` (TRON). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./sdk-features) for the full breakdown.
+> **SDK (TypeScript-only)**: x402 is a TypeScript-only SDK published as granular `@bankofai/x402-*` npm packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The source is maintained in a pnpm/turbo monorepo, but application development should install the published packages. It defines five named schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, `exact_gasfree` (TRON), and the currently client-only `auth-capture` (EVM). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./x402/sdk-features) for the full breakdown.
 
 ---
 
@@ -103,6 +104,6 @@ Base Mainnet payments use official USDC with the `exact` scheme and EIP-3009 aut
 
 Ready to build? Start here:
 
-- [Quickstart for Sellers](./getting-started/quickstart-for-sellers)
-- [Quickstart for Agents](./getting-started/quickstart-for-agent)
-- [Http 402](./core-concepts/http-402)
+- [Quickstart for Sellers](./x402/getting-started/quickstart-for-sellers)
+- [Quickstart for Agents](./x402/getting-started/quickstart-for-agent)
+- [Http 402](./x402/core-concepts/http-402)

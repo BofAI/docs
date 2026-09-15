@@ -14,15 +14,17 @@ Create a new agent in memory (not yet registered):
 <TabItem value="python" label="python">
 
 ```python
+import os
+
 from bankofai.sdk_8004.core.sdk import SDK
 
 # Initialize the SDK
 sdk = SDK(
     network="eip155:97",
     rpcUrl="https://data-seed-prebsc-1-s1.binance.org:8545",
-    signer=your_private_key,
+    signer=os.environ["EVM_PRIVATE_KEY"],
     ipfs="pinata",
-    pinataJwt=your_pinata_jwt
+    pinataJwt=os.environ["PINATA_JWT"]
 )
 
 # Create an Agent
@@ -43,7 +45,7 @@ import { SDK } from '@bankofai/8004-sdk';
 const sdk = new SDK({
     network: "eip155:97",
     rpcUrl: "https://data-seed-prebsc-1-s1.binance.org:8545",
-    signer: your_private_key
+    signer: process.env.EVM_PRIVATE_KEY!
 });
 
 // Create an Agent
@@ -277,28 +279,33 @@ According to the 8004 protocol, the `agentWallet` is **initially set to the agen
 
 `agentWallet` is a **reserved on-chain** property. According to 8004, setting this property requires signature verification.
 
-*   **Who sends the transaction**: The SDK signer (typically the agent **owner** or an authorized **operator**) submits the on-chain transaction.
-*   **Developer-facing SDK API**: `agent.setWallet(...)`.
-*   **Who must sign**: The **new wallet** must authorize this change by signing EIP-712 typed data (EOA) signature.
+*   **Who sends the transaction**: The SDK signer submits the on-chain transaction, and the contract requires it to be the agent **owner**, the address approved for that agent, or an **operator** approved for all of the owner's agents.
+*   **Developer-facing SDK API**: `agent.setWallet(newWallet, options)` in TypeScript; `agent.setWallet(new_wallet, chainId=None, *, new_wallet_signer=None, deadline=None, signature=None)` in Python. Everything after the address is optional — but see **How the signature is supplied** below, because the bare one-argument call only works in one specific case.
+*   **Who must sign**: The **new wallet** must authorize this change by signing EIP-712 typed data. The contract first tries ECDSA recovery (plain EOAs and EIP-7702 delegated EOAs); if that does not yield the new wallet, it falls back to an [ERC-1271](https://eips.ethereum.org/EIPS/eip-1271) `isValidSignature` call on the new wallet, so smart contract wallets are supported too.
+*   **Not settable as plain metadata**: `agentWallet` is a reserved key — `setMetadata()` and the metadata array of `register()` both reject it.
 
 
 <Tabs>
 <TabItem value="python" label="python">
 
 ```python
+import os
+
 # You must register the agent first, then call setWallet() if you want to use a dedicated wallet different from the owner.
 tx = agent.register("https://example.com/agent-card.json")
 tx.wait_confirmed(timeout=180)
 
 # --- EOA Flow ---
-# The *new wallet* must sign EIP-712 typed data.
-# If the new wallet is not the same address as the SDK signer, provide `new_wallet_signer`.
+# The SDK signer sends the transaction, but the *new wallet* must produce the
+# EIP-712 signature. Pass its key as new_wallet_signer whenever the new wallet
+# is not the SDK signer itself.
 agent.setWallet(
-    new_wallet="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-    chainId=97,
-    new_wallet_signer=NEW_WALLET_PRIVATE_KEY,  # Private key of 0x742d...
+    "0x742D35CC6634C0532925a3B844Bc9E7595F2bD18",
+    new_wallet_signer=os.environ["NEW_WALLET_PRIVATE_KEY"],
 )
 
+# If the SDK signer *is* the new wallet, the SDK signs automatically:
+# agent.setWallet(address_of_the_sdk_signer)
 ```
 
 </TabItem>
@@ -310,11 +317,15 @@ const tx = await agent.register("https://example.com/agent-card.json");
 await tx.waitConfirmed();
 
 // --- EOA Flow ---
-await agent.setWallet(
-  "0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb",
-  { newWalletSigner: NEW_WALLET_PRIVATE_KEY }
-);
+// The SDK signer sends the transaction, but the *new wallet* must produce the
+// EIP-712 signature. Pass its key as newWalletSigner whenever the new wallet
+// is not the SDK signer itself.
+await agent.setWallet("0x742D35CC6634C0532925a3B844Bc9E7595F2bD18", {
+  newWalletSigner: process.env.NEW_WALLET_PRIVATE_KEY!,
+});
 
+// If the SDK signer *is* the new wallet, the SDK signs automatically:
+// await agent.setWallet(addressOfTheSdkSigner);
 ```
 
 </TabItem>
@@ -335,20 +346,36 @@ If you previously set a dedicated, verified `agentWallet` and wish to remove it 
 
 This clears the agent's `agentWallet` bytes data on-chain.
 
-### "What exactly am I signing?" (EOA)
+### "What exactly am I signing?"
 
 Both SDKs internally construct EIP-712 typed data. Conceptually, the message signed by the **new wallet** contains:
 
 *   **agentId**: The agent's tokenId
 *   **newWallet**: The wallet address you are setting
 *   **owner**: The current agent owner (read from the registry)
-*   **deadline**: A short validity window enforced by the contract
-*   **domain**: The EIP-712 domain of the Identity Registry (chainId + verifyingContract, along with name/version)
+*   **deadline**: An expiry timestamp enforced by the contract — it must not have passed, and may be at most **5 minutes** in the future
+*   **domain**: The EIP-712 domain of the Identity Registry — name `ERC8004IdentityRegistry`, version `1`, plus `chainId` and `verifyingContract`
 
-#### EOA
+The contract then verifies that signature in one of two ways:
 
-*   **EOA Signature (Python)**: Pass `new_wallet_signer=...` (private key / eth-account account) unless the SDK signer is the new wallet.
-*   **EOA Signature (TypeScript)**: Pass `newWalletSigner` unless the SDK signer is the new wallet.
+*   **EOA**: The contract recovers the signer from the ECDSA signature and requires it to equal `newWallet`.
+*   **Smart contract wallet**: If recovery fails or returns a different address, the contract calls `isValidSignature(digest, signature)` on `newWallet` and requires the ERC-1271 magic value `0x1626ba7e`.
+
+### How the signature is supplied
+
+The SDK builds the typed data for you, but it cannot invent the new wallet's signature. There are exactly three ways it obtains one, and they are tried in this order:
+
+| You pass | What the SDK does |
+| :--- | :--- |
+| `signature` (Python) / `signature` (TS) | Uses your bytes as-is. This is the path for smart contract wallets and any external/offline signer. |
+| `new_wallet_signer` (Python) / `newWalletSigner` (TS) | Signs with that key. The SDK checks the key's address against `newWallet` first and raises if they differ. |
+| neither | Falls back to the SDK signer — **and this only succeeds if the SDK signer's address is the new wallet**. Otherwise it raises `New wallet must sign. Provide new_wallet_signer (EOA) or signature (ERC-1271/external).` |
+
+:::caution The bare one-argument call is not the general case
+`setWallet(address)` with no signing option works **only** when the SDK signer already is that address. Since the transaction sender must also be the owner or an approved operator, the bare call is effectively for "point the agent at the wallet I am already signing with". To attach a wallet that is *different* from the SDK signer, you must supply `new_wallet_signer` / `newWalletSigner` or a ready-made `signature`.
+:::
+
+Two more behaviours worth knowing: `deadline` defaults to 60 seconds from now (the contract's own ceiling is 5 minutes), and if `agentWallet` is already set to the address you passed, the SDK skips the transaction entirely and returns `None` / `undefined` after updating the local registration file.
 
 
 
@@ -458,8 +485,8 @@ All OASF methods support chaining:
 
 ```python
 agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=True)\
-     .addDomain("technology/data_science", validate_oasf=True)\
-     .addSkill("natural_language_processing/summarization", validate_oasf=True)
+     .addDomain("technology/data_science/data_science", validate_oasf=True)\
+     .addSkill("natural_language_processing/natural_language_generation/summarization", validate_oasf=True)
 ```
 
 </TabItem>
@@ -467,8 +494,8 @@ agent.addSkill("data_engineering/data_transformation_pipeline", validate_oasf=Tr
 
 ```typescript
 agent.addSkill("data_engineering/data_transformation_pipeline")
-     .addDomain("technology/data_science")
-     .addSkill("natural_language_processing/summarization");
+     .addDomain("technology/data_science/data_science")
+     .addSkill("natural_language_processing/natural_language_generation/summarization");
 ```
 
 </TabItem>
@@ -480,27 +507,29 @@ agent.addSkill("data_engineering/data_transformation_pipeline")
 
 ### OASF in Registration File
 
-OASF skills and domains are stored in the `endpoints` array of the registration file:
+The two SDKs store OASF skills and domains differently. **Python** keeps them in an `OASF` entry inside the registration file's `services` array:
 
 ```json
 {
-  "endpoints": [
+  "services": [
     {
       "name": "OASF",
       "endpoint": "https://github.com/agntcy/oasf/",
-      "version": "v0.8.0",
+      "version": "0.8",
       "skills": [
         "advanced_reasoning_planning/strategic_planning",
         "data_engineering/data_transformation_pipeline"
       ],
       "domains": [
         "finance_and_business/investment_services",
-        "technology/data_science"
+        "technology/data_science/data_science"
       ]
     }
   ]
 }
 ```
+
+**TypeScript** does not build an OASF entry: `addSkill()` and `addDomain()` push the same slugs into a flat top-level `tags` array, which its wire format carries alongside `metadata`. Python's published file has neither key. Expect this difference when a consumer reads registration files produced by both languages.
 
 ## Trust Model
 
@@ -632,7 +661,7 @@ agent = sdk.createAgent(
 agent.setMCP(endpoint="https://mcp.example.com/")\
      .setENS(name="advanced-agent.eth")\
      .addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=True)\
-     .addDomain("technology/data_science", validate_oasf=True)\
+     .addDomain("technology/data_science/data_science", validate_oasf=True)\
      .setActive(True)\
      .setX402Support(True)
 
@@ -653,7 +682,7 @@ const agent = sdk.createAgent({
 agent.setMCP("https://mcp.example.com/")
      .setMetadata({ ens: "advanced-agent.eth" })
      .addSkill("advanced_reasoning_planning/strategic_planning")
-     .addDomain("technology/data_science")
+     .addDomain("technology/data_science/data_science")
      .setActive(true)
      .setX402Support(true);
 

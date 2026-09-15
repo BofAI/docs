@@ -10,10 +10,10 @@
 
 买家利用钱包作为交互锚点，主要负责：
 
-- **资产托管**：安全存储 USDT 或其他 TRC-20/BEP-20 代币。
+- **资产托管**：安全存储 USDT、USDC 或其他 TRC-20 / BEP-20 / ERC-20 代币。
 - **签名授权**：使用私钥对支付载荷进行加密签名 (Sign)。
 - **程序化支付**：以代码形式授权链上资金转移（特别适用于自主 AI 代理）。
-- **额度管理**：管理对 Facilitator 合约的代币授权 (Allowance)。
+- **额度管理**：管理向 Permit2 合约授予的一次性 `approve(Permit2, max)` 额度——facilitator 随后通过 x402 的 Permit2 代理合约划转资金。
 
 > **无状态认证**：钱包机制使得买家无需注册账户、无需管理 API Key 或登录 Session 即可直接发起交易。
 
@@ -41,13 +41,13 @@ BSC 网络使用 Hexadecimal (十六进制) 编码格式的地址，且固定以
 
 x402 协议采用类型化数据签名来执行安全的支付授权。
 
-引入该标准带来了以下核心优势：
+### 核心优势
 
 - **所见即所签 (Human-readable)**：用户在签名时能够清晰地查看具体的授权详情，而非一串不可读的密文。
 - **域隔离 (Domain separation)**：签名被严格绑定至特定的合约与域，防止跨应用或跨网络混用。
 - **防重放机制 (Replay protection)**：签名数据中内嵌了随机数 (nonce) 和过期时间，有效防止恶意重复提交。
 
-**签名交互流程：**
+### 签名流程
 
 1. 客户端接收服务端返回的支付要求。
 2. 客户端构建符合规范的类型化数据结构 (TypedData)。
@@ -56,11 +56,13 @@ x402 协议采用类型化数据签名来执行安全的支付授权。
 
 ## 代币授权
 
-对于 `exact` 支付方案，普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算。客户端需授权 Permit2 合约划转代币——一次性 `approve(Permit2, max)`。x402 客户端 SDK 会在首次付款时自动广播此授权。ERC-3009 代币（如 BSC 测试网 DHLU）无需授权——通过 `transferWithAuthorization` 无 gas 结算。
+对于 `exact` 支付方案，普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算。客户端需授权 Permit2 合约划转代币——一次性 `approve(Permit2, max)`。在 TRON 上，客户端 SDK 会在首次付款时自动广播此授权；在 EVM 上则从不广播——当 server 声明了 gas 代付扩展时，客户端附上一笔已签名但未广播的授权交由 facilitator 转发，否则授权必须另行完成，不然验款会以 `permit2_allowance_required` 失败。在 TRON 上，当 resource server 声明了 `trc20ApprovalResourceSponsoring`（SDK 1.2.0+）时，client 只签名 `approve(Permit2, MaxUint256)` 而不广播——由 facilitator 临时委托付款方所缺的能量（必要时还有带宽）并广播，因此付款方首笔授权无需 TRX。该路径要求付款方是已激活的单签名 TRON EOA。ERC-3009 代币（如 BSC 测试网 DHLU）无需授权——通过 `transferWithAuthorization` 无 gas 结算。
 
 x402 客户端 SDK 会自动处理此操作。
 
 ## 网络节点端点
+
+### TRON RPC 端点
 
 各 TRON 网络环境的全节点 / API 访问端点如下：
 
@@ -71,6 +73,8 @@ x402 客户端 SDK 会自动处理此操作。
 | **Shasta** (测试网) | `https://api.shasta.trongrid.io` |
 
 
+### BSC RPC 端点
+
 各 BSC 网络环境的全节点 / API 访问端点如下：
 
 | 网络环境 (Network)  | RPC 端点 (Endpoint)              |
@@ -78,13 +82,24 @@ x402 客户端 SDK 会自动处理此操作。
 | **Mainnet** (主网)  | `https://bsc-dataseed.binance.org`        |
 | **Testnet** (测试网)   | `https://data-seed-prebsc-1-s1.binance.org:8545`       |
 
+---
+
+### Base RPC 端点
+
+| 网络 | RPC 端点 |
+| :------- | :------------ |
+| **Mainnet** (主网)（`eip155:8453`） | `https://mainnet.base.org` |
+| **Sepolia** (测试网)（`eip155:84532`） | `https://sepolia.base.org` |
+
+以上是 CLI 的内置默认值，仅供开发使用。生产环境请通过 `--rpc-url` 或 `EVM_RPC_URL_8453` / `EVM_RPC_URL` 自备端点。Base USDC 走 EIP-3009 结算，无需 Permit2 授权。
+
 
 
 ## 安全最佳实践
 
-- **严禁暴露私钥**：切勿将私钥硬编码在代码中，务必通过环境变量进行安全存储。
+- **严禁暴露私钥**：切勿将私钥硬编码在代码中，更建议干脆不要自己保管——`x402-cli` 与 SDK 都会通过 [Agent Wallet](../../Agent-Wallet/Intro.md) 解析付款方，私钥以加密形式存放在本地。`--private-key`、`EVM_PRIVATE_KEY`、`TRON_PRIVATE_KEY` 与 `PRIVATE_KEY` 仅供开发与 CI 使用。
 - **优先使用测试网**：在部署至主网前，请务必在测试网完成开发与验证。
-- **按需授权额度**：遵循最小权限原则，仅批准当前支付所需的代币金额。
+- **理解 Permit2 授权额度**：SDK 发出的这笔一次性 Permit2 授权**始终是 `MaxUint256`**——它不提供更小的额度，而 TRON 的代付扩展会拒绝非 `MaxUint256` 的被代付授权。你在链下自行设置的额度只要够付本次支付，同样会被接受。最小权限体现在下一层：每笔支付都是一份独立签名的授权，绑定了具体金额、收款方与有效期，因此仅凭这笔常设授权无法转走资金。
 - **实时监控交易**：利用 TronScan/BscScan 追踪支付状态及额度授权记录，确保资金安全。
 
 ## 总结

@@ -97,7 +97,7 @@ x402-cli pay '<x402-url>' \
 `--max-amount` caps what you're willing to pay: if the endpoint's price exceeds it, the CLI aborts before signing. The same command works on EVM networks — just point `--network` at one, such as `eip155:97` (BSC Testnet) or `base-sepolia` (Base Sepolia, USDC).
 
 :::tip No TRX? Use GasFree
-On TRON, if the endpoint advertises `exact_gasfree`, the CLI can pay without any TRX in your wallet — a relayer covers the network energy and takes its fee from the payment token. The CLI selects it automatically, or you can require it with `--scheme exact_gasfree` and cap the relayer fee with `--max-gasfree-fee`. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
+On TRON, if the endpoint advertises `exact_gasfree`, the CLI can pay without any TRX in your wallet — a relayer covers the network energy and takes its fee from the payment token. The CLI picks the first advertised requirement that matches your filters — it does not prefer GasFree — so require it with `--scheme exact_gasfree` when the endpoint also offers plain `exact`, and cap the relayer fee with `--max-gasfree-fee`. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
 :::
 
 ---
@@ -119,8 +119,7 @@ It exposes:
 
 - `GET /health` — liveness check
 - `GET /.well-known/x402` — machine-readable payment metadata
-- `GET /pay` — returns `402 Payment Required`
-- `POST /pay` — verifies and settles a submitted payment through the facilitator
+- `/pay` — returns `402 Payment Required` when the request has no `PAYMENT-SIGNATURE` header; with that header it verifies and settles the payment through the facilitator (any HTTP method)
 
 In another terminal, pay it:
 

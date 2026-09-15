@@ -9,7 +9,7 @@ Our goal: **Spend a few minutes following the wizard, clicking a few buttons, an
 Before you begin, make sure the following basic software is installed on your computer (if not, download and install them from their official websites just like any regular software):
 
 1. **OpenClaw**: Your AI assistant software.
-2. **Node.js** (must be v18 or above): The runtime environment for skill packs and configuration. *(Extremely important — older versions will definitely cause errors!)*
+2. **Node.js** (v20 or above): the wizard installs `@bankofai/mcp-server-tron`, which declares `node >= 20`. *(Extremely important — neither installer enforces 20: the macOS/Linux script only checks that `node` exists, and the Windows script enforces only 18. An older runtime passes pre-flight and fails later.)*
 3. **Git**: A small tool used to download skill packs.
 
 **Windows users, additional requirements:**
@@ -115,9 +115,9 @@ After confirming, the installer automatically removes old skills:
 ```
 Running cleanup...
 
-◇  Found 14 unique installed skill(s)
+◇  Found 10 unique installed skill(s)
 ◇  Removal process complete
-◆  Successfully removed 14 skill(s)
+◆  Successfully removed 10 skill(s)
 
 ✓ Clean install cleanup completed.
 
@@ -153,9 +153,11 @@ The wizard will automatically install a tool called AgentWallet, which securely 
 ```
 Step 0: AgentWallet Setup
 
-Launching: agent-wallet start --override --save-runtime-secrets
+Launching: agent-wallet start --save-runtime-secrets
 Please complete initialization in the CLI prompts.
 ```
+
+(After a **CLEAN** install the line reads `agent-wallet start --override --save-runtime-secrets`; `--override` skips the "wallets already exist" confirmation and is used only on that path. A Normal install never passes it, which is why your existing wallets stay untouched.)
 
 **① Choose wallet type** — Just press Enter to accept the default:
 
@@ -295,13 +297,12 @@ Press Enter (or type `1`) to install globally — this way all your OpenClaw wor
 Then the skill picker launches:
 
 ```
-◇  Found 14 skills
+◇  Found 10 skills
 │
 ◇  Select skills to install (space to toggle)
-│  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions, recharge-skill,
-│  SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit, SunSwap DEX Trading,
-│  TRC20 Token Toolkit, TronScan Data Lookup, TRX Staking & SR Voting, USDD / JUST Protocol,
-│  twitter-digest, twitter-mcp, x402-payment
+│  agent-wallet, bankofai-guide, recharge-skill, SunPerp Perpetual Futures Trading,
+│  SunPump Meme Token Toolkit, SunSwap DEX Trading, TronScan Data Lookup,
+│  USDD / JUST Protocol, wallet-cli, x402-payment
 ```
 
 Here's what each skill does:
@@ -314,12 +315,8 @@ Here's what each skill does:
 | **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
 | **SunPump Meme Token Toolkit** | Create and trade meme tokens on SunPump; query token info, rankings, holders, and trade history |
 | **TronScan Data Lookup** | Query blockchain data via TronScan |
-| **TRC20 Token Toolkit** | Common TRC20 token operations like sending tokens |
-| **TRX Staking & SR Voting** | Stake TRX, get energy/bandwidth, and vote for Super Representatives |
 | **USDD / JUST Protocol** | Manage USDD stablecoin and JUST Protocol positions |
-| **Multi-Sig & Account Permissions** | Multi-signature wallet and account permission management |
-| **twitter-digest** | Generate X/Twitter daily digests (mentions, home timeline, reply opportunities) |
-| **twitter-mcp** | Install/authorize xurl for X/Twitter and generate digests from the local xurl CLI |
+| **wallet-cli** | Standalone TRON wallet operations (transfers, staking, voting, signing) via the pinned `wallet-cli` npm package |
 | **x402-payment** | x402 protocol payments (agent-to-agent) |
 | **recharge-skill** | Check and top up your BANK OF AI balance |
 
@@ -329,17 +326,13 @@ After selecting, the installer shows a security risk assessment:
 ◇  Security Risk Assessments
 │                                     Gen               Socket            Snyk
 │  bankofai-guide                     Safe              0 alerts          High Risk
-│  Multi-Sig & Account Permissions    --                --                --
 │  recharge-skill                     Safe              1 alert           Med Risk
 │  SunPerp Perpetual Futures Trading  --                --                --
 │  SunPump Meme Token Toolkit         --                --                --
 │  SunSwap DEX Trading                --                --                --
-│  TRC20 Token Toolkit                --                --                --
 │  TronScan Data Lookup               --                --                --
-│  TRX Staking & SR Voting            --                --                --
 │  USDD / JUST Protocol               --                --                --
-│  twitter-digest                     --                --                --
-│  twitter-mcp                        --                --                --
+│  wallet-cli                         --                --                --
 │  x402-payment                       Safe              1 alert           Med Risk
 │  agent-wallet                       Safe              1 alert           High Risk
 ```
@@ -347,21 +340,17 @@ After selecting, the installer shows a security risk assessment:
 Review the report, then confirm to proceed. When installation completes:
 
 ```
-◇  Installed 14 skills
+◇  Installed 10 skills
 │
 │  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
 │  ✓ bankofai-guide → ~/.openclaw/skills/bankofai-guide
-│  ✓ Multi-Sig & Account Permissions → ~/.openclaw/skills/multi-sig-account-permissions
 │  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
 │  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
 │  ✓ SunPump Meme Token Toolkit → ~/.openclaw/skills/sunpump-meme-token-toolkit
 │  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
-│  ✓ TRC20 Token Toolkit → ~/.openclaw/skills/trc20-token-toolkit
 │  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
-│  ✓ TRX Staking & SR Voting → ~/.openclaw/skills/trx-staking-sr-voting
 │  ✓ USDD / JUST Protocol → ~/.openclaw/skills/usdd-just-protocol
-│  ✓ twitter-digest → ~/.openclaw/skills/twitter-digest
-│  ✓ twitter-mcp → ~/.openclaw/skills/twitter-mcp
+│  ✓ wallet-cli → ~/.openclaw/skills/wallet-cli
 │  ✓ x402-payment → ~/.openclaw/skills/x402-payment
 ```
 
@@ -393,11 +382,13 @@ When `Installation Complete!` lights up at the bottom of the screen — congratu
 ✓ Installed skills:
   • agent-wallet
   • bankofai-guide
-  • Multi-Sig & Account Permissions
   • recharge-skill
-  • TRC20 Token Toolkit
-  • TRX Staking & SR Voting
+  • SunPerp Perpetual Futures Trading
+  • SunPump Meme Token Toolkit
+  • SunSwap DEX Trading
+  • TronScan Data Lookup
   • USDD / JUST Protocol
+  • wallet-cli
   • x402-payment
   Verify with: npx skills list -g
 

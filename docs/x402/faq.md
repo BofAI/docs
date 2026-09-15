@@ -41,7 +41,7 @@ The previous Python SDK lives under `legacy/` for reference.
 
 #### Who runs the Facilitator?
 
-Typically, you run your own Facilitator service. x402 is designed for self-hosting, and the built-in Facilitator in the repository is production-ready.
+Typically, you run your own Facilitator service. x402 is designed for self-hosting: the repository ships a runnable reference implementation at `examples/typescript/facilitator/basic` that you harden for your own production use.
 
 An [officially hosted Facilitator](https://github.com/BofAI/x402-facilitator) service is also available, allowing you to use x402 without deploying infrastructure yourself.
 
@@ -68,12 +68,13 @@ Common pricing models include:
 
 #### What payment schemes does x402 support?
 
-x402 supports four payment schemes:
+x402 defines five named payment schemes. Four are available end to end; `auth-capture` currently ships client-side support only:
 
 - **`exact`**: Pay the exact advertised amount. EIP-3009 tokens (e.g. official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
 - **`upto`**: Usage-based billing — the client signs a Permit2 authorization for up to a **maximum**; the server settles only the **real usage** (≤ max). Ideal for **metered billing**, **LLM token usage**.
 - **`batch-settlement`**: Payment-channel for high-frequency micro-payments — deposit once, pay many requests with off-chain vouchers, settle in one batch tx. Includes a refund path.
-- **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. A relayer pays the on-chain energy via the GasFree API — no API keys required on the client side.
+- **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. A relayer pays the on-chain energy via the GasFree API — no API keys required on the client side. The relayer deducts its own fee from the payment token, on top of the payment amount.
+- **`auth-capture`** (EVM client only): Supports refundable Base Commerce Payments authorization/capture flows. Server and facilitator implementations are not yet included in the published package.
 
 #### Can this SDK interoperate with the x402 Foundation (formerly Coinbase) v2 reference implementation?
 
@@ -81,10 +82,10 @@ x402 supports four payment schemes:
 
 - A stock v2 client can directly access this SDK's `exact` protected endpoints with no project-specific adapter layer.
 - This SDK's client can pay v2-compatible servers directly.
-- In the V2 structure, transfer authorization data is carried in the `payload.authorization` field (a structured object). As a migration fallback, the client also populates `extensions.transferAuthorization` so that servers still running older versions can parse the payload.
+- In the V2 structure, transfer authorization data is carried in the `payload.authorization` field (a structured object).
 - BSC USDT/USDC are plain ERC-20s (no ERC-3009). They settle via the Permit2 path under the `exact` scheme — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. ERC-3009 tokens like BSC testnet **DHLU** settle gaslessly with no approve.
 - Base Mainnet official USDC uses EIP-3009 under `exact`: the payer signs `transferWithAuthorization`, so no Permit2 approval is required.
-- The `examples/bsc-testnet-smoke/` directory contains smoke tests for bidirectional interoperability (Coinbase official client → BANK OF AI server, BANK OF AI client → Coinbase official server) that you can use as a debugging and integration reference.
+- The `legacy/examples/bsc-testnet-smoke/` directory (part of the `legacy/` tree, kept for reference) contains smoke tests for bidirectional interoperability (Coinbase official client → BANK OF AI server, BANK OF AI client → Coinbase official server) that you can use as a debugging and integration reference.
 
 ---
 
@@ -96,7 +97,7 @@ x402 supports four payment schemes:
 | --------------------------- | ------------- | ----------- |
 | TRON Mainnet (`tron:0x2b6653dc`) | USDT (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:0xcd8690dc`)       | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **Testnet** (SDK/CLI only — the official facilitator does not settle Shasta; use Nile or self-host) |
 | TRON Mainnet (`tron:0x2b6653dc`) | USDD (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:0xcd8690dc`)       | USDD (TRC-20) | **Testnet** |
 | BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
@@ -107,15 +108,17 @@ x402 supports four payment schemes:
 | Base Mainnet (`eip155:8453`) | Official USDC (ERC-20, EIP-3009) | **Mainnet** |
 | Base Sepolia (`eip155:84532`) | USDC (ERC-20, EIP-3009) | **Testnet** |
 
+Only some of these are **default assets** (USDT on TRON and BSC Mainnet, USDC on BSC Testnet and Base). Since SDK 1.1.0 a client's spend controls reject any other asset — including TRON USDD, BSC Mainnet USDC and BSC Testnet USDT — unless it is allowlisted via `spendControls.allowedAssets`.
+
 Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` from `@bankofai/x402-tron`); custom BEP-20 tokens are advertised by adding an entry to the server's `EVM_TOKENS` config table.
 
 #### What fees are involved?
 
 - **Network Fees**:
-  - TRON: TRX for Energy and Bandwidth (paid by the Facilitator)
-  - BSC: BNB for gas (paid by the Facilitator)
-  - Base: ETH for gas (paid by the Facilitator)
-- **Facilitator Service Fee**: Configurable by each Facilitator (can be set to zero)
+  - TRON: TRX for Energy and Bandwidth (paid by the Facilitator). Since SDK 1.2.0, a Facilitator that enables `trc20ApprovalResourceSponsoring` can also cover the payer's first Permit2 `approve` by temporarily delegating its own staked Energy — and, when needed, Bandwidth — to the payer and reclaiming it after the approve is broadcast.
+  - BSC: BNB for gas (paid by the Facilitator). The payer's one-time ERC-20 `approve` can also be sponsored when the Facilitator has registered the approval gas-sponsoring extension — the official Facilitator registers it for BSC and Base; a self-hosted one must opt in. SDK clients attach the sponsoring payload only when the resource server declares the extension on the route.
+  - Base: ETH for gas (paid by the Facilitator). Sponsoring applies to Base's Permit2 paths; Base USDC under `exact` settles with EIP-3009 and needs no `approve` in the first place.
+- **Facilitator service fee**: none. The current schemes carry no fee field — `base_fee` config and the `/fee/quote` endpoint were removed in SDK 1.0.1. On TRON `exact_gasfree`, the GasFree relayer charges its own fee in the payment token; cap it with the client's GasFree fee limit.
 
 ---
 
@@ -127,7 +130,7 @@ Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` f
 
 1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).
 2. **Seller** verifies signatures without accessing private keys.
-3. **Facilitator** uses its own key to submit transactions on-chain.
+3. **Facilitator** submits transactions with its own settlement wallet, resolved through `@bankofai/agent-wallet` — the raw key never enters the facilitator process.
 
 #### How does refunds work?
 

@@ -6,7 +6,7 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 
 # 数据格式与 API 参考
 
-本页是 API 目录 的数据契约：服务方向[目录仓库](https://github.com/BofAI/x402-catalog)提交的 `catalog.json` 字段、合法取值，以及目录构建后对外暴露的 `/api/*` 接口结构。
+本页是 API 目录的数据契约：服务方向[目录仓库](https://github.com/BofAI/x402-catalog)提交的 `catalog.json` 字段、合法取值，以及目录构建后对外暴露的 `/api/*` 接口结构。
 
 ## provider catalog.json 字段
 
@@ -19,7 +19,6 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 | `title` | string | 是 | 服务名称（通常是简洁品牌名，如 `DefiLlama`） |
 | `subtitle` | string | 是 | 一句话副标题 |
 | `mainTitle` | string | 否 | 卡片/头部展示用的 tagline（如 `聚合 DeFi 数据 — TVL、费用、价格、收益率`），缺省回退到 `title` |
-| `subTitle` | string | 否 | 次级展示行，缺省回退到 `subtitle` |
 | `description` | string | 是 | 服务简介 |
 | `useCase` | string | 是 | 适用场景，帮助 Agent 判断何时调用 |
 | `i18n` | object | 是 | 多语言翻译，至少包含 `zh-CN`（见下） |
@@ -63,13 +62,13 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 | `network` | string | 该路由结算所在的标准 CAIP-2 链 ID（如 `tron:0x2b6653dc`、`eip155:56`、`eip155:8453`）。旧的 TRON 别名如 `tron:nile` 会被 schema 校验拒绝。 |
 | `provider` | string | 处理该网络的 gateway provider `fqn` |
 | `scheme` | string | 该路由的 x402 支付方案：`exact`，或在 TRON 上 `exact_gasfree` —— 由每条路由各自声明 |
-| `assetTransferMethod` | string | `exact` 路由使用的授权方式：TRON 与 BSC 填 `permit2`，Base USDC 填 `eip3009`；`exact_gasfree` 路由**不要**带该字段。 |
+| `assetTransferMethod` | string | 每条 `exact` 路由都**必须填写**：TRON/BSC 路由使用 `permit2`，Base USDC 路由使用 `eip3009`。只有 `exact_gasfree` 路由应省略该字段。 |
 | `url` | string | 该网络路由的完整 gateway URL |
 
 构建时该字段以 `x402_routes` 透传到产物。存在时，调用方/Agent 按目标支付链选择对应路由；顶层 `url` 仍是默认路由。
 
 :::note GasFree 路由
-在 TRON 上，可以为同一端点在 `exact` 路由之外再加一条 `exact_gasfree` 路由：由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需 TRX。GasFree 路由仅限 TRON，且不能带 `assetTransferMethod`。在 x402 SDK 1.0.1 下，relayer 费用由客户端估算，因此目录路由**不得**再发布旧的 `fee` 或 `feeConfig` 字段。
+在 TRON 上，可以为同一端点在 `exact` 路由之外再加一条 `exact_gasfree` 路由：由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需 TRX。GasFree 路由仅限 TRON，且不能带 `assetTransferMethod`。自 x402 SDK 1.0.1 起（当前版本 1.2.0），relayer 费用由客户端估算，因此目录路由**不得**再发布旧的 `fee` 或 `feeConfig` 字段。
 :::
 
 例如一个端点可以为每条支持的链各提供一条路由 —— TRON 主网、BSC 主网和 Base 主网，各有自己的 `provider` 和 `scheme`。调用时把 `x402-cli pay` 指向所选路由的 `url`，并传入匹配的 `--network` / `--scheme`：
@@ -118,12 +117,13 @@ security   shopping    storage     translation
 |---|---|
 | TRON 主网 | `tron:0x2b6653dc` |
 | TRON Nile 测试网 | `tron:0xcd8690dc` |
-| TRON Shasta 测试网 | `tron:0x94a9059e` |
+| TRON Shasta 测试网 | `tron:0x94a9059e` —— 仅 schema 层面接受：gateway 没有 Shasta 代币注册表，官方 facilitator 也不结算，因此无法支撑真实路由 |
 | BNB Chain (BSC) | `eip155:56` |
 | BNB 测试网 | `eip155:97` |
 | Base 主网 | `eip155:8453` |
+| Base Sepolia 测试网 | `eip155:84532` —— 仅 schema 层面可用：构建脚本没有它的展示元数据，`label` 会回退成原始链 ID，`chain_kinds` 也会报 `evm` 而不是 `base` |
 
-构建时会把每个链 ID 解析为展示元数据（`kind` / `label` / `label_zh`），前端无需自己解析 CAIP-2 —— 见[前端展示字段](#前端展示字段)。
+各条链上实际已上线的路由，以已发布的 `catalog.json` 为准。构建时会把每个链 ID 解析为展示元数据（`kind` / `label` / `label_zh`），前端无需自己解析 CAIP-2 —— 见[前端展示字段](#前端展示字段)。
 
 ## 校验与安全扫描
 
@@ -188,8 +188,8 @@ CI 构建后生成静态快照 `dist/`，由 Catalog Server 通过 `/api/` 路�
 | `title_zh` | 中文服务名（取自 `i18n.zh-CN.title`，回退到 `title`） |
 | `main_title` | 展示 tagline（取自 `mainTitle`，回退到 `title`） |
 | `main_title_zh` | 中文展示 tagline（取自 `i18n.zh-CN.mainTitle` / `mainTitle`，回退到 `title`） |
-| `sub_title` | 次级展示行（取自 `subTitle`，回退到 `subtitle`） |
-| `sub_title_zh` | 中文次级展示行（取自 `i18n.zh-CN.subtitle` / `subTitle`，回退到 `subtitle`） |
+| `sub_title` | 次级展示行（取自 `subtitle`） |
+| `sub_title_zh` | 中文次级展示行（取自 `i18n.zh-CN.subtitle`，回退到 `subtitle`） |
 | `category_meta` | 类目的 `{ id, label, label_zh }` |
 | `chain_kinds` | 去重后的友好链类型，如 `["tron"]`、`["bnb"]`、`["base"]` |
 | `chains_meta` | 每条链的 `{ id, kind, label, label_zh }`，前端无需解析 CAIP-2 |

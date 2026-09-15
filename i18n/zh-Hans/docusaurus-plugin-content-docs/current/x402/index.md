@@ -62,9 +62,9 @@ x402 支持广泛的应用场景，包括：
 
 如需深入了解，请参考：
 
-- [客户端 / 服务端](./core-concepts/client-server.md)
-- [Facilitator](./core-concepts/facilitator.md)
-- [HTTP 402](./core-concepts/http-402.md)
+- [客户端 / 服务端](./x402/core-concepts/client-server)
+- [Facilitator](./x402/core-concepts/facilitator)
+- [HTTP 402](./x402/core-concepts/http-402)
 
 我们的目标是：在区块链上打造一个低门槛、无许可且开发者友好的程序化商业层。
 
@@ -73,21 +73,22 @@ x402 支持广泛的应用场景，包括：
 x402 目前支持以下网络环境：
 
 - **TRON 主网** (`tron:0x2b6653dc`)
-- **TRON Shasta 测试网** (`tron:0x94a9059e`)
+- **TRON Shasta 测试网** (`tron:0x94a9059e`)——仅 SDK/CLI 可用，官方 facilitator 不结算
 - **TRON Nile 测试网** (`tron:0xcd8690dc`)
 - **BSC 主网** （`eip155:56`）
 - **BSC 测试网** （`eip155:97`)
 - **Base 主网**（`eip155:8453`）
+- **Base Sepolia 测试网**（`eip155:84532`）
 
 Base 主网使用官方 USDC，通过 `exact` 方案和 EIP-3009 授权完成支付。
 
-> **SDK（仅 TypeScript）**：x402 是仅 TypeScript 的 SDK，以颗粒化 `@bankofai/x402-*` npm 包发布（`core`、`evm`、`tron`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）。源码由 pnpm/turbo monorepo 维护，但应用开发应安装已发布的包。支持的方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`exact_gasfree`（TRON）。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。完整对比详见 [SDK 功能特性](./sdk-features.md)。
+> **SDK（仅 TypeScript）**：x402 是仅 TypeScript 的 SDK，以颗粒化 `@bankofai/x402-*` npm 包发布（`core`、`evm`、`tron`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）。源码由 pnpm/turbo monorepo 维护，但应用开发应安装已发布的包。它定义了五种命名方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`exact_gasfree`（TRON），以及目前仅有 client 的 `auth-capture`（EVM）。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。完整对比详见 [SDK 功能特性](./x402/sdk-features)。
 
 
 ## 快速开始
 
 准备好开始构建了吗？请从这里入手：
 
-- [卖家快速入门](./getting-started/quickstart-for-sellers.md)
-- [Agent 快速入门](./getting-started/quickstart-for-agent.md)
-- [Http 402](./core-concepts/http-402.md)
+- [卖家快速入门](./x402/getting-started/quickstart-for-sellers)
+- [Agent 快速入门](./x402/getting-started/quickstart-for-agent)
+- [Http 402](./x402/core-concepts/http-402)

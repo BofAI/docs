@@ -10,7 +10,7 @@ x402 专为 Agentic Web 设计。通过安装 `x402-payment` 技能，AI 代理�
 ---
 
 :::info SDK（仅 TypeScript）
-x402 是以 `@bankofai/x402-*` npm 包发布的**仅 TypeScript** SDK。`x402-payment` 技能封装这些包，并使用 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 托管密钥——本指南中的钱包/私钥配置方式不变。可运行的 [MCP 示例](https://github.com/BofAI/x402/tree/main/examples/typescript)（`servers/mcp` + `clients/mcp`）是参考实现。
+x402 是以 `@bankofai/x402-*` npm 包发布的**仅 TypeScript** SDK。`x402-payment` 技能并不链接这些包——它调用的是 `x402-cli` 可执行文件（该 CLI 内置了这些包），并使用 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 托管密钥——本指南中的钱包/私钥配置方式不变。可运行的 [MCP 示例](https://github.com/BofAI/x402/tree/main/examples/typescript)（`servers/mcp` + `clients/mcp`）是参考实现。
 :::
 
 ## 前置准备
@@ -45,11 +45,11 @@ x402 是以 `@bankofai/x402-*` npm 包发布的**仅 TypeScript** SDK。`x402-pa
 ---
 
 :::info 钱包管理
-x402 SDK 通过 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 来解析和管理钱包凭证，安装 x402 时会自动安装 agent-wallet 作为依赖。私钥解析优先级为：
+x402 SDK 通过 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 来解析和管理钱包凭证，Agent Wallet 需要你自行安装——它只是 `@bankofai/x402-tron` 的 devDependency，并非任何已发布 `@bankofai/x402-*` 包的运行时依赖，不会被传递安装（`npm install -g @bankofai/agent-wallet`）。私钥解析优先级为：
 1. 加密钱包文件（通过 Agent Wallet CLI 导入）
 2. 环境变量 `AGENT_WALLET_PRIVATE_KEY`
 
-本文使用环境变量方式。
+本文使用环境变量方式。注意 `x402-payment` 技能在付款前会执行 `agent-wallet list` 做预检，而仅设置环境变量不会在该列表中产生条目——如果希望预检通过，请执行 `agent-wallet start`。
 :::
 
 ## 第一步：配置私钥
@@ -57,7 +57,7 @@ x402 SDK 通过 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 来解析和管
 将私钥配置为环境变量，让 x402-payment 技能能够签署支付。将 `在此填入代理钱包私钥` 替换为前置准备中导出的私钥。
 
 ```bash
-export AGENT_WALLET_PRIVATE_KEY="在此填入代理钱包私钥"
+export AGENT_WALLET_PRIVATE_KEY="your_agent_wallet_private_key_here"
 ```
 
 > 💡 **提示：** 如需在每次打开终端时自动生效，可将其写入 shell 配置文件：
@@ -81,7 +81,7 @@ echo $AGENT_WALLET_PRIVATE_KEY
 **可选：** 生产环境的 TRON 项目建议配置 TronGrid API Key：
 
 ```bash
-export TRON_GRID_API_KEY="在此填入TronGrid API Key"
+export TRON_GRID_API_KEY="your_trongrid_api_key_here"
 ```
 
 > 💡 **如何获取 TronGrid API Key：** 前往 [TronGrid 官网](https://www.trongrid.io/) 免费注册，创建 API Key 后粘贴到上方。
@@ -113,19 +113,29 @@ export EVM_RPC_URL="https://bsc-testnet-rpc.publicnode.com"
 运行以下命令一次性安装所有 BANK OF AI Skills（包括 x402-payment）：
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y
+npx skills add https://github.com/BofAI/skills/tree/main -y -g
 ```
 
-`-y` 参数会跳过所有交互选择，默认安装所有 Skills。安装器会自动检测你电脑上的 AI 工具（Cursor、Claude Code、Cline、OpenCode 等），并将技能复制到对应的目录中。
+`-y` 参数会跳过所有交互选择，默认安装所有 Skills；`-g` 参数把技能装到全局（用户级目录 `~/.agents/skills/`），而不是只装进当前目录。安装器会自动检测你电脑上的 AI 工具（Cursor、Claude Code、Cline、OpenCode 等），并将技能复制到对应的目录中。
 
 > ✅ **成功标志：** 终端显示 `✓ x402-payment (copied)` 以及其他已安装的技能
 
-### 交互式安装
-
-如果你想手动选择安装哪些 Skills 或选择安装范围：
+:::caution 还要单独装 CLI
+`npx skills add` 只复制技能定义文件，不会安装它们依赖的外部 CLI。`x402-payment` 技能要求**恰好** `x402-cli` 1.0.1，因此在执行下面这条命令之前，第 3 步会以 `x402-cli: command not found` 失败：
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npm install -g @bankofai/x402-cli@1.0.1
+```
+
+独立 CLI 的最新版本是 1.0.2，但本技能钉的是 1.0.1，并会在付款前校验已安装版本。
+:::
+
+### 交互式安装
+
+如果你想手动选择安装哪些 Skills、装到哪些 AI 工具：
+
+```bash
+npx skills add https://github.com/BofAI/skills/tree/main -g
 ```
 
 交互式安装的完整步骤说明，请参考 [Skills 快速开始](../../McpServer-Skills/SKILLS/QuickStart.md)。
@@ -194,7 +204,7 @@ pnpm dev:server               # http://localhost:4021
 </TabItem>
 </Tabs>
 
-> ✅ **成功标志：** 代理返回了 `{"data": "..."}` 格式的内容，且区块链浏览器上出现了对应的交易记录
+> ✅ **成功标志：** 代理返回了端点的 JSON 内容——仓库自带的 Express 示例返回 `{"report":{"weather":"sunny","temperature":70}}`——且区块链浏览器上出现了对应的交易记录
 
 ---
 
@@ -215,7 +225,7 @@ pnpm dev:server               # http://localhost:4021
 | 问题 | 可能原因 | 解决方法 |
 |------|----------|----------|
 | 代理未发起付款，直接报错 | 技能未正确安装 | 重新执行第二步的安装命令 |
-| `私钥未找到` 或签名失败 | 环境变量未配置或配置错误 | 重新执行第一步，在**同一终端**中运行代理 |
+| `Private key not found` 或签名失败 | 环境变量未配置或配置错误 | 重新执行第一步，在**同一终端**中运行代理 |
 | 余额不足错误 | 测试钱包中没有测试代币 | 回到前置准备，从水龙头领取测试代币 |
 | 请求超时 | 网络问题或 RPC 限速 | 配置 `TRON_GRID_API_KEY` 以获得更好的性能 |
 | 代理访问成功但余额没有变化 | 可能访问的是免费接口 | 确认 URL 是 `/weather`（付费路由）而非其他路径 |

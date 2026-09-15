@@ -125,7 +125,7 @@ Deposit a small amount of official USDC on Base Mainnet. The resource server onl
 
 **Testnet vs. Mainnet:**
 
-- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:0xcd8690dc` / `eip155:97`
+- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:0xcd8690dc` / `eip155:97` / `eip155:84532` (Base Sepolia, USDC — test here before going to Base Mainnet)
 - **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:0x2b6653dc` / `eip155:56` / Base `eip155:8453`
 
 ---
@@ -136,6 +136,7 @@ Install the Express adapter and the TRON/EVM payment schemes in your TypeScript 
 
 ```bash
 pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm
+pnpm add -D tsx   # to run the TypeScript entry point below
 ```
 
 Use the framework package that matches your server (`@bankofai/x402-express`, `@bankofai/x402-hono`, `@bankofai/x402-fastify`, or `@bankofai/x402-next`). Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
@@ -179,6 +180,11 @@ import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
 
 const server = createResourceServer(
   new HTTPFacilitatorClient({
+    // Replace this before running — the server syncs with the facilitator on
+    // startup, so a placeholder URL makes the first protected request fail
+    // (500 for an unreachable host or an HTTP error status; 502 when the
+    // facilitator times out or returns a body the SDK cannot parse).
+    // Official: https://facilitator.bankofai.io  ·  self-hosted example: http://localhost:4022
     url: "https://facilitator.example.com",
   })
 );
@@ -208,7 +214,7 @@ express()
       credit: 1000000,
     })
   )
-  .listen(4021);
+  .listen(4021, () => console.log("Resource server on http://localhost:4021"));
 ```
 
 </TabItem>
@@ -226,6 +232,11 @@ import { ExactEvmScheme } from "@bankofai/x402-evm/exact/server";
 
 const server = createResourceServer(
   new HTTPFacilitatorClient({
+    // Replace this before running — the server syncs with the facilitator on
+    // startup, so a placeholder URL makes the first protected request fail
+    // (500 for an unreachable host or an HTTP error status; 502 when the
+    // facilitator times out or returns a body the SDK cannot parse).
+    // Official: https://facilitator.bankofai.io  ·  self-hosted example: http://localhost:4022
     url: "https://facilitator.example.com",
   })
 );
@@ -255,7 +266,7 @@ express()
       credit: 1000000,
     })
   )
-  .listen(4021);
+  .listen(4021, () => console.log("Resource server on http://localhost:4021"));
 ```
 
 </TabItem>
@@ -266,7 +277,7 @@ express()
 | Parameter | Description | Example |
 |------|------|--------|
 | `payTo` | Your receiving wallet address | TRON: `T...`; Base: `0x...` |
-| `accepts[].price` | Price per request | TRON: `"1 USDT"`; Base: `"1 USDC"` |
+| `accepts[].price` | Price per request — a **config** key; on the wire the SDK converts it into `amount` + `asset` (+ `extra`) | TRON: `"1 USDT"`; Base: `"1 USDC"` |
 | `accepts[].network` | Network to use | TRON Nile: `tron:0xcd8690dc`; Base Mainnet: `eip155:8453` |
 | `accepts[].scheme` | Payment scheme | `"exact"` |
 | `routes` | Map of `"METHOD /path"` → `{ accepts }` | `"GET /credit"` |
@@ -290,7 +301,7 @@ A Facilitator is an **automated settlement service**: when someone pays your API
 | **Maintenance required** | No — officially hosted | Yes — you run it yourself |
 | **Wallet private key required** | No | Yes (to settle on-chain) |
 | **Difficulty** | Low (just apply for an API Key) | Medium (run the example facilitator) |
-| **Best for** | Fast deployment, most users | Full control over fee strategy |
+| **Best for** | Fast deployment, most users | Full control over the settlement wallet, RPC endpoints, and registered networks/schemes |
 
 <Tabs>
 <TabItem value="official" label="✅ Official Facilitator (Recommended)">
@@ -319,7 +330,7 @@ This is the address your x402 server uses to verify and settle payments — **fo
 2. On the Dashboard, click **"Create API Key"**
 3. Confirm, then click **View** in the Dashboard to see and copy your API Key
 
-With an API Key, the rate limit increases to **1,000 requests/minute**, sufficient for production use.
+With an API Key, the official service allows **1,000 `/settle` requests per API Key per minute**, sufficient for production use.
 
 #### 4.3 Wire the API Key into Your Server
 
@@ -329,6 +340,21 @@ The official key is sent as the `X-API-KEY` header on every facilitator call. Ke
 FACILITATOR_API_KEY=paste_your_api_key_here
 ```
 
+`HTTPFacilitatorClient` sends the header only if you give it `createAuthHeaders` — without this the server silently stays on the anonymous tier:
+
+```typescript
+const apiKeyHeaders = { "X-API-KEY": process.env.FACILITATOR_API_KEY! };
+
+new HTTPFacilitatorClient({
+  url: "https://facilitator.bankofai.io",
+  createAuthHeaders: async () => ({
+    verify: apiKeyHeaders,
+    settle: apiKeyHeaders,
+    supported: apiKeyHeaders,
+  }),
+});
+```
+
 > ⚠️ **Security reminder:** Your API Key is a service credential — **treat it like a password and never commit it to Git**.
 
 > ✅ **Done!** The Official Facilitator is configured — **no local service to start**. Proceed directly to Step 5 to test.
@@ -336,7 +362,9 @@ FACILITATOR_API_KEY=paste_your_api_key_here
 </TabItem>
 <TabItem value="selfhost" label="Self-Hosted Facilitator">
 
-The self-hosted option gives you full control over fee strategy. It runs the example facilitator (`examples/typescript/facilitator/basic`), which exposes `/verify`, `/settle`, `/supported` over HTTP and dispatches by the payment's `network` field.
+The self-hosted option gives you full control over the settlement wallet, RPC endpoints, and which networks and schemes you register — neither the SDK nor the facilitator charges a fee of its own. It runs the example facilitator (`examples/typescript/facilitator/basic`), which exposes `/verify`, `/settle`, `/supported` over HTTP and dispatches by the payment's `network` field.
+
+> **Base sellers:** the bundled example facilitator registers only `eip155:97` and `eip155:56` (`EVM_NETWORKS` in `facilitator/basic/src/chains/evm.ts`). To settle on Base, either use the official facilitator — which enables `eip155:8453` and `eip155:84532` — or add those ids to `EVM_NETWORKS` yourself.
 
 > ⚠️ **Security reminder — please read first:**
 > - A self-hosted Facilitator uses your wallet to submit on-chain settlement transactions — **this wallet should be separate from your receiving wallet**
@@ -404,6 +432,12 @@ Open a **new terminal window** (do not close the facilitator), and run your serv
 pnpm tsx src/server.ts
 ```
 
+**On success you should see:**
+
+```
+Resource server on http://localhost:4021
+```
+
 > ✅ **Success:** The process keeps running and the resource server listens on `http://localhost:4021`
 
 ### 5.2 Test Unpaid Access (Should Be Rejected)
@@ -411,10 +445,14 @@ pnpm tsx src/server.ts
 In any terminal, run:
 
 ```bash
-curl http://localhost:4021/credit
+curl -i http://localhost:4021/credit
 ```
 
-**Expected result:** The server returns an HTTP `402` response with the payment requirements (an `accepts` array listing scheme, network, price, and your payout address).
+**Expected result:** an HTTP `402` whose **body is `{}`** — under x402 v2 the payment requirements travel in the `PAYMENT-REQUIRED` response header as base64 JSON. Decode it to see the `accepts` array (each entry carries `scheme`, `network`, `asset`, `amount`, `payTo`, `maxTimeoutSeconds`, `extra`):
+
+```bash
+curl -si http://localhost:4021/credit | grep -i '^payment-required:' | cut -d' ' -f2 | tr -d '\r' | base64 -d   # older macOS: base64 -D
+```
 
 > ✅ **This is exactly what we want!** It confirms that payment protection is working — unpaid requests are successfully blocked.
 
@@ -433,11 +471,11 @@ To test the complete pay → receive content flow, use the minimal client in [Qu
 | Problem | Cause | Solution |
 |---------|-------|----------|
 | `Failed to fetch` / connection refused | Facilitator or server not running | Start the facilitator first, then run your API server entry point |
-| Client `server offered no payment option matching "…"` | The client selected a network or token that the server does not advertise | Check the server's `accepts` (network + token), e.g. `TRON_NILE` + `USDT` |
+| Client selects nothing / no matching requirement | The client selected a network or token that the server does not advertise | Check the server's `accepts` (network + token), e.g. `TRON_NILE` + `USDT` |
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` under `npx tsx` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
-| `UnsupportedNetworkError` / `No mechanism registered` | The selected client network has no registered scheme | Ensure the client includes your target network, such as `TRON_NILE` |
+| `No network/scheme registered for x402 version: 2 …` | The selected client network has no registered scheme | Ensure the client registers your target network, such as `TRON_NILE` |
 | `Insufficient balance` / allowance error | Test wallet lacks test tokens, or Permit2 allowance too low | Claim test tokens from the faucet; the client auto-approves Permit2 on first payment |
-| `Connection timeout` | Network or request timeout | Check your connection, or set a reliable `EVM_RPC_URL` (e.g. `https://bsc-testnet-rpc.publicnode.com`) |
+| `Connection timeout` | Network or request timeout | Check your connection. Note the SDK reads no environment variables — `EVM_RPC_URL` is honoured by `x402-cli` and the example apps; in your own server pass the RPC URL to the signer factory |
 
 ---
 
@@ -470,7 +508,7 @@ EVM_RPC_URL=https://bsc-rpc.publicnode.com
 
 ### 3. (Self-Hosted) Switch the Facilitator to Mainnet
 
-The facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:0x2b6653dc`), and `EVM_NETWORKS` includes `eip155:56`. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
+The example facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:0x2b6653dc`), and `EVM_NETWORKS` includes `eip155:97` and `eip155:56` — Base (`eip155:8453` / `eip155:84532`) is not registered there, so add it if you settle on Base. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
 
 ```bash
 pnpm dev:facilitator

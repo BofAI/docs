@@ -29,7 +29,7 @@ In the x402 protocol (on-the-wire), BSC uses the EIP-155 chain ID format:
 | **BSC Mainnet**  | `eip155:56`   | BSC Mainnet (Production)      |
 | **BSC Testnet**  | `eip155:97`   | BSC Testnet (Chapel)          |
 
-> **Note**: When configuring a self-hosted Facilitator, the YAML config file uses a human-readable format: `bsc:mainnet` and `bsc:testnet`. The Facilitator automatically maps these to the corresponding EIP-155 chain IDs used in the protocol.
+> **Note**: A self-hosted Facilitator's YAML config takes **canonical CAIP-2 identifiers only** — `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532`, `tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`. Friendly aliases such as `bsc:mainnet` or `tron:nile` are not resolved and are rejected at startup.
 
 ---
 
@@ -57,7 +57,7 @@ The protocol uses secure signing mechanisms to ensure tamper-resistant message a
 | :------------------ | :--------- | :---- |
 | **TRON Mainnet**    | **Mainnet** | **Production network** for real-value assets |
 | **TRON Nile**       | **Testnet** | **Recommended testnet** for development and debugging |
-| **TRON Shasta**     | **Testnet** | Long-running alternative testnet |
+| **TRON Shasta**     | **Testnet** | Alternative testnet — SDK/CLI only; the official facilitator does not settle Shasta, so use Nile or self-host |
 | **BSC Mainnet**     | **Mainnet** | **Production network** for real-value assets |
 | **BSC Testnet**     | **Testnet** | **Recommended testnet** for BSC development |
 | **Base Mainnet**    | **Mainnet** | **Production network** using official USDC |
@@ -75,20 +75,22 @@ x402 supports **TRC-20, BEP-20, and ERC-20** tokens. TRON/BSC routes use their c
 | :------ | :------------- | :--------------- |
 | **USDT** | `tron:0x2b6653dc` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
 | **USDT** | `tron:0xcd8690dc`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
+| **USDT** | `tron:0x94a9059e` | `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs` |
 | **USDD** | `tron:0x2b6653dc` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
 | **USDD** | `tron:0xcd8690dc`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56`    | `0x55d398326f99059fF775485246999027B3197955` |
 | **USDC** | `eip155:56`    | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
-| **EPS**  | `eip155:56`    | `0xA7f552078dcC247C2684336020c03648500C6d9F` |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 | **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
 | **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **Extensibility**: The protocol is highly extensible. By registering tokens in the `TokenRegistry`, you can easily support any custom TRC-20 or BEP-20 token.
+> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registry resolves **USDT** on TRON (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) and BSC Mainnet (`eip155:56`), and **USDC** on BSC Testnet (`eip155:97`) and Base (`eip155:8453`, `eip155:84532`). The registry also ships defaults for twenty further EVM networks (MegaETH, Monad, Polygon, Arbitrum, Mezo, Radius, XDC, Celo, Flare and others) that this page does not table. Everything else in the table above — TRON USDD, BSC Mainnet USDC, BSC Testnet USDT, DHLU, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`, and `x402-cli` pays registry tokens by default — an unregistered asset requires explicit `--asset` plus `--decimals`, and is rejected outright on Base.
 
-> **Token selection for the `exact` scheme**: EIP-3009 tokens (for example official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`. Plain ERC-20 tokens (for example BSC USDC/USDT and TRON USDT/USDD) settle via the Permit2 path — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. The per-token method is data in the server's `accepts[].price.extra`: EIP-3009 → `{ name, version }`; plain ERC-20 → `{ assetTransferMethod: "permit2" }`.
+> **Extensibility**: The protocol is highly extensible. By registering tokens through the TRON token registry (`registerToken` from `@bankofai/x402-tron`) or the server's `EVM_TOKENS` config table, you can support any custom TRC-20 or BEP-20 token.
+
+> **Token selection for the `exact` scheme**: EIP-3009 tokens (for example official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`. Plain ERC-20 tokens (for example BSC USDC/USDT and TRON USDT/USDD) settle via the Permit2 path — the client auto-broadcasts a one-time `approve(Permit2)` on first payment, or, on TRON when the server advertises `trc20ApprovalResourceSponsoring` (SDK 1.2.0+), signs it and lets the facilitator sponsor and broadcast it. You set the per-token method on the server under `accepts[].price.extra`; the SDK surfaces it on the wire as `accepts[].extra`: EIP-3009 → `{ name, version }`; plain ERC-20 → `{ assetTransferMethod: "permit2" }`. A permit2 asset that also implements EIP-2612 carries `{ name, version }` alongside `assetTransferMethod`; omitting that pair is precisely how a server tells clients to skip EIP-2612. Both sponsoring paths live inside the permit2 branch, so neither applies to an EIP-3009 asset. On a permit2 asset the client signs a gasless EIP-2612 permit when a `readContract` capability is available (from the signer or a configured RPC), the server advertises the `eip2612GasSponsoring` extension, `extra` carries both `name` and `version`, and the current Permit2 allowance does not already cover the payment. Note the asymmetry: a *missing* read capability skips the permit entirely, whereas a read that *throws* is caught and signing proceeds. Otherwise the client *tries* ERC-20 approval gas sponsoring, which needs `readContract`, the separate `erc20ApprovalGasSponsoring` extension from the server, a signer that can both sign raw transactions and report a transaction count, and again an allowance that does not already cover the payment; there the client signs an `approve` for `MaxUint256` — always the max, regardless of the payment amount — that the facilitator broadcasts. When neither path qualifies the payload carries no sponsoring extension at all. Among the shipped default assets the flag is set on MegaETH MegaUSD (mainnet) and on Mezo mUSD and Radius SBC (mainnet and testnet).
 
 ---
 
@@ -126,16 +128,16 @@ When configuring an `HTTP 402` payment request on the server side, you must expl
 
 ## Payment Schemes
 
-x402 supports four payment schemes. Each is implemented as a client + server + facilitator trio per chain family.
+x402 defines five named payment schemes. Four have complete client + server + facilitator implementations per chain family; `auth-capture` currently ships an EVM client only.
 
 ### `exact` Scheme
 
 The `exact` scheme pays the exact amount advertised. It covers two token transfer paths:
 
 - **EIP-3009 `transferWithAuthorization`** — for tokens that natively support it (e.g. official Base USDC and BSC testnet DHLU). Gasless: no `approve` needed; the client signs a typed-data authorization and the facilitator calls `transferWithAuthorization` on-chain.
-- **Permit2** — for plain ERC-20 / TRC-20 tokens that do not implement ERC-3009 (e.g. BSC USDC/USDT, TRON USDT/USDD). The client signs a Permit2 witness and the facilitator settles via the `x402ExactPermit2Proxy` contract. A one-time `approve(Permit2)` is required; the client auto-broadcasts it on first payment.
+- **Permit2** — for plain ERC-20 / TRC-20 tokens that do not implement ERC-3009 (e.g. BSC USDC/USDT, TRON USDT/USDD). The client signs a Permit2 witness and the facilitator settles via the `x402ExactPermit2Proxy` contract. A one-time `approve(Permit2)` is required; the client auto-broadcasts it on first payment. On TRON, SDK 1.2.0 adds the `trc20ApprovalResourceSponsoring` extension — when the server advertises it, the client signs that approve without broadcasting it and the facilitator delegates the Energy/Bandwidth and broadcasts it, so the payer needs no TRX for the approve.
 
-The `exact` scheme conforms to the **v2 wire format** published by the **x402 Foundation**: a stock v2 client can pay a protected endpoint on this SDK's server directly, and this SDK's client can pay any v2-compliant server — no project-specific translation required. Transfer authorization data is carried in `payload.authorization`.
+The `exact` scheme conforms to the **v2 wire format** published by the **x402 Foundation**: a stock v2 client can pay a protected endpoint on this SDK's server directly, and this SDK's client can pay any v2-compliant server — no project-specific translation required. Transfer authorization data is carried in `payload.authorization` on the EIP-3009 path and in `payload.permit2Authorization` on the Permit2 path.
 
 ### `upto` Scheme
 
@@ -145,27 +147,31 @@ Usage-based billing. The client signs a Permit2 authorization for up to a **maxi
 
 A payment-channel scheme for high-frequency micro-payments (e.g. AI agent per-token billing). The payer **deposits once** on-chain, then pays many requests with off-chain **vouchers**; the facilitator **claims** a batch and **settles** to `payTo` in a single tx — so N requests cost ~one deposit's worth of gas. Includes a **refund** path for the unused balance. Available on EVM and TRON.
 
+### `auth-capture` Scheme
+
+An EVM client implementation for refundable Base Commerce Payments: authorize funds first, then capture, void, or refund them later. The published SDK currently exposes `@bankofai/x402-evm/auth-capture/client`; its server and facilitator implementations are not shipped yet, so it cannot currently be deployed end to end using only the published package.
+
 ### `exact_gasfree` Scheme
 
-TRON-specific. Allows buyers to pay with USDT/USDD **without holding TRX for gas fees**. The payer signs a TIP-712 GasFree permit and a relayer pays the on-chain energy via the official GasFree Proxy — no TRX for the payer, no one-time `approve`. Funds come from the payer's GasFree custodial wallet (not the main wallet). Available on `tron:0x2b6653dc` and `tron:0xcd8690dc`.
+TRON-specific. Allows buyers to pay with USDT/USDD **without holding TRX for gas fees**. The payer signs a TIP-712 GasFree permit and a relayer pays the on-chain energy via the official GasFree Proxy — no TRX for the payer, no one-time `approve`. Funds come from the payer's GasFree custodial wallet (not the main wallet). The SDK registers GasFree on `tron:0x2b6653dc`, `tron:0xcd8690dc`, and `tron:0x94a9059e`, but the official facilitator only proxies the relayer for TRON Mainnet and Nile — the built-in Shasta relayer URL has no upstream behind it, so Shasta GasFree needs your own relayer.
 
-#### GasFree Account Management (via x402-payment skill)
+The relayer charges its own fee in the payment token, **on top of** the payment amount, so the GasFree account must hold enough to cover both.
 
-When using the `x402-payment` skill, you can manage GasFree accounts directly from the CLI:
+:::info What the relayer fee is
+**The relayer fee is the service charge of the GasFree relayer**: instead of burning your own TRX, the relayer fronts the on-chain energy/bandwidth, and in exchange deducts a fee from your GasFree account, denominated in the payment token (e.g. USDT). It is composed of a fixed **transfer fee** per payment, plus a one-time **activation fee** on the first payment if the GasFree account is not yet activated. The rates are quoted per token by the relayer's API; the client queries and estimates them before signing (when the relayer reports no rate for the token, the client signs a default ceiling of one whole token instead), and the signed permit carries a `maxFee` ceiling the relayer cannot exceed. It is counted **separately** from the payment amount (the money the seller receives) — `--max-amount` does not cover it, so cap it with `--max-gasfree-fee`.
+:::
 
-**Query GasFree wallet info** (address, activation status, balance, nonce):
+#### Paying with GasFree from the CLI
+
 ```bash
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --network nile
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-info --wallet <YOUR_WALLET_ADDRESS>
+x402-cli pay <url> \
+  --scheme exact_gasfree \
+  --max-amount 0.01 \
+  --max-gasfree-fee 0.5 \
+  --json
 ```
 
-**Activate a GasFree account** (required before first use):
-```bash
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network mainnet
-npx tsx x402-payment/src/x402_invoke.ts --gasfree-activate --network nile --token USDT
-```
+The CLI takes the first requirement in the server's `accepts` list that matches your filters — it does not prefer GasFree — so pass `--scheme exact_gasfree` whenever the endpoint also advertises plain `exact`. `--max-amount` does not cover the relayer fee — cap that separately with `--max-gasfree-fee` (or `--max-gasfree-fee-raw`). See the [CLI command reference](../cli/command-reference.md#gasfree-payments-tron).
 
 ### How Payment Schemes Work
 
@@ -212,7 +218,7 @@ You may deploy your own Facilitator to gain full control over payment verificati
 
 | Core Component | TRON/BSC/Base Implementation |
 | :------------- | :---------------------- |
-| **Networks**   | `tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532` |
+| **Networks**   | The three TRON IDs (`tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`) plus any `eip155:<chainId>` — client and resource server both default to `eip155:*`, and the SDK ships default assets for twenty EVM networks beyond `eip155:56` / `97` / `8453` / `84532`. What can actually settle is bounded by the networks the facilitator has configured, which it must enumerate explicitly |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20, ERC-20 (Base official USDC) |
 | **Signing Mechanism** | TIP-712 / EIP-712 typed data signing |
 | **Payment Schemes** | `exact`, `upto`, `batch-settlement`, `exact_gasfree` (TRON) |

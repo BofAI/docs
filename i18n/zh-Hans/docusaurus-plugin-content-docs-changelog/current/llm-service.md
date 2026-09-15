@@ -15,7 +15,7 @@ LLM Service 的版本发布记录。
 
 <div className="changelog-tags"><span className="changelog-tag">新模型</span></div>
 
-- 上线 **Kimi K3**，定价文档已同步。[模型列表](../llmservice/models/kimi-k3/)
+- 上线 **Kimi K3**，定价文档已同步。[模型列表](../../llmservice/models/kimi-k3/)
 
 </div>
 </div>

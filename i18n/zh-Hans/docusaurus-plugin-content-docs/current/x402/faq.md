@@ -37,7 +37,7 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 
 #### 谁来运行 Facilitator ？
 
-通常情况下，您需要运行自己的 Facilitator 服务。x402 专为自托管而设计，代码仓库中内置的 Facilitator 程序已准备就绪，可直接运行。
+通常情况下，您需要运行自己的 Facilitator 服务。x402 专为自托管而设计：仓库在 `examples/typescript/facilitator/basic` 提供了可直接运行的参考实现，投产前请按自身需求加固。
 
 [官方托管的 Facilitator](https://github.com/BofAI/x402-facilitator) 服务也已上线，您无需自行部署基础设施即可使用 x402。
 
@@ -60,12 +60,13 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 
 #### x402 支持哪些支付方案？
 
-x402 支持四种支付方案：
+x402 定义了五种命名支付方案。其中四种可端到端使用；`auth-capture` 目前仅提供客户端支持：
 
 - **`exact`**：支付公布的准确金额。EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算；普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，首次付款需一次性 `approve(Permit2)`。`exact` 的协议 payload 遵循 **x402 Foundation** 的 v2 规范。
 - **`upto`**：按量计费——客户端签署最高至最大金额的 Permit2 授权，服务端仅结算**实际用量**（≤ max）。非常适合**按量计费**、**LLM Token 消耗**等场景。
 - **`batch-settlement`**：面向高频微支付的支付通道——一次性链上存入，然后用链下凭证支付多次请求，一笔交易批量结算。含退款路径。
-- **`exact_gasfree`**（仅限 TRON）：允许买家使用 USDT/USDD 付款而无需持有 TRX 来支付 gas。由 relayer 通过 GasFree API 支付链上 energy——客户端无需配置 API 密钥。
+- **`exact_gasfree`**（仅限 TRON）：允许买家使用 USDT/USDD 付款而无需持有 TRX 来支付 gas。由 relayer 通过 GasFree API 支付链上 energy——客户端无需配置 API 密钥。relayer 会在付款金额之外，从支付代币中扣除自己的中继费。
+- **`auth-capture`**（仅 EVM client）：支持可退款的 Base Commerce Payments 授权/扣款流程。当前发布包尚未包含 server 与 facilitator 实现。
 
 #### 本 SDK 是否可以与 x402 Foundation（原 Coinbase）的 v2 参考实现互通？
 
@@ -73,10 +74,10 @@ x402 支持四种支付方案：
 
 - 标准的 v2 客户端可以直接访问本 SDK 的 `exact` 受保护端点，无需任何项目特定的适配层。
 - 本 SDK 的客户端可以直接向 v2 兼容的服务端付款。
-- V2 结构中转账授权数据位于 `payload.authorization` 字段（结构化对象）；作为迁移过渡，客户端还会同时填充 `extensions.transferAuthorization`，以便仍在运行旧版本的服务端也能解析。
+- V2 结构中转账授权数据位于 `payload.authorization` 字段（结构化对象）。
 - BSC USDT/USDC 是普通 ERC-20（无 ERC-3009），在 `exact` 方案下通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`。ERC-3009 代币（如 BSC 测试网 DHLU）则无 gas 结算，无需 approve。
 - Base 主网官方 USDC 在 `exact` 下使用 EIP-3009：付款方签署 `transferWithAuthorization`，无需 Permit2 approve。
-- 仓库中的 `examples/bsc-testnet-smoke/` 目录提供了双向互通的烟雾测试示例（Coinbase 官方客户端 → BANK OF AI 服务端、BANK OF AI 客户端 → Coinbase 官方服务端），可作为调试与集成参考。
+- 仓库中的 `legacy/examples/bsc-testnet-smoke/` 目录（属于保留作参考的 `legacy/` 目录）提供了双向互通的烟雾测试示例（Coinbase 官方客户端 → BANK OF AI 服务端、BANK OF AI 客户端 → Coinbase 官方服务端），可作为调试与集成参考。
 
 ### 资产、网络及费用
 
@@ -86,27 +87,28 @@ x402 支持四种支付方案：
 | ----------------------------- | ------------- | ----------- |
 | TRON 主网 (`tron:0x2b6653dc`)    | USDT (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:0xcd8690dc`)       | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **测试网**（仅 SDK/CLI 支持——官方 facilitator 不结算 Shasta，请用 Nile 或自建） |
 | TRON Mainnet (`tron:0x2b6653dc`) | USDD (TRC-20) | **Mainnet** |
 | TRON Nile (`tron:0xcd8690dc`)       | USDD (TRC-20) | **Testnet** |
 | BSC 主网 (`eip155:56`) | USDT (BEP-20) | **Mainnet** |
 | BSC 主网 (`eip155:56`) | USDC (BEP-20) | **Mainnet** |
-| BSC 主网 (`eip155:56`) | EPS (BEP-20) | **Mainnet** |
 | BSC testnet (`eip155:97`)      | USDT (BEP-20) | **Testnet** |
 | BSC testnet (`eip155:97`)      | USDC (BEP-20) | **Testnet** |
 | BSC testnet (`eip155:97`)      | DHLU (BEP-20, 用于 `exact` 互通测试) | **Testnet** |
 | Base 主网 (`eip155:8453`) | 官方 USDC（ERC-20，EIP-3009） | **Mainnet** |
 | Base Sepolia (`eip155:84532`) | USDC（ERC-20，EIP-3009） | **Testnet** |
 
+其中只有一部分是**默认资产**（TRON 与 BSC 主网的 USDT、BSC 测试网与 Base 的 USDC）。SDK 1.1.0 起，客户端消费管控会拒绝其他资产——包括 TRON USDD、BSC 主网 USDC、BSC 测试网 USDT——除非通过 `spendControls.allowedAssets` 放行。
+
 此外，可通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）添加自定义 TRC-20 代币；自定义 BEP-20 代币则通过在 server 的 `EVM_TOKENS` 配置表中添加条目来公布。
 
 #### 涉及哪些费用？
 
 - **网络费用**：
-  - 在 TRON 链上用于支付能量 (Energy) 和带宽 (Bandwidth) 消耗的 TRX（由 Facilitator 承担）。
-  - 在 BSC 链上用于支付 gas 消耗的 BNB（由 Facilitator 承担）。
-  - 在 Base 链上用于支付 gas 的 ETH（由 Facilitator 承担）。
-- **Facilitator 服务费**：每个 Facilitator 可独立配置的服务费用（支持设置为零）。
+  - 在 TRON 链上用于支付能量 (Energy) 和带宽 (Bandwidth) 消耗的 TRX（由 Facilitator 承担）。自 SDK 1.2.0 起，启用了 `trc20ApprovalResourceSponsoring` 的 Facilitator 还可以为付款方的首笔 Permit2 `approve` 买单：向付款方临时委托自己质押所得的能量（必要时还有带宽），并在授权交易广播后回收。
+  - 在 BSC 链上用于支付 gas 消耗的 BNB（由 Facilitator 承担）。当 Facilitator 注册了授权 gas 代付扩展时，付款方一次性的 ERC-20 `approve` 也可以被代付——官方 Facilitator 已为 BSC 与 Base 注册，自建 Facilitator 需自行启用。SDK 客户端只有在资源服务端于路由上声明了该扩展时，才会附带代付载荷。
+  - 在 Base 链上用于支付 gas 的 ETH（由 Facilitator 承担）。代付作用于 Base 的 Permit2 路径；Base USDC 在 `exact` 下走 EIP-3009，本来就不需要 `approve`。
+- **Facilitator 服务费**：无。当前各方案不带任何费用字段——`base_fee` 配置与 `/fee/quote` 端点已在 SDK 1.0.1 移除。TRON `exact_gasfree` 由 GasFree relayer 从支付代币中收取自己的中继费，请在客户端设置中继费上限。
 
 ### 安全性
 
@@ -116,7 +118,7 @@ x402 支持四种支付方案：
 
 1.  **买家（客户端/代理）**：在本地运行时环境（如浏览器、Serverless 函数、代理虚拟机）中完成签名。
 2.  **卖家**：无需接触买家私钥；仅负责验证签名的有效性。
-3.  **Facilitator**：仅使用其自有密钥将交易提交上链。
+3.  **Facilitator**：使用自己的结算钱包提交交易，钱包通过 `@bankofai/agent-wallet` 解析——原始私钥不会进入 facilitator 进程。
 
 #### 退款机制如何运作？
 

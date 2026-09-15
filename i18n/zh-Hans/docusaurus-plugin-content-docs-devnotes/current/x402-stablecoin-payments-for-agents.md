@@ -81,7 +81,7 @@ BANK OF AI x402 完全兼容 Coinbase x402 的核心 HTTP 支付协议与交互�
 
 `exact_gasfree` 是 TRON 专用的固定金额方案。付款人可使用 USDT 或 USDD 支付，而无需在自己的普通钱包中持有 TRX；官方 GasFree Proxy/中继路径负责提交交易并支付相应的链上资源费用。
 
-这不是普适的「免成本」付款。该方案要求钱包、Token、GasFree 服务与 Facilitator 都支持相应流程；费用可能通过服务规则、资产余额或报价结构体现。生产部署应显式检查可用资产、GasFree 账户状态、费用配置和失败回退路径，不能仅根据主钱包的 TRX 余额判断是否可付。
+这不是普适的「免成本」付款。该方案要求钱包、Token、GasFree 服务与 Facilitator 都支持相应流程；其成本体现为 GasFree **中继费**：由客户端估算，并在付款金额之外从支付代币中扣除——支付要求本身不含任何费用对象。生产部署应显式检查可用资产、GasFree 账户状态、费用配置和失败回退路径，不能仅根据主钱包的 TRX 余额判断是否可付。
 
 ### 4.3 Upto：按实际用量支付
 
@@ -116,7 +116,7 @@ BANK OF AI x402 完全兼容 Coinbase x402 的核心 HTTP 支付协议与交互�
 
 ### 5.2 核心机制
 
-- **Deposit**：付款方以不可变的 `ChannelConfig` 创建或识别通道，并存入可支付资产。配置绑定付款方、收款方、Token、授权方、提现等待期与随机盐；通道 ID 由该配置、网络和合约地址确定性派生。
+- **Deposit**：付款方以不可变的 `ChannelConfig` 创建或识别通道，并存入可支付资产。配置绑定付款方、付款方授权人、收款方、收款方授权人、Token、提现等待期与一个盐值（SDK 默认全零）；通道 ID 由该配置、网络和合约地址确定性派生。
 - **Voucher**：每次调用由 Agent 签署一张累积凭证，核心字段是 `maxClaimableAmount`。它表示「截至这次调用，服务方最多可领取多少」，而不是一笔孤立的小额转账。
 - **Claim**：服务方提交一张或多张最新 Voucher，将可领取金额登记到链上 `totalClaimed`。这一步确认债权，但不一定立即转出 Token。
 - **Settle**：将同一收款方、同一 Token 下已登记的金额合并转出。一次 `settle` 可以覆盖多个通道和大量请求，这才是 batch 的主要成本优势。
@@ -203,12 +203,19 @@ BANK OF AI x402 完全兼容 Coinbase x402 的核心 HTTP 支付协议与交互�
 
 仓库的 [examples/typescript](https://github.com/BofAI/x402/tree/main/examples/typescript) 提供了与上述 **TRON Nile** 结构相同的可运行参考实现：它以 `GET /weather` 代替推理端点，但首笔 TRC-20 Deposit、后续 Voucher 与后台 Claim/Settle 的路径完全一致。要将它用于推理服务，只需把路由业务替换为模型调用，并保留 `batch-settlement` 的 TRON 支付注册与通道管理。
 
-Facilitator 是这条 TRON 路径中不可缺少的结算服务。最小接入建议优先使用 BANK OF AI 官方托管 Facilitator：在 Nile 测试网将 `FACILITATOR_URL` 配置为 `https://tn-facilitator.bankofai.io`；切换生产环境时使用 `https://facilitator.bankofai.io`。它负责验证、Deposit、Claim、Settle 与 Refund 的链上执行。
+Facilitator 是这条 TRON 路径中不可缺少的结算服务。最小接入建议优先使用 BANK OF AI 官方托管 Facilitator。两者是同一个地址：`https://facilitator.bankofai.io` 同时服务 TRON 主网与 Nile——把 `FACILITATOR_URL` 指向它，网络在注册 scheme 时选择即可。它负责验证、Deposit、Claim、Settle 与 Refund 的链上执行。
 
 ```ts
+import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
+
 const facilitator = new HTTPFacilitatorClient({
-  url: "https://tn-facilitator.bankofai.io", // TRON Nile
-  // 生产环境使用 facilitator.bankofai.io，并为请求附带 X-API-KEY。
+  url: "https://facilitator.bankofai.io", // 同时服务 TRON 主网与 Nile
+  // 生产环境请附上密钥，脱离官方 /settle 的匿名档位
+  //（每个 IP 每分钟 1 次）：
+  // createAuthHeaders: async () => {
+  //   const h = { "X-API-KEY": process.env.FACILITATOR_API_KEY! };
+  //   return { verify: h, settle: h, supported: h };
+  // },
 });
 ```
 
@@ -240,9 +247,11 @@ const paidFetch = wrapFetchWithPayment(fetch, client);
 const response = await paidFetch("https://inference.example.com/v1/generate");
 ```
 
-服务端则注册同一 TRON scheme，并把通道管理器放在后台运行：
+服务端则注册同一 TRON scheme，并把通道管理器放在后台运行：注意导入路径：客户端与服务端的类名同为 `BatchSettlementTronScheme`，只靠子路径区分，因此服务端文件必须从 `/batch-settlement/server` 导入——客户端那个类没有 `createChannelManager`。
 
 ```ts
+import { BatchSettlementTronScheme } from "@bankofai/x402-tron/batch-settlement/server";
+
 const scheme = new BatchSettlementTronScheme(process.env.TRON_ADDRESS!);
 resourceServer.register(TRON_NILE, scheme);
 

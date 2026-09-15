@@ -89,5 +89,5 @@ These are just the tip of the iceberg. For the full list of 97 tools and 6 promp
 You've completed your first on-chain interaction. What you do next depends on what you want to do:
 
 - Need transfers, contract calls, or other write operations? → [Local Private Deployment](./LocalPrivatizedDeployment.md)
-- Want to explore cloud service configuration options (such as TronGrid API Key)? → [Official Cloud Service Access](./OfficialServerAccess.md)
+- Want to explore cloud service connection options? → [Official Cloud Service Access](./OfficialServerAccess.md) (a TronGrid API Key applies to a self-hosted instance via the `TRONGRID_API_KEY` environment variable, not to the hosted service — see [Local Private Deployment](./LocalPrivatizedDeployment.md))
 - Want to see the detailed description of all available tools? → [Full Capability List](./ToolList.md)

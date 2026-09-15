@@ -8,7 +8,7 @@ description: >-
 
 ## What is x402 CLI?
 
-x402 CLI (`@bankofai/x402-cli`) brings the [x402 payment protocol](../index.md) to your terminal. It is a single, dependency-light command that lets a human operator, a shell script, or an AI agent **pay an x402-protected URL, stand up a local paywall, and browse the provider catalog** — without writing any integration code.
+x402 CLI (`@bankofai/x402-cli`) brings the [x402 payment protocol](../index.md) to your terminal. It is a single command that lets a human operator, a shell script, or an AI agent **pay an x402-protected URL, stand up a local paywall, and browse the provider catalog** — without writing any integration code.
 
 Think of it this way: the [x402 SDK](../sdk-features.md) is what you embed inside an application to charge for or pay for a resource. The CLI is the same capability wrapped as a command you can run right now:
 
@@ -17,7 +17,7 @@ Think of it this way: the [x402 SDK](../sdk-features.md) is what you embed insid
 x402-cli pay https://api.example.com/paid --network tron:0xcd8690dc --token USDT
 ```
 
-It is built entirely on the published TypeScript SDK packages — `@bankofai/x402-core`, `@bankofai/x402-evm`, `@bankofai/x402-fetch`, and `@bankofai/x402-tron`. Stablecoin payments use `scheme=exact`: Permit2 authorization on TRON and BSC, EIP-3009 on Base USDC. TRON also supports `scheme=exact_gasfree`, where a relayer pays the network energy and deducts its fee from the payment token — so the payer doesn't need to hold TRX. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
+It is built entirely on the published TypeScript SDK packages, bundled at pinned versions rather than tracking the newest SDK release — CLI 1.0.2 ships `@bankofai/x402-core`, `-evm`, `-fetch`, and `-tron` at 1.0.1, plus `@bankofai/x402-gateway` 1.0.2 and `@bankofai/agent-wallet` 2.4.0. Stablecoin payments use `scheme=exact`: Permit2 authorization on TRON and BSC, EIP-3009 on Base USDC. TRON also supports `scheme=exact_gasfree`, where a relayer pays the network energy and deducts its fee from the payment token — so the payer doesn't need to hold TRX. See [GasFree payments](./command-reference.md#gasfree-payments-tron).
 
 By default, `pay` signs with your active [Agent Wallet](../../Agent-Wallet/Intro.md) — no private key in an environment variable. See [Paying with Agent Wallet](./command-reference.md#paying-with-agent-wallet).
 
@@ -41,7 +41,7 @@ Read-only commands (`pay --dry-run`, `catalog search`, `gateway check`) need no 
 
 ## Human-readable by default, JSON when you need it
 
-Output is human-friendly text by default. Add `--json` to any command for a stable, machine-readable envelope — ideal for scripts and AI agents:
+Output is human-friendly text by default. Add `--json` to any command that returns a result for a stable, machine-readable envelope — ideal for scripts and AI agents. (`gateway start` streams the gateway's own output and emits no envelope; `catalog pay-json --raw` prints the bare payload.)
 
 ```bash
 x402-cli pay 'https://x402-gateway.bankofai.io/providers/defillama-tvl-tron/protocols' \
@@ -89,7 +89,7 @@ The CLI ships a built-in token registry. Pass a network with `--network` and a t
 | :--- | :--- | :--- |
 | **TRON Mainnet** | `tron:0x2b6653dc` | USDT, USDD |
 | **TRON Nile Testnet** | `tron:0xcd8690dc` | USDT, USDD |
-| **TRON Shasta Testnet** | `tron:0x94a9059e` | USDT |
+| **TRON Shasta Testnet** | `tron:0x94a9059e` | USDT (signing only — see note) |
 | **BSC Mainnet** | `eip155:56` | USDT |
 | **BSC Testnet** | `eip155:97` | USDT, USDC |
 | **Base Mainnet** | `eip155:8453` | USDC |
@@ -103,6 +103,10 @@ Always pass TRON networks as their canonical CAIP-2 identifiers (`tron:0x…`). 
 | `bsc-testnet` | `eip155:97` |
 | `base-mainnet` | `eip155:8453` |
 | `base-sepolia` | `eip155:84532` |
+
+:::caution Shasta is not settled by the official facilitator
+The CLI accepts `tron:0x94a9059e`, but the official facilitator (`https://facilitator.bankofai.io`) enables only TRON Mainnet/Nile, BSC Mainnet/Testnet, and Base Mainnet/Sepolia. A Shasta payment therefore cannot be verified or settled there — use `tron:0xcd8690dc` (Nile) for TRON testing, or run your own facilitator with Shasta registered.
+:::
 
 Registered token decimals are authoritative and can't be overridden. For an unregistered, non-Base asset, pass `--asset <address>` together with `--decimals <count>`.
 

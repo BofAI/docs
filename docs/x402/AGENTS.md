@@ -41,13 +41,11 @@ Documentation must reflect code changes immediately. Follow these dependency map
 - Target audience: developers with **2–5 years of experience**.
 - Use Docusaurus MDX components (`<Tabs>`, `<TabItem>`) for multi-language examples.
 - Any file using Tabs **must explicitly import**:
-
   ```js
   import Tabs from '@theme/Tabs';
   import TabItem from '@theme/TabItem';
   ```
-
- - All API endpoints must provide both **success** and **error** response examples.
+- All API endpoints must provide both **success** and **error** response examples.
 - Example code must use realistic, production-style parameter values (strictly no meaningless placeholders such as `foo` / `bar`).
 
 ---

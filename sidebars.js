@@ -408,6 +408,10 @@ const sidebars = {
           collapsed: true,
           items: ['8004/Usage/Install', '8004/Usage/ConfigureAgents', '8004/Usage/RegistrationHTTP'],
         },
+        {
+          type: 'doc',
+          id: '8004/sdk-features',
+        },
       ],
     },
     {

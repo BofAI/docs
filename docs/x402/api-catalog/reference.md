@@ -19,7 +19,6 @@ Each service is described in `providers/<fqn>/catalog.json`. Top-level fields:
 | `title` | string | Yes | Service name (typically a clean brand name, e.g. `DefiLlama`) |
 | `subtitle` | string | Yes | One-line subtitle |
 | `mainTitle` | string | No | Display tagline for the card/header (e.g. `Aggregated DeFi data — TVL, fees, prices & yields`); falls back to `title` |
-| `subTitle` | string | No | Secondary display line; falls back to `subtitle` |
 | `description` | string | Yes | Service description |
 | `useCase` | string | Yes | When to use it — helps Agents decide when to call |
 | `i18n` | object | Yes | Translations, must include `zh-CN` (see below) |
@@ -63,13 +62,13 @@ An endpoint may serve the same capability across several chains, each settling t
 | `network` | string | Canonical CAIP-2 chain ID this route settles on (e.g. `tron:0x2b6653dc`, `eip155:56`, `eip155:8453`). Legacy TRON aliases such as `tron:nile` are rejected by schema validation. |
 | `provider` | string | The gateway provider `fqn` that handles this network |
 | `scheme` | string | x402 payment scheme for this route: `exact` or, on TRON, `exact_gasfree` — each route declares its own |
-| `assetTransferMethod` | string | Authorization used by an `exact` route: `permit2` on TRON and BSC, `eip3009` on Base USDC. **Omit** it on `exact_gasfree` routes. |
+| `assetTransferMethod` | string | **Required** for every `exact` route: use `permit2` for TRON/BSC routes and `eip3009` for Base USDC routes. **Omit** it only on `exact_gasfree` routes. |
 | `url` | string | Full gateway URL for this network's route |
 
 The build passes this through to outputs as `x402_routes`. When present, callers/agents pick the route matching their intended payment chain; the top-level `url` remains the default route.
 
 :::note GasFree routes
-On TRON you can add an `exact_gasfree` route alongside the `exact` one for the same endpoint: a relayer pays the network energy and deducts its fee from the payment token, so the payer needs no TRX. GasFree routes are TRON-only and must not carry `assetTransferMethod`. With x402 SDK 1.0.1 the relayer cost is estimated client-side, so catalog routes must **not** publish the legacy `fee` or `feeConfig` fields.
+On TRON you can add an `exact_gasfree` route alongside the `exact` one for the same endpoint: a relayer pays the network energy and deducts its fee from the payment token, so the payer needs no TRX. GasFree routes are TRON-only and must not carry `assetTransferMethod`. Since x402 SDK 1.0.1 (current release 1.2.0) the relayer cost is estimated client-side, so catalog routes must **not** publish the legacy `fee` or `feeConfig` fields.
 :::
 
 For example, an endpoint may expose one route per supported chain — TRON Mainnet, BSC Mainnet, and Base Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
@@ -118,12 +117,13 @@ security   shopping    storage     translation
 |---|---|
 | TRON mainnet | `tron:0x2b6653dc` |
 | TRON Nile testnet | `tron:0xcd8690dc` |
-| TRON Shasta testnet | `tron:0x94a9059e` |
+| TRON Shasta testnet | `tron:0x94a9059e` — schema-level only: the gateway has no Shasta token registry and the official facilitator does not settle it, so it cannot back a live route |
 | BNB Chain (BSC) | `eip155:56` |
 | BNB Smart Chain testnet | `eip155:97` |
 | Base mainnet | `eip155:8453` |
+| Base Sepolia testnet | `eip155:84532` — schema-level only: the build has no display metadata for it, so `label` falls back to the raw chain ID and `chain_kinds` reports `evm` instead of `base` |
 
-The build resolves each chain ID into display metadata (`kind` / `label` / `label_zh`) so the frontend doesn't have to parse CAIP-2 itself — see [Frontend display fields](#frontend-display-fields).
+Check the published `catalog.json` for which routes are actually live on each chain. The build resolves each chain ID into display metadata (`kind` / `label` / `label_zh`) so the frontend doesn't have to parse CAIP-2 itself — see [Frontend display fields](#frontend-display-fields).
 
 ## Validation and secret scanning
 
@@ -188,8 +188,8 @@ To save the frontend from parsing raw IDs and picking translations, the build al
 | `title_zh` | Chinese service name (from `i18n.zh-CN.title`, falls back to `title`) |
 | `main_title` | Display tagline (from `mainTitle`, falls back to `title`) |
 | `main_title_zh` | Chinese display tagline (from `i18n.zh-CN.mainTitle` / `mainTitle`, falls back to `title`) |
-| `sub_title` | Secondary display line (from `subTitle`, falls back to `subtitle`) |
-| `sub_title_zh` | Chinese secondary display line (from `i18n.zh-CN.subtitle` / `subTitle`, falls back to `subtitle`) |
+| `sub_title` | Secondary display line (from `subtitle`) |
+| `sub_title_zh` | Chinese secondary display line (from `i18n.zh-CN.subtitle`, falls back to `subtitle`) |
 | `category_meta` | `{ id, label, label_zh }` for the category |
 | `chain_kinds` | De-duplicated friendly chain kinds, e.g. `["tron"]`, `["bnb"]`, `["base"]` |
 | `chains_meta` | Per-chain `{ id, kind, label, label_zh }`, so the frontend never parses CAIP-2 |

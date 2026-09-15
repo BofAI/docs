@@ -10,7 +10,7 @@ This guide walks you through: setting up a dedicated agent wallet, configuring c
 ---
 
 :::info SDK (TypeScript-only)
-x402 is a **TypeScript-only** SDK published as `@bankofai/x402-*` npm packages. The `x402-payment` skill wraps those packages and uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) for key custody — the wallet/private-key setup in this guide is unchanged. The runnable [MCP examples](https://github.com/BofAI/x402/tree/main/examples/typescript) (`servers/mcp` + `clients/mcp`) are reference implementations.
+x402 is a **TypeScript-only** SDK published as `@bankofai/x402-*` npm packages. The `x402-payment` skill does not link those packages — it shells out to the `x402-cli` binary, which bundles them — and uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) for key custody — the wallet/private-key setup in this guide is unchanged. The runnable [MCP examples](https://github.com/BofAI/x402/tree/main/examples/typescript) (`servers/mcp` + `clients/mcp`) are reference implementations.
 :::
 
 ## Prerequisites
@@ -45,11 +45,11 @@ x402 is a **TypeScript-only** SDK published as `@bankofai/x402-*` npm packages. 
 ---
 
 :::info Wallet Management
-x402 SDK uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet is automatically installed as a dependency of x402. Private key resolution priority:
+x402 SDK uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Install Agent Wallet yourself — it is a devDependency of `@bankofai/x402-tron`, not a runtime dependency of any published `@bankofai/x402-*` package, so it does not arrive transitively (`npm install -g @bankofai/agent-wallet`). Private key resolution priority:
 1. Encrypted wallet file (imported via the Agent Wallet CLI)
 2. Environment variable `AGENT_WALLET_PRIVATE_KEY`
 
-This guide uses the environment variable method.
+This guide uses the environment variable method. Note that the `x402-payment` skill checks `agent-wallet list` before paying, and an environment-variable-only setup produces no entry there — run `agent-wallet start` if you want the skill's pre-flight check to pass.
 :::
 
 ## Step 1: Configure Your Private Key
@@ -113,19 +113,29 @@ export EVM_RPC_URL="https://bsc-testnet-rpc.publicnode.com"
 Run the following command to install all BANK OF AI Skills (including x402-payment) at once:
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y
+npx skills add https://github.com/BofAI/skills/tree/main -y -g
 ```
 
-The `-y` flag skips all interactive prompts and installs all available Skills by default. The installer auto-detects AI tools on your computer (Cursor, Claude Code, Cline, OpenCode, etc.) and copies the skills into the correct directories.
+The `-y` flag skips all interactive prompts and installs all available Skills by default; `-g` installs them globally (user-level, under `~/.agents/skills/`) instead of into the current directory. The installer auto-detects AI tools on your computer (Cursor, Claude Code, Cline, OpenCode, etc.) and copies the skills into the correct directories.
 
 > ✅ **Success indicator:** Terminal shows `✓ x402-payment (copied)` along with other installed skills
 
-### Interactive Installation
-
-If you prefer to select specific skills or choose the installation scope:
+:::caution Install the CLI too
+`npx skills add` copies skill definitions only — it does not install their external CLI dependencies. The `x402-payment` skill requires **exactly** `x402-cli` 1.0.1, so Step 3 fails with `x402-cli: command not found` until you run:
 
 ```bash
-npx skills add https://github.com/BofAI/skills
+npm install -g @bankofai/x402-cli@1.0.1
+```
+
+The standalone CLI's latest release is 1.0.2, but this skill pins 1.0.1 and checks the installed version before paying.
+:::
+
+### Interactive Installation
+
+If you prefer to select specific skills or the AI tools to install them to:
+
+```bash
+npx skills add https://github.com/BofAI/skills/tree/main -g
 ```
 
 For a detailed walkthrough of the interactive installation process, see the [Skills Quick Start](../../McpServer-Skills/SKILLS/QuickStart.md).
@@ -194,7 +204,7 @@ Go to the [BSC Testnet Explorer](https://testnet.bscscan.com/), search for your 
 </TabItem>
 </Tabs>
 
-> ✅ **Success indicator:** The agent returns content in `{"data": "..."}` format, and the corresponding transaction appears on the block explorer
+> ✅ **Success indicator:** The agent returns the endpoint's JSON payload — the bundled Express example answers `{"report":{"weather":"sunny","temperature":70}}` — and the corresponding transaction appears on the block explorer
 
 ---
 

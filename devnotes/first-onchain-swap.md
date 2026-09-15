@@ -61,7 +61,7 @@ Two details in that sentence matter:
 - **State the network explicitly.** Otherwise the AI may default to mainnet, where the same command spends real money.
 - **State the slippage.** It caps how much worse than the quote you'll accept. Without it you're agreeing to whatever the pool gives you at execution time.
 
-The AI now works through a standard sequence: check balance → check token approval → fetch a fresh quote → calculate slippage → **show you the bill** → wait.
+The AI now works through a standard sequence: check that the balance covers it → confirm the two tokens differ → check the slippage sits in the recommended range → fetch a fresh quote → **show you the bill** → wait.
 
 It stops there. Nothing is signed until you confirm.
 
@@ -87,7 +87,7 @@ Four failures cover almost everything you'll hit early on:
 
 **"Insufficient energy" / the transaction fails at broadcast** — TRON charges energy for contract calls. Keep some TRX beyond the amount you're swapping, or stake TRX for energy.
 
-**"Insufficient allowance" or an approval error** — spending a TRC-20 token requires a one-time approval of the DEX contract. The AI normally handles this automatically; if it errors here, ask it directly: *"Approve SunSwap to spend my USDT, then retry the swap."*
+**"Insufficient allowance" or an approval error** — this cannot happen in this walkthrough, because the input is native TRX and the swap skips the whole approval path for it. You hit it when the token you are *spending* is a **TRC-20**. In that case the swap checks the allowance itself and, when it falls short, approves the **Permit2** contract — not the router — for just the amount that swap needs, so the approval recurs rather than being granted once and for all. An error here means that approval transaction failed: check the wallet holds enough TRX to cover its resource cost, then retry the swap. Ask for the swap again rather than for an approval — the tooling handles the approval as part of it.
 
 **The quote and the result differ noticeably** — this is slippage doing its job. On thin testnet pools it's common. Lower the amount, or state a tighter slippage and let the transaction revert rather than fill badly.
 

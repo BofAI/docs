@@ -10,7 +10,7 @@
 
 **简单来说**：你的电脑上没装 Node.js，或者版本太老了。
 
-**怎么解决**：去 [Node.js 官网](https://nodejs.org/) 下载最新的稳定版（LTS，建议 v18 或更高版本），像装普通软件一样一路点"下一步"装好。然后关掉终端里的黑框框，重新运行一次安装口令。
+**怎么解决**：去 [Node.js 官网](https://nodejs.org/) 下载最新的稳定版（LTS，v20 或更高——向导安装的 `@bankofai/mcp-server-tron` 声明了 `node >= 20`），像装普通软件一样一路点"下一步"装好。然后关掉终端里的黑框框，重新运行一次安装口令。
 
 ### 报错里写着 "command not found: git"
 
@@ -110,7 +110,7 @@
 
 ### 安装需要管理员权限吗？
 
-不需要。安装器只写入当前用户目录下的配置文件，不会修改系统文件、注册表或 Program Files 目录。
+配置文件不需要——它们都写在当前用户目录下，安装器也不会碰注册表或 Program Files。唯一会写到用户目录之外的是带版本号的全局安装 `npm install -g @bankofai/agent-wallet@<版本>`。在 Windows 上它会装到 `%APPDATA%\npm`，无需提权；在 macOS 或 Linux 上若 Node 是系统级安装，则会写入全局 `node_modules` 目录（例如 `/usr/local/lib/node_modules`），可能要求输入密码。
 
 ### Windows 和 Mac/Linux 的安装体验一样吗？
 

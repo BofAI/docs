@@ -89,5 +89,5 @@ AI 给出 ✅ 确认后，TRON MCP Server 就已就位，可以直接开始提�
 你已经完成了第一次链上交互。接下来取决于你想做什么：
 
 - 需要转账、合约调用等写操作？ → [本地私有化部署](./LocalPrivatizedDeployment.md)
-- 想深入了解云服务的配置选项（如 TronGrid API Key）？ → [官方云服务接入](./OfficialServerAccess.md)
+- 想深入了解云服务的连接方式？ → [官方云服务接入](./OfficialServerAccess.md)（TronGrid API Key 通过 `TRONGRID_API_KEY` 环境变量作用于自建实例，对托管服务无效——详见[本地私有化部署](./LocalPrivatizedDeployment.md)）
 - 想看所有可用工具的详细说明？ → [完整能力清单](./ToolList.md)

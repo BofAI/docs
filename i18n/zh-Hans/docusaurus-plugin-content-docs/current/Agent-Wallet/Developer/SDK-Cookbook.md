@@ -159,8 +159,8 @@ async function transferTRX(
 
 // 示例调用
 transferTRX(
-  "你的 TRON 地址",      // 替换成你的钱包地址
-  "收款方 TRON 地址",    // 替换成收款方地址
+  "YOUR_TRON_ADDRESS",      // 替换成你的钱包地址
+  "RECIPIENT_TRON_ADDRESS",    // 替换成收款方地址
   1_000_000              // 1 TRX
 ).catch(console.error);
 ```
@@ -230,8 +230,8 @@ async def transfer_trx(
 # 示例调用
 asyncio.run(
     transfer_trx(
-        from_address="你的 TRON 地址",      # 替换成你的钱包地址
-        to_address="收款方 TRON 地址",       # 替换成收款方地址
+        from_address="YOUR_TRON_ADDRESS",      # 替换成你的钱包地址
+        to_address="RECIPIENT_TRON_ADDRESS",       # 替换成收款方地址
         amount_sun=1_000_000,                # 1 TRX
     )
 )
@@ -333,7 +333,7 @@ async function transferBNB(
     maxPriorityFeePerGas: feeData.maxPriorityFeePerGas,
     nonce,
     chainId: CHAIN_ID,
-    type: 2, // EIP-1559
+    type: "eip1559",
   };
 
   console.log("交易已构建，nonce：", nonce);
@@ -360,7 +360,7 @@ async function transferBNB(
 
 // 示例调用
 transferBNB(
-  "0x收款方地址", // 替换成收款方地址
+  "0xYOUR_RECIPIENT_ADDRESS", // 替换成收款方地址
   "0.001"         // 发送 0.001 BNB
 ).catch(console.error);
 ```
@@ -371,6 +371,7 @@ transferBNB(
 ```python
 import asyncio
 from agent_wallet import resolve_wallet_provider
+from eth_utils import to_checksum_address
 from web3 import AsyncWeb3
 
 # BSC 测试网
@@ -392,7 +393,8 @@ async def transfer_bnb(to_address: str, amount_ether: str):
 
     # 第三步：构建未签名交易
     unsigned_tx = {
-        "to": to_address,
+        # eth-account 不接受非 checksum 格式的地址
+        "to": to_checksum_address(to_address),
         "value": w3.to_wei(amount_ether, "ether"),
         "gas": 21000,
         "maxFeePerGas": base_fee + priority_fee,
@@ -409,14 +411,14 @@ async def transfer_bnb(to_address: str, amount_ether: str):
     print("已签名")
 
     # 第五步：广播
-    tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(signed_tx_hex))
+    raw = signed_tx_hex[2:] if signed_tx_hex.startswith("0x") else signed_tx_hex
+    tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(raw))
     print("广播成功！txHash：", tx_hash.hex())
 
     # 可选：等待确认
     # 注意：此调用会阻塞事件循环最多 `timeout` 秒。
     # 生产环境的 AI Agent 建议在后台任务中执行，
     # 或使用 asyncio.wait_for() 配合更短的超时和重试逻辑。
-    import asyncio
     try:
         receipt = await asyncio.wait_for(
             w3.eth.wait_for_transaction_receipt(tx_hash),
@@ -431,7 +433,7 @@ async def transfer_bnb(to_address: str, amount_ether: str):
 # 示例调用
 asyncio.run(
     transfer_bnb(
-        to_address="0x收款方地址",  # 替换成收款方地址
+        to_address="0xYOUR_RECIPIENT_ADDRESS",  # 替换成收款方地址
         amount_ether="0.001",
     )
 )
@@ -447,13 +449,17 @@ asyncio.run(
 
 ---
 
-## x402 支付许可签名
+## x402 EIP-3009 支付签名
 
 **使用场景**：AI 代理正在访问受 x402 协议保护的付费 API——比如获取实时数据、调用 AI 推理服务，或触发链上操作。服务器返回 HTTP 402，要求代理在获取内容之前提供支付授权。
 
 **工作原理**：
 
 x402 支付不是直接发一笔转账，而是"先签名、验证后放行"的模型。代理对一个 `TransferWithAuthorization` 结构（EIP-712 格式）进行签名，把得到的签名随请求一起发给服务器作为支付凭证。服务器验证签名有效后才返回内容。代理不需要等待链上确认——延迟极低。
+
+:::note 该签哪个结构
+本节签的是 EIP-3009 的 `TransferWithAuthorization`——Base USDC 在 x402 `exact` 方案下使用的授权结构。它和仓库自带 x402 示例（`bsc-x402-sign-typed-data.ts`、`tron-x402-sign-typed-data.ts`）里的 `PaymentPermit` 结构并不相同：后者的域名是 `x402PaymentPermit`，主类型为 `PaymentPermitDetails`，字段是 `{ buyer, amount, nonce }`。以服务端在 `402` 响应里声明的结构为准。采用哪种授权方式取决于代币而非链：TRON 的 USDT/USDD 与 BSC 的 USDT/USDC 走 Permit2，而 Base 官方 USDC 这类 EIP-3009 代币走 `transferWithAuthorization`——详见[网络与代币支持](../../x402/core-concepts/network-and-token-support.md)。
+:::
 
 <ThemedImage
   alt="x402 PaymentPermit：先签名，验证通过再放行"
@@ -470,6 +476,7 @@ PaymentPermit 数据由 x402 SDK 根据服务器返回的支付参数自动构�
 
 ```typescript
 import { resolveWalletProvider } from "@bankofai/agent-wallet";
+import type { Eip712Capable } from "@bankofai/agent-wallet";
 
 async function signPaymentPermit(authorization: {
   from: string;
@@ -511,8 +518,11 @@ async function signPaymentPermit(authorization: {
     message: authorization,
   };
 
+  // signTypedData 定义在 Eip712Capable 上，而不在基础的 Wallet 接口上
+  const signer = wallet as unknown as Eip712Capable;
+
   // 用 Agent-wallet 本地签名
-  const signature = await wallet.signTypedData(typedData);
+  const signature = await signer.signTypedData(typedData);
   console.log("PaymentPermit 签名：", signature);
 
   return signature;
@@ -582,7 +592,7 @@ Agent-wallet 仓库中还包含更多可直接运行的进阶示例：
 | :--- | :--- |
 | `dual-sign-typed-data-from-private-key` | 用同一个私钥在 TRON 和 EVM 上签名 EIP-712 数据 |
 | `switch-active-wallet` | 在代码中切换多个钱包 |
-| `create-wallet-provider` | 不使用自动解析，直接实例化 Provider |
+| `create-wallet-provider` | 不使用自动解析，直接实例化 Provider（仅 TypeScript） |
 | `tron-x402-sign-typed-data` | 在 TRON 上签名 x402 PaymentPermit |
 | `bsc-x402-sign-typed-data` | 在 BSC 上签名 x402 PaymentPermit |
 | `verify-tron-privy-typed-data` | 验证 Privy TRON EIP-712 签名 |

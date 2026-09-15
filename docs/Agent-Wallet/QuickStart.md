@@ -37,13 +37,13 @@ If you've already installed [the BANK OF AI skill suite](../McpServer-Skills/SKI
 
 
 :::caution Your master password is critical — back it up immediately
-The master password is only shown once. Although it is auto-saved to `~/.agent-wallet/runtime_secrets.json`, you should also save it manually to a password manager (1Password, Bitwarden, etc.). If the local file is lost or corrupted and you have no external backup, your wallet will be permanently locked — there is no recovery mechanism, no support team, and no backdoor.
+The master password is only shown once. The guided setup runs `agent-wallet start` with `--save-runtime-secrets`, which saves it to `~/.agent-wallet/runtime_secrets.json` — but you should also save it manually to a password manager (1Password, Bitwarden, etc.). If the local file is lost or corrupted and you have no external backup, your wallet will be permanently locked — there is no recovery mechanism, no support team, and no backdoor.
 
 ⚠️ Never share this password via chat, email, screenshots, or public repositories.
 :::
 
 :::tip Done — no env-var configuration needed
-Conversational setup auto-saves the password to `~/.agent-wallet/runtime_secrets.json`, and your AI Agent reads it automatically when calling wallet functions. **You don't need to manually export `AGENT_WALLET_PASSWORD`.** If you'd rather use the env-var approach, see Method 2 below.
+Conversational setup passes `--save-runtime-secrets`, so the password is saved to `~/.agent-wallet/runtime_secrets.json` and your AI Agent reads it automatically when calling wallet functions. **You don't need to manually export `AGENT_WALLET_PASSWORD`.** If you'd rather use the env-var approach, see Method 2 below.
 :::
 
 ---
@@ -56,7 +56,7 @@ If you want to control every step yourself, or your environment doesn't support 
 
 #### 1.1 Prepare Your Environment: Install Node.js
 
-Agent-wallet requires Node.js (a runtime environment, version >= 20) on your computer.
+Agent-wallet requires Node.js (a runtime environment, version >= 18; installing the current LTS is recommended) on your computer.
 
 Open a terminal (Mac users press `Command + Space` and search for "Terminal"), then type:
 
@@ -64,7 +64,7 @@ Open a terminal (Mac users press `Command + Space` and search for "Terminal"), t
 node -v
 ```
 
-- **If the output shows `v20.x.x` or higher:** Great, skip straight to 1.2!
+- **If the output shows `v18.x.x` or higher:** Great, skip straight to 1.2!
 - **If there's no output or an error:** Don't panic — go to the **[Node.js official website](https://nodejs.org)** and download the latest **LTS** installer. Install it like any regular software — double-click and follow the prompts. After installation, close and reopen your terminal, then run `node -v` again to confirm.
 
 <details>
@@ -77,8 +77,8 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 # 2. Reload your terminal config
 source ~/.bashrc   # zsh users: source ~/.zshrc
 
-# 3. Install and switch to Node.js 20
-nvm install 20 && nvm use 20
+# 3. Install and switch to the current Node.js LTS
+nvm install --lts && nvm use --lts
 ```
 
 </details>
@@ -107,9 +107,11 @@ The system will guide you through initializing your **Agent-wallet wallet**. The
 
 ```
 ? Quick start type: local_secure  — Encrypted key stored locally (recommended)
-Wallet ID (e.g. my_wallet_1) (default_secure):
+Password requirements: at least 8 characters, with uppercase, lowercase, digit, and special character. e.g. Abc12345!@
+New Master Password (press Enter to auto-generate a strong password):
 
 Wallet initialized!
+Wallet ID (e.g. my_wallet_1) (default_secure):
 ? Import source: generate  — Generate a new random private key
 
 Wallets:
@@ -119,8 +121,9 @@ Wallets:
 │ default_secure │ local_secure │
 └────────────────┴──────────────┘
 
-Your master password: <your-unique-password-will-appear-here>
-   Save this password! You'll need it for signing and other operations.
+🔑 Your master password: <your-unique-password-will-appear-here>
+⚠️ Keep this password safe. You'll need it for signing and other operations.
+   (This line appears only when you pressed Enter to let the wizard auto-generate the password.)
 
 Active wallet: default_secure
 ```
