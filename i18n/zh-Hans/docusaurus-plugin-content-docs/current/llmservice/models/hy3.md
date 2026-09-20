@@ -1,8 +1,23 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # Hy3
 
 ## 概述
 
 Hy3 是腾讯混元于 2026 年 7 月 6 日发布的文本基础模型，API 模型 ID 为 `hy3`。该模型采用 Mixture-of-Experts（MoE）架构，总参数量为 2950 亿、激活参数量为 210 亿，面向编程、长上下文知识工作、推理以及工具驱动的 Agent 工作流。
+
+<ActivityCard
+  variant="discount"
+  title="Hy3"
+  status="限时折扣"
+  detail="9 月 16 日 17:00 SGT 起 1 折"
+>
+现有免费活动于 2026 年 9 月 16 日 17:00（新加坡时间，UTC+8）调整为限时 1 折。
+
+自生效时间起，Hy3 在 B.AI API 和 Chat 中的使用按标准参考价的 10% 结算。
+
+下方价格表继续展示标准参考价。
+</ActivityCard>
 
 ## 核心特性
 

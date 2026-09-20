@@ -7,17 +7,16 @@ import ActivityCard from '@site/src/components/ActivityCard';
 Qwen3.8-Flash is a hosted multimodal model from Alibaba's Qwen team, announced on August 26, 2026. It is the production version based on Qwen3.8-Flash-Next, adding a default 1M-token context window and hosted tools for cost-sensitive coding, agentic, and visual knowledge-work applications.
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="Qwen3.8-Flash"
-  status="Free Offer"
-  detail="API Free · Chat on Launch"
+  status="Limited-Time Discount"
+  detail="10% from Sep 16, 17:00 SGT"
 >
-Free access is available in phases across B.AI API and Chat:
+The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
 
-* **API:** Qwen3.8-Flash API usage is currently billed at `0 Credits`. No input, cache write, cache read, or output token fees apply.
-* **Chat:** Free access begins when Qwen3.8-Flash becomes available in B.AI Chat. The availability date is subject to the actual model listing. Once available, Chat usage is billed at `0 Credits`.
+From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 10% of the standard reference price.
 
-After the offer ends, Qwen3.8-Flash will return to the prices shown on this page.
+The pricing table below continues to show standard reference prices.
 </ActivityCard>
 
 ## Key Features

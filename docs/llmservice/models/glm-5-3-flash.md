@@ -7,17 +7,16 @@ import ActivityCard from '@site/src/components/ActivityCard';
 GLM-5.3-Flash is an open-weight, natively multimodal model released by Z.AI on August 26, 2026 as the Flash-tier member of the GLM-5 family. It combines 320 billion total parameters with 18 billion activated parameters, a 1M-token context window, and a hybrid sparse-and-linear-attention architecture for coding, agentic, and visual knowledge-work workloads.
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="GLM-5.3-Flash"
-  status="Free Offer"
-  detail="API Free · Chat on Launch"
+  status="Limited-Time Discount"
+  detail="As Low as 10%"
 >
-This offer covers B.AI API and Chat:
+The offer begins at 10:00 on September 12, 2026 (Singapore Time, UTC+8).
 
-* **API:** GLM-5.3-Flash API usage is currently billed at `0 Credits`. No input, cache write, cache read, or output token fees apply.
-* **Chat:** Free access begins when GLM-5.3-Flash becomes available in B.AI Chat. The availability time is subject to the actual model listing. Once available, Chat usage is billed at `0 Credits`.
+During the offer, eligible GLM-5.3-Flash usage through B.AI API and Chat is billed at rates as low as 10% of the standard reference price.
 
-After the offer ends, GLM-5.3-Flash will return to the prices shown on this page.
+The pricing table below continues to show standard reference prices.
 </ActivityCard>
 
 ## Key Features

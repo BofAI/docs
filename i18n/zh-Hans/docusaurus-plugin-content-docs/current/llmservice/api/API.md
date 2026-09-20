@@ -81,6 +81,7 @@ x-api-key: <BAI_API_KEY>
 | 方法 | 端点 | 协议 | 用途 |
 |---|---|---|---|
 | `GET` | `/models` | OpenAI 兼容 | 获取与当前凭证关联的模型列表 |
+| `GET` | [`/balance`](./balance.md) | B.AI | 查询当前 API Key 的余额与额度信息 |
 | `POST` | `/responses` | OpenAI Responses | Agent、推理、工具调用及 Codex 等场景 |
 | `POST` | `/chat/completions` | OpenAI Chat Completions | 通用聊天补全及现有 OpenAI 兼容应用 |
 | `POST` | `/messages` | Anthropic Messages | Claude SDK、Claude Code 等 Anthropic 兼容应用 |

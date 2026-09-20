@@ -6,7 +6,7 @@ GPT-Image-2 is an OpenAI image generation and editing model. It accepts text pro
 
 ### Billing Method
 
-GPT-Image-2 is billed by usage across text input, cached text input, image input, cached image input, and image output tokens. It does not have a single fixed price per generated image. Resolution, quality, aspect ratio, reference images, and output count can affect the final token usage.
+GPT-Image-2 is billed by usage across text input, image input, and image output tokens. It does not have a single fixed price per generated image. Resolution, quality, aspect ratio, reference images, and output count can affect the final token usage.
 
 ## Key Features
 
@@ -43,9 +43,9 @@ Prices are based on token usage and are shown in USD per 1 million tokens. B.AI 
 | Billing item | Standard price (USD/1M Tokens) | How it is billed |
 | :--- | ---: | :--- |
 | **Text input** | `5.00` | Based on text input tokens |
-| **Cached text input** | `1.25` | Applied when cached text input is reused |
 | **Reference-image input** | `8.00` | Based on image input tokens; multiple images accumulate usage |
-| **Cached image input** | `2.00` | Applied when cached image input is reused |
 | **Image output** | `30.00` | Based on generated image output tokens |
 
-**Pricing note:** Documented prices are B.AI standard reference prices for basic billing guidance. B.AI may provide a lower effective usage cost through top-up rewards or account benefits. Prices, bonus Credits, account benefits, and final settlement are subject to the platform display and billing records.
+:::info Pricing note
+Documented prices are B.AI standard reference prices for basic billing guidance. B.AI may provide a lower effective usage cost through top-up rewards or account benefits. Prices, bonus Credits, account benefits, and final settlement are subject to the platform display and billing records.
+:::

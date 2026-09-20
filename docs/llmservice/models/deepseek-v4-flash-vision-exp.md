@@ -14,7 +14,7 @@ B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `D
 >
 The DeepSeek-V4-Flash-Vision-Exp 50% offer takes effect at 17:00 on September 3, 2026 (UTC+8).
 
-From the effective time, eligible `deepseek-v4-flash-vision-exp` API usage is billed at 50% of the standard price for the applicable Idle or Busy period. The discounted price changes in step with DeepSeek's time-based pricing and remains at 50% in either period.
+From the effective time, eligible `deepseek-v4-flash-vision-exp` API usage is billed at 50% of the standard price for the applicable Off-Peak or Peak period. The discounted price changes in step with DeepSeek's time-based pricing and remains at 50% in either period.
 
 The pricing table below continues to show standard reference prices. Actual settlement and final billing are subject to the platform display.
 </ActivityCard>
@@ -65,13 +65,13 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 | Billing Period | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
 | :--- | ---: | ---: | ---: | ---: | ---: |
-| **Idle** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - |
-| **Busy** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - |
+| **Off-Peak** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - |
+| **Peak** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 The standard reference prices above take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8).
 
-API calls use UTC+8. Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods.
+Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods.
 
 Images are converted to input tokens according to their dimensions and billed together with text input; each image uses at most 384 tokens after resizing.

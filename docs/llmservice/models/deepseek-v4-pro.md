@@ -42,11 +42,11 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 | Billing Period | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
 | :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
-| **Idle** | `$0.66` | `$0.66` | `$0.022` | `$1.98` | - | Cache Write: `1x` input; Cache Read: `0.0333x` input |
-| **Busy** | `$1.32` | `$1.32` | `$0.044` | `$3.96` | - | Cache Write: `1x` input; Cache Read: `0.0333x` input |
+| **Off-Peak** | `$0.66` | `$0.66` | `$0.022` | `$1.98` | - | Cache Write: `1x` input; Cache Read: `0.0333x` input |
+| **Peak** | `$1.32` | `$1.32` | `$0.044` | `$3.96` | - | Cache Write: `1x` input; Cache Read: `0.0333x` input |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
-DeepSeek V4 Pro uses time-based standard reference pricing. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek V4 Pro usage in B.AI Chat is billed at Idle rates. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
+DeepSeek V4 Pro uses time-based standard reference pricing. Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods. DeepSeek V4 Pro usage in B.AI Chat is billed at Off-Peak rates. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::
