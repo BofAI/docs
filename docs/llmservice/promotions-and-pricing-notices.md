@@ -11,58 +11,53 @@ This section shows active and announced upcoming promotions: free offers appear 
 :::
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="Qwen3.8-Flash"
-  status="Free Offer"
-  detail="API Free · Chat on Launch"
+  status="Limited-Time Discount"
+  detail="10% from Sep 16, 17:00 SGT"
 >
-Free access is available in phases across B.AI API and Chat:
+The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
 
-* **API:** Qwen3.8-Flash API usage is currently billed at `0 Credits`. No input, cache write, cache read, or output token fees apply.
-* **Chat:** Free access begins when Qwen3.8-Flash becomes available in B.AI Chat. The availability date is subject to the actual model listing. Once available, Chat usage is billed at `0 Credits`.
+From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 10% of the standard reference price.
 
-After the offer ends, Qwen3.8-Flash will return to the prices shown in the [model details](./models/qwen3-8-flash.md).
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/qwen3-8-flash.md) continue to show standard reference prices.
 </ActivityCard>
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="Hy3"
-  status="Free Offer"
-  detail="0 Credits"
+  status="Limited-Time Discount"
+  detail="10% from Sep 16, 17:00 SGT"
 >
-Offer starts August 21, 2026.
+The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
 
-This offer applies to B.AI Chat and API:
+From that time, Hy3 usage through B.AI API and Chat is billed at 10% of the standard reference price.
 
-* **Chat:** Hy3 usage is billed at `0 Credits` during the offer.
-* **API:** Usage is billed at `0 Credits` during the offer. No per-request, input, cache write, cache read, or output token fees apply.
-
-After the offer ends, Hy3 will return to standard pricing. See the [model details](./models/hy3.md).
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/hy3.md) continue to show standard reference prices.
 </ActivityCard>
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="MiMo-V2.5"
-  status="Free Offer"
-  detail="API Free · Chat Aug 25"
+  status="Limited-Time Discount"
+  detail="10% from Sep 16, 17:00 SGT"
 >
-MiMo-V2.5 free access is available in phases:
+The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
 
-* **API:** MiMo-V2.5 API usage is billed at `0 Credits` from August 24, 2026.
-* **Chat:** The free-access date is August 25, 2026. The exact availability time is subject to actual activation. Once available, MiMo-V2.5 usage is billed at `0 Credits`.
+From that time, MiMo-V2.5 usage through B.AI API and Chat is billed at 10% of the standard reference price.
 
-After the offer ends, MiMo-V2.5 will return to standard pricing. See the [model details](./models/mimo-v2.5.md).
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/mimo-v2.5.md) continue to show standard reference prices.
 </ActivityCard>
 
 <ActivityCard
   variant="discount"
   title="GLM-5.3-Flash"
-  status="Limited-Time Offer"
+  status="Limited-Time Discount"
   detail="As Low as 10%"
 >
 The offer begins at 10:00 on September 12, 2026 (Singapore Time, UTC+8).
 
-During the offer, GLM-5.3-Flash discounts are available at rates as low as 10% of the standard price.
+During the offer, eligible GLM-5.3-Flash usage through B.AI API and Chat is billed at rates as low as 10% of the standard reference price.
 
 See the [model details](./models/glm-5-3-flash.md) for standard pricing.
 </ActivityCard>
@@ -75,7 +70,7 @@ See the [model details](./models/glm-5-3-flash.md) for standard pricing.
 >
 The offer begins at 10:00 on September 12, 2026 (Singapore Time, UTC+8).
 
-The promotional price changes in step with DeepSeek's time-based pricing and remains at 10% of the standard price in either the Idle or Busy period.
+The promotional price changes in step with DeepSeek's time-based pricing and remains at 10% of the standard price in either the Off-Peak or Peak period.
 
 The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/deepseek-v4-1-flash.md) continue to show standard reference prices. Actual settlement and final billing are subject to the platform display.
 </ActivityCard>

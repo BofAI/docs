@@ -40,15 +40,16 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Hy3 | `$0.132` | `$0.132` | `$0.033` | `$0.528` | - |
 | MiMo-V2.5-Pro | `$0.435` | `$0.435` | `$0.0036` | `$0.87` | - |
 | MiMo-V2.5 | `$0.14` | `$0.14` | `$0.0028` | `$0.28` | - |
+| GLM-5.3-FlashX | `$0.37` | `$0.37` | `$0.075` | `$1.25` | - |
 | GLM-5.3-Flash | `$0.15` | `$0.15` | `$0.03` | `$0.50` | - |
 | GLM-5.3 | `$1.40` | `$1.40` | `$0.28` | `$4.40` | - |
 | GLM-5.2 | `$1.40` | `$1.40` | `$0.28` | `$4.40` | - |
 | GLM-5.1 | `$1.40` | `$1.40` | `$0.28` | `$4.40` | - |
-| DeepSeek-V4.1-Flash | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.003`<br/>Busy `$0.006` | Idle `$0.60`<br/>Busy `$1.20` | - |
+| DeepSeek-V4.1-Flash | Off-Peak `$0.15`<br/>Peak `$0.30` | Off-Peak `$0.15`<br/>Peak `$0.30` | Off-Peak `$0.003`<br/>Peak `$0.006` | Off-Peak `$0.60`<br/>Peak `$1.20` | - |
 | DeepSeek V3.2 | `$0.29` | `$0.29` | `$0.145` | `$0.44` | - |
-| DeepSeek-V4-Flash | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.003`<br/>Busy `$0.006` | Idle `$0.60`<br/>Busy `$1.20` | - |
-| DeepSeek-V4-Flash-Vision-Exp | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.15`<br/>Busy `$0.30` | Idle `$0.003`<br/>Busy `$0.006` | Idle `$0.60`<br/>Busy `$1.20` | - |
-| DeepSeek V4 Pro | Idle `$0.66`<br/>Busy `$1.32` | Idle `$0.66`<br/>Busy `$1.32` | Idle `$0.022`<br/>Busy `$0.044` | Idle `$1.98`<br/>Busy `$3.96` | - |
+| DeepSeek-V4-Flash | Off-Peak `$0.15`<br/>Peak `$0.30` | Off-Peak `$0.15`<br/>Peak `$0.30` | Off-Peak `$0.003`<br/>Peak `$0.006` | Off-Peak `$0.60`<br/>Peak `$1.20` | - |
+| DeepSeek-V4-Flash-Vision-Exp | Off-Peak `$0.15`<br/>Peak `$0.30` | Off-Peak `$0.15`<br/>Peak `$0.30` | Off-Peak `$0.003`<br/>Peak `$0.006` | Off-Peak `$0.60`<br/>Peak `$1.20` | - |
+| DeepSeek V4 Pro | Off-Peak `$0.66`<br/>Peak `$1.32` | Off-Peak `$0.66`<br/>Peak `$1.32` | Off-Peak `$0.022`<br/>Peak `$0.044` | Off-Peak `$1.98`<br/>Peak `$3.96` | - |
 | Grok 4.6 | `$2.00` | `$2.00` | `$0.50` | `$6.00` | - |
 | Grok 4.5 | `$2.00` | `$2.00` | `$0.30` | `$6.00` | - |
 | GPT-6 Astra | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
@@ -86,7 +87,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::caution Pricing table notes
-**DeepSeek time-based pricing:** DeepSeek API calls use Beijing Time (UTC+8). Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek models used in B.AI Chat are billed at Idle rates. The table lists each model's standard reference prices.
+**DeepSeek time-based pricing:** Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods. DeepSeek models used in B.AI Chat are billed at Off-Peak rates. The table lists each model's standard reference prices.
 
 **Cache pricing:** `Cache Write` indicates the price charged when cache writing occurs; it does not mean that all models use the same cache retention period. Cache policies, retention periods, long-context pricing, and extended caching capabilities may vary by model. If a model uses special caching rules, 1-hour cache write pricing, or time-based pricing, refer to its model detail page.
 :::

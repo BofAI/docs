@@ -11,58 +11,53 @@ import ActivityCard from '@site/src/components/ActivityCard';
 :::
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="Qwen3.8-Flash"
-  status="免费活动"
-  detail="API 已免费 · Chat 上架后免费"
+  status="限时折扣"
+  detail="9 月 16 日 17:00 SGT 起 1 折"
 >
-B.AI API 和 Chat 分阶段开放免费使用：
+现有免费活动于 2026 年 9 月 16 日 17:00（新加坡时间，UTC+8）调整为限时 1 折。
 
-* **API：** Qwen3.8-Flash API 调用目前按 `0 Credits` 结算，不收取输入、缓存写入、缓存读取或输出 Token 费用。
-* **Chat：** Qwen3.8-Flash 在 B.AI Chat 上架后免费开放，具体免费开放日期以模型实际上架为准；开放后，Chat 使用按 `0 Credits` 结算。
+自生效时间起，Qwen3.8-Flash 在 B.AI API 和 Chat 中的使用按标准参考价的 10% 结算。
 
-活动结束后，Qwen3.8-Flash 将恢复[模型详情](./models/qwen3-8-flash.md)中展示的价格。
+[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/qwen3-8-flash.md)继续展示标准参考价。
 </ActivityCard>
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="Hy3"
-  status="免费活动"
-  detail="0 Credits"
+  status="限时折扣"
+  detail="9 月 16 日 17:00 SGT 起 1 折"
 >
-活动开始时间：2026 年 8 月 21 日。
+现有免费活动于 2026 年 9 月 16 日 17:00（新加坡时间，UTC+8）调整为限时 1 折。
 
-本活动覆盖 B.AI Chat 和 API：
+自生效时间起，Hy3 在 B.AI API 和 Chat 中的使用按标准参考价的 10% 结算。
 
-* **Chat：** 活动期间使用 Hy3，按 `0 Credits` 结算。
-* **API：** 活动期间使用按 `0 Credits` 结算，不收取单次请求、输入、缓存写入、缓存读取或输出的费用。
-
-活动结束后，Hy3 将恢复标准价格。详见[模型详情](./models/hy3.md)。
+[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/hy3.md)继续展示标准参考价。
 </ActivityCard>
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="MiMo-V2.5"
-  status="免费活动"
-  detail="API 已免费 · Chat 8 月 25 日开放"
+  status="限时折扣"
+  detail="9 月 16 日 17:00 SGT 起 1 折"
 >
-MiMo-V2.5 免费分阶段开放：
+现有免费活动于 2026 年 9 月 16 日 17:00（新加坡时间，UTC+8）调整为限时 1 折。
 
-* **API：** 自 2026 年 8 月 24 日起，MiMo-V2.5 API 调用按 `0 Credits` 结算。
-* **Chat：** 免费开放日期为 2026 年 8 月 25 日，具体开放时间以实际生效为准。开放后，使用 MiMo-V2.5 按 `0 Credits` 结算。
+自生效时间起，MiMo-V2.5 在 B.AI API 和 Chat 中的使用按标准参考价的 10% 结算。
 
-活动结束后，MiMo-V2.5 将恢复标准价格。详见[模型详情](./models/mimo-v2.5.md)。
+[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/mimo-v2.5.md)继续展示标准参考价。
 </ActivityCard>
 
 <ActivityCard
   variant="discount"
   title="GLM-5.3-Flash"
-  status="限时优惠"
+  status="限时折扣"
   detail="低至 1 折"
 >
 活动于 2026 年 9 月 12 日 10:00（新加坡时间，UTC+8）开启。
 
-活动期间，GLM-5.3-Flash 相关优惠低至标准价 1 折。
+活动期间，符合条件的 GLM-5.3-Flash API 和 Chat 使用低至标准参考价 1 折。
 
 标准价格详见[模型详情](./models/glm-5-3-flash.md)。
 </ActivityCard>
@@ -75,7 +70,7 @@ MiMo-V2.5 免费分阶段开放：
 >
 活动于 2026 年 9 月 12 日 10:00（新加坡时间，UTC+8）开启。
 
-活动价格随 DeepSeek 闲时与忙时计费时段同步变化，各时段均保持标准价 1 折。
+活动价格随 DeepSeek 空闲时段与高峰时段同步变化，各时段均保持标准价 1 折。
 
 [定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/deepseek-v4-1-flash.md)继续展示标准参考价，实际结算价格及最终账单以平台页面展示为准。
 </ActivityCard>

@@ -250,6 +250,7 @@ const sidebars = {
               label: 'Z.AI (GLM)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/glm-5-3-flashx', label: 'GLM-5.3-FlashX' },
                 { type: 'doc', id: 'llmservice/models/glm-5-3-flash', label: 'GLM-5.3-Flash' },
                 { type: 'doc', id: 'llmservice/models/glm-5-3', label: 'GLM-5.3' },
                 { type: 'doc', id: 'llmservice/models/glm-5-2', label: 'GLM-5.2' },
@@ -303,18 +304,6 @@ const sidebars = {
                 { type: 'doc', id: 'llmservice/image-models/gpt-image-2', label: 'GPT-Image-2' },
               ],
             },
-            {
-              type: 'category',
-              label: 'SpaceXAI (Grok Imagine)',
-              collapsed: true,
-              items: [
-                {
-                  type: 'doc',
-                  id: 'llmservice/image-models/grok-imagine-image-2-0',
-                  label: 'Grok Imagine Image 2.0',
-                },
-              ],
-            },
           ],
         },
         { type: 'doc', id: 'llmservice/memory', label: 'Memory' },
@@ -330,7 +319,15 @@ const sidebars = {
           collapsed: true,
           items: ['llmservice/Claude-Code/claudecode-bankofai-api-configuration-guide'],
         },
-        { type: 'doc', id: 'llmservice/api/API', label: 'API Reference' },
+        {
+          type: 'category',
+          label: 'API Reference',
+          collapsed: true,
+          items: [
+            { type: 'doc', id: 'llmservice/api/API', label: 'API Overview' },
+            { type: 'doc', id: 'llmservice/api/balance', label: 'Balance API' },
+          ],
+        },
       ],
     },
     {

@@ -7,17 +7,16 @@ import ActivityCard from '@site/src/components/ActivityCard';
 Qwen3.8-Flash 是阿里巴巴 Qwen 团队于 2026 年 8 月 26 日发布的托管多模态模型。该模型是基于 Qwen3.8-Flash-Next 构建的生产版本，提供默认 100 万 Token 上下文窗口和托管工具，面向成本敏感的编程、Agent 与视觉知识工作场景。
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="Qwen3.8-Flash"
-  status="免费活动"
-  detail="API 已免费 · Chat 上架后免费"
+  status="限时折扣"
+  detail="9 月 16 日 17:00 SGT 起 1 折"
 >
-B.AI API 和 Chat 分阶段开放免费使用：
+现有免费活动于 2026 年 9 月 16 日 17:00（新加坡时间，UTC+8）调整为限时 1 折。
 
-* **API：** Qwen3.8-Flash API 调用目前按 `0 Credits` 结算，不收取输入、缓存写入、缓存读取或输出 Token 费用。
-* **Chat：** Qwen3.8-Flash 在 B.AI Chat 上架后免费开放，具体免费开放日期以模型实际上架为准；开放后，Chat 使用按 `0 Credits` 结算。
+自生效时间起，Qwen3.8-Flash 在 B.AI API 和 Chat 中的使用按标准参考价的 10% 结算。
 
-活动结束后，Qwen3.8-Flash 将恢复本页展示的价格。
+下方价格表继续展示标准参考价。
 </ActivityCard>
 
 ## 核心特性

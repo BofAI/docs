@@ -122,6 +122,12 @@ module.exports = {
           if (existingPath.endsWith('/McpServer-Skills/SKILLS/Intro/') || existingPath.endsWith('/McpServer-Skills/SKILLS/Intro')) {
             return [existingPath.replace('/McpServer-Skills/SKILLS/Intro', '/McpServer-Skills/Intro')]
           }
+          if (existingPath === '/llmservice/image-models/pricing/') {
+            return ['/llmservice/image-models/grok-imagine-image-2-0/']
+          }
+          if (existingPath === '/zh-Hans/llmservice/image-models/pricing/') {
+            return ['/zh-Hans/llmservice/image-models/grok-imagine-image-2-0/']
+          }
           return undefined
         },
       },

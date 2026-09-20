@@ -1,3 +1,5 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # DeepSeek-V4.1-Flash
 
 ## Overview
@@ -7,6 +9,19 @@ DeepSeek-V4.1-Flash is a native multimodal Mixture-of-Experts model released by 
 :::info B.AI model routing
 B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `DeepSeek-V4-Flash-Vision-Exp` model names to DeepSeek-V4.1-Flash. After routing takes effect, these requests are billed at the applicable DeepSeek-V4.1-Flash price.
 :::
+
+<ActivityCard
+  variant="discount"
+  title="DeepSeek-V4.1-Flash"
+  status="Limited-Time Discount"
+  detail="10% of Standard Price"
+>
+The offer begins at 10:00 on September 12, 2026 (Singapore Time, UTC+8).
+
+The promotional price changes in step with DeepSeek's time-based pricing and remains at 10% of the standard price in either the Off-Peak or Peak period.
+
+The pricing table below continues to show standard reference prices. Actual settlement and final billing are subject to the platform display.
+</ActivityCard>
 
 ## Key Features
 
@@ -48,11 +63,11 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 | Billing Period | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
 | :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
-| **Idle** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
-| **Busy** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
+| **Off-Peak** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
+| **Peak** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
-The table shows the time-based standard reference price for DeepSeek-V4.1-Flash. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek-V4.1-Flash usage in B.AI Chat is billed at Idle rates. Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through promotions, top-up bonuses, and account benefits.
+The table shows the time-based standard reference price for DeepSeek-V4.1-Flash. Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods. DeepSeek-V4.1-Flash usage in B.AI Chat is billed at Off-Peak rates. Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through promotions, top-up bonuses, and account benefits.
 :::

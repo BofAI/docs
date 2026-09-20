@@ -7,17 +7,16 @@ import ActivityCard from '@site/src/components/ActivityCard';
 GLM-5.3-Flash 是 Z.AI 于 2026 年 8 月 26 日发布的开放权重原生多模态模型，也是 GLM-5 系列的 Flash 级模型。该模型拥有 3200 亿总参数和 180 亿激活参数，支持 1M Token 上下文，并采用稀疏注意力与线性注意力相结合的混合架构，面向编程、Agent 和视觉知识工作负载。
 
 <ActivityCard
-  variant="free"
+  variant="discount"
   title="GLM-5.3-Flash"
-  status="免费活动"
-  detail="API 已免费 · Chat 上架后免费"
+  status="限时折扣"
+  detail="低至 1 折"
 >
-本活动覆盖 B.AI API 和 Chat：
+活动于 2026 年 9 月 12 日 10:00（新加坡时间，UTC+8）开启。
 
-* **API：** GLM-5.3-Flash API 调用目前按 `0 Credits` 结算，不收取输入、缓存写入、缓存读取或输出 Token 费用。
-* **Chat：** GLM-5.3-Flash 在 B.AI Chat 上架后免费开放，具体开放时间以模型实际上架为准；开放后，Chat 使用按 `0 Credits` 结算。
+活动期间，符合条件的 GLM-5.3-Flash API 和 Chat 使用低至标准参考价 1 折。
 
-活动结束后，GLM-5.3-Flash 将恢复本页展示的价格。
+下方价格表继续展示标准参考价。
 </ActivityCard>
 
 ## 主要特性

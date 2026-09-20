@@ -81,6 +81,7 @@ Example:
 | Method | Endpoint | Protocol | Use case |
 |---|---|---|---|
 | `GET` | `/models` | OpenAI-compatible | List models associated with the current credential |
+| `GET` | [`/balance`](./balance.md) | B.AI | Retrieve balance and quota information for the current API Key |
 | `POST` | `/responses` | OpenAI Responses | Agents, reasoning, tool use, and Codex |
 | `POST` | `/chat/completions` | OpenAI Chat Completions | General chat completions and existing OpenAI-compatible applications |
 | `POST` | `/messages` | Anthropic Messages | Claude SDK, Claude Code, and other Anthropic-compatible clients |

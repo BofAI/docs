@@ -18,7 +18,7 @@ DeepSeek-V4-Flash is DeepSeek's high-efficiency open-source language model, rele
 >
 The DeepSeek-V4-Flash 50% offer takes effect at 17:00 on September 3, 2026 (UTC+8).
 
-From the effective time, eligible DeepSeek-V4-Flash API usage is billed at 50% of the standard price for the applicable period. The discounted price changes in step with DeepSeek's Idle and Busy pricing periods and remains at 50% in either period.
+From the effective time, eligible DeepSeek-V4-Flash API usage is billed at 50% of the standard price for the applicable period. The discounted price changes in step with DeepSeek's Off-Peak and Peak pricing periods and remains at 50% in either period.
 
 The pricing table below continues to show standard reference prices. Actual settlement and final billing are subject to the platform display.
 </ActivityCard>
@@ -61,11 +61,11 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 | Billing Period | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
 | :------------- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
-| **Idle** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
-| **Busy** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
+| **Off-Peak** | `$0.15` | `$0.15` | `$0.003` | `$0.60` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
+| **Peak** | `$0.30` | `$0.30` | `$0.006` | `$1.20` | - | Cache Write: `1x` input; Cache Read: `0.02x` input |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
-The standard reference prices above take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8). The table shows the time-based standard reference price for DeepSeek-V4-Flash. API calls use UTC+8: Busy periods are 09:00-12:00 and 14:00-18:00, Monday through Friday; all other times, including weekends, are Idle periods. DeepSeek-V4-Flash usage in B.AI Chat is billed at Idle rates. From 17:00 on September 3, 2026 (UTC+8), eligible API usage is billed at 50% of the standard price for the applicable period. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
+The standard reference prices above take effect at 12:00 on September 10, 2026 (Beijing Time, UTC+8). The table shows the time-based standard reference price for DeepSeek-V4-Flash. Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods. DeepSeek-V4-Flash usage in B.AI Chat is billed at Off-Peak rates. From 17:00 on September 3, 2026 (UTC+8), eligible API usage is billed at 50% of the standard price for the applicable period. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through top-up bonuses and account benefits.
 :::
