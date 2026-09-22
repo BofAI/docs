@@ -232,6 +232,8 @@ const sidebars = {
               label: 'Xiaomi (MiMo)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/mimo-v2.6-pro', label: 'MiMo-V2.6-Pro' },
+                { type: 'doc', id: 'llmservice/models/mimo-v2.6-flash', label: 'MiMo-V2.6-Flash' },
                 { type: 'doc', id: 'llmservice/models/mimo-v2.5-pro', label: 'MiMo-V2.5-Pro' },
                 { type: 'doc', id: 'llmservice/models/mimo-v2.5', label: 'MiMo-V2.5' },
               ],
@@ -262,8 +264,8 @@ const sidebars = {
               label: 'Moonshot AI (Kimi)',
               collapsed: true,
               items: [
-                { type: 'doc', id: 'llmservice/models/kimi-k2.8-preview', label: 'Kimi K2.8 Preview' },
                 { type: 'doc', id: 'llmservice/models/kimi-k3', label: 'Kimi K3' },
+                { type: 'doc', id: 'llmservice/models/kimi-k2.8-preview', label: 'Kimi K2.8 Preview' },
                 { type: 'doc', id: 'llmservice/models/kimi-k2.6', label: 'Kimi K2.6' },
                 { type: 'doc', id: 'llmservice/models/kimi-k2.5', label: 'Kimi K2.5' },
               ],
