@@ -1,5 +1,9 @@
 # FAQ
 
+:::note
+This extension is paused. The following is historical installation reference. New users should follow the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) rather than install the old wallet/MCP stack by default.
+:::
+
 Don't panic when you see an error — it's usually just a small setting that's not configured properly. We've listed the most common issues in order of frequency:
 
 ---

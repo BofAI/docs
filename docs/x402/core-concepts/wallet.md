@@ -54,13 +54,13 @@ x402 uses typed data signing for secure payment authorization.
 
 ### Core Advantages
 
-- **What You See Is What You Sign (Human-readable)**  
+- **What You See Is What You Sign (Human-readable)**
   Users can clearly review authorization details before signing, rather than approving opaque hash data.
 
-- **Domain Separation**  
+- **Domain Separation**
   Signatures are strictly bound to a specific contract and domain, preventing cross-application or cross-network misuse.
 
-- **Replay Protection**  
+- **Replay Protection**
   Embedded `nonce` values and expiration timestamps prevent malicious replay attacks.
 
 ---
@@ -108,22 +108,22 @@ For the `exact` payment scheme, plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, 
 | **Mainnet** (`eip155:8453`) | `https://mainnet.base.org` |
 | **Sepolia (Testnet)** (`eip155:84532`) | `https://sepolia.base.org` |
 
-These are the CLI's built-in defaults and are meant for development. In production supply your own endpoint with `--rpc-url` or `EVM_RPC_URL_8453` / `EVM_RPC_URL`. Base USDC settles with EIP-3009, so it needs no Permit2 approval.
+These are public RPC examples. Configure production RPCs through your chosen client's documented configuration; SDK applications pass them explicitly to their signer/client factories. Base USDC settles with EIP-3009, so it needs no Permit2 approval.
 
 ---
 
 ## Security Best Practices
 
-- **Never Expose Private Keys**  
-  Do not hardcode private keys in source code, and prefer not to hold them yourself at all: `x402-cli` and the SDK resolve the payer from [Agent Wallet](../../Agent-Wallet/Intro.md), which keeps the key encrypted on disk. `--private-key`, `EVM_PRIVATE_KEY`, `TRON_PRIVATE_KEY` and `PRIVATE_KEY` exist for development and CI only.
+- **Never Expose Private Keys**
+  Use [wallet-cli](/x402/cli/quickstart/) for the official CLI account and signing flow. Existing SDK integrations may use [Agent Wallet](/Agent-Wallet/Intro/) or another supported signer. Do not expose private keys in source code, command arguments, or chat.
 
-- **Use Testnets First**  
+- **Use Testnets First**
   Always complete development and validation on testnet before deploying to mainnet.
 
 - **Understand the Permit2 Approval**
   The one-time Permit2 approval the SDK sends is always `MaxUint256` — it offers no smaller amount, and the TRON sponsoring extension rejects a sponsored approval that is not `MaxUint256`. An allowance you set yourself out of band is honoured as long as it covers the payment. Least privilege applies at the next layer instead: each payment is a separate signed authorization bound to a specific amount, recipient and deadline, so the standing approval alone cannot move funds.
 
-- **Monitor Transactions in Real Time**  
+- **Monitor Transactions in Real Time**
   Use TronScan/BscScan to track payment status and allowance records for enhanced security.
 
 ---
@@ -142,5 +142,5 @@ These are the CLI's built-in defaults and are meant for development. In producti
 
 Continue exploring:
 
-- [Network and Token Support](./network-and-token-support.md) — View supported networks and token lists  
-- [SDK Features](../sdk-features.md) — Explore the full capabilities of the x402 SDK  
+- [Network and Token Support](./network-and-token-support.md) — View supported networks and token lists
+- [SDK Features](../sdk-features.md) — Explore the full capabilities of the x402 SDK

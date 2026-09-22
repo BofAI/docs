@@ -598,7 +598,7 @@ The Agent-wallet repository includes additional ready-to-run examples covering m
 | `verify-tron-privy-typed-data` | Verify Privy TRON EIP-712 signatures |
 | `compare-sign-consistency` | Cross-wallet signature consistency testing |
 
-Browse the full set in the [TypeScript examples](https://github.com/BofAI/agent-wallet/tree/main/packages/typescript/examples) and [Python examples](https://github.com/BofAI/agent-wallet/tree/main/packages/python/examples) directories.
+The repository currently provides [TypeScript examples](https://github.com/BofAI/agent-wallet/tree/main/packages/typescript/examples).
 
 ---
 

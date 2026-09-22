@@ -1,5 +1,9 @@
 # 官方云服务接入
 
+:::note
+TRON MCP 按项目整改计划停止开发。新钱包操作使用 [wallet-cli](/zh-Hans/x402/cli/quickstart/)；以下保留现有 MCP 用户参考。
+:::
+
 ## 什么是官方云服务？
 
 官方云服务是由 **BANK OF AI** 托管的 TRON MCP Server 实例，用于为 AI 客户端提供 **TRON 区块链的只读查询能力**。

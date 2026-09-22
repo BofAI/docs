@@ -1,5 +1,9 @@
 # Quick Start
 
+:::note
+TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/x402/cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
+:::
+
 The goal of this page is simple: **get you connected in 1 minute and make your first blockchain query.**
 
 We'll use the [official cloud service](./OfficialServerAccess.md) for this quick start. The cloud service is read-only — no dependencies to install, no wallet to configure, no API Key required. Just copy a config snippet into your AI client and start asking questions.

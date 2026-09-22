@@ -1,5 +1,9 @@
 # 简介
 
+:::note
+TRON MCP 按项目整改计划停止开发。新钱包操作使用 [wallet-cli](/zh-Hans/x402/cli/quickstart/)；以下保留现有 MCP 用户参考。
+:::
+
 ## TRON MCP Server 是什么？
 
 TRON MCP Server 是连接 AI 助手与 TRON 区块链的桥梁。它基于 [Model Context Protocol (MCP)](../Intro.md) 标准协议，让你可以用自然语言与区块链交互——查余额、发起转账、调用智能合约——而无需编写任何代码。

@@ -1,5 +1,9 @@
 # Introduction
 
+:::note
+This extension is paused. The following is historical installation reference. New users should follow the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) rather than install the old wallet/MCP stack by default.
+:::
+
 ## 💡 Why OpenClaw Extension?
 
 In a multi-chain Web3 world, managing assets often means constant "context switching" and repetition:

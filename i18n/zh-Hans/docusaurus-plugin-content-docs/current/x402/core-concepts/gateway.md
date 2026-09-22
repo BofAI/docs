@@ -74,7 +74,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 ### 面向 AI Agent：一个目录，汇聚海量 API，按需付费
 
-- **当前用 CLI 发现** —— `x402-cli catalog search` / `show` / `endpoints` 可定位所需 API 及其路由。通过 MCP 付款由 `@bankofai/x402-mcp` 支持；支持目录发现的 MCP 尚未发布。
+- **当前用 CLI 发现** —— `wallet-cli x402 provider-list` / `provider-show` / `endpoint-list` 可定位所需 API 及其路由。通过 MCP 付款由 `@bankofai/x402-mcp` 支持；支持目录发现的 MCP 尚未发布。
 - **按次计费** —— 无需订阅，无最低消费。
 - **实时价格透明** —— 网关在 `402` 响应中返回实时计算的价格，客户端授权会绑定所选支付要求；报价本身并不是网关的密码学签名。
 - **无账号、无密钥** —— 钱包即身份，无需注册或管理任何 API Key。

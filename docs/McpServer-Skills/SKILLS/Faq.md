@@ -1,5 +1,9 @@
 # FAQ
 
+:::note
+For new setup, follow the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/). Legacy wallet and installer references below are for existing integrations, not wallet-cli 4.14 setup instructions.
+:::
+
 Questions are ordered by urgency — the ones you're most likely to hit first are at the top, concepts at the bottom.
 
 ---
@@ -40,7 +44,7 @@ Run this in your terminal:
 ls ~/.agents/skills
 ```
 
-You should see 10 directory names: `agent-wallet`, `wallet-cli`, `sunswap-dex-trading`, `sunpump-meme-token-toolkit`, `sunperp-perpetual-futures-trading`, `tronscan-data-lookup`, `usdd-just-protocol`, `x402-payment`, `recharge-skill`, and `bankofai-guide`.
+The installed set depends on your release and selection. Check for the requested Skill and its `SKILL.md`; do not use a fixed directory count to determine success.
 
 Then verify in your AI chat:
 
@@ -75,7 +79,7 @@ If it's a **mainnet** private key, act immediately:
 5. Revoke token approvals on all protocols (SunSwap, SunPerp, etc.) connected to the old wallet.
 
 :::tip Prevention is better than cure
-Use [Agent Wallet](../../Agent-Wallet/Intro.md) from the start instead of plaintext private keys. Agent Wallet locks your key in an encrypted local vault — even if someone sees your environment variables, they can't open the vault without the encryption password. Two locks broken at once? Extremely unlikely.
+Use [wallet-cli](/x402/cli/quickstart/) from the start instead of plaintext private keys. Agent Wallet locks your key in an encrypted local vault — even if someone sees your environment variables, they can't open the vault without the encryption password. Two locks broken at once? Extremely unlikely.
 :::
 
 ### Why does the AI ask for confirmation before every transaction?
@@ -108,47 +112,7 @@ If extreme volatility causes a transaction to fail, try increasing the tolerance
 
 ### How do I configure credentials?
 
-**The simplest and safest method (strongly recommended): use [Agent Wallet](../../Agent-Wallet/QuickStart.md).** Think of it as a password-protected vault with a simple visual interface — just follow the prompts to enter your keys. Set it up once, and you'll never have to wrestle with config files again.
-
-<details>
-<summary>Backup method for power users: environment variables</summary>
-
-If you're comfortable with the command line, you can store credentials in your shell config file.
-
-**Mac:**
-
-1. Open Terminal (press `Command + Space`, search for `Terminal`)
-2. Type `nano ~/.zshrc` and press Enter — you'll see a basic text editor
-3. Use arrow keys to scroll to the bottom, paste the lines you need from below (important: do NOT delete the double quotes `"` around each value, and make sure they're straight quotes, not curly quotes)
-4. Press `Ctrl + X`, then `Y`, then Enter to save
-5. Close the terminal, reopen it, and restart your AI tool
-
-Add the variables for the skills you need:
-
-```bash
-# SunSwap trading, SunPump buy/sell, USDD PSM, SunPerp withdrawals
-# (any skill that spends on-chain funds via this key; wallet-cli manages
-# its own wallet and never reads these variables)
-export TRON_PRIVATE_KEY="your_private_key"
-export TRONGRID_API_KEY="your_TronGrid_API_key"
-export TRON_NETWORK="mainnet"   # or "nile" / "shasta" for testnet
-
-# SunPerp perpetual contracts
-export SUNPERP_ACCESS_KEY="your_SunPerp_Access_Key"
-export SUNPERP_SECRET_KEY="your_SunPerp_Secret_Key"
-
-# TronScan data queries (optional — BANK OF AI proxy works without a key)
-export TRONSCAN_API_KEY="your_TronScan_API_Key"
-
-# BANK OF AI account (recharge-skill)
-export BANKOFAI_API_KEY="your_BANKOFAI_API_Key"
-
-# agent-wallet (if you use encrypted local mode for x402-payment / signing)
-export AGENT_WALLET_PASSWORD="your_master_password"
-
-```
-
-</details>
+Use the [wallet-cli setup flow](/x402/cli/quickstart/) for the official wallet and payment entry. Community projects retain their own API-key and signing requirements; these settings are not automatically shared with wallet-cli. Never paste a private key or master password into chat, or store the wallet-cli master password in an environment variable.
 
 ### Which AI tools support Skills?
 

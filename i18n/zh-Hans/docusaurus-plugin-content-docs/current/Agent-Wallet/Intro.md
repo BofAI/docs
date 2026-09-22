@@ -1,4 +1,8 @@
 # 简介
+
+:::note
+Agent Wallet 文档保留给现有 SDK、服务端和社区集成。官方新用户的钱包配置入口是 [wallet-cli](/zh-Hans/x402/cli/quickstart/)，两套配置不会自动互通。
+:::
 ## 享受 AI Agent 便利，告别私钥泄露焦虑
 
 ### 你的私钥，距离被盗可能只差一次文件读取

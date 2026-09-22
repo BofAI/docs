@@ -86,7 +86,7 @@ x402 supports **TRC-20, BEP-20, and ERC-20** tokens. TRON/BSC routes use their c
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registry resolves **USDT** on TRON (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) and BSC Mainnet (`eip155:56`), and **USDC** on BSC Testnet (`eip155:97`) and Base (`eip155:8453`, `eip155:84532`). The registry also ships defaults for twenty further EVM networks (MegaETH, Monad, Polygon, Arbitrum, Mezo, Radius, XDC, Celo, Flare and others) that this page does not table. Everything else in the table above — TRON USDD, BSC Mainnet USDC, BSC Testnet USDT, DHLU, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`, and `x402-cli` pays registry tokens by default — an unregistered asset requires explicit `--asset` plus `--decimals`, and is rejected outright on Base.
+> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registry resolves **USDT** on TRON (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) and BSC Mainnet (`eip155:56`), and **USDC** on BSC Testnet (`eip155:97`) and Base (`eip155:8453`, `eip155:84532`). The registry also ships defaults for twenty further EVM networks (MegaETH, Monad, Polygon, Arbitrum, Mezo, Radius, XDC, Celo, Flare and others) that this page does not table. Everything else in the table above — TRON USDD, BSC Mainnet USDC, BSC Testnet USDT, DHLU, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`. For CLI asset selection, follow the [wallet-cli command reference](/x402/cli/command-reference/).
 
 > **Extensibility**: The protocol is highly extensible. By registering tokens through the TRON token registry (`registerToken` from `@bankofai/x402-tron`) or the server's `EVM_TOKENS` config table, you can support any custom TRC-20 or BEP-20 token.
 
@@ -164,11 +164,11 @@ The relayer charges its own fee in the payment token, **on top of** the payment 
 #### Paying with GasFree from the CLI
 
 ```bash
-x402-cli pay <url> \
+wallet-cli x402 pay --dry-run <url> --network tron:728126428 \
   --scheme exact_gasfree \
   --max-amount 0.01 \
   --max-gasfree-fee 0.5 \
-  --json
+  -o json
 ```
 
 The CLI takes the first requirement in the server's `accepts` list that matches your filters — it does not prefer GasFree — so pass `--scheme exact_gasfree` whenever the endpoint also advertises plain `exact`. `--max-amount` does not cover the relayer fee — cap that separately with `--max-gasfree-fee` (or `--max-gasfree-fee-raw`). See the [CLI command reference](../cli/command-reference.md#gasfree-payments-tron).

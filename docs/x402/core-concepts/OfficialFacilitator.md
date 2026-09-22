@@ -48,7 +48,7 @@ Official Facilitator can stably handle payment requests in a production environm
 
 ## How to Call the Official Facilitator?
 
-To call the Official Facilitator, you only need to configure the official **Facilitator service address** https://facilitator.bankofai.io on the server-side.
+To call the Official Facilitator, you only need to configure the official **Facilitator service address** `https://facilitator.bankofai.io` on the server-side.
 
 > ⚠️ **Note**: This address is a server-side endpoint for API calls, not a webpage for browser access. Opening it directly in a browser will not display any content.
 

@@ -1,5 +1,9 @@
 # Official Cloud Service Access
 
+:::note
+TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/x402/cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
+:::
+
 ## What is the Official Cloud Service?
 
 The official cloud service is a TRON MCP Server instance hosted by **BANK OF AI**, providing AI clients with **read-only query capabilities for the TRON blockchain**.

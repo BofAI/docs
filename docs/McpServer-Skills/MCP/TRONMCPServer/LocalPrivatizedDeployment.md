@@ -1,5 +1,9 @@
 # Local Private Deployment
 
+:::note
+TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/x402/cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
+:::
+
 ## What is Local Private Deployment?
 
 Local private deployment means running TRON MCP Server on your own machine, giving your AI assistant **full read and write access** to the TRON blockchain.

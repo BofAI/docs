@@ -74,7 +74,7 @@ Providers turn calls into cash flow. Agents turn calls into capabilities. The ga
 
 ### For AI Agents: one catalog, many APIs, pay as you go
 
-- **CLI discovery today** — `x402-cli catalog search` / `show` / `endpoints` find the right API and its routes. Paying over MCP is supported via `@bankofai/x402-mcp`; catalog-aware MCP discovery is not shipped yet.
+- **CLI discovery today** — `wallet-cli x402 provider-list` / `provider-show` / `endpoint-list` find the right API and its routes. Paying over MCP is supported via `@bankofai/x402-mcp`; catalog-aware MCP discovery is not shipped yet.
 - **Per-call pricing** — no subscriptions, no minimums.
 - **Live price transparency** — the gateway returns the computed price in its `402` response, and the client's authorization binds the selected payment requirement. The quote itself is not a gateway cryptographic signature.
 - **No accounts, no keys** — your wallet is your identity; nothing to register or manage.

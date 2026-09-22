@@ -1,360 +1,70 @@
 ---
-title: '命令参考'
-description: >-
-  x402 CLI 每条命令与参数的完整参考——pay、serve、roundtrip、gateway、catalog。
+title: "Wallet CLI 命令参考"
+description: "从独立 x402-cli 迁移到 wallet-cli 4.14.0。"
 ---
 
-# 命令参考
+# Wallet CLI 命令参考
 
-本页是 x402 CLI 所有命令的完整参考。
-
-> 图例：`<arg>` = 必填参数，`[arg]` = 可选参数。除非标注 **（必填）**，选项均为可选。
-
----
-
-## 全局选项
-
-以下参数对每条命令都生效。
-
-| 参数 | 说明 |
-| :--- | :--- |
-| `-h, --help` | 显示该命令的帮助 |
-| `-V, --version` | 打印 CLI 版本 |
-| `--json` | 打印机器可读的结构化 JSON 输出 |
-| `--human` | 打印人类可读的输出（默认） |
-
-`--json` 与 `--human` 互斥。该结构化输出始终包含 `ok` 和 `command`，以及一个 `result` 对象或一个结构化的 `error`（`code`、`message`、`hint`）。
+以 **4.14.0** 发布包为准。先查询命令 schema，不要直接沿用旧 CLI 的参数。
 
 ```bash
-x402-cli --help
-x402-cli --version
-x402-cli pay --help
+wallet-cli --json-schema -o json
+wallet-cli x402 pay --json-schema -o json
+wallet-cli bai recharge --json-schema -o json
 ```
 
----
+## 旧命令迁移
 
-## `pay`
+| 原入口 | 新入口 |
+| --- | --- |
+| `x402-cli pay` | `wallet-cli x402 pay` |
+| `x402-cli serve` / `roundtrip` | `wallet-cli x402 serve` / `roundtrip` |
+| `catalog search` | `wallet-cli x402 provider-list`；使用支持的 category/capability 过滤，不支持原关键词搜索参数 |
+| `catalog show` / `endpoints` | `wallet-cli x402 provider-show` / `endpoint-list` |
+| `catalog update` | `wallet-cli x402 update-catalog` |
+| `gateway ...` / `catalog export-gateway` / `catalog build` | 不提供同名替换；使用 [Gateway](/zh-Hans/x402/core-concepts/gateway/) 和 [Catalog](/zh-Hans/x402/api-catalog/list-your-service/) 的部署与构建流程 |
 
-支付一个受 x402 保护的 URL。CLI 发出请求，若服务器回应 `402 Payment Required`，它会读取 `PAYMENT-REQUIRED` 应答头、选出匹配的支付要求、签名，并携带签名载荷重试请求。
+## 支付参数
+
+- `--network`：指定支付网络；TRON 主网使用 `tron:728126428`。
+- `--account`：选择 wallet-cli 账户，替代旧钱包选择参数。
+- `--token` 或 `--asset`、`--decimals`：按 schema 指定支付资产。
+- `--max-amount` / `--max-raw-amount`：二选一，限制支付数量。
+- `--dry-run`：读取支付要求，不签名。
+- `--method`、`--header`、`--body` / `--body-file`：HTTP 请求配置。
+- `--password-stdin`：实际签名所需主密码的安全输入通道。
+- `-o json`：机器输出；不是旧 CLI 的 `--json`。
+
+## GasFree 支付 {#gasfree-payments-tron}
+
+TRON 路线需要 GasFree 时显式指定 `--scheme exact_gasfree`，并限制 `--max-gasfree-fee`。4.14 使用 `--gasfree-relay` 选择服务，不沿用旧 `--gasfree-api-url`。支付金额上限不包含 GasFree 手续费。
+
+## 结果处理
+
+操作返回 `wallet-cli.result.v1`，包含 `success`、`command`、`data` 或 `error`。退出码 `0` 表示命令成功，`1` 为执行错误，`2` 为调用错误。schema 查询返回命令目录或输入 schema，不是操作结果对象。
+
+支付读取 `data.response`；失败时查看 `error.details.paymentStatus` 和 `retryPayment`。`not_sent` 表示未发送支付，`unknown` 表示不能确定；`retryPayment: false` 时应核对已有交易，不能再次支付。
+
+## B.AI 充值
 
 ```bash
-x402-cli pay <url> [options]
+wallet-cli bai recharge 1 --network tron:728126428 --token USDT --dry-run -o json
+wallet-cli bai recharge-orders --json-schema -o json
 ```
 
-| 选项 | 说明 |
-| :--- | :--- |
-| `--method <method>` | HTTP 方法——需大写，且为 `DELETE`、`GET`、`HEAD`、`OPTIONS`、`PATCH`、`POST`、`PUT` 之一（默认：`GET`）；其他值会以 `INVALID_ARGUMENT` 失败（退出码 2） |
-| `--header "Name: Value"` | 请求头，可重复 |
-| `--body <body>` | 请求体；`GET` 与 `HEAD` 会忽略该参数 |
-| `--network <caip2>` | 要求特定网络（如 `tron:0xcd8690dc`、`base-mainnet`） |
-| `--token <symbol>` | 要求特定代币（如 `USDT`、`USDC`） |
-| `--asset <address>` | 要求特定资产合约地址 |
-| `--decimals <count>` | 未注册资产的精度 |
-| `--scheme <scheme>` | 要求特定 x402 scheme：`exact` 或 `exact_gasfree` |
-| `--gasfree-api-url <url>` | 覆盖 TRON GasFree relayer API 地址（环境变量 `X402_GASFREE_API_URL`） |
-| `--max-gasfree-fee <amount>` | GasFree relayer 手续费上限（代币单位） |
-| `--max-gasfree-fee-raw <n>` | GasFree relayer 手续费上限（最小单位） |
-| `--max-amount <amount>` | 允许支付的最大金额，按代币单位计（用该代币的精度换算，不是美元金额） |
-| `--max-raw-amount <amount>` | 允许支付的最大最小单位金额 |
-| `--dry-run` | 只读取支付要求，不签名、不付款 |
-| `--wallet-id <id>` | 显式指定已配置的 Agent Wallet（环境变量 `AGENT_WALLET_ID`） |
-| `--private-key <hex>` | 覆盖 Agent Wallet——仅限开发与 CI |
-| `--rpc-url <url>` | 显式网络 RPC URL |
-| `--timeout-ms <ms>` | 网络超时（毫秒，默认：`30000`） |
-| `--json` | 打印结构化 JSON 输出 |
-
-已注册代币的精度以注册表为准，不能用 `--decimals` 覆盖。只有未注册的非 Base 资产，才需要同时传 `--asset` 和 `--decimals`。
-
-### 用 Agent Wallet 付款 {#paying-with-agent-wallet}
-
-默认情况下，`pay` 会为所选网络解析出**当前激活的 [Agent Wallet](../../Agent-Wallet/Intro.md)** 并交由它签名——不需要把私钥放进配置文件或环境变量。
-
-- 如果配置了钱包但没有激活项，CLI 会**在签名前停下**，而不是默认选第一个。请设置激活钱包，或用 `--wallet-id` / `AGENT_WALLET_ID` 显式指定。
-- 用 `AGENT_WALLET_DIR` 指向非默认的 Agent Wallet 目录。
-- CLI 不会从 `wallets_config.json` 里读取私钥。
-- 在 EVM 网络上，它会在签名前检查付款方的代币余额，并在结果中返回解析出的钱包 ID、地址与原始余额。EIP-712 的付款方必须与该地址一致。
-
-**仅在开发与 CI 场景下**，可以用 `--private-key` 或 `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` 环境变量覆盖 Agent Wallet。共享环境中优先用环境变量而非命令行参数——命令行参数可能被本机其他进程看到。
-
-**示例：**
-
-```bash
-# 预览支付要求但不付款
-x402-cli pay https://api.example.com/paid --dry-run --json
-```
-
-```bash
-# 支付，但绝不超过 0.01 USDT
-x402-cli pay https://api.example.com/paid \
-  --network tron:0xcd8690dc --token USDT --max-amount 0.01
-```
-
-```bash
-# 带请求体和自定义请求头的 POST
-x402-cli pay https://api.example.com/paid \
-  --method POST --header "X-Client: demo" --body '{"q":"hello"}'
-```
-
-如果接口没有返回 `402`，CLI 会报告实际状态与响应，而不会付款。
-
-### GasFree 支付（TRON） {#gasfree-payments-tron}
-
-在 TRON 上，`scheme=exact_gasfree` 让一个 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需持有 TRX。CLI **不会**优先选择 GasFree：它取服务端 `accepts` 列表中第一条通过 `--network` / `--scheme` / `--token` 过滤的支付要求。若该端点同时也宣告了普通 `exact`，请传 `--scheme exact_gasfree` 才能确保走免 gas 路径。
-
-GasFree 手续费与宣告的支付金额是**分开**的——它是中继方的服务费（每笔固定转账费，GasFree 账户未激活时首笔另加一次性激活费），以支付代币从你的 GasFree 账户扣除。对 `exact_gasfree` 支付要求，CLI 一定会估算 relayer 手续费，并在结果中以 `gasfreeEstimate`（含 `fee` 与 `total`）返回；再加上手续费上限后，只要估值或最终签名中的 `maxFee` 超限，就会在签名前中止：
-
-```bash
-x402-cli pay https://api.example.com/pay \
-  --network tron:0xcd8690dc --token USDT \
-  --scheme exact_gasfree \
-  --max-amount 0.01 \
-  --max-gasfree-fee 0.5 \
-  --json
-```
-
-`--max-gasfree-fee` 与 `--max-gasfree-fee-raw` 互斥；若 CLI 选中的支付要求不是 `exact_gasfree`，传这两个参数会以 `INVALID_ARGUMENT` 报错（退出码 2）。用 `--gasfree-api-url <url>` 或 `X402_GASFREE_API_URL` 覆盖 relayer 地址。
-
-已付款的响应会区分 `settled`（支付已在链上结算）与 `delivered`（上游 HTTP 业务响应成功）。「结算成功但上游失败」会以退出码 1 和错误封装返回（`ok: false`，`error.code` 为 `HTTP_ERROR`，429 时为 `RATE_LIMITED`），其中 `paid` / `settled` / `delivered` 与 `paymentResponse` 位于 `error.details` 之下。请从那里读取用于对账，切勿盲目重试。
-
-### 在 Base 上付款 {#paying-on-base}
-
-Base 通过标准的 `exact` EVM 流程结算 USDC，使用的是 **EIP-3009**（`transferWithAuthorization`）而非 Permit2。这一点不需要你选择——CLI 会按网络自动采用正确的授权方式。
-
-```bash
-x402-cli pay https://api.example.com/pay \
-  --network base-mainnet \
-  --token USDC \
-  --max-amount 0.01 \
-  --rpc-url <生产环境-RPC-地址>
-```
-
-内置的公共 RPC 仅供开发使用。生产环境请通过 `--rpc-url`，或 `EVM_RPC_URL_8453` / `EVM_RPC_URL_84532` / `EVM_RPC_URL` 提供 RPC 端点。
-
-:::caution 不跟随重定向
-探测请求与带签名的重试都**不会**自动跟随 HTTP 重定向，以确保 `PAYMENT-SIGNATURE` 不被转发到其他源。如果接口发生重定向，请先确认目标地址，再显式请求最终可信的 URL。
-:::
-
-### 环境变量 {#pay-environment-variables}
-
-有些配置没有对应的命令行参数，只能通过环境变量设置：
-
-| 变量 | 用途 |
-| :--- | :--- |
-| `AGENT_WALLET_DIR` | 使用非默认的 Agent Wallet 目录 |
-| `AGENT_WALLET_ID` | 指定已配置的钱包（等同 `--wallet-id`） |
-| `TRON_RPC_URL` | TRON RPC 地址（`--rpc-url` 未传时使用） |
-| `TRON_GRID_API_KEY` | TronGrid API Key——设置后可避免公共节点限流 |
-| `X402_TRON_ALLOWANCE_MODE` | TRON 授权额度处理方式，默认 `auto` |
-| `EVM_RPC_URL` | 默认 EVM RPC 地址 |
-| `EVM_RPC_URL_<chainId>` | 按链的专用 RPC，如 `EVM_RPC_URL_8453`、`EVM_RPC_URL_84532`、`EVM_RPC_URL_56`、`EVM_RPC_URL_97` |
-| `RPC_URL` | 通用 EVM RPC 兜底 |
-| `X402_GASFREE_API_URL` | 覆盖 TRON GasFree relayer 接口地址 |
-| `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` | 覆盖 Agent Wallet——仅限开发与 CI |
-
-> EVM RPC 取值优先级：`--rpc-url` → `EVM_RPC_URL_<chainId>` → `RPC_URL` → `EVM_RPC_URL` → 内置公共节点。内置节点（BSC 与 Base 都有）仅供开发使用。
-
----
-
-## `serve`
-
-启动一个本地 x402 付费端点。它对外宣告一条支付要求，随后通过 Facilitator 校验并结算收到的支付。
-
-```bash
-x402-cli serve --pay-to <address> [options]
-```
-
-| 选项 | 说明 |
-| :--- | :--- |
-| `--pay-to <address>` | **（必填）** 收款钱包地址 |
-| `--amount <amount>` | 人类可读的代币金额（默认：`0.0001`） |
-| `--raw-amount <amount>` | 最小单位金额（与 `--amount` 互斥） |
-| `--network <caip2>` | 支付网络（默认：`tron:0xcd8690dc`） |
-| `--scheme <scheme>` | 支付 scheme：`exact` 或 `exact_gasfree`（默认：`exact`） |
-| `--token <symbol>` | 代币符号（默认：`USDT`） |
-| `--asset <address>` | 未注册代币的显式合约地址 |
-| `--decimals <count>` | 代币精度，配合未注册的 `--asset` 时必填 |
-| `--host <host>` | 绑定主机（默认：`127.0.0.1`） |
-| `--port <port>` | 绑定端口（默认：`4020`） |
-| `--resource-url <url>` | 在支付要求中对外宣告的 URL |
-| `--facilitator-url <url>` | Facilitator 基础 URL（默认：`https://facilitator.bankofai.io`） |
-| `--valid-for-seconds <n>` | 支付要求的有效时长——整数，1–86400（默认：`300`） |
-| `--timeout-ms <ms>` | Facilitator 超时（毫秒，默认：`30000`） |
-| `-d, --daemon` | 在后台运行并打印子进程 pid |
-| `--json` | 打印结构化 JSON 输出 |
-
-服务暴露以下路由——付费判定看的是 `PAYMENT-SIGNATURE` 请求头，而非 HTTP 方法：
-
-| 路由 | 用途 |
-| :--- | :--- |
-| `/health`（任意方法） | 返回 `{ "ok": true }` |
-| `/.well-known/x402`（任意方法） | 机器可读的支付元数据：网络、scheme、资产、金额、`rawAmount`、`payTo` 与 `pay_url` |
-| `/pay`（任意方法） | 请求未带 `PAYMENT-SIGNATURE` 时返回带 `PAYMENT-REQUIRED` 头的 `402 Payment Required`；带该头时通过 facilitator 校验并结算，返回交易 |
-
-**示例：**
-
-```bash
-x402-cli serve --pay-to T... --network tron:0xcd8690dc --token USDT
-```
-
-```bash
-x402-cli serve --pay-to 0x... --network eip155:97 --token USDT --amount 0.0001 --daemon
-```
-
----
-
-## `roundtrip`
-
-启动一个临时本地服务、立即支付它、然后退出。这是最快的完整端到端测试。它接受 `serve` 与 `pay` 的全部选项之和。
-
-```bash
-x402-cli roundtrip --pay-to <address> [serve/pay 选项]
-```
-
-**示例：**
-
-```bash
-x402-cli roundtrip \
-  --pay-to T... --amount 0.0001 --network tron:0xcd8690dc --token USDT
-```
-
-加上 `--json` 时，`roundtrip` 会输出单个 JSON 文档，其中分别包含 `serve` 与 `pay` 的结果。
-
----
-
-## `gateway`
-
-管理本地网关的 provider 文件——校验、脚手架、启动网关进程，以及从 `provider.yml` 文件构建目录资产。
-
-```bash
-x402-cli gateway <search|start|check|scaffold|catalog> [options]
-```
-
-| 子命令 | 说明 |
-| :--- | :--- |
-| `search <query>` | 搜索目录资产（见 [`catalog search`](#catalog)） |
-| `start` | 启动本地 x402 网关进程 |
-| `check <providers>` | 校验一个或多个 `provider.yml` 文件 |
-| `scaffold <name>` | 生成一个起步用的 `provider.yml` |
-| `catalog <command>` | 构建/校验/搜索网关目录资产 |
-
-`gateway start` 还接受 `--providers-dir` 作为 `--providers` 的别名；`gateway catalog search` 也可以用 `--query` 代替位置参数。
-
-`gateway start` 会拉起一个 gateway 运行时，但 CLI 本身已经带了一份：发布包内含 `dist/gateway/cli.js`，并依赖 `@bankofai/x402-gateway`，因此正常 `npm install -g @bankofai/x402-cli` 之后无需额外安装。它按以下顺序解析运行时——`--gateway-bin`、`@bankofai/x402-gateway` 依赖、内置的 `dist/gateway/cli.js`、`PATH` 上的 `x402-gateway`，最后是代码检出里的 `../x402-gateway/dist/cli.js`。`gateway check`、`gateway catalog build`、`gateway catalog pay-assets` 与 `catalog build` 在进程内直接调用 gateway 库；`gateway scaffold` 只是写出一个模板文件，`gateway search` / `gateway catalog search` 则读取目录数据源。
-
-默认值：`gateway start` 绑定 `--host 127.0.0.1 --port 4020`，读取 `--providers providers`；`gateway check` 同样默认 `providers`；`gateway scaffold` 输出到 `--output-dir providers/<name>`，`--forward-url` 默认 `https://api.example.com`；直接执行 `x402-cli gateway catalog` 等同于 `build`。
-
-**校验 provider 文件：**
-
-```bash
-x402-cli gateway check ./providers
-```
-
-**生成一个新的 provider：**
-
-```bash
-x402-cli gateway scaffold my-service --forward-url https://api.myservice.com
-```
-
-这会写出 `providers/my-service/provider.yml`，其中包含可直接编辑的模板（网络、收款地址、货币，以及一个示例计费接口）。
-
-**启动网关：**
-
-```bash
-x402-cli gateway start --providers ./providers --host 127.0.0.1 --port 4020
-```
-
-### `gateway catalog`
-
-```bash
-x402-cli gateway catalog <build|check|pay-assets|search> [options]
-```
-
-| 子命令 | 说明 |
-| :--- | :--- |
-| `build <providers>` | 从 `provider.yml` 文件构建本地目录 |
-| `check <providers>` | 校验本地 `provider.yml` 文件 |
-| `pay-assets <providers>` | 列出可付费的接口资产（方法、路径、网络、价格） |
-| `search <query>` | 搜索目录资产 |
-
-```bash
-x402-cli gateway catalog pay-assets ./providers --json
-```
-
----
-
-## `catalog`
-
-搜索、缓存、查看并导出托管的服务目录。
-
-```bash
-x402-cli catalog <update|search|show|endpoints|pay-json|export-gateway|build> [options]
-```
-
-| 子命令 | 说明 |
-| :--- | :--- |
-| `update` | 将托管/本地目录资产缓存到 `~/.cache/x402-cli/catalog` |
-| `search <query>` | 按名称、标签、链、类别、接口搜索服务 |
-| `show <provider>` | 显示服务详情 JSON |
-| `endpoints <provider>` | 列出某服务的接口 |
-| `pay-json <provider>` | 打印某服务的付费 JSON（可付费路由详情） |
-| `export-gateway <url>` | 从一个运行中的网关导出 `catalog.json` 和 `pay.md` |
-| `build [providers]` | 从本地 `provider.yml` 文件构建目录（默认为 `providers`） |
-
-**常用选项：**
-
-| 选项 | 说明 |
-| :--- | :--- |
-| `--catalog <source>` | `catalog.json` 路径或 URL |
-| `--provider <fqn>` | 服务 FQN（用于 `export-gateway`） |
-| `--output-dir <dir>` | 生成文件的输出目录（用于 `export-gateway`；默认为 `providers/<fqn>/`，FQN 中的 `/` 会被替换成 `__`） |
-| `--output <file>` | 把构建出的目录 JSON 写入该文件（用于 `build`） |
-| `--dist-dir <dir>` | 把构建结果写入 `<dir>/catalog.json`（用于 `build`） |
-| `-n, --limit <count>` | 搜索结果数量上限（默认：`10`） |
-| `--include-blocked` | 在搜索结果中包含被屏蔽的服务 |
-| `--timeout-ms <ms>` | 网络超时（毫秒，默认：`30000`） |
-| `--force` | 覆盖已存在的文件（用于 `export-gateway`） |
-| `--raw` | 打印原始付费载荷（用于 `pay-json`） |
-| `--json` | 打印结构化 JSON 输出 |
-
-**目录来源解析。** 省略 `--catalog` 时，CLI 按以下顺序解析来源：环境变量 `X402_CATALOG` 或 `X402_GATEWAY_CATALOG`，然后是本地缓存 `~/.cache/x402-cli/catalog/catalog.json`，最后是托管默认值 `https://x402-catalog.bankofai.io/api/catalog.json`。
-
-**示例：**
-
-```bash
-# 将托管目录缓存到本地，实现快速、离线搜索
-x402-cli catalog update
-```
-
-```bash
-# 搜索服务，限制 5 条结果
-x402-cli catalog search "weather forecast" -n 5
-```
-
-```bash
-# 查看某个服务
-x402-cli catalog show acme.weather
-x402-cli catalog endpoints acme.weather --json
-```
-
-```bash
-# 获取某服务的可付费路由 JSON
-x402-cli catalog pay-json acme.weather --raw
-```
-
-```bash
-# 从运行中的网关导出 catalog.json + pay.md
-x402-cli catalog export-gateway https://gateway.example.com \
-  --provider acme.weather --output-dir ./out --force
-```
-
----
-
-## 退出码
-
-| 退出码 | 含义 |
-| :--- | :--- |
-| `0` | 成功 |
-| `1` | 运行时错误（网络、钱包、结算等） |
-| `2` | 用法错误（缺少/非法参数、未知命令） |
-
-完整的错误码列表及修复方法，见 [FAQ 与故障排查](./faq.md)。
+需要 wallet-cli 账户及已存储的 B.AI API Key。充值只支持配置中允许的主网；预览不创建订单、不绑定钱包、不付款。实际充值可能先绑定付款地址，需在授权范围内执行。`creditStatus: "unconfirmed"` 不代表付款失败，应使用 `bai report-recharge` 报告原交易，不要重新充值。
+
+[快速入门](/zh-Hans/x402/cli/quickstart/) · [常见问题](/zh-Hans/x402/cli/faq/)
+
+{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
+<span id="全局选项"></span>
+<span id="pay"></span>
+<span id="paying-with-agent-wallet"></span>
+<span id="paying-on-base"></span>
+<span id="pay-environment-variables"></span>
+<span id="serve"></span>
+<span id="roundtrip"></span>
+<span id="gateway"></span>
+<span id="gateway-catalog"></span>
+<span id="catalog"></span>
+<span id="退出码"></span>

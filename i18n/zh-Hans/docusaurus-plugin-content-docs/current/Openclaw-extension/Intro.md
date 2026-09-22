@@ -1,5 +1,9 @@
 # 简介
 
+:::note
+该扩展暂停维护。以下为旧安装流程参考，新用户请使用 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)，不要默认安装旧钱包和 MCP。
+:::
+
 ## 💡 为什么需要 OpenClaw Extension？
 
 在多链并行的 Web3 世界里，管理资产往往意味着不断的"打断"与"重复"：

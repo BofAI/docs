@@ -473,7 +473,7 @@ curl -si http://localhost:4021/credit | grep -i '^payment-required:' | cut -d' '
 | `npx tsx` 下出现 `ERR_PACKAGE_PATH_NOT_EXPORTED` | 项目未声明为 ESM | 在 `package.json` 中添加 `"type": "module"` |
 | `No network/scheme registered for x402 version: 2 …` | 客户端选择的网络没有注册的 scheme | 确保 client 注册了目标网络，例如 `TRON_NILE` |
 | `Insufficient balance` / allowance 错误 | 测试钱包缺少测试代币，或 Permit2 授权额度过低 | 从水龙头领取测试代币；client 在首次付款时会自动批准 Permit2 |
-| `Connection timeout` | 网络或请求超时 | 检查连接。注意 SDK 不读取任何环境变量——`EVM_RPC_URL` 由 `x402-cli` 和示例程序识别；在自己的服务端里请把 RPC 地址直接传给 signer 工厂函数 |
+| `Connection timeout` | 网络或请求超时 | 检查连接。注意 SDK 不读取任何环境变量——`EVM_RPC_URL` 由 参考示例程序识别；在自己的服务端里请把 RPC 地址直接传给 signer 工厂函数 |
 
 ---
 

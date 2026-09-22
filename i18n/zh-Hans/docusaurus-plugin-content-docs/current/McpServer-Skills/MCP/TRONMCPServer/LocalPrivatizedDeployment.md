@@ -1,5 +1,9 @@
 # 本地私有化部署
 
+:::note
+TRON MCP 按项目整改计划停止开发。新钱包操作使用 [wallet-cli](/zh-Hans/x402/cli/quickstart/)；以下保留现有 MCP 用户参考。
+:::
+
 ## 什么是本地私有化部署？
 
 本地私有化部署是指在你自己的机器上运行 TRON MCP Server，让 AI 助手获得对 TRON 区块链的 **完整读写能力**。
