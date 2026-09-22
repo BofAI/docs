@@ -1,15 +1,10 @@
 ---
-title: 'SUN MCP Server'
-sidebar_label: 'Introduction'
-description: 'SUN MCP Server connects AI assistants to SunSwap on TRON. The full documentation now lives on the SUN docs site.'
+title: "SUN MCP Server"
+description: "Migration entry for the discontinued SUN MCP Server."
 ---
 
 # SUN MCP Server
 
-SUN MCP Server is the bridge connecting AI assistants to [SUN.IO (SunSwap)](https://sun.io), the largest decentralized exchange on the TRON blockchain. Built on the Model Context Protocol (MCP), it lets you query DeFi data, execute token swaps, and manage liquidity positions in natural language — without touching contracts or on-chain parameters directly.
+SUN MCP Server development has stopped. SUN CLI provides the replacement capabilities. This page retains the old documentation entry without linking to legacy MCP services or tool lists.
 
-:::tip Full documentation
-The complete SUN MCP Server guide — installation, official and self-hosted access, the full tool list, and FAQ — now lives on the SUN documentation site.
-
-**→ [Open the SUN MCP Server docs](https://docs.sun.io/sun-ai/sun-mcp-server/overview)**
-:::
+[Read the SUN CLI documentation](/McpServer-Skills/Tools/SUNCli/Intro/)

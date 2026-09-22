@@ -1,208 +1,24 @@
-# Official Cloud Service Access
-
-:::note
-TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/x402/cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
-:::
-
-## What is the Official Cloud Service?
-
-The official cloud service is a TRON MCP Server instance hosted by **BANK OF AI**, providing AI clients with **read-only query capabilities for the TRON blockchain**.
-
-In the traditional approach, if you want an AI assistant to read on-chain data, you typically need to:
-
-- Install Node.js and related dependencies locally
-- Clone the repository and complete the build
-- Configure environment variables and network parameters
-- Maintain server version updates yourself
-
-This is far too much overhead for users who simply want to check a balance.
-
-**The core purpose of the official cloud service is to handle all of this infrastructure for you.** You only need to add a single service URL to your AI client's configuration to start interacting with the TRON blockchain.
-
-### Key Advantages
-
-**1. No private key exposure risk**
-
-Since the cloud service is read-only, you never need to provide a wallet private key or mnemonic. This fundamentally eliminates risks like key leakage and config files accidentally committed to Git. It's especially convenient for team collaboration — any member can connect directly without key distribution or management concerns.
-
-**2. Official maintenance and continuous updates**
-
-The cloud service is maintained by the official team and always runs the latest stable version of TRON MCP Server. This includes:
-
-- Updates with new tools and features
-- Adaptations for underlying TRON network upgrades
-- Continuous performance and stability improvements
-
-You don't need to worry about version numbers or manually run `npm install` or rebuild.
-
-**3. Covers the vast majority of real-world use cases**
-
-The most common daily operations — checking address balances, analyzing transaction details, reading contract state, viewing the Super Representative list, monitoring on-chain events — are all read-only queries, fully supported through the cloud service. Only when you need to actually move assets (transfers, staking, contract writes) do you need to switch to [Local Private Deployment](./LocalPrivatizedDeployment.md).
-
-> In short: **The official cloud service acts as a "read-only API gateway" for the TRON blockchain** — AI clients only need the service URL to query all public on-chain data.
-
-:::warning Important
-The official cloud service only provides **read-only access**. It does **not support** transfers, contract writes, staking, or any other write operations. For full functionality, please use [Local Private Deployment](./LocalPrivatizedDeployment.md).
-:::
-
+---
+title: "TRON MCP Access Migration"
+description: "TRON MCP Access Migration"
 ---
 
-## How to Connect
+# TRON MCP Access Migration
 
-We provide three installation methods. **Pick the one that matches your level of comfort** — the conversational install is the easiest; the interactive install gives you the most control.
+TRON MCP Server no longer receives feature development; wallet-cli provides the replacement capabilities. For new integrations, use the [Wallet CLI 4.14 quick start](/x402/cli/quickstart/) and [Skills installation guide](/McpServer-Skills/SKILLS/QuickStart/).
 
-### Method 1: Conversational Install (Easiest)
+Existing client connections will stop working when the hosted MCP service is retired. This page no longer supplies the legacy service URL or remote installation commands. Migrate the required operations to wallet-cli, then remove the old MCP connection configuration. Wallet-cli and Agent Wallet stores are not automatically interchangeable; verify account setup locally.
 
-If you're already using an AI Agent that can run shell commands (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.), you can install everything by **simply chatting with the AI** — no need to open a terminal yourself, no manual file copying.
+This page retains its original URL and section anchors for existing links.
 
-:::tip Prerequisite
-**Node.js is required** on the machine where the AI Agent runs (the Agent uses `npx` under the hood). If Node.js isn't installed yet, grab the LTS installer from [nodejs.org](https://nodejs.org) — install once, double-click and follow the prompts.
-:::
-
-**How it works:**
-
-1. Open your AI Agent chat
-2. Copy and paste the following prompt:
-
-   ```
-   Run npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y to install the TRON MCP Server.
-   Note: Please install to the MCP config of the current Agent.
-   ```
-
-3. The AI handles the entire flow automatically:
-   - Detects the remote MCP service URL
-   - Auto-detects which AI client is currently running
-   - Writes the `tron-mcp-server` entry into the right MCP config file (no manual JSON editing)
-   - Reports back with a ✅ confirmation when done
-
-Once the AI confirms the install, the TRON MCP Server is ready — you can start asking questions right away.
-
-:::tip Why this is the recommended path for beginners
-You don't need to know what `npx`, `npm`, or "MCP config file" means. The AI handles every step including selecting the right config path for your client.
-:::
-
-### Method 2: Quick Auto-Install (Command Line)
-
-If you have Node.js installed and prefer the command line, run the following directly in your terminal:
-
-```bash
-npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
-```
-
-The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
-
-Once installation is complete, you can start interacting with the TRON blockchain via TRON MCP Server.
-
-### Method 3: Interactive Install (Most Control)
-
-If you want to choose which AI tools to install to, remove the `-y` flag:
-
-```bash
-npx add-mcp https://tron-mcp-server.bankofai.io/mcp
-```
-
-:::tip
-This guide demonstrates the installation process using terminal commands as an example.
-:::
-
-#### Installation Walkthrough
-
-The installer will guide you through a few steps — just follow along:
-
-**1️⃣ Identify the service source**
-
-The installer automatically detects the remote MCP service URL and generates a server name:
-
-```
-◇  Source: https://tron-mcp-server.bankofai.io/mcp (remote)
-│
-●  Server name: tron-mcp-server
-```
-
-**2️⃣ Choose which AI tools to install to**
-
-The installer auto-detects AI tools on your computer (e.g., Claude Code, Cursor, Cline, etc.). Use Space to select the ones you want:
-
-```
-◇  Detected 1 agent
-│
-◇  Select agents to install to
-│  Claude Code
-```
-
-**3️⃣ Confirm installation details**
-
-The installer displays an installation summary. Review it and select `Yes` to proceed:
-
-```
-◇  Installation Summary ────╮
-│                           │
-│  Server: tron-mcp-server  │
-│  Type: remote             │
-│  Scope: Project           │
-│  Agents: Claude Code      │
-│                           │
-├───────────────────────────╯
-│
-◇  Proceed with installation?
-│  Yes
-```
-
-**4️⃣ Installation complete!**
-
-When you see output like this, TRON MCP Server has been successfully installed to your selected AI tools:
-
-```
-◇  Installation complete
-│
-◇  Installed to 1 agent ───────╮
-│                              │
-│  ✓ Claude Code: ~/.mcp.json  │
-│                              │
-├──────────────────────────────╯
-│
-└  Done!
-```
-
-Once installation is complete, you can start interacting with the TRON blockchain via TRON MCP Server.
-
----
-
-## Verify Connection
-
-Once connected, you can test by asking your AI Agent the following question:
-
-```
-Query the current block height of TRON mainnet
-```
-
-If you receive a normal response (e.g., showing the current block height), the connection is working.
-
-If you encounter issues, please check [FAQ](./FAQ.md) for troubleshooting.
-
----
-
-## Available Capabilities
-
-When connected via the official cloud service, you can use all **read-only** tools, including but not limited to:
-
-| Category | Example Capabilities |
-| :--- | :--- |
-| Balance Queries | Query TRX balance, TRC20 token balance, all token holdings |
-| Transaction Queries | Look up transaction details, receipts, resource consumption |
-| Block Data | Query by block number, by hash, latest block, batch queries |
-| Account Info | Account details, resources, delegation info, bandwidth/energy |
-| Smart Contract Reading | Call view/pure functions, get ABI, contract metadata |
-| Event Queries | Query events by transaction, contract, block number |
-| Network Status | Chain info, resource prices, supported networks |
-| Governance | List Super Representatives, proposals, reward queries |
-| Address Utilities | Format conversion, address validation |
-
-For the Full Capability List, please refer to [Full Capability List](./ToolList.md).
-
----
-
-## Next Steps
-
-- Need transfers, staking, or contract writes? → [Local Private Deployment](./LocalPrivatizedDeployment.md)
-- Want the detailed description of all 97 tools? → [Full Capability List](./ToolList.md)
+{/* Keep legacy bookmarks valid. */}
+<span id="what-is-the-official-cloud-service"></span>
+<span id="key-advantages"></span>
+<span id="how-to-connect"></span>
+<span id="method-1-conversational-install-easiest"></span>
+<span id="method-2-quick-auto-install-command-line"></span>
+<span id="method-3-interactive-install-most-control"></span>
+<span id="installation-walkthrough"></span>
+<span id="verify-connection"></span>
+<span id="available-capabilities"></span>
+<span id="next-steps"></span>
