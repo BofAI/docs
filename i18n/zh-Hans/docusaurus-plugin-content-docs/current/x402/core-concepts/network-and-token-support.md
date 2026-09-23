@@ -80,7 +80,7 @@ x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自�
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）与 BSC 主网（`eip155:56`）上解析 **USDT**，在 BSC 测试网（`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`）上解析 **USDC**。注册表还为本页未列表的二十条 EVM 网络（MegaETH、Monad、Polygon、Arbitrum、Mezo、Radius、XDC、Celo、Flare 等）内置了默认资产。上表中的其余代币——TRON USDD、BSC 主网 USDC、BSC 测试网 USDT、DHLU 以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付。CLI 资产选择请参见 [wallet-cli 命令参考](/zh-Hans/x402/cli/command-reference/)。
+> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）与 BSC 主网（`eip155:56`）上解析 **USDT**，在 BSC 测试网（`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`）上解析 **USDC**。注册表还为本页未列表的二十条 EVM 网络（MegaETH、Monad、Polygon、Arbitrum、Mezo、Radius、XDC、Celo、Flare 等）内置了默认资产。上表中的其余代币——TRON USDD、BSC 主网 USDC、BSC 测试网 USDT、DHLU 以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付。CLI 资产选择请参见 [wallet-cli 命令参考](/zh-Hans/wallet-cli/command-reference/)。
 
 > **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或 server 的 `EVM_TOKENS` 配置表，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
 
@@ -153,7 +153,7 @@ wallet-cli x402 pay --dry-run <url> --network tron:728126428 \
   -o json
 ```
 
-CLI 取的是服务端 `accepts` 列表中第一条匹配你过滤条件的支付要求，并不会优先选 GasFree；只要端点同时也宣告了普通 `exact`，就请传 `--scheme exact_gasfree`。`--max-amount` 不包含中继费——请用 `--max-gasfree-fee`（或 `--max-gasfree-fee-raw`）单独限额。详见 [CLI 命令参考](../cli/command-reference.md#gasfree-payments-tron)。
+CLI 取的是服务端 `accepts` 列表中第一条匹配你过滤条件的支付要求，并不会优先选 GasFree；只要端点同时也宣告了普通 `exact`，就请传 `--scheme exact_gasfree`。`--max-amount` 不包含中继费——请用 `--max-gasfree-fee`（或 `--max-gasfree-fee-raw`）单独限额。详见 [CLI 命令参考](/zh-Hans/wallet-cli/command-reference/#gasfree-payments-tron)。
 
 ### 工作原理
 

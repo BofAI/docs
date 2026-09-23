@@ -54,17 +54,4 @@ wallet-cli bai recharge-orders --json-schema -o json
 
 需要 wallet-cli 账户及已存储的 B.AI API Key。充值只支持配置中允许的主网；预览不创建订单、不绑定钱包、不付款。实际充值可能先绑定付款地址，需在授权范围内执行。`creditStatus: "unconfirmed"` 不代表付款失败，应使用 `bai report-recharge` 报告原交易，不要重新充值。
 
-[快速入门](/zh-Hans/x402/cli/quickstart/) · [常见问题](/zh-Hans/x402/cli/faq/)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="全局选项"></span>
-<span id="pay"></span>
-<span id="paying-with-agent-wallet"></span>
-<span id="paying-on-base"></span>
-<span id="pay-environment-variables"></span>
-<span id="serve"></span>
-<span id="roundtrip"></span>
-<span id="gateway"></span>
-<span id="gateway-catalog"></span>
-<span id="catalog"></span>
-<span id="退出码"></span>
+[快速入门](/zh-Hans/wallet-cli/quickstart/) · [常见问题](/zh-Hans/wallet-cli/faq/)

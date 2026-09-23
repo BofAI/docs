@@ -5,7 +5,7 @@
 :::warning 三条铁律
 BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦上链**不可撤销**——没有"撤回"按钮，没有客服回滚。
 
-1. **永远不要把私钥粘贴到聊天窗口里。** 请使用 [wallet-cli](/zh-Hans/x402/cli/quickstart/)（相当于给 AI 开了一个专用"支付宝"，你不需要把银行卡密码直接给它）。
+1. **永远不要把私钥粘贴到聊天窗口里。** 请使用 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)（相当于给 AI 开了一个专用"支付宝"，你不需要把银行卡密码直接给它）。
 2. **先用假钱练手。** 每个新操作都先在 Nile 测试网上试——测试网用的是免费"游戏币"，怎么折腾都不亏。
 3. **仔细看确认弹窗。** 任何花钱操作执行前，AI 都会把账单摊开给你看，你不点头它绝不动手。
 :::
@@ -27,7 +27,7 @@ BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦�
 
 ### 凭据配置
 
-官方钱包配置见 [wallet-cli 快速入门](/zh-Hans/x402/cli/quickstart/)。不要把私钥或密码交给聊天窗口。社区项目按各自 Skill 配置：TronScan API Key、SunPerp API Key/Secret，以及 USDD 或提现所需签名参数不会自动转换成 wallet-cli 配置。
+官方钱包配置见 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)。不要把私钥或密码交给聊天窗口。社区项目按各自 Skill 配置：TronScan API Key、SunPerp API Key/Secret，以及 USDD 或提现所需签名参数不会自动转换成 wallet-cli 配置。
 
 B.AI 的 API Key 在 [控制台](https://chat.bankofai.io/key)获取，通过 wallet-cli 支持的配置方式保存；不要打印或提交凭据。
 
@@ -39,7 +39,7 @@ B.AI 的 API Key 在 [控制台](https://chat.bankofai.io/key)获取，通过 wa
 
 ## agent-wallet {#agent-wallet}
 
-旧钱包 Skill 不再作为官方默认配置入口。新用户从 [wallet-cli 快速入门](/zh-Hans/x402/cli/quickstart/)开始。仍使用 agent-wallet 的 SDK、服务端和社区项目可查阅 [Agent Wallet 参考文档](/zh-Hans/Agent-Wallet/Intro/)。
+旧钱包 Skill 不再作为官方默认配置入口。新用户从 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)开始。仍使用 agent-wallet 的 SDK、服务端和社区项目可查阅 [Agent Wallet 参考文档](/zh-Hans/Agent-Wallet/Intro/)。
 
 ## wallet-cli {#wallet-cli}
 
@@ -253,21 +253,21 @@ PSM 支持 **USDT ↔ USDD 即时 1:1 兑换**——是获取 USDD 最简单的�
 
 ## x402-payment {#x402-payment}
 
-独立支付 Skill 正在退出默认接入路径。使用 [wallet-cli 4.14 的支付流程](/zh-Hans/x402/cli/quickstart/)，先预览再授权付款；本节保留旧锚点供已有链接访问，不再要求安装独立 x402-cli。
+独立支付 Skill 正在退出默认接入路径。使用 [wallet-cli 4.14 的支付流程](/zh-Hans/wallet-cli/quickstart/)，先预览再授权付款；本节保留旧锚点供已有链接访问，不再要求安装独立 x402-cli。
 
 ## recharge-skill {#recharge-skill}
 
-充值与记录查询使用 `wallet-cli bai`，通过 `--json-schema` 查询具体命令，参见 [B.AI 充值说明](/zh-Hans/x402/cli/command-reference/)。需要 wallet-cli 账户和 B.AI API Key。旧充值服务的 MCP 接口仍是独立服务能力，不因 Skill 调整而自动关闭。
+充值与记录查询使用 `wallet-cli bai`，通过 `--json-schema` 查询具体命令，参见 [B.AI 充值说明](/zh-Hans/wallet-cli/command-reference/)。需要 wallet-cli 账户和 B.AI API Key。旧充值服务的 MCP 接口仍是独立服务能力，不因 Skill 调整而自动关闭。
 
 ## bankofai-guide {#bankofai-guide}
 
-不再作为默认安装或首次钱包配置流程。请使用 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)和 [wallet-cli 配置指引](/zh-Hans/x402/cli/quickstart/)。本节保留旧锚点，避免已有链接失效。
+不再作为默认安装或首次钱包配置流程。请使用 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)和 [wallet-cli 配置指引](/zh-Hans/wallet-cli/quickstart/)。本节保留旧锚点，避免已有链接失效。
 
 ## 推荐学习路径
 
 **从这里开始——零风险，零配置：** 用 tronscan-skill 查账户、看交易，用 sunswap 查价格和报价。纯查询，不花钱，不需要密码。
 
-**接下来——用假钱练手：** 配置好钱包（见 [wallet-cli 快速入门](/zh-Hans/x402/cli/quickstart/)），然后在 Nile 测试网上试试换币和流动性操作。确认 AI 的表现完全符合预期。
+**接下来——用假钱练手：** 配置好钱包（见 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)），然后在 Nile 测试网上试试换币和流动性操作。确认 AI 的表现完全符合预期。
 
 **然后——主网小额试水：** 用少量真实资金跑一遍完整流程，确保没有意外。
 

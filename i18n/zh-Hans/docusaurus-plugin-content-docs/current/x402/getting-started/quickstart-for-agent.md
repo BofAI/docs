@@ -7,7 +7,7 @@ description: "使用 wallet-cli 4.14 配置 Agent 的支付入口。"
 
 新的支付入口使用 **wallet-cli 4.14.0**，无需安装独立 x402-cli。钱包配置与签名由 wallet-cli 管理，Agent 负责选择命令、预览支付并解释结果。
 
-1. 按 [Wallet CLI 快速入门](/zh-Hans/x402/cli/quickstart/)安装 CLI，在本地配置账户并核对地址。
+1. 按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)安装 CLI，在本地配置账户并核对地址。
 2. 如需 Skill，按 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)选择安装；核对 Skill 的依赖版本与 CLI 一致。
 3. 从 [API Catalog](/zh-Hans/x402/api-catalog/get-started/)查询接口，先运行 `wallet-cli x402 pay` 的 `--dry-run` 预览。
 4. 向用户展示网络、收款地址、币种、金额和费用；得到相应授权后，使用已批准的安全密码来源进行签名。
@@ -21,7 +21,7 @@ description: "使用 wallet-cli 4.14 配置 Agent 的支付入口。"
 
 出现 `paymentStatus: "unknown"` 或 `retryPayment: false` 时，先核对原交易；不要让 Agent 自动重新支付。
 
-- [命令参考](/zh-Hans/x402/cli/command-reference/)
+- [命令参考](/zh-Hans/wallet-cli/command-reference/)
 - [为服务端接入 x402](/zh-Hans/x402/getting-started/quickstart-for-sellers/)
 - [x402 SDK](/zh-Hans/x402/sdk-features/)
 

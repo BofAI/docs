@@ -1,7 +1,7 @@
 # Introduction
 
 :::note
-Agent Wallet documentation remains for existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](/x402/cli/quickstart/); the stores are not automatically interchangeable.
+Agent Wallet documentation remains for existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](/wallet-cli/quickstart/); the stores are not automatically interchangeable.
 :::
 
 ## Enjoy the Convenience of AI Agents Without the Private Key Risk

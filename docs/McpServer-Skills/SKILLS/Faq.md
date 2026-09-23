@@ -79,7 +79,7 @@ If it's a **mainnet** private key, act immediately:
 5. Revoke token approvals on all protocols (SunSwap, SunPerp, etc.) connected to the old wallet.
 
 :::tip Prevention is better than cure
-Use [wallet-cli](/x402/cli/quickstart/) from the start instead of plaintext private keys. Agent Wallet locks your key in an encrypted local vault — even if someone sees your environment variables, they can't open the vault without the encryption password. Two locks broken at once? Extremely unlikely.
+Use [wallet-cli](/wallet-cli/quickstart/) from the start instead of plaintext private keys. Agent Wallet locks your key in an encrypted local vault — even if someone sees your environment variables, they can't open the vault without the encryption password. Two locks broken at once? Extremely unlikely.
 :::
 
 ### Why does the AI ask for confirmation before every transaction?
@@ -112,7 +112,7 @@ If extreme volatility causes a transaction to fail, try increasing the tolerance
 
 ### How do I configure credentials?
 
-Use the [wallet-cli setup flow](/x402/cli/quickstart/) for the official wallet and payment entry. Community projects retain their own API-key and signing requirements; these settings are not automatically shared with wallet-cli. Never paste a private key or master password into chat, or store the wallet-cli master password in an environment variable.
+Use the [wallet-cli setup flow](/wallet-cli/quickstart/) for the official wallet and payment entry. Community projects retain their own API-key and signing requirements; these settings are not automatically shared with wallet-cli. Never paste a private key or master password into chat, or store the wallet-cli master password in an environment variable.
 
 ### Which AI tools support Skills?
 

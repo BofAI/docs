@@ -1,7 +1,7 @@
 # 本地私有化部署
 
 :::note
-TRON MCP 按项目整改计划停止开发。新钱包操作使用 [wallet-cli](/zh-Hans/x402/cli/quickstart/)；以下保留现有 MCP 用户参考。
+TRON MCP 按项目整改计划停止开发。新钱包操作使用 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)；以下保留现有 MCP 用户参考。
 :::
 
 ## 什么是本地私有化部署？

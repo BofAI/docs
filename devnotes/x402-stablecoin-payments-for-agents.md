@@ -273,5 +273,5 @@ A genuinely reliable agent payment system still has to implement protocol capabi
 ## Related docs
 
 - [x402 Payment Protocol](/) — protocol overview and core concepts
-- [x402 CLI](/x402/cli/) — pay and run paywalls from your terminal
+- [Wallet CLI guide](/wallet-cli/) — pay and run paywalls from your terminal
 - [SDK Features](/x402/sdk-features/) — which schemes the SDK supports

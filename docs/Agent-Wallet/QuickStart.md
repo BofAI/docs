@@ -4,7 +4,7 @@ import TabItem from '@theme/TabItem';
 # Quick Start
 
 :::note
-Agent Wallet documentation remains for existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](/x402/cli/quickstart/); the stores are not automatically interchangeable.
+Agent Wallet documentation remains for existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](/wallet-cli/quickstart/); the stores are not automatically interchangeable.
 :::
 
 From zero to invoking your Agent-wallet in your AI agent chat. We provide two ways to create your wallet — **conversational setup is the easiest**, done entirely from your AI chat; **command-line setup** gives you the most precise control.

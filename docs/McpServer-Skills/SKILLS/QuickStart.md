@@ -20,7 +20,7 @@ wallet-cli --version
 npx skills add https://github.com/BofAI/skills/tree/main --skill wallet-cli -g
 ```
 
-`npx skills add` installs definitions, not external CLI dependencies. Inspect the dependency version in the installed `wallet-cli/SKILL.md`. The 4.14.0 Skill update is tracked in [Skills PR #81](https://github.com/BofAI/skills/pull/81). If the stable branch still requires 4.13.0, do not bypass its version check or automatically downgrade: use 4.14.0 directly through the [CLI quick start](/x402/cli/quickstart/) until the matching Skill is released.
+`npx skills add` installs definitions, not external CLI dependencies. Inspect the dependency version in the installed `wallet-cli/SKILL.md`. The 4.14.0 Skill update is tracked in [Skills PR #81](https://github.com/BofAI/skills/pull/81). If the stable branch still requires 4.13.0, do not bypass its version check or automatically downgrade: use 4.14.0 directly through the [CLI quick start](/wallet-cli/quickstart/) until the matching Skill is released.
 
 For community workflows, select additional Skills interactively:
 
@@ -32,10 +32,10 @@ Install only what you need and read each Skill's dependency and credential requi
 
 ## Configure and use
 
-Configure and select an account locally using the [Wallet CLI quick start](/x402/cli/quickstart/). Never paste passwords, mnemonics, or private keys into chat.
+Configure and select an account locally using the [Wallet CLI quick start](/wallet-cli/quickstart/). Never paste passwords, mnemonics, or private keys into chat.
 
 - Wallet and general TRON operations: use the `wallet-cli` Skill.
-- x402 payments: use [wallet-cli x402](/x402/cli/command-reference/).
+- x402 payments: use [wallet-cli x402](/wallet-cli/command-reference/).
 - B.AI recharge and records: inspect `wallet-cli bai --json-schema -o json` and configure a B.AI API key.
 - Community workflows: follow their actual Skill requirements; do not universally require an agent-wallet account.
 

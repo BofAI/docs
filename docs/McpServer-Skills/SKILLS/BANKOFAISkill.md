@@ -5,7 +5,7 @@ You don't need to write code or understand the technical details. Just copy the 
 :::warning Three Golden Rules
 BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactions are **irreversible** — there's no undo button, no customer service rollback.
 
-1. **Never paste your private key into a chat window.** Use [wallet-cli](/x402/cli/quickstart/) instead (think of it as opening a dedicated "payment account" for your AI — you don't hand over your bank password directly).
+1. **Never paste your private key into a chat window.** Use [wallet-cli](/wallet-cli/quickstart/) instead (think of it as opening a dedicated "payment account" for your AI — you don't hand over your bank password directly).
 2. **Practice with play money first.** Every new operation should be tested on the Nile testnet — it uses free test tokens, so there's nothing to lose.
 3. **Read the confirmation prompt carefully.** Before any on-chain transaction, the AI will show you the full bill and wait for your explicit "yes."
 :::
@@ -27,7 +27,7 @@ Five skills install under a different directory name than their repository folde
 
 ### Credentials
 
-Use the [wallet-cli quick start](/x402/cli/quickstart/) for the official wallet setup. Never paste private keys or passwords into chat. Community projects retain their own requirements: TronScan keys, SunPerp API keys/secrets, and USDD or withdrawal signing settings do not automatically become wallet-cli configuration.
+Use the [wallet-cli quick start](/wallet-cli/quickstart/) for the official wallet setup. Never paste private keys or passwords into chat. Community projects retain their own requirements: TronScan keys, SunPerp API keys/secrets, and USDD or withdrawal signing settings do not automatically become wallet-cli configuration.
 
 Obtain a B.AI API key from the [console](https://chat.bankofai.io/key) and store it through wallet-cli's supported configuration workflow; never print or commit credentials.
 
@@ -39,7 +39,7 @@ Head over to **[Quick Start](./QuickStart.md)** — it takes about 1 minute. Com
 
 ## agent-wallet {#agent-wallet}
 
-This legacy wallet Skill is no longer the default setup entry. Start with the [wallet-cli quick start](/x402/cli/quickstart/). SDK, server, and community integrations that still use agent-wallet can use the [Agent Wallet reference](/Agent-Wallet/Intro/).
+This legacy wallet Skill is no longer the default setup entry. Start with the [wallet-cli quick start](/wallet-cli/quickstart/). SDK, server, and community integrations that still use agent-wallet can use the [Agent Wallet reference](/Agent-Wallet/Intro/).
 
 ## wallet-cli {#wallet-cli}
 
@@ -255,21 +255,21 @@ Before redeeming USDD for USDT, check `psm-info` — if USDT reserves are low, `
 
 ## x402-payment {#x402-payment}
 
-The standalone payment Skill is being retired from the default integration path. Use the [wallet-cli 4.14 payment flow](/x402/cli/quickstart/): preview first, then authorize payment. This section preserves the old anchor; do not install standalone x402-cli.
+The standalone payment Skill is being retired from the default integration path. Use the [wallet-cli 4.14 payment flow](/wallet-cli/quickstart/): preview first, then authorize payment. This section preserves the old anchor; do not install standalone x402-cli.
 
 ## recharge-skill {#recharge-skill}
 
-Use `wallet-cli bai` for recharge and records; discover its commands with `--json-schema` and follow the [B.AI recharge guidance](/x402/cli/command-reference/). It requires a wallet-cli account and a B.AI API key. The recharge service MCP endpoint remains a separate service capability; changing the Skill does not disable it.
+Use `wallet-cli bai` for recharge and records; discover its commands with `--json-schema` and follow the [B.AI recharge guidance](/wallet-cli/command-reference/). It requires a wallet-cli account and a B.AI API key. The recharge service MCP endpoint remains a separate service capability; changing the Skill does not disable it.
 
 ## bankofai-guide {#bankofai-guide}
 
-No longer the default installation or first-wallet setup flow. Use the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) and [wallet-cli setup guide](/x402/cli/quickstart/). This section retains the old anchor for existing links.
+No longer the default installation or first-wallet setup flow. Use the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) and [wallet-cli setup guide](/wallet-cli/quickstart/). This section retains the old anchor for existing links.
 
 ## Recommended Learning Path
 
 **Start here — zero risk, zero config:** Use tronscan-skill to look up accounts and check transactions. Use sunswap to check prices and get quotes. Read-only, no credentials needed.
 
-**Next — practice with play money:** Set up your wallet (see [Wallet CLI Quick Start](/x402/cli/quickstart/)), then test swaps and liquidity operations on the Nile testnet. Confirm the AI behaves exactly as expected.
+**Next — practice with play money:** Set up your wallet (see [Wallet CLI Quick Start](/wallet-cli/quickstart/)), then test swaps and liquidity operations on the Nile testnet. Confirm the AI behaves exactly as expected.
 
 **Then — mainnet with small amounts:** Run the full flow with a small amount of real funds to make sure everything works.
 

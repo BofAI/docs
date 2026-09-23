@@ -1,7 +1,7 @@
 # Local Private Deployment
 
 :::note
-TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/x402/cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
+TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/wallet-cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
 :::
 
 ## What is Local Private Deployment?

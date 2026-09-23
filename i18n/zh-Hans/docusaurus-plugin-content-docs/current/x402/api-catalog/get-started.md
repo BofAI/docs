@@ -5,7 +5,7 @@ description: "用 wallet-cli 查询目录和预览付费接口。"
 
 # Catalog 快速入门
 
-先按 [Wallet CLI 快速入门](/zh-Hans/x402/cli/quickstart/)安装 `@tron-walletcli/wallet-cli@4.14.0`。目录查询不需要钱包或密码，支付预览和付款需要已配置账户。
+先按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)安装 `@tron-walletcli/wallet-cli@4.14.0`。目录查询不需要钱包或密码，支付预览和付款需要已配置账户。
 
 ## 浏览目录
 
@@ -33,7 +33,7 @@ wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1
 
 - [目录数据与接口参考](/zh-Hans/x402/api-catalog/reference/)
 - [提交服务](/zh-Hans/x402/api-catalog/list-your-service/)
-- [支付命令参考](/zh-Hans/x402/cli/command-reference/)
+- [支付命令参考](/zh-Hans/wallet-cli/command-reference/)
 
 {/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
 <span id="第-1-步安装-agent-wallet"></span>

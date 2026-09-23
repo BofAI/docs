@@ -187,7 +187,7 @@ Use it when an agent, backend workflow, or CLI script has already validated the 
 
 ## CLI Quick Start
 
-Install wallet-cli 4.14.0 using the [quick start](/zh-Hans/x402/cli/quickstart/), configure an account, and preview the route for your payment network. The examples below do not pay. Authorize any real payment separately and supply the password securely.
+Install wallet-cli 4.14.0 using the [quick start](/zh-Hans/wallet-cli/quickstart/), configure an account, and preview the route for your payment network. The examples below do not pay. Authorize any real payment separately and supply the password securely.
 
 TRON Mainnet:
 

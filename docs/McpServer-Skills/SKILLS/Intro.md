@@ -1,7 +1,7 @@
 # Introduction
 
 :::note
-Use wallet-cli as the official wallet entry point. See the [Wallet CLI guide](/x402/cli/) for payment and recharge commands. Available Skills depend on the selected release.
+Use wallet-cli as the official wallet entry point. See the [Wallet CLI guide](/wallet-cli/) for payment and recharge commands. Available Skills depend on the selected release.
 :::
 
 Welcome to BANK OF AI SKILLS!

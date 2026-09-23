@@ -1,7 +1,7 @@
 # FAQ & Troubleshooting
 
 :::note
-TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/x402/cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
+TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/wallet-cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
 :::
 
 When you encounter problems, check here first. Organized by the order you're most likely to encounter them: connection issues (most common), then authentication and keys, on-chain errors, AI behavior issues, and finally some general questions.

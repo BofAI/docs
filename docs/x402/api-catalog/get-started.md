@@ -5,7 +5,7 @@ description: "Discover catalog services and preview payments with wallet-cli."
 
 # Catalog Quick Start
 
-Install `@tron-walletcli/wallet-cli@4.14.0` using the [Wallet CLI quick start](/x402/cli/quickstart/). Catalog reads need no wallet or password; payment previews and payments require a configured account.
+Install `@tron-walletcli/wallet-cli@4.14.0` using the [Wallet CLI quick start](/wallet-cli/quickstart/). Catalog reads need no wallet or password; payment previews and payments require a configured account.
 
 ## Browse providers
 
@@ -33,7 +33,7 @@ For direct API access, read the [Catalog JSON](https://x402-catalog.bankofai.io/
 
 - [Catalog data and API reference](/x402/api-catalog/reference/)
 - [List your service](/x402/api-catalog/list-your-service/)
-- [Payment command reference](/x402/cli/command-reference/)
+- [Payment command reference](/wallet-cli/command-reference/)
 
 {/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
 <span id="step-1-install-the-agent-wallet"></span>

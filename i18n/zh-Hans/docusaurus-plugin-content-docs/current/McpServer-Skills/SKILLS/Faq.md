@@ -79,7 +79,7 @@ AI 能准确描述功能 = 安装成功。
 5. 去各个协议（SunSwap、SunPerp 等）撤销旧钱包的授权。
 
 :::tip 预防胜于补救
-从一开始就使用 [wallet-cli](/zh-Hans/x402/cli/quickstart/) 替代明文私钥。Agent Wallet 把你的密钥锁在本地加密保险箱里——就算有人偷看到你的环境变量，没有加密密码也打不开保险箱。两把锁同时被破的概率极低。
+从一开始就使用 [wallet-cli](/zh-Hans/wallet-cli/quickstart/) 替代明文私钥。Agent Wallet 把你的密钥锁在本地加密保险箱里——就算有人偷看到你的环境变量，没有加密密码也打不开保险箱。两把锁同时被破的概率极低。
 :::
 
 ### 为什么每笔交易 AI 都要问我确认？
@@ -112,7 +112,7 @@ AI 的应对策略是：先给你看报价，你确认后在实际提交前会�
 
 ### 怎么配置密码和密钥？
 
-官方钱包和支付使用 [wallet-cli 配置流程](/zh-Hans/x402/cli/quickstart/)。社区项目仍按各自 Skill 配置 API Key 或签名参数；这些配置不会自动与 wallet-cli 共享。不要将私钥或主密码粘贴到聊天窗口，也不要把 wallet-cli 主密码作为环境变量保存。
+官方钱包和支付使用 [wallet-cli 配置流程](/zh-Hans/wallet-cli/quickstart/)。社区项目仍按各自 Skill 配置 API Key 或签名参数；这些配置不会自动与 wallet-cli 共享。不要将私钥或主密码粘贴到聊天窗口，也不要把 wallet-cli 主密码作为环境变量保存。
 
 ### 哪些 AI 工具能用这些技能？
 

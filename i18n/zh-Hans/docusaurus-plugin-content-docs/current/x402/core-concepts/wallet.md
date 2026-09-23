@@ -97,7 +97,7 @@ x402 客户端 SDK 会自动处理此操作。
 
 ## 安全最佳实践
 
-- **严禁暴露私钥**：官方 CLI 的账户与签名由 [wallet-cli](/zh-Hans/x402/cli/quickstart/)管理；现有 SDK 集成可使用 [Agent Wallet](/zh-Hans/Agent-Wallet/Intro/) 或其他受支持的签名器。不要将私钥写入源代码、命令参数或聊天。
+- **严禁暴露私钥**：官方 CLI 的账户与签名由 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)管理；现有 SDK 集成可使用 [Agent Wallet](/zh-Hans/Agent-Wallet/Intro/) 或其他受支持的签名器。不要将私钥写入源代码、命令参数或聊天。
 - **优先使用测试网**：在部署至主网前，请务必在测试网完成开发与验证。
 - **理解 Permit2 授权额度**：SDK 发出的这笔一次性 Permit2 授权**始终是 `MaxUint256`**——它不提供更小的额度，而 TRON 的代付扩展会拒绝非 `MaxUint256` 的被代付授权。你在链下自行设置的额度只要够付本次支付，同样会被接受。最小权限体现在下一层：每笔支付都是一份独立签名的授权，绑定了具体金额、收款方与有效期，因此仅凭这笔常设授权无法转走资金。
 - **实时监控交易**：利用 TronScan/BscScan 追踪支付状态及额度授权记录，确保资金安全。

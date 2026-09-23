@@ -49,13 +49,4 @@ Before paying, confirm the network, recipient, amount, and fees. Remove `--dry-r
 
 After an uncertain result, reconcile the transaction and inspect `error.details.paymentStatus`. Do not pay again when `retryPayment: false` is returned.
 
-[Command and result reference](/x402/cli/command-reference/) · [FAQ](/x402/cli/faq/)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="prerequisites"></span>
-<span id="step-1-install"></span>
-<span id="step-2-try-it-without-spending-anything"></span>
-<span id="step-3-run-a-full-roundtrip-on-testnet"></span>
-<span id="step-4-pay-a-real-x402-endpoint"></span>
-<span id="optional-run-your-own-paywall"></span>
-<span id="next-steps"></span>
+[Command and result reference](/wallet-cli/command-reference/) · [FAQ](/wallet-cli/faq/)

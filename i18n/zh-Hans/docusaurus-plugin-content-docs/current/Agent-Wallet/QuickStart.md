@@ -4,7 +4,7 @@ import TabItem from '@theme/TabItem';
 # 快速开始
 
 :::note
-Agent Wallet 文档保留给现有 SDK、服务端和社区集成。官方新用户的钱包配置入口是 [wallet-cli](/zh-Hans/x402/cli/quickstart/)，两套配置不会自动互通。
+Agent Wallet 文档保留给现有 SDK、服务端和社区集成。官方新用户的钱包配置入口是 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)，两套配置不会自动互通。
 :::
 
 从零到在 AI 代理对话框里唤醒你的 Agent-wallet。我们提供了两种创建钱包的方式——**对话式创建最简单**，全程在 AI 对话框里完成；**命令行创建**则给你最精细的控制。

@@ -49,13 +49,4 @@ wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1
 
 支付结果不确定时先检查交易和 `error.details.paymentStatus`；出现 `retryPayment: false` 时不要重新付款。
 
-[完整命令与结果说明](/zh-Hans/x402/cli/command-reference/) · [常见问题](/zh-Hans/x402/cli/faq/)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="准备工作"></span>
-<span id="第-1-步安装"></span>
-<span id="第-2-步先不花钱试一试"></span>
-<span id="第-3-步在测试网跑一次完整回路"></span>
-<span id="第-4-步支付真实的-x402-接口"></span>
-<span id="可选运行你自己的付费端点"></span>
-<span id="下一步"></span>
+[完整命令与结果说明](/zh-Hans/wallet-cli/command-reference/) · [常见问题](/zh-Hans/wallet-cli/faq/)

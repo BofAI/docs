@@ -20,7 +20,7 @@ wallet-cli --version
 npx skills add https://github.com/BofAI/skills/tree/main --skill wallet-cli -g
 ```
 
-`npx skills add` 只安装 Skill 定义，不安装外部 CLI。安装后检查 `wallet-cli/SKILL.md` 的依赖版本。4.14.0 的 Skill 更新正在 [Skills PR #81](https://github.com/BofAI/skills/pull/81) 中推进；如果稳定分支仍要求 4.13.0，不要忽略版本检查或自动降级，可先按 [CLI 快速入门](/zh-Hans/x402/cli/quickstart/)直接使用 4.14.0，待对应 Skill 发布后再安装。
+`npx skills add` 只安装 Skill 定义，不安装外部 CLI。安装后检查 `wallet-cli/SKILL.md` 的依赖版本。4.14.0 的 Skill 更新正在 [Skills PR #81](https://github.com/BofAI/skills/pull/81) 中推进；如果稳定分支仍要求 4.13.0，不要忽略版本检查或自动降级，可先按 [CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)直接使用 4.14.0，待对应 Skill 发布后再安装。
 
 需要社区业务时，使用交互式选择安装：
 
@@ -32,10 +32,10 @@ npx skills add https://github.com/BofAI/skills/tree/main -g
 
 ## 配置及调用
 
-按 [Wallet CLI 快速入门](/zh-Hans/x402/cli/quickstart/)在本地配置和选择账户。不要把密码、助记词、私钥粘贴到聊天中。
+按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)在本地配置和选择账户。不要把密码、助记词、私钥粘贴到聊天中。
 
 - 基础钱包与 TRON 操作：使用 `wallet-cli` Skill。
-- x402 支付：使用 [wallet-cli x402](/zh-Hans/x402/cli/command-reference/)。
+- x402 支付：使用 [wallet-cli x402](/zh-Hans/wallet-cli/command-reference/)。
 - B.AI 充值与记录：查看 `wallet-cli bai --json-schema -o json`，并配置 B.AI API Key。
 - 社区业务：按对应 Skill 的实际说明配置，不能统一强制创建 agent-wallet 钱包。
 

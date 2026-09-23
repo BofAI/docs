@@ -1,7 +1,7 @@
 # 简介
 
 :::note
-官方钱包入口统一为 wallet-cli；支付和充值命令见 [Wallet CLI 指引](/zh-Hans/x402/cli/)。实际可安装 Skill 以所选发布版本为准。
+官方钱包入口统一为 wallet-cli；支付和充值命令见 [Wallet CLI 指引](/zh-Hans/wallet-cli/)。实际可安装 Skill 以所选发布版本为准。
 :::
 
 欢迎来到 BANK OF AI SKILLS！

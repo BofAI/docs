@@ -54,17 +54,4 @@ wallet-cli bai recharge-orders --json-schema -o json
 
 Requires a wallet-cli account and a stored B.AI API key. Recharge supports the configured mainnet routes only. A preview creates no order, binds no wallet, and makes no payment. A real recharge may first bind the paying address, which must be within the authorized operation. `creditStatus: "unconfirmed"` is not a failed payment: use `bai report-recharge` for the original transaction instead of paying again.
 
-[Quick start](/x402/cli/quickstart/) · [FAQ](/x402/cli/faq/)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="global-options"></span>
-<span id="pay"></span>
-<span id="paying-with-agent-wallet"></span>
-<span id="paying-on-base"></span>
-<span id="pay-environment-variables"></span>
-<span id="serve"></span>
-<span id="roundtrip"></span>
-<span id="gateway"></span>
-<span id="gateway-catalog"></span>
-<span id="catalog"></span>
-<span id="exit-codes"></span>
+[Quick start](/wallet-cli/quickstart/) · [FAQ](/wallet-cli/faq/)

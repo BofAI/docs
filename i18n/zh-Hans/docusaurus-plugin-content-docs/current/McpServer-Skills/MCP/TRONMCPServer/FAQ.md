@@ -1,7 +1,7 @@
 # 常见问题与排查
 
 :::note
-TRON MCP 按项目整改计划停止开发。新钱包操作使用 [wallet-cli](/zh-Hans/x402/cli/quickstart/)；以下保留现有 MCP 用户参考。
+TRON MCP 按项目整改计划停止开发。新钱包操作使用 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)；以下保留现有 MCP 用户参考。
 :::
 
 遇到问题时，先来这里找找答案。本页按照你最可能遇到的顺序组织：先是连接问题（最常见），然后是认证与密钥、链上错误、AI 行为异常，最后是一些通用的常见问题。

@@ -115,7 +115,7 @@ These are public RPC examples. Configure production RPCs through your chosen cli
 ## Security Best Practices
 
 - **Never Expose Private Keys**
-  Use [wallet-cli](/x402/cli/quickstart/) for the official CLI account and signing flow. Existing SDK integrations may use [Agent Wallet](/Agent-Wallet/Intro/) or another supported signer. Do not expose private keys in source code, command arguments, or chat.
+  Use [wallet-cli](/wallet-cli/quickstart/) for the official CLI account and signing flow. Existing SDK integrations may use [Agent Wallet](/Agent-Wallet/Intro/) or another supported signer. Do not expose private keys in source code, command arguments, or chat.
 
 - **Use Testnets First**
   Always complete development and validation on testnet before deploying to mainnet.
