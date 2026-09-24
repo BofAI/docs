@@ -23,7 +23,7 @@ JEV-1.13.0 是 TypeSafe AI 面向软件工作流中快速结构化决策的 Syst
 
 | 能力维度 | 说明 |
 | :--- | :--- |
-| **API 接口** | 使用 `POST https://api.b.ai/v1/decisions`，请求包含 `state`、`model` 和 `questions`。详情参见 [API 参考](../api/API.md)。 |
+| **API 接口** | 使用 `POST https://api.b.ai/v1/decisions`，请求包含 `state`、`model` 和 `questions`。详情参见 [Decisions API 参考](../api/decisions-api.md)。 |
 | **模型 ID** | `jev-1.13.0` 为稳定版本；`jev-latest` 当前解析到该版本。 |
 | **推理能力** | 针对聚焦型语义判断优化；复杂决策应拆分为范围明确的问题，并在代码中组合。 |
 | **输入模态** | 仅支持文本，可使用字符串、JSON 对象或数组提供。 |

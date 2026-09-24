@@ -1,6 +1,6 @@
 # B.AI API 参考
 
-B.AI 提供统一的大语言模型 API，兼容 OpenAI Chat Completions、OpenAI Responses 和 Anthropic Messages 协议。开发者可以使用同一个 B.AI API Key 接入不同协议，并根据应用或客户端的要求选择对应端点。
+B.AI 提供统一的大语言模型 API，兼容 OpenAI Chat Completions、OpenAI Responses 和 Anthropic Messages 协议，同时提供兼容 TypeSafe System One 协议的 Decisions API。开发者可以使用同一个 B.AI API Key 接入不同协议，并根据应用或客户端的要求选择对应端点。
 
 - **API 版本：** `v1`
 - **生产环境 Base URL：** `https://api.b.ai/v1`
@@ -82,6 +82,7 @@ x-api-key: <BAI_API_KEY>
 |---|---|---|---|
 | `GET` | `/models` | OpenAI 兼容 | 获取与当前凭证关联的模型列表 |
 | `GET` | [`/balance`](./balance.md) | B.AI | 查询当前 API Key 的余额与额度信息 |
+| `POST` | [`/decisions`](./decisions-api.md) | TypeSafe System One | 用于分类、评分和是非判断，返回结构化决策结果 |
 | `POST` | `/responses` | OpenAI Responses | Agent、推理、工具调用及 Codex 等场景 |
 | `POST` | `/chat/completions` | OpenAI Chat Completions | 通用聊天补全及现有 OpenAI 兼容应用 |
 | `POST` | `/messages` | Anthropic Messages | Claude SDK、Claude Code 等 Anthropic 兼容应用 |
