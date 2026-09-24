@@ -475,7 +475,7 @@ To test the complete pay → receive content flow, use the minimal client in [Qu
 | `ERR_PACKAGE_PATH_NOT_EXPORTED` under `npx tsx` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
 | `No network/scheme registered for x402 version: 2 …` | The selected client network has no registered scheme | Ensure the client registers your target network, such as `TRON_NILE` |
 | `Insufficient balance` / allowance error | Test wallet lacks test tokens, or Permit2 allowance too low | Claim test tokens from the faucet; the client auto-approves Permit2 on first payment |
-| `Connection timeout` | Network or request timeout | Check your connection. Note the SDK reads no environment variables — `EVM_RPC_URL` is honoured by `x402-cli` and the example apps; in your own server pass the RPC URL to the signer factory |
+| `Connection timeout` | Network or request timeout | Check your connection. Note the SDK reads no environment variables — `EVM_RPC_URL` is honoured by the reference example apps; in your own server pass the RPC URL to the signer factory |
 
 ---
 

@@ -63,7 +63,7 @@ The officially hosted Facilitator service is available and ready to use — no i
 | Address | Purpose |
 |---------|---------|
 | [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) | **Admin Portal** — Register, create, and manage your Facilitator API Key (open in browser) |
-| [https://facilitator.bankofai.io](https://facilitator.bankofai.io) | **Service Endpoint** — Set as `FACILITATOR_URL` in your code; handles payment verification and settlement (API calls only, not for browser access) |
+| `https://facilitator.bankofai.io` | **Service Endpoint** — Set as `FACILITATOR_URL` in your code; handles payment verification and settlement (API calls only, not for browser access) |
 
 Quick usage examples can be found in [OfficialFacilitator](./OfficialFacilitator.md)
 

@@ -1,5 +1,9 @@
 # 简介
 
+:::note
+官方钱包入口统一为 wallet-cli；支付和充值命令见 [Wallet CLI 指引](/zh-Hans/wallet-cli/)。实际可安装 Skill 以所选发布版本为准。
+:::
+
 欢迎来到 BANK OF AI SKILLS！
 
 在过去，探索 Web3 是一件充满门槛的苦差事：盯盘、算滑点、切钱包、查合约……稍有不慎还会踩坑报错。现在，我们决定终结这种繁琐。
@@ -57,20 +61,16 @@
 
 ## 目前 Skills 能帮你干什么？
 
-一共 10 个技能，覆盖 TRON 生态最常用的场景。下表一眼看全：每个技能配一句"参考话术"，复制进 AI 对话框回车就能体验；点技能名查看完整文档。
+这些技能覆盖 TRON 生态最常用的场景。下表一眼看全：每个技能配一句"参考话术"，复制进 AI 对话框回车就能体验；点技能名查看完整文档。
 
 | 技能 | 一句话能干嘛 | 试试这句话 |
 | :-- | :-- | :-- |
-| 🔑 [agent-wallet](./BANKOFAISkill.md#agent-wallet) | 创建/管理加密钱包、签名交易，私钥全程不暴露；其它技能的底层依赖（EVM + TRON） | "帮我创建一个新的 agent 钱包" |
 | 🧰 [wallet-cli](./BANKOFAISkill.md#wallet-cli) | 独立的 TRON 钱包工具箱——转账、质押、投票、合约、签名、链上查询，走锁定版 `wallet-cli` npm 包；Agent 执行时密码只经 stdin，钱包管理仅限人工 | "用 wallet-cli 查我在 Nile 上的余额和质押状态" |
 | 💱 [sunswap](./BANKOFAISkill.md#sunswap)<br/>`sunswap-dex-trading` | 查价格、比报价、一键换币 | "100 USDT 在 SunSwap 能换多少 TRX？" |
 | 🚀 [sunpump-agent-skill](./BANKOFAISkill.md#sunpump-agent-skill)<br/>`sunpump-meme-token-toolkit` | 一句话发 meme 币、SunPump 买卖与行情（仅 TRON 主网；发币无需钱包） | "帮我在 SunPump 上发一个 meme 币" |
 | 📈 [sunperp-skill](./BANKOFAISkill.md#sunperp-skill)<br/>`sunperp-perpetual-futures-trading` | SunPerp 永续合约看行情、开平仓；内置风控：≤20 倍杠杆、强制止损 | "开一张 5 倍多单，亏 5% 自动止损" |
 | 🕵️ [tronscan-skill](./BANKOFAISkill.md#tronscan-skill)<br/>`tronscan-data-lookup` | 查账户、交易、代币安全；纯查询零风险、不花钱 | "查查这个币有没有被庄家控盘" |
 | 💵 [usdd-skill](./BANKOFAISkill.md#usdd-skill)<br/>`usdd-just-protocol` | PSM 1:1 兑换 USDT↔USDD（现零手续费）、查金库（CDP）仓位 | "用 1000 USDT 通过 PSM 换成 USDD" |
-| ☕ [x402-payment](./BANKOFAISkill.md#x402-payment) | 调用付费接口时经 x402 自动"先付费再获取"（TRON / BSC 多链） | "用 x402 调用这个付费端点：https://…" |
-| 🏦 [recharge-skill](./BANKOFAISkill.md#recharge-skill) | 查 BANK OF AI 余额、一句话充值 | "查下余额，顺便再充 5 个 U" |
-| 🧭 [bankofai-guide](./BANKOFAISkill.md#bankofai-guide) | 新手引导 + "钱包守门员"，通常由安装器自动唤醒 | "带我走一遍新手引导" |
 
 ---
 

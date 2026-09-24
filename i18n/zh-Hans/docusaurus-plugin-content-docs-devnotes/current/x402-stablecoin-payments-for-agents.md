@@ -273,5 +273,5 @@ BANK OF AI x402 让 API 能用 HTTP 原生的挑战—响应方式报价和收�
 ## 相关文档
 
 - [x402 支付协议](/zh-Hans/) —— 协议总览与核心概念
-- [x402 CLI](/zh-Hans/x402/cli/) —— 在终端里支付与自建付费端点
+- [Wallet CLI 指引](/zh-Hans/wallet-cli/) —— 在终端里支付与自建付费端点
 - [SDK 功能](/zh-Hans/x402/sdk-features/) —— 各支付方案的 SDK 支持情况

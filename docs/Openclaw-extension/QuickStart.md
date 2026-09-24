@@ -1,5 +1,9 @@
 # Quick Start
 
+:::note
+This extension is paused. The following is historical installation reference. New users should follow the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) rather than install the old wallet/MCP stack by default.
+:::
+
 Our goal: **Spend a few minutes following the wizard, clicking a few buttons, and get your AI to successfully fetch its first piece of on-chain data.**
 
 ---

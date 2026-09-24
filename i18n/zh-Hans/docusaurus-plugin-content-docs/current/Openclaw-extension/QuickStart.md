@@ -1,5 +1,9 @@
 # 快速开始
 
+:::note
+该扩展暂停维护。以下为旧安装流程参考，新用户请使用 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)，不要默认安装旧钱包和 MCP。
+:::
+
 我们的目标是：**花几分钟跟着向导点几下，让你的 AI 成功查到第一笔链上数据。**
 
 ---

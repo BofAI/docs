@@ -1,15 +1,10 @@
 ---
-title: 'SUN MCP Server'
-sidebar_label: '简介'
-description: 'SUN MCP Server 连接 AI 助手与 TRON 上的 SunSwap。完整文档已迁移至 SUN 文档站。'
+title: "SUN MCP Server"
+description: "SUN MCP Server 停止开发后的迁移入口。"
 ---
 
 # SUN MCP Server
 
-SUN MCP Server 是连接 AI 助手与 [SUN.IO（SunSwap）](https://sun.io)的桥梁——SunSwap 是 TRON 上最大的去中心化交易所。它基于 Model Context Protocol（MCP）构建，让你用自然语言查询 DeFi 数据、执行代币兑换、管理流动性头寸，无需直接接触合约或链上参数。
+SUN MCP Server 已停止开发，相关能力由 SUN CLI 承接。原 MCP 文档入口在此保留，不再链接到旧 MCP 服务或工具列表。
 
-:::tip 完整文档
-SUN MCP Server 的完整文档——安装、官方与私有化接入、全部工具列表、FAQ——现已迁移至 SUN 文档站。
-
-**→ [打开 SUN MCP Server 文档](https://docs-zh.sun.io/sun-ai/sun-mcp-server/overview)**
-:::
+[查看 SUN CLI 文档](/zh-Hans/McpServer-Skills/Tools/SUNCli/Intro/)

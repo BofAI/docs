@@ -34,8 +34,8 @@ To get listed, a provider submits two **public** files to the catalog repository
 Three consumers share the same data:
 
 - **[Catalog website](https://bankofai.io/catalog)**: for humans to browse and compare services.
-- **x402-cli**: search, inspect, and make paid calls from the command line.
-- **MCP**: `@bankofai/x402-mcp` lets an Agent pay for an x402 endpoint over MCP. Catalog-aware MCP discovery — browsing the catalog by name from inside an MCP client — is not shipped yet; use `x402-cli catalog` for discovery today.
+- **wallet-cli 4.14**: search, inspect, and make paid calls from the command line.
+- **MCP**: `@bankofai/x402-mcp` lets an Agent pay for an x402 endpoint over MCP. Catalog-aware MCP discovery — browsing the catalog by name from inside an MCP client — is not shipped yet; use `wallet-cli x402 provider-list` for discovery today.
 
 ## What's in the catalog
 

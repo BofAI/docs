@@ -1,5 +1,9 @@
 # Introduction
 
+:::note
+TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/wallet-cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
+:::
+
 ## What is TRON MCP Server?
 
 TRON MCP Server is a bridge that connects AI assistants with the TRON blockchain. Built on the [Model Context Protocol (MCP)](../Intro.md) standard, it lets you interact with the blockchain using natural language — checking balances, initiating transfers, calling smart contracts — without writing any code.

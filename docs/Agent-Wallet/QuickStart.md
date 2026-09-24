@@ -3,6 +3,10 @@ import TabItem from '@theme/TabItem';
 
 # Quick Start
 
+:::note
+Agent Wallet documentation remains for existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](/wallet-cli/quickstart/); the stores are not automatically interchangeable.
+:::
+
 From zero to invoking your Agent-wallet in your AI agent chat. We provide two ways to create your wallet — **conversational setup is the easiest**, done entirely from your AI chat; **command-line setup** gives you the most precise control.
 
 :::tip Prerequisites & CLI command details
@@ -14,7 +18,11 @@ From zero to invoking your Agent-wallet in your AI agent chat. We provide two wa
 
 ## Method 1: Conversational Setup (Easiest)
 
-If you've already installed [the BANK OF AI skill suite](../McpServer-Skills/SKILLS/QuickStart.md) (which includes `agent-wallet` and `bankofai-guide`), creating a wallet takes just one prompt in your AI chat — the AI generates the password, creates the wallet, and saves the config for you, with no manual file editing.
+:::note Historical setup
+The following conversational flow applies only to existing installations of the legacy agent-wallet and bankofai-guide Skills. They are no longer part of the default setup.
+:::
+
+If you've already installed [the BANK OF AI skill suite](../McpServer-Skills/SKILLS/QuickStart.md) from an older release that included `agent-wallet` and `bankofai-guide`, creating a wallet takes just one prompt in your AI chat — the AI generates the password, creates the wallet, and saves the config for you, with no manual file editing.
 
 **How it works:**
 

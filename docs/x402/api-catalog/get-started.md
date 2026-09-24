@@ -1,113 +1,43 @@
 ---
-title: Get Started
-sidebar_label: Get Started
-description: Plug your Agent into the API Catalog in 3 minutes — install the Agent Wallet, then install the x402 CLI to discover and call every service in the catalog.
+title: "Catalog Quick Start"
+description: "Discover catalog services and preview payments with wallet-cli."
 ---
 
-# Get Started
+# Catalog Quick Start
 
-Two steps and under 3 minutes to plug your Agent into the whole catalog: install the wallet, then install the x402 CLI. After that, your Agent can discover and call any service in the catalog, paying per call on-chain.
+Install `@tron-walletcli/wallet-cli@4.14.0` using the [Wallet CLI quick start](/wallet-cli/quickstart/). Catalog reads need no wallet or password; payment previews and payments require a configured account.
 
-**Prerequisite**: Node.js and npm.
-
-## Step 1: Install the Agent Wallet
-
-Run the command below to install a local wallet that manages stablecoins on TRON, BNB Chain, and Base. Every paid call your Agent makes from now on is signed locally by this wallet.
+## Browse providers
 
 ```bash
-npm i -g @bankofai/agent-wallet
-agent-wallet --help
+wallet-cli x402 provider-list -o json
+wallet-cli x402 provider-show dia -o json
+wallet-cli x402 endpoint-list dia -o json
+wallet-cli x402 update-catalog -o json
 ```
 
-## Step 2: Install the x402 CLI
+`provider-list` supports network, category, and capability filters. `update-catalog` refreshes the local cache.
 
-One install connects your Agent to the catalog — it discovers and calls every service over x402, paying per call. No accounts, no API keys to manage.
+## Choose an endpoint and network
+
+Read the network-specific URL from the CLI JSON's `x402Routes[].url` and fill in path placeholders. Gateway provider IDs differ from catalog FQNs, so do not construct URLs yourself. For example, preview DIA's TRON BTC quotation endpoint:
 
 ```bash
-npm install -g @bankofai/x402-cli
-x402-cli --version
+wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1/quotation/BTC \
+  --network tron:728126428 --token USDT --max-amount 0.01 --dry-run -o json
 ```
 
-When the version prints, you're done — that's both steps. Your Agent is now plugged into the catalog and ready to call.
+This only previews the payment. For an actual payment, review the network and amount, obtain authorization, and use `--password-stdin` from a secure source. Cap GasFree fees separately; reconcile uncertain transactions before considering another payment.
 
-## Calling services with the CLI
+For direct API access, read the [Catalog JSON](https://x402-catalog.bankofai.io/api/catalog.json). The static API uses snake_case fields such as `x402_routes`; use the CLI's schema and documentation for its output shape rather than mixing the two.
 
-Once installed, your Agent can discover and call services through the CLI. Search by name or keyword to see what's in the catalog:
+- [Catalog data and API reference](/x402/api-catalog/reference/)
+- [List your service](/x402/api-catalog/list-your-service/)
+- [Payment command reference](/wallet-cli/command-reference/)
 
-```bash
-x402-cli catalog search <keyword> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
-```
-
-Inspect a service's details and available endpoints:
-
-```bash
-x402-cli catalog show <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
-x402-cli catalog endpoints <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
-```
-
-:::caution Take the URL from the catalog, don't build it
-A gateway URL contains the **gateway provider id**, which is not the catalog FQN — `defillama` is served by `defillama-tvl-tron`, `defillama-coins-price-tron` and `defillama-yields-tron`, and every provider has one id per chain (`…-tron`, `…-bsc`, `…-base`). There is no substitution rule; copy the endpoint's `url`, or the matching `x402_routes[].url`, from `catalog endpoints <fqn>`. A wrong id returns `404 {"error":"provider not found"}`.
-:::
-
-**Free endpoints** (those the provider leaves unpriced) return their result to a plain `curl` — no CLI and no payment needed:
-
-```bash
-curl -sS 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>'
-```
-
-For a **paid** endpoint, use `x402-cli pay` — it handles the quote, payment, and result retrieval in one step. A simple GET needs nothing more than the URL:
-
-```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>'
-```
-
-For a paid POST endpoint, or to pin the payment chain, token, and scheme, pass them explicitly:
-
-```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>' \
-  --method POST \
-  --network tron:0x2b6653dc \
-  --token USDT \
-  --scheme exact \
-  --max-amount 0.000001 \
-  --header 'Content-Type: application/json' \
-  --body '{ ... }'
-```
-
-| Flag | Purpose |
-|---|---|
-| `--method` | HTTP method (defaults to `GET`) |
-| `--network` | CAIP-2 payment chain, e.g. `tron:0x2b6653dc`, `eip155:56`, `eip155:8453` |
-| `--token` | Settlement token, e.g. `USDT` or Base Mainnet `USDC` |
-| `--scheme` | x402 payment scheme declared by the route, e.g. `exact` |
-| `--max-amount` | Spend ceiling in **token units** (converted with the selected token's decimals, not a USD figure); the call aborts if the quote exceeds it |
-| `--header` / `--body` | Request headers and body for the upstream call |
-
-A service that settles on multiple chains exposes one route per network (`x402_routes` in the served API; the submission file spells it `x402Routes`); pick the route — and the matching `--network` / `--scheme` — for the chain you want to pay on.
-
-:::tip
-`--catalog` can point to the hosted URL above or to a locally built `dist/catalog.json` for offline debugging.
-:::
-
-## What happens during a paid call
-
-Every call clears on-chain via x402. On `exact` routes the quoted price is exactly what you pay; on TRON `exact_gasfree` routes the relayer additionally deducts its energy fee from the payment token, so cap it with `--max-gasfree-fee`:
-
-1. **Agent calls** — requests the target endpoint.
-2. **Gateway quotes** — returns the price (HTTP `402`).
-3. **Wallet authorizes** — the client signs the selected payment requirement and retries with a `PAYMENT-SIGNATURE` header.
-4. **Verified & settled** — the gateway asks the facilitator to verify the signed payload and settle funds on-chain to the provider's wallet.
-5. **Response returns** — the gateway returns the upstream result to the Agent.
-
-Upstream credentials never leave the gateway — the calling Agent never touches any key.
-
-:::tip Good to know
-- **Free endpoints**: not every call costs money. Endpoints the provider leaves unpriced charge you nothing — there's no quote step, the result comes straight back, and your wallet is never debited.
-- **No wallet yet?** Follow the [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md) to create and fund a wallet (takes under a minute). The Catalog reuses the same wallet — no extra setup.
-- **Risk isolation**: keep only a small amount of stablecoins in the wallet for per-call payments. Never store your main assets in an Agent wallet.
-:::
-
-## Next steps
-
-- Browse every service, or learn the response structures → [Data Format & API Reference](./reference.md)
-- Have an API you'd like to list and monetize? → [List Your Service](./list-your-service.md)
+{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
+<span id="step-1-install-the-agent-wallet"></span>
+<span id="step-2-install-the-x402-cli"></span>
+<span id="calling-services-with-the-cli"></span>
+<span id="what-happens-during-a-paid-call"></span>
+<span id="next-steps"></span>

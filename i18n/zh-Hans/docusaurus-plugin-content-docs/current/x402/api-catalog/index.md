@@ -34,8 +34,8 @@ import ThemedImage from '@theme/ThemedImage';
 三个消费入口共用同一份数据：
 
 - **[前端目录站](https://bankofai.io/catalog)**：给人浏览、比较服务。
-- **x402-cli**：在命令行里搜索、查看、直接付费调用。
-- **MCP**：`@bankofai/x402-mcp` 让 Agent 能通过 MCP 为 x402 端点付款。支持目录发现的 MCP（在 MCP 客户端里按名称浏览目录）尚未发布，当前请用 `x402-cli catalog` 做发现。
+- **wallet-cli 4.14**：在命令行里搜索、查看、直接付费调用。
+- **MCP**：`@bankofai/x402-mcp` 让 Agent 能通过 MCP 为 x402 端点付款。支持目录发现的 MCP（在 MCP 客户端里按名称浏览目录）尚未发布，当前请用 `wallet-cli x402 provider-list` 做发现。
 
 ## 目录里有什么
 

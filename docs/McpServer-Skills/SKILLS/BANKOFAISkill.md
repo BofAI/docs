@@ -5,7 +5,7 @@ You don't need to write code or understand the technical details. Just copy the 
 :::warning Three Golden Rules
 BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactions are **irreversible** — there's no undo button, no customer service rollback.
 
-1. **Never paste your private key into a chat window.** Use [Agent Wallet](../../Agent-Wallet/Intro.md) instead (think of it as opening a dedicated "payment account" for your AI — you don't hand over your bank password directly).
+1. **Never paste your private key into a chat window.** Use [wallet-cli](/wallet-cli/quickstart/) instead (think of it as opening a dedicated "payment account" for your AI — you don't hand over your bank password directly).
 2. **Practice with play money first.** Every new operation should be tested on the Nile testnet — it uses free test tokens, so there's nothing to lose.
 3. **Read the confirmation prompt carefully.** Before any on-chain transaction, the AI will show you the full bill and wait for your explicit "yes."
 :::
@@ -16,50 +16,20 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 
 | Skill | What It Does | What Key/Credential Do I Need? |
 | :--- | :--- | :--- |
-| **agent-wallet** | Create wallets, sign transactions/messages, manage multiple wallets — supports EVM and TRON | `AGENT_WALLET_PASSWORD` (encrypted mode) or none (interactive) |
-| **wallet-cli** | Standalone TRON wallet operations via the pinned `@tron-walletcli/wallet-cli@4.13.0` — transfers, staking, voting, contracts, signing, chain queries (machine-readable JSON) | A local wallet managed by wallet-cli; agent runs pass passwords via stdin only |
+| **wallet-cli** | Standalone TRON wallet operations via the pinned `@tron-walletcli/wallet-cli@4.14.0` — transfers, staking, voting, contracts, signing, chain queries (machine-readable JSON) | A local wallet managed by wallet-cli; agent runs pass passwords via stdin only |
 | **sunswap**<br/>installs as `sunswap-dex-trading` | Check prices, get quotes, swap tokens, manage V2/V3/V4 liquidity pools | Read-only: none. Trading: wallet credentials |
 | **sunpump-agent-skill**<br/>installs as `sunpump-meme-token-toolkit` | SunPump meme coins: create tokens with one command (server-side, no wallet), market data/rankings/holders/portfolios, plus buy/sell meme coins (automatically picks the swap route based on whether the token has launched, TRON mainnet only) | Read-only & token creation: none. On-chain buy/sell: wallet credentials |
 | **sunperp-skill**<br/>installs as `sunperp-perpetual-futures-trading` | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys. Withdrawals additionally need `TRON_PRIVATE_KEY` to sign the confirmation |
 | **tronscan-skill**<br/>installs as `tronscan-data-lookup` | Look up accounts, transactions, tokens, blocks, network stats | Optional: TronScan API key — without one, requests go through the keyless BofAI proxy and may be rate-limited |
 | **usdd-skill**<br/>installs as `usdd-just-protocol` | USDD stablecoin — PSM swaps (1:1 USDT ↔ USDD), vault queries, balance checks | Read-only: none. PSM swaps: wallet credentials |
-| **x402-payment** | On-chain "pay-first" auto-settlement on TRON (TRC20) & BSC (ERC20), with GasFree support | Wallet credentials (via agent-wallet) |
-| **recharge-skill** | Balance, order history, account top-up | Balance and order queries: BANK OF AI API key. Top-up: wallet credentials — it is authorised by an on-chain x402 payment, not by the API key |
-| **bankofai-guide** | Onboarding helper — post-install setup, first AgentWallet creation, wallet guard for other skills | None (runs automatically when needed) |
 
 Five skills install under a different directory name than their repository folder — that second name is what appears in `~/.agents/skills` and what you reference when asking an assistant to read a skill file.
 
-### 🔑 Where Do I Get These Keys? How Do I Set Them Up?
+### Credentials
 
-If you just want the AI to look up public data (like token prices or block height), you don't need to configure anything — just start using it.
+Use the [wallet-cli quick start](/wallet-cli/quickstart/) for the official wallet setup. Never paste private keys or passwords into chat. Community projects retain their own requirements: TronScan keys, SunPerp API keys/secrets, and USDD or withdrawal signing settings do not automatically become wallet-cli configuration.
 
-But if you want to unlock advanced features or trading, grab the keys you need below:
-
-**1. Wallet Credentials (for spending money and trading)**
-
-- **Where to get it:** You don't need to apply anywhere — this is simply your TRON wallet private key.
-- **How to set it up:** We've prepared two options in [Quick Start](./QuickStart.md#-want-the-ai-to-trade-for-you) — pick whichever suits you:
-  - **Option 1 (Recommended):** Use [Agent Wallet](../../Agent-Wallet/QuickStart.md) — visual interface, 2 minutes, private key encrypted and never exposed.
-  - **Option 2:** Paste your private key directly into your system config file (the "notepad method") — great for power users or quick testing.
-
-**2. TronScan API Key (your VIP pass for data queries)**
-
-You can query data without this — requests then go through the keyless BofAI proxy (`ts.bankofai.io`) — but if you query too fast, the system may rate-limit you. With a key, you get the VIP fast lane.
-
-- **Where to get it (completely free):** Go to [TronScan](https://tronscan.org/), register an account, and click to generate a key.
-- **How to set it up:** Follow the same "notepad method" in [Quick Start — "Want the AI to Trade for You?"](./QuickStart.md#-want-the-ai-to-trade-for-you) and paste `TRONSCAN_API_KEY` in the same way.
-
-**3. SunPerp API Keys (for perpetual contract trading)**
-
-- **Where to get them:** Go to [SunPerp](https://sunperp.com/), connect your wallet, then generate an API Key and Secret in your account settings.
-- **How to set them up:** Use the same "notepad method" to paste `SUNPERP_ACCESS_KEY` and `SUNPERP_SECRET_KEY` into your config file.
-
-**4. BANK OF AI API Key (for balance and order-history queries)**
-
-- **Where to get it:** Go to [chat.bankofai.io/key](https://chat.bankofai.io/key) and log in to get your key.
-- **How to set it up:** Use the notepad method to paste `BANKOFAI_API_KEY`.
-
----
+Obtain a B.AI API key from the [console](https://chat.bankofai.io/key) and store it through wallet-cli's supported configuration workflow; never print or commit credentials.
 
 ## Haven't Installed Yet?
 
@@ -69,47 +39,11 @@ Head over to **[Quick Start](./QuickStart.md)** — it takes about 1 minute. Com
 
 ## agent-wallet {#agent-wallet}
 
-Your AI's secure signing engine. This skill creates and manages encrypted wallets for your AI agent, letting it sign transactions and messages on both EVM (BSC, Ethereum, Polygon, Arbitrum, Base, etc.) and TRON networks — without ever exposing your private key. Think of it as the "keychain" that all other trading and payment skills rely on. Requires Node.js 20+.
-
-**Completely safe — looking only, no spending:**
-
-> List all my agent wallets.
-
-> Show the EVM and TRON addresses for my wallet.
-
-> What wallet is currently active?
-
-**Requires your confirmation:**
-
-> Create a new encrypted wallet for me.
-
-> Switch to my BSC wallet.
-
-> Sign this message: "Hello World" on TRON mainnet.
-
-**Real-world scenarios:**
-
-> Setting up for the first time? Try: "Create a new agent wallet" — the AI walks you through choosing a wallet type (`local_secure` for an encrypted local key, or `privy` for a hosted wallet via API credentials), generating keys, and saving your master password.
-
-> Managing multiple chains? Try: "Show me all my wallets and their addresses" — one wallet derives both EVM and TRON addresses from the same key. Use `eip155:<chainId>` for EVM networks (e.g. `eip155:1` Ethereum, `eip155:56` BSC, `eip155:137` Polygon, `eip155:42161` Arbitrum, `eip155:8453` Base) and canonical CAIP-2 IDs for TRON: `tron:0x2b6653dc` (Mainnet), `tron:0xcd8690dc` (Nile), `tron:0x94a9059e` (Shasta).
-
-> Need to sign something? Try: "Sign this transaction on BSC" — the AI handles the signing locally without broadcasting. Supports raw transactions, EIP-191 messages, and EIP-712 typed data (EVM only).
-
-:::tip Why use Agent Wallet instead of raw private keys?
-Agent Wallet encrypts your private key with a master password. Even if someone accesses your files, they can't use the key without the master password. This is the recommended way to configure wallet credentials for all other skills (sunswap, x402-payment, etc.).
-:::
-
-:::caution Dangerous operations are agent-restricted
-`remove`, `reset`, and `change-password` cannot be executed by the AI — you must run these commands yourself in the terminal. This protects against accidental or irreversible loss of wallet access. The AI will explain the command and ask you to run it yourself.
-:::
-
-For detailed setup instructions, see [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md).
-
----
+This legacy wallet Skill is no longer the default setup entry. Start with the [wallet-cli quick start](/wallet-cli/quickstart/). SDK, server, and community integrations that still use agent-wallet can use the [Agent Wallet reference](/Agent-Wallet/Intro/).
 
 ## wallet-cli {#wallet-cli}
 
-A standalone TRON wallet toolbox. It teaches your AI to run TRON wallet operations through the pinned `@tron-walletcli/wallet-cli@4.13.0` npm package: account, staking, and delegation queries, TRX/token transfers, staking and resource delegation, SR voting and governance, contract calls, message signing, and transaction-status tracking. Every command runs through the CLI's machine-readable interface (`-o json`) — the AI branches on exit codes and structured fields, never on guessed text.
+A standalone TRON wallet toolbox. It teaches your AI to run TRON wallet operations through the pinned `@tron-walletcli/wallet-cli@4.14.0` npm package: account, staking, and delegation queries, TRX/token transfers, staking and resource delegation, SR voting and governance, contract calls, message signing, and transaction-status tracking. Every command runs through the CLI's machine-readable interface (`-o json`) — the AI branches on exit codes and structured fields, never on guessed text.
 
 **Completely safe — looking only, no spending:**
 
@@ -125,15 +59,15 @@ A standalone TRON wallet toolbox. It teaches your AI to run TRON wallet operatio
 
 > Stake 100 TRX for energy — mainnet operations are previewed and wait for your explicit confirmation.
 
-:::tip How it differs from agent-wallet
-`agent-wallet` is the signing engine other skills (sunswap, x402-payment, …) rely on; `wallet-cli` is a standalone TRON wallet toolbox that performs transfers, staking, and governance directly. For swaps or liquidity, use `sunswap` — not wallet-cli.
+:::tip
+wallet-cli is the official wallet and CLI entry point. Community Skills and server integrations may still use their own signing implementations; configure each according to its actual dependencies.
 :::
 
 :::caution Hard boundaries: passwords and wallet administration
 In agent-driven runs, wallet passwords are only accepted via `--password-stdin` from an approved source — the AI never puts a password in command arguments, environment variables, or the chat, and never asks you to paste a password, mnemonic, or private key into the conversation. The root wallet-administration commands `import` / `backup` / `delete` / `change-password` are **human-only by skill policy**: the AI will not run them even if you confirm. This is the skill refusing, not a lock in the CLI — the CLI itself only forces a TTY for `import` and `change-password`, and `backup` even documents a `--password-stdin` form. Any funds-moving operation on mainnet is previewed first and waits for your explicit confirmation.
 :::
 
-Note: wallet-cli canonically uses decimal CAIP-2 network ids — `tron:728126428` (Mainnet), `tron:3448148188` (Nile), `tron:2494104990` (Shasta); `tron:mainnet` / `tron:nile` / `tron:shasta` are accepted as input aliases only. This is distinct from the hex identifiers (`tron:0x…`) required by the x402 tooling.
+Note: wallet-cli canonically uses decimal CAIP-2 network ids — `tron:728126428` (Mainnet), `tron:3448148188` (Nile), `tron:2494104990` (Shasta); `tron:mainnet` / `tron:nile` / `tron:shasta` are accepted as input aliases only. This is distinct from the hex identifiers (`tron:0x…`) used in x402 protocol metadata; `wallet-cli x402` still uses wallet-cli network identifiers.
 
 Since Skills 2.0.0, the generic TRON workflows of the retired `trc20-toolkit-skill`, `trx-staking-skill`, and `multisig-permissions` skills — TRC20/TRC10 transfers and token queries, staking and SR voting, and account-permission management (`permission show|update`) — are handled by this skill.
 
@@ -321,87 +255,21 @@ Before redeeming USDD for USDT, check `psm-info` — if USDT reserves are low, `
 
 ## x402-payment {#x402-payment}
 
-Some APIs and AI agents require on-chain payment before use. This skill uses the x402 protocol to automatically complete "pay first, then receive" on-chain settlement — the AI detects the charge, previews it, completes the on-chain payment, gets the result, and reports back. It always asks for your confirmation before paying. Payments run through the `x402-cli` command-line tool and this Skill requires **exactly version 1.0.1**. The skill checks your installed version first and, if the CLI is missing or another version is installed, asks before installing `npm install -g @bankofai/x402-cli@1.0.1` — no local payment scripts are involved. The standalone CLI's latest release is 1.0.2, but that is not the version pinned by this Skill. Payments settle on **TRON (TRC20: USDT, USDD)** or **BSC (ERC20: USDT on mainnet; USDT and USDC on testnet)** — each payment settles on its own chain; this is multi-chain support, not a cross-chain bridge.
-
-**Completely safe — looking only, no spending:**
-
-> Check whether x402-cli is installed and which version I have.
-
-> Preview what this endpoint would charge before I pay anything: https://api.example.com/protected
-
-> Show me what this endpoint would charge, without paying: https://api.example.com/protected
-
-**Requires your confirmation:**
-
-> Use the x402 protocol to call this paid agent endpoint, and don't spend more than 0.01 USDT: https://api.example.com (replace with the actual paid endpoint URL you want to call)
-
-> Pay this endpoint on Nile with USDT via GasFree — cap the payment at 0.01 and the relayer fee at 0.5.
-
-:::tip Always previewed, always capped
-Before the first payment to an unfamiliar endpoint, the skill runs a dry run (`x402-cli pay <url> --dry-run --json`) and shows you the network, scheme, token, and exact amount. Unless you explicitly approve the exact advertised amount, every real payment then carries a spending cap (`--max-amount`), so the payment itself can't exceed what you approved — on GasFree the relayer fee sits on top of it, capped separately (see below).
-:::
-
-:::tip GasFree support (TRON)
-GasFree (`scheme=exact_gasfree`) lets you pay on TRON without holding TRX for energy — a relayer covers the network cost and charges a small fee in the payment token instead (the relayer's service charge: a fixed transfer fee per payment, plus a one-time activation fee on first use, deducted from your GasFree account). The CLI takes the first payment option the endpoint offers that matches your constraints — it does not prefer GasFree — so say "require GasFree" whenever an endpoint also offers a normal TRON payment. Your GasFree account needs enough of the payment token to cover **both** the payment amount and the relayer fee. Because the spending cap doesn't include that fee, every GasFree payment also caps the fee (`--max-gasfree-fee`) unless you explicitly approve the estimate. GasFree is TRON-only — it can't be combined with a BSC (`eip155:*`) network.
-:::
-
-:::info Networks use canonical CAIP-2 IDs
-`tron:0x2b6653dc` (TRON Mainnet — USDT, USDD), `tron:0xcd8690dc` (Nile — USDT, USDD), `tron:0x94a9059e` (Shasta — USDT), `eip155:56` (BSC — USDT), `eip155:97` (BSC testnet — USDT, USDC). Shorthand aliases such as `tron:mainnet` are no longer accepted.
-:::
-
-:::caution Wallet credentials come from agent-wallet
-This skill prefers `agent-wallet` for signing — it does **not** read raw private keys from random config files, and never accepts a private key typed into a chat command. The underlying CLI does still honour `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY` if they are already set in your environment, which is the development and CI escape hatch. Set `AGENT_WALLET_PASSWORD` for encrypted local mode, or `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC` for static mode. Requires Node.js 20+.
-:::
-
----
+The standalone payment Skill is being retired from the default integration path. Use the [wallet-cli 4.14 payment flow](/wallet-cli/quickstart/): preview first, then authorize payment. This section preserves the old anchor; do not install standalone x402-cli.
 
 ## recharge-skill {#recharge-skill}
 
-Check your balance, view order history, or top up your account.
-
-**Completely safe — looking only, no spending:**
-
-> How much balance does my BANK OF AI account have?
-
-> Show my recent BANK OF AI order history.
-
-**Requires your confirmation:**
-
-> Recharge 1 USDT to my BANK OF AI account.
-
----
+Use `wallet-cli bai` for recharge and records; discover its commands with `--json-schema` and follow the [B.AI recharge guidance](/wallet-cli/command-reference/). It requires a wallet-cli account and a B.AI API key. The recharge service MCP endpoint remains a separate service capability; changing the Skill does not disable it.
 
 ## bankofai-guide {#bankofai-guide}
 
-The onboarding companion that ties the rest of the skill set together. You don't typically invoke this skill directly — it kicks in automatically in three situations:
-
-1. **Post-install setup.** Right after you run `npx skills add https://github.com/BofAI/skills/tree/main -g`, the installer hands off to `bankofai-guide`. It installs the `@bankofai/agent-wallet` CLI globally, checks whether you already have a wallet, and asks whether you want to set one up now or later.
-2. **First-wallet creation.** If you have no wallet yet, it offers two paths: a **quick setup** (strongly recommended — fully automated, takes ~10 seconds, generates an encrypted `local_secure` wallet and a strong random password) and a **detailed setup** (step-by-step walkthrough with custom options). Once your wallet is ready, it shows you both the EVM and TRON addresses and tells you where to deposit USDT.
-3. **Wallet guard.** Signing skills run `agent-wallet list` first (`sunswap`, `sunperp-skill`, `sunpump-agent-skill` and `x402-payment`; the first three also hand off to `bankofai-guide`) to check wallet state before any on-chain operation. **Only when no wallet is found** do they hand off to `bankofai-guide`, which pauses the current operation, walks you through creating one in a minute or two, and then returns control to the original flow.
-
-**Sample prompts that will activate it:**
-
-> Walk me through BANK OF AI onboarding.
-
-> Run bankofai-guide so I can set up my first wallet.
-
-> Help me create an AgentWallet with quick setup.
-
-:::tip Why this skill exists
-Most Web3 stumbles happen on day one — no wallet configured, no idea where to deposit funds, no sense of which address belongs to which chain. `bankofai-guide` compresses that whole journey into a handful of confirmations so the rest of your skills can just work.
-:::
-
-:::caution Your password matters
-The quick setup auto-generates a strong password and stores it in `~/.agent-wallet/runtime_secrets.json` for convenience. Save or memorize it anyway — if that file is ever deleted, the password is the only way to recover access to the encrypted wallet.
-:::
-
----
+No longer the default installation or first-wallet setup flow. Use the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) and [wallet-cli setup guide](/wallet-cli/quickstart/). This section retains the old anchor for existing links.
 
 ## Recommended Learning Path
 
 **Start here — zero risk, zero config:** Use tronscan-skill to look up accounts and check transactions. Use sunswap to check prices and get quotes. Read-only, no credentials needed.
 
-**Next — practice with play money:** Set up your wallet (see [Agent Wallet Quick Start](../../Agent-Wallet/QuickStart.md)), then test swaps and liquidity operations on the Nile testnet. Confirm the AI behaves exactly as expected.
+**Next — practice with play money:** Set up your wallet (see [Wallet CLI Quick Start](/wallet-cli/quickstart/)), then test swaps and liquidity operations on the Nile testnet. Confirm the AI behaves exactly as expected.
 
 **Then — mainnet with small amounts:** Run the full flow with a small amount of real funds to make sure everything works.
 
@@ -414,3 +282,6 @@ The quick setup auto-generates a strong password and stores it in `~/.agent-wall
 - Want to understand how skills work under the hood? → [What Are Skills?](./Intro.md)
 - Running into issues? → [FAQ](./Faq.md)
 - Using OpenClaw Extension? → [OpenClaw Extension Documentation](../../Openclaw-extension/Intro.md)
+
+{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
+<span id="-where-do-i-get-these-keys-how-do-i-set-them-up"></span>

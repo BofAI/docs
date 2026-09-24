@@ -71,12 +71,12 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 在 TRON 上，可以为同一端点在 `exact` 路由之外再加一条 `exact_gasfree` 路由：由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需 TRX。GasFree 路由仅限 TRON，且不能带 `assetTransferMethod`。自 x402 SDK 1.0.1 起（当前版本 1.2.0），relayer 费用由客户端估算，因此目录路由**不得**再发布旧的 `fee` 或 `feeConfig` 字段。
 :::
 
-例如一个端点可以为每条支持的链各提供一条路由 —— TRON 主网、BSC 主网和 Base 主网，各有自己的 `provider` 和 `scheme`。调用时把 `x402-cli pay` 指向所选路由的 `url`，并传入匹配的 `--network` / `--scheme`：
+例如一个端点可以为每条支持的链各提供一条路由 —— TRON 主网、BSC 主网和 Base 主网，各有自己的 `provider` 和 `scheme`。调用时把 `wallet-cli x402 pay` 指向所选路由的 `url`，并传入匹配的 `--network` / `--scheme`：
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
+wallet-cli x402 pay --dry-run -o json 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --method POST \
-  --network tron:0x2b6653dc \
+  --network tron:728126428 \
   --token USDT \
   --scheme exact \
   --max-amount 0.000001 \
@@ -96,7 +96,7 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
 
 ## pay.md
 
-与 `catalog.json` 同目录提交、面向人和 Agent 的可读调用说明，为**必交**文件。建议包含：服务基本信息（FQN、入口地址、类目、结算链）、各端点的地址与价格，以及一条可直接复制的 `x402-cli pay` 调用示例。该文件与 `catalog.json` 一样会经过敏感信息扫描（见下）。
+与 `catalog.json` 同目录提交、面向人和 Agent 的可读调用说明，为**必交**文件。建议包含：服务基本信息（FQN、入口地址、类目、结算链）、各端点的地址与价格，以及一条可直接复制的 `wallet-cli x402 pay` 调用示例。该文件与 `catalog.json` 一样会经过敏感信息扫描（见下）。
 
 ## 合法类目
 

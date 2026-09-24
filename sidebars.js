@@ -77,17 +77,17 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'x402 CLI',
+          label: 'Wallet CLI / x402',
           collapsed: true,
           items: [
             {
               type: 'doc',
-              id: 'x402/cli/index',
+              id: 'wallet-cli/index',
               label: 'Overview',
             },
-            'x402/cli/quickstart',
-            'x402/cli/command-reference',
-            'x402/cli/faq',
+            'wallet-cli/quickstart',
+            'wallet-cli/command-reference',
+            'wallet-cli/faq',
           ],
         },
         {

@@ -1,5 +1,9 @@
 # 常见问题
 
+:::note
+新用户配置请以 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)为准。下文涉及旧钱包或旧安装器的内容仅供现有集成参考；不要将其作为 wallet-cli 4.14 的配置步骤。
+:::
+
 问题按你最可能遇到的顺序排列——出了问题的排最前面，概念解释放最后。
 
 ---
@@ -40,7 +44,7 @@
 ls ~/.agents/skills
 ```
 
-能看到 10 个目录：`agent-wallet`、`wallet-cli`、`sunswap-dex-trading`、`sunpump-meme-token-toolkit`、`sunperp-perpetual-futures-trading`、`tronscan-data-lookup`、`usdd-just-protocol`、`x402-payment`、`recharge-skill`，以及 `bankofai-guide`，就说明装好了。
+安装结果以所选版本和 Skill 为准；确认所需 Skill 的 `SKILL.md` 已安装，不使用固定数量判断是否成功。
 
 然后在 AI 对话中验证：
 
@@ -75,7 +79,7 @@ AI 能准确描述功能 = 安装成功。
 5. 去各个协议（SunSwap、SunPerp 等）撤销旧钱包的授权。
 
 :::tip 预防胜于补救
-从一开始就使用 [Agent Wallet](../../Agent-Wallet/Intro.md) 替代明文私钥。Agent Wallet 把你的密钥锁在本地加密保险箱里——就算有人偷看到你的环境变量，没有加密密码也打不开保险箱。两把锁同时被破的概率极低。
+从一开始就使用 [wallet-cli](/zh-Hans/wallet-cli/quickstart/) 替代明文私钥。Agent Wallet 把你的密钥锁在本地加密保险箱里——就算有人偷看到你的环境变量，没有加密密码也打不开保险箱。两把锁同时被破的概率极低。
 :::
 
 ### 为什么每笔交易 AI 都要问我确认？
@@ -108,47 +112,7 @@ AI 的应对策略是：先给你看报价，你确认后在实际提交前会�
 
 ### 怎么配置密码和密钥？
 
-**最简单、最安全的方法（强烈推荐）：使用 [Agent Wallet](../../Agent-Wallet/QuickStart.md)。** 它就像一个带密码的保险箱，有简单的可视化界面，按提示填入密钥即可。设置一次，以后再也不用跟复杂的代码打交道。
-
-<details>
-<summary>极客/老手备用方法：通过环境变量配置</summary>
-
-如果你熟悉命令行，可以将密码贴在系统的"隐形便签"（shell 配置文件）里。
-
-**苹果电脑：**
-
-1. 打开终端（按 `Command + 空格`，搜索 `Terminal`）
-2. 输入 `nano ~/.zshrc`，按回车——你会看到一个简陋的文本编辑器
-3. 用方向键移到最下面，把下面需要的内容粘贴进去（注意：每行两边的英文双引号 `"` 千万别删掉，也别替换成中文引号）
-4. 按 `Ctrl + X`，再按 `Y`，再按回车——保存完毕
-5. 关掉终端，重新打开，然后重启你的 AI 工具
-
-根据你需要的技能，把对应的内容粘贴进去：
-
-```bash
-# SunSwap 换币、SunPump 买卖、USDD PSM、SunPerp 提现
-#（任何通过该私钥在链上花钱的技能；wallet-cli 自行管理
-# 钱包，不读取这些变量）
-export TRON_PRIVATE_KEY="你的私钥"
-export TRONGRID_API_KEY="你的 TronGrid API Key"
-export TRON_NETWORK="mainnet"   # 或 "nile" / "shasta" 使用测试网
-
-# SunPerp 永续合约
-export SUNPERP_ACCESS_KEY="你的 SunPerp Access Key"
-export SUNPERP_SECRET_KEY="你的 SunPerp Secret Key"
-
-# TronScan 数据查询（可选，不填会自动走 BANK OF AI 免费代理）
-export TRONSCAN_API_KEY="你的 TronScan API Key"
-
-# BANK OF AI 账户（recharge-skill 使用）
-export BANKOFAI_API_KEY="你的 BANK OF AI API Key"
-
-# agent-wallet（用加密本地模式跑 x402-payment / 签名时需要）
-export AGENT_WALLET_PASSWORD="你的主密码"
-
-```
-
-</details>
+官方钱包和支付使用 [wallet-cli 配置流程](/zh-Hans/wallet-cli/quickstart/)。社区项目仍按各自 Skill 配置 API Key 或签名参数；这些配置不会自动与 wallet-cli 共享。不要将私钥或主密码粘贴到聊天窗口，也不要把 wallet-cli 主密码作为环境变量保存。
 
 ### 哪些 AI 工具能用这些技能？
 

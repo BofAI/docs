@@ -196,7 +196,7 @@ Product updates and announcements for BANK OF AI.
 
 <div className="changelog-tags"><span className="changelog-tag">Product Updates</span><span className="changelog-tag">Docs</span></div>
 
-- **New x402 CLI documentation set**: overview, quick start, full command reference, and FAQ — in English and 中文. [Read the docs](../x402/cli/)
+- **New x402 CLI documentation set**: overview, quick start, full command reference, and FAQ — in English and 中文. [Wallet CLI guide](/wallet-cli/)
 - **Docs site refresh**: offline full-text search (⌘K), a Changelogs tab, section icons, and a cleaner sidebar layout.
 
 </div>
@@ -212,7 +212,7 @@ Product updates and announcements for BANK OF AI.
 
 - **`v1.0.0` — first stable release** of `@bankofai/x402-cli`, a TypeScript command-line client for x402 payments: `pay` any x402-protected URL, `serve` a local paywall endpoint, `roundtrip` for end-to-end smoke tests, plus `gateway` and `catalog` for provider files and the service catalog.
 - Built on the published `@bankofai/x402-core` / `x402-evm` / `x402-tron` SDK 1.0 packages; `scheme=exact` with Permit2.
-- Networks: TRON (`tron:mainnet` / `tron:nile` / `tron:shasta`) and BSC (`eip155:56` / `eip155:97`). [Quick Start](../x402/cli/quickstart/)
+- Networks: TRON (`tron:mainnet` / `tron:nile` / `tron:shasta`) and BSC (`eip155:56` / `eip155:97`). [Wallet CLI guide](/wallet-cli/quickstart/)
 
 </div>
 </div>

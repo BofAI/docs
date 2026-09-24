@@ -5,7 +5,7 @@
 :::warning 三条铁律
 BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦上链**不可撤销**——没有"撤回"按钮，没有客服回滚。
 
-1. **永远不要把私钥粘贴到聊天窗口里。** 请使用 [Agent Wallet](../../Agent-Wallet/Intro.md)（相当于给 AI 开了一个专用"支付宝"，你不需要把银行卡密码直接给它）。
+1. **永远不要把私钥粘贴到聊天窗口里。** 请使用 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)（相当于给 AI 开了一个专用"支付宝"，你不需要把银行卡密码直接给它）。
 2. **先用假钱练手。** 每个新操作都先在 Nile 测试网上试——测试网用的是免费"游戏币"，怎么折腾都不亏。
 3. **仔细看确认弹窗。** 任何花钱操作执行前，AI 都会把账单摊开给你看，你不点头它绝不动手。
 :::
@@ -16,50 +16,20 @@ BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦�
 
 | 技能 | 能干什么 | 需要什么钥匙/密码？ |
 | :--- | :--- | :--- |
-| **agent-wallet** | 创建钱包、签名交易/消息、管理多个钱包——支持 EVM 和 TRON | `AGENT_WALLET_PASSWORD`（加密模式）或无需配置（交互模式） |
-| **wallet-cli** | 通过锁定版 `@tron-walletcli/wallet-cli@4.13.0` 直接完成 TRON 钱包操作——转账、质押、投票、合约、签名、链上查询（机器可读 JSON） | wallet-cli 本地管理的钱包；Agent 执行时密码仅经 stdin 传入 |
+| **wallet-cli** | 通过锁定版 `@tron-walletcli/wallet-cli@4.14.0` 直接完成 TRON 钱包操作——转账、质押、投票、合约、签名、链上查询（机器可读 JSON） | wallet-cli 本地管理的钱包；Agent 执行时密码仅经 stdin 传入 |
 | **sunswap**<br/>安装后目录名 `sunswap-dex-trading` | 查价、报价、换币，管理 V2/V3/V4 流动性池 | 查询不需要；交易需要钱包凭证 |
 | **sunpump-agent-skill**<br/>安装后目录名 `sunpump-meme-token-toolkit` | SunPump meme 币：一句话发币（服务端创建，无需钱包），查行情/排行/持有人/钱包持仓，买卖 meme 币（根据代币是否已发射自动选择兑换路线，仅 TRON 主网） | 只读查询与发币免配置；链上买卖需钱包凭证 |
 | **sunperp-skill**<br/>安装后目录名 `sunperp-perpetual-futures-trading` | 看行情、开仓、平仓、提现 | 看行情不需要；交易需要 SunPerp 密钥；提现还需要 `TRON_PRIVATE_KEY` 用于签署确认 |
 | **tronscan-skill**<br/>安装后目录名 `tronscan-data-lookup` | 查账户、交易、代币、区块、全网数据 | 可选 TronScan API 密钥——不配时请求走无密钥的 BofAI 代理，可能被限流 |
 | **usdd-skill**<br/>安装后目录名 `usdd-just-protocol` | USDD 稳定币——PSM 1:1 USDT ↔ USDD 兑换、金库查询、余额查看 | 查询不需要；PSM 兑换需要钱包凭证 |
-| **x402-payment** | 链上"先付后用"自动结算，支持 TRON（TRC20）与 BSC（ERC20），含 GasFree | 通过 agent-wallet 提供钱包凭证 |
-| **recharge-skill** | 查余额、看订单、充值 | 查余额与订单需要 BANK OF AI 密钥；充值需要钱包凭证——它由链上 x402 付款授权，而不是靠 API Key |
-| **bankofai-guide** | 引导辅助技能——安装后首次配置、首个 AgentWallet 创建、其它技能的钱包守门员 | 无需配置（需要时自动触发） |
 
 其中 5 个技能安装后的目录名与仓库目录名不同——**安装后的那个名字**才是你在 `~/.agents/skills` 里看到的名字，也是让助手读取技能文件时要引用的名字。
 
-### 🔑 这些"钥匙"去哪领？怎么配？
+### 凭据配置
 
-如果你只想让 AI 帮你查查公开数据（比如币价、区块高度），你可以什么都不配，直接去玩。
+官方钱包配置见 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)。不要把私钥或密码交给聊天窗口。社区项目按各自 Skill 配置：TronScan API Key、SunPerp API Key/Secret，以及 USDD 或提现所需签名参数不会自动转换成 wallet-cli 配置。
 
-但如果你想解锁高级功能或交易，请根据需要去领取对应的"钥匙"：
-
-**1. 钱包凭证（用来花钱、交易的密码）**
-
-- **去哪领：** 你不需要去别的地方申请，这就是你的波场钱包私钥。
-- **怎么配：** 我们在[《快速开始》](./QuickStart.md#-想让-ai-帮你交易)里准备了两种方案任你挑：
-  - **方案一（推荐）：** 用 [Agent Wallet](../../Agent-Wallet/QuickStart.md)，可视化界面，两分钟搞定，私钥加密存储不外露。
-  - **方案二：** 直接把私钥贴进系统配置文件（记事本大法），适合老手或快速测试。
-
-**2. TronScan API 密钥（查数据的 VIP 通行证）**
-
-不填这个也能查数据——请求会走无密钥的 BofAI 代理（`ts.bankofai.io`）——但查快了容易被限速。填了就能走 VIP 高速通道。
-
-- **去哪领（完全免费）：** 去 [TronScan 官网](https://tronscan.org/) 注册个账号，点击生成即可。
-- **怎么配：** 请参考[《快速开始》里的"想让 AI 帮你交易？"](./QuickStart.md#-想让-ai-帮你交易)，用同样的记事本大法把 `TRONSCAN_API_KEY` 贴进去就行。
-
-**3. SunPerp 密钥（专门用来玩永续合约）**
-
-- **去哪领：** 前往 [SunPerp 官网](https://sunperp.com/)，连接你的钱包后，在账户设置里生成 API Key 和 Secret。
-- **怎么配：** 同样使用记事本大法，把 `SUNPERP_ACCESS_KEY` 和 `SUNPERP_SECRET_KEY` 贴到系统配置文件里。
-
-**4. BANK OF AI 密钥（用来查余额与订单记录）**
-
-- **去哪领：** 前往 [chat.bankofai.io/key](https://chat.bankofai.io/key)，登录后即可获取。
-- **怎么配：** 使用记事本大法，贴入 `BANKOFAI_API_KEY`。
-
----
+B.AI 的 API Key 在 [控制台](https://chat.bankofai.io/key)获取，通过 wallet-cli 支持的配置方式保存；不要打印或提交凭据。
 
 ## 还没安装？
 
@@ -69,47 +39,11 @@ BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦�
 
 ## agent-wallet {#agent-wallet}
 
-AI 的安全签名引擎。这个技能帮你的 AI 创建和管理加密钱包，让它能在 EVM（BSC、Ethereum、Polygon、Arbitrum、Base 等）和 TRON 网络上签名交易和消息——全程不暴露你的私钥。你可以把它理解成所有交易和支付技能依赖的"钥匙串"。需要 Node.js 20+。
-
-**绝对安全，只看不花钱：**
-
-> 帮我列出所有的 agent 钱包。
-
-> 帮我查看我钱包的 EVM 和 TRON 地址。
-
-> 我当前激活的是哪个钱包？
-
-**需要你确认才会执行：**
-
-> 帮我创建一个新的加密钱包。
-
-> 切换到我的 BSC 钱包。
-
-> 帮我在 TRON 主网上签名这条消息："Hello World"。
-
-**实战场景：**
-
-> 第一次设置？ "帮我创建一个新的 agent 钱包"——AI 会引导你选择钱包类型（`local_secure` 是加密的本地私钥，`privy` 则是通过 API 凭证接入的托管钱包）、生成密钥并保存主密码。
-
-> 管理多条链？ "帮我看看所有钱包和它们的地址"——同一个钱包会自动生成 EVM 和 TRON 两个地址。EVM 网络使用 `eip155:<chainId>`（如 `eip155:1` 以太坊、`eip155:56` BSC、`eip155:137` Polygon、`eip155:42161` Arbitrum、`eip155:8453` Base），TRON 使用规范的 CAIP-2 ID：`tron:0x2b6653dc`（主网）、`tron:0xcd8690dc`（Nile）、`tron:0x94a9059e`（Shasta）。
-
-> 需要签名？ "帮我在 BSC 上签名这笔交易"——AI 在本地完成签名，不会广播上链。支持原始交易、EIP-191 消息以及 EIP-712 typed data（仅 EVM）。
-
-:::tip 为什么推荐用 Agent Wallet 而不是直接贴私钥？
-Agent Wallet 会用主密码加密你的私钥。即使别人拿到了你的文件，没有主密码也用不了。这是给所有其他技能（sunswap、x402-payment 等）配置钱包凭证的推荐方式。
-:::
-
-:::caution 危险操作受限
-`remove`（删除钱包）、`reset`（重置所有数据）和 `change-password`（修改密码）这三个命令 AI 不能执行——你必须自己在终端里运行。这是为了防止误操作导致不可逆的钱包丢失。AI 会给你完整解释并让你自己复制命令执行。
-:::
-
-详细设置步骤请参考 [Agent Wallet 快速开始](../../Agent-Wallet/QuickStart.md)。
-
----
+旧钱包 Skill 不再作为官方默认配置入口。新用户从 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)开始。仍使用 agent-wallet 的 SDK、服务端和社区项目可查阅 [Agent Wallet 参考文档](/zh-Hans/Agent-Wallet/Intro/)。
 
 ## wallet-cli {#wallet-cli}
 
-一个独立的 TRON 钱包工具箱。它教你的 AI 通过锁定版 `@tron-walletcli/wallet-cli@4.13.0` npm 包完成 TRON 钱包操作：账户、质押与代理状态查询，TRX/代币转账、质押与资源代理、SR 投票与治理、合约调用、消息签名、交易状态跟踪。所有命令都走 CLI 的机器可读接口（`-o json`）——AI 先看退出码、再看结构化字段，从不靠猜文本。
+一个独立的 TRON 钱包工具箱。它教你的 AI 通过锁定版 `@tron-walletcli/wallet-cli@4.14.0` npm 包完成 TRON 钱包操作：账户、质押与代理状态查询，TRX/代币转账、质押与资源代理、SR 投票与治理、合约调用、消息签名、交易状态跟踪。所有命令都走 CLI 的机器可读接口（`-o json`）——AI 先看退出码、再看结构化字段，从不靠猜文本。
 
 **绝对安全，只看不花钱：**
 
@@ -125,15 +59,15 @@ Agent Wallet 会用主密码加密你的私钥。即使别人拿到了你的文�
 
 > 帮我质押 100 TRX 换能量——主网操作会先给你预览、等你明确确认。
 
-:::tip 与 agent-wallet 的分工
-`agent-wallet` 是给其他技能（sunswap、x402-payment 等）用的签名引擎；`wallet-cli` 则是面向 TRON 的独立钱包工具箱，直接完成转账、质押、治理等操作。换币或流动性请用 `sunswap`，不要用 wallet-cli。
+:::tip
+wallet-cli 是官方钱包与 CLI 接入入口；社区 Skill 和服务端可能仍使用各自的签名实现。按实际依赖配置，不要求所有项目同时迁移。
 :::
 
 :::caution 密码与钱包管理的硬性边界
 Agent 执行时，钱包密码只能通过 `--password-stdin` 从受信来源传入——AI 不会把密码放进命令行参数、环境变量或对话里，也永远不会让你在聊天中粘贴密码、助记词或私钥。`import` / `backup` / `delete` / `change-password` 这几类根钱包管理命令**按技能策略仅限你本人执行**：即使你给出确认，AI 也不会代跑。这是技能层面的拒绝，而非 CLI 的强制锁——CLI 自身只对 `import` 与 `change-password` 强制要求 TTY，`backup` 甚至公开提供了 `--password-stdin` 的用法。主网上任何动钱的操作都会先预览、再等你明确确认。
 :::
 
-注意：wallet-cli 的规范网络标识是十进制 CAIP-2 ID——`tron:728126428`（主网）、`tron:3448148188`（Nile）、`tron:2494104990`（Shasta）；`tron:mainnet` / `tron:nile` / `tron:shasta` 仅作为输入别名被接受。这与 x402 系列工具要求的十六进制标识符（`tron:0x…`）是两套约定。
+注意：wallet-cli 的规范网络标识是十进制 CAIP-2 ID——`tron:728126428`（主网）、`tron:3448148188`（Nile）、`tron:2494104990`（Shasta）；`tron:mainnet` / `tron:nile` / `tron:shasta` 仅作为输入别名被接受。这与 x402 协议元数据中的十六进制标识符（`tron:0x…`）不同；`wallet-cli x402` 仍使用 wallet-cli 的网络标识。
 
 自 Skills 2.0.0 起，已下线的 `trc20-toolkit-skill`、`trx-staking-skill`、`multisig-permissions` 三个技能覆盖的通用 TRON 操作——TRC20/TRC10 转账与代币查询、质押与 SR 投票、账户权限管理（`permission show|update`）——均由本技能承接。
 
@@ -319,87 +253,21 @@ PSM 支持 **USDT ↔ USDD 即时 1:1 兑换**——是获取 USDD 最简单的�
 
 ## x402-payment {#x402-payment}
 
-有些高级 API 和 AI 智能体是收费的——需要你先完成链上付费才能使用。这个技能通过 x402 协议帮你自动完成"先付费、再获取"的链上结算流程：AI 发现对方要收费，先预览费用，再帮你完成链上支付，拿到结果后汇报给你。每次付款前同样会先问你确认。支付统一走 `x402-cli` 命令行工具，本技能要求**版本必须正好是 1.0.1**。技能会先检查已安装版本；如果缺失或版本不同，会先询问你，再安装 `npm install -g @bankofai/x402-cli@1.0.1`——不再使用本地支付脚本。独立 CLI 自身最新版是 1.0.2，但它不是本技能锁定的版本。支持在 **TRON（TRC20：USDT、USDD）** 与 **BSC（ERC20：主网 USDT；测试网 USDT、USDC）** 上结算——付款各自在对应链上完成，不是跨链桥接。
-
-**绝对安全，只看不花钱：**
-
-> 看一下我装没装 x402-cli，版本是多少。
-
-> 先别付款，帮我预览一下这个端点会收多少钱：https://api.example.com/protected
-
-> 先别付款，把这个端点会收多少钱列给我看：https://api.example.com/protected
-
-**需要你确认才会执行：**
-
-> 使用 x402 协议调用这个付费智能体端点，最多花 0.01 USDT：https://api.example.com （请替换为你实际要调用的付费端点地址）
-
-> 在 Nile 上用 USDT 走 GasFree 付这个端点，付款上限 0.01，中继费上限 0.5。
-
-:::tip 先预览，再限额
-第一次调用陌生端点时，技能会先跑一次空跑预览（`x402-cli pay <url> --dry-run --json`），把网络、方案、代币和确切金额摆给你看。除非你明确认可端点公布的确切金额，真正付款时都会带上花费上限（`--max-amount`），付款本身不会超过你批准的金额——GasFree 的中继费另计，需单独限额（见下方说明）。
-:::
-
-:::tip GasFree 支持（TRON）
-GasFree（`scheme=exact_gasfree`）让你在 TRON 上付款时不必持有 TRX 抵扣能量——由中继方垫付网络开销，改从支付代币里收取一笔中继费（即中继服务的服务费：每笔一个固定转账费，账户首次使用另加一次性激活费，从你的 GasFree 账户扣除）。CLI 取的是端点提供的、第一条符合你条件的付款方式，并不会优先选 GasFree；只要端点同时也提供普通 TRON 付款，就直接说"必须用 GasFree"。你的 GasFree 账户需要有足够代币，**同时**覆盖付款金额和中继费。由于付款上限并不包含中继费，除非你明确认可估算值，否则每笔 GasFree 付款都会再加一道中继费上限（`--max-gasfree-fee`）。GasFree 仅支持 TRON，不能与 BSC（`eip155:*`）网络组合使用。
-:::
-
-:::info 网络统一使用规范的 CAIP-2 ID
-`tron:0x2b6653dc`（TRON 主网 —— USDT、USDD）、`tron:0xcd8690dc`（Nile —— USDT、USDD）、`tron:0x94a9059e`（Shasta —— USDT）、`eip155:56`（BSC —— USDT）、`eip155:97`（BSC 测试网 —— USDT、USDC）。`tron:mainnet` 这类简写别名已不再受支持。
-:::
-
-:::caution 钱包凭证来自 agent-wallet
-这个技能优先通过 `agent-wallet` 加载签名凭证，**不会**从其他随意的配置文件里读取明文私钥，也不会接受你在对话里直接输入的私钥。不过底层 CLI 仍会识别环境里已设置的 `EVM_PRIVATE_KEY` / `TRON_PRIVATE_KEY` / `PRIVATE_KEY`——这是留给开发与 CI 的出口。加密本地模式请设置 `AGENT_WALLET_PASSWORD`，静态模式请设置 `AGENT_WALLET_PRIVATE_KEY` 或 `AGENT_WALLET_MNEMONIC`。需要 Node.js 20+。
-:::
-
----
+独立支付 Skill 正在退出默认接入路径。使用 [wallet-cli 4.14 的支付流程](/zh-Hans/wallet-cli/quickstart/)，先预览再授权付款；本节保留旧锚点供已有链接访问，不再要求安装独立 x402-cli。
 
 ## recharge-skill {#recharge-skill}
 
-查余额、看订单、给 BANK OF AI 账户充值。
-
-**绝对安全，只看不花钱：**
-
-> 我的 BANK OF AI 账户还有多少余额？
-
-> 显示我最近的 BANK OF AI 订单记录。
-
-**需要你确认才会执行：**
-
-> 给 BANK OF AI 充值 1 USDT。
-
----
+充值与记录查询使用 `wallet-cli bai`，通过 `--json-schema` 查询具体命令，参见 [B.AI 充值说明](/zh-Hans/wallet-cli/command-reference/)。需要 wallet-cli 账户和 B.AI API Key。旧充值服务的 MCP 接口仍是独立服务能力，不因 Skill 调整而自动关闭。
 
 ## bankofai-guide {#bankofai-guide}
 
-把整套技能串起来的引导助手。你通常不需要主动调用它——它会在下面三种场景里自动登场：
-
-1. **安装后首次配置。** 你一跑完 `npx skills add https://github.com/BofAI/skills/tree/main -g`，安装器就会把控制权交给 `bankofai-guide`。它会全局安装 `@bankofai/agent-wallet` CLI，检查你是否已经有钱包，并询问你是现在就创建一个，还是稍后再说。
-2. **首个钱包创建。** 如果你还没钱包，它会给你两条路：**快速模式**（强烈推荐——全自动，约 10 秒搞定，生成加密的 `local_secure` 钱包和一个强随机密码）和**详细模式**（一步一步走，自定义选项更多）。钱包就绪后，它会把 EVM 地址和 TRON 地址一起展示给你，并告诉你该往哪充 USDT。
-3. **钱包守门员。** 需要签名的技能在执行链上操作之前会先跑 `agent-wallet list` 自查钱包状态（`sunswap`、`sunperp-skill`、`sunpump-agent-skill` 与 `x402-payment` 都会；其中前三个还会交接给 `bankofai-guide`）；**只有在发现没有钱包时**，才会调用 `bankofai-guide` 暂停当前操作，用一两分钟帮你补上，然后回到原来的流程。
-
-**可以触发它的参考话术：**
-
-> 带我走一遍 BANK OF AI 的新手引导。
-
-> 运行 bankofai-guide，帮我配第一个钱包。
-
-> 用快速模式帮我创建一个 AgentWallet。
-
-:::tip 为什么要有这个技能？
-大部分 Web3 新手都会卡在第一天——钱包没配、不知道该往哪充钱、也搞不清哪个地址属于哪条链。`bankofai-guide` 把整段路压缩成了几次简单的确认，让你的其他技能能够"开箱即用"。
-:::
-
-:::caution 密码很重要
-快速模式会自动生成一个强密码，并顺手保存到 `~/.agent-wallet/runtime_secrets.json` 里方便你后续使用。但你最好也自己记下或者安全存一份——如果这个文件不小心被删了，这个密码就是你恢复加密钱包访问权限的唯一凭证。
-:::
-
----
+不再作为默认安装或首次钱包配置流程。请使用 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)和 [wallet-cli 配置指引](/zh-Hans/wallet-cli/quickstart/)。本节保留旧锚点，避免已有链接失效。
 
 ## 推荐学习路径
 
 **从这里开始——零风险，零配置：** 用 tronscan-skill 查账户、看交易，用 sunswap 查价格和报价。纯查询，不花钱，不需要密码。
 
-**接下来——用假钱练手：** 配置好钱包（见 [Agent Wallet 快速开始](../../Agent-Wallet/QuickStart.md)），然后在 Nile 测试网上试试换币和流动性操作。确认 AI 的表现完全符合预期。
+**接下来——用假钱练手：** 配置好钱包（见 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)），然后在 Nile 测试网上试试换币和流动性操作。确认 AI 的表现完全符合预期。
 
 **然后——主网小额试水：** 用少量真实资金跑一遍完整流程，确保没有意外。
 
@@ -412,3 +280,6 @@ GasFree（`scheme=exact_gasfree`）让你在 TRON 上付款时不必持有 TRX �
 - 想了解技能背后的工作原理？ → [什么是 Skills？](./Intro.md)
 - 遇到问题了？ → [常见问题](./Faq.md)
 - 在用 OpenClaw Extension？ → [OpenClaw Extension 文档](../../Openclaw-extension/Intro.md)
+
+{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
+<span id="-这些钥匙去哪领怎么配"></span>

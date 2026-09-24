@@ -1,342 +1,58 @@
-# 快速开始
-
-只需 **2 步**，不到 **1 分钟**，你的 AI 就能开始帮你查链上数据、看行情报价。不需要密码，不需要配置任何东西——装完就能用。
-
+---
+title: "Skills 快速入门"
+description: "按需安装 Skills，并使用 wallet-cli 配置官方钱包入口。"
 ---
 
-:::tip 前置依赖
-**需要在 AI Agent 运行的机器上安装 Node.js**（Agent 内部会调用 `npx`）。如果还没装，去 [nodejs.org](https://nodejs.org) 下载 LTS 安装包，双击按提示装一次即可，后续无需再操作。
-:::
+# Skills 快速入门
 
-## 第 1 步：安装技能库
+需要 Node.js 20 或更新版本。选择所需 Skill，不再默认安装所有旧钱包和入门助手。
 
-我们提供了三种安装方式。**根据你的使用习惯选一种即可**——对话式安装最简单；交互式安装控制最精细。
-
-### 方式一：对话式安装（最简单）
-
-如果你已经在使用支持 Skills 的 AI Agent（OpenClaw、Telegram Bot、Web 聊天页面，或任何能执行 shell 命令的客户端），你可以**直接在对话框里让 AI 完成安装**——不用自己打开终端，不用手动复制文件。
-
-**操作步骤：**
-
-1. 打开你的 AI Agent 对话框
-2. 复制下面这段 prompt 发送给 AI：
-
-   ```
-   运行 npx skills add https://github.com/BofAI/skills/tree/main -y -g 安装 BANK OF AI 全部技能，安装完成后使用 bankofai-guide 进行引导后续操作。
-   注意：请安装到当前 Agent 对应的 skill 目录
-   ```
-
-3. AI 会自动完成以下流程（无需人工干预）：
-   - 拉取 `BofAI/skills` 仓库
-   - 自动检测当前 Agent 对应的 skills 目录（如 `~/.agents/skills/`）
-   - 安装全部 10 个 BANK OF AI 技能：9 个核心技能（`agent-wallet`、`wallet-cli`、`sunswap-dex-trading`、`sunpump-meme-token-toolkit`、`sunperp-perpetual-futures-trading`、`tronscan-data-lookup`、`usdd-just-protocol`、`x402-payment`、`recharge-skill`），以及 `bankofai-guide`（引导辅助技能）
-
-:::tip 这是新手最推荐的路径
-你不需要懂 `npx`、`npm` 是什么，也不用关心"全局安装"是什么意思。AI 会处理每一步，包括为你的平台选对 skills 目录、安装钱包 CLI、引导你完成首个钱包配置。
-:::
-
----
-
-### 方式二：一键自动安装（命令行）
-
-如果你已经装好 Node.js 并习惯使用命令行，告诉你的 AI Agent 执行以下命令：
+## 安装 wallet-cli
 
 ```bash
-npx skills add https://github.com/BofAI/skills/tree/main -y -g
+npm install -g @tron-walletcli/wallet-cli@4.14.0
+wallet-cli --version
 ```
 
-`/tree/main` 锁定的是**稳定的 `main` 分支**——其他开发分支可能含未发布内容。`-y` 参数会跳过所有交互选择，默认安装所有 Skills；`-g` 参数把技能装到**全局**（用户级，目录为 `~/.agents/skills/`），所有项目都能用——这个参数请保留，否则只会装进你当前所在的目录。安装完成后会显示 ✅ 安装完成！以及安装的所有 Skills 列表。
+## 选择 Skill
 
----
+```bash
+npx skills add https://github.com/BofAI/skills/tree/main --skill wallet-cli -g
+```
 
-### 方式三：交互式安装（最精细控制）
+`npx skills add` 只安装 Skill 定义，不安装外部 CLI。安装后检查 `wallet-cli/SKILL.md` 的依赖版本。4.14.0 的 Skill 更新正在 [Skills PR #81](https://github.com/BofAI/skills/pull/81) 中推进；如果稳定分支仍要求 4.13.0，不要忽略版本检查或自动降级，可先按 [CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)直接使用 4.14.0，待对应 Skill 发布后再安装。
 
-如果你想手动选择安装哪些 Skills、装到哪些 AI 工具，去掉 `-y` 参数、保留 `-g` 即可：
+需要社区业务时，使用交互式选择安装：
 
 ```bash
 npx skills add https://github.com/BofAI/skills/tree/main -g
 ```
 
-:::tip 提示
-本文档以在终端中运行命令为例展示安装过程。
-:::
-
-#### 交互式安装步骤详解
-
-安装器会引导你完成以下几步，照着做就行：
-
-**1️⃣ 选择要安装的 Skills**
-
-安装器会自动从仓库拉取所有可用的 Skills，然后列出清单让你勾选。按**空格键**切换选中/取消，默认全选即可：
-
-```
-◇  Found 10 skills
-│
-◇  Select skills to install (space to toggle)
-│  agent-wallet, bankofai-guide, recharge-skill, SunPerp Perpetual Futures Trading,
-│  SunPump Meme Token Toolkit, SunSwap DEX Trading, TronScan Data Lookup,
-│  USDD / JUST Protocol, wallet-cli, x402-payment
-```
-
-:::tip 建议全选
-除非你很明确只需要某几个技能，否则建议全部安装。Skills 采用按需唤醒架构，不用的技能不会占用任何资源。
-:::
-
-**2️⃣ 选择要安装到哪些 AI 工具**
-
-安装器会自动检测你电脑上装了哪些 AI 工具（如 Cursor、Claude Code、Cline 等），用空格键勾选你要用的：
-
-```
-◇  77 agents
-◇  Which agents do you want to install to?
-│  Amp, Antigravity, Antigravity CLI, Cline, Codex, Cursor, Deep Agents,
-│  Gemini CLI, GitHub Copilot, Kimi Code CLI, OpenCode, Warp, Zed,
-│  Claude Code, OpenClaw … （共 77 个，按空格勾选你实际在用的）
-```
-
-**3️⃣ 安装范围**
-
-因为你带了 `-g`，安装器会跳过这一步，直接装到用户级目录 `~/.agents/skills/`。只带 `-y` 同样会跳过。否则它会问你选 `Project`（装在当前目录，随项目一起提交）还是 `Global`（装在用户主目录，所有项目通用）：
-
-```
-◇  Installation scope
-│  Project
-```
-
-**4️⃣ 选择安装方式**
-
-选择技能文件如何落地到各个工具——`Symlink (Recommended)`（软链，推荐）或 `Copy to all agents`（完整拷贝），直接回车用推荐项即可。（摘要行里的 "universal" 不是这个选项，它指的是共用 `.agents/skills` 目录的那一类客户端。）
-
-```
-◇  Installation method
-│  Symlink (Recommended)
-```
-
-**5️⃣ 查看安装计划**
-
-安装器会先展示一份安装清单：每个 Skill 会落到哪个路径，以及会覆盖（overwrites）哪些已有文件。软链模式下清单会分成 `universal:` 与 `symlink →` 两行；拷贝模式下则只有一行 `copy →`，覆盖全部客户端：
-
-```
-◇  Installation Summary ─────────────────────────────────────────────────────────╮
-│                                                                                │
-│  ~/.agents/skills/bankofai-guide                                               │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/recharge-skill                                               │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/sunperp-perpetual-futures-trading                            │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/sunpump-meme-token-toolkit                                   │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/sunswap-dex-trading                                          │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/tronscan-data-lookup                                         │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/usdd-just-protocol                                           │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/wallet-cli                                                   │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/x402-payment                                                 │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-│  ~/.agents/skills/agent-wallet                                                 │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more          │
-│    symlink → AiderDesk, AstrBot, Autohand Code CLI, Augment, IBM Bob +42 more  │
-│    overwrites: Amp, Antigravity, Antigravity CLI, Cline, Codex +10 more        │
-│                                                                                │
-├────────────────────────────────────────────────────────────────────────────────╯
-```
-
-:::tip universal 和 symlink 的区别
-`universal` 指的是读取共享目录 `~/.agents/skills/` 的那一类工具——技能文件就直接放在那里。Claude Code、OpenClaw 等用自己的目录规范，因此在软链模式下安装器会给它们建**软链（symlink）**指回这份共享副本——一份源文件，多处同步。它是一类工具的标签，而不是你上一步选的「拷贝还是软链」。`overwrites` 则列出本次会覆盖的已有同名技能文件。
-:::
-
-**6️⃣ 查看安全评估 & 确认安装**
-
-安装器会对每个 Skill 进行安全风险扫描，并展示评估结果。确认无误后选择 `Yes` 开始安装：
-
-```
-◇  Security Risk Assessments ────────────────────────────────────────────────────────╮
-│                                                                                    │
-│                                     Gen               Socket            Snyk       │
-│  bankofai-guide                     Safe              0 alerts          High Risk  │
-│  recharge-skill                     Safe              1 alert           Med Risk   │
-│  SunPerp Perpetual Futures Trading  --                --                --         │
-│  SunPump Meme Token Toolkit         --                --                --         │
-│  SunSwap DEX Trading                --                --                --         │
-│  TronScan Data Lookup               --                --                --         │
-│  USDD / JUST Protocol               --                --                --         │
-│  wallet-cli                         --                --                --         │
-│  x402-payment                       Safe              1 alert           Med Risk   │
-│  agent-wallet                       Safe              1 alert           High Risk  │
-│                                                                                    │
-│  Details: https://skills.sh/BofAI/skills                                           │
-│                                                                                    │
-├────────────────────────────────────────────────────────────────────────────────────╯
-
-◇  Proceed with installation?
-│  Yes
-```
-
-**7️⃣ 安装完成！**
-
-看到类似以下输出，说明所有 Skills 已经成功安装到你选择的 AI 工具中：
-
-```
-◇  Installation complete
-
-◇  Installed 10 skills ──────────────────────────────────────────────────╮
-│                                                                        │
-│  ✓ ~/.agents/skills/bankofai-guide                                     │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/recharge-skill                                     │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/sunperp-perpetual-futures-trading                  │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/sunpump-meme-token-toolkit                         │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/sunswap-dex-trading                                │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/tronscan-data-lookup                               │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/usdd-just-protocol                                 │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/wallet-cli                                         │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/x402-payment                                       │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│  ✓ ~/.agents/skills/agent-wallet                                       │
-│    universal: Amp, Antigravity, Antigravity CLI, Cline, Codex +8 more  │
-│    symlinked: Claude Code, OpenClaw                                    │
-│                                                                        │
-├────────────────────────────────────────────────────────────────────────╯
-
-└  Done!  Review skills before use; they run with full agent permissions.
-```
-
-:::info 结尾出现 “Failed to install” 属正常现象
-全局安装的有时会打印 `■  Failed to install 10`，并对每个技能提示 `PromptScript: PromptScript does not support global skill installation`。这只是 PromptScript 这一个客户端没有全局安装位置，不影响其他任何工具。以它上方的 `✓ Installed 10 skills` 清单为准——Claude Code、OpenClaw、Codex 等都已安装成功。
-:::
-
-### 验证安装
-
-打开你的 AI 对话框，输入：
-
-```
-读一下 sunswap-dex-trading 技能，告诉我它能做什么。
-```
-
-AI 能准确描述功能——恭喜，安装成功！
-
----
-
-## 第 2 步：对 AI 说出你的第一句话
-
-打开你的 AI 对话框，把下面这句话复制进去，回车：
-
-> 给我一份 TRON 全网概览：当前 TPS、超级代表数量、账户总数。
-
-几秒后，AI 会自动调用 tronscan-data-lookup 技能，为你呈现一份完整的链上数据报告。
-
-**这个操作绝对安全——它只是帮你"看"数据，不碰你的钱包，不花一分钱。**
-
-再试几句：
-
-> 100 USDT 在 SunSwap 上能换多少 TRX？
-
-> 显示市值排名前 10 的 TRC20 代币。
-
-> BTC-USDT 永续合约的当前价格、24h 涨跌幅和资金费率是多少？
-
-如果 AI 返回了真实数据——恭喜，你的 AI 已经"开窍"了！
-
----
-
-## 💰 想让 AI 帮你交易？
-
-上面所有的操作都是"只看不动"的——AI 能帮你查数据、比价格，但它现在还没有权限动你的一分钱。这是故意的：控制权始终在你手里。
-
-当你准备好让 AI 帮你换币、开仓、管理流动性时，你需要给它配一把"钱包钥匙"。
-
-我们为你准备了两种给钥匙的方法，任选其一即可：
-
-### 方案一：给 AI 开个专用"支付宝"（强烈推荐，最安全）
-
-我们推荐使用 **Agent Wallet**。你可以把它理解成给 AI 开了一个专属的支付账户。你不需要把银行卡密码（明文私钥）直接暴露在电脑文件里，而是给它设置一个支付密码。每次花钱前，它都会把账单摊开给你看，你说"好"它才会操作。
-
-👉 前往 [Agent Wallet 快速开始](../../Agent-Wallet/QuickStart.md) 设置（有可视化界面，大约 2 分钟搞定）。
-
-### 方案二：直接把私钥贴给 AI（适合老手或快速测试）
-
-如果你嫌麻烦，不想装新工具，只想马上体验交易，你也可以像改普通记事本一样，直接把你的私钥贴在电脑的"隐形便签"里：
-
-1. 在终端里打开 shell 配置文件。macOS + zsh 用 `open -e ~/.zshrc`；Linux 用 `nano ~/.bashrc`（若用 zsh 则是 `~/.zshrc`）；Windows 请改到**系统属性 → 环境变量**里设置。
-2. 电脑会弹出一个记事本窗口。滑到最底下，新起一行，把你的波场私钥粘贴进去：
-   ```bash
-   export TRON_PRIVATE_KEY='你的真实或测试网私钥'
-   ```
-   ⚠️ 注意：两边的引号别漏掉——用示例里的英文单引号最稳妥，可以避免 shell 解释私钥里的特殊字符。
-3. 保存并关闭编辑器（TextEdit 用 `Command + S`；nano 先按 `Ctrl + O` 再按 `Ctrl + X`）。
-
-:::danger 极其重要的一步
-无论你用哪种方案配好了钥匙，都必须**彻底关闭并重新打开你的 AI 软件**，它才能拿到这把新钥匙。注意 macOS 上从访达或程序坞启动的应用不会读取 `~/.zshrc`——需要完全退出后从终端启动，或者把变量设置到 GUI 应用能读到的位置。
-:::
-
----
-
-## 🎮 钥匙配好了，怎么让它去交易？
-
-配好钥匙并重启 AI 后，你就可以直接对它下达交易指令了！
-
-:::caution 新手铁律：先用假钱练手
-在执行任何真实交易之前，**务必先在 Nile 测试网上跑一遍**。测试网用的是没有真实价值的"游戏币"，怎么折腾都不会亏钱。
-:::
-
-打开对话框，对 AI 喊出你的第一句交易指令：
-
-> 在 Nile 测试网上，帮我把 100 TRX 兑换成 USDT。
-
-此时，AI 会迅速帮你计算价格、预估手续费，然后停下来问你："确定要执行吗？" 你只需要回复"确定"，这笔链上交易就自动完成了！
-
-等你在测试网上玩熟了，确认 AI 的表现完全符合预期，以后只要把指令里的"测试网"三个字去掉，它就会帮你操作主网的真金白银了。
-
----
-
-## 下一步
-
-- 看看每个技能都能帮你干什么 → [技能大全](./BANKOFAISkill.md)
-- 遇到问题了？ → [常见问题](./Faq.md)
+只选择所需 Skills，并查看各自的依赖和凭据要求。SunSwap、SunPump、SunPerp、USDD 的现有实现不应被假定已经全部迁移到 wallet-cli。
+
+## 配置及调用
+
+按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)在本地配置和选择账户。不要把密码、助记词、私钥粘贴到聊天中。
+
+- 基础钱包与 TRON 操作：使用 `wallet-cli` Skill。
+- x402 支付：使用 [wallet-cli x402](/zh-Hans/wallet-cli/command-reference/)。
+- B.AI 充值与记录：查看 `wallet-cli bai --json-schema -o json`，并配置 B.AI API Key。
+- 社区业务：按对应 Skill 的实际说明配置，不能统一强制创建 agent-wallet 钱包。
+
+旧 `bankofai-guide` 不再作为安装后的默认步骤。OpenClaw 一键安装器处于暂停维护状态，不作为新用户推荐入口。
+
+[Skill 列表](/zh-Hans/McpServer-Skills/SKILLS/BANKOFAISkill/) · [常见问题](/zh-Hans/McpServer-Skills/SKILLS/Faq/)
+
+{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
+<span id="第-1-步安装技能库"></span>
+<span id="方式一对话式安装最简单"></span>
+<span id="方式二一键自动安装命令行"></span>
+<span id="方式三交互式安装最精细控制"></span>
+<span id="交互式安装步骤详解"></span>
+<span id="验证安装"></span>
+<span id="第-2-步对-ai-说出你的第一句话"></span>
+<span id="-想让-ai-帮你交易"></span>
+<span id="方案一给-ai-开个专用支付宝强烈推荐最安全"></span>
+<span id="方案二直接把私钥贴给-ai适合老手或快速测试"></span>
+<span id="-钥匙配好了怎么让它去交易"></span>
+<span id="下一步"></span>

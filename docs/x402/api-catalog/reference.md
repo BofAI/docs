@@ -71,12 +71,12 @@ The build passes this through to outputs as `x402_routes`. When present, callers
 On TRON you can add an `exact_gasfree` route alongside the `exact` one for the same endpoint: a relayer pays the network energy and deducts its fee from the payment token, so the payer needs no TRX. GasFree routes are TRON-only and must not carry `assetTransferMethod`. Since x402 SDK 1.0.1 (current release 1.2.0) the relayer cost is estimated client-side, so catalog routes must **not** publish the legacy `fee` or `feeConfig` fields.
 :::
 
-For example, an endpoint may expose one route per supported chain — TRON Mainnet, BSC Mainnet, and Base Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
+For example, an endpoint may expose one route per supported chain — TRON Mainnet, BSC Mainnet, and Base Mainnet — each with its own `provider` and `scheme`. To call one, point `wallet-cli x402 pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
+wallet-cli x402 pay --dry-run -o json 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --method POST \
-  --network tron:0x2b6653dc \
+  --network tron:728126428 \
   --token USDT \
   --scheme exact \
   --max-amount 0.000001 \
@@ -96,7 +96,7 @@ The other routes reuse the same request body, swapping only the route `url`, `--
 
 ## pay.md
 
-Submitted alongside `catalog.json` in the same directory — a human- and Agent-readable call guide, and a **required** file. Recommended contents: basic service info (FQN, entry address, category, settlement chains), each endpoint's address and price, plus one copy-paste `x402-cli pay` example. Like `catalog.json`, this file goes through the sensitive-data scan (see below).
+Submitted alongside `catalog.json` in the same directory — a human- and Agent-readable call guide, and a **required** file. Recommended contents: basic service info (FQN, entry address, category, settlement chains), each endpoint's address and price, plus one copy-paste `wallet-cli x402 pay` example. Like `catalog.json`, this file goes through the sensitive-data scan (see below).
 
 ## Allowed categories
 

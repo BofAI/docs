@@ -1,113 +1,43 @@
 ---
-title: 快速开始
-sidebar_label: 快速开始
-description: 3 分钟把你的 Agent 接入 API 目录 —— 安装 Agent Wallet，再安装 x402 CLI 即可发现并调用目录内的全部服务。
+title: "Catalog 快速入门"
+description: "用 wallet-cli 查询目录和预览付费接口。"
 ---
 
-# 快速开始
+# Catalog 快速入门
 
-只需两步、不到 3 分钟，你的 Agent 就能接入整个目录：装好钱包，再装上 x402 CLI。完成后，Agent 就能发现并调用目录里的任意服务，按次在链上付费。
+先按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)安装 `@tron-walletcli/wallet-cli@4.14.0`。目录查询不需要钱包或密码，支付预览和付款需要已配置账户。
 
-**前提**：Node.js 和 npm。
-
-## 第 1 步：安装 Agent Wallet
-
-运行下面这行命令，你会装上一个在 TRON、BNB Chain 与 Base 上管理稳定币的本地钱包。之后 Agent 发起的每一次付费调用，都由它在本地签名。
+## 浏览目录
 
 ```bash
-npm i -g @bankofai/agent-wallet
-agent-wallet --help
+wallet-cli x402 provider-list -o json
+wallet-cli x402 provider-show dia -o json
+wallet-cli x402 endpoint-list dia -o json
+wallet-cli x402 update-catalog -o json
 ```
 
-## 第 2 步：安装 x402 CLI
+`provider-list` 可按支持的网络、类别和 capability 过滤。`update-catalog` 会更新本地缓存。
 
-一次安装，就把 Agent 接入了目录 —— 它通过 x402 发现并调用全部服务、按次付费。无需账号，也无需管理任何 API Key。
+## 选择接口和网络
+
+从 CLI JSON 的 `x402Routes[].url` 读取网络对应的 URL，并填入接口路径中的占位符。Gateway provider id 与目录 FQN 不同，不能自行拼接。例如 DIA 的 TRON BTC 报价接口：
 
 ```bash
-npm install -g @bankofai/x402-cli
-x402-cli --version
+wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1/quotation/BTC \
+  --network tron:728126428 --token USDT --max-amount 0.01 --dry-run -o json
 ```
 
-看到版本号即安装完成。两步到此结束 —— 你的 Agent 已经接入目录，可以开始调用了。
+该命令只预览。实际支付需核对金额及网络、取得授权并通过安全来源提供 `--password-stdin`。GasFree 另设手续费上限；结果不确定时先核对交易，不能重复付款。
 
-## 用 CLI 调用服务
+需要直接读取目录数据时，可访问 [Catalog JSON](https://x402-catalog.bankofai.io/api/catalog.json)。静态 API 使用 `x402_routes` 等 snake_case 字段；CLI 的输出字段以其 schema 和文档为准，不要混用。
 
-装好后，Agent 就能通过 CLI 发现并调用服务。先按服务名或关键字搜索，看看目录里有什么：
+- [目录数据与接口参考](/zh-Hans/x402/api-catalog/reference/)
+- [提交服务](/zh-Hans/x402/api-catalog/list-your-service/)
+- [支付命令参考](/zh-Hans/wallet-cli/command-reference/)
 
-```bash
-x402-cli catalog search <keyword> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
-```
-
-查看某个服务的详情与可用端点：
-
-```bash
-x402-cli catalog show <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
-x402-cli catalog endpoints <fqn> --catalog https://x402-catalog.bankofai.io/api/catalog.json --json
-```
-
-:::caution 网关地址请从目录里取，不要自己拼
-网关地址里的是**网关 provider id**，并不是目录 FQN——`defillama` 对应的是 `defillama-tvl-tron`、`defillama-coins-price-tron` 与 `defillama-yields-tron`，而且每条链各有一个 id（`…-tron`、`…-bsc`、`…-base`）。两者之间没有替换规则；请直接复制 `catalog endpoints <fqn>` 输出里端点的 `url`，或对应的 `x402_routes[].url`。id 写错会返回 `404 {"error":"provider not found"}`。
-:::
-
-**免费端点**（服务方未定价的端点）用普通 `curl` 即可拿到结果——无需 CLI、也无需付费：
-
-```bash
-curl -sS 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>'
-```
-
-对于**付费端点**，使用 `x402-cli pay`——它一步完成报价、付款和取回结果。简单的 GET 只需给出 URL：
-
-```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>'
-```
-
-如果是付费 POST 端点，或想指定支付链、代币与方案，显式传入对应参数：
-
-```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<gateway-provider-id>/<path>' \
-  --method POST \
-  --network tron:0x2b6653dc \
-  --token USDT \
-  --scheme exact \
-  --max-amount 0.000001 \
-  --header 'Content-Type: application/json' \
-  --body '{ ... }'
-```
-
-| 参数 | 作用 |
-|---|---|
-| `--method` | HTTP 方法（默认 `GET`） |
-| `--network` | CAIP-2 支付链，如 `tron:0x2b6653dc`、`eip155:56`、`eip155:8453` |
-| `--token` | 结算代币，如 `USDT` 或 Base 主网 `USDC` |
-| `--scheme` | 路由声明的 x402 支付方案，如 `exact` |
-| `--max-amount` | 支出上限，单位是**代币数量**（按所选代币精度换算，不是美元金额）；报价超出即中止调用 |
-| `--header` / `--body` | 转发到上游的请求头与请求体 |
-
-跨多条链结算的服务会为每个网络提供一条路由（服务端输出里字段名为 `x402_routes`，提交文件里写作 `x402Routes`）；按你想付款的链选择对应路由，以及匹配的 `--network` / `--scheme`。
-
-:::tip
-`--catalog` 既可以指向上面的线上地址，也可以指向你本地构建出来的 `dist/catalog.json`，方便离线调试。
-:::
-
-## 一次付费调用发生了什么
-
-每一笔调用都通过 x402 在链上清算。`exact` 路由报价即为实付；TRON `exact_gasfree` 路由则会由 relayer 额外从支付代币里扣除能量费，请用 `--max-gasfree-fee` 限额：
-
-1. **Agent 发起调用** —— 请求目标端点。
-2. **网关报价** —— 返回价格（HTTP `402`）。
-3. **钱包授权** —— 客户端签署所选支付要求，并携带 `PAYMENT-SIGNATURE` 请求头重试。
-4. **验款并结算** —— 网关请求 facilitator 验证签名载荷，并在链上把款项结算至服务方钱包。
-5. **返回结果** —— 网关把上游结果返回给 Agent。
-
-上游凭证始终保留在网关侧，调用方 Agent 全程接触不到任何密钥。
-
-:::tip 几点提示
-- **免费端点**：不是每次调用都要付钱。服务方设为免费的端点不会向你收费——没有报价环节，直接返回结果，钱包不会发生任何扣款。
-- **还没创建钱包？** 先按 [Agent Wallet 快速开始](../../Agent-Wallet/QuickStart.md) 创建并充值钱包（不到一分钟）。Catalog 复用同一个钱包，无需重复配置。
-- **风险隔离**：钱包里只放少量稳定币用于按次付费，主资产请勿放在 Agent 钱包中。
-:::
-
-## 下一步
-
-- 浏览目录里的全部服务，或了解响应结构 → [数据格式与 API 参考](./reference.md)
-- 你也有 API 想上架变现？→ [上架你的服务](./list-your-service.md)
+{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
+<span id="第-1-步安装-agent-wallet"></span>
+<span id="第-2-步安装-x402-cli"></span>
+<span id="用-cli-调用服务"></span>
+<span id="一次付费调用发生了什么"></span>
+<span id="下一步"></span>

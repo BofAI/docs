@@ -1,5 +1,9 @@
 # Full Capability List
 
+:::note
+TRON MCP is no longer under active development under the consolidation plan. Use [wallet-cli](/wallet-cli/quickstart/) for new wallet workflows; the following remains for existing MCP users.
+:::
+
 TRON MCP Server provides **97 tools**, **6 prompts**, and **1 resource** for interacting with the TRON blockchain. Tools are the core capability — they are the actual functions the AI calls on your behalf.
 
 ## Understand Two Key Concepts First
