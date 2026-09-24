@@ -55,7 +55,7 @@ description: 把你的 API 上架到 API 目录 —— 填表申请或直接提�
 
 ## 第 1 步：准备两份公开文件
 
-**自建网关**：先运行并验证自己的 Gateway，再按下文格式编写 `catalog.json` 和 `pay.md`，只包含公开接口、价格和收款信息。旧 CLI 的导出命令已退出使用，wallet-cli 4.14 没有同名替换。
+**自建网关**：先运行并验证自己的 Gateway，再按下文格式编写 `catalog.json` 和 `pay.md`，只包含公开接口、价格和收款信息。
 
 **官方网关**：接入沟通确认后，按分配给你的官方地址（形如 `https://x402-gateway.bankofai.io/providers/<fqn>`）填写两份文件即可，格式参考下面的示例。
 

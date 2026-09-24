@@ -5,7 +5,7 @@ description: "Use wallet-cli 4.14.0 for payments and service discovery."
 
 # Wallet CLI and x402
 
-The standalone `@bankofai/x402-cli` is being retired. Use **`@tron-walletcli/wallet-cli@4.14.0`** for new command-line integrations.
+Use **`@tron-walletcli/wallet-cli@4.14.0`** for new command-line integrations.
 
 | Task | Entry point |
 | --- | --- |
@@ -19,6 +19,6 @@ The standalone `@bankofai/x402-cli` is being retired. Use **`@tron-walletcli/wal
 Configure and select accounts through wallet-cli. An agent-wallet configuration does not automatically become a wallet-cli account. Use decimal CAIP-2 network IDs for the CLI: Nile `tron:3448148188`, TRON mainnet `tron:728126428`, BSC `eip155:56`, and Base `eip155:8453`. Protocol documentation can use hexadecimal TRON IDs; do not substitute those into CLI examples.
 
 - [Quick start](/wallet-cli/quickstart/)
-- [Command reference and migration](/wallet-cli/command-reference/)
+- [Command reference](/wallet-cli/command-reference/)
 - [FAQ](/wallet-cli/faq/)
 - [Agent payment setup](/x402/getting-started/quickstart-for-agent/)

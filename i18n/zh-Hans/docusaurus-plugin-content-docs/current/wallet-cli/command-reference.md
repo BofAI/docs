@@ -1,11 +1,11 @@
 ---
 title: "Wallet CLI 命令参考"
-description: "从独立 x402-cli 迁移到 wallet-cli 4.14.0。"
+description: "wallet-cli 4.14.0 命令与支付参数。"
 ---
 
 # Wallet CLI 命令参考
 
-以 **4.14.0** 发布包为准。先查询命令 schema，不要直接沿用旧 CLI 的参数。
+以 **4.14.0** 发布包为准。通过命令 schema 查询可用参数。
 
 ```bash
 wallet-cli --json-schema -o json
@@ -13,31 +13,20 @@ wallet-cli x402 pay --json-schema -o json
 wallet-cli bai recharge --json-schema -o json
 ```
 
-## 旧命令迁移
-
-| 原入口 | 新入口 |
-| --- | --- |
-| `x402-cli pay` | `wallet-cli x402 pay` |
-| `x402-cli serve` / `roundtrip` | `wallet-cli x402 serve` / `roundtrip` |
-| `catalog search` | `wallet-cli x402 provider-list`；使用支持的 category/capability 过滤，不支持原关键词搜索参数 |
-| `catalog show` / `endpoints` | `wallet-cli x402 provider-show` / `endpoint-list` |
-| `catalog update` | `wallet-cli x402 update-catalog` |
-| `gateway ...` / `catalog export-gateway` / `catalog build` | 不提供同名替换；使用 [Gateway](/zh-Hans/x402/core-concepts/gateway/) 和 [Catalog](/zh-Hans/x402/api-catalog/list-your-service/) 的部署与构建流程 |
-
 ## 支付参数
 
 - `--network`：指定支付网络；TRON 主网使用 `tron:728126428`。
-- `--account`：选择 wallet-cli 账户，替代旧钱包选择参数。
+- `--account`：选择 wallet-cli 账户。
 - `--token` 或 `--asset`、`--decimals`：按 schema 指定支付资产。
 - `--max-amount` / `--max-raw-amount`：二选一，限制支付数量。
 - `--dry-run`：读取支付要求，不签名。
 - `--method`、`--header`、`--body` / `--body-file`：HTTP 请求配置。
 - `--password-stdin`：实际签名所需主密码的安全输入通道。
-- `-o json`：机器输出；不是旧 CLI 的 `--json`。
+- `-o json`：机器输出。
 
 ## GasFree 支付 {#gasfree-payments-tron}
 
-TRON 路线需要 GasFree 时显式指定 `--scheme exact_gasfree`，并限制 `--max-gasfree-fee`。4.14 使用 `--gasfree-relay` 选择服务，不沿用旧 `--gasfree-api-url`。支付金额上限不包含 GasFree 手续费。
+TRON 路线需要 GasFree 时显式指定 `--scheme exact_gasfree`，并限制 `--max-gasfree-fee`。使用 `--gasfree-relay` 选择服务。支付金额上限不包含 GasFree 手续费。
 
 ## 结果处理
 

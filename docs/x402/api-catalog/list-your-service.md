@@ -55,7 +55,7 @@ Skip the form and follow the steps below to prepare the files and open the PR.
 
 ## Step 1: Prepare the two public files
 
-**Self-hosted gateway**: run and validate your Gateway, then prepare `catalog.json` and `pay.md` using the formats below. Include public endpoints, prices, and payment details only. The retired CLI export command has no same-name replacement in wallet-cli 4.14.
+**Self-hosted gateway**: run and validate your Gateway, then prepare `catalog.json` and `pay.md` using the formats below. Include public endpoints, prices, and payment details only.
 
 **Official gateway**: once onboarding is confirmed, fill in the two files using the official address assigned to you (like `https://x402-gateway.bankofai.io/providers/<fqn>`), following the examples below.
 

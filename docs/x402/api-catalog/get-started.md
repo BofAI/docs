@@ -16,7 +16,7 @@ wallet-cli x402 endpoint-list dia -o json
 wallet-cli x402 update-catalog -o json
 ```
 
-`provider-list` supports network, category, and capability filters. Do not reuse old keyword-search arguments or `--catalog`. `update-catalog` refreshes the local cache.
+`provider-list` supports network, category, and capability filters. `update-catalog` refreshes the local cache.
 
 ## Choose an endpoint and network
 

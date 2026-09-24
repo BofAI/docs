@@ -16,7 +16,7 @@ wallet-cli x402 endpoint-list dia -o json
 wallet-cli x402 update-catalog -o json
 ```
 
-`provider-list` 可按支持的网络、类别和 capability 过滤，不沿用旧 CLI 的关键词搜索或 `--catalog` 参数。`update-catalog` 会更新本地缓存。
+`provider-list` 可按支持的网络、类别和 capability 过滤。`update-catalog` 会更新本地缓存。
 
 ## 选择接口和网络
 
