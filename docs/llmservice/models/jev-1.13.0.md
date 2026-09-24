@@ -23,7 +23,7 @@ JEV-1.13.0 is TypeSafe AI's System One model for fast, structured decisions in s
 
 | Capability | Description |
 | :--- | :--- |
-| **API Interface** | Uses `POST https://api.b.ai/v1/decisions` with `state`, `model`, and `questions`. See the [API reference](../api/API.md). |
+| **API Interface** | Uses `POST https://api.b.ai/v1/decisions` with `state`, `model`, and `questions`. See the [Decisions API reference](../api/decisions-api.md). |
 | **Model IDs** | `jev-1.13.0` is the stable version; `jev-latest` currently resolves to it. |
 | **Reasoning** | Optimized for focused semantic judgments. Complex decisions should be decomposed into narrow questions and combined in code. |
 | **Input Modalities** | Text only, supplied as a string, JSON object, or array. |

@@ -1,8 +1,23 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # MiMo-V2.6-Flash
 
 ## 概述
 
 MiMo-V2.6-Flash 是小米 MiMo 于 2026 年 9 月 22 日发布的开放权重原生多模态推理模型。其 API 模型 ID 为 `mimo-v2.6-flash`，结合稀疏 Mixture-of-Experts 架构与 1M Token 上下文窗口，面向高频调用、大规模办公负载，以及成本敏感的编程和 Agent 应用。
+
+<ActivityCard
+  variant="discount"
+  title="MiMo-V2.6-Flash"
+  status="限时折扣"
+  detail="9 月 25 日 15:00 起 1 折"
+>
+活动于 2026 年 9 月 25 日 15:00（北京时间，UTC+8）开启。
+
+自生效时间起，符合条件的 MiMo-V2.6-Flash 使用按标准参考价的 10% 结算。
+
+下方价格表继续展示标准参考价。
+</ActivityCard>
 
 ## 核心特性
 

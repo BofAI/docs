@@ -10,11 +10,11 @@ Qwen3.8-Flash 是阿里巴巴 Qwen 团队于 2026 年 8 月 26 日发布的托�
   variant="discount"
   title="Qwen3.8-Flash"
   status="限时折扣"
-  detail="9 月 16 日 17:00 SGT 起 1 折"
+  detail="9 月 25 日 15:00 起 3 折"
 >
-现有免费活动于 2026 年 9 月 16 日 17:00（新加坡时间，UTC+8）调整为限时 1 折。
+活动折扣于 2026 年 9 月 25 日 15:00（北京时间，UTC+8）由标准参考价的 1 折调整为 3 折。
 
-自生效时间起，Qwen3.8-Flash 在 B.AI API 和 Chat 中的使用按标准参考价的 10% 结算。
+自生效时间起，Qwen3.8-Flash 在 B.AI API 和 Chat 中的使用按标准参考价的 30% 结算。
 
 下方价格表继续展示标准参考价。
 </ActivityCard>

@@ -12,67 +12,67 @@ This section shows active and announced upcoming promotions: free offers appear 
 
 <ActivityCard
   variant="discount"
-  title="Qwen3.8-Flash"
+  title="MiMo-V2.6-Flash"
   status="Limited-Time Discount"
-  detail="10% from Sep 16, 17:00 SGT"
+  detail="10% from Sep 25, 15:00 UTC+8"
 >
-The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
+The offer begins at 15:00 on September 25, 2026 (Beijing Time, UTC+8).
 
-From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 10% of the standard reference price.
+From that time, eligible MiMo-V2.6-Flash usage is billed at 10% of the standard reference price.
 
-The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/qwen3-8-flash.md) continue to show standard reference prices.
-</ActivityCard>
-
-<ActivityCard
-  variant="discount"
-  title="Hy3"
-  status="Limited-Time Discount"
-  detail="10% from Sep 16, 17:00 SGT"
->
-The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
-
-From that time, Hy3 usage through B.AI API and Chat is billed at 10% of the standard reference price.
-
-The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/hy3.md) continue to show standard reference prices.
-</ActivityCard>
-
-<ActivityCard
-  variant="discount"
-  title="MiMo-V2.5"
-  status="Limited-Time Discount"
-  detail="10% from Sep 16, 17:00 SGT"
->
-The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
-
-From that time, MiMo-V2.5 usage through B.AI API and Chat is billed at 10% of the standard reference price.
-
-The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/mimo-v2.5.md) continue to show standard reference prices.
-</ActivityCard>
-
-<ActivityCard
-  variant="discount"
-  title="GLM-5.3-Flash"
-  status="Limited-Time Discount"
-  detail="As Low as 10%"
->
-The offer begins at 10:00 on September 12, 2026 (Singapore Time, UTC+8).
-
-During the offer, eligible GLM-5.3-Flash usage through B.AI API and Chat is billed at rates as low as 10% of the standard reference price.
-
-See the [model details](./models/glm-5-3-flash.md) for standard pricing.
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/mimo-v2.6-flash.md) continue to show standard reference prices.
 </ActivityCard>
 
 <ActivityCard
   variant="discount"
   title="DeepSeek-V4.1-Flash"
   status="Limited-Time Discount"
-  detail="10% of Standard Price"
+  detail="30% from Sep 25, 15:00 UTC+8"
 >
-The offer begins at 10:00 on September 12, 2026 (Singapore Time, UTC+8).
+At 15:00 on September 25, 2026 (Beijing Time, UTC+8), the promotional rate changes from 10% to 30% of the standard reference price.
 
-The promotional price changes in step with DeepSeek's time-based pricing and remains at 10% of the standard price in either the Off-Peak or Peak period.
+The promotional price changes in step with DeepSeek's time-based pricing and remains at 30% of the applicable Off-Peak or Peak standard price.
 
 The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/deepseek-v4-1-flash.md) continue to show standard reference prices. Actual settlement and final billing are subject to the platform display.
+</ActivityCard>
+
+<ActivityCard
+  variant="discount"
+  title="GLM-5.3-Flash"
+  status="Limited-Time Discount"
+  detail="30% from Sep 25, 15:00 UTC+8"
+>
+At 15:00 on September 25, 2026 (Beijing Time, UTC+8), the promotional rate changes from 10% to 30% of the standard reference price.
+
+From that time, eligible GLM-5.3-Flash usage through B.AI API and Chat is billed at 30% of the standard reference price.
+
+See the [model details](./models/glm-5-3-flash.md) for standard pricing.
+</ActivityCard>
+
+<ActivityCard
+  variant="discount"
+  title="Qwen3.8-Flash"
+  status="Limited-Time Discount"
+  detail="30% from Sep 25, 15:00 UTC+8"
+>
+At 15:00 on September 25, 2026 (Beijing Time, UTC+8), the promotional rate changes from 10% to 30% of the standard reference price.
+
+From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 30% of the standard reference price.
+
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/qwen3-8-flash.md) continue to show standard reference prices.
+</ActivityCard>
+
+<ActivityCard
+  variant="discount"
+  title="MiMo-V2.6-Pro"
+  status="Limited-Time Discount"
+  detail="50% from Sep 25, 15:00 UTC+8"
+>
+The offer begins at 15:00 on September 25, 2026 (Beijing Time, UTC+8).
+
+From that time, eligible MiMo-V2.6-Pro usage is billed at 50% of the standard reference price.
+
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/mimo-v2.6-pro.md) continue to show standard reference prices.
 </ActivityCard>
 
 <ActivityCard

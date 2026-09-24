@@ -10,11 +10,11 @@ Qwen3.8-Flash is a hosted multimodal model from Alibaba's Qwen team, announced o
   variant="discount"
   title="Qwen3.8-Flash"
   status="Limited-Time Discount"
-  detail="10% from Sep 16, 17:00 SGT"
+  detail="30% from Sep 25, 15:00 UTC+8"
 >
-The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
+At 15:00 on September 25, 2026 (Beijing Time, UTC+8), the promotional rate changes from 10% to 30% of the standard reference price.
 
-From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 10% of the standard reference price.
+From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 30% of the standard reference price.
 
 The pricing table below continues to show standard reference prices.
 </ActivityCard>
