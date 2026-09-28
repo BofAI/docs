@@ -1,10 +1,12 @@
 ---
-title: "Tool List"
-description: "Migration entry for the discontinued SUN MCP Server."
+title: 'Tool List'
+description: 'This page is now maintained on the SUN documentation site.'
 ---
 
 # Tool List
 
-SUN MCP Server development has stopped. SUN CLI provides the replacement capabilities. This page retains the old documentation entry without linking to legacy MCP services or tool lists.
+This page has moved to the SUN documentation site.
 
-[Read the SUN CLI documentation](/McpServer-Skills/Tools/SUNCli/Intro/)
+:::tip This page has moved
+**→ [Open on the SUN docs site](https://docs.sun.io/sun-ai/sun-mcp-server/tool-list)**
+:::
