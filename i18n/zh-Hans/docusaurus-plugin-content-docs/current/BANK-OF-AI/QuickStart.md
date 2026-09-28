@@ -21,7 +21,6 @@ description: "选择 BANK OF AI Skills，使用 wallet-cli 配置钱包与支付
 
 旧的 bankofai-guide 自动初始化流程不再作为默认入口。已有 Agent Wallet、OpenClaw 或 MCP 集成的参考页面仍保留，但应按各自维护状态使用。
 
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
 <span id="第-1-步粘贴安装指令"></span>
 <span id="第-2-步确认创建钱包"></span>
 <span id="验证安装"></span>

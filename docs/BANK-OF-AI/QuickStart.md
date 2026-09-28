@@ -21,7 +21,6 @@ Complete wallet setup locally. Never send a private key, mnemonic, or master pas
 
 The old bankofai-guide automatic setup flow is no longer the default entry. Reference pages for existing Agent Wallet, OpenClaw, and MCP integrations remain available with their maintenance status.
 
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
 <span id="step-1-paste-the-install-command"></span>
 <span id="step-2-confirm-wallet-creation"></span>
 <span id="verify-the-install"></span>
