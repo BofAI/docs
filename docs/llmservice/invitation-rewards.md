@@ -1,18 +1,17 @@
 # Invitation Rewards Rules
 
-B.AI invitation rewards let you invite friends to register and earn Coin when eligible invited friends top up or subscribe. This page explains invitation registration rewards, referral rebates, Coin settlement, redemption, and adjustments.
+B.AI invitation rewards let you invite friends to register and earn Coin when eligible invited friends top up or subscribe. This page explains invitation relationships, referral rebates, Coin settlement, redemption, and adjustments.
 
-## 1. Invitation Registration Reward
+## 1. Establishing an Invitation Relationship
 
-When a friend registers through your dedicated invitation link or invitation code, they can claim a dedicated invitation registration gift of `300,000 Credits`.
+When a friend registers through your dedicated invitation link or invitation code, a two-year invitation relationship is established between you and the invited friend.
 
 * Each user can be linked to only one inviter.
 * Users cannot invite themselves.
-* The `300,000 Credits` invitation registration gift is a free bonus Credit grant and is valid for 30 days from the date it is issued. Any unused portion expires automatically after that period.
 
 ## 2. Referral Rebates
 
-An invitation relationship remains valid for two years after it is established. During this period, you can earn Coin when an invited friend completes an eligible top-up or subscription.
+During the invitation relationship's validity period, you can earn Coin when an invited friend completes an eligible top-up or subscription.
 
 Rebates are calculated from the invited friend's actual paid eligible amount. Bonus amounts, discounts, refunds, and abnormal orders are not included in rebate calculations.
 
