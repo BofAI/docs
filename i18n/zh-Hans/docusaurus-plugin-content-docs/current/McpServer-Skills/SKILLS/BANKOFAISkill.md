@@ -37,10 +37,6 @@ B.AI 的 API Key 在 [控制台](https://chat.bankofai.io/key)获取，通过 wa
 
 ---
 
-## agent-wallet {#agent-wallet}
-
-旧钱包 Skill 不再作为官方默认配置入口。新用户从 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)开始。仍使用 agent-wallet 的 SDK、服务端和社区项目可查阅 [Agent Wallet 参考文档](/zh-Hans/Agent-Wallet/Intro/)。
-
 ## wallet-cli {#wallet-cli}
 
 一个独立的 TRON 钱包工具箱。它教你的 AI 通过锁定版 `@tron-walletcli/wallet-cli@4.14.0` npm 包完成 TRON 钱包操作：账户、质押与代理状态查询，TRX/代币转账、质押与资源代理、SR 投票与治理、合约调用、消息签名、交易状态跟踪。所有命令都走 CLI 的机器可读接口（`-o json`）——AI 先看退出码、再看结构化字段，从不靠猜文本。
@@ -69,7 +65,7 @@ Agent 执行时，钱包密码只能通过 `--password-stdin` 从受信来源传
 
 注意：wallet-cli 的规范网络标识是十进制 CAIP-2 ID——`tron:728126428`（主网）、`tron:3448148188`（Nile）、`tron:2494104990`（Shasta）；`tron:mainnet` / `tron:nile` / `tron:shasta` 仅作为输入别名被接受。这与 x402 协议元数据中的十六进制标识符（`tron:0x…`）不同；`wallet-cli x402` 仍使用 wallet-cli 的网络标识。
 
-自 Skills 2.0.0 起，已下线的 `trc20-toolkit-skill`、`trx-staking-skill`、`multisig-permissions` 三个技能覆盖的通用 TRON 操作——TRC20/TRC10 转账与代币查询、质押与 SR 投票、账户权限管理（`permission show|update`）——均由本技能承接。
+本技能还支持 TRC20/TRC10 转账与代币查询、质押与 SR 投票，以及账户权限管理（`permission show|update`）。
 
 ---
 
@@ -251,18 +247,6 @@ PSM 支持 **USDT ↔ USDD 即时 1:1 兑换**——是获取 USDD 最简单的�
 
 ---
 
-## x402-payment {#x402-payment}
-
-独立支付 Skill 正在退出默认接入路径。使用 [wallet-cli 4.14 的支付流程](/zh-Hans/wallet-cli/quickstart/)，先预览再授权付款；本节保留旧锚点供已有链接访问，不再要求安装独立 x402-cli。
-
-## recharge-skill {#recharge-skill}
-
-充值与记录查询使用 `wallet-cli bai`，通过 `--json-schema` 查询具体命令，参见 [B.AI 充值说明](/zh-Hans/wallet-cli/command-reference/)。需要 wallet-cli 账户和 B.AI API Key。旧充值服务的 MCP 接口仍是独立服务能力，不因 Skill 调整而自动关闭。
-
-## bankofai-guide {#bankofai-guide}
-
-不再作为默认安装或首次钱包配置流程。请使用 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)和 [wallet-cli 配置指引](/zh-Hans/wallet-cli/quickstart/)。本节保留旧锚点，避免已有链接失效。
-
 ## 推荐学习路径
 
 **从这里开始——零风险，零配置：** 用 tronscan-skill 查账户、看交易，用 sunswap 查价格和报价。纯查询，不花钱，不需要密码。
@@ -280,6 +264,3 @@ PSM 支持 **USDT ↔ USDD 即时 1:1 兑换**——是获取 USDD 最简单的�
 - 想了解技能背后的工作原理？ → [什么是 Skills？](./Intro.md)
 - 遇到问题了？ → [常见问题](./Faq.md)
 - 在用 OpenClaw Extension？ → [OpenClaw Extension 文档](../../Openclaw-extension/Intro.md)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="-这些钥匙去哪领怎么配"></span>

@@ -46,7 +46,12 @@ This reads DIA's payment requirements **without signing or paying**. A configure
 
 ```bash
 wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1/quotation/BTC \
-  --network tron:728126428 --token USDT --max-amount 0.01 --dry-run -o json
+  --method GET \
+  --network tron:728126428 \
+  --token USDT \
+  --scheme exact \
+  --max-amount 0.01 \
+  --dry-run -o json
 ```
 
 Before paying, confirm the network, recipient, amount, and fees. Remove `--dry-run` only for the authorized payment, and supply the master password through `--password-stdin` from an approved secure source, never a password argument. Cap GasFree fees separately with `--max-gasfree-fee`.

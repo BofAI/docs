@@ -19,17 +19,4 @@ Installation requires Node.js 20 or newer and an agent that supports local Skill
 
 Complete wallet setup locally. Never send a private key, mnemonic, or master password to an AI. Before paying, check the network, address, token, amount, and fees.
 
-The old bankofai-guide automatic setup flow is no longer the default entry. Reference pages for existing Agent Wallet, OpenClaw, and MCP integrations remain available with their maintenance status.
-
-<span id="step-1-paste-the-install-command"></span>
-<span id="step-2-confirm-wallet-creation"></span>
-<span id="verify-the-install"></span>
-<span id="what-else-can-you-do"></span>
-<span id="-on-chain-data-lookup-free"></span>
-<span id="-trc20-token-transfer-via-wallet-cli"></span>
-<span id="-sunswap-swaps"></span>
-<span id="-sunperp-futures"></span>
-<span id="️-trx-staking--sr-voting-via-wallet-cli"></span>
-<span id="a-few-reminders"></span>
-<span id="want-to-use-the-other-products-independently-or-self-host"></span>
-<span id="whats-next"></span>
+Skills 3.0.0 removed the old bankofai-guide automatic setup flow. Reference pages for existing Agent Wallet, OpenClaw, and MCP integrations remain available with their maintenance status.

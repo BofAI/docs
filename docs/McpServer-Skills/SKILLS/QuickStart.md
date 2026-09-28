@@ -24,7 +24,7 @@ If `npm install -g` fails with a permission error (such as `EACCES`) on macOS or
 npx skills add https://github.com/BofAI/skills --skill wallet-cli -g
 ```
 
-`npx skills add` installs definitions, not external CLI dependencies. Inspect the dependency version in the installed `wallet-cli/SKILL.md`. The 4.14.0 Skill update is tracked in [Skills PR #81](https://github.com/BofAI/skills/pull/81). If the stable branch still requires 4.13.0, do not bypass its version check or automatically downgrade: use 4.14.0 directly through the [CLI quick start](/wallet-cli/quickstart/) until the matching Skill is released.
+`npx skills add` installs definitions, not external CLI dependencies. Since Skills 3.0.0, the `wallet-cli` Skill is pinned to `@tron-walletcli/wallet-cli@4.14.0`, the same version installed above.
 
 For community workflows, select additional Skills interactively:
 
@@ -43,20 +43,6 @@ Configure and select an account locally using the [Wallet CLI quick start](/wall
 - B.AI recharge and records: inspect `wallet-cli bai --json-schema -o json` and configure a B.AI API key.
 - Community workflows: follow their actual Skill requirements; do not universally require an agent-wallet account.
 
-`bankofai-guide` is no longer the default post-install step. The OpenClaw one-click installer is paused and is not the recommended entry point for new users.
+Skills 3.0.0 removed `bankofai-guide`, `agent-wallet`, `x402-payment`, and `recharge-skill`; see the [Skill catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/) for the current list. The OpenClaw one-click installer is paused and is not the recommended entry point for new users.
 
 [Skill catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/) · [FAQ](/McpServer-Skills/SKILLS/Faq/)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="step-1-install-the-skills"></span>
-<span id="method-1-conversational-install-easiest"></span>
-<span id="method-2-quick-auto-install-command-line"></span>
-<span id="method-3-interactive-install-most-control"></span>
-<span id="interactive-installation-walkthrough"></span>
-<span id="verify-installation"></span>
-<span id="step-2-talk-to-your-ai"></span>
-<span id="-want-the-ai-to-trade-for-you"></span>
-<span id="option-1-open-a-dedicated-payment-account-for-the-ai-strongly-recommended-safest"></span>
-<span id="option-2-paste-your-private-key-directly-for-power-users-or-quick-testing"></span>
-<span id="-key-is-set--how-do-i-start-trading"></span>
-<span id="next-steps"></span>

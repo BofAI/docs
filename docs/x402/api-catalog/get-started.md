@@ -24,7 +24,12 @@ Read the network-specific URL from the CLI JSON's `x402Routes[].url` and fill in
 
 ```bash
 wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1/quotation/BTC \
-  --network tron:728126428 --token USDT --max-amount 0.01 --dry-run -o json
+  --method GET \
+  --network tron:728126428 \
+  --token USDT \
+  --scheme exact \
+  --max-amount 0.01 \
+  --dry-run -o json
 ```
 
 This only previews the payment. For an actual payment, review the network and amount, obtain authorization, and use `--password-stdin` from a secure source. Cap GasFree fees separately; reconcile uncertain transactions before considering another payment.
@@ -34,10 +39,3 @@ For direct API access, read the [Catalog JSON](https://x402-catalog.bankofai.io/
 - [Catalog data and API reference](/x402/api-catalog/reference/)
 - [List your service](/x402/api-catalog/list-your-service/)
 - [Payment command reference](/wallet-cli/command-reference/)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="step-1-install-the-agent-wallet"></span>
-<span id="step-2-install-the-x402-cli"></span>
-<span id="calling-services-with-the-cli"></span>
-<span id="what-happens-during-a-paid-call"></span>
-<span id="next-steps"></span>

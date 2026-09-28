@@ -19,10 +19,10 @@ Agent Wallet 文档保留给现有 SDK、服务端和社区集成。官方新用
 ## 方式一：对话式创建（最简单）
 
 :::note 历史配置流程
-以下对话式流程仅适用于已安装旧版 agent-wallet 和 bankofai-guide Skill 的环境，它们已不属于默认安装流程。
+以下对话式流程仅适用于已安装旧版 agent-wallet 和 bankofai-guide Skill 的环境，这两个 Skill 已在 Skills 3.0.0 中删除。
 :::
 
-如果你已经安装了 [BANK OF AI 全部技能](../McpServer-Skills/SKILLS/QuickStart.md)（包含 `agent-wallet` 和 `bankofai-guide`），那么创建钱包只需要在 AI 对话框里发一句话就行——AI 会自动帮你生成密码、创建钱包、保存配置，全程无需手动改文件。
+如果你之前安装过包含 `agent-wallet` 和 `bankofai-guide` 的旧版 [BANK OF AI 技能](../McpServer-Skills/SKILLS/QuickStart.md)，那么创建钱包只需要在 AI 对话框里发一句话就行——AI 会自动帮你生成密码、创建钱包、保存配置，全程无需手动改文件。
 
 **操作步骤：**
 

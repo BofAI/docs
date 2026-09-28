@@ -46,7 +46,12 @@ wallet-cli x402 endpoint-list dia -o json
 
 ```bash
 wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1/quotation/BTC \
-  --network tron:728126428 --token USDT --max-amount 0.01 --dry-run -o json
+  --method GET \
+  --network tron:728126428 \
+  --token USDT \
+  --scheme exact \
+  --max-amount 0.01 \
+  --dry-run -o json
 ```
 
 确认网络、收款地址、金额和费用后才能付款。实际付款去掉 `--dry-run`，使用 `--password-stdin` 从已授权的安全来源输入主密码；不要把密码放到命令行参数中。GasFree 需要单独限制 `--max-gasfree-fee`。

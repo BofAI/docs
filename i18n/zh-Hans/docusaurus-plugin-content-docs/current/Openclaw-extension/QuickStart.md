@@ -2,6 +2,8 @@
 
 :::note
 该扩展暂停维护。以下为旧安装流程参考，新用户请使用 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)，不要默认安装旧钱包和 MCP。
+
+下文的技能列表截取于 Skills 3.0.0 之前；3.0.0 已删除 `agent-wallet`、`bankofai-guide`、`recharge-skill` 和 `x402-payment`。
 :::
 
 我们的目标是：**花几分钟跟着向导点几下，让你的 AI 成功查到第一笔链上数据。**

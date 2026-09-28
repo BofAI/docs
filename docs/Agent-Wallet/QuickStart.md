@@ -19,7 +19,7 @@ From zero to invoking your Agent-wallet in your AI agent chat. We provide two wa
 ## Method 1: Conversational Setup (Easiest)
 
 :::note Historical setup
-The following conversational flow applies only to existing installations of the legacy agent-wallet and bankofai-guide Skills. They are no longer part of the default setup.
+The following conversational flow applies only to existing installations of the legacy agent-wallet and bankofai-guide Skills. Both were removed in Skills 3.0.0.
 :::
 
 If you've already installed [the BANK OF AI skill suite](../McpServer-Skills/SKILLS/QuickStart.md) from an older release that included `agent-wallet` and `bankofai-guide`, creating a wallet takes just one prompt in your AI chat — the AI generates the password, creates the wallet, and saves the config for you, with no manual file editing.

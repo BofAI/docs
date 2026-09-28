@@ -19,17 +19,4 @@ description: "选择 BANK OF AI Skills，使用 wallet-cli 配置钱包与支付
 
 首次配置钱包在本地完成。不要把私钥、助记词或主密码发给 AI；支付前核对网络、地址、币种、金额与手续费。
 
-旧的 bankofai-guide 自动初始化流程不再作为默认入口。已有 Agent Wallet、OpenClaw 或 MCP 集成的参考页面仍保留，但应按各自维护状态使用。
-
-<span id="第-1-步粘贴安装指令"></span>
-<span id="第-2-步确认创建钱包"></span>
-<span id="验证安装"></span>
-<span id="你还可以做什么"></span>
-<span id="-链上数据查询完全免费"></span>
-<span id="-trc20-代币转账由-wallet-cli-执行"></span>
-<span id="-sunswap-兑换"></span>
-<span id="-sunperp-期货交易"></span>
-<span id="️-trx-质押投票由-wallet-cli-执行"></span>
-<span id="几条提醒"></span>
-<span id="想独立使用其他产品或自行部署"></span>
-<span id="下一步"></span>
+Skills 3.0.0 已删除旧的 bankofai-guide 自动初始化流程。已有 Agent Wallet、OpenClaw 或 MCP 集成的参考页面仍保留，但应按各自维护状态使用。

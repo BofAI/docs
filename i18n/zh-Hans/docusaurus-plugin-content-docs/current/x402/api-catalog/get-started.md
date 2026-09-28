@@ -24,7 +24,12 @@ wallet-cli x402 update-catalog -o json
 
 ```bash
 wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1/quotation/BTC \
-  --network tron:728126428 --token USDT --max-amount 0.01 --dry-run -o json
+  --method GET \
+  --network tron:728126428 \
+  --token USDT \
+  --scheme exact \
+  --max-amount 0.01 \
+  --dry-run -o json
 ```
 
 该命令只预览。实际支付需核对金额及网络、取得授权并通过安全来源提供 `--password-stdin`。GasFree 另设手续费上限；结果不确定时先核对交易，不能重复付款。
@@ -34,10 +39,3 @@ wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1
 - [目录数据与接口参考](/zh-Hans/x402/api-catalog/reference/)
 - [提交服务](/zh-Hans/x402/api-catalog/list-your-service/)
 - [支付命令参考](/zh-Hans/wallet-cli/command-reference/)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="第-1-步安装-agent-wallet"></span>
-<span id="第-2-步安装-x402-cli"></span>
-<span id="用-cli-调用服务"></span>
-<span id="一次付费调用发生了什么"></span>
-<span id="下一步"></span>

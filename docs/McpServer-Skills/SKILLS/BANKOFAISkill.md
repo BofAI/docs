@@ -37,10 +37,6 @@ Head over to **[Quick Start](./QuickStart.md)** — it takes about 1 minute. Com
 
 ---
 
-## agent-wallet {#agent-wallet}
-
-This legacy wallet Skill is no longer the default setup entry. Start with the [wallet-cli quick start](/wallet-cli/quickstart/). SDK, server, and community integrations that still use agent-wallet can use the [Agent Wallet reference](/Agent-Wallet/Intro/).
-
 ## wallet-cli {#wallet-cli}
 
 A standalone TRON wallet toolbox. It teaches your AI to run TRON wallet operations through the pinned `@tron-walletcli/wallet-cli@4.14.0` npm package: account, staking, and delegation queries, TRX/token transfers, staking and resource delegation, SR voting and governance, contract calls, message signing, and transaction-status tracking. Every command runs through the CLI's machine-readable interface (`-o json`) — the AI branches on exit codes and structured fields, never on guessed text.
@@ -69,7 +65,7 @@ In agent-driven runs, wallet passwords are only accepted via `--password-stdin` 
 
 Note: wallet-cli canonically uses decimal CAIP-2 network ids — `tron:728126428` (Mainnet), `tron:3448148188` (Nile), `tron:2494104990` (Shasta); `tron:mainnet` / `tron:nile` / `tron:shasta` are accepted as input aliases only. This is distinct from the hex identifiers (`tron:0x…`) used in x402 protocol metadata; `wallet-cli x402` still uses wallet-cli network identifiers.
 
-Since Skills 2.0.0, the generic TRON workflows of the retired `trc20-toolkit-skill`, `trx-staking-skill`, and `multisig-permissions` skills — TRC20/TRC10 transfers and token queries, staking and SR voting, and account-permission management (`permission show|update`) — are handled by this skill.
+This skill also covers TRC20/TRC10 transfers and token queries, staking and SR voting, and account-permission management (`permission show|update`).
 
 ---
 
@@ -253,18 +249,6 @@ Before redeeming USDD for USDT, check `psm-info` — if USDT reserves are low, `
 
 ---
 
-## x402-payment {#x402-payment}
-
-The standalone payment Skill is being retired from the default integration path. Use the [wallet-cli 4.14 payment flow](/wallet-cli/quickstart/): preview first, then authorize payment. This section preserves the old anchor; do not install standalone x402-cli.
-
-## recharge-skill {#recharge-skill}
-
-Use `wallet-cli bai` for recharge and records; discover its commands with `--json-schema` and follow the [B.AI recharge guidance](/wallet-cli/command-reference/). It requires a wallet-cli account and a B.AI API key. The recharge service MCP endpoint remains a separate service capability; changing the Skill does not disable it.
-
-## bankofai-guide {#bankofai-guide}
-
-No longer the default installation or first-wallet setup flow. Use the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) and [wallet-cli setup guide](/wallet-cli/quickstart/). This section retains the old anchor for existing links.
-
 ## Recommended Learning Path
 
 **Start here — zero risk, zero config:** Use tronscan-skill to look up accounts and check transactions. Use sunswap to check prices and get quotes. Read-only, no credentials needed.
@@ -282,6 +266,3 @@ No longer the default installation or first-wallet setup flow. Use the [Skills q
 - Want to understand how skills work under the hood? → [What Are Skills?](./Intro.md)
 - Running into issues? → [FAQ](./Faq.md)
 - Using OpenClaw Extension? → [OpenClaw Extension Documentation](../../Openclaw-extension/Intro.md)
-
-{/* Preserve bookmarks to sections replaced by the wallet-cli migration guidance. */}
-<span id="-where-do-i-get-these-keys-how-do-i-set-them-up"></span>
