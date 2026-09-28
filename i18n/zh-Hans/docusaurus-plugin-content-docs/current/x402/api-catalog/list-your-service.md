@@ -27,7 +27,7 @@ description: 把你的 API 上架到 API 目录 —— 填表申请或直接提�
 
 ## 决定一：用谁的网关
 
-这决定两份文件里的调用地址（`serviceUrl` 与各端点的 `url`）填谁：
+这决定两份文件里的调用地址填谁——即各端点的 `url` 及其 `x402Routes[].url`。（`serviceUrl` 填的是服务的公开官网，不是网关地址。）
 
 | | 官方网关（托管） | 自建网关 |
 |---|---|---|
@@ -55,19 +55,13 @@ description: 把你的 API 上架到 API 目录 —— 填表申请或直接提�
 
 ## 第 1 步：准备两份公开文件
 
-**自建网关**：先在自己的机器上把网关跑起来，再用 CLI 导出。下面的命令只会产出 `catalog.json` 与 `pay.md` 两份公开文件，不会带出任何密钥：
+**自建网关**：先运行并验证自己的 Gateway，再按下文格式编写 `catalog.json` 和 `pay.md`，只包含公开接口、价格和收款信息。
 
-```bash
-x402-cli catalog export-gateway https://gateway.example.com \
-  --provider <fqn> \
-  --output-dir providers/<fqn>
-```
-
-**官方网关**：接入沟通确认后，按分配给你的官方地址（形如 `https://x402-gateway.bankofai.io/providers/<fqn>`）填写两份文件即可，格式参考下面的示例。
+**官方网关**：接入沟通确认后，按分配给你的官方地址填写两份文件即可，格式参考下面的示例。网关按支付链各分配一个 provider ID，与目录里的 `fqn` 不同，例如 `https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron`、`…-bsc` 和 `…-base`。
 
 ### catalog.json 长什么样
 
-一个基于 **SunPump** 服务的示例（节选自 `providers/sunpump-token-launch/`，真实文件的 `description` 与 `i18n` 文本更长）：
+SunPump 服务的真实文件 `providers/sunpump-token-launch/catalog.json`：
 
 ```json
 {
@@ -76,15 +70,15 @@ x402-cli catalog export-gateway https://gateway.example.com \
   "title": "SunPump",
   "mainTitle": "One-call agent token launch, paid via x402",
   "subtitle": "Create a meme or agent token from structured metadata.",
-  "description": "## What it does\n\nSunPump Agent Token Launch API lets agents, scripts, and applications pay with x402 and submit token launch metadata to SunPump. The gateway forwards the caller's JSON payload to the SunPump launch endpoint after payment settlement.\n\n## Best for\n\n- Agent workflows that need to create a meme or agent token from structured metadata.\n- Operator tools that want one paid API call for token creation.\n- Mainnet payment flows across TRON Mainnet, BNB Smart Chain and Base Mainnet while using the same SunPump launch request shape.\n\n## Request shape\n\nPOST a JSON body with `name`, `symbol`, `description`, `imageBase64`, `twitterUrl`, `telegramUrl`, `websiteUrl`, and `tweetUsername`. Keep `name` within 1-20 characters and use a unique symbol. `imageBase64` may include a base64-encoded token image; if it is empty or omitted, SunPump generates an image automatically.\n\n## Code usage\n\nUse `x402-cli pay` against the route for the mainnet payment chain you want. TRON Mainnet example:\n\n```bash\nx402-cli pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \\\n  --method POST \\\n  --network tron:0x2b6653dc \\\n  --token USDT \\\n  --scheme exact \\\n  --max-amount 0.000001 \\\n  --header 'Content-Type: application/json' \\\n  --body '{\"name\":\"X402MainA\",\"symbol\":\"X4M17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}'\n```\n\nBNB Smart Chain uses `sunpump-token-launch-bsc` with `eip155:56`, and Base Mainnet uses `sunpump-token-launch-base` with `eip155:8453` and USDC \u2014 all with the same JSON body.",
+  "description": "## What it does\n\nSunPump Agent Token Launch API lets agents, scripts, and applications pay with x402 and submit token launch metadata to SunPump. The gateway forwards the caller's JSON payload to the SunPump launch endpoint after payment settlement.\n\n## Best for\n\n- Agent workflows that need to create a meme or agent token from structured metadata.\n- Operator tools that want one paid API call for token creation.\n- Mainnet payment flows across TRON Mainnet, BNB Smart Chain and Base Mainnet while using the same SunPump launch request shape.\n\n## Request shape\n\nPOST a JSON body with `name`, `symbol`, `description`, `imageBase64`, `twitterUrl`, `telegramUrl`, `websiteUrl`, and `tweetUsername`. Keep `name` within 1-20 characters and use a unique symbol. `imageBase64` may include a base64-encoded token image; if it is empty or omitted, SunPump generates an image automatically.\n\n## Code usage\n\nTRON Mainnet defaults to `exact` + `permit2` and also supports `exact_gasfree`. First inspect the payment requirements:\n\n```bash\ncurl -sS -X POST 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \\\n  -H 'Content-Type: application/json' \\\n  --data '{\"name\":\"X402MainA\",\"symbol\":\"X4M17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}'\n```\n\nThen pay and submit the launch request with Wallet CLI:\n\n```bash\nwallet-cli x402 pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \\\n  --password-stdin \\\n  --method POST \\\n  --header 'Content-Type: application/json' \\\n  --body '{\"name\":\"X402MainA\",\"symbol\":\"X4M17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}' \\\n  --network tron:728126428 \\\n  --token USDT \\\n  --scheme exact \\\n  --max-amount 0.000001\n```\n\nBNB Smart Chain Mainnet supports `exact` + `permit2`:\n\n```bash\ncurl -sS -X POST 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bsc/pump-api/ai/agentTokenLaunch' \\\n  -H 'Content-Type: application/json' \\\n  --data '{\"name\":\"X402BscA\",\"symbol\":\"X4B17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}'\n```\n\n```bash\nwallet-cli x402 pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bsc/pump-api/ai/agentTokenLaunch' \\\n  --password-stdin \\\n  --method POST \\\n  --header 'Content-Type: application/json' \\\n  --body '{\"name\":\"X402BscA\",\"symbol\":\"X4B17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}' \\\n  --network eip155:56 \\\n  --token USDT \\\n  --scheme exact \\\n  --max-amount 0.000001\n```\n\n## Base Mainnet payment\n\nBase Mainnet uses official USDC on `eip155:8453` with x402 `exact` and EIP-3009. A successful call still launches the token on TRON Mainnet.",
   "useCase": "Use this provider when an app, agent, or CLI workflow needs to launch a SunPump token after a successful x402 payment. Choose a TRON Mainnet, BNB Smart Chain, or Base Mainnet payment route; every successful launch creates the token on TRON Mainnet.",
   "i18n": {
     "zh-CN": {
       "title": "SunPump",
-      "subtitle": "用结构化元数据一次付费发币(meme/Agent 代币)。",
-      "description": "## 能做什么\n\nSunPump Agent 发币 API 允许 Agent、脚本和应用先完成 x402 支付，再把发币元数据提交给 SunPump。Gateway 在支付结算后把调用方的 JSON 请求体转发到 SunPump 发币接口。\n\n## 适合场景\n\n- 需要基于结构化元数据创建 meme token 或 agent token 的 Agent 工作流。\n- 希望用一次付费 API 调用完成发币的运营工具。\n- 在 TRON 主网、BNB Smart Chain 主网和 Base 主网使用同一套 SunPump 发币请求格式。\n\n## 请求格式\n\nPOST JSON 请求体包含 `name`、`symbol`、`description`、`imageBase64`、`twitterUrl`、`telegramUrl`、`websiteUrl` 和 `tweetUsername`。`name` 需要保持在 1-20 个字符内，并使用唯一 symbol。`imageBase64` 可以传入 base64 编码的 token 图片；如果为空或不传，SunPump 会自动生成图片。\n\n## 代码用法\n\n使用 `x402-cli pay` 调用目标主网支付链对应的路由。TRON 主网示例：\n\n```bash\nx402-cli pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \\\n  --method POST \\\n  --network tron:0x2b6653dc \\\n  --token USDT \\\n  --scheme exact \\\n  --max-amount 0.000001 \\\n  --header 'Content-Type: application/json' \\\n  --body '{\"name\":\"X402MainA\",\"symbol\":\"X4M17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}'\n```\n\nBNB Smart Chain 使用 `sunpump-token-launch-bsc` 和 `eip155:56`，Base 主网使用 `sunpump-token-launch-base`、`eip155:8453` 与 USDC，请求体均相同。",
+      "subtitle": "用结构化元数据一次付费发币。",
+      "description": "## 能做什么\n\nSunPump Agent 发币 API 允许 Agent、脚本和应用先完成 x402 支付，再把发币元数据提交给 SunPump。Gateway 在支付结算后把调用方的 JSON 请求体转发到 SunPump 发币接口。\n\n## 适合场景\n\n- 需要基于结构化元数据创建 meme token 或 agent token 的 Agent 工作流。\n- 希望用一次付费 API 调用完成发币的运营工具。\n- 在 TRON 主网、BNB Smart Chain 主网和 Base 主网使用同一套 SunPump 发币请求格式。\n\n## 请求格式\n\nPOST JSON 请求体包含 `name`、`symbol`、`description`、`imageBase64`、`twitterUrl`、`telegramUrl`、`websiteUrl` 和 `tweetUsername`。`name` 需要保持在 1-20 个字符内，并使用唯一 symbol。`imageBase64` 可以传入 base64 编码的 token 图片；如果为空或不传，SunPump 会自动生成图片。\n\n## 代码用法\n\nTRON 主网默认使用 `exact` + `permit2`，同时支持 `exact_gasfree`。先查看支付要求：\n\n```bash\ncurl -sS -X POST 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \\\n  -H 'Content-Type: application/json' \\\n  --data '{\"name\":\"X402MainA\",\"symbol\":\"X4M17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}'\n```\n\n然后使用 Wallet CLI 支付并提交发币请求：\n\n```bash\nwallet-cli x402 pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \\\n  --password-stdin \\\n  --method POST \\\n  --header 'Content-Type: application/json' \\\n  --body '{\"name\":\"X402MainA\",\"symbol\":\"X4M17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}' \\\n  --network tron:728126428 \\\n  --token USDT \\\n  --scheme exact \\\n  --max-amount 0.000001\n```\n\nBNB Smart Chain 主网支持 `exact` + `permit2`：\n\n```bash\ncurl -sS -X POST 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bsc/pump-api/ai/agentTokenLaunch' \\\n  -H 'Content-Type: application/json' \\\n  --data '{\"name\":\"X402BscA\",\"symbol\":\"X4B17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}'\n```\n\n```bash\nwallet-cli x402 pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bsc/pump-api/ai/agentTokenLaunch' \\\n  --password-stdin \\\n  --method POST \\\n  --header 'Content-Type: application/json' \\\n  --body '{\"name\":\"X402BscA\",\"symbol\":\"X4B17\",\"description\":\"x402 launch\",\"imageBase64\":\"\",\"twitterUrl\":\"\",\"telegramUrl\":\"\",\"websiteUrl\":\"\",\"tweetUsername\":\"\"}' \\\n  --network eip155:56 \\\n  --token USDT \\\n  --scheme exact \\\n  --max-amount 0.000001\n```\n\n## Base 主网支付\n\nBase 主网路由使用 `eip155:8453` 官方 USDC，通过 x402 `exact` + EIP-3009 支付；成功调用仍会在 TRON 主网创建 Token。",
       "useCase": "适合应用、Agent 或 CLI 流程在 x402 支付成功后调用 SunPump 发币接口。可选择 TRON 主网、BNB Smart Chain 或 Base 主网支付路由；成功后均在 TRON 主网创建 Token。",
-      "mainTitle": "一次付费完成 Agent 代币发行(x402)"
+      "mainTitle": "一次付费完成 Agent 代币发行"
     }
   },
   "logo": "https://sunpump.meme/favicon.ico",
@@ -132,8 +126,8 @@ x402-cli catalog export-gateway https://gateway.example.com \
           "url": "https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bsc/pump-api/ai/agentTokenLaunch"
         },
         {
-          "network": "eip155:8453",
           "provider": "sunpump-token-launch-base",
+          "network": "eip155:8453",
           "scheme": "exact",
           "assetTransferMethod": "eip3009",
           "url": "https://x402-gateway.bankofai.io/providers/sunpump-token-launch-base/pump-api/ai/agentTokenLaunch"
@@ -169,14 +163,14 @@ x402-cli catalog export-gateway https://gateway.example.com \
 
 ### pay.md 怎么写
 
-`pay.md` 是人和 Agent 都会读的调用说明，建议包含三部分：服务基本信息、各端点的地址与价格、一条可直接复制的调用示例：
+`pay.md` 是人和 Agent 都会读的调用说明，建议包含三部分：服务基本信息、各端点的地址与价格、可直接复制的调用示例。目录仓库的 CI 测试要求每个 `pay.md` 都包含带 `--network tron:728126428` 和 `--scheme exact` 的 `wallet-cli x402 pay` 示例、提到 `exact_gasfree`，并覆盖 Base 主网（`eip155:8453`）。SunPump 的真实文件 `providers/sunpump-token-launch/pay.md`：
 
 ````markdown
 # SunPump Agent Token Launch API
 
-SunPump Agent Token Launch API is an x402-paid gateway provider for launching a SunPump token from structured metadata. It exposes the same launch request shape across TRON Mainnet, BNB Smart Chain and Base Mainnet payment routes.
+SunPump Agent Token Launch API is an x402-paid gateway provider for launching a TRON Mainnet SunPump token from structured metadata. It exposes the same launch request shape across TRON Mainnet, BNB Smart Chain and Base Mainnet payment routes.
 
-Use it when an agent, backend workflow, or CLI script has already validated the launch metadata and is ready to create the token.
+Use it when an agent, backend workflow, or CLI script has validated launch metadata and is ready to create a token through a paid API call.
 
 ## Service
 
@@ -193,14 +187,29 @@ Use it when an agent, backend workflow, or CLI script has already validated the 
 
 ## CLI Quick Start
 
-Install or update the x402 CLI, then call the route matching the payment chain you want to use.
+Install or update Wallet CLI and configure an account before paying:
+
+```bash
+npm install -g @tron-walletcli/wallet-cli@4.14.0
+```
+
+The examples use the active account. Supply its master password through standard input for `--password-stdin`. `--max-amount` limits the payment in whole units of the selected token.
+
+Call the route matching the payment chain you want to use.
 
 TRON Mainnet:
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \
+curl -sS -X POST 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \
+  -H 'Content-Type: application/json' \
+  --data '{"name":"X402MainA","symbol":"X4M17","description":"x402 launch","imageBase64":"","twitterUrl":"","telegramUrl":"","websiteUrl":"","tweetUsername":""}'
+```
+
+```bash
+wallet-cli x402 pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron/pump-api/ai/agentTokenLaunch' \
+  --password-stdin \
   --method POST \
-  --network tron:0x2b6653dc \
+  --network tron:728126428 \
   --token USDT \
   --scheme exact \
   --max-amount 0.000001 \
@@ -211,7 +220,14 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tr
 BNB Smart Chain:
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bsc/pump-api/ai/agentTokenLaunch' \
+curl -sS -X POST 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bsc/pump-api/ai/agentTokenLaunch' \
+  -H 'Content-Type: application/json' \
+  --data '{"name":"X402BscA","symbol":"X4B17","description":"x402 launch","imageBase64":"","twitterUrl":"","telegramUrl":"","websiteUrl":"","tweetUsername":""}'
+```
+
+```bash
+wallet-cli x402 pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bsc/pump-api/ai/agentTokenLaunch' \
+  --password-stdin \
   --method POST \
   --network eip155:56 \
   --token USDT \
@@ -224,7 +240,8 @@ x402-cli pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-bs
 Base Mainnet:
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-base/pump-api/ai/agentTokenLaunch' \
+wallet-cli x402 pay 'https://x402-gateway.bankofai.io/providers/sunpump-token-launch-base/pump-api/ai/agentTokenLaunch' \
+  --password-stdin \
   --method POST \
   --network eip155:8453 \
   --token USDC \
@@ -269,37 +286,38 @@ CI 会强制以下规则，建议提交前逐条对照：
 - `version` 必须为 `1`。
 - `fqn` 为小写字母/数字/连字符，且与目录名一致。
 - `category` 必须是合法类目之一（见[参考](./reference.md#合法类目)）。
-- `chains` 至少一条，使用 CAIP-2 风格的链 ID。公开目录发布主网路由，例如 `tron:0x2b6653dc`、`eip155:56` 和 Base 主网 `eip155:8453`。
+- `chains` 至少一条，使用 CAIP-2 风格的链 ID。TRON 链 ID 只能是 `tron:0x2b6653dc`、`tron:0xcd8690dc` 或 `tron:0x94a9059e`。CI 测试要求每个服务都列出 Base 主网 `eip155:8453`，并拒绝 Base Sepolia `eip155:84532`。
 - `isFirstParty`、`isFeatured`（布尔值）与 `featuredTags`（字符串数组，可为空 `[]`）为**必填**，缺一即校验失败。
 - 每个 endpoint 的 `method` 必须大写、`path` 以 `/` 开头、`maxPriceUsd` 不小于 `minPriceUsd`。
-- _（选填）_ 跨多条链结算的端点可加 `x402Routes`。每条路由都需要 `network`、`provider`、`scheme` 和 `url`；`exact` 路由还必须带 `assetTransferMethod`（`permit2` 或 `eip3009`），`exact_gasfree` 路由则必须**省略**该字段。同一网络可以出现多次——TRON 通常同时发布 `exact` 与 `exact_gasfree` 两条路由——只要每组 `(provider, network, scheme, url)` 唯一即可。旧的 `fee` / `feeConfig` 字段会被拒绝。详见[参考](./reference.md#x402routes--多网络路由)。
+- `serviceUrl`、各端点 `url` 和各路由 `url` 都必须以 `https://` 开头。
+- 不允许出现未定义的字段——顶层、端点、路由、`i18n.<locale>` 和 `status` 都会拒绝未知字段。
+- `x402Routes` 在 schema 中是选填，但 CI 测试要求每个端点恰好发布一条 Base 主网路由：`scheme` 为 `exact`、`assetTransferMethod` 为 `eip3009`，`provider` 以 `-base` 结尾。每条路由的 `network` 都必须出现在 `chains` 里，`exact_gasfree` 只能用于 TRON 网络。每条路由都需要 `network`、`provider`、`scheme` 和 `url`；`exact` 路由还必须带 `assetTransferMethod`（`permit2` 或 `eip3009`），`exact_gasfree` 路由则必须**省略**该字段。同一网络可以出现多次——TRON 通常同时发布 `exact` 与 `exact_gasfree` 两条路由——只要每组 `(provider, network, scheme, url)` 唯一即可。旧的 `fee` / `feeConfig` 字段会被拒绝。详见[参考](./reference.md#x402routes--多网络路由)。
 - 服务与每个 endpoint 都必须提供 `i18n.zh-CN` 的 `title`、`subtitle`、`description`、`useCase`。
+- 如填写 `status`，取值只能是：`catalog` 为 `listed`/`unlisted`；`gateway` 为 `configured`/`unknown`/`unavailable`；`payment` 为 `paid-route`/`mainnet`/`testnet`/`unknown`；`upstream` 为 `public`/`authenticated`/`unknown`/`unavailable`。
 - `pay.md` 必须与 `catalog.json` 一同提交，两份文件都会被敏感信息扫描。
 - 不得包含任何密钥、私钥或内网地址。
 
 ## 第 2 步：本地自检
 
-提交前先在本地跑一遍校验和构建，确保字段合法、没有夹带敏感信息：
+提交前先安装校验依赖，再在本地跑一遍校验、构建和单元测试（与 CI 的步骤相同）：
 
 ```bash
+pip install -r requirements.txt
 python3 scripts/validate.py
 python3 scripts/build.py
+python3 -m unittest discover -s tests
 ```
 
-期望看到：
-
-```text
-validated 1 provider(s)
-built 1 provider(s) into dist
-```
+前两条会输出 `validated N provider(s)` 和 `built N provider(s) into dist`，N 是仓库里全部服务的数量（包括你新加的）。
 
 ## 第 3 步：提交 Pull Request
 
-把这两份文件加入[目录仓库](https://github.com/BofAI/x402-catalog)对应目录：
+把这两份文件加入[目录仓库](https://github.com/BofAI/x402-catalog)对应目录，并一起提交重新生成的 `dist/` 文件：
 
 ```text
 providers/<fqn>/catalog.json
 providers/<fqn>/pay.md
+dist/
 ```
 
 :::caution 安全红线：这两份文件是公开的
@@ -313,4 +331,4 @@ PR 合入后，发布流程会把最新构建的 `dist/` 刷新到 Catalog Serve
 ## 下一步
 
 - 查看全部字段、类目与接口结构 → [数据格式与 API 参考](./reference.md)
-- 想先体验调用方视角？→ [快速开始](./get-started.md)
+- 想先体验调用方视角？→ [Catalog 快速入门](./get-started.md)

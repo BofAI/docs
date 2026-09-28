@@ -8,6 +8,32 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-09-28</div>
+<div className="changelog-body">
+
+### SKILLS 3.0.0——移除四个旧技能
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">破坏性变更</span></div>
+
+- Skills 3.0.0 删除了 `agent-wallet`、`bankofai-guide`、`x402-payment` 和 `recharge-skill`，技能目录现有 **6 个技能**；钱包配置、x402 支付和 B.AI 充值统一改用 **`wallet-cli`**，并固定为 `@tron-walletcli/wallet-cli@4.14.0`。[详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-09-28</div>
+<div className="changelog-body">
+
+### x402 命令行文档迁移到 wallet-cli
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">x402</span><span className="changelog-tag">CLI</span></div>
+
+- x402 命令行指南移至 [Wallet CLI](/zh-Hans/wallet-cli/)，统一使用 `wallet-cli x402`；独立 x402-cli 的页面已移除。[详情](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-09-09</div>
 <div className="changelog-body">
 
@@ -196,7 +222,7 @@ BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-tags"><span className="changelog-tag">产品更新</span><span className="changelog-tag">文档</span></div>
 
-- **新增 x402 CLI 文档集**：概览、快速开始、完整命令参考与 FAQ，中英双语。[查看文档](../x402/cli/)
+- **新增 x402 CLI 文档集**：概览、快速开始、完整命令参考与 FAQ，中英双语。[Wallet CLI 指引](/zh-Hans/wallet-cli/)
 - **文档站升级**：离线全文搜索（⌘K）、更新日志页签、板块图标、更清爽的侧边栏布局。
 
 </div>
@@ -212,7 +238,7 @@ BANK OF AI 各产品的更新与公告。
 
 - **`v1.0.0` 首个正式版发布**——`@bankofai/x402-cli`，用于 x402 支付的 TypeScript 命令行客户端：`pay` 支付任意受保护 URL、`serve` 启动本地付费端点、`roundtrip` 端到端冒烟测试，以及管理 provider 文件与服务目录的 `gateway` / `catalog`。
 - 基于已发布的 `@bankofai/x402-core` / `x402-evm` / `x402-tron` SDK 1.0 包构建；`scheme=exact` 配合 Permit2。
-- 支持网络：TRON（`tron:mainnet` / `tron:nile` / `tron:shasta`）与 BSC（`eip155:56` / `eip155:97`）。[快速开始](../x402/cli/quickstart/)
+- 支持网络：TRON（`tron:mainnet` / `tron:nile` / `tron:shasta`）与 BSC（`eip155:56` / `eip155:97`）。[Wallet CLI 指引](/zh-Hans/wallet-cli/quickstart/)
 
 </div>
 </div>

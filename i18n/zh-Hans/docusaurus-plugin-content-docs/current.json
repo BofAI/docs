@@ -186,5 +186,9 @@
   "sidebar.docsSidebar.category.API Catalog": {
     "message": "API 目录",
     "description": "The label for category API Catalog in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Wallet CLI / x402": {
+    "message": "Wallet CLI / x402",
+    "description": "The label for category Wallet CLI / x402 in sidebar docsSidebar"
   }
 }

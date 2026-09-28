@@ -598,7 +598,7 @@ Agent-wallet 仓库中还包含更多可直接运行的进阶示例：
 | `verify-tron-privy-typed-data` | 验证 Privy TRON EIP-712 签名 |
 | `compare-sign-consistency` | 跨钱包签名一致性测试 |
 
-浏览完整示例集：[TypeScript 示例](https://github.com/BofAI/agent-wallet/tree/main/packages/typescript/examples) 和 [Python 示例](https://github.com/BofAI/agent-wallet/tree/main/packages/python/examples)。
+仓库当前提供 [TypeScript 示例](https://github.com/BofAI/agent-wallet/tree/main/packages/typescript/examples)。
 
 ---
 

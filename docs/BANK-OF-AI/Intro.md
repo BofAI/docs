@@ -175,7 +175,7 @@ Each layer works on its own, or combines into the full platform. Later chapters 
 
 You now know what BANK OF AI is, why it exists, and how it works. One step left: try it yourself.
 
-Setup takes about a minute — paste an install command, then confirm wallet creation. After that, you can give your AI its first on-chain instruction:
+Start with the [Quick Start](./QuickStart.md): install wallet-cli and the Skills you need, then set up your wallet locally. After that, you can give your AI its first on-chain instruction:
 
 > Check my wallet balance.
 

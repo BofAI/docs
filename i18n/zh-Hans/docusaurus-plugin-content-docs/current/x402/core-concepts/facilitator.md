@@ -63,7 +63,7 @@ Facilitator 是一种中间件服务，主要负责：
 | 地址 | 用途 |
 |------|------|
 | [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io) | **管理后台** — 用于注册账号、申请和管理 Facilitator API Key |
-| [https://facilitator.bankofai.io](https://facilitator.bankofai.io) |  **服务端点** — 在项目代码的 `FACILITATOR_URL` 中配置，用于实际处理付款验证和结算请求（API 调用，非浏览器访问） |
+| `https://facilitator.bankofai.io` |  **服务端点** — 在项目代码的 `FACILITATOR_URL` 中配置，用于实际处理付款验证和结算请求（API 调用，非浏览器访问） |
 
 快速使用示例可参考 [官方 Facilitator](./OfficialFacilitator.md) 中示例。
 

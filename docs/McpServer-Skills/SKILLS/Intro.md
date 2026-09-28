@@ -1,5 +1,9 @@
 # Introduction
 
+:::note
+Use wallet-cli as the official wallet entry point. See the [Wallet CLI guide](/wallet-cli/) for payment and recharge commands. Available Skills depend on the selected release.
+:::
+
 Welcome to BANK OF AI SKILLS!
 
 In the past, exploring Web3 was a grind full of barriers: watching charts, calculating slippage, switching wallets, checking contracts... one wrong step and you'd hit an error. We decided to put an end to that hassle.
@@ -57,20 +61,16 @@ No. Skills use an **on-demand, lightweight architecture** — the AI only loads 
 
 ## What Can Skills Do for You?
 
-Ten skills covering the most common TRON scenarios — the table below shows everything at a glance. Each comes with a sample prompt you can paste straight into your AI chat; click a skill name for its full docs.
+Skills covering the most common TRON scenarios — the table below shows everything at a glance. Each comes with a sample prompt you can paste straight into your AI chat; click a skill name for its full docs.
 
 | Skill | What it does | Try saying |
 | :-- | :-- | :-- |
-| 🔑 [agent-wallet](./BANKOFAISkill.md#agent-wallet) | Create/manage encrypted wallets and sign transactions without exposing your key; the foundation other skills rely on (EVM + TRON) | "Create a new agent wallet for me" |
 | 🧰 [wallet-cli](./BANKOFAISkill.md#wallet-cli) | Standalone TRON wallet toolbox — transfers, staking, voting, contracts, signing, chain queries via the pinned `wallet-cli` npm package; agent runs pass passwords via stdin only and wallet admin stays human-only | "Check my account balance and staking state on Nile with wallet-cli" |
 | 💱 [sunswap](./BANKOFAISkill.md#sunswap)<br/>`sunswap-dex-trading` | Check prices, compare rates, swap tokens in one go | "How much TRX can I get for 100 USDT?" |
 | 🚀 [sunpump-agent-skill](./BANKOFAISkill.md#sunpump-agent-skill)<br/>`sunpump-meme-token-toolkit` | Launch a meme token in one sentence, trade and track SunPump (TRON mainnet only; creation needs no wallet) | "Launch a meme token on SunPump" |
 | 📈 [sunperp-skill](./BANKOFAISkill.md#sunperp-skill)<br/>`sunperp-perpetual-futures-trading` | SunPerp perpetuals — market data, open/close positions; built-in guardrails: ≤20x leverage, mandatory stop-loss | "Open a 5x long with a 5% stop-loss" |
 | 🕵️ [tronscan-skill](./BANKOFAISkill.md#tronscan-skill)<br/>`tronscan-data-lookup` | Look up accounts, transactions, token safety; read-only, free, zero risk | "Is that new token whale-controlled?" |
 | 💵 [usdd-skill](./BANKOFAISkill.md#usdd-skill)<br/>`usdd-just-protocol` | 1:1 USDT ↔ USDD via the PSM (currently zero fee), read vault (CDP) positions | "Sell 1000 USDT for USDD via the PSM" |
-| ☕ [x402-payment](./BANKOFAISkill.md#x402-payment) | Auto "pay first, then receive" settlement via x402 when calling paid APIs (TRON / BSC) | "Use x402 to call this paid endpoint: https://…" |
-| 🏦 [recharge-skill](./BANKOFAISkill.md#recharge-skill) | Check your BANK OF AI balance and top up in one sentence | "Check my balance, then recharge 5 USDT" |
-| 🧭 [bankofai-guide](./BANKOFAISkill.md#bankofai-guide) | Onboarding + "wallet guard"; usually invoked automatically by the installer | "Walk me through BANK OF AI onboarding" |
 
 ---
 

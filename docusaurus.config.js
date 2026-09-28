@@ -20,8 +20,8 @@ module.exports = {
       },
     },
   },
-  onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'ignore',
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'throw',
   favicon: 'img/favicon.ico',
   organizationName: 'open-aibank',
   projectName: 'x402-tron',
@@ -92,6 +92,7 @@ module.exports = {
       {
         docs: {
           routeBasePath: '/',
+          exclude: ['**/AGENTS.md', '**/_*.{js,jsx,ts,tsx,md,mdx}', '**/_*/**', '**/*.test.*', '**/__tests__/**'],
           sidebarPath: require.resolve('./sidebars.js'),
           remarkPlugins: [math],
           rehypePlugins: [katex],

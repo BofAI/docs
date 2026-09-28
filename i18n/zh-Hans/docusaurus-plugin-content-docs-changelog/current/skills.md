@@ -8,6 +8,24 @@ description: 'SKILLS 的版本发布记录。'
 SKILLS 的版本发布记录。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-09-28</div>
+<div className="changelog-body">
+
+### Skills 3.0.0——钱包统一走 wallet-cli
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">破坏性变更</span></div>
+
+- **删除四个技能**：`agent-wallet`、`bankofai-guide`、`x402-payment`、`recharge-skill` 及其附带脚本。钱包配置用 `wallet-cli`，x402 支付用 `wallet-cli x402`，B.AI 充值用 `wallet-cli bai`。技能目录现有 **6 个技能**，版本统一为 3.0.0。
+- **不再有全局钱包前置要求**——SunSwap、SunPump、SunPerp 不再强制要求配置 agent-wallet，各自保留原有的凭据与签名配置方式。
+- **`wallet-cli` 固定为 4.14.0**——帮助、版本、schema 查询及不带参数的调用不再读取钱包数据；实际操作命令仍会先执行启动迁移。
+- **文档**——技能目录只列当前技能，安装命令为 `npx skills add https://github.com/BofAI/skills -g`。
+
+👉 [技能目录](/zh-Hans/McpServer-Skills/SKILLS/BANKOFAISkill/) · [快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-09-09</div>
 <div className="changelog-body">
 

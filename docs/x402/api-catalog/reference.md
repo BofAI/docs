@@ -18,14 +18,14 @@ Each service is described in `providers/<fqn>/catalog.json`. Top-level fields:
 | `fqn` | string | Yes | Globally unique ID, regex `^[a-z0-9][a-z0-9-]{1,62}$`, must match the directory name |
 | `title` | string | Yes | Service name (typically a clean brand name, e.g. `DefiLlama`) |
 | `subtitle` | string | Yes | One-line subtitle |
-| `mainTitle` | string | No | Display tagline for the card/header (e.g. `Aggregated DeFi data — TVL, fees, prices & yields`); falls back to `title` |
+| `mainTitle` | string | No | Display tagline for the card/header (e.g. `Aggregated DeFi data — TVL, prices & yields`); falls back to `title` |
 | `description` | string | Yes | Service description |
 | `useCase` | string | Yes | When to use it — helps Agents decide when to call |
 | `i18n` | object | Yes | Translations, must include `zh-CN` (see below) |
 | `logo` | string | Yes | Logo image URL |
 | `category` | string | Yes | Must be an allowed value (see [allowed categories](#allowed-categories)) |
 | `chains` | string[] | Yes | Settlement chains, at least one, CAIP-2 style |
-| `serviceUrl` | string | Yes | The service's entry address on the gateway |
+| `serviceUrl` | string | Yes | The service's public website (e.g. `https://defillama.com`), starting with `https://`. Gateway call addresses go in each endpoint's `url` and `x402Routes[].url` |
 | `endpoints` | object[] | Yes | Endpoint list, at least one (see below) |
 | `isFirstParty` | boolean | Yes | First-party service or not |
 | `isFeatured` | boolean | Yes | Featured or not (affects catalog ordering, see [aggregate fields and ordering](#catalogjson-aggregate-fields-and-ordering)) |
@@ -71,12 +71,12 @@ The build passes this through to outputs as `x402_routes`. When present, callers
 On TRON you can add an `exact_gasfree` route alongside the `exact` one for the same endpoint: a relayer pays the network energy and deducts its fee from the payment token, so the payer needs no TRX. GasFree routes are TRON-only and must not carry `assetTransferMethod`. Since x402 SDK 1.0.1 (current release 1.2.0) the relayer cost is estimated client-side, so catalog routes must **not** publish the legacy `fee` or `feeConfig` fields.
 :::
 
-For example, an endpoint may expose one route per supported chain — TRON Mainnet, BSC Mainnet, and Base Mainnet — each with its own `provider` and `scheme`. To call one, point `x402-cli pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
+For example, an endpoint may expose one route per supported chain — TRON Mainnet, BSC Mainnet, and Base Mainnet — each with its own `provider` and `scheme`. To call one, point `wallet-cli x402 pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
 
 ```bash
-x402-cli pay 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
+wallet-cli x402 pay --dry-run -o json 'https://x402-gateway.bankofai.io/providers/<provider>/<path>' \
   --method POST \
-  --network tron:0x2b6653dc \
+  --network tron:728126428 \
   --token USDT \
   --scheme exact \
   --max-amount 0.000001 \
@@ -94,9 +94,18 @@ The other routes reuse the same request body, swapping only the route `url`, `--
 { "catalog": "listed", "gateway": "unknown", "payment": "unknown", "upstream": "unknown" }
 ```
 
+Allowed values:
+
+| Key | Values |
+|---|---|
+| `catalog` | `listed`, `unlisted` |
+| `gateway` | `configured`, `unknown`, `unavailable` |
+| `payment` | `paid-route`, `mainnet`, `testnet`, `unknown` |
+| `upstream` | `public`, `authenticated`, `unknown`, `unavailable` |
+
 ## pay.md
 
-Submitted alongside `catalog.json` in the same directory — a human- and Agent-readable call guide, and a **required** file. Recommended contents: basic service info (FQN, entry address, category, settlement chains), each endpoint's address and price, plus one copy-paste `x402-cli pay` example. Like `catalog.json`, this file goes through the sensitive-data scan (see below).
+Submitted alongside `catalog.json` in the same directory — a human- and Agent-readable call guide, and a **required** file. Recommended contents: basic service info (FQN, entry address, category, settlement chains), each endpoint's address and price, plus copy-paste call examples. The catalog's CI tests currently require a `wallet-cli x402 pay` example with `--network tron:728126428` and `--scheme exact`, a mention of `exact_gasfree`, and Base Mainnet (`eip155:8453`) coverage. Like `catalog.json`, this file goes through the sensitive-data scan (see below).
 
 ## Allowed categories
 
@@ -121,9 +130,9 @@ security   shopping    storage     translation
 | BNB Chain (BSC) | `eip155:56` |
 | BNB Smart Chain testnet | `eip155:97` |
 | Base mainnet | `eip155:8453` |
-| Base Sepolia testnet | `eip155:84532` — schema-level only: the build has no display metadata for it, so `label` falls back to the raw chain ID and `chain_kinds` reports `evm` instead of `base` |
+| Base Sepolia testnet | `eip155:84532` — schema-level only: the build has no display metadata for it, so `label` falls back to the raw chain ID and `chain_kinds` reports `evm` instead of `base`. The catalog's CI tests also reject it in `chains` |
 
-Check the published `catalog.json` for which routes are actually live on each chain. The build resolves each chain ID into display metadata (`kind` / `label` / `label_zh`) so the frontend doesn't have to parse CAIP-2 itself — see [Frontend display fields](#frontend-display-fields).
+Per-endpoint routes are published in `/api/providers/<fqn>.json` and `/api/pay/<fqn>.json` (as `x402_routes`), not in the summary-only `/api/catalog.json`. The build resolves each chain ID into display metadata (`kind` / `label` / `label_zh`) so the frontend doesn't have to parse CAIP-2 itself — see [Frontend display fields](#frontend-display-fields).
 
 ## Validation and secret scanning
 
@@ -169,7 +178,7 @@ The `providers` array is pre-sorted at build time by **featured first → catego
 
 ### Derived fields
 
-Build outputs add derived fields on top of the raw data and convert everything to snake_case (e.g. `useCase` → `use_case`):
+Build outputs add derived fields on top of the raw data and convert top-level and endpoint field names to snake_case (e.g. `useCase` → `use_case`, `x402Routes` → `x402_routes`). The `i18n` block and the objects inside `x402_routes` are passed through unchanged, so they keep camelCase keys such as `mainTitle` and `assetTransferMethod`:
 
 | Field | Description |
 |---|---|
@@ -199,18 +208,24 @@ These are additive — the raw `title`, `subtitle`, `category`, `chains`, and `i
 ### Other output structures
 
 - **`/api/pay/<fqn>.json`**: payment summary for Agents / CLI. Top level includes `version`, `fqn`, `title`, `title_zh`, `main_title`, `main_title_zh`, `sub_title`, `sub_title_zh`, `subtitle`, `description`, `use_case`, `i18n`, `service_url`, `chains`, `chain_kinds`, `chains_meta`, `sha`; `endpoints[]` keeps the call-relevant fields `method`, `path`, `url`, `description`, `metered`, `min_price_usd`, `max_price_usd`, plus `x402_routes` when the endpoint defines multi-network routes.
-- **`/api/search-index.json`**: `{ version, generated_at, documents[] }`, each document being a service summary (with `category_meta` / `chain_kinds` / `chains_meta`) plus each endpoint's `method` / `path` / `title` / `description` (and `x402_routes` when present).
+- **`/api/search-index.json`**: `{ version, generated_at, documents[] }`, each document carrying a reduced set of service fields — `fqn`, `title`, `subtitle`, `description`, `use_case`, `category`, `category_meta`, `chains`, `chain_kinds`, `chains_meta`, `featured_tags`, `service_url` — plus each endpoint's `method` / `path` / `title` / `description` (and `x402_routes` when present).
 - **`/api/categories.json`**: array of categories in use, each `{ id, label, label_zh, count }` — a direct export of `frontend.categories`.
 - **`/api/status.json`**: `{ version, generated_at, provider_count, status }`; `status` of `ok` means the build is healthy.
 
 ## Local build and run
 
 ```bash
+# install the validation dependency (jsonschema)
+pip install -r requirements.txt
+
 # validate all providers
 python3 scripts/validate.py
 
 # build the static snapshot into dist/
 python3 scripts/build.py
+
+# run the unit tests
+python3 -m unittest discover -s tests
 ```
 
 Container mode (validates and builds `dist/` at image build time, then serves from `/api/`):
@@ -224,7 +239,7 @@ curl http://127.0.0.1:8088/api/status.json
 The port can be overridden with the `X402_CATALOG_PORT` environment variable (default `8088`; the container listens on `8080` internally).
 
 :::note CI scheduling
-The catalog repository's CI (GitHub Actions) runs the same validation and build automatically on PRs, on merges to `main`, and on a recurring schedule — no manual trigger needed.
+The catalog repository's CI (GitHub Actions) runs validation, build, and the unit tests on every PR, on pushes to `main`, on release tags, and every 30 minutes; it can also be triggered manually.
 :::
 
 ## Related pages
