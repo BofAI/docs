@@ -1,23 +1,8 @@
-import ActivityCard from '@site/src/components/ActivityCard';
-
 # Hy3
 
 ## Overview
 
 Hy3 is a text foundation model from Tencent Hunyuan, released on July 6, 2026. It is available through the API with the model ID `hy3`. The model uses a Mixture-of-Experts (MoE) architecture with 295 billion total parameters and 21 billion activated parameters, and is designed for coding, long-context knowledge work, reasoning, and tool-driven agent workflows.
-
-<ActivityCard
-  variant="discount"
-  title="Hy3"
-  status="Limited-Time Discount"
-  detail="10% from Sep 16, 17:00 SGT"
->
-The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
-
-From that time, Hy3 usage through B.AI API and Chat is billed at 10% of the standard reference price.
-
-The pricing table below continues to show standard reference prices.
-</ActivityCard>
 
 ## Key Features
 

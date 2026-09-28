@@ -153,6 +153,8 @@ const sidebars = {
               collapsed: true,
               items: [
                 { type: 'doc', id: 'llmservice/models/gpt-6-astra', label: 'GPT-6 Astra' },
+                { type: 'doc', id: 'llmservice/models/gpt-6-sol', label: 'GPT-6 Sol' },
+                { type: 'doc', id: 'llmservice/models/gpt-6-luna', label: 'GPT-6 Luna' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-sol', label: 'GPT-5.6 Sol' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-terra', label: 'GPT-5.6 Terra' },
                 { type: 'doc', id: 'llmservice/models/gpt-5-6-luna', label: 'GPT-5.6 Luna' },
@@ -172,6 +174,7 @@ const sidebars = {
               label: 'Anthropic (Claude)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/claude-opus-5.5', label: 'Claude Opus 5.5' },
                 { type: 'doc', id: 'llmservice/models/claude-opus-5', label: 'Claude Opus 5' },
                 { type: 'doc', id: 'llmservice/models/claude-sonnet-5', label: 'Claude Sonnet 5' },
                 { type: 'doc', id: 'llmservice/models/claude-fable-5-1', label: 'Claude Fable 5.1' },
@@ -291,6 +294,14 @@ const sidebars = {
                 { type: 'doc', id: 'llmservice/models/minimax-m2.7', label: 'MiniMax M2.7' },
               ],
             },
+            {
+              type: 'category',
+              label: 'TypeSafe AI',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/models/jev-1.13.0', label: 'JEV-1.13.0' },
+              ],
+            },
           ],
         },
         {
@@ -328,6 +339,7 @@ const sidebars = {
           collapsed: true,
           items: [
             { type: 'doc', id: 'llmservice/api/API', label: 'API Overview' },
+            { type: 'doc', id: 'llmservice/api/decisions-api', label: 'Decisions API' },
             { type: 'doc', id: 'llmservice/api/balance', label: 'Balance API' },
           ],
         },

@@ -1,8 +1,23 @@
+import ActivityCard from '@site/src/components/ActivityCard';
+
 # MiMo-V2.6-Flash
 
 ## Overview
 
 MiMo-V2.6-Flash is an open-weight, native multimodal reasoning model released by Xiaomi MiMo on September 22, 2026. Available through the API as `mimo-v2.6-flash`, it combines a sparse Mixture-of-Experts architecture with a 1M-token context window, targeting frequent calls, large-scale office workloads, and cost-sensitive coding and agent applications.
+
+<ActivityCard
+  variant="discount"
+  title="MiMo-V2.6-Flash"
+  status="Limited-Time Discount"
+  detail="10% from Sep 25, 15:00 UTC+8"
+>
+The offer begins at 15:00 on September 25, 2026 (Beijing Time, UTC+8).
+
+From that time, eligible MiMo-V2.6-Flash usage is billed at 10% of the standard reference price.
+
+The pricing table below continues to show standard reference prices.
+</ActivityCard>
 
 ## Key Features
 

@@ -1,6 +1,6 @@
 # B.AI API Reference
 
-B.AI provides a unified large language model API compatible with the OpenAI Chat Completions, OpenAI Responses, and Anthropic Messages protocols. Use the same B.AI API Key with different protocols and choose the endpoint that matches your application or client.
+B.AI provides a unified large language model API compatible with the OpenAI Chat Completions, OpenAI Responses, and Anthropic Messages protocols, as well as a Decisions API compatible with the TypeSafe System One protocol. Use the same B.AI API Key with different protocols and choose the endpoint that matches your application or client.
 
 - **API version:** `v1`
 - **Production Base URL:** `https://api.b.ai/v1`
@@ -82,6 +82,7 @@ Example:
 |---|---|---|---|
 | `GET` | `/models` | OpenAI-compatible | List models associated with the current credential |
 | `GET` | [`/balance`](./balance.md) | B.AI | Retrieve balance and quota information for the current API Key |
+| `POST` | [`/decisions`](./decisions-api.md) | TypeSafe System One | Classification, scoring, and yes/no judgments with structured decision results |
 | `POST` | `/responses` | OpenAI Responses | Agents, reasoning, tool use, and Codex |
 | `POST` | `/chat/completions` | OpenAI Chat Completions | General chat completions and existing OpenAI-compatible applications |
 | `POST` | `/messages` | Anthropic Messages | Claude SDK, Claude Code, and other Anthropic-compatible clients |

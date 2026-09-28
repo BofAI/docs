@@ -1,23 +1,8 @@
-import ActivityCard from '@site/src/components/ActivityCard';
-
 # MiMo-V2.5
 
 ## Overview
 
 MiMo-V2.5 is an open-weight native omnimodal model from Xiaomi MiMo that entered public beta on April 23, 2026. It combines a 310-billion-parameter sparse Mixture-of-Experts (MoE) language backbone with dedicated vision and audio encoders to understand text, images, video, and audio in long-context agent workflows.
-
-<ActivityCard
-  variant="discount"
-  title="MiMo-V2.5"
-  status="Limited-Time Discount"
-  detail="10% from Sep 16, 17:00 SGT"
->
-The current free offer changes to a limited-time discount at 17:00 on September 16, 2026 (Singapore Time, UTC+8).
-
-From that time, MiMo-V2.5 usage through B.AI API and Chat is billed at 10% of the standard reference price.
-
-The pricing table below continues to show standard reference prices.
-</ActivityCard>
 
 ## Key Features
 
