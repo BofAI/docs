@@ -127,7 +127,7 @@ Free bonus Credits are valid for 30 days from the date they are issued, includin
 :::
 
 :::info Invitation rewards
-Invite friends to register and earn Coin from eligible top-ups and subscriptions. Invitation registration Credits and Credits redeemed from Coin are valid for 30 days from the date they are issued. See [Invitation Rewards](./invitation-rewards.md) for eligibility, settlement, redemption, and adjustment rules.
+Invite friends to register and earn Coin from eligible top-ups and subscriptions. Credits redeemed from Coin are valid for 30 days from the date they are issued. See [Invitation Rewards](./invitation-rewards.md) for eligibility, settlement, redemption, and adjustment rules.
 :::
 
 ### Subscription Plans
