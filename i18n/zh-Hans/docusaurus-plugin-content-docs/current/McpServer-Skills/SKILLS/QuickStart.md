@@ -26,7 +26,7 @@ npx skills add https://github.com/BofAI/skills --skill wallet-cli -g
 
 `npx skills add` 只安装 Skill 定义，不安装外部 CLI。自 Skills 3.0.0 起，`wallet-cli` Skill 固定依赖 `@tron-walletcli/wallet-cli@4.14.0`，与上面安装的版本一致。
 
-需要社区业务时，使用交互式选择安装：
+需要 DeFi 与数据业务（SunSwap、SunPump、SunPerp、TronScan、USDD）时，使用交互式选择安装：
 
 ```bash
 npx skills add https://github.com/BofAI/skills -g
@@ -41,7 +41,7 @@ npx skills add https://github.com/BofAI/skills -g
 - 基础钱包与 TRON 操作：使用 `wallet-cli` Skill。
 - x402 支付：使用 [wallet-cli x402](/zh-Hans/wallet-cli/command-reference/)。
 - B.AI 充值与记录：查看 `wallet-cli bai --json-schema -o json`，并配置 B.AI API Key。
-- 社区业务：按对应 Skill 的实际说明配置，不能统一强制创建 agent-wallet 钱包。
+- DeFi 与数据业务：按对应 Skill 的说明配置。
 
 Skills 3.0.0 已删除 `bankofai-guide`、`agent-wallet`、`x402-payment` 和 `recharge-skill`，当前技能列表见[技能大全](/zh-Hans/McpServer-Skills/SKILLS/BANKOFAISkill/)。OpenClaw 一键安装器处于暂停维护状态，不作为新用户推荐入口。
 

@@ -27,7 +27,7 @@ Five skills install under a different directory name than their repository folde
 
 ### Credentials
 
-Use the [wallet-cli quick start](/wallet-cli/quickstart/) for the official wallet setup. Never paste private keys or passwords into chat. Community projects retain their own requirements: TronScan keys, SunPerp API keys/secrets, and USDD or withdrawal signing settings do not automatically become wallet-cli configuration.
+Use the [wallet-cli quick start](/wallet-cli/quickstart/) for the official wallet setup. Never paste private keys or passwords into chat. Other skills keep their own requirements: TronScan keys, SunPerp API keys/secrets, and USDD or withdrawal signing settings do not automatically become wallet-cli configuration.
 
 Obtain a B.AI API key from the [console](https://chat.bankofai.io/key) and store it through wallet-cli's supported configuration workflow; never print or commit credentials.
 
@@ -56,7 +56,7 @@ A standalone TRON wallet toolbox. It teaches your AI to run TRON wallet operatio
 > Stake 100 TRX for energy — mainnet operations are previewed and wait for your explicit confirmation.
 
 :::tip
-wallet-cli is the official wallet and CLI entry point. Community Skills and server integrations may still use their own signing implementations; configure each according to its actual dependencies.
+wallet-cli is the official wallet and CLI entry point. Other Skills and server integrations may use their own signing implementations; configure each according to its actual dependencies.
 :::
 
 :::caution Hard boundaries: passwords and wallet administration
@@ -253,7 +253,7 @@ Before redeeming USDD for USDT, check `psm-info` — if USDT reserves are low, `
 
 **Start here — zero risk, zero config:** Use tronscan-skill to look up accounts and check transactions. Use sunswap to check prices and get quotes. Read-only, no credentials needed.
 
-**Next — practice with play money:** Set up your wallet (see [Wallet CLI Quick Start](/wallet-cli/quickstart/)), then test swaps and liquidity operations on the Nile testnet. Confirm the AI behaves exactly as expected.
+**Next — practice with play money:** Configure the sunswap skill's own wallet credentials (see [sunswap](#sunswap)), then test swaps and liquidity operations on the Nile testnet. For TRX/token transfers and staking, set up [wallet-cli](/wallet-cli/quickstart/) — its accounts are not shared with sunswap. Confirm the AI behaves exactly as expected.
 
 **Then — mainnet with small amounts:** Run the full flow with a small amount of real funds to make sure everything works.
 

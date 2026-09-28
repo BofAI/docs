@@ -26,7 +26,7 @@ npx skills add https://github.com/BofAI/skills --skill wallet-cli -g
 
 `npx skills add` installs definitions, not external CLI dependencies. Since Skills 3.0.0, the `wallet-cli` Skill is pinned to `@tron-walletcli/wallet-cli@4.14.0`, the same version installed above.
 
-For community workflows, select additional Skills interactively:
+For DeFi and data workflows (SunSwap, SunPump, SunPerp, TronScan, USDD), select additional Skills interactively:
 
 ```bash
 npx skills add https://github.com/BofAI/skills -g
@@ -41,7 +41,7 @@ Configure and select an account locally using the [Wallet CLI quick start](/wall
 - Wallet and general TRON operations: use the `wallet-cli` Skill.
 - x402 payments: use [wallet-cli x402](/wallet-cli/command-reference/).
 - B.AI recharge and records: inspect `wallet-cli bai --json-schema -o json` and configure a B.AI API key.
-- Community workflows: follow their actual Skill requirements; do not universally require an agent-wallet account.
+- DeFi and data workflows: follow each Skill's own requirements.
 
 Skills 3.0.0 removed `bankofai-guide`, `agent-wallet`, `x402-payment`, and `recharge-skill`; see the [Skill catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/) for the current list. The OpenClaw one-click installer is paused and is not the recommended entry point for new users.
 

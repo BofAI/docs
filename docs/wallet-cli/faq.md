@@ -1,6 +1,6 @@
 ---
 title: "Wallet CLI FAQ"
-description: "Installation, wallet, and payment questions for wallet-cli 4.14."
+description: "Installation, wallet, and payment questions for wallet-cli."
 ---
 
 # Wallet CLI FAQ

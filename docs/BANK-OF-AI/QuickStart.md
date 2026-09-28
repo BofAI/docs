@@ -13,7 +13,7 @@ Choose an entry point for your task:
 | Configure a wallet and pay with x402 | [wallet-cli quick start](/wallet-cli/quickstart/) |
 | Find paid APIs | [API Catalog](/x402/api-catalog/get-started/) |
 | Recharge B.AI | [wallet-cli recharge guidance](/wallet-cli/command-reference/) |
-| Community workflows and data queries | [Skill catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/) |
+| DeFi workflows and data queries | [Skill catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/) |
 
 Installation requires Node.js 20 or newer and an agent that supports local Skills. Select only the Skills you need. Installing a Skill does not install its external CLI or configure a wallet; match its dependency version to the installed CLI.
 

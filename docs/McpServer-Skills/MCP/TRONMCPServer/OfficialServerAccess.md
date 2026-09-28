@@ -1,4 +1,5 @@
 ---
+sidebar_label: "Official Cloud Service Access"
 title: "TRON MCP Access Migration"
 description: "TRON MCP Access Migration"
 ---
@@ -9,4 +10,4 @@ TRON MCP Server no longer receives feature development; wallet-cli provides the 
 
 Existing client connections will stop working when the hosted MCP service is retired. This page no longer supplies the legacy service URL or remote installation commands. Migrate the required operations to wallet-cli, then remove the old MCP connection configuration. Wallet-cli and Agent Wallet stores are not automatically interchangeable; verify account setup locally.
 
-This page retains its original URL and section anchors for existing links.
+This page keeps its original URL so existing links still open.

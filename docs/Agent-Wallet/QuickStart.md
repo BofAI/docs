@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 Agent Wallet documentation remains for existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](/wallet-cli/quickstart/); the stores are not automatically interchangeable.
 :::
 
-From zero to invoking your Agent-wallet in your AI agent chat. We provide two ways to create your wallet — **conversational setup is the easiest**, done entirely from your AI chat; **command-line setup** gives you the most precise control.
+From zero to invoking your Agent-wallet in your AI agent chat. There are two ways to create your wallet: **command-line setup** works for every installation; **conversational setup** only works where the legacy agent-wallet and bankofai-guide Skills are still installed.
 
 :::tip Prerequisites & CLI command details
 - Your AI Agent supports shell command execution (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.)
@@ -16,7 +16,7 @@ From zero to invoking your Agent-wallet in your AI agent chat. We provide two wa
 
 ---
 
-## Method 1: Conversational Setup (Easiest)
+## Method 1: Conversational Setup (Legacy Skills)
 
 :::note Historical setup
 The following conversational flow applies only to existing installations of the legacy agent-wallet and bankofai-guide Skills. Both were removed in Skills 3.0.0.

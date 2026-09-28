@@ -57,6 +57,6 @@ The live service list and statistics (service count, chain count, etc.) are **ge
 
 ## Next steps
 
-- Want your Agent to use these services → [Get Started](./get-started.md)
+- Want your Agent to use these services → [Catalog Quick Start](./get-started.md)
 - Want to list and monetize your own API → [List Your Service](./list-your-service.md)
 - Want the data structures and API details → [Data Format & API Reference](./reference.md)

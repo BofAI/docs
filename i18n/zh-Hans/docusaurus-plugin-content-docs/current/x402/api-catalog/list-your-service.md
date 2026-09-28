@@ -331,4 +331,4 @@ PR 合入后，发布流程会把最新构建的 `dist/` 刷新到 Catalog Serve
 ## 下一步
 
 - 查看全部字段、类目与接口结构 → [数据格式与 API 参考](./reference.md)
-- 想先体验调用方视角？→ [快速开始](./get-started.md)
+- 想先体验调用方视角？→ [Catalog 快速入门](./get-started.md)

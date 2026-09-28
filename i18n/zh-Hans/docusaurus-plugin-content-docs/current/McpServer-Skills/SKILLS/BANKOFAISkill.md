@@ -27,7 +27,7 @@ BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦�
 
 ### 凭据配置
 
-官方钱包配置见 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)。不要把私钥或密码交给聊天窗口。社区项目按各自 Skill 配置：TronScan API Key、SunPerp API Key/Secret，以及 USDD 或提现所需签名参数不会自动转换成 wallet-cli 配置。
+官方钱包配置见 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)。不要把私钥或密码交给聊天窗口。其他 Skill 按各自说明配置：TronScan API Key、SunPerp API Key/Secret，以及 USDD 或提现所需签名参数不会自动转换成 wallet-cli 配置。
 
 B.AI 的 API Key 在 [控制台](https://chat.bankofai.io/key)获取，通过 wallet-cli 支持的配置方式保存；不要打印或提交凭据。
 
@@ -56,7 +56,7 @@ B.AI 的 API Key 在 [控制台](https://chat.bankofai.io/key)获取，通过 wa
 > 帮我质押 100 TRX 换能量——主网操作会先给你预览、等你明确确认。
 
 :::tip
-wallet-cli 是官方钱包与 CLI 接入入口；社区 Skill 和服务端可能仍使用各自的签名实现。按实际依赖配置，不要求所有项目同时迁移。
+wallet-cli 是官方钱包与 CLI 接入入口；其他 Skill 和服务端可能使用各自的签名实现。按实际依赖配置，不要求所有项目同时迁移。
 :::
 
 :::caution 密码与钱包管理的硬性边界
@@ -251,7 +251,7 @@ PSM 支持 **USDT ↔ USDD 即时 1:1 兑换**——是获取 USDD 最简单的�
 
 **从这里开始——零风险，零配置：** 用 tronscan-skill 查账户、看交易，用 sunswap 查价格和报价。纯查询，不花钱，不需要密码。
 
-**接下来——用假钱练手：** 配置好钱包（见 [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/)），然后在 Nile 测试网上试试换币和流动性操作。确认 AI 的表现完全符合预期。
+**接下来——用假钱练手：** 按 [sunswap](#sunswap) 的说明配置它自己的钱包凭据，然后在 Nile 测试网上试试换币和流动性操作。转账、质押则需配置 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)——它的账户不会共享给 sunswap。确认 AI 的表现完全符合预期。
 
 **然后——主网小额试水：** 用少量真实资金跑一遍完整流程，确保没有意外。
 

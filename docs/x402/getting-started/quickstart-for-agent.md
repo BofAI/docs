@@ -1,6 +1,6 @@
 ---
 title: "Quickstart for AI Agents"
-description: "Set up agent payments through wallet-cli 4.14."
+description: "Set up agent payments through wallet-cli."
 ---
 
 # Quickstart for AI Agents

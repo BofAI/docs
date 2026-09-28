@@ -7,7 +7,7 @@ import TabItem from '@theme/TabItem';
 Agent Wallet 文档保留给现有 SDK、服务端和社区集成。官方新用户的钱包配置入口是 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)，两套配置不会自动互通。
 :::
 
-从零到在 AI 代理对话框里唤醒你的 Agent-wallet。我们提供了两种创建钱包的方式——**对话式创建最简单**，全程在 AI 对话框里完成；**命令行创建**则给你最精细的控制。
+从零到在 AI 代理对话框里唤醒你的 Agent-wallet。创建钱包有两种方式：**命令行创建**适用于所有环境；**对话式创建**只适用于仍装有旧版 agent-wallet 和 bankofai-guide Skill 的环境。
 
 :::tip 前置依赖 & CLI 命令细节
 - 你的 AI Agent 支持 shell 命令执行（OpenClaw、Telegram Bot、Web 聊天页面、Claude Code、Cursor 等）
@@ -16,7 +16,7 @@ Agent Wallet 文档保留给现有 SDK、服务端和社区集成。官方新用
 
 ---
 
-## 方式一：对话式创建（最简单）
+## 方式一：对话式创建（旧版 Skill）
 
 :::note 历史配置流程
 以下对话式流程仅适用于已安装旧版 agent-wallet 和 bankofai-guide Skill 的环境，这两个 Skill 已在 Skills 3.0.0 中删除。

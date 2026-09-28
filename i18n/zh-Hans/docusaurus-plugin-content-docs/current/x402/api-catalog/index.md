@@ -57,6 +57,6 @@ import ThemedImage from '@theme/ThemedImage';
 
 ## 下一步
 
-- 想让你的 Agent 用上这些服务 → [快速开始](./get-started.md)
+- 想让你的 Agent 用上这些服务 → [Catalog 快速入门](./get-started.md)
 - 想把自己的 API 上架变现 → [上架你的服务](./list-your-service.md)
 - 想了解数据结构与接口细节 → [数据格式与 API 参考](./reference.md)

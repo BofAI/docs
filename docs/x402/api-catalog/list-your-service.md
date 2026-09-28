@@ -331,4 +331,4 @@ After your PR merges, the release process refreshes the freshly built `dist/` to
 ## Next steps
 
 - All fields, categories, and API structures → [Data Format & API Reference](./reference.md)
-- Want to try the caller side first? → [Get Started](./get-started.md)
+- Want to try the caller side first? → [Catalog Quick Start](./get-started.md)
