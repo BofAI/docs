@@ -9,6 +9,7 @@ on:
       - ai-bankofai-patch-1
       - x402-sdk-1.0.0-update
       - Refactor
+      - wallet-cli
     tags:
       - 'test'
   pull_request:
@@ -19,6 +20,7 @@ on:
       - ai-bankofai-patch-1
       - x402-sdk-1.0.0-update
       - Refactor
+      - wallet-cli
   workflow_dispatch: # Intentionally unrestricted — allows manual builds from any branch for flexibility
 
 env:
