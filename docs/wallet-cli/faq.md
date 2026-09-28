@@ -1,5 +1,6 @@
 ---
 title: "Wallet CLI FAQ"
+sidebar_label: "FAQ"
 description: "Installation, wallet, and payment questions for wallet-cli."
 ---
 

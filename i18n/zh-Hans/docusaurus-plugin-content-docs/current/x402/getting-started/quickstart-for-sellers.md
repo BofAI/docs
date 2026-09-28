@@ -125,8 +125,8 @@ git --version     # 版本控制工具
 
 **测试网 vs. 主网：**
 
-- **测试网**：使用免费测试代币，不涉及真实资金，适合开发调试。网络标识：`tron:0xcd8690dc` / `eip155:97` / `eip155:84532`（Base Sepolia，USDC——上 Base 主网前先在这里测）
-- **主网**：涉及真实支付，上线时使用。网络标识：`tron:0x2b6653dc` / `eip155:56` / Base `eip155:8453`
+- **测试网**：使用免费测试代币，不涉及真实资金，适合开发调试。网络标识：`tron:3448148188` / `eip155:97` / `eip155:84532`（Base Sepolia，USDC——上 Base 主网前先在这里测）
+- **主网**：涉及真实支付，上线时使用。网络标识：`tron:728126428` / `eip155:56` / Base `eip155:8453`
 
 ---
 
@@ -276,7 +276,7 @@ express()
 |------|------|--------|
 | `payTo` | 您的收款钱包地址 | TRON：`T...`；Base：`0x...` |
 | `accepts[].price` | 每次请求价格——这是**配置**字段；SDK 会把它转换成链路上的 `amount` + `asset`（以及 `extra`） | TRON：`"1 USDT"`；Base：`"1 USDC"` |
-| `accepts[].network` | 使用的网络 | TRON Nile：`tron:0xcd8690dc`；Base 主网：`eip155:8453` |
+| `accepts[].network` | 使用的网络 | TRON Nile：`tron:3448148188`；Base 主网：`eip155:8453` |
 | `accepts[].scheme` | 付款方式 | `"exact"` |
 | `routes` | `"METHOD /path"` → `{ accepts }` 的映射 | `"GET /credit"` |
 
@@ -409,7 +409,7 @@ pnpm dev:facilitator
 
 ```
 [evm] facilitator registered eip155:97 (0x…)
-[tron] facilitator registered tron:0xcd8690dc (T…)
+[tron] facilitator registered tron:3448148188 (T…)
 🚀 Facilitator on http://localhost:4022  (evm=true, tron=true)
 ```
 
@@ -506,7 +506,7 @@ EVM_RPC_URL=https://bsc-rpc.publicnode.com
 
 ### 3.（自托管）将 Facilitator 切换到主网
 
-示例 facilitator 的 `TRON_NETWORKS` 已包含 `TRON_MAINNET`（`tron:0x2b6653dc`），`EVM_NETWORKS` 已包含 `eip155:97` 与 `eip155:56`——但不含 Base（`eip155:8453` / `eip155:84532`），若在 Base 结算需自行添加。向 Facilitator 钱包充入足够的真实 TRX/BNB 以支付结算 gas，然后重启：
+示例 facilitator 的 `TRON_NETWORKS` 已包含 `TRON_MAINNET`（`tron:728126428`），`EVM_NETWORKS` 已包含 `eip155:97` 与 `eip155:56`——但不含 Base（`eip155:8453` / `eip155:84532`），若在 Base 结算需自行添加。向 Facilitator 钱包充入足够的真实 TRX/BNB 以支付结算 gas，然后重启：
 
 ```bash
 pnpm dev:facilitator

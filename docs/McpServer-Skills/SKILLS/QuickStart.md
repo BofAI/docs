@@ -1,5 +1,6 @@
 ---
 title: "Skills Quick Start"
+sidebar_label: "Quick Start"
 description: "Install selected Skills and use wallet-cli as the official wallet entry point."
 ---
 

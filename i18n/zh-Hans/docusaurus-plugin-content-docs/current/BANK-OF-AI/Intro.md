@@ -81,7 +81,7 @@ AI 能安全完成签名——私钥永不离开你的设备。
 
 <div className="intro-card-links">
 
-[Agent Wallet](../Agent-Wallet/Intro.md)
+[wallet-cli](../wallet-cli/index.md)
 
 </div>
 
@@ -165,7 +165,7 @@ AI 拥有可验证的链上身份，Agent 之间可以互信协作。
 | AI 怎么用多个大模型 | [LLM Service](../llmservice/introduction.md) |
 | AI 怎么自动付款 | [x402 支付协议](../x402/index.md) |
 | AI 的链上身份和信誉 | [8004 协议](../8004/general.md) |
-| 私钥怎么保管、签名怎么完成 | [Agent Wallet](../Agent-Wallet/Intro.md) |
+| 私钥怎么保管、签名怎么完成 | [wallet-cli](../wallet-cli/index.md) |
 | AI 按什么流程执行操作 | [Skills](../McpServer-Skills/SKILLS/Intro.md) |
 | AI 怎么调用链上工具 | [MCP Server](../McpServer-Skills/MCP/Intro.md) |
 

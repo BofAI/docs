@@ -118,7 +118,7 @@ x402 使用 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 解析和管理钱�
 export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-> 💡 **提示：** 本快速入门使用 `TRON_NILE`（`tron:0xcd8690dc`）付款。client 会从 server 返回的 `accepts` 中选择 `network === TRON_NILE` 的付款选项。
+> 💡 **提示：** 本快速入门使用 `TRON_NILE`（`tron:3448148188`）付款。client 会从 server 返回的 `accepts` 中选择 `network === TRON_NILE` 的付款选项。
 
 生产 TRON 负载建议使用 TronGrid API Key，以获得更可靠的 RPC。SDK 不会读取任何环境变量，因此必须显式传给 signer：
 

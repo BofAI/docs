@@ -1,5 +1,6 @@
 ---
 title: "Wallet CLI Quick Start"
+sidebar_label: "Quick Start"
 description: "Install wallet-cli and preview an x402 payment."
 ---
 

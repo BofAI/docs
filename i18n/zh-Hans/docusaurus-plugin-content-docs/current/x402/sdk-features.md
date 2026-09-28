@@ -52,13 +52,15 @@ description: 'x402 TypeScript SDK 的功能支持矩阵，以颗粒化 @bankofai
 
 | 网络 | SDK 常量 | 状态 |
 |-----------|----------|--------|
-| `tron:0x2b6653dc` | `TRON_MAINNET` | ✅ |
-| `tron:0xcd8690dc` | `TRON_NILE` | ✅ |
-| `tron:0x94a9059e` | `TRON_SHASTA` | ✅ |
+| `tron:728126428` | `TRON_MAINNET` | ✅ |
+| `tron:3448148188` | `TRON_NILE` | ✅ |
+| `tron:2494104990` | `TRON_SHASTA` | ✅ |
 | `eip155:56`（BSC 主网） | - | ✅ |
 | `eip155:97`（BSC 测试网） | - | ✅ |
 | `eip155:8453`（Base 主网） | - | ✅ |
 | `eip155:84532`（Base Sepolia） | - | ✅（CLI/SDK 测试） |
+
+> **TRON 标识格式**：自 `@bankofai/x402-tron` 2.0.0 起，SDK 常量使用十进制 CAIP-2 引用。旧的十六进制形式（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）仍可作为输入别名使用，官方 facilitator 与 API Catalog 目前返回的也是十六进制形式。
 
 > 另有二十条上游 EVM 链（MegaETH、Monad、Polygon、Arbitrum One/Sepolia、Celo、XDC、Flare、Mezo、Radius、Stable、ADI、HPP、Igra 等）也已接入 EVM 默认资产注册表。公开 API Catalog 只发布 Base 主网路由；Base Sepolia 保留用于 CLI/SDK 测试。
 
@@ -207,8 +209,8 @@ const route = {
 
 | 代币 | 网络 | 状态 |
 |--------|---------|--------|
-| USDT（TRC-20） | `tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e` | ✅ |
-| USDD（TRC-20） | `tron:0x2b6653dc`、`tron:0xcd8690dc` | ✅ |
+| USDT（TRC-20） | `tron:728126428`、`tron:3448148188`、`tron:2494104990` | ✅ |
+| USDD（TRC-20） | `tron:728126428`、`tron:3448148188` | ✅ |
 | USDT（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
 | USDC（BEP-20） | `eip155:56`、`eip155:97` | ✅ |
 | DHLU（BSC 测试网，ERC-3009） | `eip155:97` | ✅ |

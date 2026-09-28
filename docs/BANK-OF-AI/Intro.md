@@ -81,7 +81,7 @@ Your AI can sign securely — your private key never leaves your device.
 
 <div className="intro-card-links">
 
-[Agent Wallet](../Agent-Wallet/Intro.md)
+[wallet-cli](../wallet-cli/index.md)
 
 </div>
 
@@ -165,7 +165,7 @@ Each layer works on its own, or combines into the full platform. Later chapters 
 | How AI uses multiple models | [LLM Service](../llmservice/introduction.md) |
 | How AI pays automatically | [x402 Payment Protocol](../x402/index.md) |
 | On-chain identity and reputation | [8004 Protocol](../8004/general.md) |
-| How keys are stored and signing works | [Agent Wallet](../Agent-Wallet/Intro.md) |
+| How keys are stored and signing works | [wallet-cli](../wallet-cli/index.md) |
 | The workflows AI follows | [Skills](../McpServer-Skills/SKILLS/Intro.md) |
 | How AI calls on-chain tools | [MCP Server](../McpServer-Skills/MCP/Intro.md) |
 

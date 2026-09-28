@@ -1,5 +1,6 @@
 ---
 title: "Skills 快速入门"
+sidebar_label: "快速入门"
 description: "按需安装 Skills，并使用 wallet-cli 配置官方钱包入口。"
 ---
 

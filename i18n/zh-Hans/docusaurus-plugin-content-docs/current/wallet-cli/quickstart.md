@@ -1,5 +1,6 @@
 ---
 title: "Wallet CLI 快速入门"
+sidebar_label: "快速入门"
 description: "安装 wallet-cli 并预览 x402 支付。"
 ---
 

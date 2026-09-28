@@ -1,5 +1,6 @@
 ---
 title: "Wallet CLI 常见问题"
+sidebar_label: "常见问题"
 description: "wallet-cli 的安装、钱包及支付问题。"
 ---
 

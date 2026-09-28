@@ -118,7 +118,7 @@ This guide uses the environment variable method.
 export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
 ```
 
-> 💡 **Tip:** This quickstart pays on `TRON_NILE` (`tron:0xcd8690dc`). The client chooses the payment option where `network === TRON_NILE` from the server's `accepts` list.
+> 💡 **Tip:** This quickstart pays on `TRON_NILE` (`tron:3448148188`). The client chooses the payment option where `network === TRON_NILE` from the server's `accepts` list.
 
 For production TRON workloads, use a TronGrid API Key for better RPC reliability. The SDK never reads environment variables, so pass it explicitly to the signer:
 
