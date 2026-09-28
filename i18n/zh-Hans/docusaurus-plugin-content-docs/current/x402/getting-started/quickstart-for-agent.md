@@ -1,11 +1,11 @@
 ---
 title: "AI Agent 支付快速入门"
-description: "使用 wallet-cli 4.14 配置 Agent 的支付入口。"
+description: "使用 wallet-cli 配置 Agent 的支付入口。"
 ---
 
 # AI Agent 支付快速入门
 
-新的支付入口使用 **wallet-cli 4.14.0**，无需安装独立 x402-cli。钱包配置与签名由 wallet-cli 管理，Agent 负责选择命令、预览支付并解释结果。
+新的支付入口使用 **wallet-cli**，无需安装独立 x402-cli。钱包配置与签名由 wallet-cli 管理，Agent 负责选择命令、预览支付并解释结果。
 
 1. 按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)安装 CLI，在本地配置账户并核对地址。
 2. 如需 Skill，按 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)选择安装；核对 Skill 的依赖版本与 CLI 一致。
@@ -15,7 +15,7 @@ description: "使用 wallet-cli 4.14 配置 Agent 的支付入口。"
 
 可以这样要求 Agent：
 
-> 使用 wallet-cli 4.14 查看 DIA 的 BTC 报价接口。先预览 TRON 主网 USDT 支付要求，上限 0.01，不要付款。
+> 使用 wallet-cli 查看 DIA 的 BTC 报价接口。先预览 TRON 主网 USDT 支付要求，上限 0.01，不要付款。
 
 不要把私钥或主密码输出到聊天、日志或命令参数中。无需为了验证配置而执行 `echo` 打印私钥。测试支付应使用你控制的测试网收费接口；目录中的生产服务可能只支持主网。
 

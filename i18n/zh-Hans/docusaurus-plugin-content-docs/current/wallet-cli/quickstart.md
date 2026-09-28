@@ -1,6 +1,6 @@
 ---
 title: "Wallet CLI 快速入门"
-description: "安装 wallet-cli 4.14.0 并预览 x402 支付。"
+description: "安装 wallet-cli 并预览 x402 支付。"
 ---
 
 # Wallet CLI 快速入门

@@ -34,7 +34,7 @@ import ThemedImage from '@theme/ThemedImage';
 三个消费入口共用同一份数据：
 
 - **[前端目录站](https://bankofai.io/catalog)**：给人浏览、比较服务。
-- **wallet-cli 4.14**：在命令行里搜索、查看、直接付费调用。
+- **wallet-cli**：在命令行里搜索、查看、直接付费调用。
 - **MCP**：`@bankofai/x402-mcp` 让 Agent 能通过 MCP 为 x402 端点付款。支持目录发现的 MCP（在 MCP 客户端里按名称浏览目录）尚未发布，当前请用 `wallet-cli x402 provider-list` 做发现。
 
 ## 目录里有什么
@@ -52,7 +52,7 @@ import ThemedImage from '@theme/ThemedImage';
 以上服务均属 **金融（Finance）** 类目。请查看各端点的 `x402_routes`，确认当前已发布的 TRON、BNB Chain 和 Base 主网路由——该字段位于 `/api/providers/<fqn>.json`、`/api/pay/<fqn>.json` 与 `/api/search-index.json`，只含摘要的 `/api/catalog.json` 里没有。
 
 :::note
-在架服务清单与统计数字（服务数、链数等）均由目录数据**动态生成**，以 `/api/catalog.json` 的实时内容为准，本文不写死具体数量；目录会随新服务上架而增长。
+在架服务清单与统计数字（服务数、链数等）均由目录数据**动态生成**，以 `/api/catalog.json` 的实时内容为准（它只含服务摘要，各端点的路由在上文的单服务文件里），本文不写死具体数量；目录会随新服务上架而增长。
 :::
 
 ## 下一步

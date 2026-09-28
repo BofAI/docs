@@ -34,7 +34,7 @@ wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1
 
 This only previews the payment. For an actual payment, review the network and amount, obtain authorization, and use `--password-stdin` from a secure source. Cap GasFree fees separately; reconcile uncertain transactions before considering another payment.
 
-For direct API access, read the [Catalog JSON](https://x402-catalog.bankofai.io/api/catalog.json). The static API uses snake_case fields such as `x402_routes`; use the CLI's schema and documentation for its output shape rather than mixing the two.
+For direct API access, read the [Catalog JSON](https://x402-catalog.bankofai.io/api/catalog.json) for the service list, and `/api/providers/<fqn>.json` for endpoints and their `x402_routes`. The static API uses snake_case field names, except inside `i18n` and route objects (for example `assetTransferMethod`); use the CLI's schema and documentation for its output shape rather than mixing the two.
 
 - [Catalog data and API reference](/x402/api-catalog/reference/)
 - [List your service](/x402/api-catalog/list-your-service/)

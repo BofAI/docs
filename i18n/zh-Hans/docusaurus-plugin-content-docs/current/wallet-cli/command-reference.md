@@ -1,6 +1,6 @@
 ---
 title: "Wallet CLI 命令参考"
-description: "wallet-cli 4.14.0 命令与支付参数。"
+description: "wallet-cli 命令与支付参数。"
 ---
 
 # Wallet CLI 命令参考

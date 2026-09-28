@@ -1,6 +1,6 @@
 ---
 title: "Wallet CLI 常见问题"
-description: "wallet-cli 4.14 的安装、钱包及支付问题。"
+description: "wallet-cli 的安装、钱包及支付问题。"
 ---
 
 # Wallet CLI 常见问题

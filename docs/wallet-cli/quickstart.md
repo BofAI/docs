@@ -1,6 +1,6 @@
 ---
 title: "Wallet CLI Quick Start"
-description: "Install wallet-cli 4.14.0 and preview an x402 payment."
+description: "Install wallet-cli and preview an x402 payment."
 ---
 
 # Wallet CLI Quick Start

@@ -1,6 +1,6 @@
 ---
 title: "Wallet CLI and x402"
-description: "Use wallet-cli 4.14.0 for payments and service discovery."
+description: "Use wallet-cli for payments and service discovery."
 ---
 
 # Wallet CLI and x402

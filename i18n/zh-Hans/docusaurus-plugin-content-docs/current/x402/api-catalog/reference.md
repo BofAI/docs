@@ -18,14 +18,14 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 | `fqn` | string | 是 | 全局唯一标识，正则 `^[a-z0-9][a-z0-9-]{1,62}$`，须与目录名一致 |
 | `title` | string | 是 | 服务名称（通常是简洁品牌名，如 `DefiLlama`） |
 | `subtitle` | string | 是 | 一句话副标题 |
-| `mainTitle` | string | 否 | 卡片/头部展示用的 tagline（如 `聚合 DeFi 数据 — TVL、费用、价格、收益率`），缺省回退到 `title` |
+| `mainTitle` | string | 否 | 卡片/头部展示用的 tagline（如 `聚合 DeFi 数据 — TVL、价格、收益率`），缺省回退到 `title` |
 | `description` | string | 是 | 服务简介 |
 | `useCase` | string | 是 | 适用场景，帮助 Agent 判断何时调用 |
 | `i18n` | object | 是 | 多语言翻译，至少包含 `zh-CN`（见下） |
 | `logo` | string | 是 | Logo 图片 URL |
 | `category` | string | 是 | 类目，须为合法取值之一（见[合法类目](#合法类目)） |
 | `chains` | string[] | 是 | 结算链，至少一条，CAIP-2 风格 |
-| `serviceUrl` | string | 是 | 服务在网关上的入口地址 |
+| `serviceUrl` | string | 是 | 服务的公开官网（如 `https://defillama.com`），须以 `https://` 开头。网关调用地址填在各端点的 `url` 和 `x402Routes[].url` 里 |
 | `endpoints` | object[] | 是 | 端点列表，至少一个（见下） |
 | `isFirstParty` | boolean | 是 | 是否自营 |
 | `isFeatured` | boolean | 是 | 是否精选（影响目录排序，见[聚合字段与排序](#catalogjson-的聚合字段与排序)） |
@@ -94,9 +94,18 @@ wallet-cli x402 pay --dry-run -o json 'https://x402-gateway.bankofai.io/provider
 { "catalog": "listed", "gateway": "unknown", "payment": "unknown", "upstream": "unknown" }
 ```
 
+合法取值：
+
+| 键 | 取值 |
+|---|---|
+| `catalog` | `listed`、`unlisted` |
+| `gateway` | `configured`、`unknown`、`unavailable` |
+| `payment` | `paid-route`、`mainnet`、`testnet`、`unknown` |
+| `upstream` | `public`、`authenticated`、`unknown`、`unavailable` |
+
 ## pay.md
 
-与 `catalog.json` 同目录提交、面向人和 Agent 的可读调用说明，为**必交**文件。建议包含：服务基本信息（FQN、入口地址、类目、结算链）、各端点的地址与价格，以及一条可直接复制的 `wallet-cli x402 pay` 调用示例。该文件与 `catalog.json` 一样会经过敏感信息扫描（见下）。
+与 `catalog.json` 同目录提交、面向人和 Agent 的可读调用说明，为**必交**文件。建议包含：服务基本信息（FQN、入口地址、类目、结算链）、各端点的地址与价格，以及可直接复制的调用示例。目录仓库的 CI 测试要求包含带 `--network tron:728126428` 和 `--scheme exact` 的 `wallet-cli x402 pay` 示例、提到 `exact_gasfree`，并覆盖 Base 主网（`eip155:8453`）。该文件与 `catalog.json` 一样会经过敏感信息扫描（见下）。
 
 ## 合法类目
 
@@ -121,9 +130,9 @@ security   shopping    storage     translation
 | BNB Chain (BSC) | `eip155:56` |
 | BNB 测试网 | `eip155:97` |
 | Base 主网 | `eip155:8453` |
-| Base Sepolia 测试网 | `eip155:84532` —— 仅 schema 层面可用：构建脚本没有它的展示元数据，`label` 会回退成原始链 ID，`chain_kinds` 也会报 `evm` 而不是 `base` |
+| Base Sepolia 测试网 | `eip155:84532` —— 仅 schema 层面可用：构建脚本没有它的展示元数据，`label` 会回退成原始链 ID，`chain_kinds` 也会报 `evm` 而不是 `base`；目录仓库的 CI 测试也不允许它出现在 `chains` 里 |
 
-各条链上实际已上线的路由，以已发布的 `catalog.json` 为准。构建时会把每个链 ID 解析为展示元数据（`kind` / `label` / `label_zh`），前端无需自己解析 CAIP-2 —— 见[前端展示字段](#前端展示字段)。
+各端点的路由（`x402_routes`）发布在 `/api/providers/<fqn>.json` 和 `/api/pay/<fqn>.json` 中，只含摘要的 `/api/catalog.json` 里没有。构建时会把每个链 ID 解析为展示元数据（`kind` / `label` / `label_zh`），前端无需自己解析 CAIP-2 —— 见[前端展示字段](#前端展示字段)。
 
 ## 校验与安全扫描
 
@@ -169,7 +178,7 @@ CI 构建后生成静态快照 `dist/`，由 Catalog Server 通过 `/api/` 路�
 
 ### 派生字段
 
-构建产物在原始字段基础上会补充派生字段，并统一转为 snake_case（如 `useCase` → `use_case`）：
+构建产物在原始字段基础上会补充派生字段，并把顶层和端点的字段名转为 snake_case（如 `useCase` → `use_case`、`x402Routes` → `x402_routes`）。`i18n` 块和 `x402_routes` 里的路由对象原样保留，仍是 `mainTitle`、`assetTransferMethod` 这样的 camelCase：
 
 | 字段 | 说明 |
 |---|---|
@@ -199,18 +208,24 @@ CI 构建后生成静态快照 `dist/`，由 Catalog Server 通过 `/api/` 路�
 ### 其它产物结构
 
 - **`/api/pay/<fqn>.json`**：供 Agent / CLI 读取的支付摘要。顶层包含 `version`、`fqn`、`title`、`title_zh`、`main_title`、`main_title_zh`、`sub_title`、`sub_title_zh`、`subtitle`、`description`、`use_case`、`i18n`、`service_url`、`chains`、`chain_kinds`、`chains_meta`、`sha`；`endpoints[]` 保留调用所需字段 `method`、`path`、`url`、`description`、`metered`、`min_price_usd`、`max_price_usd`，端点定义了多网络路由时还会带 `x402_routes`。
-- **`/api/search-index.json`**：`{ version, generated_at, documents[] }`，每个 document 为服务摘要（含 `category_meta` / `chain_kinds` / `chains_meta`）加上端点的 `method` / `path` / `title` / `description`（存在时还有 `x402_routes`）。
+- **`/api/search-index.json`**：`{ version, generated_at, documents[] }`，每个 document 只含部分服务字段——`fqn`、`title`、`subtitle`、`description`、`use_case`、`category`、`category_meta`、`chains`、`chain_kinds`、`chains_meta`、`featured_tags`、`service_url`——再加上端点的 `method` / `path` / `title` / `description`（存在时还有 `x402_routes`）。
 - **`/api/categories.json`**：出现过的类目数组，每项为 `{ id, label, label_zh, count }`，是 `frontend.categories` 的直接导出。
 - **`/api/status.json`**：`{ version, generated_at, provider_count, status }`，`status` 为 `ok` 时表示构建正常。
 
 ## 本地构建与运行
 
 ```bash
+# 安装校验依赖（jsonschema）
+pip install -r requirements.txt
+
 # 校验所有 provider
 python3 scripts/validate.py
 
 # 构建静态快照到 dist/
 python3 scripts/build.py
+
+# 运行单元测试
+python3 -m unittest discover -s tests
 ```
 
 容器方式（构建时先校验并生成 `dist/`，再从 `/api/` 提供）：
@@ -224,7 +239,7 @@ curl http://127.0.0.1:8088/api/status.json
 端口可用环境变量 `X402_CATALOG_PORT` 覆盖（默认 `8088`，容器内部监听 `8080`）。
 
 :::note CI 调度
-目录仓库的 CI（GitHub Actions）会在 PR、合入 `main` 以及定时任务上自动执行同样的校验与构建，无需手动触发。
+目录仓库的 CI（GitHub Actions）会在每个 PR、推送到 `main`、发布标签时以及每 30 分钟运行一次校验、构建和单元测试，也可以手动触发。
 :::
 
 ## 相关页面

@@ -10,7 +10,7 @@ description: "选择 BANK OF AI Skills，使用 wallet-cli 配置钱包与支付
 | 任务 | 指引 |
 | --- | --- |
 | 给 Agent 安装能力 | [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/) |
-| 钱包配置与 x402 支付 | [wallet-cli 4.14 快速入门](/zh-Hans/wallet-cli/quickstart/) |
+| 钱包配置与 x402 支付 | [wallet-cli 快速入门](/zh-Hans/wallet-cli/quickstart/) |
 | 查询可付费 API | [API Catalog](/zh-Hans/x402/api-catalog/get-started/) |
 | 充值 B.AI | [wallet-cli 充值说明](/zh-Hans/wallet-cli/command-reference/) |
 | 社区业务与数据查询 | [Skill 列表](/zh-Hans/McpServer-Skills/SKILLS/BANKOFAISkill/) |

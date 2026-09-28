@@ -1,6 +1,6 @@
 ---
 title: "Wallet CLI Command Reference"
-description: "Commands and payment options for wallet-cli 4.14.0."
+description: "Commands and payment options for wallet-cli."
 ---
 
 # Wallet CLI Command Reference

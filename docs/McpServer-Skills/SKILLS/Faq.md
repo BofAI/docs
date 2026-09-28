@@ -1,7 +1,7 @@
 # FAQ
 
 :::note
-For new setup, follow the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/). Legacy wallet and installer references below are for existing integrations, not wallet-cli 4.14 setup instructions.
+For new setup, follow the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/). Legacy wallet and installer references below are for existing integrations, not wallet-cli setup instructions.
 :::
 
 Questions are ordered by urgency — the ones you're most likely to hit first are at the top, concepts at the bottom.

@@ -34,7 +34,7 @@ wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1
 
 该命令只预览。实际支付需核对金额及网络、取得授权并通过安全来源提供 `--password-stdin`。GasFree 另设手续费上限；结果不确定时先核对交易，不能重复付款。
 
-需要直接读取目录数据时，可访问 [Catalog JSON](https://x402-catalog.bankofai.io/api/catalog.json)。静态 API 使用 `x402_routes` 等 snake_case 字段；CLI 的输出字段以其 schema 和文档为准，不要混用。
+需要直接读取目录数据时，服务列表见 [Catalog JSON](https://x402-catalog.bankofai.io/api/catalog.json)，端点及其 `x402_routes` 见 `/api/providers/<fqn>.json`。静态 API 的字段名为 snake_case，但 `i18n` 和路由对象里的字段保持原样（如 `assetTransferMethod`）；CLI 的输出字段以其 schema 和文档为准，不要混用。
 
 - [目录数据与接口参考](/zh-Hans/x402/api-catalog/reference/)
 - [提交服务](/zh-Hans/x402/api-catalog/list-your-service/)

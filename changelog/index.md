@@ -24,11 +24,11 @@ Product updates and announcements for BANK OF AI.
 <div className="changelog-date">Sep 28, 2026</div>
 <div className="changelog-body">
 
-### x402 command-line docs move to wallet-cli 4.14
+### x402 command-line docs move to wallet-cli
 
 <div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">CLI</span></div>
 
-- The x402 command-line guides now live under [Wallet CLI](/wallet-cli/) and use `wallet-cli x402` 4.14.0; the standalone x402-cli pages were removed. [Details](./x402/)
+- The x402 command-line guides now live under [Wallet CLI](/wallet-cli/) and use `wallet-cli x402`; the standalone x402-cli pages were removed. [Details](./x402/)
 
 </div>
 </div>

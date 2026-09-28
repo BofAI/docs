@@ -1,7 +1,7 @@
 # 常见问题
 
 :::note
-新用户配置请以 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)为准。下文涉及旧钱包或旧安装器的内容仅供现有集成参考；不要将其作为 wallet-cli 4.14 的配置步骤。
+新用户配置请以 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)为准。下文涉及旧钱包或旧安装器的内容仅供现有集成参考；不要将其作为 wallet-cli 的配置步骤。
 :::
 
 问题按你最可能遇到的顺序排列——出了问题的排最前面，概念解释放最后。

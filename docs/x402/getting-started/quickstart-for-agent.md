@@ -5,7 +5,7 @@ description: "Set up agent payments through wallet-cli 4.14."
 
 # Quickstart for AI Agents
 
-Use **wallet-cli 4.14.0** for new payment integrations; do not install the standalone x402-cli. wallet-cli manages the account and signing, while the agent selects commands, previews payments, and interprets results.
+Use **wallet-cli** for new payment integrations; do not install the standalone x402-cli. wallet-cli manages the account and signing, while the agent selects commands, previews payments, and interprets results.
 
 1. Follow the [Wallet CLI quick start](/wallet-cli/quickstart/), configure an account locally, and verify its address.
 2. If using a Skill, follow the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) and match its dependency version to the CLI.
@@ -15,7 +15,7 @@ Use **wallet-cli 4.14.0** for new payment integrations; do not install the stand
 
 Example agent request:
 
-> Use wallet-cli 4.14 to inspect DIA's BTC quotation endpoint. Preview the TRON mainnet USDT payment with a 0.01 cap. Do not pay.
+> Use wallet-cli to inspect DIA's BTC quotation endpoint. Preview the TRON mainnet USDT payment with a 0.01 cap. Do not pay.
 
 Never print private keys or master passwords into chat, logs, or command arguments. Do not use `echo` to reveal a private key as a setup check. Use a testnet endpoint you control for test payments; production catalog services may support mainnet only.
 
