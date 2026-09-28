@@ -77,7 +77,7 @@ const sidebars = {
         },
         {
           type: 'category',
-          label: 'Wallet CLI / x402',
+          label: 'Wallet CLI',
           collapsed: true,
           items: [
             {

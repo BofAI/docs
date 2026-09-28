@@ -1,5 +1,6 @@
 ---
 title: "Wallet CLI Command Reference"
+sidebar_label: "Command Reference"
 description: "Commands and payment options for wallet-cli."
 ---
 

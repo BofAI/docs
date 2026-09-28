@@ -1,5 +1,6 @@
 ---
 title: "Wallet CLI 命令参考"
+sidebar_label: "命令参考"
 description: "wallet-cli 命令与支付参数。"
 ---
 
