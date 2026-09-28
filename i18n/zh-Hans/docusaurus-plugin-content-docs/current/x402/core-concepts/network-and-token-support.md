@@ -14,9 +14,11 @@ x402 采用 CAIP-2 网络标识符格式：`tron:<hex_chain_id>`。
 
 | 网络名称 (Network Name) | CAIP-2 ID | SDK 常量 | 描述 (Description) |
 | :---------------------- | :-------- | :------- | :----------------- |
-| **TRON Mainnet**        | `tron:0x2b6653dc` | `TRON_MAINNET` | TRON 主网 (生产环境) |
-| **TRON Shasta**         | `tron:0x94a9059e`  | `TRON_SHASTA`  | TRON Shasta 测试网 |
-| **TRON Nile**           | `tron:0xcd8690dc`  | `TRON_NILE`    | TRON Nile 测试网 |
+| **TRON Mainnet**        | `tron:728126428` | `TRON_MAINNET` | TRON 主网 (生产环境) |
+| **TRON Shasta**         | `tron:2494104990`  | `TRON_SHASTA`  | TRON Shasta 测试网 |
+| **TRON Nile**           | `tron:3448148188`  | `TRON_NILE`    | TRON Nile 测试网 |
+
+> **TRON 标识格式**：自 `@bankofai/x402-tron` 2.0.0 起，SDK 常量使用十进制 CAIP-2 引用。旧的十六进制形式（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）仍可作为输入别名使用，官方 facilitator 与 API Catalog 目前返回的也是十六进制形式。
 
 
 ## BSC 网络标识符
@@ -67,11 +69,11 @@ x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自�
 
 | 代币符号 | 网络环境       | 合约地址 (Contract Address)          |
 | :------- | :------------- | :----------------------------------- |
-| **USDT** | `tron:0x2b6653dc` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
-| **USDT** | `tron:0xcd8690dc`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
-| **USDT** | `tron:0x94a9059e` | `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs` |
-| **USDD** | `tron:0x2b6653dc` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
-| **USDD** | `tron:0xcd8690dc`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
+| **USDT** | `tron:728126428` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
+| **USDT** | `tron:3448148188`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
+| **USDT** | `tron:2494104990` | `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs` |
+| **USDD** | `tron:728126428` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
+| **USDD** | `tron:3448148188`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56` | `0x55d398326f99059fF775485246999027B3197955` |
 | **USDC** | `eip155:56` | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
@@ -80,7 +82,7 @@ x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自�
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）与 BSC 主网（`eip155:56`）上解析 **USDT**，在 BSC 测试网（`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`）上解析 **USDC**。注册表还为本页未列表的二十条 EVM 网络（MegaETH、Monad、Polygon、Arbitrum、Mezo、Radius、XDC、Celo、Flare 等）内置了默认资产。上表中的其余代币——TRON USDD、BSC 主网 USDC、BSC 测试网 USDT、DHLU 以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付。CLI 资产选择请参见 [wallet-cli 命令参考](/zh-Hans/wallet-cli/command-reference/)。
+> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:728126428`、`tron:3448148188`、`tron:2494104990`）与 BSC 主网（`eip155:56`）上解析 **USDT**，在 BSC 测试网（`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`）上解析 **USDC**。注册表还为本页未列表的二十条 EVM 网络（MegaETH、Monad、Polygon、Arbitrum、Mezo、Radius、XDC、Celo、Flare 等）内置了默认资产。上表中的其余代币——TRON USDD、BSC 主网 USDC、BSC 测试网 USDT、DHLU 以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付。CLI 资产选择请参见 [wallet-cli 命令参考](/zh-Hans/wallet-cli/command-reference/)。
 
 > **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或 server 的 `EVM_TOKENS` 配置表，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
 
@@ -100,7 +102,7 @@ x402 采用类型化数据签名来处理所有支付相关的签名授权。
 
 在服务端配置 `HTTP 402` 支付要求时，您需要明确指定以下三个核心参数：
 
-1.  **网络 (Network)**：目标网络的唯一标识符（例如 `tron:0xcd8690dc` 或 `eip155:8453`）。
+1.  **网络 (Network)**：目标网络的唯一标识符（例如 `tron:3448148188` 或 `eip155:8453`）。
 2.  **资产 (Asset)**：目标 TRC-20/BEP-20/ERC-20 代币的**合约地址**。
 3.  **金额 (Amount)**：基于代币**最小单位**（Raw Amount）的整数值。
 
@@ -135,7 +137,7 @@ x402 定义了五种命名支付方案。其中四种按链族提供完整的 cl
 
 ### `exact_gasfree` 方案
 
-TRON 专属。允许用户使用 USDT/USDD 付款而**无需持有 TRX 来支付 gas 费用**。客户端签署 TIP-712 GasFree 许可，由 relayer 通过官方 GasFree 代理支付链上 energy——付款方无需 TRX，也无需一次性 `approve`。资金来自付款方的 GasFree 托管钱包（非主钱包）。SDK 在 `tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e` 上注册了 GasFree，但官方 facilitator 只为 TRON 主网与 Nile 代理中继——内置的 Shasta 中继地址背后没有对应上游，因此 Shasta 上的 GasFree 需要自备中继。
+TRON 专属。允许用户使用 USDT/USDD 付款而**无需持有 TRX 来支付 gas 费用**。客户端签署 TIP-712 GasFree 许可，由 relayer 通过官方 GasFree 代理支付链上 energy——付款方无需 TRX，也无需一次性 `approve`。资金来自付款方的 GasFree 托管钱包（非主钱包）。SDK 在 `tron:728126428`、`tron:3448148188`、`tron:2494104990` 上注册了 GasFree，但官方 facilitator 只为 TRON 主网与 Nile 代理中继——内置的 Shasta 中继地址背后没有对应上游，因此 Shasta 上的 GasFree 需要自备中继。
 
 中继方会在付款金额**之外**，从支付代币中收取自己的中继费，因此 GasFree 账户余额需同时覆盖两者。
 
@@ -191,7 +193,7 @@ CLI 取的是服务端 `accepts` 列表中第一条匹配你过滤条件的支�
 
 | 核心组件     | TRON/BSC/Base 实现详情                              |
 | :----------- | :----------------------------------------- |
-| **网络环境** | 三个 TRON 标识（`tron:0x2b6653dc`、`tron:0x94a9059e`、`tron:0xcd8690dc`）以及任意 `eip155:<chainId>`——客户端与资源服务端默认注册的都是 `eip155:*`，SDK 为 `eip155:56` / `97` / `8453` / `84532` 之外的二十条 EVM 网络也内置了默认资产。但真正能结算的范围由 facilitator 显式配置的网络决定 |
+| **网络环境** | 三个 TRON 标识（`tron:728126428`、`tron:2494104990`、`tron:3448148188`）以及任意 `eip155:<chainId>`——客户端与资源服务端默认注册的都是 `eip155:*`，SDK 为 `eip155:56` / `97` / `8453` / `84532` 之外的二十条 EVM 网络也内置了默认资产。但真正能结算的范围由 facilitator 显式配置的网络决定 |
 | **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）、BEP-20 代币、ERC-20 代币（Base 官方 USDC） |
 | **签名机制** | TIP-712 / EIP-712 类型化数据签名                     |
 | **支付方案** | `exact`、`upto`、`batch-settlement`、`exact_gasfree`（TRON） |

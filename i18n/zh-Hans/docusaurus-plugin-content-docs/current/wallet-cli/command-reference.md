@@ -27,7 +27,7 @@ wallet-cli bai recharge --json-schema -o json
 
 ## GasFree 支付 {#gasfree-payments-tron}
 
-TRON 路线需要 GasFree 时显式指定 `--scheme exact_gasfree`，并限制 `--max-gasfree-fee`。使用 `--gasfree-relay` 选择服务。支付金额上限不包含 GasFree 手续费。
+要通过 GasFree 支付 TRON 路线，请指定 `--scheme exact_gasfree`，并用 `--max-gasfree-fee` 限制手续费。不指定 `--scheme` 时，会使用服务端给出的第一条匹配路线，这条路线可能就是 GasFree；如需排除，请指定 `--scheme exact`。使用 `--gasfree-relay` 选择服务。支付金额上限不包含 GasFree 手续费。
 
 ## 结果处理
 

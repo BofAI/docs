@@ -27,7 +27,7 @@ wallet-cli bai recharge --json-schema -o json
 
 ## GasFree payments {#gasfree-payments-tron}
 
-Require `--scheme exact_gasfree` for a TRON GasFree route and cap `--max-gasfree-fee`. Use `--gasfree-relay` to select the relay service. The payment amount cap does not include the GasFree fee.
+To pay a TRON route through GasFree, pass `--scheme exact_gasfree` and cap `--max-gasfree-fee`. Without `--scheme`, the first matching route the server offers is used, which can be a GasFree route; pass `--scheme exact` to rule that out. Use `--gasfree-relay` to select the relay service. The payment amount cap does not include the GasFree fee.
 
 ## Result handling
 

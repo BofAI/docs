@@ -14,9 +14,11 @@ Use the exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NIL
 
 | Network Name | CAIP-2 ID | SDK Constant | Description |
 | :----------- | :-------- | :----------- | :---------- |
-| **TRON Mainnet** | `tron:0x2b6653dc` | `TRON_MAINNET` | TRON Mainnet (Production) |
-| **TRON Shasta**  | `tron:0x94a9059e`  | `TRON_SHASTA`  | TRON Shasta Testnet |
-| **TRON Nile**    | `tron:0xcd8690dc`  | `TRON_NILE`    | TRON Nile Testnet |
+| **TRON Mainnet** | `tron:728126428` | `TRON_MAINNET` | TRON Mainnet (Production) |
+| **TRON Shasta**  | `tron:2494104990`  | `TRON_SHASTA`  | TRON Shasta Testnet |
+| **TRON Nile**    | `tron:3448148188`  | `TRON_NILE`    | TRON Nile Testnet |
+
+> **TRON ID format**: since `@bankofai/x402-tron` 2.0.0 the SDK constants use decimal CAIP-2 references. The older hexadecimal forms (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) are still accepted as input aliases, and are what the official facilitator and the API catalog currently report.
 
 ---
 
@@ -73,11 +75,11 @@ x402 supports **TRC-20, BEP-20, and ERC-20** tokens. TRON/BSC routes use their c
 
 | Symbol | Network        | Contract Address |
 | :------ | :------------- | :--------------- |
-| **USDT** | `tron:0x2b6653dc` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
-| **USDT** | `tron:0xcd8690dc`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
-| **USDT** | `tron:0x94a9059e` | `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs` |
-| **USDD** | `tron:0x2b6653dc` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
-| **USDD** | `tron:0xcd8690dc`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
+| **USDT** | `tron:728126428` | `TR7NHqjeKQxGTCi8q8ZY4pL8otSzgjLj6t` |
+| **USDT** | `tron:3448148188`    | `TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf` |
+| **USDT** | `tron:2494104990` | `TG3XXyExBkPp9nzdajDZsozEu4BkaSJozs` |
+| **USDD** | `tron:728126428` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
+| **USDD** | `tron:3448148188`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56`    | `0x55d398326f99059fF775485246999027B3197955` |
 | **USDC** | `eip155:56`    | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
@@ -86,7 +88,7 @@ x402 supports **TRC-20, BEP-20, and ERC-20** tokens. TRON/BSC routes use their c
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registry resolves **USDT** on TRON (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) and BSC Mainnet (`eip155:56`), and **USDC** on BSC Testnet (`eip155:97`) and Base (`eip155:8453`, `eip155:84532`). The registry also ships defaults for twenty further EVM networks (MegaETH, Monad, Polygon, Arbitrum, Mezo, Radius, XDC, Celo, Flare and others) that this page does not table. Everything else in the table above — TRON USDD, BSC Mainnet USDC, BSC Testnet USDT, DHLU, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`. For CLI asset selection, follow the [wallet-cli command reference](/wallet-cli/command-reference/).
+> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registry resolves **USDT** on TRON (`tron:728126428`, `tron:3448148188`, `tron:2494104990`) and BSC Mainnet (`eip155:56`), and **USDC** on BSC Testnet (`eip155:97`) and Base (`eip155:8453`, `eip155:84532`). The registry also ships defaults for twenty further EVM networks (MegaETH, Monad, Polygon, Arbitrum, Mezo, Radius, XDC, Celo, Flare and others) that this page does not table. Everything else in the table above — TRON USDD, BSC Mainnet USDC, BSC Testnet USDT, DHLU, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`. For CLI asset selection, follow the [wallet-cli command reference](/wallet-cli/command-reference/).
 
 > **Extensibility**: The protocol is highly extensible. By registering tokens through the TRON token registry (`registerToken` from `@bankofai/x402-tron`) or the server's `EVM_TOKENS` config table, you can support any custom TRC-20 or BEP-20 token.
 
@@ -115,7 +117,7 @@ x402 uses typed data signing for all payment-related signatures.
 
 When configuring an `HTTP 402` payment request on the server side, you must explicitly define:
 
-1. **Network** – The unique network identifier (e.g., `tron:0xcd8690dc` or `eip155:8453`)
+1. **Network** – The unique network identifier (e.g., `tron:3448148188` or `eip155:8453`)
 2. **Asset** – The TRC-20/BEP-20/ERC-20 token **contract address**
 3. **Amount** – The integer value in the token’s **smallest unit (raw amount)**
 
@@ -153,7 +155,7 @@ An EVM client implementation for refundable Base Commerce Payments: authorize fu
 
 ### `exact_gasfree` Scheme
 
-TRON-specific. Allows buyers to pay with USDT/USDD **without holding TRX for gas fees**. The payer signs a TIP-712 GasFree permit and a relayer pays the on-chain energy via the official GasFree Proxy — no TRX for the payer, no one-time `approve`. Funds come from the payer's GasFree custodial wallet (not the main wallet). The SDK registers GasFree on `tron:0x2b6653dc`, `tron:0xcd8690dc`, and `tron:0x94a9059e`, but the official facilitator only proxies the relayer for TRON Mainnet and Nile — the built-in Shasta relayer URL has no upstream behind it, so Shasta GasFree needs your own relayer.
+TRON-specific. Allows buyers to pay with USDT/USDD **without holding TRX for gas fees**. The payer signs a TIP-712 GasFree permit and a relayer pays the on-chain energy via the official GasFree Proxy — no TRX for the payer, no one-time `approve`. Funds come from the payer's GasFree custodial wallet (not the main wallet). The SDK registers GasFree on `tron:728126428`, `tron:3448148188`, and `tron:2494104990`, but the official facilitator only proxies the relayer for TRON Mainnet and Nile — the built-in Shasta relayer URL has no upstream behind it, so Shasta GasFree needs your own relayer.
 
 The relayer charges its own fee in the payment token, **on top of** the payment amount, so the GasFree account must hold enough to cover both.
 
@@ -218,7 +220,7 @@ You may deploy your own Facilitator to gain full control over payment verificati
 
 | Core Component | TRON/BSC/Base Implementation |
 | :------------- | :---------------------- |
-| **Networks**   | The three TRON IDs (`tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`) plus any `eip155:<chainId>` — client and resource server both default to `eip155:*`, and the SDK ships default assets for twenty EVM networks beyond `eip155:56` / `97` / `8453` / `84532`. What can actually settle is bounded by the networks the facilitator has configured, which it must enumerate explicitly |
+| **Networks**   | The three TRON IDs (`tron:728126428`, `tron:2494104990`, `tron:3448148188`) plus any `eip155:<chainId>` — client and resource server both default to `eip155:*`, and the SDK ships default assets for twenty EVM networks beyond `eip155:56` / `97` / `8453` / `84532`. What can actually settle is bounded by the networks the facilitator has configured, which it must enumerate explicitly |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20, ERC-20 (Base official USDC) |
 | **Signing Mechanism** | TIP-712 / EIP-712 typed data signing |
 | **Payment Schemes** | `exact`, `upto`, `batch-settlement`, `exact_gasfree` (TRON) |

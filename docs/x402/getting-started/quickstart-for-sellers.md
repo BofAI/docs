@@ -125,8 +125,8 @@ Deposit a small amount of official USDC on Base Mainnet. The resource server onl
 
 **Testnet vs. Mainnet:**
 
-- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:0xcd8690dc` / `eip155:97` / `eip155:84532` (Base Sepolia, USDC — test here before going to Base Mainnet)
-- **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:0x2b6653dc` / `eip155:56` / Base `eip155:8453`
+- **Testnet**: Uses free test tokens, no real funds involved, suitable for development and debugging. Network identifiers: `tron:3448148188` / `eip155:97` / `eip155:84532` (Base Sepolia, USDC — test here before going to Base Mainnet)
+- **Mainnet**: Involves real payments, used when going live. Network identifiers: `tron:728126428` / `eip155:56` / Base `eip155:8453`
 
 ---
 
@@ -278,7 +278,7 @@ express()
 |------|------|--------|
 | `payTo` | Your receiving wallet address | TRON: `T...`; Base: `0x...` |
 | `accepts[].price` | Price per request — a **config** key; on the wire the SDK converts it into `amount` + `asset` (+ `extra`) | TRON: `"1 USDT"`; Base: `"1 USDC"` |
-| `accepts[].network` | Network to use | TRON Nile: `tron:0xcd8690dc`; Base Mainnet: `eip155:8453` |
+| `accepts[].network` | Network to use | TRON Nile: `tron:3448148188`; Base Mainnet: `eip155:8453` |
 | `accepts[].scheme` | Payment scheme | `"exact"` |
 | `routes` | Map of `"METHOD /path"` → `{ accepts }` | `"GET /credit"` |
 
@@ -411,7 +411,7 @@ pnpm dev:facilitator
 
 ```
 [evm] facilitator registered eip155:97 (0x…)
-[tron] facilitator registered tron:0xcd8690dc (T…)
+[tron] facilitator registered tron:3448148188 (T…)
 🚀 Facilitator on http://localhost:4022  (evm=true, tron=true)
 ```
 
@@ -508,7 +508,7 @@ EVM_RPC_URL=https://bsc-rpc.publicnode.com
 
 ### 3. (Self-Hosted) Switch the Facilitator to Mainnet
 
-The example facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:0x2b6653dc`), and `EVM_NETWORKS` includes `eip155:97` and `eip155:56` — Base (`eip155:8453` / `eip155:84532`) is not registered there, so add it if you settle on Base. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
+The example facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:728126428`), and `EVM_NETWORKS` includes `eip155:97` and `eip155:56` — Base (`eip155:8453` / `eip155:84532`) is not registered there, so add it if you settle on Base. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
 
 ```bash
 pnpm dev:facilitator

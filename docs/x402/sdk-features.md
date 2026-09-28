@@ -52,13 +52,15 @@ This page tracks the feature support of the x402 SDK.
 
 | Network | SDK Constant | Status |
 |-----------|--------------|--------|
-| `tron:0x2b6653dc` | `TRON_MAINNET` | ✅ |
-| `tron:0xcd8690dc` | `TRON_NILE` | ✅ |
-| `tron:0x94a9059e` | `TRON_SHASTA` | ✅ |
+| `tron:728126428` | `TRON_MAINNET` | ✅ |
+| `tron:3448148188` | `TRON_NILE` | ✅ |
+| `tron:2494104990` | `TRON_SHASTA` | ✅ |
 | `eip155:56` (BSC Mainnet) | - | ✅ |
 | `eip155:97` (BSC Testnet) | - | ✅ |
 | `eip155:8453` (Base Mainnet) | - | ✅ |
 | `eip155:84532` (Base Sepolia) | - | ✅ (CLI/SDK testing) |
+
+> **TRON ID format**: since `@bankofai/x402-tron` 2.0.0 the SDK constants use decimal CAIP-2 references. The older hexadecimal forms (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) are still accepted as input aliases, and are what the official facilitator and the API catalog currently report.
 
 > Twenty further upstream EVM chains (MegaETH, Monad, Polygon, Arbitrum One/Sepolia, Celo, XDC, Flare, Mezo, Radius, Stable, ADI, HPP, Igra, …) are also wired into the EVM default-asset registry. The public API Catalog publishes Base Mainnet routes only; Base Sepolia remains available for CLI/SDK testing.
 
@@ -207,8 +209,8 @@ Since 1.1.0 a client will only pay assets it recognizes from the default-asset r
 
 | Token | Network | Status |
 |--------|---------|--------|
-| USDT (TRC-20) | `tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e` | ✅ |
-| USDD (TRC-20) | `tron:0x2b6653dc`, `tron:0xcd8690dc` | ✅ |
+| USDT (TRC-20) | `tron:728126428`, `tron:3448148188`, `tron:2494104990` | ✅ |
+| USDD (TRC-20) | `tron:728126428`, `tron:3448148188` | ✅ |
 | USDT (BEP-20) | `eip155:56`, `eip155:97` | ✅ |
 | USDC (BEP-20) | `eip155:56`, `eip155:97` | ✅ |
 | DHLU (BSC testnet, ERC-3009) | `eip155:97` | ✅ |
