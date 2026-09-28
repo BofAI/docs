@@ -8,6 +8,24 @@ description: 'Release notes for SKILLS.'
 Release notes for SKILLS.
 
 <div className="changelog-entry">
+<div className="changelog-date">Sep 28, 2026</div>
+<div className="changelog-body">
+
+### Skills 3.0.0 — wallet-cli is the only wallet path
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">Breaking</span></div>
+
+- **Four skills removed**: `agent-wallet`, `bankofai-guide`, `x402-payment`, and `recharge-skill`, together with their bundled helpers. Use `wallet-cli` for wallet setup, `wallet-cli x402` for x402 payments, and `wallet-cli bai` for B.AI recharge. The catalog now holds **6 skills**, all versioned 3.0.0.
+- **No collection-wide wallet guard** — SunSwap, SunPump, and SunPerp no longer require an agent-wallet setup. Each keeps its own supported credentials and signing configuration.
+- **`wallet-cli` pinned to 4.14.0** — help, version, schema discovery, and bare CLI calls no longer read wallet data; operational commands still run the startup migration first.
+- **Docs** — the Skill catalog lists only the current skills, and the install command is `npx skills add https://github.com/BofAI/skills -g`.
+
+👉 [Skill Catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/) · [Quick Start](/McpServer-Skills/SKILLS/QuickStart/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Sep 9, 2026</div>
 <div className="changelog-body">
 

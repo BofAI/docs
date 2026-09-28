@@ -8,6 +8,32 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-09-28</div>
+<div className="changelog-body">
+
+### SKILLS 3.0.0——移除四个旧技能
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">破坏性变更</span></div>
+
+- Skills 3.0.0 删除了 `agent-wallet`、`bankofai-guide`、`x402-payment` 和 `recharge-skill`，技能目录现有 **6 个技能**；钱包配置、x402 支付和 B.AI 充值统一改用 **`wallet-cli`**，并固定为 `@tron-walletcli/wallet-cli@4.14.0`。[详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-09-28</div>
+<div className="changelog-body">
+
+### x402 命令行文档迁移到 wallet-cli 4.14
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">x402</span><span className="changelog-tag">CLI</span></div>
+
+- x402 命令行指南移至 [Wallet CLI](/zh-Hans/wallet-cli/)，统一使用 `wallet-cli x402` 4.14.0；独立 x402-cli 的页面已移除。[详情](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-09-09</div>
 <div className="changelog-body">
 

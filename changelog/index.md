@@ -8,6 +8,32 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
+<div className="changelog-date">Sep 28, 2026</div>
+<div className="changelog-body">
+
+### SKILLS 3.0.0 — four legacy skills removed
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">Breaking</span></div>
+
+- Skills 3.0.0 removes `agent-wallet`, `bankofai-guide`, `x402-payment`, and `recharge-skill`. The catalog now holds **6 skills**; wallet setup, x402 payments, and B.AI recharge all go through **`wallet-cli`**, now pinned to `@tron-walletcli/wallet-cli@4.14.0`. [Details](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Sep 28, 2026</div>
+<div className="changelog-body">
+
+### x402 command-line docs move to wallet-cli 4.14
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">CLI</span></div>
+
+- The x402 command-line guides now live under [Wallet CLI](/wallet-cli/) and use `wallet-cli x402` 4.14.0; the standalone x402-cli pages were removed. [Details](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Sep 9, 2026</div>
 <div className="changelog-body">
 
