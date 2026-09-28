@@ -15,6 +15,10 @@ wallet-cli --version
 wallet-cli x402 pay --json-schema -o json
 ```
 
+:::tip 安装时报权限错误？
+在 macOS 或 Linux 上，如果 `npm install -g` 报权限错误（如 `EACCES`），可以在命令前加 `sudo`；或者去掉 `-g` 安装到当前目录，之后用 `npx wallet-cli` 运行。
+:::
+
 4.14.0 的帮助、版本和 schema 查询不读取钱包数据。首次执行其他命令可能返回 `command: "migration"`；这表示只完成了迁移，原命令尚未执行，需检查结果后再运行。
 
 ## 准备钱包

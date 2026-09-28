@@ -15,6 +15,10 @@ wallet-cli --version
 wallet-cli x402 pay --json-schema -o json
 ```
 
+:::tip Permission error on install?
+If `npm install -g` fails with a permission error (such as `EACCES`) on macOS or Linux, either prefix the command with `sudo`, or drop `-g` to install into the current directory and run the CLI as `npx wallet-cli`.
+:::
+
 In 4.14.0, help, version, and schema discovery do not read wallet data. A first operational command may return `command: "migration"`: only the migration ran, so inspect its result before invoking the original command again.
 
 ## Prepare an account

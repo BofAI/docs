@@ -14,10 +14,14 @@ npm install -g @tron-walletcli/wallet-cli@4.14.0
 wallet-cli --version
 ```
 
+:::tip 安装时报权限错误？
+在 macOS 或 Linux 上，如果 `npm install -g` 报权限错误（如 `EACCES`），可以在命令前加 `sudo`；或者去掉 `-g` 安装到当前目录，之后用 `npx wallet-cli` 运行。
+:::
+
 ## 选择 Skill
 
 ```bash
-npx skills add https://github.com/BofAI/skills/tree/main --skill wallet-cli -g
+npx skills add https://github.com/BofAI/skills --skill wallet-cli -g
 ```
 
 `npx skills add` 只安装 Skill 定义，不安装外部 CLI。安装后检查 `wallet-cli/SKILL.md` 的依赖版本。4.14.0 的 Skill 更新正在 [Skills PR #81](https://github.com/BofAI/skills/pull/81) 中推进；如果稳定分支仍要求 4.13.0，不要忽略版本检查或自动降级，可先按 [CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)直接使用 4.14.0，待对应 Skill 发布后再安装。
@@ -25,7 +29,7 @@ npx skills add https://github.com/BofAI/skills/tree/main --skill wallet-cli -g
 需要社区业务时，使用交互式选择安装：
 
 ```bash
-npx skills add https://github.com/BofAI/skills/tree/main -g
+npx skills add https://github.com/BofAI/skills -g
 ```
 
 只选择所需 Skills，并查看各自的依赖和凭据要求。SunSwap、SunPump、SunPerp、USDD 的现有实现不应被假定已经全部迁移到 wallet-cli。

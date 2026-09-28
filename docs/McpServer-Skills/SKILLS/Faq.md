@@ -139,7 +139,7 @@ rm -rf ~/.agents/skills/sunswap-dex-trading
 **Update:** Re-run the install command (keep `-g` so it refreshes the global copy). It will update all skills to the latest version.
 
 ```bash
-npx skills add https://github.com/BofAI/skills/tree/main -y -g
+npx skills add https://github.com/BofAI/skills -y -g
 ```
 
 ---
