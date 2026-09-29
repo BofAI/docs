@@ -16,7 +16,7 @@ wallet-cli --version
 ```
 
 :::tip 安装时报权限错误？
-在 macOS 或 Linux 上，如果 `npm install -g` 报权限错误（如 `EACCES`），可以在命令前加 `sudo`；或者去掉 `-g` 安装到当前目录，之后用 `npx wallet-cli` 运行。
+在 macOS 或 Linux 上，如果 `npm install -g` 报权限错误（如 `EACCES`），请参考 npm 官方文档：[Resolving EACCES permissions errors when installing packages globally](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally)。
 :::
 
 ## 选择 Skill
