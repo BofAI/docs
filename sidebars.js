@@ -175,6 +175,7 @@ const sidebars = {
               collapsed: true,
               items: [
                 { type: 'doc', id: 'llmservice/models/claude-opus-5.5', label: 'Claude Opus 5.5' },
+                { type: 'doc', id: 'llmservice/models/claude-sonnet-5-5', label: 'Claude Sonnet 5.5' },
                 { type: 'doc', id: 'llmservice/models/claude-opus-5', label: 'Claude Opus 5' },
                 { type: 'doc', id: 'llmservice/models/claude-sonnet-5', label: 'Claude Sonnet 5' },
                 { type: 'doc', id: 'llmservice/models/claude-fable-5-1', label: 'Claude Fable 5.1' },
