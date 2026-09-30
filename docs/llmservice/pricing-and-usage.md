@@ -55,6 +55,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | DeepSeek V4 Pro | Off-Peak `$0.66`<br/>Peak `$1.32` | Off-Peak `$0.66`<br/>Peak `$1.32` | Off-Peak `$0.022`<br/>Peak `$0.044` | Off-Peak `$1.98`<br/>Peak `$3.96` | - |
 | Grok 4.6 | `$2.00` | `$2.00` | `$0.50` | `$6.00` | - |
 | Grok 4.5 | `$2.00` | `$2.00` | `$0.30` | `$6.00` | - |
+| GPT-6.1 Sol | `$2.00` | `$2.50` | `$0.10` | `$10.00` | `$0.01` |
 | GPT-6 Astra | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
 | GPT-6 Sol | `$2.00` | `$2.50` | `$0.20` | `$10.00` | `$0.01` |
 | GPT-6 Luna | `$0.10` | `$0.125` | `$0.01` | `$0.50` | `$0.01` |

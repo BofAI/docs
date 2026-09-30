@@ -152,6 +152,7 @@ const sidebars = {
               label: 'OpenAI (GPT)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gpt-6-1-sol', label: 'GPT-6.1 Sol' },
                 { type: 'doc', id: 'llmservice/models/gpt-6-astra', label: 'GPT-6 Astra' },
                 { type: 'doc', id: 'llmservice/models/gpt-6-sol', label: 'GPT-6 Sol' },
                 { type: 'doc', id: 'llmservice/models/gpt-6-luna', label: 'GPT-6 Luna' },
