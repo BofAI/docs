@@ -14,11 +14,11 @@ B.AI 将逐步把使用 `DeepSeek-V4-Flash` 和 `DeepSeek-V4-Flash-Vision-Exp` �
   variant="discount"
   title="DeepSeek-V4.1-Flash"
   status="限时折扣"
-  detail="9 月 25 日 15:00 起 3 折"
+  detail="10 月 3 日 17:00 SGT 起 6 折"
 >
-活动折扣于 2026 年 9 月 25 日 15:00（北京时间，UTC+8）由标准参考价的 1 折调整为 3 折。
+活动于 2026 年 10 月 3 日 17:00（SGT，新加坡时间，UTC+8）起生效。
 
-活动价格随 DeepSeek 空闲时段与高峰时段同步变化，各时段均按对应标准价的 30% 结算。
+自生效时间起，活动价格随 DeepSeek 空闲时段与高峰时段同步变化，各时段均按对应标准价的 60% 结算。
 
 下方价格表继续展示标准参考价，实际结算价格及最终账单以平台页面展示为准。
 </ActivityCard>
