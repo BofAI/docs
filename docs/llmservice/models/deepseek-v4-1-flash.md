@@ -14,11 +14,11 @@ B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `D
   variant="discount"
   title="DeepSeek-V4.1-Flash"
   status="Limited-Time Discount"
-  detail="30% from Sep 25, 15:00 UTC+8"
+  detail="60% from Oct 3, 17:00 SGT"
 >
-At 15:00 on September 25, 2026 (Beijing Time, UTC+8), the promotional rate changes from 10% to 30% of the standard reference price.
+The offer takes effect at 17:00 on October 3, 2026 (SGT, UTC+8).
 
-The promotional price changes in step with DeepSeek's time-based pricing and remains at 30% of the applicable Off-Peak or Peak standard price.
+From that time, the promotional price changes in step with DeepSeek's time-based pricing and is billed at 60% of the applicable Off-Peak or Peak standard price.
 
 The pricing table below continues to show standard reference prices. Actual settlement and final billing are subject to the platform display.
 </ActivityCard>

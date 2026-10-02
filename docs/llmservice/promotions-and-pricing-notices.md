@@ -25,32 +25,6 @@ The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./mode
 
 <ActivityCard
   variant="discount"
-  title="DeepSeek-V4.1-Flash"
-  status="Limited-Time Discount"
-  detail="30% from Sep 25, 15:00 UTC+8"
->
-At 15:00 on September 25, 2026 (Beijing Time, UTC+8), the promotional rate changes from 10% to 30% of the standard reference price.
-
-The promotional price changes in step with DeepSeek's time-based pricing and remains at 30% of the applicable Off-Peak or Peak standard price.
-
-The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/deepseek-v4-1-flash.md) continue to show standard reference prices. Actual settlement and final billing are subject to the platform display.
-</ActivityCard>
-
-<ActivityCard
-  variant="discount"
-  title="GLM-5.3-Flash"
-  status="Limited-Time Discount"
-  detail="30% from Sep 25, 15:00 UTC+8"
->
-At 15:00 on September 25, 2026 (Beijing Time, UTC+8), the promotional rate changes from 10% to 30% of the standard reference price.
-
-From that time, eligible GLM-5.3-Flash usage through B.AI API and Chat is billed at 30% of the standard reference price.
-
-See the [model details](./models/glm-5-3-flash.md) for standard pricing.
-</ActivityCard>
-
-<ActivityCard
-  variant="discount"
   title="Qwen3.8-Flash"
   status="Limited-Time Discount"
   detail="30% from Sep 25, 15:00 UTC+8"
@@ -77,26 +51,26 @@ The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./mode
 
 <ActivityCard
   variant="discount"
-  title="GLM-5.2"
+  title="DeepSeek-V4.1-Flash"
   status="Limited-Time Discount"
-  detail="60% of Standard Price"
+  detail="60% from Oct 3, 17:00 SGT"
 >
-Offer starts August 12, 2026.
+The offer takes effect at 17:00 on October 3, 2026 (SGT, UTC+8).
 
-**Eligibility:** This offer applies to GLM-5.2 requests made through the B.AI API and B.AI web app.
+From that time, the promotional price changes in step with DeepSeek's time-based pricing and is billed at 60% of the applicable Off-Peak or Peak standard price.
 
-For a limited time, eligible requests are billed at 60% of the standard reference price. The promotional prices per 1 million tokens are: Input `$0.84`, Cache Write `$0.84`, Cache Read `$0.168`, and Output `$2.64`. See the [model details](./models/glm-5-2.md).
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/deepseek-v4-1-flash.md) continue to show standard reference prices. Actual settlement and final billing are subject to the platform display.
 </ActivityCard>
 
 <ActivityCard
   variant="discount"
-  title="GLM-5.3"
+  title="GLM-5.3-Flash"
   status="Limited-Time Discount"
-  detail="90% of Standard Price"
+  detail="70% from Oct 3, 17:00 SGT"
 >
-Offer starts August 14, 2026.
+The offer takes effect at 17:00 on October 3, 2026 (SGT, UTC+8).
 
-**Eligibility:** This offer applies to GLM-5.3 requests made through the B.AI API and B.AI web app.
+From that time, eligible GLM-5.3-Flash usage through B.AI API and Chat is billed at 70% of the standard reference price.
 
-For a limited time, eligible requests are billed at 90% of the standard reference price. The promotional prices per 1 million tokens are: Input `$1.26`, Cache Write `$1.26`, Cache Read `$0.252`, and Output `$3.96`. See the [model details](./models/glm-5-3.md).
+See the [model details](./models/glm-5-3-flash.md) for standard pricing.
 </ActivityCard>
