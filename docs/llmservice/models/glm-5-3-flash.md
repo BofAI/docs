@@ -10,9 +10,9 @@ GLM-5.3-Flash is an open-weight, natively multimodal model released by Z.AI on A
   variant="discount"
   title="GLM-5.3-Flash"
   status="Limited-Time Discount"
-  detail="70% from Oct 3, 17:00 SGT"
+  detail="70% from Oct 4, 10:00 SGT"
 >
-The offer takes effect at 17:00 on October 3, 2026 (SGT, UTC+8).
+The offer takes effect at 10:00 on October 4, 2026 (SGT, UTC+8).
 
 From that time, eligible GLM-5.3-Flash usage through B.AI API and Chat is billed at 70% of the standard reference price.
 

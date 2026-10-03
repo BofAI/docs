@@ -322,6 +322,25 @@ const sidebars = {
             },
           ],
         },
+        {
+          type: 'category',
+          label: 'Video Generation Models',
+          collapsed: true,
+          items: [
+            { type: 'doc', id: 'llmservice/video-models/pricing', label: 'Video Model Pricing' },
+            {
+              type: 'category',
+              label: 'ByteDance (Seedance)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/video-models/seedance-2.5', label: 'Seedance 2.5' },
+                { type: 'doc', id: 'llmservice/video-models/seedance-2.0', label: 'Seedance 2.0' },
+                { type: 'doc', id: 'llmservice/video-models/seedance-2.0-fast', label: 'Seedance 2.0 Fast' },
+                { type: 'doc', id: 'llmservice/video-models/seedance-2.0-mini', label: 'Seedance 2.0 Mini' },
+              ],
+            },
+          ],
+        },
         { type: 'doc', id: 'llmservice/memory', label: 'Memory' },
         {
           type: 'category',

@@ -4,7 +4,7 @@
 
 The platform uses a unified Credits system to measure and settle usage across all AI services.
 
-> **Price display:** Input, cache write, cache read, and output prices are shown in USD per 1 million tokens. Web search prices are shown in USD per use.
+> **Price display:** For text-output models, input, cache write, cache read, and output prices are shown in USD per 1 million tokens. Web search prices are shown in USD per use. Image and video generation use the billing units shown in their respective pricing tables; Seedance prices are shown in `USD / 1M Video Tokens`.
 >
 > **Credits settlement:** B.AI bills accounts in Credits at `1 USD = 1,000,000 Credits`. For example, an input price of `0.30` means `$0.30 / 1M input tokens`, which corresponds to `300,000 Credits` for 1 million input tokens.
 
@@ -12,9 +12,11 @@ The platform uses a unified Credits system to measure and settle usage across al
 
 **Token usage details:** The response details panel shows a breakdown of token usage, helping you understand where Credits are spent and optimize future usage.
 
-**Model pricing:** Different AI models use different billing structures based on their capabilities and output type. Text-output models are generally billed by input and output tokens, while image generation models may be billed by token usage or by each generated image. Cache-enabled requests may incur separate cache write and cache read usage. Web search incurs an additional per-use charge. See the sections below for detailed pricing.
+**Model pricing:** Different AI models use different billing structures based on their capabilities and output type. Text-output models are generally billed by input and output tokens, image generation models may be billed by token usage or by each generated image, and Seedance video generation models are billed by video tokens, with rates depending on output resolution and whether the input includes video. Cache-enabled text requests may incur separate cache write and cache read usage. Web search incurs an additional per-use charge. See the corresponding pricing tables for details.
 
 **Image generation pricing:** Image generation models may be billed by token usage or by each generated image. See [Image Generation Model Pricing](./image-models/pricing.md) for the applicable billing unit and rates.
+
+**Video generation pricing:** See [Video Generation Model Pricing](./video-models/pricing.md) for Seedance 2.0, Seedance 2.0 Fast, Seedance 2.0 Mini, and Seedance 2.5. Prices are shown in `USD / 1M Video Tokens`, not per second or per video. The video pricing table distinguishes tasks with and without video input and includes resolution-specific rates.
 
 ### Text-Output Model Standard Pricing
 

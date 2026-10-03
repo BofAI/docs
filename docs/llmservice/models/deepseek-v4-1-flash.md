@@ -14,9 +14,9 @@ B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `D
   variant="discount"
   title="DeepSeek-V4.1-Flash"
   status="Limited-Time Discount"
-  detail="60% from Oct 3, 17:00 SGT"
+  detail="60% from Oct 4, 10:00 SGT"
 >
-The offer takes effect at 17:00 on October 3, 2026 (SGT, UTC+8).
+The offer takes effect at 10:00 on October 4, 2026 (SGT, UTC+8).
 
 From that time, the promotional price changes in step with DeepSeek's time-based pricing and is billed at 60% of the applicable Off-Peak or Peak standard price.
 

@@ -53,9 +53,9 @@ import ActivityCard from '@site/src/components/ActivityCard';
   variant="discount"
   title="DeepSeek-V4.1-Flash"
   status="限时折扣"
-  detail="10 月 3 日 17:00 SGT 起 6 折"
+  detail="10 月 4 日 10:00 SGT 起 6 折"
 >
-活动于 2026 年 10 月 3 日 17:00（SGT，新加坡时间，UTC+8）起生效。
+活动于 2026 年 10 月 4 日 10:00（SGT，新加坡时间，UTC+8）起生效。
 
 自生效时间起，活动价格随 DeepSeek 空闲时段与高峰时段同步变化，各时段均按对应标准价的 60% 结算。
 
@@ -66,9 +66,9 @@ import ActivityCard from '@site/src/components/ActivityCard';
   variant="discount"
   title="GLM-5.3-Flash"
   status="限时折扣"
-  detail="10 月 3 日 17:00 SGT 起 7 折"
+  detail="10 月 4 日 10:00 SGT 起 7 折"
 >
-活动于 2026 年 10 月 3 日 17:00（SGT，新加坡时间，UTC+8）起生效。
+活动于 2026 年 10 月 4 日 10:00（SGT，新加坡时间，UTC+8）起生效。
 
 自生效时间起，符合条件的 GLM-5.3-Flash API 和 Chat 使用按标准参考价的 70% 结算。
 
