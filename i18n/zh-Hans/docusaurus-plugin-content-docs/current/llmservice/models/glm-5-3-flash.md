@@ -10,9 +10,9 @@ GLM-5.3-Flash 是 Z.AI 于 2026 年 8 月 26 日发布的开放权重原生多�
   variant="discount"
   title="GLM-5.3-Flash"
   status="限时折扣"
-  detail="10 月 3 日 17:00 SGT 起 7 折"
+  detail="10 月 4 日 10:00 SGT 起 7 折"
 >
-活动于 2026 年 10 月 3 日 17:00（SGT，新加坡时间，UTC+8）起生效。
+活动于 2026 年 10 月 4 日 10:00（SGT，新加坡时间，UTC+8）起生效。
 
 自生效时间起，符合条件的 GLM-5.3-Flash API 和 Chat 使用按标准参考价的 70% 结算。
 

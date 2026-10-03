@@ -91,6 +91,18 @@
     "message": "图像模型定价",
     "description": "The label for the Image Model Pricing document in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.category.Video Generation Models": {
+    "message": "视频生成模型",
+    "description": "The label for the video model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Video Model Pricing": {
+    "message": "视频模型定价",
+    "description": "The label for the Video Model Pricing document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.ByteDance (Seedance)": {
+    "message": "字节跳动（Seedance）",
+    "description": "The label for the ByteDance video model category in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.category.OpenAI (GPT Image)": {
     "message": "OpenAI（GPT Image）",
     "description": "The label for the OpenAI image model category in sidebar docsSidebar"
