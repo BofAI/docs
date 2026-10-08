@@ -75,6 +75,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | GPT-5 Nano | `$0.05` | `$0.05` | `$0.005` | `$0.40` | - |
 | Claude Opus 5.5 | `$4.00` | `$5.00` | `$0.20` | `$20.00` | `$0.01` |
 | Claude Sonnet 5.5 | `$2.00` | `$2.50` | `$0.20` | `$10.00` | `$0.01` |
+| Claude Haiku 5.5<br/>Prompt up to 100,000 tokens | `$0.10` | `$0.125` | `$0.01` | `$0.50` | `$0.01` |
+| Claude Haiku 5.5<br/>Prompt over 100,000 tokens | `$0.50` | `$0.625` | `$0.05` | `$2.50` | `$0.01` |
 | Claude Opus 5 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
 | Claude Fable 5.1 | `$10.00` | `$12.50` | `$0.25` | `$50.00` | - |
 | Claude Fable 5 | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
@@ -101,6 +103,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **DeepSeek time-based pricing:** Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods. DeepSeek models used in B.AI Chat are billed at Off-Peak rates. The table lists each model's standard reference prices.
 
 **Cache pricing:** `Cache Write` indicates the price charged when cache writing occurs; it does not mean that all models use the same cache retention period. Cache policies, retention periods, long-context pricing, and extended caching capabilities may vary by model. If a model uses special caching rules, 1-hour cache write pricing, or time-based pricing, refer to its model detail page.
+
+**Claude Haiku 5.5:** The table shows 5-minute cache write rates. Prompts over 100,000 tokens use the higher token rates for the entire request, including output and cached tokens. See the [model detail page](./models/claude-haiku-5-5.md) for 1-hour cache write prices and tier rules.
 :::
 
 :::info Pricing note
