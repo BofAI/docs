@@ -2,11 +2,13 @@
 
 B.AI provides a unified large language model API compatible with the OpenAI Chat Completions, OpenAI Responses, and Anthropic Messages protocols, as well as a Decisions API compatible with the TypeSafe System One protocol. Use the same B.AI API Key with different protocols and choose the endpoint that matches your application or client.
 
+B.AI also provides an asynchronous [Video Generation API](./videos.md) to create tasks, query their status, and download completed videos.
+
 - **API version:** `v1`
 - **Production Base URL:** `https://api.b.ai/v1`
 - **Request format:** `application/json`
 - **Character encoding:** UTF-8
-- **Streaming:** Server-Sent Events (SSE)
+- **Text-generation streaming:** Server-Sent Events (SSE)
 
 ---
 
@@ -48,6 +50,8 @@ Replace `your-model-id` with a model ID enabled for the selected endpoint.
 
 B.AI supports the following authentication headers. Both use the same platform-issued API Key; choose either one.
 
+For video generation, use the Bearer authentication shown in the [Video Generation API](./videos.md) request example; `x-api-key` support for that endpoint is not documented here.
+
 ### Bearer Token
 
 ```http
@@ -86,6 +90,11 @@ Example:
 | `POST` | `/responses` | OpenAI Responses | Agents, reasoning, tool use, and Codex |
 | `POST` | `/chat/completions` | OpenAI Chat Completions | General chat completions and existing OpenAI-compatible applications |
 | `POST` | `/messages` | Anthropic Messages | Claude SDK, Claude Code, and other Anthropic-compatible clients |
+| `POST` | [`/videos`](./videos.md) | - | Create an asynchronous video-generation task |
+| `GET` | [`/videos/{task_id}`](./videos.md) | - | Query a video task's generation and billing status |
+| `GET` | [`/videos/{task_id}/content`](./videos.md) | - | Download a completed and settled video with authentication |
+
+The video endpoint's protocol compatibility is not specified in this reference; use its documented request format.
 
 ---
 
@@ -761,11 +770,15 @@ model = "your-model-id"
 
 Choose the endpoint that matches the client's protocol and request structure.
 
+For video generation, use `POST /v1/videos` and the request format in the [Video Generation API](./videos.md), rather than a text-generation endpoint from the table above.
+
 ---
 
 ## Error Responses
 
-Errors from non-streaming requests and errors that occur before an SSE connection is established are returned as JSON:
+For the text-generation endpoints described above, errors from non-streaming requests and errors that occur before an SSE connection is established are returned as JSON. This section does not specify the video endpoint's response format.
+
+Example:
 
 ```json
 {

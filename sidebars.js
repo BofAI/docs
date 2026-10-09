@@ -361,6 +361,7 @@ const sidebars = {
           collapsed: true,
           items: [
             { type: 'doc', id: 'llmservice/api/API', label: 'API Overview' },
+            { type: 'doc', id: 'llmservice/api/videos', label: 'Video Generation API' },
             { type: 'doc', id: 'llmservice/api/decisions-api', label: 'Decisions API' },
             { type: 'doc', id: 'llmservice/api/balance', label: 'Balance API' },
           ],
