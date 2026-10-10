@@ -2,11 +2,13 @@
 
 B.AI 提供统一的大语言模型 API，兼容 OpenAI Chat Completions、OpenAI Responses 和 Anthropic Messages 协议，同时提供兼容 TypeSafe System One 协议的 Decisions API。开发者可以使用同一个 B.AI API Key 接入不同协议，并根据应用或客户端的要求选择对应端点。
 
+B.AI 还提供异步[视频生成 API](./videos.md)，支持创建任务、查询状态及下载已完成的视频。
+
 - **API 版本：** `v1`
 - **生产环境 Base URL：** `https://api.b.ai/v1`
 - **请求格式：** `application/json`
 - **字符编码：** UTF-8
-- **流式传输：** Server-Sent Events（SSE）
+- **文本生成流式传输：** Server-Sent Events（SSE）
 
 ---
 
@@ -48,6 +50,8 @@ curl https://api.b.ai/v1/responses \
 
 B.AI 支持以下两种认证请求头。两者使用平台签发的同一种 API Key，选择其中一种即可。
 
+视频生成请使用[视频生成 API](./videos.md)示例中的 Bearer 认证；本页暂未说明该端点是否支持 `x-api-key`。
+
 ### Bearer Token
 
 ```http
@@ -86,6 +90,11 @@ x-api-key: <BAI_API_KEY>
 | `POST` | `/responses` | OpenAI Responses | Agent、推理、工具调用及 Codex 等场景 |
 | `POST` | `/chat/completions` | OpenAI Chat Completions | 通用聊天补全及现有 OpenAI 兼容应用 |
 | `POST` | `/messages` | Anthropic Messages | Claude SDK、Claude Code 等 Anthropic 兼容应用 |
+| `POST` | [`/videos`](./videos.md) | - | 创建异步视频生成任务 |
+| `GET` | [`/videos/{task_id}`](./videos.md) | - | 查询视频任务的生成及计费状态 |
+| `GET` | [`/videos/{task_id}/content`](./videos.md) | - | 通过鉴权下载已完成生成和结算的视频 |
+
+本页暂未标注视频端点的协议兼容性，请使用对应文档中的请求格式。
 
 ---
 
@@ -761,11 +770,15 @@ model = "your-model-id"
 
 请选择与客户端协议及请求结构匹配的端点。
 
+视频生成请使用 `POST /v1/videos`，请求格式见[视频生成 API](./videos.md)，不应直接使用上表中的文本生成端点。
+
 ---
 
 ## 错误响应
 
-非流式请求以及建立 SSE 连接前发生的错误，统一返回 JSON：
+对于上述文本生成端点，非流式请求以及建立 SSE 连接前发生的错误，统一返回 JSON。本节不说明视频端点的响应格式。
+
+示例：
 
 ```json
 {

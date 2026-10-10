@@ -77,3 +77,5 @@ The following limits and result-retention rules describe the model provider's se
 ### Asynchronous Generation
 
 Generation is task-based: submit a request, check its status, and retrieve the result after completion. It is not a streamed text reply. Use B.AI's supported video-generation interface; do not substitute a chat endpoint or the provider's endpoint without confirming compatibility.
+
+See the [Video Generation API](../api/videos.md) for task creation, status queries, video downloads, and billing behavior.
