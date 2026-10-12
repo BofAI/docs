@@ -7,6 +7,7 @@ const sidebars = {
       label: 'Overview',
     },
     'x402-stablecoin-payments-for-agents',
+    'trc20-approval-resource-sponsoring',
     // 'first-onchain-swap', // 暂时隐藏（文件保留）
   ],
 }
