@@ -196,6 +196,7 @@ const sidebars = {
               label: 'Google (Gemini)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gemini-4-argon', label: 'Gemini 4 Argon' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-8-flash', label: 'Gemini 3.8 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-6-flash', label: 'Gemini 3.6 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-5-flash', label: 'Gemini 3.5 Flash' },
