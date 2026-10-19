@@ -294,6 +294,7 @@ const sidebars = {
               label: 'MiniMax',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/minimax-m3.1-flash', label: 'MiniMax-M3.1-Flash' },
                 { type: 'doc', id: 'llmservice/models/minimax-m3', label: 'MiniMax M3' },
                 { type: 'doc', id: 'llmservice/models/minimax-m2.7', label: 'MiniMax M2.7' },
               ],
