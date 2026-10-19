@@ -28,6 +28,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 | Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
 | :--- | ---: | ---: | ---: | ---: | ---: |
+| MiniMax-M3.1-Flash | `$0.15` | `$0.15` | `$0.015` | `$0.60` | - |
 | MiniMax M3 | `$0.30` | `$0.30` | `$0.06` | `$1.20` | - |
 | MiniMax M2.7 | `$0.30` | `$0.375` | `$0.06` | `$1.20` | - |
 | Kimi K3 | `$3.00` | `$3.00` | `$0.30` | `$15.00` | - |
