@@ -29,7 +29,7 @@ MiniMax-M3.1-Flash, also known as Space Bunny, is a MiniMax M-series model desig
 | **Reasoning** | Supports reasoning tasks; available thinking modes and effort controls are not confirmed for this release. |
 | **Multimodal** | Supports visual understanding; the exact supported input and output modalities are not confirmed for this release. |
 | **Context Window** | 1M tokens. |
-| **Max Output** | 128K tokens. |
+| **Max Output** | 512K tokens. |
 | **Tool Use** | Tool-assisted workflows are reported; API function-calling support and controls are not confirmed for this release. |
 
 ### Known Limitations
