@@ -4,10 +4,6 @@
 
 MiMo-V2.6-Flash is an open-weight, native multimodal reasoning model released by Xiaomi MiMo on September 22, 2026. Available through the API as `mimo-v2.6-flash`, it combines a sparse Mixture-of-Experts architecture with a 1M-token context window, targeting frequent calls, large-scale office workloads, and cost-sensitive coding and agent applications.
 
-:::info Promotion update
-From 17:00 on October 22, 2026 (Beijing Time, UTC+8), MiMo-V2.6-Flash leaves this promotion and returns to the standard reference prices shown on this page. Until then, current promotion rules continue to apply.
-:::
-
 ## Key Features
 
 * **Efficient Sparse Architecture**: Uses 309 billion total parameters with 15 billion activated parameters; the published MiMo-V2.6-Flash-RL checkpoint is MIT-licensed.

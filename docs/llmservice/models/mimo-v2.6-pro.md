@@ -4,10 +4,6 @@
 
 MiMo-V2.6-Pro is Xiaomi MiMo's flagship open-weight, native multimodal reasoning model in the V2.6 series, released on September 22, 2026. Available through the API as `mimo-v2.6-pro`, its sparse Mixture-of-Experts architecture and 1M-token context window target complex software engineering, extended agent workflows, and research involving multiple tools and modalities.
 
-:::info Promotion update
-From 17:00 on October 22, 2026 (Beijing Time, UTC+8), MiMo-V2.6-Pro leaves this promotion and returns to the standard reference prices shown on this page. Until then, current promotion rules continue to apply.
-:::
-
 ## Key Features
 
 * **High-Capacity Sparse Architecture**: Uses 1.02 trillion total parameters with 42 billion activated parameters; the published MiMo-V2.6-Pro-RL checkpoint is MIT-licensed.
