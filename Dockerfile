@@ -1,5 +1,5 @@
 # Stage 1: Build the Docusaurus application
-FROM node:20.18.1 AS build
+FROM node:22.23.4 AS build
 
 ARG APP_ENV
 
