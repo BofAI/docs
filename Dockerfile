@@ -32,7 +32,12 @@ COPY . .
 RUN yarn build
 
 # Stage 2: Serve the application with Nginx
-FROM nginx:alpine
+# Pin the Alpine branch so security fixes come from the same branch's repository.
+FROM nginx:1.31-alpine3.24
+
+# CVE-2026-111497: brotli-libs must be 1.2.1-r0 or a later fix from the Alpine 3.24 repository.
+# apk fails, and so does the build, if the repository cannot satisfy the constraint.
+RUN apk add --no-cache --upgrade 'brotli-libs>=1.2.1-r0'
 
 # Create the log directory used in nginx.conf
 RUN mkdir -p /app/logs
