@@ -38,6 +38,10 @@ MiniMax-M3.1-Flash, also known as Space Bunny, is a MiniMax M-series model desig
 
 ## Standard Pricing
 
+:::info MiniMax-M3.1-Flash 50% off promotion
+Starting at 17:00 on October 26, 2026 (SGT, UTC+8), MiniMax-M3.1-Flash is billed at 50% of the standard reference price. The table below continues to show standard reference prices. See [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) for details.
+:::
+
 The token prices below are shown in USD per 1 million tokens.
 
 | Model | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
@@ -47,5 +51,5 @@ The token prices below are shown in USD per 1 million tokens.
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
 :::

@@ -63,5 +63,5 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **Standard price effective date:** The prices above take effect at 00:00 on September 10, 2026 (UTC+8). This standard price update does not affect current promotions. During a promotion, billing follows the applicable promotion rules; after it ends, the standard reference prices above apply.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through limited-time offers, top-up bonuses, and account benefits. Specific prices, bonus Credits, account benefits, and final billing are subject to the platform display and billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through limited-time offers and account benefits. Specific prices, account benefits, and final billing are subject to the platform display and billing records.
 :::

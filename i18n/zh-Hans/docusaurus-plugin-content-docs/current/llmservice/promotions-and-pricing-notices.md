@@ -10,7 +10,18 @@ import ActivityCard from '@site/src/components/ActivityCard';
 本栏目展示当前生效及已公布的近期活动：免费活动优先，折扣活动按优惠力度由高至低排列。
 :::
 
-本页提前展示 2026 年 10 月 22 日 17:00（北京时间，UTC+8）起的活动安排；生效前仍按现行活动规则结算。
+<ActivityCard
+  variant="discount"
+  title="MiniMax-M3.1-Flash"
+  status="限时折扣"
+  detail="10 月 26 日 17:00 SGT 起 5 折"
+>
+活动于 2026 年 10 月 26 日 17:00（SGT，新加坡时间，UTC+8）起生效。
+
+自生效时间起，MiniMax-M3.1-Flash 享 5 折优惠，按标准参考价的 50% 结算。
+
+[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/minimax-m3.1-flash.md)继续展示标准参考价，活动适用规则、实际结算价格及最终账单以平台页面展示为准。
+</ActivityCard>
 
 <ActivityCard
   variant="discount"

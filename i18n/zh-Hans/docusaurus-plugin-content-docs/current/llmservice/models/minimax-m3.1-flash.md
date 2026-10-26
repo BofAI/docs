@@ -38,6 +38,10 @@ MiniMax-M3.1-Flash 又称 Space Bunny，是 MiniMax M 系列中面向办公自�
 
 ## 标准价格
 
+:::info MiniMax-M3.1-Flash 5 折活动
+2026 年 10 月 26 日 17:00（SGT，新加坡时间，UTC+8）起，MiniMax-M3.1-Flash 享 5 折优惠，按标准参考价的 50% 结算。下表继续展示标准参考价，活动详情请查看[活动与调整公告](../promotions-and-pricing-notices.md)。
+:::
+
 以下 Token 价格均以美元计价，单位为每 100 万 Token。
 
 | 模型 | 输入<br/>（USD / 1M Tokens） | 缓存写入<br/>（USD / 1M Tokens） | 缓存读取<br/>（USD / 1M Tokens） | 输出<br/>（USD / 1M Tokens） | 网页搜索<br/>（USD / 次） |
@@ -47,5 +51,5 @@ MiniMax-M3.1-Flash 又称 Space Bunny，是 MiniMax M 系列中面向办公自�
 **Credits 结算：** B.AI 按照 `1 USD = 1,000,000 Credits` 换算，并从账户余额中扣除 Credits。
 
 :::info 价格说明
-文档价格为 B.AI 平台模型标准参考价，仅供基础计费说明使用。B.AI 可能会通过充值赠送及账户权益等方式，为用户提供更低的实际使用成本。具体价格、赠送 Credits、账户权益及最终结算请以平台页面展示和账单记录为准。
+文档价格为 B.AI 平台模型标准参考价，仅供基础计费说明使用。B.AI 可能会通过账户权益等方式，为用户提供更低的实际使用成本。具体价格、账户权益及最终结算请以平台页面展示和账单记录为准。
 :::

@@ -47,5 +47,5 @@ Prices are based on token usage and are shown in USD per 1 million tokens. B.AI 
 | **Image output** | `30.00` | Based on generated image output tokens |
 
 :::info Pricing note
-Documented prices are B.AI standard reference prices for basic billing guidance. B.AI may provide a lower effective usage cost through top-up rewards or account benefits. Prices, bonus Credits, account benefits, and final settlement are subject to the platform display and billing records.
+Documented prices are B.AI standard reference prices for basic billing guidance. B.AI may provide a lower effective usage cost through account benefits. Prices, account benefits, and final settlement are subject to the platform display and billing records.
 :::

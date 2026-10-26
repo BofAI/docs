@@ -10,7 +10,18 @@ This page summarizes active and announced upcoming limited-time offers and prici
 This section shows active and announced upcoming promotions: free offers appear first, followed by discounts from highest to lowest.
 :::
 
-This page previews the promotion lineup effective from 17:00 on October 22, 2026 (Beijing Time, UTC+8). Until then, current promotion rules continue to apply.
+<ActivityCard
+  variant="discount"
+  title="MiniMax-M3.1-Flash"
+  status="Limited-Time Discount"
+  detail="50% off from Oct 26, 17:00 SGT"
+>
+The offer takes effect at 17:00 on October 26, 2026 (SGT, UTC+8).
+
+From that time, MiniMax-M3.1-Flash receives a 50% discount and is billed at 50% of the standard reference price.
+
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/minimax-m3.1-flash.md) continue to show standard reference prices. Eligibility, actual settlement prices, and final billing are subject to the platform display.
+</ActivityCard>
 
 <ActivityCard
   variant="discount"
