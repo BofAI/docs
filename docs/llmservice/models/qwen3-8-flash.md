@@ -69,5 +69,5 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 Explicit cache creation costs `$0.20 per 1M tokens`. Both explicit and implicit cache hits cost `$0.016 per 1M tokens`.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through limited-time offers, top-up bonuses, and account benefits. Specific prices, bonus Credits, account benefits, and final billing are subject to the platform display and billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through limited-time offers and account benefits. Specific prices, account benefits, and final billing are subject to the platform display and billing records.
 :::

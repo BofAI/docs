@@ -1,15 +1,17 @@
-# Kimi K3.1 Pro
+# Kimi K3.1 Pro / Highspeed
 
 ## Overview
 
-[Kimi K3.1 Pro](https://www.kimi.com/en/blog/kimi-k3-1-pro) is Moonshot AI's first K3.1-series flagship, a 3T-class model developed through further post-training of Kimi K3. It combines native visual understanding and a 1M-token context window with improved coding, 3D creation, financial research, and multi-step agent capabilities.
+This page covers **Kimi K3.1 Pro** and **Kimi K3.1 Pro Highspeed**. Both variants offer the same intelligence and context window; their main differences are response speed and pricing.
+
+[Kimi K3.1 Pro](https://www.kimi.com/en/blog/kimi-k3-1-pro) is Moonshot AI's first K3.1-series flagship, a 3T-class model developed through further post-training of Kimi K3. Both Pro and its Highspeed variant combine native visual understanding and a 1M-token context window with improved coding, 3D creation, financial research, and multi-step agent capabilities.
 
 ## Model Variants
 
-| Model | API Model ID | Description |
-| :--- | :--- | :--- |
-| **Kimi K3.1 Pro** | `kimi-k3.1-pro` | Standard variant with lower input, output, and cache-write prices. |
-| **Kimi K3.1 Pro Highspeed** | `kimi-k3.1-pro-highspeed` | Same intelligence and context window, with approximately 2-3x the speed according to Moonshot AI; suited to interactive coding and latency-sensitive agent workflows. |
+| Model | API Model ID | Key Difference | Best For |
+| :--- | :--- | :--- | :--- |
+| **Kimi K3.1 Pro** | `kimi-k3.1-pro` | Lower input, output, and cache-write prices. | Cost-sensitive tasks. |
+| **Kimi K3.1 Pro Highspeed** | `kimi-k3.1-pro-highspeed` | Approximately 2-3x the speed of the standard variant, according to Moonshot AI. | Interactive coding and latency-sensitive agent workflows. |
 
 ## Key Features
 
@@ -27,6 +29,8 @@
 - **Financial Analysis**: Compare reports, trace supporting evidence, and prepare research or linked spreadsheet models with appropriate tools.
 
 ## Capabilities and Limitations
+
+The following capabilities and limitations apply to both model variants.
 
 | Capability | Description |
 | :--- | :--- |
@@ -59,5 +63,5 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
 :::

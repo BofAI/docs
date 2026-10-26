@@ -114,7 +114,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 :::
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
 :::
 
 :::info Auto Mode billing
@@ -136,8 +136,8 @@ The platform supports two usage models: topping up Credits and subscription plan
 
 Top-up Credits are suitable for flexible, on-demand usage. Subscription plans are better suited for frequent users and include a fixed allowance within each billing period. When your subscription allowance is exhausted, the system will continue consuming Credits from your account balance.
 
-:::caution Free bonus Credits validity
-Free bonus Credits are valid for 30 days from the date they are issued, including Credits granted for new-user registration and Credits granted through top-up promotions. Any unused portion automatically expires after the validity period.
+:::info Registration and top-up Credits rules
+Registration through any channel does not grant bonus Credits. Inviting someone to register does not grant bonus Credits either. No payment method provides additional bonus Credits on top-ups.
 :::
 
 :::info Invitation rewards

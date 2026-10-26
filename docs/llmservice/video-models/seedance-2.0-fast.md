@@ -57,7 +57,7 @@ The specifications below describe the model provider's capabilities. Features, r
 [View all video model prices](./pricing.md)
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, account benefits, and final settlement are subject to the platform display and billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices, account benefits, and final settlement are subject to the platform display and billing records.
 :::
 
 ## Usage and Limitations
