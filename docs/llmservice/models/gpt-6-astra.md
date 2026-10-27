@@ -41,14 +41,15 @@ GPT-6 Astra is OpenAI's first 6-series model, announced on September 3, 2026, fo
 
 The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
 
-| Context | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
-| Up to 272K input tokens | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
-| More than 272K input tokens | `$20.00` | `$25.00` | `$2.00` | `$75.00` | `$0.01` |
+| Context | Input<br/>(USD / 1M Tokens) | 30m Cache Write<br/>(USD / 1M Tokens) | 12h Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| Up to 272K input tokens | `$10.00` | `$12.50` | `$25.00` | `$1.00` | `$50.00` | `$0.01` |
+| More than 272K input tokens | `$20.00` | `$25.00` | `$50.00` | `$2.00` | `$75.00` | `$0.01` |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 * For requests with more than 272K input tokens, the long-context input, cache, and output rates apply to the full request.
+* Cache-write rates replace the ordinary input charge for those tokens, rather than adding to it. A 30-minute cache write costs 1.25x the applicable input rate; a 12-hour write costs 2.5x. The default minimum lifetime is 30 minutes. Both lifetimes have the same cache-read rate, 0.1x the applicable input rate.
 * Web search is billed per use and is not affected by the input-token context tier.
 
 :::info Pricing note
