@@ -40,15 +40,15 @@ GPT-6 Luna is OpenAI's GPT-6 model for focused, high-volume workloads, released 
 
 The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
 
-| Context | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
-| Up to 272K input tokens | `$0.10` | `$0.125` | `$0.01` | `$0.50` | `$0.01` |
-| More than 272K input tokens | `$0.20` | `$0.25` | `$0.02` | `$0.75` | `$0.01` |
+| Context | Input<br/>(USD / 1M Tokens) | 30m Cache Write<br/>(USD / 1M Tokens) | 12h Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| Up to 272K input tokens | `$0.10` | `$0.125` | `$0.25` | `$0.01` | `$0.50` | `$0.01` |
+| More than 272K input tokens | `$0.20` | `$0.25` | `$0.50` | `$0.02` | `$0.75` | `$0.01` |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 * For requests with more than 272K input tokens, the long-context rates apply to the full request.
-* Cache Write is billed at 1.25x the input rate. Cache reads are billed at 0.1x input. The supported cache lifetime is 30 minutes and refreshes on reuse.
+* Cache-write rates replace the ordinary input charge for those tokens, rather than adding to it. A 30-minute cache write costs 1.25x the applicable input rate; a 12-hour write costs 2.5x. The default minimum lifetime is 30 minutes. Both lifetimes have the same cache-read rate, 0.1x the applicable input rate.
 * Web search costs `10,000 Credits` (`$0.01`) per use and is not affected by the context tier.
 
 :::info Pricing note

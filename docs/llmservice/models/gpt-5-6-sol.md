@@ -42,9 +42,13 @@ GPT-5.6 Sol is OpenAI's flagship GPT-5.6 tier, made generally available on July 
 
 The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
 
-| Context | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) | Billing Notes |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: | :--- |
-| Short context | `$4.00` | `$5.00` | `$0.40` | `$20.00` | `$0.01` | Standard GPT-5.6 Sol pricing |
+| Context | Input<br/>(USD / 1M Tokens) | 30m Cache Write<br/>(USD / 1M Tokens) | 12h Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| Up to 272K input tokens | `$4.00` | `$5.00` | `$10.00` | `$0.40` | `$20.00` | `$0.01` |
+| More than 272K input tokens | `$8.00` | `$10.00` | `$20.00` | `$0.80` | `$30.00` | `$0.01` |
+
+* Above 272K input tokens, input and cache-write/read rates are 2x the base tier and output rates are 1.5x. The higher rates apply to the entire request, not only the portion above the threshold.
+* Web search costs `10,000 Credits` (`$0.01`) per use and is not affected by the context tier.
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
@@ -52,4 +56,4 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
 :::
 
-* For GPT-5.6 models, cache writes are billed at 1.25x the uncached input rate; cache reads remain discounted at 0.1x input.
+* Cache-write rates replace the ordinary input charge for those tokens, rather than adding to it. A 30-minute cache write costs 1.25x the applicable input rate; a 12-hour write costs 2.5x. The default minimum lifetime is 30 minutes. Both lifetimes have the same cache-read rate, 0.1x the applicable input rate.
