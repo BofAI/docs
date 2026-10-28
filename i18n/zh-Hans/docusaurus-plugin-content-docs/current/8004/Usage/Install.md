@@ -7,7 +7,7 @@
 * **Python**: 3.11 或更高版本
 * **pip**: 包管理器
 * **私钥**: 用于签署交易（若仅运行只读模式则不需要）
-* **RPC 节点**: [受支持网络](/zh-Hans/8004/SupportedNetworks/)的 RPC 端点——BSC 使用 EVM 端点，TRON 使用 TRON 节点端点
+* **RPC 节点**: [受支持网络](/zh-Hans/8004/SupportedNetworks/)的 RPC 端点——BSC 或 Base 使用 EVM 端点，TRON 使用 TRON 节点端点
 * **IPFS 提供商（可选）**: Pinata、Filecoin 账号或本地 IPFS 节点
 * **Subgraph（可选）**: 当你的部署提供 subgraph 端点时使用
 
@@ -40,11 +40,11 @@ pip install -e .
 
 ## 通过 TypeScript 安装
 ### 前置要求
-* **Node.js**: 20 或更高版本
+* **Node.js**: 22.23.4+（22.x）、24.22.1+（24.x）或 26.12.1+（26.x）
 * **npm 或 yarn**: 包管理器
 * **写入操作配置**: 写入操作需配置 `signer`（私钥字符串）
-* **RPC 节点**: [受支持网络](/zh-Hans/8004/SupportedNetworks/)的 RPC 端点——BSC 使用 EVM 端点，TRON 使用 TRON 节点端点
-* **IPFS 提供商（可选）**: Pinata、Filecoin 账号或本地 IPFS 节点
+* **RPC 节点**: [受支持网络](/zh-Hans/8004/SupportedNetworks/)的 RPC 端点——BSC 或 Base 使用 EVM 端点，TRON 使用 TRON 节点端点
+* **IPFS（可选）**: TypeScript SDK 没有内置提供商，`registerIPFS()` 需要传入 `ipfsUploader` 回调
 * **Subgraph（可选）**: 可按需传入 `subgraphUrl` 或 `subgraphOverrides`
 
 

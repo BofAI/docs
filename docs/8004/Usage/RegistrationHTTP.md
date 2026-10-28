@@ -347,7 +347,7 @@ const jsonContent = JSON.stringify(registrationData, null, 2);
 
 // 5. Update the URI on-chain (only if the URI has changed)
 const tx = await agent.updateRegistration("https://yourdomain.com/agents/my-agent-updated.json");
-await tx.waitConfirmed();
+if ("waitConfirmed" in tx) await tx.waitConfirmed(); // returns the Agent itself when no URI is passed
 ```
 
 </TabItem>
@@ -396,7 +396,8 @@ The SDK generates a registration file compliant with the 8004 standard:
 }
 ```
 
-**Note:** two things to watch when you publish this file.
+**Note:** three things to watch when you publish this file.
 
-* **TypeScript does not emit these keys.** Python's `registrationFile().to_dict()` (and `str(...)`) produces exactly the shape above. In `@bankofai/8004-sdk` **1.1.2**, `agent.toJSON()` returns the SDK's internal shape — `endpoints` and `x402support` — and `uploadRegistrationFile()` serialises that object as-is, so `registerIPFS()` publishes the internal keys too. Map `endpoints` → `services` and `x402support` → `x402Support` yourself before hosting the file from TypeScript.
+* **TypeScript's `toJSON()` is not this shape.** Python's `registrationFile().to_dict()` (and `str(...)`) produces the keys above, but for an agent built with `createAgent()` neither carries chain or registry info, so `registrations` comes out as `[]` and `type` is the EIP-8004 URL even on TRON; `agent.toJson()` passes that info and fills in `registrations` (once the agent has an ID) and the TRON `type`. In `@bankofai/8004-sdk` **1.2.1**, `agent.toJSON()` still returns the SDK's internal shape — `endpoints` and `x402support` — so map `endpoints` → `services` and `x402support` → `x402Support` yourself before hosting the file from TypeScript. `registerIPFS()` does not need this: since 1.2.0 it publishes the canonical keys (`type`, `services`, `registrations` with the minted agent ID, `x402Support`), plus TypeScript's own `tags` and `metadata`, and `loadAgent()` reads both the canonical and the internal key names.
+* **TRON uses a different `type`.** On TRON, the file that `registerIPFS()` publishes in either SDK — and Python's `agent.toJson()` — sets `type` to `https://github.com/tronprotocol/tips/blob/master/tip-8004.md#registration-v1` instead of the EIP-8004 URL.
 * `setA2A()` defaults the endpoint version to `0.30` in Python and `0.3.0` in TypeScript. Pass the version explicitly if you need both languages to agree.
