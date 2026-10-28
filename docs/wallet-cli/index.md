@@ -5,7 +5,7 @@ description: "Use wallet-cli for payments and service discovery."
 
 # Wallet CLI and x402
 
-Use **`@tron-walletcli/wallet-cli@4.14.0`** for new command-line integrations.
+Use **`@tron-walletcli/wallet-cli@4.15.1`** for new command-line integrations.
 
 | Task | Entry point |
 | --- | --- |

@@ -15,7 +15,7 @@ Choose an entry point for your task:
 | Recharge B.AI | [wallet-cli recharge guidance](/wallet-cli/command-reference/) |
 | DeFi workflows and data queries | [Skill catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/) |
 
-Installation requires Node.js 20 or newer and an agent that supports local Skills. Select only the Skills you need. Installing a Skill does not install its external CLI or configure a wallet; match its dependency version to the installed CLI.
+Installation requires Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+ and an agent that supports local Skills. Select only the Skills you need. Installing a Skill does not install its external CLI or configure a wallet; match its dependency version to the installed CLI.
 
 Complete wallet setup locally. Never send a private key, mnemonic, or master password to an AI. Before paying, check the network, address, token, amount, and fees.
 

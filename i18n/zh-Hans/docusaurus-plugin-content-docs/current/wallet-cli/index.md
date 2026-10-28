@@ -5,7 +5,7 @@ description: "使用 wallet-cli 进行支付和服务发现。"
 
 # Wallet CLI 与 x402
 
-新的命令行接入使用 **`@tron-walletcli/wallet-cli@4.14.0`**。
+新的命令行接入使用 **`@tron-walletcli/wallet-cli@4.15.1`**。
 
 | 需求 | 新入口 |
 | --- | --- |
