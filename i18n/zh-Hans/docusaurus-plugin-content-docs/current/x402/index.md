@@ -13,7 +13,7 @@ x402 是一种基于 HTTP `402 Payment Required` 状态码的区块链开放支�
 
 **有意参与文档共建？** 欢迎在 [GitHub 仓库](https://github.com/BofAI/docs)提交 PR！我们唯一的原则是保持文档的中立性：除必要的资源链接外，请避免包含任何品牌推广内容。
 
-**使用 x402 开发？** 请在您的 TypeScript 应用中安装已发布的 [`@bankofai/x402-*`](https://www.npmjs.com/package/@bankofai/x402-tron) 包。[`x402` 仓库](https://github.com/BofAI/x402) 在 `examples/typescript/` 下提供完整 client → server → facilitator 可运行示例，用于参考——`exact`、`gasfree`、`upto`、`batch-settlement`。
+**使用 x402 开发？** 请在您的 TypeScript 应用中安装已发布的 [`@bankofai/x402-tron`](https://www.npmjs.com/package/@bankofai/x402-tron) 等包，并搭配官方 `@x402/*` 包。[`x402` 仓库](https://github.com/BofAI/x402) 在 `examples/typescript/` 下提供完整 client → server → facilitator 可运行示例，用于参考——`exact`、`gasfree`、`upto`、`batch-settlement`。
 
 ## 为什么要使用 x402？
 
@@ -72,9 +72,9 @@ x402 支持广泛的应用场景，包括：
 
 x402 目前支持以下网络环境：
 
-- **TRON 主网** (`tron:0x2b6653dc`)
-- **TRON Shasta 测试网** (`tron:0x94a9059e`)——仅 SDK/CLI 可用，官方 facilitator 不结算
-- **TRON Nile 测试网** (`tron:0xcd8690dc`)
+- **TRON 主网** (`tron:728126428`)
+- **TRON Shasta 测试网** (`tron:2494104990`)——仅 SDK/CLI 可用，官方 facilitator 不结算
+- **TRON Nile 测试网** (`tron:3448148188`)
 - **BSC 主网** （`eip155:56`）
 - **BSC 测试网** （`eip155:97`)
 - **Base 主网**（`eip155:8453`）
@@ -82,7 +82,9 @@ x402 目前支持以下网络环境：
 
 Base 主网使用官方 USDC，通过 `exact` 方案和 EIP-3009 授权完成支付。
 
-> **SDK（仅 TypeScript）**：x402 是仅 TypeScript 的 SDK，以颗粒化 `@bankofai/x402-*` npm 包发布（`core`、`evm`、`tron`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）。源码由 pnpm/turbo monorepo 维护，但应用开发应安装已发布的包。它定义了五种命名方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`exact_gasfree`（TRON），以及目前仅有 client 的 `auth-capture`（EVM）。此前的 Python + TypeScript SDK 已移至 `legacy/` 仅供参考。完整对比详见 [SDK 功能特性](./x402/sdk-features)。
+自 x402 v2.0.0 起，TRON 标识使用十进制链 ID；旧的十六进制写法（`tron:0x2b6653dc`、`tron:0x94a9059e`、`tron:0xcd8690dc`）仍可作为输入别名。
+
+> **SDK（仅 TypeScript）**：x402 是仅 TypeScript 的 SDK：TRON 机制与 TRON 资源赞助扩展以 `@bankofai/x402-tron` 和 `@bankofai/x402-tron-extensions` 发布，构建在官方 `@x402/*` 包（`core`、`evm`、`fetch`、`express`、`hono`、`fastify`、`next`、`axios`、`mcp`、`extensions`）之上。源码由 pnpm/turbo monorepo 维护，但应用开发应安装已发布的包。它定义了五种命名方案：`exact`（ERC-3009 / Permit2）、`upto`、`batch-settlement`、`exact_gasfree`（TRON），以及目前仅有 client 的 `auth-capture`（EVM）。上一代 Python + TypeScript SDK 归档已在 x402 v2.0.0 中移除，`typescript/packages/legacy/` 下的兼容 npm 包也已在 v2.1.0 中移除。完整对比详见 [SDK 功能特性](./x402/sdk-features)。
 
 
 ## 快速开始

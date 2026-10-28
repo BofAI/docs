@@ -59,7 +59,7 @@ An endpoint may serve the same capability across several chains, each settling t
 
 | Field | Type | Description |
 |---|---|---|
-| `network` | string | Canonical CAIP-2 chain ID this route settles on (e.g. `tron:0x2b6653dc`, `eip155:56`, `eip155:8453`). Legacy TRON aliases such as `tron:nile` are rejected by schema validation. |
+| `network` | string | CAIP-2 chain ID this route settles on (e.g. `tron:0x2b6653dc`, `eip155:56`, `eip155:8453`). For TRON the catalog accepts only the hexadecimal IDs listed under [Chain IDs](#chain-ids); aliases such as `tron:nile` and the decimal form `tron:728126428` are both rejected by the catalog's validation. |
 | `provider` | string | The gateway provider `fqn` that handles this network |
 | `scheme` | string | x402 payment scheme for this route: `exact` or, on TRON, `exact_gasfree` — each route declares its own |
 | `assetTransferMethod` | string | **Required** for every `exact` route: use `permit2` for TRON/BSC routes and `eip3009` for Base USDC routes. **Omit** it only on `exact_gasfree` routes. |
@@ -68,7 +68,7 @@ An endpoint may serve the same capability across several chains, each settling t
 The build passes this through to outputs as `x402_routes`. When present, callers/agents pick the route matching their intended payment chain; the top-level `url` remains the default route.
 
 :::note GasFree routes
-On TRON you can add an `exact_gasfree` route alongside the `exact` one for the same endpoint: a relayer pays the network energy and deducts its fee from the payment token, so the payer needs no TRX. GasFree routes are TRON-only and must not carry `assetTransferMethod`. Since x402 SDK 1.0.1 (current release 1.2.0) the relayer cost is estimated client-side, so catalog routes must **not** publish the legacy `fee` or `feeConfig` fields.
+On TRON you can add an `exact_gasfree` route alongside the `exact` one for the same endpoint: a relayer pays the network energy and deducts its fee from the payment token, so the payer needs no TRX. GasFree routes are TRON-only and must not carry `assetTransferMethod`. Since x402 SDK 1.0.1 the relayer cost is estimated client-side, so catalog routes must **not** publish the legacy `fee` or `feeConfig` fields.
 :::
 
 For example, an endpoint may expose one route per supported chain — TRON Mainnet, BSC Mainnet, and Base Mainnet — each with its own `provider` and `scheme`. To call one, point `wallet-cli x402 pay` at the chosen route's `url` and pass the matching `--network` / `--scheme`:
@@ -88,7 +88,7 @@ The other routes reuse the same request body, swapping only the route `url`, `--
 
 ### status block
 
-`status` is optional and describes the state of each stage of the service, with four keys: `catalog` / `gateway` / `payment` / `upstream`. When omitted, the build output (service detail) fills in defaults automatically:
+`status` is optional and describes the state of each stage of the service, with four keys: `catalog` / `gateway` / `payment` / `upstream`. When present, all four keys are required. When omitted, the build output (service detail) fills in defaults automatically:
 
 ```json
 { "catalog": "listed", "gateway": "unknown", "payment": "unknown", "upstream": "unknown" }
@@ -105,7 +105,7 @@ Allowed values:
 
 ## pay.md
 
-Submitted alongside `catalog.json` in the same directory — a human- and Agent-readable call guide, and a **required** file. Recommended contents: basic service info (FQN, entry address, category, settlement chains), each endpoint's address and price, plus copy-paste call examples. The catalog's CI tests currently require a `wallet-cli x402 pay` example with `--network tron:728126428` and `--scheme exact`, a mention of `exact_gasfree`, and Base Mainnet (`eip155:8453`) coverage. Like `catalog.json`, this file goes through the sensitive-data scan (see below).
+Submitted alongside `catalog.json` in the same directory — a human- and Agent-readable call guide, and a **required** file. Recommended contents: basic service info (FQN, entry address, category, settlement chains), each endpoint's address and price, plus copy-paste call examples. The catalog's CI tests currently require a `wallet-cli x402 pay` example with `--network tron:728126428` and `--scheme exact`, a mention of `exact_gasfree`, and Base Mainnet coverage (the strings `Base Mainnet`, `eip155:8453`, `-base`, `USDC`, and `EIP-3009`, with no `Sepolia` or `eip155:84532`). Like `catalog.json`, this file goes through the sensitive-data scan (see below).
 
 ## Allowed categories
 
@@ -121,6 +121,10 @@ security   shopping    storage     translation
 ## Chain IDs
 
 `chains` uses CAIP-2 style chain identifiers. Mainnets and testnets are both recognized:
+
+:::note TRON ID format
+The catalog schema accepts TRON chains only in the hexadecimal form below. The x402 SDK (since 2.0.0) and Wallet CLI use the decimal CAIP-2 IDs — `tron:728126428` (mainnet), `tron:3448148188` (Nile), `tron:2494104990` (Shasta). The SDK still accepts the hexadecimal values as deprecated aliases of the same chains; Wallet CLI's global `--network` (used by `x402 pay` and account commands) does not — use the decimal ID or an alias such as `tron`, `nile` or `shasta`; only the catalog filter `x402 provider-list --network` also accepts the hex form. That is why the CLI examples pass `--network tron:728126428` while `catalog.json` lists `tron:0x2b6653dc`.
+:::
 
 | Chain | ID |
 |---|---|
@@ -213,6 +217,8 @@ These are additive — the raw `title`, `subtitle`, `category`, `chains`, and `i
 - **`/api/status.json`**: `{ version, generated_at, provider_count, status }`; `status` of `ok` means the build is healthy.
 
 ## Local build and run
+
+Requires Python 3.11 or newer.
 
 ```bash
 # install the validation dependency (jsonschema)

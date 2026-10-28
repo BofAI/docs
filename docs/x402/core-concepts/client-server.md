@@ -25,7 +25,7 @@ Clients can take many forms, including:
 
 - **Initiate Requests**: Send the initial HTTP request to the resource server.
 - **Handle Payment Requirements**: Parse the `402 Payment Required` response and extract payment details.
-- **Manage Token Approvals**: Authorize Permit2 (one-time `approve(Permit2)`) for plain ERC-20/TRC-20 tokens; ERC-3009 tokens need no approve. Who broadcasts it differs by chain. **On TRON** the client auto-broadcasts the approve on first payment, paying the Energy itself — unless the server advertises the `trc20ApprovalResourceSponsoring` extension (SDK 1.2.0+), in which case the client signs it **without broadcasting** and the facilitator sponsors the Energy/Bandwidth and broadcasts it. **On EVM the client never broadcasts anything**: it either attaches a signed, unbroadcast approve for the facilitator to relay (when the server advertises `eip2612GasSponsoring` or `erc20ApprovalGasSponsoring`), or, with no such extension declared, verification fails with `permit2_allowance_required` and the allowance must be granted once out of band before the first payment. See [SDK Feature Matrix](../sdk-features.md#extensions).
+- **Manage Token Approvals**: Authorize Permit2 (one-time `approve(Permit2)`) for plain ERC-20/TRC-20 tokens; ERC-3009 tokens need no approve. Who broadcasts it differs by chain. **On TRON** the client auto-broadcasts the approve on first payment, paying the Energy itself (with the default `allowanceMode: "auto"`; `"skip"` leaves the approval to your app) — unless the server advertises the `trc20ApprovalResourceSponsoring` extension, in which case the client signs it **without broadcasting** and the facilitator sponsors the Energy/Bandwidth and broadcasts it. Since 2.1.0 this needs the client extension from `@bankofai/x402-tron-extensions` registered with `client.registerExtension(createTrc20ApprovalResourceSponsoringClientExtension(signer))`; without it, a sponsored payment fails with `trc20_approval_client_extension_not_registered` instead of falling back to a client broadcast. **On EVM the client never broadcasts anything**: it either attaches an off-chain EIP-2612 permit signature (when the server advertises `eip2612GasSponsoring`) or a signed, unbroadcast approve transaction for the facilitator to relay (`erc20ApprovalGasSponsoring`), or, with no such extension declared, verification fails with `permit2_allowance_required` and the allowance must be granted once out of band before the first payment. See [SDK Feature Matrix](../sdk-features.md#extensions).
 - **Prepare Payment Payload**: Construct and sign a payment payload according to server requirements.
 - **Retry with Payment**: Attach the `PAYMENT-SIGNATURE` header and resend the request.
 
@@ -45,7 +45,7 @@ Servers may include:
 
 ### Core Responsibilities
 
-- **Define Payment Requirements**: Respond with HTTP `402 Payment Required` when a request lacks valid payment credentials, detailing payment requirements in the response body.
+- **Define Payment Requirements**: Respond with HTTP `402 Payment Required` when a request lacks valid payment credentials, detailing payment requirements in the Base64-encoded `PAYMENT-REQUIRED` response header (the body is `{}` by default).
 - **Validate Payment Payload**: Call the Facilitator service to verify the incoming signed payload.
 - **Settle Transactions**: Upon successful validation, submit the transaction via the Facilitator to complete on-chain settlement.
 - **Deliver Resources**: After confirming payment, return the requested resource to the client.
@@ -71,6 +71,8 @@ In the x402 protocol, a typical interaction between client and server proceeds a
     dark: '/img/diagrams/x402-payment-flow.svg',
   }}
 />
+
+The diagram shows the order the client observes: the resource arrives after settlement. Under the default `authorization` flow the server runs its handler before settling and releases the response only once settlement succeeds (step 5 above).
 
 ---
 

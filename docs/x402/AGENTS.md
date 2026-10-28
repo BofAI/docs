@@ -18,7 +18,7 @@ import TabItem from '@theme/TabItem';
 - `docs/faq.md` — Frequently Asked Questions.
 - `sidebars.js` — Docusaurus sidebar configuration.
 - `docusaurus.config.js` — Main Docusaurus configuration file.
-- `docs/sdk-features.md` — Feature matrix for the TypeScript-only x402 SDK (`@bankofai/x402-*` packages).
+- `docs/sdk-features.md` — Feature matrix for the TypeScript-only x402 SDK (`@bankofai/x402-tron` and `@bankofai/x402-tron-extensions` on the official `@x402/*` packages).
 
 ---
 
@@ -35,8 +35,8 @@ Documentation must reflect code changes immediately. Follow these dependency map
 
 ## 4. Style & Writing Standards
 
-- Use **TypeScript** as the primary example language (the SDK is TypeScript-only; the previous Python SDK lives under `legacy/`).
-- Prefer code samples that work with the published `@bankofai/x402-*` npm packages. Runnable `examples/typescript/` code may be used as a reference implementation when it matches the package API.
+- Use **TypeScript** as the primary example language (the SDK is TypeScript-only; the previous Python SDK was removed in x402 v2.0.0).
+- Prefer code samples that work with the published npm packages (`@bankofai/x402-tron`, `@bankofai/x402-tron-extensions` and the official `@x402/*` packages). Runnable `examples/typescript/` code may be used as a reference implementation when it matches the package API.
 - All API examples **must include complete error handling**.
 - Target audience: developers with **2–5 years of experience**.
 - Use Docusaurus MDX components (`<Tabs>`, `<TabItem>`) for multi-language examples.
@@ -66,7 +66,7 @@ Documentation must reflect code changes immediately. Follow these dependency map
 <Tabs>
   <TabItem value="TRON" label="TRON">
 
-- **Network Identifier**: Must follow the `tron:<hex_chain_id>` CAIP-2 format. Use exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NILE`, `TRON_SHASTA`) instead of hard-coding names.
+- **Network Identifier**: Must follow the `tron:<decimal_chain_id>` CAIP-2 format (e.g. `tron:3448148188` for Nile); hex forms such as `tron:0xcd8690dc` are deprecated input aliases. Use exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NILE`, `TRON_SHASTA`) instead of hard-coding names.
 - **Signature Standard**: TRON signatures must reference the **TIP-712** standard (do not confuse with EIP-712).
 - **Address Format**: Token addresses must use Base58 encoding (must start with `T`).
 - **Node Access**: Must connect to TronGrid endpoints.
@@ -142,7 +142,7 @@ When SDK code changes in any of the following areas, you **must** update `docs/s
 - New signers added under the `*/signers/` directory.
 - New features introduced in the Client or Server components.
 
-> **Note**: The SDK is TypeScript-only. Cross-check documentation against the published `@bankofai/x402-*` package API, `typescript/packages/` exports, and `examples/typescript/` reference source.
+> **Note**: The SDK is TypeScript-only. Cross-check documentation against the published package APIs (`@bankofai/x402-tron`, `@bankofai/x402-tron-extensions`, official `@x402/*`), `typescript/packages/` exports, and `examples/typescript/` reference source.
 
 ---
 

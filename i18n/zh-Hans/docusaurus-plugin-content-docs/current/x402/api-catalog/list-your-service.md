@@ -163,7 +163,7 @@ SunPump 服务的真实文件 `providers/sunpump-token-launch/catalog.json`：
 
 ### pay.md 怎么写
 
-`pay.md` 是人和 Agent 都会读的调用说明，建议包含三部分：服务基本信息、各端点的地址与价格、可直接复制的调用示例。目录仓库的 CI 测试要求每个 `pay.md` 都包含带 `--network tron:728126428` 和 `--scheme exact` 的 `wallet-cli x402 pay` 示例、提到 `exact_gasfree`，并覆盖 Base 主网（`eip155:8453`）。SunPump 的真实文件 `providers/sunpump-token-launch/pay.md`：
+`pay.md` 是人和 Agent 都会读的调用说明，建议包含三部分：服务基本信息、各端点的地址与价格、可直接复制的调用示例。目录仓库的 CI 测试要求每个 `pay.md` 都包含带 `--network tron:728126428` 和 `--scheme exact` 的 `wallet-cli x402 pay` 示例、提到 `exact_gasfree`，并覆盖 Base 主网：文中必须出现 `Base Mainnet`、`eip155:8453`、以 `-base` 结尾的 gateway provider、`USDC` 和 `EIP-3009`，且不得出现 `Sepolia` 或 `eip155:84532`。SunPump 的真实文件 `providers/sunpump-token-launch/pay.md`：
 
 ````markdown
 # SunPump Agent Token Launch API
@@ -286,20 +286,21 @@ CI 会强制以下规则，建议提交前逐条对照：
 - `version` 必须为 `1`。
 - `fqn` 为小写字母/数字/连字符，且与目录名一致。
 - `category` 必须是合法类目之一（见[参考](./reference.md#合法类目)）。
-- `chains` 至少一条，使用 CAIP-2 风格的链 ID。TRON 链 ID 只能是 `tron:0x2b6653dc`、`tron:0xcd8690dc` 或 `tron:0x94a9059e`。CI 测试要求每个服务都列出 Base 主网 `eip155:8453`，并拒绝 Base Sepolia `eip155:84532`。
+- `chains` 至少一条，使用 CAIP-2 风格的链 ID。TRON 链 ID 只能是 `tron:0x2b6653dc`、`tron:0xcd8690dc` 或 `tron:0x94a9059e`，十进制形式（`tron:728126428`）会被拒绝，见[链 ID](./reference.md#链-id)。CI 测试要求每个服务都列出 Base 主网 `eip155:8453`，并拒绝 Base Sepolia `eip155:84532`。
 - `isFirstParty`、`isFeatured`（布尔值）与 `featuredTags`（字符串数组，可为空 `[]`）为**必填**，缺一即校验失败。
 - 每个 endpoint 的 `method` 必须大写、`path` 以 `/` 开头、`maxPriceUsd` 不小于 `minPriceUsd`。
 - `serviceUrl`、各端点 `url` 和各路由 `url` 都必须以 `https://` 开头。
 - 不允许出现未定义的字段——顶层、端点、路由、`i18n.<locale>` 和 `status` 都会拒绝未知字段。
 - `x402Routes` 在 schema 中是选填，但 CI 测试要求每个端点恰好发布一条 Base 主网路由：`scheme` 为 `exact`、`assetTransferMethod` 为 `eip3009`，`provider` 以 `-base` 结尾。每条路由的 `network` 都必须出现在 `chains` 里，`exact_gasfree` 只能用于 TRON 网络。每条路由都需要 `network`、`provider`、`scheme` 和 `url`；`exact` 路由还必须带 `assetTransferMethod`（`permit2` 或 `eip3009`），`exact_gasfree` 路由则必须**省略**该字段。同一网络可以出现多次——TRON 通常同时发布 `exact` 与 `exact_gasfree` 两条路由——只要每组 `(provider, network, scheme, url)` 唯一即可。旧的 `fee` / `feeConfig` 字段会被拒绝。详见[参考](./reference.md#x402routes--多网络路由)。
+- 凡有 TRON 路由的端点，第一条 TRON 路由必须是 `exact` + `permit2`（默认方式）；服务级 `description`（含 `i18n` 翻译）不得包含 `--scheme exact_gasfree`。
 - 服务与每个 endpoint 都必须提供 `i18n.zh-CN` 的 `title`、`subtitle`、`description`、`useCase`。
-- 如填写 `status`，取值只能是：`catalog` 为 `listed`/`unlisted`；`gateway` 为 `configured`/`unknown`/`unavailable`；`payment` 为 `paid-route`/`mainnet`/`testnet`/`unknown`；`upstream` 为 `public`/`authenticated`/`unknown`/`unavailable`。
+- `status` 可不填；如填写，四个键都必须给出，取值只能是：`catalog` 为 `listed`/`unlisted`；`gateway` 为 `configured`/`unknown`/`unavailable`；`payment` 为 `paid-route`/`mainnet`/`testnet`/`unknown`；`upstream` 为 `public`/`authenticated`/`unknown`/`unavailable`。
 - `pay.md` 必须与 `catalog.json` 一同提交，两份文件都会被敏感信息扫描。
 - 不得包含任何密钥、私钥或内网地址。
 
 ## 第 2 步：本地自检
 
-提交前先安装校验依赖，再在本地跑一遍校验、构建和单元测试（与 CI 的步骤相同）：
+提交前先安装校验依赖，再在本地跑一遍校验、构建和单元测试（与 CI 的步骤相同）。脚本需要 Python 3.11 或更高版本（CI 用 3.12）；在 3.10 上会报 `ImportError: cannot import name 'UTC' from 'datetime'`。
 
 ```bash
 pip install -r requirements.txt
@@ -309,6 +310,10 @@ python3 -m unittest discover -s tests
 ```
 
 前两条会输出 `validated N provider(s)` 和 `built N provider(s) into dist`，N 是仓库里全部服务的数量（包括你新加的）。
+
+:::note 测试里写死的数量
+`tests/test_build.py` 固定了目录当前的若干总数，例如所有服务的 Base 主网路由总数。新服务即使通过 `validate.py`，也可能在这些断言上失败（例如 `AssertionError: 20 != 18`）；请在同一个 PR 里更新期望值。
+:::
 
 ## 第 3 步：提交 Pull Request
 

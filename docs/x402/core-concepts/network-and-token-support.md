@@ -7,8 +7,8 @@ import TabItem from '@theme/TabItem';
 
 ## TRON Network Identifiers
 
-x402 adopts the CAIP-2 network identifier format `tron:<hex_chain_id>`.
-Use the exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NILE`, `TRON_SHASTA`) in application code instead of copying opaque hex strings.
+x402 adopts the CAIP-2 network identifier format `tron:<decimal_chain_id>`.
+Use the exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NILE`, `TRON_SHASTA`) in application code instead of copying identifier strings.
 
 ### Identifier Reference
 
@@ -18,7 +18,7 @@ Use the exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NIL
 | **TRON Shasta**  | `tron:2494104990`  | `TRON_SHASTA`  | TRON Shasta Testnet |
 | **TRON Nile**    | `tron:3448148188`  | `TRON_NILE`    | TRON Nile Testnet |
 
-> **TRON ID format**: since `@bankofai/x402-tron` 2.0.0 the SDK constants use decimal CAIP-2 references. The older hexadecimal forms (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) are still accepted as input aliases, and are what the official facilitator and the API catalog currently report.
+> **TRON ID format**: since `@bankofai/x402-tron` 2.0.0 the SDK constants use decimal CAIP-2 references. The older hexadecimal forms (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) are still accepted as input aliases and are normalized to the decimal form. The official facilitator reports the decimal identifiers in `/supported`; the API Catalog still lists the hexadecimal forms.
 
 ---
 
@@ -31,7 +31,7 @@ In the x402 protocol (on-the-wire), BSC uses the EIP-155 chain ID format:
 | **BSC Mainnet**  | `eip155:56`   | BSC Mainnet (Production)      |
 | **BSC Testnet**  | `eip155:97`   | BSC Testnet (Chapel)          |
 
-> **Note**: A self-hosted Facilitator's YAML config takes **canonical CAIP-2 identifiers only** — `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532`, `tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`. Friendly aliases such as `bsc:mainnet` or `tron:nile` are not resolved and are rejected at startup.
+> **Note**: A self-hosted Facilitator's YAML config takes **canonical CAIP-2 identifiers only** — `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532`, `tron:728126428`, `tron:3448148188`, `tron:2494104990`. Deprecated hexadecimal TRON IDs (`tron:0x…`) are still accepted and normalized to decimal. Friendly aliases such as `bsc:mainnet` or `tron:nile` are not resolved and are rejected at startup.
 
 ---
 
@@ -81,18 +81,17 @@ x402 supports **TRC-20, BEP-20, and ERC-20** tokens. TRON/BSC routes use their c
 | **USDD** | `tron:728126428` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
 | **USDD** | `tron:3448148188`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56`    | `0x55d398326f99059fF775485246999027B3197955` |
-| **USDC** | `eip155:56`    | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
+| **USDC** | `eip155:56`    | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` (not in any shipped token registry — explicit asset only) |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 | **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
-| **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registry resolves **USDT** on TRON (`tron:728126428`, `tron:3448148188`, `tron:2494104990`) and BSC Mainnet (`eip155:56`), and **USDC** on BSC Testnet (`eip155:97`) and Base (`eip155:8453`, `eip155:84532`). The registry also ships defaults for twenty further EVM networks (MegaETH, Monad, Polygon, Arbitrum, Mezo, Radius, XDC, Celo, Flare and others) that this page does not table. Everything else in the table above — TRON USDD, BSC Mainnet USDC, BSC Testnet USDT, DHLU, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`. For CLI asset selection, follow the [wallet-cli command reference](/wallet-cli/command-reference/).
+> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registries resolve **USDT** on TRON (`tron:728126428`, `tron:3448148188`, `tron:2494104990`, from `@bankofai/x402-tron`) and **USDC** on Base (`eip155:8453`, `eip155:84532`, from the official `@x402/evm` 2.28.0). `@x402/evm` also ships defaults for further EVM networks (Ethereum, Polygon, Arbitrum, Avalanche, Celo, Sei, MegaETH, Monad, XDC, Flare and others) that this page does not table, but **none for BSC**: a BSC route must be priced with an explicit `{ asset, amount, extra }` object. Everything else in the table above — TRON USDD, every BSC asset, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`. For CLI asset selection, follow the [wallet-cli command reference](/wallet-cli/command-reference/).
 
-> **Extensibility**: The protocol is highly extensible. By registering tokens through the TRON token registry (`registerToken` from `@bankofai/x402-tron`) or the server's `EVM_TOKENS` config table, you can support any custom TRC-20 or BEP-20 token.
+> **Extensibility**: The protocol is highly extensible. By registering tokens through the TRON token registry (`registerToken` from `@bankofai/x402-tron`) or an explicit `{ asset, amount, extra }` price on the server route, you can support any custom TRC-20 or BEP-20 token.
 
-> **Token selection for the `exact` scheme**: EIP-3009 tokens (for example official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`. Plain ERC-20 tokens (for example BSC USDC/USDT and TRON USDT/USDD) settle via the Permit2 path — the client auto-broadcasts a one-time `approve(Permit2)` on first payment, or, on TRON when the server advertises `trc20ApprovalResourceSponsoring` (SDK 1.2.0+), signs it and lets the facilitator sponsor and broadcast it. You set the per-token method on the server under `accepts[].price.extra`; the SDK surfaces it on the wire as `accepts[].extra`: EIP-3009 → `{ name, version }`; plain ERC-20 → `{ assetTransferMethod: "permit2" }`. A permit2 asset that also implements EIP-2612 carries `{ name, version }` alongside `assetTransferMethod`; omitting that pair is precisely how a server tells clients to skip EIP-2612. Both sponsoring paths live inside the permit2 branch, so neither applies to an EIP-3009 asset. On a permit2 asset the client signs a gasless EIP-2612 permit when a `readContract` capability is available (from the signer or a configured RPC), the server advertises the `eip2612GasSponsoring` extension, `extra` carries both `name` and `version`, and the current Permit2 allowance does not already cover the payment. Note the asymmetry: a *missing* read capability skips the permit entirely, whereas a read that *throws* is caught and signing proceeds. Otherwise the client *tries* ERC-20 approval gas sponsoring, which needs `readContract`, the separate `erc20ApprovalGasSponsoring` extension from the server, a signer that can both sign raw transactions and report a transaction count, and again an allowance that does not already cover the payment; there the client signs an `approve` for `MaxUint256` — always the max, regardless of the payment amount — that the facilitator broadcasts. When neither path qualifies the payload carries no sponsoring extension at all. Among the shipped default assets the flag is set on MegaETH MegaUSD (mainnet) and on Mezo mUSD and Radius SBC (mainnet and testnet).
+> **Token selection for the `exact` scheme**: EIP-3009 tokens (for example official Base USDC) settle gaslessly via `transferWithAuthorization`. Plain ERC-20 tokens (for example BSC USDC/USDT and TRON USDT/USDD) settle via the Permit2 path and need a one-time `approve(Permit2)` — on TRON the client auto-broadcasts it on first payment (on EVM it never does; see the sponsoring paths below), or, on TRON when the server advertises `trc20ApprovalResourceSponsoring` (SDK 1.2.0+), signs it and lets the facilitator sponsor and broadcast it (since 2.1.0 only with the client extension from `@bankofai/x402-tron-extensions` registered). You set the per-token method on the server under `accepts[].price.extra`; the SDK surfaces it on the wire as `accepts[].extra`: EIP-3009 → `{ name, version }`; plain ERC-20 → `{ assetTransferMethod: "permit2" }`. A permit2 asset that also implements EIP-2612 carries `{ name, version }` alongside `assetTransferMethod`; omitting that pair is precisely how a server tells clients to skip EIP-2612. Both sponsoring paths live inside the permit2 branch, so neither applies to an EIP-3009 asset. On a permit2 asset the client signs a gasless EIP-2612 permit when a `readContract` capability is available (from the signer or a configured RPC), the server advertises the `eip2612GasSponsoring` extension, `extra` carries both `name` and `version`, and the current Permit2 allowance does not already cover the payment. Note the asymmetry: a *missing* read capability skips the permit entirely, whereas a read that *throws* is caught and signing proceeds. Otherwise the client *tries* ERC-20 approval gas sponsoring, which needs `readContract`, the separate `erc20ApprovalGasSponsoring` extension from the server, a signer that can sign raw transactions, and a transaction count (from the signer or a configured RPC), and again an allowance that does not already cover the payment; there the client signs an `approve` for `MaxUint256` — always the max, regardless of the payment amount — that the facilitator broadcasts. When neither path qualifies the payload carries no sponsoring extension at all. Among the shipped default assets the `supportsEip2612` flag is set on MegaETH MegaUSD (mainnet) and on Mezo mUSD and Radius SBC (mainnet and testnet).
 
 ---
 
@@ -136,8 +135,8 @@ x402 defines five named payment schemes. Four have complete client + server + fa
 
 The `exact` scheme pays the exact amount advertised. It covers two token transfer paths:
 
-- **EIP-3009 `transferWithAuthorization`** — for tokens that natively support it (e.g. official Base USDC and BSC testnet DHLU). Gasless: no `approve` needed; the client signs a typed-data authorization and the facilitator calls `transferWithAuthorization` on-chain.
-- **Permit2** — for plain ERC-20 / TRC-20 tokens that do not implement ERC-3009 (e.g. BSC USDC/USDT, TRON USDT/USDD). The client signs a Permit2 witness and the facilitator settles via the `x402ExactPermit2Proxy` contract. A one-time `approve(Permit2)` is required; the client auto-broadcasts it on first payment. On TRON, SDK 1.2.0 adds the `trc20ApprovalResourceSponsoring` extension — when the server advertises it, the client signs that approve without broadcasting it and the facilitator delegates the Energy/Bandwidth and broadcasts it, so the payer needs no TRX for the approve.
+- **EIP-3009 `transferWithAuthorization`** — for tokens that natively support it (e.g. official Base USDC). Gasless: no `approve` needed; the client signs a typed-data authorization and the facilitator calls `transferWithAuthorization` on-chain.
+- **Permit2** — for plain ERC-20 / TRC-20 tokens that do not implement ERC-3009 (e.g. BSC USDC/USDT, TRON USDT/USDD). The client signs a Permit2 witness and the facilitator settles via the `x402ExactPermit2Proxy` contract. A one-time `approve(Permit2)` is required; on TRON the client auto-broadcasts it on first payment, while on EVM it must already be in place or be relayed through a gas-sponsoring extension. On TRON, SDK 1.2.0 adds the `trc20ApprovalResourceSponsoring` extension — when the server advertises it, the client signs that approve without broadcasting it and the facilitator delegates the Energy/Bandwidth and broadcasts it, so the payer needs no TRX for the approve. Since 2.1.0 the client must register `createTrc20ApprovalResourceSponsoringClientExtension(signer)` from `@bankofai/x402-tron-extensions`; otherwise the payment fails with `trc20_approval_client_extension_not_registered`.
 
 The `exact` scheme conforms to the **v2 wire format** published by the **x402 Foundation**: a stock v2 client can pay a protected endpoint on this SDK's server directly, and this SDK's client can pay any v2-compliant server — no project-specific translation required. Transfer authorization data is carried in `payload.authorization` on the EIP-3009 path and in `payload.permit2Authorization` on the Permit2 path.
 
@@ -151,7 +150,7 @@ A payment-channel scheme for high-frequency micro-payments (e.g. AI agent per-to
 
 ### `auth-capture` Scheme
 
-An EVM client implementation for refundable Base Commerce Payments: authorize funds first, then capture, void, or refund them later. The published SDK currently exposes `@bankofai/x402-evm/auth-capture/client`; its server and facilitator implementations are not shipped yet, so it cannot currently be deployed end to end using only the published package.
+An EVM client implementation for refundable Base Commerce Payments: authorize funds first, then capture, void, or refund them later. The official `@x402/evm` package (which the SDK uses for EVM since 2.1.0) currently exposes `@x402/evm/auth-capture/client`; its server and facilitator implementations are not shipped yet, so it cannot currently be deployed end to end using only the published package.
 
 ### `exact_gasfree` Scheme
 
@@ -220,7 +219,7 @@ You may deploy your own Facilitator to gain full control over payment verificati
 
 | Core Component | TRON/BSC/Base Implementation |
 | :------------- | :---------------------- |
-| **Networks**   | The three TRON IDs (`tron:728126428`, `tron:2494104990`, `tron:3448148188`) plus any `eip155:<chainId>` — client and resource server both default to `eip155:*`, and the SDK ships default assets for twenty EVM networks beyond `eip155:56` / `97` / `8453` / `84532`. What can actually settle is bounded by the networks the facilitator has configured, which it must enumerate explicitly |
+| **Networks**   | The three TRON IDs (`tron:728126428`, `tron:2494104990`, `tron:3448148188`) plus any `eip155:<chainId>` — client and resource server both default to `eip155:*`, and the official `@x402/evm` ships default assets for Base, Base Sepolia and many other EVM networks, but not BSC (`eip155:56` / `97` need an explicit asset). What can actually settle is bounded by the networks the facilitator has configured, which it must enumerate explicitly |
 | **Token Standard** | TRC-20 (built-in USDT & USDD support), BEP-20, ERC-20 (Base official USDC) |
 | **Signing Mechanism** | TIP-712 / EIP-712 typed data signing |
 | **Payment Schemes** | `exact`, `upto`, `batch-settlement`, `exact_gasfree` (TRON) |
@@ -242,7 +241,7 @@ registerToken(TRON_NILE, {
 });
 ```
 
-On the **resource server** side, custom EVM tokens are advertised by adding an entry to the server's `EVM_TOKENS` table in `src/chains/evm.ts` — an explicit `{ asset, amount, extra }` object. Adding a chain is one table entry; no SDK changes are needed.
+On the **resource server** side, custom EVM tokens are advertised with an explicit `{ asset, amount, extra }` price object in the route's `accepts`; no SDK changes are needed. (The `EVM_TOKENS` table of the earlier example server was removed with the EVM examples in x402 v2.1.0; see the [upstream EVM examples](https://github.com/x402-foundation/x402/tree/main/examples/typescript).)
 
 Once registered, you can use the custom token symbol in TRON prices (e.g., `"0.001 MYT"`).
 
@@ -257,4 +256,4 @@ x402 is deeply tailored for blockchain-native architectures, providing seamless 
 - **Development Environment**: Use testnets for development and debugging.
 - **Default Settlement Asset**: TRON/BSC routes use their configured stablecoins; Base uses official **USDC**.
 - **Security Model**: TIP-712 / EIP-712 typed data signing ensures secure, trust-minimized payment authorization.
-- **Extensibility**: Expand support for any custom TRC-20/BEP-20 token via the TRON token registry (`registerToken`) or the server's `EVM_TOKENS` config table.
+- **Extensibility**: Expand support for any custom TRC-20/BEP-20 token via the TRON token registry (`registerToken`) or an explicit `{ asset, amount, extra }` route price.

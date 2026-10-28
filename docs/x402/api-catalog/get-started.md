@@ -5,18 +5,18 @@ description: "Discover catalog services and preview payments with wallet-cli."
 
 # Catalog Quick Start
 
-Install `@tron-walletcli/wallet-cli@4.14.0` using the [Wallet CLI quick start](/wallet-cli/quickstart/). Catalog reads need no wallet or password; payment previews and payments require a configured account.
+Install Wallet CLI using the [Wallet CLI quick start](/wallet-cli/quickstart/). Catalog reads need no wallet or password; payment previews and payments require a configured account.
 
 ## Browse providers
 
 ```bash
+wallet-cli x402 update-catalog -o json
 wallet-cli x402 provider-list -o json
 wallet-cli x402 provider-show dia -o json
 wallet-cli x402 endpoint-list dia -o json
-wallet-cli x402 update-catalog -o json
 ```
 
-`provider-list` supports network, category, and capability filters. `update-catalog` refreshes the local cache.
+`update-catalog` downloads the catalog to the local cache. `provider-list`, `provider-show`, and `endpoint-list` read that cache and download from the catalog only when the cache is missing or lacks what was asked for; they never refresh it, so run `update-catalog` again when you want the latest providers and prices. `provider-list` supports `--network`, `--category`, and `--capability` filters.
 
 ## Choose an endpoint and network
 

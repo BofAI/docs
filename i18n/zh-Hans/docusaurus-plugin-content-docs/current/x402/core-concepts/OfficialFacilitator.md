@@ -62,10 +62,12 @@ Facilitator 由官方持续维护和升级，包括：
 
 | 模式 |限速 |说明 |
 |-----|-----|-----|
-| **匿名调用（Anonymous Mode）** | 官方服务：每个 IP 每分钟最多 1 次；自建部署未配置 `rate_limit.anonymous` 时，默认每个 IP 每分钟最多 10 次（可自行调整） | 不需要 API Key，适用于本地开发和功能测试 |
-| **API Key 调用（API Key Mode）** | 官方服务：每个 API Key 每分钟最多 1000 次；自建部署未配置 `rate_limit.authenticated` 时采用相同默认值（可自行调整） | 需要 API Key，适用于生产环境和高频支付请求 |
+| **匿名调用（Anonymous Mode）** | 官方服务：每个 IP 每分钟最多 10 次，`/verify` 与 `/settle` 分别计数；这也是自建部署未配置 `rate_limit.anonymous` 时的默认值（可自行调整） | 不需要 API Key，适用于本地开发和功能测试 |
+| **API Key 调用（API Key Mode）** | 官方服务：每个 API Key 每分钟最多 1000 次，`/verify` 与 `/settle` 分别计数；自建部署未配置 `rate_limit.authenticated` 时采用相同默认值（可自行调整） | 需要 API Key，适用于生产环境和高频支付请求 |
 
 两种模式的调用方式完全相同，但在 **身份识别与接口限速策略** 上有所不同。
+
+> **计数按实例进行。** 官方生产配置使用 `rate_limit.store: memory`，每个 facilitator 实例各自维护计数器；落到不同实例上的请求不会累计到同一个总数里。自建部署默认同样使用内存存储——如需在多个副本间共享计数，请设置 `rate_limit.store: redis`（并配置 `redis_url`）。
 
 
 
@@ -78,8 +80,8 @@ Facilitator 由官方持续维护和升级，包括：
 
 在匿名模式下：
 
-- `/settle` 接口会启用 **限速**
-- **官方服务按每个 IP 每分钟最多调用 1 次**；自建部署未配置 `rate_limit.anonymous` 时，默认按每个 IP 每分钟最多调用 **10 次**，且可自行调整。
+- `/verify` 与 `/settle` 接口会启用 **限速**，各自独立计数
+- **官方服务对每个接口按每个 IP 每分钟最多调用 10 次**，与自建部署未配置 `rate_limit.anonymous` 时的默认值相同，且可自行调整。
 
 该模式主要用于：
 
@@ -96,7 +98,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
   -d '{ ... }'
 ```
 
-虽然匿名模式可以正常调用所有核心接口，但由于 `/settle` 的调用频率非常低，因此 **不适合生产环境使用**。
+虽然匿名模式可以正常调用所有核心接口，但由于 `/verify` 与 `/settle` 的单 IP 限额较低，因此 **不适合生产环境使用**。
 
 如果你的应用需要处理真实用户支付或较高频率的请求，建议使用 **API Key 调用模式**。
 
@@ -121,7 +123,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 当 Facilitator 识别到 API Key 后：
 
-- 在官方服务上，`/settle` 限额提升至**每个 API Key 每分钟 1000 次**
+- 在官方服务上，`/verify` 与 `/settle` 的限额各自提升至**每个 API Key 每分钟 1000 次**
 
 这意味着你的服务可以支持 **生产级别的支付吞吐量**。
 
@@ -256,23 +258,31 @@ curl -X POST https://facilitator.bankofai.io/settle \
 |------|------|------|
 | GET | `/health` | 服务健康检查 |
 | GET | `/supported` | 查询支持的支付能力和配置 |
-| POST | `/verify` | 验证支付载荷有效性 |
+| POST | `/verify` | 验证支付载荷有效性（**受限速保护**） |
 | POST | `/settle` | 执行链上结算（**受限速保护**） |
 | GET | `/payments/tx/{tx_hash}` | 按结算交易哈希查询支付记录 |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | 按链上授权身份查询支付记录 |
 | GET | `/payments` | 已认证卖家的结算记录流（`?limit=&offset=`；`limit` 默认 `50`、上限 `200`——超过 `200` 会被静默压到 `200`，不会报错；`offset` 默认 `0`） |
+| GET | `/sponsoring/ready` | TRON 授权资源赞助的就绪状态（`?network=` 只查单个网络）；就绪返回 HTTP `200`，否则（启动中、恢复中、降级或未启用赞助）返回 `503` |
 
-> **不存在** `/fee/quote` 端点，各方案也不收取 facilitator 费用。限速仅作用于 `/settle` 接口，其他接口不受限速影响。
+> **不存在** `/fee/quote` 端点，各方案也不收取 facilitator 费用。限速作用于 `/verify` 与 `/settle`（分别计数），其他接口不限速。超出限额的请求返回 HTTP `429`、响应体 `{"error":"rate_limit_exceeded"}`，并带 `Retry-After` 头。
 
 ### 官方服务结算的网络与方案
 
 | 网络 | 环境 |
 |---|---|
-| `tron:0x2b6653dc`（TRON 主网）· `tron:0xcd8690dc`（Nile） | 主网 · 测试网 |
+| `tron:728126428`（TRON 主网）· `tron:3448148188`（Nile） | 主网 · 测试网 |
 | `eip155:56`（BSC）· `eip155:97`（BSC 测试网） | 主网 · 测试网 |
 | `eip155:8453`（Base）· `eip155:84532`（Base Sepolia） | 主网 · 测试网 |
 
-以上网络均注册了 `exact`、`upto` 与 `batch-settlement`；TRON 在服务持有 GasFree 中继凭证的网络上（TRON 主网与 Nile）额外注册 `exact_gasfree`。以所连接部署的 `/supported` 返回为准。官方 facilitator 目前未启用 `trc20ApprovalResourceSponsoring` 扩展——TRON 授权资源赞助需要自建 facilitator。但在其 EVM 网络（BSC 与 Base）上，官方确实为每一条 EVM 网络注册了 ERC-20 授权 gas 代付扩展——不过只有当资源服务端在路由上声明该扩展时，代付才会真正生效。
+以上网络均注册了 `exact`、`upto` 与 `batch-settlement`；TRON 在服务持有 GasFree 中继凭证的网络上（TRON 主网与 Nile）额外注册 `exact_gasfree`。以所连接部署的 `/supported` 返回为准。TRON 网络以十进制 CAIP-2 标识返回；旧的十六进制写法（`tron:0x2b6653dc`、`tron:0xcd8690dc`）仍可作为输入别名。
+
+`/supported` 列出两个扩展：
+
+- `erc20ApprovalGasSponsoring`——为官方服务的每一条 EVM 网络（BSC 与 Base）注册。
+- `trc20ApprovalResourceSponsoring`——TRON 授权资源赞助**仅在 Nile 上启用**，仅针对配置的资产（Nile USDT），并且**需要 API Key**。匿名请求若携带该扩展，会被以 `sponsor_auth_required` 拒绝；已认证请求若针对 TRON 主网，会被以 `sponsor_network_disabled` 拒绝。`GET /sponsoring/ready` 可查询赞助运行时是否就绪。
+
+无论哪种代付，只有当资源服务端在路由上声明了对应扩展时才会真正生效。
 
 ### 支付记录查询
 
@@ -292,7 +302,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 > 提供 API Key 时，这两个接口只返回与你的账户关联的支付记录，不会看到其他卖家的数据。
 
 :::danger 不带 API Key 时
-匿名请求下，`tx_hash` 与 `network` + `nonce` 查询**不添加卖家过滤**，返回结果可能包含已绑定卖家的记录——任何持有准确标识符的人都能查到对应记录。`/payments` 列表接口仍要求身份验证，因此不存在免认证的列表接口；但这两个查询接口也没有限流（官方服务按每个 IP 每分钟 1 次的匿名限流只覆盖 `/settle`），而结算 tx hash 又是链上公开数据。请把结算元数据视为事实上公开，而非按卖家隔离。
+匿名请求下，`tx_hash` 与 `network` + `nonce` 查询**不添加卖家过滤**，返回结果可能包含已绑定卖家的记录——任何持有准确标识符的人都能查到对应记录。`/payments` 列表接口仍要求身份验证，因此不存在免认证的列表接口；但这两个查询接口也没有限流（官方服务按每个 IP 每分钟 10 次的匿名限流只覆盖 `/verify` 与 `/settle`），而结算 tx hash 又是链上公开数据。请把结算元数据视为事实上公开，而非按卖家隔离。
 
 **以上描述的是当前实现行为，不代表推荐的访问控制策略。** 想让查询限定在自己账户范围内请带上 API Key，并且绝不要把结算 tx hash 或其 nonce 当作秘密。
 :::
@@ -303,7 +313,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 **Q：不配置 API Key 能正常运行吗？**
 
-可以运行，但官方服务将 `/settle` 限制为每个 IP 每分钟 1 次。自建部署未配置 `rate_limit.anonymous` 时，默认每个 IP 每分钟 10 次，且可自行调整。匿名访问只适合测试，任何真实流量都必须配置 API Key。
+可以运行，但官方服务将 `/verify` 与 `/settle` 各自限制为每个 IP 每分钟 10 次，与自建部署未配置 `rate_limit.anonymous` 时的默认值相同，且可自行调整。匿名访问只适合测试，任何真实流量都必须配置 API Key。
 
 **Q：API Key 会过期吗？**
 
@@ -311,7 +321,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 **Q：我可以在多个项目中使用同一个 API Key 吗？**
 
-可以，同一个 API Key 可以在多个服务实例中复用。在官方服务上，这些实例共享该 Key 每分钟 1000 次 `/settle` 调用的限额；不会因为使用这个 Key 的服务器增多而分别重置配额。
+可以，同一个 API Key 可以在多个服务实例中复用。在官方服务上，限额按 API Key 而非调用方服务器计算：你的各个实例共用该 Key 每分钟 1000 次 `/settle` 调用的限额（`/verify` 另有独立的 1000 次），不会每台服务器各得一份配额。这些计数器按 facilitator 实例维护（`rate_limit.store: memory`），因此限额在每个 facilitator 实例内生效，而不是一个全局总数。
 
 **Q：我想更换 API Key，怎么操作？**
 

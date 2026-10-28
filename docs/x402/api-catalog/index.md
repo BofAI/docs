@@ -35,7 +35,7 @@ Three consumers share the same data:
 
 - **[Catalog website](https://bankofai.io/catalog)**: for humans to browse and compare services.
 - **wallet-cli**: search, inspect, and make paid calls from the command line.
-- **MCP**: `@bankofai/x402-mcp` lets an Agent pay for an x402 endpoint over MCP. Catalog-aware MCP discovery — browsing the catalog by name from inside an MCP client — is not shipped yet; use `wallet-cli x402 provider-list` for discovery today.
+- **MCP**: `@x402/mcp` (the official MCP integration used since SDK 2.1.0) lets an Agent pay for an x402 endpoint over MCP. Catalog-aware MCP discovery — browsing the catalog by name from inside an MCP client — is not shipped yet; use `wallet-cli x402 provider-list` for discovery today.
 
 ## What's in the catalog
 

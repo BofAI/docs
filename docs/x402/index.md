@@ -17,7 +17,7 @@ x402 currently supports **TRON**, **BNB Smart Chain (BSC)**, and **Base**, with 
 Feel free to submit a PR to the [GitHub repository](https://github.com/BofAI/docs). Our only principle is to maintain neutrality — aside from essential resource links, please avoid promotional or branded content.
 
 **Building with x402?**
-Install the published [`@bankofai/x402-*`](https://www.npmjs.com/package/@bankofai/x402-tron) packages in your TypeScript app. The [`x402` repository](https://github.com/BofAI/x402) ships runnable client → server → facilitator examples under `examples/typescript/` for reference — `exact`, `gasfree`, `upto`, and `batch-settlement`.
+Install the published [`@bankofai/x402-tron`](https://www.npmjs.com/package/@bankofai/x402-tron) packages together with the official `@x402/*` packages in your TypeScript app. The [`x402` repository](https://github.com/BofAI/x402) ships runnable client → server → facilitator examples under `examples/typescript/` for reference — `exact`, `gasfree`, `upto`, and `batch-settlement`.
 
 ---
 
@@ -86,9 +86,9 @@ Our goal is to build a low-barrier, permissionless, developer-friendly programma
 
 x402 currently supports the following networks:
 
-- **TRON Mainnet** (`tron:0x2b6653dc`)
-- **TRON Shasta Testnet** (`tron:0x94a9059e`) — SDK/CLI only; not settled by the official facilitator
-- **TRON Nile Testnet** (`tron:0xcd8690dc`)
+- **TRON Mainnet** (`tron:728126428`)
+- **TRON Shasta Testnet** (`tron:2494104990`) — SDK/CLI only; not settled by the official facilitator
+- **TRON Nile Testnet** (`tron:3448148188`)
 - **BSC Mainnet** (`eip155:56`)
 - **BSC Testnet** (`eip155:97`)
 - **Base Mainnet** (`eip155:8453`)
@@ -96,7 +96,9 @@ x402 currently supports the following networks:
 
 Base Mainnet payments use official USDC with the `exact` scheme and EIP-3009 authorization.
 
-> **SDK (TypeScript-only)**: x402 is a TypeScript-only SDK published as granular `@bankofai/x402-*` npm packages (`core`, `evm`, `tron`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The source is maintained in a pnpm/turbo monorepo, but application development should install the published packages. It defines five named schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, `exact_gasfree` (TRON), and the currently client-only `auth-capture` (EVM). The previous-generation Python + TypeScript SDK lives under `legacy/` for reference. See the [SDK Feature Matrix](./x402/sdk-features) for the full breakdown.
+Since x402 v2.0.0, TRON identifiers use decimal chain IDs; the older hex forms (`tron:0x2b6653dc`, `tron:0x94a9059e`, `tron:0xcd8690dc`) are still accepted as input aliases.
+
+> **SDK (TypeScript-only)**: x402 is a TypeScript-only SDK: the TRON mechanism and TRON resource-sponsoring extension ship as `@bankofai/x402-tron` and `@bankofai/x402-tron-extensions`, on top of the official `@x402/*` packages (`core`, `evm`, `fetch`, `express`, `hono`, `fastify`, `next`, `axios`, `mcp`, `extensions`). The source is maintained in a pnpm/turbo monorepo, but application development should install the published packages. It defines five named schemes: `exact` (ERC-3009 / Permit2), `upto`, `batch-settlement`, `exact_gasfree` (TRON), and the currently client-only `auth-capture` (EVM). The previous-generation Python + TypeScript SDK archive was removed in x402 v2.0.0, and the compatibility npm packages under `typescript/packages/legacy/` in v2.1.0. See the [SDK Feature Matrix](./x402/sdk-features) for the full breakdown.
 
 ---
 

@@ -163,7 +163,7 @@ Full field definitions: [Data Format & API Reference](./reference.md).
 
 ### How to write pay.md
 
-`pay.md` is read by humans and Agents alike. Three parts are recommended: basic service info, endpoint addresses and prices, and copy-paste call examples. The catalog's CI tests require every `pay.md` to contain a `wallet-cli x402 pay` example with `--network tron:728126428` and `--scheme exact`, to mention `exact_gasfree`, and to cover Base Mainnet (`eip155:8453`). The real SunPump file, `providers/sunpump-token-launch/pay.md`:
+`pay.md` is read by humans and Agents alike. Three parts are recommended: basic service info, endpoint addresses and prices, and copy-paste call examples. The catalog's CI tests require every `pay.md` to contain a `wallet-cli x402 pay` example with `--network tron:728126428` and `--scheme exact`, to mention `exact_gasfree`, and to cover Base Mainnet: the text must contain `Base Mainnet`, `eip155:8453`, a `-base` gateway provider, `USDC`, and `EIP-3009`, and must not mention `Sepolia` or `eip155:84532`. The real SunPump file, `providers/sunpump-token-launch/pay.md`:
 
 ````markdown
 # SunPump Agent Token Launch API
@@ -286,20 +286,21 @@ CI enforces the following rules — go through them before submitting:
 - `version` must be `1`.
 - `fqn` is lowercase letters/digits/hyphens and must match the directory name.
 - `category` must be one of the allowed values (see [reference](./reference.md#allowed-categories)).
-- `chains` needs at least one entry, using CAIP-2 style chain IDs. TRON IDs must be `tron:0x2b6653dc`, `tron:0xcd8690dc`, or `tron:0x94a9059e`. CI tests require every provider to list Base Mainnet `eip155:8453` and reject Base Sepolia `eip155:84532`.
+- `chains` needs at least one entry, using CAIP-2 style chain IDs. TRON IDs must be `tron:0x2b6653dc`, `tron:0xcd8690dc`, or `tron:0x94a9059e` — the decimal form (`tron:728126428`) is rejected; see [Chain IDs](./reference.md#chain-ids). CI tests require every provider to list Base Mainnet `eip155:8453` and reject Base Sepolia `eip155:84532`.
 - `isFirstParty`, `isFeatured` (booleans) and `featuredTags` (string array, may be empty `[]`) are **required** — missing any of them fails validation.
 - For every endpoint: `method` must be uppercase, `path` must start with `/`, and `maxPriceUsd` must not be less than `minPriceUsd`.
 - `serviceUrl`, every endpoint `url`, and every route `url` must start with `https://`.
 - Unknown fields are rejected — at the top level and in endpoints, routes, `i18n.<locale>`, and `status`.
 - `x402Routes` is optional in the schema, but CI tests require every endpoint to publish exactly one Base Mainnet route: `scheme` `exact`, `assetTransferMethod` `eip3009`, and a `provider` ending in `-base`. Every route's `network` must also appear in `chains`, and `exact_gasfree` is allowed only on TRON networks. Every route needs `network`, `provider`, `scheme`, and `url`; an `exact` route must also carry `assetTransferMethod` (`permit2` or `eip3009`), and an `exact_gasfree` route must **omit** it. A network may appear more than once — TRON typically publishes both an `exact` and an `exact_gasfree` route — as long as each `(provider, network, scheme, url)` combination is unique. Legacy `fee` / `feeConfig` fields are rejected. See the [reference](./reference.md#x402routes--multi-network-routing).
+- On every endpoint with TRON routes, the first TRON route must be `exact` + `permit2` (the default), and the service-level `description` — including its `i18n` translations — must not contain `--scheme exact_gasfree`.
 - The service and every endpoint must provide `i18n.zh-CN` translations for `title`, `subtitle`, `description`, and `useCase`.
-- `status`, if present, only accepts: `catalog` `listed`/`unlisted`; `gateway` `configured`/`unknown`/`unavailable`; `payment` `paid-route`/`mainnet`/`testnet`/`unknown`; `upstream` `public`/`authenticated`/`unknown`/`unavailable`.
+- `status` is optional, but if present it must include all four keys, and only accepts: `catalog` `listed`/`unlisted`; `gateway` `configured`/`unknown`/`unavailable`; `payment` `paid-route`/`mainnet`/`testnet`/`unknown`; `upstream` `public`/`authenticated`/`unknown`/`unavailable`.
 - `pay.md` must be submitted together with `catalog.json`; both files are scanned for sensitive data.
 - No keys, private keys, or private network addresses anywhere.
 
 ## Step 2: Validate locally
 
-Before submitting, install the validation dependency, then run validation, build, and the unit tests locally — the same steps CI runs:
+Before submitting, install the validation dependency, then run validation, build, and the unit tests locally — the same steps CI runs. The scripts need Python 3.11 or newer (CI uses 3.12); on 3.10 they fail with `ImportError: cannot import name 'UTC' from 'datetime'`.
 
 ```bash
 pip install -r requirements.txt
@@ -309,6 +310,10 @@ python3 -m unittest discover -s tests
 ```
 
 The first two print `validated N provider(s)` and `built N provider(s) into dist`, where N counts every provider in the repository, yours included.
+
+:::note Pinned counts in the tests
+`tests/test_build.py` pins current catalog totals, such as the number of Base Mainnet routes across all providers. A new provider that passes `validate.py` can still fail those assertions (for example `AssertionError: 20 != 18`); update the expected counts in the same PR.
+:::
 
 ## Step 3: Open the Pull Request
 

@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 - `docs/faq.md` — 常见问题解答。
 - `sidebars.js` — Docusaurus 侧边栏配置文件。
 - `docusaurus.config.js` — Docusaurus 主配置文件。
-- `docs/sdk-features.md` — 仅 TypeScript 的 x402 SDK（`@bankofai/x402-*` 包）功能矩阵。
+- `docs/sdk-features.md` — 仅 TypeScript 的 x402 SDK（基于官方 `@x402/*` 包的 `@bankofai/x402-tron` 与 `@bankofai/x402-tron-extensions`）功能矩阵。
 
 ## 3. 代码与文档的同步机制
 
@@ -28,8 +28,8 @@ import TabItem from '@theme/TabItem';
 - 底层机制的变更 $\rightarrow$ 需更新 `core-concepts` 文档。
 
 ## 4. 风格与规范 
-- 以 **TypeScript** 作为主要代码示例（SDK 仅 TypeScript；此前的 Python SDK 已移至 `legacy/`）。
-- 优先提供可直接基于已发布 `@bankofai/x402-*` npm 包运行的代码示例。`examples/typescript/` 中的可运行代码可作为与包 API 一致时的参考实现。
+- 以 **TypeScript** 作为主要代码示例（SDK 仅 TypeScript；此前的 Python SDK 已在 x402 v2.0.0 中移除）。
+- 优先提供可直接基于已发布 npm 包（`@bankofai/x402-tron`、`@bankofai/x402-tron-extensions` 与官方 `@x402/*`）运行的代码示例。`examples/typescript/` 中的可运行代码可作为与包 API 一致时的参考实现。
 - 所有 API 调用示例必须包含完整的错误处理逻辑。
 - 内容撰写面向具有 **2–5 年经验** 的开发者。
 - 必须使用 Docusaurus MDX 组件（`<Tabs>`、`<TabItem>`）来展示多语言代码。
@@ -58,7 +58,7 @@ import TabItem from '@theme/TabItem';
 <Tabs>
   <TabItem value="TRON" label="TRON">
 
-- **网络标识**：必须遵循 `tron:<hex_chain_id>` CAIP-2 格式。优先使用 `@bankofai/x402-tron` 导出的常量（`TRON_MAINNET`、`TRON_NILE`、`TRON_SHASTA`），不要硬编码旧的名称。
+- **网络标识**：必须遵循 `tron:<decimal_chain_id>` CAIP-2 格式（如 Nile 为 `tron:3448148188`）；`tron:0xcd8690dc` 这类十六进制写法是已弃用的输入别名。优先使用 `@bankofai/x402-tron` 导出的常量（`TRON_MAINNET`、`TRON_NILE`、`TRON_SHASTA`），不要硬编码旧的名称。
 - **签名标准**：TRON 签名必须引用 **TIP-712** 标准（请勿混淆为 EIP-712）。
 - **地址格式**：Token 地址必须使用 Base58 编码格式（即以 `T` 开头的地址）。
 - **节点接入**：节点访问需指向 TronGrid 端点。
@@ -126,7 +126,7 @@ import TabItem from '@theme/TabItem';
 - `*/signers/` 目录中新增了签名器。
 - 客户端 (Client) 或服务端 (Server) 新增了功能特性。
 
-**注意**：SDK 仅 TypeScript。更新文档时需对照已发布的 `@bankofai/x402-*` 包 API、`typescript/packages/` 的导出与 `examples/typescript/` 的参考源码交叉检查。
+**注意**：SDK 仅 TypeScript。更新文档时需对照已发布包（`@bankofai/x402-tron`、`@bankofai/x402-tron-extensions`、官方 `@x402/*`）的 API、`typescript/packages/` 的导出与 `examples/typescript/` 的参考源码交叉检查。
 
 
 ## 12.开发常用命令 

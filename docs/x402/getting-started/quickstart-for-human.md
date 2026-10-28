@@ -10,7 +10,7 @@ This guide is for developers who want to **call an x402-protected API from code*
 > **Testnet first:** This guide uses testnet by default. You can safely follow every step without spending real money.
 
 :::info (TypeScript-only)
-x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide shows how to integrate the published npm packages directly.
+x402 is a **TypeScript-only** SDK: the TRON mechanism ships as `@bankofai/x402-tron` and runs on the official `@x402/*` Core and HTTP packages. This guide shows how to integrate the published npm packages directly.
 :::
 
 ---
@@ -31,7 +31,7 @@ x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packa
 
 ### Checklist Before You Start
 
-- [ ] **Node.js 22+** and **pnpm 11.1+** installed
+- [ ] **Node.js 24.22.1+** and **pnpm 11.1+** installed
 - [ ] A dedicated **test wallet** created (see below)
 - [ ] Test tokens claimed (free)
 - [ ] A target x402-protected API URL, such as the `/credit` endpoint from [Quickstart for Sellers](./quickstart-for-sellers.md)
@@ -94,16 +94,16 @@ x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packa
 Install the published npm packages in your TypeScript application:
 
 ```bash
-pnpm add @bankofai/agent-wallet @bankofai/x402-fetch @bankofai/x402-tron
+pnpm add @bankofai/agent-wallet @x402/core@2.28.0 @x402/fetch@2.28.0 @bankofai/x402-tron@2.1.0
 pnpm add -D tsx   # to run the TypeScript entry point below
 ```
 
-Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
+Use `npm install` or `yarn add` with the same package names if your project does not use pnpm. Keep `@x402/core` and `@x402/fetch` at exactly `2.28.0` — `@bankofai/x402-tron` 2.1.0 declares `@x402/core@2.28.0` as an exact peer dependency.
 
 :::info Wallet Management
-x402 uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet is installed with the package set above. Private key resolution priority:
-1. Encrypted wallet file (imported via the Agent Wallet CLI)
-2. Environment variable `AGENT_WALLET_PRIVATE_KEY`
+x402 uses [Agent Wallet](../../Agent-Wallet/QuickStart.md) to resolve and manage wallet credentials. Agent Wallet (3.0+) is installed with the package set above. Wallet resolution priority:
+1. The Agent Wallet CLI config (`~/.agent-wallet`), when it contains at least one wallet — set up with `agent-wallet start raw_secret`, `wallet_cli` or `privy`
+2. Environment variables `AGENT_WALLET_PRIVATE_KEY` (or `AGENT_WALLET_MNEMONIC`)
 
 This guide uses the environment variable method.
 :::
@@ -145,7 +145,8 @@ The client wraps `fetch` so HTTP `402 Payment Required` challenges are paid auto
 
 ```typescript
 import { resolveWallet, type Wallet, type Eip712Capable } from "@bankofai/agent-wallet";
-import { x402Client, wrapFetchWithPayment } from "@bankofai/x402-fetch";
+import { x402Client } from "@x402/core/client";
+import { wrapFetchWithPayment } from "@x402/fetch";
 import { createClientTronSigner, TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/client";
 
@@ -210,15 +211,14 @@ See [SDK Feature Matrix](../sdk-features.md) for the full options, including `al
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
-| `WalletNotFoundError` / no wallet resolved | agent-wallet has no wallet, or `AGENT_WALLET_PRIVATE_KEY` is not set in this shell | Run `agent-wallet start`, or run the `export` in **the same terminal window** as the script |
-| `WalletNotFoundError: No active wallet set` | agent-wallet has no wallet configured | Run `agent-wallet start` and follow the prompts to import your private key |
+| `resolve_wallet could not find a wallet source in config or env` | agent-wallet has no wallet, or `AGENT_WALLET_PRIVATE_KEY` is not set in this shell | Run `agent-wallet start`, or run the `export` in **the same terminal window** as the script |
 | `Insufficient balance` / balance error | Test wallet doesn't have enough USDT/USDD | Go back to Prerequisites and claim test tokens from the faucet |
 | `No network/scheme registered for x402 version: 2 …` | No scheme is registered for any network the server advertises — this is raised before your selector runs | Check that the server's `accepts` includes `network: TRON_NILE` and that you called `client.register(TRON_NILE, …)` |
 | `permit2_allowance_required` | The Permit2 allowance is missing or too low | On TRON the SDK auto-broadcasts the one-time `approve` on first payment; if it persists, check that the wallet holds enough TRX for that approve |
 | `approval_reset_required` (TRON) | The token already has a non-zero but insufficient Permit2 allowance, and the default `zero-first` strategy will not overwrite it | Set the token's Permit2 allowance back to `0`, then retry — the SDK never inserts an implicit `approve(0)` |
 | `approval_asset_unsupported` (TRON) | The token is not a known Permit2 asset and no approval strategy was configured for it | Configure it with `createTrc20ApprovalPolicy`, or pay with a supported token |
 | `Connection timeout` | Network or request timeout | Check the API service, facilitator, and TRON RPC connection |
-| `ERR_PACKAGE_PATH_NOT_EXPORTED` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
+| `Top-level await is currently not supported with the "cjs" output format` (under `tsx`) | Project is not declared as ESM, so the script's top-level `await` is compiled as CommonJS | Add `"type": "module"` to your `package.json` |
 
 If you need finer-grained error handling in your code:
 
@@ -232,7 +232,7 @@ try {
     console.error(await res.text());
   }
 } catch (error) {
-  if (error instanceof Error && error.message.includes("no payment option")) {
+  if (error instanceof Error && error.message.includes("No network/scheme registered")) {
     console.error("No matching payment option — check TRON_NILE vs the server's accepts");
   } else if (error instanceof Error && error.message.includes("allowance")) {
     console.error("Insufficient token allowance — check wallet balance");

@@ -23,7 +23,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 - **发起请求**：向资源服务器发送初始 HTTP 请求。
 - **处理支付要求**：解析 `402 Payment Required` 响应，并提取支付详情。
-- **管理代币授权**：为普通 ERC-20/TRC-20 代币授权 Permit2（一次性 `approve(Permit2)`）；ERC-3009 代币无需授权。由谁广播因链而异。**在 TRON 上**，client 会在首次付款时自动广播该授权、能量自付——除非 server 声明了 `trc20ApprovalResourceSponsoring` 扩展（SDK 1.2.0+），此时 client 只签名不广播，由 facilitator 赞助能量/带宽并广播。**在 EVM 上 client 从不广播任何交易**：要么在 server 声明了 `eip2612GasSponsoring` 或 `erc20ApprovalGasSponsoring` 时附上一笔已签名但未广播的授权交由 facilitator 转发；要么在没有任何相关扩展时，验款直接以 `permit2_allowance_required` 失败，授权必须在首次付款前另行完成。详见 [SDK 功能矩阵](../sdk-features.md#extensions)。
+- **管理代币授权**：为普通 ERC-20/TRC-20 代币授权 Permit2（一次性 `approve(Permit2)`）；ERC-3009 代币无需授权。由谁广播因链而异。**在 TRON 上**，client 会在首次付款时自动广播该授权、能量自付（默认 `allowanceMode: "auto"` 时如此；设为 `"skip"` 则由应用自行处理授权）——除非 server 声明了 `trc20ApprovalResourceSponsoring` 扩展，此时 client 只签名不广播，由 facilitator 赞助能量/带宽并广播。2.1.0 起，这需要用 `client.registerExtension(createTrc20ApprovalResourceSponsoringClientExtension(signer))` 注册 `@bankofai/x402-tron-extensions` 中的 client 扩展；未注册时，受赞助的付款会以 `trc20_approval_client_extension_not_registered` 失败，不会退回由 client 自行广播。**在 EVM 上 client 从不广播任何交易**：要么附上链下的 EIP-2612 permit 签名（server 声明了 `eip2612GasSponsoring` 时），或附上一笔已签名但未广播的授权交易交由 facilitator 转发（`erc20ApprovalGasSponsoring`）；要么在没有任何相关扩展时，验款直接以 `permit2_allowance_required` 失败，授权必须在首次付款前另行完成。详见 [SDK 功能矩阵](../sdk-features.md#extensions)。
 - **准备支付载荷**：根据服务端的要求，构建并签署支付载荷。
 - **携带支付凭证重发请求**：在请求头中附加 `PAYMENT-SIGNATURE` 并重新发送请求。
 
@@ -41,7 +41,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 ### 核心职责
 
-- **定义支付要求**：对未附带有效支付凭证的请求响应 HTTP `402 Payment Required`，并在响应体中详细说明支付要求。
+- **定义支付要求**：对未附带有效支付凭证的请求响应 HTTP `402 Payment Required`，并在 Base64 编码的 `PAYMENT-REQUIRED` 响应头中详细说明支付要求（响应体默认为 `{}`）。
 - **验证支付载荷**：调用 Facilitator 服务对传入的签名载荷进行验证。
 - **结算交易**：验证通过后，通过 Facilitator 提交交易以完成资金结算。
 - **交付资源**：支付确认无误后，向客户端返回所请求的资源。
@@ -65,6 +65,8 @@ import ThemedImage from '@theme/ThemedImage';
     dark: '/img/diagrams/x402-payment-flow.zh.svg',
   }}
 />
+
+图中是客户端看到的顺序：资源在结算之后才到达。在默认的 `authorization` 流程下，服务端会先执行处理逻辑再结算，并在结算成功后才放出响应（见上文第 5 步）。
 
 ## 总结
 

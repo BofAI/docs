@@ -56,10 +56,12 @@ Official Facilitator supports **two calling modes**.
 
 | Mode | Rate Limit | Description |
 |-----|-----|-----|
-| **Anonymous Mode** | Official service: 1 request per IP per minute. Self-hosted deployments default to 10 requests per IP per minute when `rate_limit.anonymous` is omitted (configurable). | No API Key required, suitable for local development and functional testing |
-| **API Key Mode** | Official service: 1000 requests per API Key per minute. Self-hosted deployments use the same default when `rate_limit.authenticated` is omitted (configurable). | API Key required, suitable for production environments and high-frequency payment requests |
+| **Anonymous Mode** | Official service: 10 requests per IP per minute, counted separately for `/verify` and `/settle`. This is also the self-hosted default when `rate_limit.anonymous` is omitted (configurable). | No API Key required, suitable for local development and functional testing |
+| **API Key Mode** | Official service: 1000 requests per API Key per minute, counted separately for `/verify` and `/settle`. Self-hosted deployments use the same default when `rate_limit.authenticated` is omitted (configurable). | API Key required, suitable for production environments and high-frequency payment requests |
 
 The calling methods for both modes are exactly the same, but they differ in **identity recognition and interface rate limiting strategies**.
+
+> **Counters are per instance.** The official production config uses `rate_limit.store: memory`, so each facilitator instance keeps its own counters; requests that land on different instances are not counted against one shared total. Self-hosted deployments default to the same in-memory store — set `rate_limit.store: redis` (with `redis_url`) to share counters across replicas.
 
 ---
 
@@ -69,8 +71,8 @@ If the request **does not carry an API Key**, the Facilitator will treat the req
 
 In anonymous mode:
 
-- The `/settle` interface is **rate-limited**
-- The **official service allows 1 request per IP per minute**. Self-hosted deployments default to **10 requests per IP per minute** when `rate_limit.anonymous` is omitted; this limit is configurable.
+- The `/verify` and `/settle` interfaces are **rate-limited**, each with its own counter
+- The **official service allows 10 requests per IP per minute** on each of them — the same as the self-hosted default when `rate_limit.anonymous` is omitted; this limit is configurable.
 
 This mode is mainly used for:
 
@@ -87,7 +89,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
   -d '{ ... }'
 ```
 
-Although anonymous mode can call all core interfaces normally, due to the very low call frequency of `/settle`, it is **not suitable for production environments**.
+Although anonymous mode can call all core interfaces normally, due to the low per-IP limit on `/verify` and `/settle`, it is **not suitable for production environments**.
 
 If your application needs to handle real user payments or higher frequency requests, it is recommended to use **API Key calling mode**.
 
@@ -112,7 +114,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 When the Facilitator recognizes the API Key:
 
-- On the official service, the `/settle` limit increases to **1000 requests per API Key per minute**
+- On the official service, the `/verify` and `/settle` limits each increase to **1000 requests per API Key per minute**
 
 This means your service can support **production-level payment throughput**.
 
@@ -246,23 +248,31 @@ After clicking **"Confirm"**, you will return to the Dashboard page, and the API
 |------|------|------|
 | GET | `/health` | Service health check |
 | GET | `/supported` | Query supported payment capabilities and configurations |
-| POST | `/verify` | Verify payment payload validity |
+| POST | `/verify` | Verify payment payload validity (**rate-limited**) |
 | POST | `/settle` | Perform on-chain settlement (**rate-limited**)|
 | GET | `/payments/tx/{tx_hash}` | Query payment records by settlement transaction hash |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | Query payment records by the on-chain authorization identity |
 | GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`; `limit` defaults to `50` and is capped at `200` — a larger value is silently reduced to `200`, not rejected; `offset` defaults to `0`) |
+| GET | `/sponsoring/ready` | TRON approval resource sponsoring readiness (`?network=` checks one network); HTTP `200` when ready, `503` otherwise (booting, recovering, degraded, or sponsoring disabled) |
 
-> There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee. Rate limiting only applies to the `/settle` interface; other interfaces are not affected by rate limiting.
+> There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee. Rate limiting applies to `/verify` and `/settle` (separate counters); other interfaces are not rate-limited. A request over the limit receives HTTP `429` with `{"error":"rate_limit_exceeded"}` and a `Retry-After` header.
 
 ### Networks and schemes the official service settles
 
 | Network | Environment |
 |---|---|
-| `tron:0x2b6653dc` (TRON Mainnet) · `tron:0xcd8690dc` (Nile) | mainnet · testnet |
+| `tron:728126428` (TRON Mainnet) · `tron:3448148188` (Nile) | mainnet · testnet |
 | `eip155:56` (BSC) · `eip155:97` (BSC testnet) | mainnet · testnet |
 | `eip155:8453` (Base) · `eip155:84532` (Base Sepolia) | mainnet · testnet |
 
-Each of these networks registers `exact`, `upto`, and `batch-settlement`; TRON additionally registers `exact_gasfree` where the service holds GasFree relayer credentials (TRON Mainnet and Nile). Query `/supported` for the authoritative list of the deployment you are pointing at. The official facilitator does not currently enable the `trc20ApprovalResourceSponsoring` extension — TRON approval resource sponsoring requires a self-hosted facilitator. On its EVM networks (BSC and Base) it does register the ERC-20 approval gas-sponsoring extension for every EVM network it serves — but sponsoring only kicks in when the resource server declares that extension on the route.
+Each of these networks registers `exact`, `upto`, and `batch-settlement`; TRON additionally registers `exact_gasfree` where the service holds GasFree relayer credentials (TRON Mainnet and Nile). Query `/supported` for the authoritative list of the deployment you are pointing at. TRON networks are reported with decimal CAIP-2 identifiers; the older hex forms (`tron:0x2b6653dc`, `tron:0xcd8690dc`) are still accepted as input aliases.
+
+`/supported` lists two extensions:
+
+- `erc20ApprovalGasSponsoring` — registered for every EVM network the service serves (BSC and Base).
+- `trc20ApprovalResourceSponsoring` — TRON approval resource sponsoring is enabled **on Nile only**, for the configured asset (Nile USDT), and **requires an API Key**. An anonymous request that carries the extension is rejected with `sponsor_auth_required`; an authenticated request for TRON Mainnet is rejected with `sponsor_network_disabled`. `GET /sponsoring/ready` reports whether the sponsoring runtime is ready.
+
+Either sponsorship only kicks in when the resource server declares the extension on the route.
 
 ### Payment Record Query
 
@@ -282,7 +292,7 @@ The `/payments/tx/{tx_hash}` and `/payments?network=&nonce=[&asset=&payer=]` int
 > When an API Key is provided, these interfaces only return payment records associated with your account; you will not see data from other sellers.
 
 :::danger Without an API Key
-The `tx_hash` and `network` + `nonce` lookups add **no seller filter** when the request is anonymous, so the response may include records bound to a seller — anyone holding an exact identifier can resolve the corresponding record. The `/payments` list endpoint still requires authentication, so there is no unauthenticated listing endpoint; but these lookups are not rate-limited either (the official service's 1-request-per-IP-per-minute anonymous limit covers `/settle` only), and settlement tx hashes are public on-chain data. Treat settlement metadata as effectively public rather than seller-private.
+The `tx_hash` and `network` + `nonce` lookups add **no seller filter** when the request is anonymous, so the response may include records bound to a seller — anyone holding an exact identifier can resolve the corresponding record. The `/payments` list endpoint still requires authentication, so there is no unauthenticated listing endpoint; but these lookups are not rate-limited either (the official service's 10-requests-per-IP-per-minute anonymous limit covers `/verify` and `/settle` only), and settlement tx hashes are public on-chain data. Treat settlement metadata as effectively public rather than seller-private.
 
 **This describes the current implementation, not a recommended access-control policy.** Send your API Key to keep queries scoped to your own account, and never treat a settlement tx hash or its nonce as a secret.
 :::
@@ -293,7 +303,7 @@ The `tx_hash` and `network` + `nonce` lookups add **no seller filter** when the 
 
 **Q: Can it run normally without configuring an API Key?**
 
-Yes, it can run, but the official service limits `/settle` to 1 request per IP per minute. A self-hosted deployment defaults to 10 requests per IP per minute when `rate_limit.anonymous` is omitted, and that limit is configurable. Anonymous access is only suitable for testing; any real traffic must be configured with an API Key.
+Yes, it can run, but the official service limits `/verify` and `/settle` to 10 requests per IP per minute each — the same as the self-hosted default when `rate_limit.anonymous` is omitted, which is configurable. Anonymous access is only suitable for testing; any real traffic must be configured with an API Key.
 
 **Q: Does the API Key expire?**
 
@@ -301,7 +311,7 @@ Currently, API Keys do not actively expire, but if you actively delete and recre
 
 **Q: Can I use the same API Key for multiple projects?**
 
-Yes, the same API Key can be reused across multiple service instances. On the official service, those instances share that Key's limit of 1000 `/settle` requests per minute; the quota does not reset for each server using the Key.
+Yes, the same API Key can be reused across multiple service instances. On the official service the limit is keyed by API Key, not by calling server: your instances draw on the same 1000 `/settle` requests per minute (and a separate 1000 for `/verify`) rather than each getting its own quota. Those counters are kept per facilitator instance (`rate_limit.store: memory`), so the limit applies within each facilitator instance, not as one global total.
 
 **Q: I want to change my API Key, how do I do it?**
 

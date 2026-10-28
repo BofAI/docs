@@ -19,7 +19,7 @@ By introducing a Facilitator, servers no longer need to maintain direct connecti
 
 - **Payment Verification**: Ensures that the signed payload strictly complies with the server's declared payment requirements.
 - **Payment Settlement**: Submits validated transactions to the blockchain and monitors their confirmation status.
-- **Settlement Records**: Persists one row per settle attempt — the store applies no de-duplication and holds no unique constraint, so failures and retries accumulate. At most one *successful* row exists per authorization identity in practice, because on-chain replay protection lets a given authorization settle only once. It also answers record queries, seller-scoped when the caller authenticates. A save failure is logged but never changes the `/settle` response.
+- **Settlement Records**: Persists one row for each settle attempt that reaches a result from the settle mechanism — success or failure — so failed attempts and retries accumulate. Requests rejected before or around settlement get no row: malformed bodies (400), sponsoring-access rejections (403/503), Permit2 replay-guard errors, and internal errors (500). A partial unique index on (`network`, `asset`, `payer`, `nonce`) where `status = 'success'` allows at most one *successful* row per authorization, complementing on-chain replay protection, which lets a given authorization settle only once. It also answers record queries, seller-scoped when the caller authenticates. A save failure is logged but never changes the `/settle` response.
 - **Result Feedback**: Returns verification and settlement results to the server, enabling it to decide whether to deliver the requested resource.
 
 > **Note**: The Facilitator **does not custody funds** and does not act as an escrow. It only executes verification and on-chain operations according to the client's signed authorization.
@@ -31,7 +31,7 @@ Integrating a Facilitator provides significant advantages:
 - **Reduced Operational Overhead**: Servers do not need to directly manage blockchain nodes or RPC infrastructure.
 - **Protocol Standardization**: Ensures consistent payment verification and settlement processes across services.
 - **Fast Integration**: Servers can begin accepting payments with minimal blockchain development effort.
-- **Resource Fee Management**: The Facilitator covers transaction execution costs such as TRX (Energy and Bandwidth) / BNB, reducing the operational burden on the server. Since SDK 1.2.0 a TRON Facilitator may additionally opt into the `trc20ApprovalResourceSponsoring` extension, temporarily delegating its own Stake 2.0 Energy — and, when needed, Bandwidth — to the payer so the payer's first `approve(Permit2)` costs them no TRX. This is opt-in: the Facilitator must register the sponsoring runtime together with a bounded sponsorship policy and a durable operation coordinator. Either way the resource server must also declare the extension on the route — that declaration is what makes an SDK client attach the sponsoring payload (the Facilitator itself does not check it, so a non-SDK client could skip that step). EVM networks have an equivalent capability — sponsoring the payer's ERC-20 `approve` gas — but the SDK does not wire it up for you: a self-hosted Facilitator must register the extension itself. The official Facilitator registers it for the EVM networks it serves; see [Official Facilitator](./OfficialFacilitator.md).
+- **Resource Fee Management**: The Facilitator covers transaction execution costs such as TRX (Energy and Bandwidth) / BNB, reducing the operational burden on the server. Since SDK 1.2.0 a TRON Facilitator may additionally opt into the `trc20ApprovalResourceSponsoring` extension, temporarily delegating its own Stake 2.0 Energy — and, when needed, Bandwidth — to the payer so the payer's first `approve(Permit2)` costs them no TRX. This is opt-in: the Facilitator must register the sponsoring runtime together with a bounded sponsorship policy and a durable operation coordinator. Either way the resource server must also declare the extension on the route — that declaration is what makes an SDK client attach the sponsoring payload (the Facilitator itself does not check it, so a non-SDK client could skip that step). EVM networks have an equivalent capability — sponsoring the payer's ERC-20 `approve` gas — but the SDK does not wire it up for you: a self-hosted Facilitator must register the extension itself. The official Facilitator registers it for the EVM networks it serves, and enables TRON approval resource sponsoring on Nile for API Key holders; see [Official Facilitator](./OfficialFacilitator.md).
 
 Although developers may implement verification and settlement logic locally, using a Facilitator significantly accelerates development and ensures protocol-compliant implementation.
 
@@ -74,7 +74,7 @@ Quick usage examples can be found in [OfficialFacilitator](./OfficialFacilitator
 If you need full control over the settlement wallet, RPC endpoints, energy management, or which networks and schemes are registered — or you have specific privacy or compliance requirements — you can deploy your own Facilitator service.
 
 > ⚠️ **Self-hosting security notes:**
-> - A self-hosted Facilitator needs a **dedicated funded wallet** to pay blockchain transaction fees. It is resolved through `@bankofai/agent-wallet` and unlocked out-of-band (for example `AGENT_WALLET_PASSWORD`) — the raw private key never enters the service process
+> - A self-hosted Facilitator needs a **dedicated funded wallet** to pay blockchain transaction fees. It is resolved through `@bankofai/agent-wallet` v3: with the `privy` or `wallet_cli` provider the key stays outside the service process; the `raw_secret` provider keeps a plaintext key in its config and is for development only
 > - **This Facilitator wallet should be separate from your payment recipient wallet** — create a new wallet specifically for this purpose
 > - Only deposit a small amount of tokens into the Facilitator wallet (enough for fees); do not store large amounts
 > - Never place a raw private key in `.env`, a config file, or a shell command — **and never upload wallet material to GitHub or share it with anyone**
@@ -91,15 +91,18 @@ Whether using the official service or a self-hosted instance, the Facilitator pr
 |--------|------|-------------|
 | GET | `/health` | Liveness check |
 | GET | `/supported` | Supported payment capabilities and configuration |
-| POST | `/verify` | Verify payment payload validity |
+| POST | `/verify` | Verify payment payload validity (**rate-limited**, see below) |
 | POST | `/settle` | Execute on-chain settlement (**rate-limited**, see below); persists a settlement record |
 | GET | `/payments/tx/{tx_hash}` | Query payment records by settlement transaction hash (seller-scoped when authenticated) |
 | GET | `/payments?network=&nonce=[&asset=&payer=]` | Query payment records by the on-chain authorization identity (seller-scoped when authenticated) |
 | GET | `/payments` | Authenticated seller's settlement feed (`?limit=&offset=`; `limit` defaults to `50` and is capped at `200` — a larger value is silently reduced to `200`, not rejected; `offset` defaults to `0`) |
+| GET | `/sponsoring/ready` | TRON approval resource sponsoring readiness (`?network=` checks one network); HTTP `200` when ready, `503` otherwise (booting, recovering, degraded, or sponsoring disabled) |
 | GET | `/metrics` | Prometheus metrics (operational; exposed on the main port only when monitoring shares it) |
 | ALL | `/mainnet/*` · `/nile/*` | GasFree Open API transparent proxy (HMAC-signed) — used internally by the TRON `exact_gasfree` scheme |
 
 Record-query failures use these codes: `404 not_found` when no record matches, `400 invalid_identity_query` for a partial identity query (any of `network`/`nonce`/`asset`/`payer` without the required `network`+`nonce` pair), and `400 missing_identity_or_auth` when `/payments` is called with neither identity parameters nor an API Key.
+
+`/verify` and `/settle` keep the x402 response shape (`invalidReason` / `errorReason`). Besides the SDK's own reasons, the service returns: `400 invalid_json` or `missing_parameters` for a malformed body; `413` `{"code":"body_too_large","message":…}` (default limit 1 MiB); `429` `{"error":"rate_limit_exceeded"}`; `403 sponsor_auth_required`, `sponsor_network_disabled` or `sponsor_pay_to_invalid` when a request carries `trc20ApprovalResourceSponsoring` that the deployment will not sponsor; and `503` with `Retry-After` for transient conditions (`sponsor_owner_busy`, `sponsor_recovery_in_progress`, `sponsor_storage_unavailable`, and on `/settle` only `permit2_authorization_busy`, `permit2_storage_unavailable`, `permit2_nonce_check_unavailable`). On `/settle`, a Permit2 authorization whose nonce is already consumed fails with `permit2_nonce_consumed` (HTTP 200) without broadcasting a new transaction; a malformed one fails `/settle` with `400 permit2_invalid_authorization`. Sponsored approvals can also fail at the protocol level (HTTP 200, in `invalidReason` / `errorReason`): `approval_transaction_reused` (the signed approve was already used for a different payment request), `sponsor_approval_lifetime_exceeded` (the signed approve is valid for longer than 630 seconds) and, on `/settle` only, `sponsor_existing_delegation`. An unexpected failure returns `500 internal_error`. The GasFree proxy is served only under `/mainnet` and `/nile` (any other path gets a plain `404`), and answers `502 bad_gateway` when the upstream fails or its response is too large.
 
 > There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee at all. Payment records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`), not a client-supplied payment ID.
 
@@ -107,14 +110,16 @@ Record-query failures use these codes: `404 not_found` when no record matches, `
 
 ## Rate Limiting
 
-The `/settle` endpoint enforces dynamic rate limits based on the caller's authentication status:
+The `/verify` and `/settle` endpoints enforce dynamic rate limits based on the caller's authentication status, with a separate counter for each endpoint:
 
 | Mode | Rate Limit | How to Authenticate |
 |------|------------|---------------------|
-| **Authenticated** | Official service: 1000 requests per API Key per minute. Self-hosted deployments use the same default when `rate_limit.authenticated` is omitted (configurable). | Include `X-API-KEY: <your_key>` header |
-| **Anonymous** | Official service: 1 request per IP per minute. Self-hosted deployments default to 10 requests per IP per minute when `rate_limit.anonymous` is omitted (configurable). | No API Key provided |
+| **Authenticated** | Official service: 1000 requests per API Key per minute, counted separately for `/verify` and `/settle`. Self-hosted deployments use the same default when `rate_limit.authenticated` is omitted (configurable). | Include `X-API-KEY: <your_key>` header |
+| **Anonymous** | Official service: 10 requests per IP per minute, counted separately for `/verify` and `/settle`. This is also the self-hosted default when `rate_limit.anonymous` is omitted (configurable). | No API Key provided |
 
-Other endpoints (`/verify`, `/supported`, `/payments/*`) are not individually rate-limited.
+Other endpoints (`/supported`, `/payments/*`, `/sponsoring/ready`, `/health`) are not rate-limited. Over the limit, the response is HTTP `429` `{"error":"rate_limit_exceeded"}` with a `Retry-After` header.
+
+> **Counters are per instance.** The official production config uses `rate_limit.store: memory`, so each facilitator instance keeps its own counters; requests that land on different instances are not counted against one shared total. Self-hosted deployments default to the same in-memory store — set `rate_limit.store: redis` (with `redis_url`) to share counters across replicas.
 
 > **Tip**: For any production workload, apply for an API Key via the [Admin Portal](https://admin-facilitator.bankofai.io) to unlock the higher rate limit.
 
@@ -132,7 +137,7 @@ How access currently behaves:
 - **With a valid `X-API-KEY`** — results are filtered to the seller that key belongs to.
 - **Anonymous `tx_hash` or `network` + `nonce` lookup** — the current implementation adds **no seller filter**, so the response may include records that are bound to a seller.
 - **The `/payments` list endpoint** — still requires authentication: with no identity parameters and no API Key it returns `400`, and a partial identity query returns `400` rather than degrading into a feed.
-- **No rate limit on these lookups** — the official service's 1-request-per-IP-per-minute anonymous limit applies to `/settle` only; the record-query endpoints are not individually rate-limited.
+- **No rate limit on these lookups** — the official service's anonymous limit applies to `/verify` and `/settle` only; the record-query endpoints are not individually rate-limited.
 
 Settlement tx hashes are public on-chain data, and the `network` + `nonce` lookup additionally resolves **failed** settlements — including pre-broadcast failures, which carry no tx hash at all and so cannot be reached any other way. The practical consequence is that **settlement metadata should be treated as effectively public**, even though no unauthenticated listing endpoint exists. The response body never includes the seller id, so what a lookup exposes is the payment metadata of a seller-bound record, not seller attribution.
 

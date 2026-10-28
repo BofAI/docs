@@ -5,18 +5,18 @@ description: "用 wallet-cli 查询目录和预览付费接口。"
 
 # Catalog 快速入门
 
-先按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)安装 `@tron-walletcli/wallet-cli@4.14.0`。目录查询不需要钱包或密码，支付预览和付款需要已配置账户。
+先按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)安装 Wallet CLI。目录查询不需要钱包或密码，支付预览和付款需要已配置账户。
 
 ## 浏览目录
 
 ```bash
+wallet-cli x402 update-catalog -o json
 wallet-cli x402 provider-list -o json
 wallet-cli x402 provider-show dia -o json
 wallet-cli x402 endpoint-list dia -o json
-wallet-cli x402 update-catalog -o json
 ```
 
-`provider-list` 可按支持的网络、类别和 capability 过滤。`update-catalog` 会更新本地缓存。
+`update-catalog` 把目录下载到本地缓存。`provider-list`、`provider-show` 和 `endpoint-list` 读取该缓存，只有缓存不存在或缺少所需内容时才从目录下载；它们不会刷新缓存，需要最新的服务和价格时请重新运行 `update-catalog`。`provider-list` 支持 `--network`、`--category` 和 `--capability` 过滤。
 
 ## 选择接口和网络
 

@@ -11,7 +11,7 @@ x402 唤醒了长期闲置的 HTTP `402 Payment Required` 状态码，将其转�
 
 #### x402 是商业产品吗？
 
-**不是。** x402 是 x402 协议针对区块链的开源实现，遵循 MIT 许可协议发布。您无需购买任何商业产品即可自由使用。
+**不是。** x402 是 x402 协议针对区块链的开源实现。[代码仓库](https://github.com/BofAI/x402)采用 MIT 许可协议，而已发布的 npm 包 `@bankofai/x402-tron` 与 `@bankofai/x402-tron-extensions` 在其 `package.json` 中声明的是 `Apache-2.0`（官方 `@x402/*` 包同样如此）。您无需购买任何商业产品即可自由使用。
 
 #### 为什么要摒弃传统支付渠道或 API 密钥？
 
@@ -25,13 +25,13 @@ x402 唤醒了长期闲置的 HTTP `402 Payment Required` 状态码，将其转�
 
 #### 支持哪些语言和框架？
 
-x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发布：
+x402 是**仅 TypeScript** 的 SDK：TRON 相关包以 `@bankofai/x402-tron` 与 `@bankofai/x402-tron-extensions` 发布，Core、EVM 与框架集成使用官方 `@x402/*` 包：
 
 - **服务端中间件**：Express、Fastify、Hono、Next.js
-- **客户端**：包装 `fetch`（`@bankofai/x402-fetch`）、Axios、MCP 传输
+- **客户端**：包装 `fetch`（`@x402/fetch`）、Axios、MCP 传输
 - **Facilitator**：链无关引擎，按方案 verify + settle
 
-此前的 Python SDK 已移至 `legacy/` 仅供参考。
+已退役的 Python SDK 与旧的根目录 `legacy/` 归档已在 x402 v2.0.0 中移除，`typescript/packages/legacy/` 下的兼容 npm 包也已在 v2.1.0 中移除。
 
 ### Facilitator
 
@@ -62,7 +62,7 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 
 x402 定义了五种命名支付方案。其中四种可端到端使用；`auth-capture` 目前仅提供客户端支持：
 
-- **`exact`**：支付公布的准确金额。EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算；普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，首次付款需一次性 `approve(Permit2)`。`exact` 的协议 payload 遵循 **x402 Foundation** 的 v2 规范。
+- **`exact`**：支付公布的准确金额。EIP-3009 代币（如 Base 官方 USDC）通过 `transferWithAuthorization` 无 gas 结算；普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，首次付款需一次性 `approve(Permit2)`。`exact` 的协议 payload 遵循 **x402 Foundation** 的 v2 规范。
 - **`upto`**：按量计费——客户端签署最高至最大金额的 Permit2 授权，服务端仅结算**实际用量**（≤ max）。非常适合**按量计费**、**LLM Token 消耗**等场景。
 - **`batch-settlement`**：面向高频微支付的支付通道——一次性链上存入，然后用链下凭证支付多次请求，一笔交易批量结算。含退款路径。
 - **`exact_gasfree`**（仅限 TRON）：允许买家使用 USDT/USDD 付款而无需持有 TRX 来支付 gas。由 relayer 通过 GasFree API 支付链上 energy——客户端无需配置 API 密钥。relayer 会在付款金额之外，从支付代币中扣除自己的中继费。
@@ -74,10 +74,10 @@ x402 定义了五种命名支付方案。其中四种可端到端使用；`auth-
 
 - 标准的 v2 客户端可以直接访问本 SDK 的 `exact` 受保护端点，无需任何项目特定的适配层。
 - 本 SDK 的客户端可以直接向 v2 兼容的服务端付款。
-- V2 结构中转账授权数据位于 `payload.authorization` 字段（结构化对象）。
-- BSC USDT/USDC 是普通 ERC-20（无 ERC-3009），在 `exact` 方案下通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`。ERC-3009 代币（如 BSC 测试网 DHLU）则无 gas 结算，无需 approve。
+- V2 结构中转账授权数据是结构化对象：EIP-3009 路径位于 `payload.authorization`，Permit2 路径位于 `payload.permit2Authorization`。
+- BSC USDT/USDC 是普通 ERC-20（无 ERC-3009），在 `exact` 方案下通过 Permit2 路径结算，需要一次性 `approve(Permit2)`。在 EVM 上客户端从不广播该授权：要么事先已授权，要么在 server 声明了 gas 代付扩展时交由 facilitator 转发——否则请求会以 `permit2_allowance_required` 失败。
 - Base 主网官方 USDC 在 `exact` 下使用 EIP-3009：付款方签署 `transferWithAuthorization`，无需 Permit2 approve。
-- 仓库中的 `legacy/examples/bsc-testnet-smoke/` 目录（属于保留作参考的 `legacy/` 目录）提供了双向互通的烟雾测试示例（Coinbase 官方客户端 → BANK OF AI 服务端、BANK OF AI 客户端 → Coinbase 官方服务端），可作为调试与集成参考。
+- 原 `legacy/examples/bsc-testnet-smoke/` 互通烟雾测试已随根目录 `legacy/` 归档在 x402 v2.0.0 中移除。当前请以可运行的 [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) 工作区作为 client → server → facilitator 的参考；自 v2.1.0 起它只覆盖 TRON，EVM 请参考[上游示例](https://github.com/x402-foundation/x402/tree/main/examples/typescript)。
 
 ### 资产、网络及费用
 
@@ -85,22 +85,23 @@ x402 定义了五种命名支付方案。其中四种可端到端使用；`auth-
 
 | 网络                          | 代币          | 状态        |
 | ----------------------------- | ------------- | ----------- |
-| TRON 主网 (`tron:0x2b6653dc`)    | USDT (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:0xcd8690dc`)       | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **测试网**（仅 SDK/CLI 支持——官方 facilitator 不结算 Shasta，请用 Nile 或自建） |
-| TRON Mainnet (`tron:0x2b6653dc`) | USDD (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:0xcd8690dc`)       | USDD (TRC-20) | **Testnet** |
+| TRON 主网 (`tron:728126428`)    | USDT (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:3448148188`)       | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:2494104990`)   | USDT (TRC-20) | **测试网**（仅 SDK/CLI 支持——官方 facilitator 不结算 Shasta，请用 Nile 或自建） |
+| TRON Mainnet (`tron:728126428`) | USDD (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:3448148188`)       | USDD (TRC-20) | **Testnet** |
 | BSC 主网 (`eip155:56`) | USDT (BEP-20) | **Mainnet** |
-| BSC 主网 (`eip155:56`) | USDC (BEP-20) | **Mainnet** |
+| BSC 主网 (`eip155:56`) | USDC（BEP-20；`0x8AC76a…`，不在任何内置代币注册表中——仅能作为显式资产） | **Mainnet** |
 | BSC testnet (`eip155:97`)      | USDT (BEP-20) | **Testnet** |
 | BSC testnet (`eip155:97`)      | USDC (BEP-20) | **Testnet** |
-| BSC testnet (`eip155:97`)      | DHLU (BEP-20, 用于 `exact` 互通测试) | **Testnet** |
 | Base 主网 (`eip155:8453`) | 官方 USDC（ERC-20，EIP-3009） | **Mainnet** |
 | Base Sepolia (`eip155:84532`) | USDC（ERC-20，EIP-3009） | **Testnet** |
 
-其中只有一部分是**默认资产**（TRON 与 BSC 主网的 USDT、BSC 测试网与 Base 的 USDC）。SDK 1.1.0 起，客户端消费管控会拒绝其他资产——包括 TRON USDD、BSC 主网 USDC、BSC 测试网 USDT——除非通过 `spendControls.allowedAssets` 放行。
+自 x402 v2.0.0（`@bankofai/x402-tron` 2.0.0）起，TRON 标识使用十进制链 ID；旧的十六进制写法（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）仍可作为输入别名。
 
-此外，可通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）添加自定义 TRC-20 代币；自定义 BEP-20 代币则通过在 server 的 `EVM_TOKENS` 配置表中添加条目来公布。
+其中只有一部分是**默认资产**（TRON 三个网络上的 USDT，Base 与 Base Sepolia 上的 USDC）。SDK 1.1.0 起，客户端消费管控会拒绝其他资产——包括 TRON USDD 和所有 BSC 资产——除非通过 `spendControls.allowedAssets` 放行。
+
+此外，可通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）添加自定义 TRC-20 代币；自定义 BEP-20 代币则通过在 server 路由上使用显式的 `{ asset, amount, extra }` 价格来公布。
 
 #### 涉及哪些费用？
 
@@ -118,7 +119,7 @@ x402 定义了五种命名支付方案。其中四种可端到端使用；`auth-
 
 1.  **买家（客户端/代理）**：在本地运行时环境（如浏览器、Serverless 函数、代理虚拟机）中完成签名。
 2.  **卖家**：无需接触买家私钥；仅负责验证签名的有效性。
-3.  **Facilitator**：使用自己的结算钱包提交交易，钱包通过 `@bankofai/agent-wallet` 解析——原始私钥不会进入 facilitator 进程。
+3.  **Facilitator**：使用自己的结算钱包提交交易，钱包通过 `@bankofai/agent-wallet` 解析——使用 `privy` 或 `wallet_cli` provider 时私钥留在 facilitator 进程之外（`raw_secret` 把明文私钥存在配置中，仅适用于开发环境）。
 
 #### 退款机制如何运作？
 
@@ -149,11 +150,11 @@ x402 定义了五种命名支付方案。其中四种可端到端使用；`auth-
 在您的 TypeScript 应用中安装已发布的 npm 包并基于这些包开发，例如：
 
 ```bash
-pnpm add @bankofai/x402-fetch @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
-pnpm add @bankofai/x402-core @bankofai/x402-express
+pnpm add @x402/core@2.28.0 @x402/fetch@2.28.0 @bankofai/x402-tron@2.1.0 @x402/evm@2.28.0 @bankofai/agent-wallet
+pnpm add @x402/express@2.28.0
 ```
 
-请根据服务框架选择对应包（`express`、`hono`、`fastify` 或 `next`）。[`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) 工作区是 client → server → facilitator 流程的可运行参考，不是应用开发的前置条件。
+请根据服务框架选择对应包（`@x402/express`、`@x402/hono`、`@x402/fastify` 或 `@x402/next`），版本与 `@x402/core` 一致为 `2.28.0`——`@bankofai/x402-tron` 2.1.0 要求精确的 `@x402/core@2.28.0`。仅在使用 TRON 资源赞助时再安装 `@bankofai/x402-tron-extensions@2.1.0`。[`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) 工作区是 client → server → facilitator 流程的可运行参考，不是应用开发的前置条件。
 
 #### 推荐使用哪个测试网？
 
@@ -175,10 +176,11 @@ BSC 上推荐使用 **BSC Testnet** 进行测试。该网络是 BSC 主网的镜
 
 1.  **签名无效**：域 (Domain) 参数配置错误或载荷 (Payload) 字段不匹配。
 2.  **支付金额不足**：签名载荷中的金额低于服务端要求的金额。
-3.  **授权额度 (Allowance) 不足**：客户端对 Facilitator 的代币授权额度不足。
-4.  **账户余额不足**：客户端钱包地址缺乏足够的 USDT。
+3.  **账户余额不足**：客户端钱包地址缺乏足够的 USDT。
 
-建议查看服务端返回的 JSON 响应中的 `error` 字段，以获取具体的错误诊断信息。
+响应体默认是 `{}`。失败原因在 `PAYMENT-REQUIRED` 响应头里——该头部是 Base64 编码的付款要求，其中的 `error` 字段即诊断信息，可用 `@x402/core/http` 的 `decodePaymentRequiredHeader` 解码查看。
+
+`exact` / `upto` 的 Permit2 路径上授权额度 (Allowance) 不足时，返回的不是 402：服务端会响应 HTTP `412 Precondition Failed`，同一头部中的 `error` 为 `"permit2_allowance_required"`。（`batch-settlement` 的存入路径则以 402 返回其方案专属的错误码。）
 
 #### 在 Nile 测试网运行正常，切换到主网后失败，常见原因有哪些？
 
