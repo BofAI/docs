@@ -1,115 +1,137 @@
 # CLI Reference
 
-A complete reference for every Agent-wallet command. Whether you're reviewing the basics or configuring automation scripts, you'll find the answer here.
+A complete reference for every `agent-wallet` 3.x command. Whether you're reviewing the basics or configuring automation scripts, you'll find the answer here.
 
 :::tip Just getting started?
-If you haven't created a wallet yet, head to [Quick Start](../QuickStart.md) first — three steps, under a minute.
+If you haven't created a wallet yet, head to [Quick Start](../QuickStart.md) first.
+:::
+
+```
+Usage: agent-wallet <command> [options]
+
+Commands:
+  start             Quick setup: init + configure wallet
+  add               Add a wallet configuration
+  list              List all configured wallets
+  use [id]          Set the active wallet
+  inspect <id>      Show wallet details
+  resolve-address [id]  Resolve wallet addresses
+  remove [id]       Remove a wallet
+  sign              Sign transactions or typed data
+  reset             Delete all wallet data
+```
+
+Every command accepts `--dir, -d <path>` (wallet directory, default `~/.agent-wallet`, or `AGENT_WALLET_DIR` when set) and `--help, -h`. Add `-h` after any command or subcommand — for example `agent-wallet start wallet_cli -h` — to see its exact options.
+
+:::caution Removed in 3.0
+`init`, `change-password`, `sign msg`, the `local_secure` wallet type, and the `-p/--password` and `--save-runtime-secrets` flags no longer exist; `-g/--generate` is still parsed but ignored — 3.x does not generate keys. Agent-wallet 3.x has no master password and does not generate keys.
 :::
 
 ---
 
 ## Basic Commands
 
-The core operations you'll use most often — creating wallets and signing.
-
-### `agent-wallet start` (Initialize / Create Wallet)
-
-**Interactive creation (recommended):**
-```bash
-agent-wallet start
-```
-The system walks you through choosing a wallet type, generating keys, and setting a master password. Just follow the prompts.
-
-:::danger Avoid the `raw_secret` wallet type for real funds
-The interactive wizard may offer a `raw_secret` option. This type stores your private key **unencrypted** on disk — any program with file system access can read it directly. Only use `raw_secret` in fully isolated test environments. For any wallet holding real funds, always choose `local_secure`.
-:::
-
-:::tip Privy wallet type
-The wizard also offers a `privy` option for Privy-managed server wallets. This type delegates key custody to Privy's infrastructure — no local private key is stored on disk. You'll need a Privy App ID, App Secret, and Wallet ID to configure it:
+### `agent-wallet start` (Create a Wallet and Make It Active)
 
 ```bash
-agent-wallet start   # then choose "privy" when prompted
+agent-wallet start                       # interactive: choose a wallet type
+agent-wallet start <raw_secret|privy|wallet_cli> [options]
 ```
 
-The default wallet ID for Privy wallets is `default_privy`.
-:::
+Creates the wallet directory if needed, adds one wallet, and makes it the **active** wallet. If wallets already exist, `start` first asks whether to `add` another or `exit`; pass `--override` to skip that question.
 
-**Custom password:**
-```bash
-agent-wallet start local_secure -p Abc12345!
-```
-`-p` applies to `local_secure` only. Passing it to a bare `start` works when you then pick `local_secure` at the type prompt, but choosing `raw_secret` or `privy` there exits with `--password is only valid for local_secure quick start.` — naming the type on the command line, as above, avoids that.
-
-Password requirements: at least 8 characters, including uppercase, lowercase, numbers, and special characters. A password typed at the interactive prompt is re-prompted until it passes; one supplied through `-p`, `AGENT_WALLET_PASSWORD`, or `runtime_secrets.json` is not — a weak value there prints the validation errors and exits 1.
-
-When creating a new password interactively, you must enter it twice for confirmation. If the two entries don't match, the CLI will ask you to try again.
-
-**Default wallet IDs:** If you don't specify a wallet ID, the system defaults to `default_secure` for `local_secure` wallets and `default_raw` for `raw_secret` wallets.
-
-:::caution Shell history risk
-Passing `-p` inline records the password in your terminal's history file. For production wallets, prefer interactive mode (`agent-wallet start` without `-p`) or set `AGENT_WALLET_PASSWORD` as an environment variable — see [Non-Interactive Execution](#non-interactive-execution-for-automation--background-services).
-:::
-
-**Import an existing private key:**
-```bash
-agent-wallet start -p Abc12345! -k your-private-key-hex
-```
-
-**Import a mnemonic:**
-```bash
-agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
-```
-
-#### Skip the prompts: name the wallet type directly
-
-`start` and `add` also take the wallet type as a subcommand, which skips the type prompt. For CI or a background service you must also pass `-w` — without it the CLI still prompts for a wallet ID, and in a non-interactive environment that prompt fails with `Cannot prompt for wallet id in a non-interactive environment. Pass the required flags explicitly.` and exits 1:
-
-```bash
-agent-wallet start local_secure -w default_secure -p Abc12345! -g   # encrypted, generate a new key
-agent-wallet start raw_secret -w default_raw -k your-private-key    # plaintext, dev only
-agent-wallet start privy -w default_privy --app-id <id> --app-secret <secret> --privy-wallet-id <wallet>
-```
-
-`add` works the same way (`add local_secure` / `add raw_secret` / `add privy`) for a second wallet.
+Naming the wallet type as a subcommand skips the type prompt. For CI or a background service, also pass `-w` and every credential flag — without them the CLI prompts, and prompts fail in a non-interactive environment. If wallets may already exist, pass `--override` too; otherwise the add/exit question can't be asked and `start` exits 1.
 
 | Option | Applies to | Description |
 | :--- | :--- | :--- |
-| `-w, --wallet-id <id>` | all | Wallet ID to create |
-| `-g, --generate` | `local_secure` | Generate a new random key |
-| `-k, --private-key <hex>` | `local_secure`, `raw_secret` | Import a private key |
-| `-m, --mnemonic <words>` | `local_secure`, `raw_secret` | Import a mnemonic |
-| `-mi, --mnemonic-index <n>` | `local_secure`, `raw_secret` | Account index when deriving from the mnemonic |
-| `--derive-as <profile>` | `local_secure`, `raw_secret` | Mnemonic derivation profile: `eip155` or `tron` |
-| `-p, --password <pass>` | `local_secure` | Master password |
-| `--app-id` / `--app-secret` / `--privy-wallet-id` | `privy` | Privy app credentials and wallet ID |
-| `-d, --dir <path>` | all | Secrets directory (default `~/.agent-wallet`) |
-| `--save-runtime-secrets` | `local_secure` | Persist the password to `runtime_secrets.json`. The `raw_secret` and `privy` paths never read it — they collect no password |
-| `--override` | `start` only | Skip the confirmation prompt when wallets already exist |
+| `-w, --wallet-id <id>` | all | Wallet ID to create. Prompt defaults: `default_raw`, `default_privy`, `default_cli` |
+| `--override` | `start` only | Skip the "already initialized" prompt when wallets already exist |
+| `-k, --private-key <hex>` | `raw_secret` | Import a hex private key |
+| `-m, --mnemonic <words>` | `raw_secret` | Import a BIP-39 mnemonic |
+| `-mi, --mnemonic-index <n>` | `raw_secret` | Account index for the mnemonic (default `0`; requires `-m`) |
+| `--derive-as <profile>` | `raw_secret` | `eip155` or `tron`; answers the mnemonic derivation prompt (3.0.0 checks the value but does not store it, so it does not change the derived addresses) |
+| `--app-id <id>` | `privy` | Privy app ID |
+| `--app-secret <secret>` | `privy` | Privy app secret (plaintext; prefer `--app-secret-exec`) |
+| `--app-secret-exec <path>` | `privy` | Executable that prints the Privy app secret |
+| `--privy-wallet-id <id>` | `privy` | Existing Privy wallet ID |
+| `--account <label>` | `wallet_cli` | Existing wallet-cli account label or ID (the wallet-cli active account if omitted) |
+| `--cli-password-exec <path>` | `wallet_cli` | Executable that prints the wallet-cli keystore password |
+| `-d, --dir <path>` | all | Wallet directory |
 
-Run `agent-wallet start local_secure --help` or `agent-wallet add privy --help` for the exact options of one mode.
+#### `wallet_cli` wallets
+
+Links an existing [wallet-cli](../../wallet-cli/quickstart.md) account as a TRON + EVM signer. **It does not create or import keys** — create the account with wallet-cli first.
+
+```bash
+agent-wallet start wallet_cli \
+  --wallet-id my_cli_wallet \
+  --account main-1 \
+  --cli-password-exec /absolute/path/to/fetch-password.sh
+```
+
+- Requires `@tron-walletcli/wallet-cli` `>=4.13.0 <5.0.0`. Agent-wallet looks for it in this order: `AGENT_WALLET_WALLET_CLI_PATH`, a copy installed as a local package dependency alongside Agent-wallet, then `wallet-cli` on your `PATH`. If it is missing, the command prints install guidance and exits 1.
+- The account is checked with wallet-cli **before** any password is collected; the canonical account ID is saved, so later changes to wallet-cli's active account don't affect this wallet.
+- `--cli-password <plaintext>` is rejected so the password never lands in shell history or the process list. Without `--cli-password-exec`, an interactive prompt offers `direct` (stored as plaintext in `wallets_config.json`, mode `0600`) or `exec`.
+
+#### Privy wallets {#privy-wallets}
+
+Links an existing [Privy](https://privy.io) server wallet. No private key is stored on your disk; signing calls Privy's API, so it needs network access.
+
+```bash
+agent-wallet start privy -w default_privy \
+  --app-id <privy-app-id> \
+  --app-secret-exec /absolute/path/to/fetch-privy-secret.sh \
+  --privy-wallet-id <privy-wallet-id>
+```
+
+#### `raw_secret` wallets
+
+:::danger Avoid `raw_secret` for real funds
+This type stores your private key or mnemonic **unencrypted** in `wallets_config.json` — any program with file system access can read it. Only use it with throwaway keys in isolated test environments.
+:::
+
+```bash
+agent-wallet start raw_secret -w default_raw -k <private-key-hex>
+agent-wallet start raw_secret -w default_raw -m "word1 word2 ..." --derive-as eip155
+```
+
+### `agent-wallet add` (Add Another Wallet)
+
+```bash
+agent-wallet add
+agent-wallet add <raw_secret|privy|wallet_cli> [options]
+```
+
+Same subcommands and options as `start` (except `--override`). The new wallet becomes active only if no wallet was active before; switch with `use`.
 
 ### `agent-wallet sign` (Core Signing Operations)
 
-For `local_secure` and `raw_secret` wallets, every `sign` subcommand requires `--network` / `-n` to specify the chain. Privy wallets are the exception: their chain type comes from Privy, and EVM transaction payloads carry their own `chainId`, so `--network` is optional for Privy signing.
-
-:::info Password retry behavior
-When signing with a `local_secure` wallet, the CLI will prompt for the master password if it's not provided via `-p`, `~/.agent-wallet/runtime_secrets.json`, or `AGENT_WALLET_PASSWORD` (in that order of precedence). If the password is wrong, the sign command fails immediately with exit code 1 ("Wrong password. Please try again."). The 3-attempt interactive retry loop applies to the `start`, `add`, `change-password`, and `resolve-address` prompts, not to `sign`.
-:::
-
-**Sign a message:**
 ```bash
-agent-wallet sign msg "Hello" -n tron
-# Output: Signature: d220de880cbc1c3f...
+agent-wallet sign tx '<json>' -n <network> [-w <wallet-id>]
+agent-wallet sign typed-data '<json>' -n <network> [-w <wallet-id>]
 ```
 
-**Sign a transaction** (build the unsigned tx via RPC first):
+| Option | Short | Description |
+| :--- | :--- | :--- |
+| `--network` | `-n` | Canonical CAIP-2 network: `eip155:<chainId>` or `tron:<chainId>`. **Required for `raw_secret` and `wallet_cli`.** Optional for `privy` (EVM transactions use the payload's `chainId`), but must be canonical if given |
+| `--wallet-id` | `-w` | Wallet to sign with (defaults to the active wallet) |
+| `--dir` | `-d` | Wallet directory |
+
+Only exact canonical identifiers are accepted — `tron`, `eip155`, `evm:1`, `tron:nile`, `tron:mainnet`, hex TRON ids, and any case or whitespace variants are rejected. Use `tron:728126428` (mainnet), `tron:3448148188` (Nile), `tron:2494104990` (Shasta), `eip155:1`, `eip155:56`, `eip155:97`, and so on. For `wallet_cli` wallets the network must also be one wallet-cli itself knows — its built-ins (`eip155:1`, `eip155:11155111`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532` (the two Base networks were added in wallet-cli 4.14.0) and the three TRON networks) or a network added to wallet-cli's own config — otherwise signing fails with `wallet-cli network '<id>' is unavailable` (code `network_mismatch` in the SDK). `raw_secret` and `privy` wallets have no such limit.
+
+**Sign a TRON transaction** (build the unsigned transaction first, e.g. via TronGrid; `raw_data_hex` is required, and `wallet_cli` wallets also need `raw_data` and a matching `txID`):
 ```bash
-agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
-# Output: a line reading `Signed tx:` followed by the signed transaction as pretty-printed JSON
-# (a single line is used only when the result is not valid JSON)
+agent-wallet sign tx '{"txID":"...","raw_data_hex":"0a02...","raw_data":{}}' -n tron:3448148188
+# Output: "Signed tx:" followed by the signed transaction as pretty-printed JSON
 ```
 
-**Sign EIP-712 typed data:**
+**Sign an EVM transaction** (`chainId` should match `-n`; `wallet_cli` wallets reject a mismatch with a `SigningError`, `raw_secret` and `privy` sign with the payload's `chainId`):
+```bash
+agent-wallet sign tx '{"chainId":97,"nonce":0,"gas":"0x5208","gasPrice":"0x3b9aca00","to":"0x...","value":"0x0"}' -n eip155:97
+# Output: Signed tx: <raw transaction hex, without 0x>
+```
+
+**Sign EIP-712 / TIP-712 typed data:**
 ```bash
 agent-wallet sign typed-data '{
   "types": {
@@ -120,30 +142,11 @@ agent-wallet sign typed-data '{
   "domain": {"name":"MyDApp","chainId":1},
   "message": {"to":"0x7099...","amount":1000000}
 }' -n eip155:1
+# Output: Signature: <hex, without 0x>
 ```
 
----
-
-### `agent-wallet init` (Initialize Secrets Directory)
-
-Initialize the secrets directory and set the master password — without creating a wallet yet. This is useful for advanced scenarios where you want to prepare the directory before adding wallets.
-
-```bash
-agent-wallet init
-```
-
-**Non-interactive mode:**
-```bash
-agent-wallet init -p 'Abc12345!'
-```
-
-| Flag | Description |
-| :--- | :--- |
-| `--password, -p <pw>` | Master password (skip prompt) |
-| `--save-runtime-secrets` | Persist password to `runtime_secrets.json` |
-
-:::tip When to use `init` vs `start`
-`start` = `init` + create a wallet in one step. If you just need to set up the directory and password first (e.g., for a CI pipeline or when importing keys later), use `init` alone.
+:::note No message signing
+`sign msg` was removed in 3.0. Agent-wallet only signs transactions and typed data.
 :::
 
 ---
@@ -152,37 +155,27 @@ agent-wallet init -p 'Abc12345!'
 
 Manage multiple wallets — add, switch, inspect, remove.
 
-**Add a new wallet:**
-```bash
-agent-wallet add
-```
-
-**List all wallets:**
+**List all wallets** (`*` marks the active one):
 ```bash
 agent-wallet list
 ```
 
-**Switch the active wallet:**
+**Switch the active wallet** (omit the ID to pick from a list):
 ```bash
 agent-wallet use my-bsc-wallet
 ```
 
-**Inspect a wallet:**
+**Inspect a wallet** (secrets are always shown as `[redacted]`):
 ```bash
 agent-wallet inspect my-bsc-wallet
 ```
 
-To see the wallet's derived addresses, use the separate `resolve-address` command:
-```bash
-agent-wallet resolve-address my-bsc-wallet
-```
-
 **Sign with a specific wallet** (without switching the active one):
 ```bash
-agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
+agent-wallet sign typed-data '<json>' -n eip155:56 -w my-bsc-wallet
 ```
 
-**Remove a wallet:**
+**Remove a wallet** (omit the ID to pick from a list):
 ```bash
 agent-wallet remove my-bsc-wallet
 ```
@@ -191,24 +184,26 @@ agent-wallet remove my-bsc-wallet
 | :--- | :--- | :--- |
 | `--yes` | `-y` | Skip confirmation prompt (**required in non-interactive / agent contexts**) |
 
+Removing a `wallet_cli` or `privy` wallet only deletes Agent-wallet's configuration entry — the wallet-cli account or Privy wallet itself is untouched.
+
 ### `agent-wallet resolve-address` (Resolve Wallet Addresses)
 
-Display the on-chain addresses associated with a wallet. Local wallets (`local_secure`, `raw_secret`) always show both an EVM and a TRON address. `local_secure` wallets (however created — a mnemonic import stores the single key derived under the chosen `--derive-as` profile) and private-key `raw_secret` wallets derive both addresses from the same stored key; only `raw_secret` **mnemonic** wallets derive each chain's address from the mnemonic via its own derivation path. Privy wallets show the single address reported by Privy.
+Display the on-chain addresses associated with a wallet, without signing:
+
+- `raw_secret` wallets show both an EVM and a TRON address derived from the same secret material.
+- `wallet_cli` wallets show both addresses when the wallet-cli account has both families (one address otherwise). No password is requested.
+- `privy` wallets show the single address reported by Privy.
 
 ```bash
 agent-wallet resolve-address my-wallet
 ```
 
-If you omit the wallet ID, the CLI will present an interactive list to choose from:
-
-```bash
-agent-wallet resolve-address
-```
+If you omit the wallet ID, the CLI will present an interactive list to choose from.
 
 Example output:
 ```
 Wallet  my-wallet
-Type    local_secure
+Type    raw_secret
 
 Addresses
 EVM   0x742D35CC6634C0532925a3B844Bc9E7595F2bD18
@@ -219,102 +214,36 @@ TRON  TJRyWwFs9wTFGZg3JbrVriFbNfCug5tDeC
 
 ## Non-Interactive Execution (For Automation & Background Services)
 
-By default, signing commands pause and prompt you to type your password interactively. But if an AI agent is running in the background, or you're running an automation script, this "stop and wait for input" behavior will cause the program to hang or error out.
+There is no master password to supply in 3.x. To run without prompts:
 
-To let the program run silently from start to finish (non-interactive mode), you need to pre-supply the password. Depending on your use case, there are three approaches:
+- **Creating wallets:** name the type and pass every value as a flag (`-w`, `-k`/`-m` plus `--derive-as`, `--app-id`/`--privy-wallet-id`, `--account`). With `start`, add `--override` when wallets may already exist — otherwise it exits 1. For `privy`, pass **both** `--app-id` and `--app-secret-exec` (or `--app-secret`): when a Privy wallet already exists and neither `--app-id` nor `--app-secret` is passed (`--app-secret-exec` alone does not count), the CLI asks whether to reuse its credentials; with `--app-id` but no secret it asks where the secret comes from. Either prompt exits 1 non-interactively.
+- **Secrets:** use exec scripts — `--cli-password-exec` for wallet-cli, `--app-secret-exec` for Privy. The path must point to an executable file (not an inline shell command). It inherits the process environment, its trimmed stdout is used as the secret, and it times out after 10 seconds by default. For `wallet_cli` the script runs again for **every** signature.
+- **Signing:** always pass `-n`, and `-w` if you don't want to depend on the active wallet.
+- **Removing / resetting:** pass `-y`.
+- **Check flag spelling:** the CLI ignores flags it does not recognise instead of failing, so a misspelled flag (for example `--walet-id`) silently falls back to a prompt or a default.
 
-### Method A: Environment Variable Injection (Recommended for AI Agents / CI Pipelines)
+`wallets_config.json` holds `active_wallet` and a `wallets` map keyed by wallet ID; each entry has a `type` and `params`: `raw_secret` → `source` with `private_key`, or `mnemonic` plus `account_index`; `privy` → `app_id`, `app_secret`, `wallet_id`; `wallet_cli` → `account` (optional) and `password`. `app_secret` and `password` are either a string or an exec reference (`private_key` and `mnemonic` are plain strings) (`timeout` in milliseconds is optional):
 
-Store the password in the current system environment. When the program needs the password, it automatically retrieves it — fully silent:
-
-```bash
-export AGENT_WALLET_PASSWORD='Abc12345!'
+```json
+{ "exec": "/absolute/path/to/fetch-password.sh", "timeout": 10000 }
 ```
-
-Once set, all signing commands in the current window return results instantly, no more pausing:
-
-```bash
-agent-wallet sign msg "Hello" -n tron
-agent-wallet sign tx '{"txID":"..."}' -n tron
-```
-
-:::tip Prevent this command from being recorded in shell history
-To prevent the command from being recorded in shell history, edit `~/.zshrc` / `~/.bashrc` directly in a text editor rather than running the command in the terminal. Alternatively, prefix the command with a space — but only if you have verified that `HISTCONTROL=ignorespace` is active in Bash (`echo $HISTCONTROL`) or `HIST_IGNORE_SPACE` is active in Zsh (`setopt | grep HIST_IGNORE_SPACE`). These settings are **not** enabled by default on most systems and must be configured explicitly.
-:::
-
-:::caution Password contains special characters? Always use single quotes
-```bash
-# ✅ Correct — shell treats it literally
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
-
-# ❌ Wrong — $ gets expanded by the shell, password silently breaks
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
-```
-:::
-
-<details>
-<summary>GitHub Actions / CI example</summary>
-
-In CI/CD environments, never hardcode the password in workflow files. Use repository secrets instead:
-
-```yaml
-# .github/workflows/sign.yml
-jobs:
-  sign:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: agent-wallet sign msg "Hello" -n tron
-        env:
-          AGENT_WALLET_PASSWORD: ${{ secrets.AGENT_WALLET_PASSWORD }}
-```
-
-</details>
-
-### Method B: Local Password Cache (Convenience vs. Security Trade-off)
-
-After running a command once with the `--save-runtime-secrets` flag, the password is cached in a local file (`~/.agent-wallet/runtime_secrets.json`). The next time you run any signing command, the system automatically reads from the cache. No need for inline passwords or environment variables:
-
-```bash
-agent-wallet sign msg "Hello" -n tron -p 'Abc12345!' --save-runtime-secrets
-```
-
-:::danger This disables the dual-lock protection
-Caching the password next to the wallet file means a single file system compromise grants full access to your funds — defeating Agent-wallet's core "physical file + password separation" security model. **Only use this for throwaway test wallets.**
-
-`runtime_secrets.json` stores your master password in **plaintext**. Any program with access to your file system (malicious plugins, AI agents, automation scripts) can read it directly. Make sure this file is never committed to git or synced to the cloud.
-
-The tool automatically sets restrictive file permissions (`600` — owner-read-only) on creation. If you've manually moved or copied the file, verify the permissions: `chmod 600 ~/.agent-wallet/runtime_secrets.json`.
-
-To remove the cached password and restore full dual-lock protection:
-
-```bash
-rm ~/.agent-wallet/runtime_secrets.json
-```
-
-After deletion, signing commands will prompt for the password interactively again (or read from `AGENT_WALLET_PASSWORD` if set).
-:::
-
-### Method C: Inline `-p` Flag (For One-Off Commands)
-
-Pass the password directly at the end of the command. The program takes the password and runs immediately — no prompts:
-
-```bash
-agent-wallet sign msg "Hello" -n tron -p 'Abc12345!'
-```
-
-:::danger Security Warning
-When using `-p` to pass the password inline, the plaintext password is recorded in your terminal's `history`. Only use this method in fully isolated test environments!
-:::
 
 ### Custom Storage Directory
 
-All commands support the `--dir` flag to specify a custom Agent-wallet storage path (default: `~/.agent-wallet`). For example, you can store your Agent-wallet directly on an encrypted USB drive — plug and play, unplug and go:
+All commands support `--dir` to use a wallet directory other than `~/.agent-wallet`. Set `AGENT_WALLET_DIR` to make it the default for both the CLI and the SDK:
 
 ```bash
-agent-wallet start --dir /Volumes/MyUSB/agent-wallet
-agent-wallet sign msg "Hello" -n tron --dir /Volumes/MyUSB/agent-wallet
+agent-wallet start raw_secret --dir /Volumes/MyUSB/agent-wallet
+agent-wallet list --dir /Volumes/MyUSB/agent-wallet
 ```
+
+### Environment Variables
+
+| Variable | Purpose |
+| :--- | :--- |
+| `AGENT_WALLET_DIR` | Default wallet directory (CLI and SDK) |
+| `AGENT_WALLET_WALLET_CLI_PATH` | Path to the wallet-cli executable or its JavaScript entrypoint, when it is not on `PATH` |
+| `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC` / `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | SDK environment fallback only (used when no wallet is configured) — see [SDK Guide](./SDK-Guide.md#environment-variable-fallback) |
 
 ---
 
@@ -323,33 +252,9 @@ agent-wallet sign msg "Hello" -n tron --dir /Volumes/MyUSB/agent-wallet
 :::danger The following operations are irreversible — use with extreme caution!
 :::
 
-### `agent-wallet change-password` (Change Master Password)
+### `agent-wallet reset` (Reset All Data) {#agent-wallet-reset-reset-all-data}
 
-After changing, **all key files are re-encrypted with the new password**. The old password becomes invalid immediately — make sure to update your password manager.
-
-**Interactive mode (default):**
-```bash
-agent-wallet change-password
-```
-
-**Non-interactive mode** (for automation scripts):
-```bash
-agent-wallet change-password -p 'OldPassword123!' --new-password 'NewPassword456!'
-```
-
-| Flag | Description |
-| :--- | :--- |
-| `--password, -p <pw>` | Current master password (skip prompt) |
-| `--new-password <pw>` | New master password (skip prompt) |
-| `--save-runtime-secrets` | Update cached password in `runtime_secrets.json` |
-
-:::caution
-Both `-p` and `--new-password` will be recorded in shell history. For production use, prefer interactive mode or pipe passwords from a secrets manager.
-:::
-
-### `agent-wallet reset` (Reset All Data)
-
-Deletes the files the CLI manages inside `~/.agent-wallet/` — `master.json`, `wallets_config.json`, `runtime_secrets.json`, and every `secret_*.json`. **This is a nuclear option — once executed, all wallets, keys, and configuration are gone, with no recovery.** The directory itself and anything else in it (including `cred_*.json`) are left in place. The CLI asks for confirmation **twice**; pass `-y/--yes` to skip both prompts in automation.
+Deletes `wallets_config.json` from the wallet directory — every wallet configuration, including any `raw_secret` keys stored in it. Other files in the directory are left in place. wallet-cli accounts and Privy wallets themselves are not affected. The CLI asks for confirmation **twice**; pass `-y/--yes` to skip both prompts in automation.
 
 ```bash
 agent-wallet reset
@@ -359,33 +264,32 @@ agent-wallet reset
 
 ## Real-World Example: Signing in a Shell Script
 
-The CLI isn't just for manual typing — it integrates perfectly into your automation scripts.
-
-This minimal example demonstrates how to perform a non-interactive signing operation in a Bash script and capture the signature into a variable (the CLI prints `Signature: <hex>`, so the prefix is stripped with `sed`):
+This minimal example performs a non-interactive typed-data signature in a Bash script and captures the result into a variable. The CLI prints `Signature: <hex>`, so the script strips the prefix and checks that what remains is a 130-character hex signature. It deliberately avoids piping into `sed`: in a pipeline the exit status is the last command's, so a failed signature would still look successful.
 
 ```bash
 #!/bin/bash
-# Enable strict mode: stop immediately on any error
-set -e
+# Strict mode: stop on errors, unset variables, and failures inside pipelines
+set -euo pipefail
 
-# 1. Password should already be set in the environment before running this script.
-#    e.g. via ~/.zshrc / ~/.bashrc — see "Save and Activate the Password" in QuickStart.
-#    NEVER hardcode a real password in a script file (it will end up in git history).
-if [[ -z "$AGENT_WALLET_PASSWORD" ]]; then
-  echo "Error: AGENT_WALLET_PASSWORD not set" >&2
-  exit 1
-fi
+# Typed data to sign (built by your own logic)
+TYPED_DATA='{"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],"Message":[{"name":"contents","type":"string"}]},"primaryType":"Message","domain":{"name":"MyScript","chainId":56},"message":{"contents":"Hello from my script"}}'
 
 echo "Calling local Agent-wallet for signing..."
 
-# 2. Core operation: execute signing, capture the hash output into the SIGNATURE variable
-SIGNATURE=$(agent-wallet sign msg "Hello from my script" -n tron | sed 's/^Signature: //')
+# On failure the CLI exits non-zero and prints the reason (e.g. "Wallet 'my-bsc-wallet' not found")
+if ! OUTPUT=$(agent-wallet sign typed-data "$TYPED_DATA" -n eip155:56 -w my-bsc-wallet); then
+  echo "❌ Signing failed: $OUTPUT" >&2
+  exit 1
+fi
 
-# 3. Got the clean signature value — continue with downstream logic
+SIGNATURE=${OUTPUT#Signature: }
+if [[ ! "$SIGNATURE" =~ ^[0-9a-fA-F]{130}$ ]]; then
+  echo "❌ Unexpected output: $OUTPUT" >&2
+  exit 1
+fi
+
 echo "✅ Signing successful!"
 echo "Extracted signature: $SIGNATURE"
-
-# From here, you can use $SIGNATURE to build requests, construct JSON, or pass it to other pipeline tasks...
 ```
 
 ---

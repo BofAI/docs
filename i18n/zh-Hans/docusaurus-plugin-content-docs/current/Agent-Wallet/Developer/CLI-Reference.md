@@ -1,115 +1,137 @@
 # CLI 命令行手册
 
-包含了 Agent-wallet 所有命令的完整参考。无论你是想复习基础操作，还是想配置自动化脚本，这里都有答案。
+`agent-wallet` 3.x 全部命令的完整参考。无论是查阅基础用法，还是配置自动化脚本，都能在这里找到答案。
 
-:::tip 刚刚入门？
-如果你还没创建过钱包，先去 [快速开始](../QuickStart.md) 走一遍——三步搞定，不到一分钟。
+:::tip 刚开始？
+如果你还没有创建钱包，请先去 [快速开始](../QuickStart.md)。
+:::
+
+```
+Usage: agent-wallet <command> [options]
+
+Commands:
+  start             Quick setup: init + configure wallet
+  add               Add a wallet configuration
+  list              List all configured wallets
+  use [id]          Set the active wallet
+  inspect <id>      Show wallet details
+  resolve-address [id]  Resolve wallet addresses
+  remove [id]       Remove a wallet
+  sign              Sign transactions or typed data
+  reset             Delete all wallet data
+```
+
+所有命令都支持 `--dir, -d <path>`（钱包目录，默认 `~/.agent-wallet`，设置了 `AGENT_WALLET_DIR` 时以它为准）和 `--help, -h`。在任意命令或子命令后加 `-h`——例如 `agent-wallet start wallet_cli -h`——即可查看它的确切参数。
+
+:::caution 3.0 中已移除
+`init`、`change-password`、`sign msg`、`local_secure` 钱包类型，以及 `-p/--password`、`--save-runtime-secrets` 参数都已不存在；`-g/--generate` 仍会被解析但被忽略——3.x 不生成私钥。Agent-wallet 3.x 没有主密码，也不生成私钥。
 :::
 
 ---
 
 ## 基础命令
 
-高频使用的核心操作——创建钱包和签名。
-
-### `agent-wallet start`（初始化 / 创建钱包）
-
-**交互式创建（推荐）：**
-```bash
-agent-wallet start
-```
-系统会一步步引导你选择钱包类型、生成密钥、设置主密码。跟着提示走就行。
-
-:::danger 切勿对真实资金使用 `raw_secret` 钱包类型
-交互式向导可能会提供 `raw_secret` 选项。该类型将私钥**以明文形式**存储在磁盘上——任何有文件系统访问权限的程序都能直接读取。`raw_secret` 仅适用于完全隔离的测试环境。持有真实资金的钱包请始终选择 `local_secure`。
-:::
-
-:::tip Privy 钱包类型
-向导还提供 `privy` 选项，用于 Privy 托管的服务器钱包。该类型将密钥托管交给 Privy 的基础设施——本地磁盘上不存储私钥。配置时需要 Privy App ID、App Secret 和 Wallet ID：
+### `agent-wallet start`（创建钱包并设为激活）
 
 ```bash
-agent-wallet start   # 然后在提示时选择 "privy"
+agent-wallet start                       # 交互式：选择钱包类型
+agent-wallet start <raw_secret|privy|wallet_cli> [options]
 ```
 
-Privy 钱包的默认 ID 是 `default_privy`。
-:::
+按需创建钱包目录，添加一个钱包，并把它设为**激活**钱包。如果已存在钱包，`start` 会先询问要 `add`（再加一个）还是 `exit`；传 `--override` 可跳过这个询问。
 
-**自定义密码：**
-```bash
-agent-wallet start local_secure -p Abc12345!
-```
-`-p` 只对 `local_secure` 有效。直接跑不带类型的 `start` 再传 `-p`，只有在随后的类型选择里选 `local_secure` 才能走通；若选了 `raw_secret` 或 `privy`，CLI 会以 `--password is only valid for local_secure quick start.` 退出。像上面那样在命令行里写明类型即可避免。
+把钱包类型作为子命令写出来可以跳过类型选择。在 CI 或后台服务中，还要传 `-w` 以及所有凭据参数——缺少时 CLI 会弹出提示，而在非交互环境中提示会直接失败。如果可能已有钱包，还要传 `--override`；否则无法询问 add/exit，`start` 会以退出码 1 结束。
 
-密码要求：至少 8 位，包含大写、小写、数字和特殊字符。在交互式提示里输入的密码会被反复要求重输直到通过；而通过 `-p`、`AGENT_WALLET_PASSWORD` 或 `runtime_secrets.json` 传入的密码不会——强度不足会直接打印校验错误并退出 1。
-
-交互式创建新密码时，需要输入两次进行确认。如果两次输入不一致，系统会要求你重新输入。
-
-**默认钱包 ID：** 如果不指定钱包 ID，系统默认为 `local_secure` 钱包使用 `default_secure`，为 `raw_secret` 钱包使用 `default_raw`。
-
-:::caution Shell 历史记录风险
-使用 `-p` 内联传递密码会将密码记录在终端的历史文件中。生产钱包建议使用交互式模式（不带 `-p` 的 `agent-wallet start`）或通过环境变量设置 `AGENT_WALLET_PASSWORD`——详见[非交互式执行](#非交互式执行专为自动化与后台设计)。
-:::
-
-**导入已有私钥：**
-```bash
-agent-wallet start -p Abc12345! -k your-private-key-hex
-```
-
-**导入助记词：**
-```bash
-agent-wallet start -p Abc12345! -m "word1 word2 word3 ..."
-```
-
-#### 跳过交互：直接指定钱包类型
-
-`start` 和 `add` 也可以把钱包类型作为子命令传入，这样会跳过类型选择。但在 CI 或后台服务里还必须带上 `-w`——否则 CLI 仍会询问钱包 ID，而在非交互环境下该提问会以 `Cannot prompt for wallet id in a non-interactive environment. Pass the required flags explicitly.` 报错并退出 1：
-
-```bash
-agent-wallet start local_secure -w default_secure -p Abc12345! -g   # 加密存储，生成新私钥
-agent-wallet start raw_secret -w default_raw -k 你的私钥            # 明文，仅限开发
-agent-wallet start privy -w default_privy --app-id <id> --app-secret <secret> --privy-wallet-id <wallet>
-```
-
-`add` 用法相同（`add local_secure` / `add raw_secret` / `add privy`），用于再加一个钱包。
-
-| 选项 | 适用类型 | 说明 |
+| 参数 | 适用于 | 说明 |
 | :--- | :--- | :--- |
-| `-w, --wallet-id <id>` | 全部 | 要创建的钱包 ID |
-| `-g, --generate` | `local_secure` | 生成一个新的随机私钥 |
-| `-k, --private-key <hex>` | `local_secure`、`raw_secret` | 导入私钥 |
-| `-m, --mnemonic <words>` | `local_secure`、`raw_secret` | 导入助记词 |
-| `-mi, --mnemonic-index <n>` | `local_secure`、`raw_secret` | 从助记词派生时的账户索引 |
-| `--derive-as <profile>` | `local_secure`、`raw_secret` | 助记词派生方案：`eip155` 或 `tron` |
-| `-p, --password <pass>` | `local_secure` | 主密码 |
-| `--app-id` / `--app-secret` / `--privy-wallet-id` | `privy` | Privy 应用凭证与钱包 ID |
-| `-d, --dir <path>` | 全部 | 密钥目录（默认 `~/.agent-wallet`） |
-| `--save-runtime-secrets` | `local_secure` | 把密码写入 `runtime_secrets.json`。`raw_secret` 与 `privy` 路径不会读取它——这两条路径根本不收集密码 |
-| `--override` | 仅 `start` | 已存在钱包时跳过确认提示 |
+| `-w, --wallet-id <id>` | 全部 | 要创建的钱包 ID。提示中的默认值：`default_raw`、`default_privy`、`default_cli` |
+| `--override` | 仅 `start` | 已有钱包时跳过"已初始化"提示 |
+| `-k, --private-key <hex>` | `raw_secret` | 导入十六进制私钥 |
+| `-m, --mnemonic <words>` | `raw_secret` | 导入 BIP-39 助记词 |
+| `-mi, --mnemonic-index <n>` | `raw_secret` | 助记词账户索引（默认 `0`；需要同时传 `-m`） |
+| `--derive-as <profile>` | `raw_secret` | `eip155` 或 `tron`；用于回答助记词派生方式的提示（3.0.0 会校验取值但不保存，因此不影响派生出的地址） |
+| `--app-id <id>` | `privy` | Privy app ID |
+| `--app-secret <secret>` | `privy` | Privy app secret（明文；建议改用 `--app-secret-exec`） |
+| `--app-secret-exec <path>` | `privy` | 输出 Privy app secret 的可执行脚本 |
+| `--privy-wallet-id <id>` | `privy` | 已有的 Privy 钱包 ID |
+| `--account <label>` | `wallet_cli` | 已有的 wallet-cli 账户标签或 ID（省略时使用 wallet-cli 当前激活账户） |
+| `--cli-password-exec <path>` | `wallet_cli` | 输出 wallet-cli keystore 密码的可执行脚本 |
+| `-d, --dir <path>` | 全部 | 钱包目录 |
 
-用 `agent-wallet start local_secure --help` 或 `agent-wallet add privy --help` 查看某个模式的确切选项。
+#### `wallet_cli` 钱包
+
+把已有的 [wallet-cli](../../wallet-cli/quickstart.md) 账户连结为 TRON + EVM 签名器。**它不会创建或导入私钥**——请先用 wallet-cli 创建账户。
+
+```bash
+agent-wallet start wallet_cli \
+  --wallet-id my_cli_wallet \
+  --account main-1 \
+  --cli-password-exec /absolute/path/to/fetch-password.sh
+```
+
+- 需要 `@tron-walletcli/wallet-cli` `>=4.13.0 <5.0.0`。Agent-wallet 按以下顺序查找：`AGENT_WALLET_WALLET_CLI_PATH`、与 Agent-wallet 一起作为本地包依赖安装的副本，最后是 `PATH` 中的 `wallet-cli`。找不到时命令会打印安装指引并以 1 退出。
+- 在收集任何密码**之前**，会先向 wallet-cli 确认账户存在；保存的是规范账户 ID，之后 wallet-cli 切换激活账户也不会影响这个钱包。
+- `--cli-password <明文>` 会被拒绝，避免密码进入 shell 历史或进程列表。不带 `--cli-password-exec` 时，交互提示会让你选择 `direct`（以明文保存在 `wallets_config.json`，权限 `0600`）或 `exec`。
+
+#### Privy 钱包 {#privy-wallets}
+
+连结已有的 [Privy](https://privy.io) 服务端钱包。你的磁盘上不保存私钥；签名会调用 Privy API，因此需要联网。
+
+```bash
+agent-wallet start privy -w default_privy \
+  --app-id <privy-app-id> \
+  --app-secret-exec /absolute/path/to/fetch-privy-secret.sh \
+  --privy-wallet-id <privy-wallet-id>
+```
+
+#### `raw_secret` 钱包
+
+:::danger 真实资金请勿使用 `raw_secret`
+该类型把你的私钥或助记词**不加密**地保存在 `wallets_config.json` 中——任何有文件系统访问权限的程序都能直接读取。只在隔离的测试环境中配合一次性私钥使用。
+:::
+
+```bash
+agent-wallet start raw_secret -w default_raw -k <private-key-hex>
+agent-wallet start raw_secret -w default_raw -m "word1 word2 ..." --derive-as eip155
+```
+
+### `agent-wallet add`（再添加一个钱包）
+
+```bash
+agent-wallet add
+agent-wallet add <raw_secret|privy|wallet_cli> [options]
+```
+
+子命令和参数与 `start` 相同（`--override` 除外）。只有在此前没有激活钱包时，新钱包才会成为激活钱包；切换请用 `use`。
 
 ### `agent-wallet sign`（核心签名操作）
 
-对于 `local_secure` 和 `raw_secret` 钱包，每条 `sign` 子命令都需要 `--network` / `-n` 来指定链。Privy 钱包例外：链类型由 Privy 提供，EVM 交易载荷本身也包含 `chainId`，因此 Privy 签名可以省略 `--network`。
-
-:::info 密码重试机制
-使用 `local_secure` 钱包签名时，如果未通过 `-p`、`~/.agent-wallet/runtime_secrets.json` 或 `AGENT_WALLET_PASSWORD`（优先级从高到低）提供密码，CLI 会交互式提示输入主密码。密码错误时，`sign` 命令会立即以退出码 1 失败（`Wrong password. Please try again.`）；「3 次重试」机制只适用于 `start`、`add`、`change-password` 和 `resolve-address` 的交互提示，不适用于 `sign`。
-:::
-
-**签名消息：**
 ```bash
-agent-wallet sign msg "Hello" -n tron
-# 输出: Signature: d220de880cbc1c3f...
+agent-wallet sign tx '<json>' -n <network> [-w <wallet-id>]
+agent-wallet sign typed-data '<json>' -n <network> [-w <wallet-id>]
 ```
 
-**签名交易**（需要先通过 RPC 构建未签名交易）：
+| 参数 | 缩写 | 说明 |
+| :--- | :--- | :--- |
+| `--network` | `-n` | 规范 CAIP-2 网络：`eip155:<chainId>` 或 `tron:<chainId>`。**`raw_secret` 和 `wallet_cli` 必填。** `privy` 可省略（EVM 交易使用 payload 中的 `chainId`），但如果提供也必须是规范格式 |
+| `--wallet-id` | `-w` | 用哪个钱包签名（默认为激活钱包） |
+| `--dir` | `-d` | 钱包目录 |
+
+只接受精确的规范标识——`tron`、`eip155`、`evm:1`、`tron:nile`、`tron:mainnet`、十六进制 TRON id，以及任何大小写或空白变体都会被拒绝。请使用 `tron:728126428`（主网）、`tron:3448148188`（Nile）、`tron:2494104990`（Shasta）、`eip155:1`、`eip155:56`、`eip155:97` 等。`wallet_cli` 钱包还要求该网络是 wallet-cli 自身认识的网络——即它的内置网络（`eip155:1`、`eip155:11155111`、`eip155:56`、`eip155:97`、`eip155:8453`、`eip155:84532`（Base 自 wallet-cli 4.14.0 起才内置）及三个 TRON 网络），或在 wallet-cli 自己的配置中添加的网络——否则签名会以 `wallet-cli network '<id>' is unavailable` 失败（SDK 中的 code 为 `network_mismatch`）。`raw_secret` 和 `privy` 钱包没有这一限制。
+
+**签名 TRON 交易**（先通过 TronGrid 等构建未签名交易；必须包含 `raw_data_hex`，`wallet_cli` 钱包还需要 `raw_data` 和匹配的 `txID`）：
 ```bash
-agent-wallet sign tx '{"txID":"abc123...","raw_data_hex":"0a02...","raw_data":{...}}' -n tron
-# 输出：先是一行 `Signed tx:`，随后是美化格式的已签名交易 JSON
-# （只有当结果不是合法 JSON 时才会输出成一行）
+agent-wallet sign tx '{"txID":"...","raw_data_hex":"0a02...","raw_data":{}}' -n tron:3448148188
+# 输出："Signed tx:" 后跟格式化的已签名交易 JSON
 ```
 
-**签名 EIP-712 结构化数据：**
+**签名 EVM 交易**（`chainId` 应与 `-n` 一致；`wallet_cli` 钱包会以 `SigningError` 拒绝不一致的情况，`raw_secret` 和 `privy` 则按 payload 中的 `chainId` 签名）：
+```bash
+agent-wallet sign tx '{"chainId":97,"nonce":0,"gas":"0x5208","gasPrice":"0x3b9aca00","to":"0x...","value":"0x0"}' -n eip155:97
+# 输出：Signed tx: <原始交易 hex，不带 0x>
+```
+
+**签名 EIP-712 / TIP-712 结构化数据：**
 ```bash
 agent-wallet sign typed-data '{
   "types": {
@@ -120,34 +142,12 @@ agent-wallet sign typed-data '{
   "domain": {"name":"MyDApp","chainId":1},
   "message": {"to":"0x7099...","amount":1000000}
 }' -n eip155:1
+# 输出：Signature: <hex，不带 0x>
 ```
 
----
-
-### `agent-wallet init`（初始化密钥目录）
-
-初始化密钥目录并设置主密码------但此时不会创建钱包。这在一些高级场景中很有用，比如你希望在添加钱包之前先准备好目录结构。
-
-```bash
-agent-wallet init
-```
-
-**非交互模式：**
-
-```bash
-agent-wallet init -p 'Abc12345!'
-```
-
-| 参数 | 说明 |
-| :--- | :--- |
-| `--password, -p <pw>` | 主密码（跳过交互输入） |
-| `--save-runtime-secrets` | 将密码持久化保存到  `runtime_secrets.json` |
-
-:::tip 什么时候使用 `init` 和 `start` 
-`start` = `init` + 创建钱包（一步完成）。如果你只需要先设置目录和密码（例如用于 CI
-流程，或稍后再导入私钥），可以单独使用 `init`。 
+:::note 不支持消息签名
+`sign msg` 已在 3.0 中移除。Agent-wallet 只签名交易和结构化数据。
 :::
-
 
 ---
 
@@ -155,63 +155,55 @@ agent-wallet init -p 'Abc12345!'
 
 管理多个钱包——添加、切换、查看、删除。
 
-**添加新钱包：**
-```bash
-agent-wallet add
-```
-
-**列出所有钱包：**
+**列出所有钱包**（`*` 标记激活钱包）：
 ```bash
 agent-wallet list
 ```
 
-**切换活跃钱包：**
+**切换激活钱包**（省略 ID 时从列表中选择）：
 ```bash
 agent-wallet use my-bsc-wallet
 ```
 
-**查看钱包详情：**
+**查看钱包详情**（敏感信息始终显示为 `[redacted]`）：
 ```bash
 agent-wallet inspect my-bsc-wallet
 ```
 
-要查看钱包的派生地址，请使用独立的 `resolve-address` 命令：
+**用指定钱包签名**（不切换激活钱包）：
 ```bash
-agent-wallet resolve-address my-bsc-wallet
+agent-wallet sign typed-data '<json>' -n eip155:56 -w my-bsc-wallet
 ```
 
-**用指定钱包签名**（不切换活跃钱包）：
-```bash
-agent-wallet sign msg "Hello" -n eip155:56 -w my-bsc-wallet -p 'Abc12345!'
-```
-
-**删除钱包：**
+**删除钱包**（省略 ID 时从列表中选择）：
 ```bash
 agent-wallet remove my-bsc-wallet
 ```
 
-| 参数 | 简写 | 说明 |
+| 参数 | 缩写 | 说明 |
 | :--- | :--- | :--- |
-| `--yes` | `-y` | 跳过确认提示（**非交互 / Agent 场景下必需**） |
+| `--yes` | `-y` | 跳过确认提示（**在非交互 / 代理环境中必须使用**） |
+
+删除 `wallet_cli` 或 `privy` 钱包只会删除 Agent-wallet 中的配置条目——wallet-cli 账户或 Privy 钱包本身不受影响。
 
 ### `agent-wallet resolve-address`（解析钱包地址）
 
-显示某个钱包关联的链上地址。本地钱包（`local_secure`、`raw_secret`）都会显示 EVM 与 TRON 两个地址：`local_secure` 钱包（无论如何创建——助记词导入时只存按 `--derive-as` 方案派生出的那一把密钥）和私钥型 `raw_secret` 钱包的两个地址由同一把密钥派生；只有 `raw_secret` **助记词**钱包会按各链自己的派生路径分别从助记词派生。Privy 钱包显示 Privy 返回的单一地址。
+不签名，只显示钱包对应的链上地址：
+
+- `raw_secret` 钱包显示由同一份密钥材料派生出的 EVM 和 TRON 两个地址。
+- `wallet_cli` 钱包在 wallet-cli 账户同时拥有两条链地址时显示两个地址（否则显示一个），不会索要密码。
+- `privy` 钱包显示 Privy 返回的单个地址。
 
 ```bash
 agent-wallet resolve-address my-wallet
 ```
 
-如果省略钱包 ID，CLI 会弹出交互式列表让你选择：
+省略钱包 ID 时，CLI 会给出交互式列表供你选择。
 
-```bash
-agent-wallet resolve-address
-```
-
-示例输出：
+输出示例：
 ```
 Wallet  my-wallet
-Type    local_secure
+Type    raw_secret
 
 Addresses
 EVM   0x742D35CC6634C0532925a3B844Bc9E7595F2bD18
@@ -220,141 +212,51 @@ TRON  TJRyWwFs9wTFGZg3JbrVriFbNfCug5tDeC
 
 ---
 
-## 非交互式执行（专为自动化与后台设计）
+## 非交互式执行（适用于自动化和后台服务）
 
-默认情况下，执行签名命令时，终端会停下来并出现一行提示，等待你手动敲击键盘输入密码。但如果是 AI 代理在后台运行，或者你在跑自动化脚本，这种"中途停下来等人输入"的机制会导致程序直接卡死报错。
+3.x 没有需要提供的主密码。要做到全程无提示运行：
 
-为了让程序能一口气静默跑完（非交互模式），你需要提前把密码"喂"给命令。根据你的使用场景，有以下三种方式：
+- **创建钱包：** 写出钱包类型，并用参数提供所有值（`-w`、`-k`/`-m` 加 `--derive-as`、`--app-id`/`--privy-wallet-id`、`--account`）。使用 `start` 时，如果可能已有钱包，再加 `--override`——否则会以退出码 1 结束。`privy` 要**同时**传 `--app-id` 和 `--app-secret-exec`（或 `--app-secret`）：已有 Privy 钱包、且 `--app-id` 和 `--app-secret` 都没传时（只传 `--app-secret-exec` 不算），CLI 会询问是否复用已有凭据；传了 `--app-id` 但没传 secret 时则询问 secret 的来源。非交互环境下这两种提示都会以退出码 1 结束。
+- **密钥类凭据：** 使用 exec 脚本——wallet-cli 用 `--cli-password-exec`，Privy 用 `--app-secret-exec`。路径必须指向一个可执行文件（不是内联 shell 命令）。脚本继承进程环境变量，其 stdout 去除首尾空白后作为凭据，默认 10 秒超时。对于 `wallet_cli`，脚本会在**每次**签名时重新执行。
+- **签名：** 始终传 `-n`；如果不想依赖激活钱包，再加 `-w`。
+- **删除 / 重置：** 传 `-y`。
+- **检查参数拼写：** CLI 会直接忽略无法识别的参数而不报错，拼错的参数（例如 `--walet-id`）会静默退回到提示或默认值。
 
-### 方式 A：环境变量注入（推荐用于 AI 代理 / CI 流水线）
+`wallets_config.json` 包含 `active_wallet` 和以钱包 ID 为键的 `wallets`；每个条目有 `type` 和 `params`：`raw_secret` 为 `source`（`private_key`，或 `mnemonic` 加 `account_index`）；`privy` 为 `app_id`、`app_secret`、`wallet_id`；`wallet_cli` 为 `account`（可选）和 `password`。`app_secret` 和 `password` 可以是字符串，也可以是 exec 引用（`private_key` 和 `mnemonic` 只能是字符串）（`timeout` 以毫秒为单位，可选）：
 
-将密码提前存在当前系统环境里，程序运行需要密码时会自动去环境里拿，全程静默：
-
-```bash
-export AGENT_WALLET_PASSWORD='Abc12345!'
+```json
+{ "exec": "/absolute/path/to/fetch-password.sh", "timeout": 10000 }
 ```
-
-设置后，当前窗口的所有签名命令直接秒出结果，不再停顿等待：
-
-```bash
-agent-wallet sign msg "Hello" -n tron
-agent-wallet sign tx '{"txID":"..."}' -n tron
-```
-
-:::tip 防止此命令被记录到 Shell 历史
-建议直接用文本编辑器编辑 `~/.zshrc` / `~/.bashrc`，从根本上避免历史记录泄露。如果选择在命令前加空格来阻止记录，请先确认你的 Shell 已启用相应设置：Bash 中运行 `echo $HISTCONTROL` 确认包含 `ignorespace`，Zsh 中运行 `setopt | grep HIST_IGNORE_SPACE` 确认已开启。这些设置在大多数系统上**并非**默认启用，需要手动配置。
-:::
-
-:::caution 密码有特殊字符？务必用单引号
-```bash
-# 正确 — shell 按字面意思处理
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
-
-# 错误 — $ 被 shell 展开，导致密码在后台静默报错
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
-```
-:::
-
-<details>
-<summary>GitHub Actions / CI 示例</summary>
-
-在 CI/CD 环境中，切勿将密码硬编码在工作流文件里。请使用仓库密钥（Secrets）：
-
-```yaml
-# .github/workflows/sign.yml
-jobs:
-  sign:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: agent-wallet sign msg "Hello" -n tron
-        env:
-          AGENT_WALLET_PASSWORD: ${{ secrets.AGENT_WALLET_PASSWORD }}
-```
-
-</details>
-
-### 方式 B：密码本地缓存（便利性与安全性的取舍）
-
-执行一次带 `--save-runtime-secrets` 参数的命令后，密码会被缓存在本地文件（`~/.agent-wallet/runtime_secrets.json`）中。下次再运行任何签名命令时，系统会自动读取该缓存。你既不需要在命令行写密码，也不需要配环境变量：
-
-```bash
-agent-wallet sign msg "Hello" -n tron -p 'Abc12345!' --save-runtime-secrets
-```
-
-:::danger 此操作会使双重锁保护失效
-将密码缓存在钱包文件旁边，意味着一次文件系统入侵就能获取全部资金——彻底击溃 Agent-wallet 的核心"物理文件 + 密码分离"安全模型。**请仅对一次性测试钱包使用此功能。**
-
-`runtime_secrets.json` 以**明文**存储你的主密码。任何能访问你文件系统的程序（恶意插件、AI 代理、自动化脚本）都可以直接读取。务必确保该文件不会被提交到 git 或同步到云端。
-
-工具在创建该文件时会自动设置严格的文件权限（`600`——仅所有者可读）。如果你手动移动或复制过该文件，请验证权限：`chmod 600 ~/.agent-wallet/runtime_secrets.json`。
-
-要删除已缓存的密码并恢复完整的双重锁保护：
-
-```bash
-rm ~/.agent-wallet/runtime_secrets.json
-```
-
-删除后，签名命令将再次以交互方式提示输入密码（或从 `AGENT_WALLET_PASSWORD` 环境变量读取）。
-:::
-
-### 方式 C：命令行内联 `-p`（适合临时跑单次指令）
-
-直接把密码写在命令的结尾。程序拿到密码就直接干活，不会再停下来问你：
-
-```bash
-agent-wallet sign msg "Hello" -n tron -p 'Abc12345!'
-```
-
-:::danger 安全提示
-直接用 `-p` 传递密码时，明文密码会被留在你电脑的终端 `history`（历史记录）中。强烈建议仅在完全隔离的测试环境中使用此方法！
-:::
 
 ### 自定义存储目录
 
-所有命令都支持 `--dir` 参数来指定 Agent-wallet 的存储路径（默认在 `~/.agent-wallet`）。比如，你可以把 Agent-wallet 直接建在加密 U 盘里，即插即用，拔下即走：
+所有命令都支持 `--dir`，用来指定 `~/.agent-wallet` 以外的钱包目录。设置 `AGENT_WALLET_DIR` 可以让它成为 CLI 和 SDK 的默认目录：
 
 ```bash
-agent-wallet start --dir /Volumes/MyUSB/agent-wallet
-agent-wallet sign msg "Hello" -n tron --dir /Volumes/MyUSB/agent-wallet
+agent-wallet start raw_secret --dir /Volumes/MyUSB/agent-wallet
+agent-wallet list --dir /Volumes/MyUSB/agent-wallet
 ```
+
+### 环境变量
+
+| 变量 | 用途 |
+| :--- | :--- |
+| `AGENT_WALLET_DIR` | 默认钱包目录（CLI 和 SDK） |
+| `AGENT_WALLET_WALLET_CLI_PATH` | wallet-cli 不在 `PATH` 中时，指定其可执行文件或 JavaScript 入口的路径 |
+| `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC` / `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | 仅用于 SDK 的环境变量回退（没有配置任何钱包时才使用）——参见 [SDK 接入指南](./SDK-Guide.md#environment-variable-fallback) |
 
 ---
 
 ## 危险操作
 
-:::danger 以下操作不可逆，请谨慎使用！
+:::danger 以下操作不可逆，请务必谨慎！
 :::
 
-### `agent-wallet change-password`（修改主密码）
+<a id="agent-wallet-reset"></a>
 
-修改后，**所有密钥文件会用新密码重新加密**。旧密码立即失效，请确保已在密码管理器中更新。
+### `agent-wallet reset`（重置所有数据） {#agent-wallet-reset-reset-all-data}
 
-**交互式（默认）：**
-```bash
-agent-wallet change-password
-```
-
-**非交互式**（用于自动化脚本）：
-```bash
-agent-wallet change-password -p 'OldPassword123!' --new-password 'NewPassword456!'
-```
-
-| 参数 | 说明 |
-| :--- | :--- |
-| `--password, -p <pw>` | 当前主密码（跳过提示） |
-| `--new-password <pw>` | 新主密码（跳过提示） |
-| `--save-runtime-secrets` | 同步更新 `runtime_secrets.json` 中的缓存密码 |
-
-:::caution
-`-p` 和 `--new-password` 都会被记录在 Shell 历史中。生产环境请优先使用交互式模式，或通过密钥管理器传入密码。
-:::
-
-<a id="agent-wallet-reset-reset-all-data"></a>
-
-### `agent-wallet reset`（重置所有数据）
-
-删除 `~/.agent-wallet/` 中由 CLI 管理的文件——`master.json`、`wallets_config.json`、`runtime_secrets.json`，以及所有 `secret_*.json`。**这是核弹级操作——一旦执行，所有钱包、密钥、配置全部消失，无法恢复。** 目录本身及其中的其他文件（包括 `cred_*.json`）会保留。CLI 会要求**两次**确认；自动化场景可传 `-y/--yes` 跳过这两次提问。
+删除钱包目录中的 `wallets_config.json`——所有钱包配置，包括其中保存的 `raw_secret` 私钥，都会被删除。目录中的其他文件保持不动。wallet-cli 账户和 Privy 钱包本身不受影响。CLI 会**两次**确认；在自动化中传 `-y/--yes` 跳过两次提示。
 
 ```bash
 agent-wallet reset
@@ -362,42 +264,41 @@ agent-wallet reset
 
 ---
 
-## 实战：在 Shell 脚本中调用签名
+## 实战示例：在 Shell 脚本中签名
 
-CLI 不只是拿来手敲的——它可以完美嵌入你的自动化脚本。
-
-下面这个极简示例展示了如何在 Bash 脚本中完成一次非交互式签名并把签名存入变量（CLI 输出的是 `Signature: <hex>`，用 `sed` 去掉前缀）：
+下面的最小示例在 Bash 脚本中执行一次非交互式结构化数据签名，并把结果存进变量。CLI 输出 `Signature: <hex>`，脚本会去掉前缀，并检查剩下的是不是 130 位十六进制签名。这里特意不用管道接 `sed`：管道的退出状态取最后一个命令，签名失败也会被当成成功。
 
 ```bash
 #!/bin/bash
-# 开启严格模式：遇到报错立刻停止
-set -e
+# 严格模式：出错、使用未定义变量、管道中任一命令失败时都立即停止
+set -euo pipefail
 
-# 1. 密码应在运行此脚本之前已在环境中设置好。
-#    例如通过 ~/.zshrc / ~/.bashrc — 详见快速开始中的"保存并使密码生效"。
-#    切勿在脚本文件中硬编码真实密码（密码会随脚本进入 git 历史记录）。
-if [[ -z "$AGENT_WALLET_PASSWORD" ]]; then
-  echo "错误：AGENT_WALLET_PASSWORD 未设置" >&2
-  exit 1
-fi
+# 要签名的结构化数据（由你自己的逻辑构建）
+TYPED_DATA='{"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],"Message":[{"name":"contents","type":"string"}]},"primaryType":"Message","domain":{"name":"MyScript","chainId":56},"message":{"contents":"Hello from my script"}}'
 
 echo "正在调用本地 Agent-wallet 签名..."
 
-# 2. 核心操作：执行签名，并将终端打印出的哈希结果直接存入 SIGNATURE 变量
-SIGNATURE=$(agent-wallet sign msg "Hello from my script" -n tron | sed 's/^Signature: //')
+# 签名失败时 CLI 以非零码退出，并输出原因（如 "Wallet 'my-bsc-wallet' not found"）
+if ! OUTPUT=$(agent-wallet sign typed-data "$TYPED_DATA" -n eip155:56 -w my-bsc-wallet); then
+  echo "❌ 签名失败：$OUTPUT" >&2
+  exit 1
+fi
 
-# 3. 拿到干净的签名值，继续后续流程
+SIGNATURE=${OUTPUT#Signature: }
+if [[ ! "$SIGNATURE" =~ ^[0-9a-fA-F]{130}$ ]]; then
+  echo "❌ 输出不符合预期：$OUTPUT" >&2
+  exit 1
+fi
+
 echo "✅ 签名成功！"
-echo "提取到的签名内容是: $SIGNATURE"
-
-# 接下来，你可以拿这个 $SIGNATURE 去发请求、拼 JSON，或者传给其他流水线任务...
+echo "提取到的签名：$SIGNATURE"
 ```
 
 ---
 
 ## 下一步
 
-- 没写过代码？ → [快速上手](../QuickStart.md)
-- 要开发应用？ → [SDK 接入指南](./SDK-Guide.md)
-- 找现成代码？ → [完整代码示例](./SDK-Cookbook.md)
-- 查看常见问题 → [FAQ](../FAQ.md)
+- 刚接触？ → [快速开始](../QuickStart.md)
+- 要自己写代理？ → [SDK 接入指南](./SDK-Guide.md)
+- 想找现成代码？ → [完整代码示例](./SDK-Cookbook.md)
+- 常见问题 → [常见问题](../FAQ.md)

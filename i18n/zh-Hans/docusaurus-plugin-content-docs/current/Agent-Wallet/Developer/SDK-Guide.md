@@ -1,38 +1,32 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # SDK 接入指南
 
-CLI 已经跑通了，能从命令行签名。现在你想把签名能力放进代码里——MCP Server、自动化脚本、AI 代理工作流。
+你已经用 CLI 在命令行里签过名了。现在你想在自己的代码里调用签名——比如 MCP Server、自动化脚本、AI 代理工作流。
 
-本页教你怎么做。完成后，你就能用几行 TypeScript 或 Python 初始化钱包 Provider、获取活跃钱包，并对消息、交易、EIP-712 结构化数据进行签名。
+这一页就教你怎么做。读完后，你就能用 `@bankofai/agent-wallet` 3.x TypeScript SDK 解析钱包、读取地址，并签名交易和 EIP-712 / TIP-712 结构化数据。
 
-:::tip 刚刚入门？
-如果还没创建过钱包，先去 [快速上手](../QuickStart.md) 走一遍（不到一分钟）。SDK 读取的就是 CLI 创建的那个钱包——不需要重复配置任何东西。
+:::tip 第一次来？
+如果还没有创建钱包，先去 [快速开始](../QuickStart.md)。SDK 读取的就是 CLI 写入的同一份 `wallets_config.json`——不用重复配置。
 :::
 
-文档提供 TypeScript 和 Python 两个版本的安装说明和代码示例，点击标签页切换。
+:::note Python SDK
+Agent-wallet 3.x 只提供 TypeScript。PyPI 上的 Python 包 `bankofai-agent-wallet` 停留在 2.4.0，沿用 2.x 模型（`local_secure`、主密码、`sign_message`），不支持 `wallet_cli` 类型，也不返回本文介绍的 3.x 签名结果。
+:::
 
 ---
 
 ## 第一步：安装
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
-
 **检查 Node.js 版本**
 
-需要 Node.js ≥ 18——这是该包 `engines` 声明的下限。建议安装当前的 LTS 版本：Node 18 已于 2025 年 4 月、Node 20 已于 2026 年 4 月停止维护。查看当前版本：
+请使用 Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`，即 2026 年 10 月的安全更新版本。这是源码 `main` 分支声明的 `engines` 范围；npm 上已发布的 `3.0.0` 仍声明 `>=18.0.0`，但 wallet-cli `4.15.1` 本身就声明了同一范围。在 `main` 上，当 `wallet_cli` 钱包类型用当前 Node 通过 JavaScript 入口启动 wallet-cli 时（本地安装的包，或指向 `.js` 文件的 `AGENT_WALLET_WALLET_CLI_PATH`），会先检查同一范围；从 `PATH` 找到的 `wallet-cli` 可执行文件则不做此检查。（已发布的 `3.0.0` 中，该入口检查只要求 Node.js 20+。）检查当前版本：
 
 ```bash
 node -v
 ```
 
-输出 `v18.0.0` 或更高，可以直接安装；否则按下面的方法升级。
-
 :::tip 安装 / 升级 Node.js
 
-推荐用 [nvm](https://github.com/nvm-sh/nvm) 管理 Node.js 版本：
+推荐使用 [nvm](https://github.com/nvm-sh/nvm) 管理 Node.js 版本：
 
 ```bash
 # 安装 nvm（已安装可跳过）
@@ -56,279 +50,115 @@ nvm use --lts
 npm install @bankofai/agent-wallet
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-**检查 Python 版本**
-
-需要 Python ≥ 3.11（SDK 使用了 3.11+ 的特性）：
+该包同时提供 ESM 和 CommonJS 构建。只有使用 `wallet_cli` 钱包时，才需要额外安装可选的 peer 依赖：
 
 ```bash
-python3 --version
+npm install '@tron-walletcli/wallet-cli@^4.13.0'
 ```
-
-输出 `3.11.x` 或更高，可以直接安装；否则按下面的方法升级。
-
-:::tip 安装 / 升级 Python
-
-推荐用 [pyenv](https://github.com/pyenv/pyenv) 管理 Python 版本：
-
-```bash
-# 第一步：安装 pyenv
-curl https://pyenv.run | bash
-```
-
-安装后需要手动添加到 shell 配置：
-
-```bash
-# 将以下三行追加到 ~/.bashrc（zsh 用户改为 ~/.zshrc）
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(pyenv init -)"' >> ~/.bashrc
-
-# 重新加载配置，使当前终端立即生效
-source ~/.bashrc
-```
-
-使用 pyenv 之前，先安装系统依赖，**跳过这步会导致 `_ctypes`、`ssl` 等模块缺失，进而影响 `asyncio` 等标准库的导入**：
-
-```bash
-# CentOS / RHEL / Amazon Linux / Fedora
-sudo yum install -y libffi-devel bzip2-devel openssl-devel readline-devel sqlite-devel xz-devel
-
-# Ubuntu / Debian
-sudo apt-get install -y libffi-dev libbz2-dev libssl-dev libreadline-dev libsqlite3-dev liblzma-dev
-```
-
-然后编译 Python：
-
-```bash
-pyenv install 3.11
-pyenv global 3.11
-```
-
-也可以从 [python.org](https://www.python.org/downloads/) 下载安装包，选择 **3.11 或更高版本**。
-
-:::
-
-**安装 SDK**
-
-```bash
-pip install bankofai-agent-wallet
-```
-
-两条链的依赖（EVM 的 `eth-account` 与 TRON 的 `tronpy`）都会随包一并安装——不存在按链拆分的 extra。
-
-验证安装：
-
-```bash
-python3 -c "import agent_wallet; print('Installation successful')"
-```
-
-</TabItem>
-</Tabs>
 
 ---
 
-## 第二步：配置模式
+## 第二步：选择私钥来源
 
-调用 SDK 之前，需要通过环境变量告诉 Agent-wallet 去哪里找密钥。
+`resolveWalletProvider()` / `resolveWallet()` 会替你决定来源——代码里不需要写 `if/else`：
 
-不要被复杂的概念吓到，`resolveWalletProvider()` 极其聪明，它会自动检测可用的凭证来源——环境变量、已保存的 runtime-secrets 密码，或已存在的本地钱包配置——并决定工作模式，代码里不需要写任何 `if/else` 判断逻辑。
+1. **钱包配置（推荐）。** 如果钱包目录（`dir` 参数 → `AGENT_WALLET_DIR` → `~/.agent-wallet`）中的 `wallets_config.json` 至少包含一个钱包，就使用 `ConfigWalletProvider`。它支持 CLI 能创建的所有钱包类型：`wallet_cli`、`privy` 和 `raw_secret`。
+2. **环境变量回退。** 否则使用 `EnvWalletProvider`，从环境变量读取私钥。
 
-它支持以下两种模式：
+不需要导出任何密码：`wallet_cli` 的凭据来自钱包配置中保存的 exec 脚本或值，`privy` 的凭据同样保存在那里。
 
-### 🛡️ 核心用法：本地 Agent-wallet 模式（强烈推荐）
+### 环境变量回退 {#environment-variable-fallback}
 
-如果你刚才已经跟着 [快速上手](../QuickStart.md) 走过一遍，那你的私钥早就安全地躺在本地的隐藏文件里了。
-
-**在这个模式下，你根本不需要（也不应该）接触明文私钥。** 你只需要告诉 SDK 你的"开箱密码"即可。
-
-```bash
-export AGENT_WALLET_PASSWORD='Abc12345!'
-# 可选：如果你之前改过钱包存储目录，告诉 SDK 在哪找
-export AGENT_WALLET_DIR="$HOME/.agent-wallet"
-```
-
-:::caution 密码含特殊字符时，务必用单引号
-自动生成的强密码可能含有 `$`、`!` 等 shell 特殊字符，务必用单引号，避免 shell 展开导致密码被破坏：
+在一次性环境中（例如使用一次性测试私钥的 CI 流水线），你可以跳过钱包配置，直接把私钥交给 SDK：
 
 ```bash
-# ✅ 正确：单引号，密码原样传入
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
-
-# ❌ 错误：双引号，$ 被 shell 展开
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
-```
-:::
-
-### ⚠️ 备用方案：静态注入模式（仅限测试环境）
-
-如果你是在一个"用完即毁"的临时环境（比如 GitHub Actions 的自动化测试流水线），或者你手里只有别人的一个临时测试私钥，你可以跳过本地 Agent-wallet，直接把私钥喂给 SDK。
-
-```bash
-export AGENT_WALLET_PRIVATE_KEY='your-private-key-in-hex'
-# 或
+export AGENT_WALLET_PRIVATE_KEY='你的十六进制私钥'
+# 或者
 export AGENT_WALLET_MNEMONIC='word1 word2 word3 ...'
 ```
 
-:::danger 极度危险：违背核心安全原则！
-静态模式直接读取明文私钥，这意味着你放弃了 Agent-wallet 引以为傲的加密保护，退回了简介中所说的"单点白给"的老路。请仅在完全隔离的测试环境、或一次性 CI/CD 脚本中使用此模式！主网真金白银操作，请永远使用本地 Agent-wallet 模式。
+:::danger 明文私钥
+这种方式以明文从环境变量读取私钥。只能在完全隔离的测试环境中配合一次性私钥使用。同时设置两个变量会报错。
 :::
 
-:::tip 环境变量冲突怎么办？
-如果环境变量里同时存在密码和私钥，SDK 会优先保护安全：强制使用 `AGENT_WALLET_PASSWORD` 进入本地 Agent-wallet 模式，忽略明文私钥。
-:::
+### 环境变量一览
 
-### 环境变量速查
+| 变量 | 用途 | 使用方 |
+| :--- | :--- | :--- |
+| `AGENT_WALLET_DIR` | 钱包目录（默认 `~/.agent-wallet`） | 钱包配置 |
+| `AGENT_WALLET_WALLET_CLI_PATH` | wallet-cli 不在 `PATH` 中时，指定其可执行文件或 JavaScript 入口 | `wallet_cli` 钱包 |
+| `AGENT_WALLET_PRIVATE_KEY` | 明文私钥（hex） | 环境变量回退——二选一 |
+| `AGENT_WALLET_MNEMONIC` | 明文助记词 | 环境变量回退——二选一 |
+| `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | 助记词账户索引（默认 `0`） | 环境变量回退 |
 
-| 变量名 | 用途 | 模式 | 是否必填 |
-| :--- | :--- | :--- | :--- |
-| `AGENT_WALLET_PASSWORD` | 主密码，解锁本地隐藏文件 | 🛡️ 本地 Agent-wallet | 核心必填 |
-| `AGENT_WALLET_DIR` | 密钥目录（默认 `~/.agent-wallet`） | 🛡️ 本地 Agent-wallet | 可选 |
-| `AGENT_WALLET_PRIVATE_KEY` | 明文私钥（十六进制） | ⚠️ 静态注入 | 二选一（与助记词） |
-| `AGENT_WALLET_MNEMONIC` | 明文助记词短语 | ⚠️ 静态注入 | 二选一（与私钥） |
-| `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | BIP-44 派生索引（默认 `0`） | ⚠️ 静态注入 | 可选 |
-
-:::note 遗留变量名
-SDK 仍然接受早期的 `TRON_PRIVATE_KEY`、`TRON_MNEMONIC`、`TRON_ACCOUNT_INDEX`，它们分别对应 `AGENT_WALLET_PRIVATE_KEY`、`AGENT_WALLET_MNEMONIC`、`AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX`。虽然名字里带 TRON，但在 EVM 网络上同样生效。新项目建议统一用 `AGENT_WALLET_*` 这套名字。
-:::
+只有当钱包配置中没有任何钱包时，才会读取环境变量回退。2.x 的 `TRON_PRIVATE_KEY`、`TRON_MNEMONIC`、`TRON_ACCOUNT_INDEX` 和 `AGENT_WALLET_PASSWORD` 已不再读取。
 
 ---
 
 ## 使用示例
 
-### 初始化钱包 Provider
+### 网络
 
-所有操作的起点是 `resolveWalletProvider()`。它会选择对应模式并返回钱包 Provider，调用 `getActiveWallet()` 获取活跃钱包。模式选择并不只看环境变量：保存在 runtime-secrets 文件里的密码同样算数，而且只要钱包目录里已有任何钱包，即使一个环境变量都没设，也会走本地模式。
+所有 `network` 参数都只接受精确的规范 CAIP-2 字符串：`eip155:<chainId>`（如 `eip155:1`、`eip155:56`、`eip155:97`）或 `tron:<chainId>`（`tron:728126428` 主网、`tron:3448148188` Nile、`tron:2494104990` Shasta）。`tron:nile`、`tron:mainnet` 等别名、裸 `tron` / `eip155`、十六进制 TRON id，以及大小写或空白变体都会抛出 `NetworkError`。
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+`raw_secret`、环境变量回退和 `wallet_cli` 钱包**必须**提供网络——它决定使用 EVM 还是 TRON 签名器（对于助记词，还决定派生路径 `m/44'/60'/0'/0/{index}` 或 `m/44'/195'/0'/0/{index}`）。`privy` 钱包可以省略。
 
-```typescript
-import { resolveWalletProvider } from "@bankofai/agent-wallet";
+`wallet_cli` 钱包还要求该网络是 wallet-cli 自身认识的网络——即它的内置网络（`eip155:1`、`eip155:11155111`、`eip155:56`、`eip155:97`、`eip155:8453`、`eip155:84532`（Base 自 wallet-cli 4.14.0 起才内置）及三个 TRON 网络），或在 wallet-cli 自己的配置中添加的网络——否则签名会以 `network_mismatch` 失败。`raw_secret` 和 `privy` 钱包没有这一限制。
 
-const provider = resolveWalletProvider({ network: "tron:nile" });
-const wallet = await provider.getActiveWallet();
+### 解析钱包
 
-// 查看当前钱包地址
-const address = await wallet.getAddress();
-console.log("Address:", address);
-```
-
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-from agent_wallet import resolve_wallet_provider
-
-provider = resolve_wallet_provider(network="tron:nile")
-
-async def main():
-    wallet = await provider.get_active_wallet()
-
-    # 查看当前钱包地址
-    address = await wallet.get_address()
-    print("Address:", address)
-
-asyncio.run(main())
-```
-
-</TabItem>
-</Tabs>
-
-拿到 `wallet` 之后，就可以调用下面三种签名方法。`signMessage` 与 `signTypedData` 返回十六进制签名字符串（不带 `0x` 前缀）；`signTransaction` 返回完整的已签名交易——EVM 上是不带 `0x` 的十六进制序列化结果，TRON 上是 JSON 字符串。`signTypedData` 在两种语言里都声明在独立的 `Eip712Capable` 接口上，而不在 `Wallet` 上。TypeScript 会强制这一点，调用前需先做类型转换；Python 只在静态类型检查时体现——运行时可以直接调用，仓库自己让类型检查通过的写法是加一层 `isinstance(wallet, Eip712Capable)` 判断。
-
-#### 快捷方式：`resolveWallet()`
-
-如果你只需要 wallet、完全用不到 provider 本身，`resolveWallet()` 可以把两步合成一步。它接受同样的 `network` 与 `dir` 选项，另外还支持可选的 `walletId`，用于指定某个钱包而不是当前激活的钱包。`walletId` 只在本地钱包配置模式下生效——静态注入模式下它会被忽略，返回的仍是环境变量对应的钱包。
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+最短的路径是 `resolveWallet()`。它接受 `network`、`dir`，以及可选的 `walletId`，用于指定某个已配置的钱包而不是激活钱包（在环境变量回退模式下会被忽略）：
 
 ```typescript
 import { resolveWallet } from "@bankofai/agent-wallet";
 
-const wallet = await resolveWallet({ network: "tron:nile" });
+const wallet = await resolveWallet({ network: "tron:3448148188" });
+console.log("Address:", await wallet.getAddress());
 
-// 也可以指定某个钱包，而不用当前激活的
-const other = await resolveWallet({ network: "tron:nile", walletId: "trading" });
+// 或者指定某个钱包，而不是激活钱包
+const other = await resolveWallet({ network: "eip155:56", walletId: "trading" });
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-from agent_wallet import resolve_wallet
-
-async def main():
-    wallet = await resolve_wallet(network="tron:nile")
-
-    # 也可以指定某个钱包，而不用当前激活的
-    other = await resolve_wallet(network="tron:nile", wallet_id="trading")
-
-asyncio.run(main())
-```
-
-</TabItem>
-</Tabs>
-
-两个函数都还接受 `dir`，用于指向 `~/.agent-wallet` 之外的钱包目录，等价于在代码里设置 `AGENT_WALLET_DIR` 环境变量。
-
-:::note Privy 授权密钥
-每个签名方法都有一个可选的第二参数 `SignOptions`。它只有一个字段，会作为 `privy-authorization-signature` 请求头转发——当 Privy 钱包启用了授权密钥策略时必须提供。本地钱包会忽略该字段。该字段在 TypeScript 里叫 `authorizationSignature`，在 Python 里叫 `authorization_signature`：
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+需要 provider 本身时，使用 `resolveWalletProvider()`：
 
 ```typescript
-await wallet.signMessage(message, { authorizationSignature });
+import { resolveWalletProvider } from "@bankofai/agent-wallet";
+
+const provider = resolveWalletProvider({ network: "tron:3448148188" });
+const wallet = await provider.getActiveWallet();     // 或 getActiveWallet("eip155:56")
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
+两个函数都接受 `dir`，它相当于在代码里设置 `AGENT_WALLET_DIR`。
 
-```python
-from agent_wallet import SignOptions
-
-await wallet.sign_message(message, SignOptions(authorization_signature=signature))
-```
-
-</TabItem>
-</Tabs>
-:::
-
-### 签名消息
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+### `Wallet` 接口
 
 ```typescript
-const sig = await wallet.signMessage(new TextEncoder().encode("Hello"));
-console.log("Signature:", sig);
+interface Wallet {
+  getAddress(): Promise<string>;
+  signTransaction(payload: TransactionPayload, options?: SignOptions): Promise<SignedTransactionArtifact>;
+}
+
+interface Eip712Capable {
+  signTypedData(data: Record<string, unknown>, options?: SignOptions): Promise<string>;
+}
+
+type SignOptions = {
+  authorizationSignature?: string; // 作为 privy-authorization-signature 转发给 Privy
+  signal?: AbortSignal;            // 取消 wallet-cli 签名子进程
+};
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-sig = await wallet.sign_message(b"Hello")
-print("Signature:", sig)
-```
-
-</TabItem>
-</Tabs>
+- `signTransaction` 返回带类型的结果：`{ family: "evm", rawTransaction }`（hex，**不带** `0x`）或 `{ family: "tron", transaction }`（附带 `txID` 和 `signature` 的交易对象）。请根据 `family` 分支处理，不要去解析字符串。
+- `signTypedData` 返回**不带** `0x` 前缀的 hex 签名。它定义在单独的 `Eip712Capable` 接口上；调用前先检查（三种内置钱包类型都实现了它）。
+- 3.x 中没有 `signMessage` 或 `signRaw`。
 
 ### 签名交易
 
-Agent-wallet 只负责签名，不构建也不广播。你需要先通过 RPC（比如 TronGrid、Infura）构建未签名的交易，再传给 SDK 签名。
+Agent-wallet 只负责签名，不负责构建和广播交易。你需要先通过 RPC（如 TronGrid、EVM 节点）构建未签名交易，再交给 SDK 签名。
 
 #### TRON 交易
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+payload 必须包含 `raw_data_hex`（TronGrid 会返回）。对 `raw_secret`、`privy` 和环境变量钱包，缺少 `txID` 时会根据 `raw_data_hex` 计算。`wallet_cli` 钱包则需要完整交易——`raw_data`、`raw_data_hex`，以及等于 `raw_data_hex` 的 SHA-256 的 `txID`——否则 wallet-cli 会拒绝签名。
 
 ```typescript
 // 1. 调用方通过 TronGrid 构建未签名交易
@@ -338,41 +168,18 @@ const unsignedTx = {
   raw_data: { /* TronGrid 返回的原始数据 */ },
 };
 
-// 2. SDK 本地签名（无网络调用）
-const signedTxJson = await wallet.signTransaction(unsignedTx);
-console.log("Signed transaction:", signedTxJson);
+// 2. SDK 签名（raw_secret 在进程内签名；wallet_cli 委托给 wallet-cli）
+const signed = await wallet.signTransaction(unsignedTx);
+if (signed.family !== "tron") throw new Error("expected a TRON wallet");
+console.log("Signed transaction:", signed.transaction);
 
-// 3. 调用方负责广播
+// 3. 调用方广播 signed.transaction
 ```
-
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-# 1. 调用方通过 TronGrid 构建未签名交易
-unsigned_tx = {
-    "txID": "abc123...",
-    "raw_data_hex": "0a02...",
-    "raw_data": {},  # TronGrid 返回的原始数据
-}
-
-# 2. SDK 本地签名（无网络调用）
-signed_tx_json = await wallet.sign_transaction(unsigned_tx)
-print("Signed transaction:", signed_tx_json)
-
-# 3. 调用方负责广播
-```
-
-</TabItem>
-</Tabs>
 
 #### EVM 交易（BSC、Ethereum 等）
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
-
 ```typescript
-const signedTxHex = await wallet.signTransaction({
+const signed = await wallet.signTransaction({
   type: "eip1559",
   to: "0xRecipient...",
   value: 0n,
@@ -382,45 +189,26 @@ const signedTxHex = await wallet.signTransaction({
   nonce: 0,
   chainId: 56,
 });
-console.log("Signed tx:", signedTxHex);
+if (signed.family !== "evm") throw new Error("expected an EVM wallet");
+console.log("Signed tx:", "0x" + signed.rawTransaction);
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-from eth_utils import to_checksum_address
-
-signed_tx_hex = await wallet.sign_transaction({
-    "type": 2,  # 可省略——eth-account 真正要求的是两个 fee 字段齐全，或改用 legacy 的 gasPrice
-    "to": to_checksum_address("0xRecipient..."),
-    "value": 0,
-    "gas": 21000,
-    "maxFeePerGas": 20000000000,
-    "maxPriorityFeePerGas": 1000000000,
-    "nonce": 0,
-    "chainId": 56,
-})
-print("Signed tx:", signed_tx_hex)
-```
-
-</TabItem>
-</Tabs>
+`wallet_cli` 钱包还会拒绝与钱包网络不一致的 `chainId`、已签名的 payload，以及 EIP-4844 / EIP-7702 交易。
 
 ### 签名 EIP-712 结构化数据
 
-用于 x402 协议 PaymentPermit 签名、Permit2 等场景：
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+用于 x402 支付授权、Permit2 等场景：
 
 ```typescript
-import type { Eip712Capable } from "@bankofai/agent-wallet";
+import type { Eip712Capable, Wallet } from "@bankofai/agent-wallet";
 
-// signTypedData 定义在 Eip712Capable 上，而不在基础的 Wallet 接口上
-const signer = wallet as unknown as Eip712Capable;
+function supportsTypedData(wallet: Wallet): wallet is Wallet & Eip712Capable {
+  return "signTypedData" in wallet && typeof wallet.signTypedData === "function";
+}
 
-const sig = await signer.signTypedData({
+if (!supportsTypedData(wallet)) throw new Error("wallet cannot sign typed data");
+
+const sig = await wallet.signTypedData({
   types: {
     EIP712Domain: [
       { name: "name", type: "string" },
@@ -438,119 +226,60 @@ const sig = await signer.signTypedData({
 console.log("Signature:", sig);
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-sig = await wallet.sign_typed_data({
-    "types": {
-        "EIP712Domain": [
-            {"name": "name", "type": "string"},
-            {"name": "chainId", "type": "uint256"},
-        ],
-        "Transfer": [
-            {"name": "to", "type": "address"},
-            {"name": "amount", "type": "uint256"},
-        ],
-    },
-    "primaryType": "Transfer",
-    "domain": {"name": "MyDApp", "chainId": 1},
-    "message": {"to": "0x...", "amount": 1000000},
-})
-print("Signature:", sig)
-```
-
-</TabItem>
-</Tabs>
-
 ---
 
 ### 管理多个钱包
 
-需要在代码中管理多个钱包时，使用本地模式的 `resolveWalletProvider()`，Provider 会读取钱包配置并支持切换活跃钱包：
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+`ConfigWalletProvider` 用于读取和修改钱包配置。你可以从 `resolveWalletProvider()` 获得它（已配置钱包时），也可以直接用 `new ConfigWalletProvider(dir, { network })` 构造：
 
 ```typescript
 import { resolveWalletProvider, ConfigWalletProvider } from "@bankofai/agent-wallet";
 
-// 本地模式：需要设置 AGENT_WALLET_PASSWORD
-const provider = resolveWalletProvider({ network: "tron:nile" });
+const provider = resolveWalletProvider({ network: "tron:3448148188" });
 
 if (provider instanceof ConfigWalletProvider) {
-  // 列出所有钱包 — 返回 [walletId, config, isActive] 元组数组
-  const wallets = provider.listWallets();
-  for (const [id, config, isActive] of wallets) {
-    console.log(`${id} (${config.type})${isActive ? " ← 活跃" : ""}`);
+  // 列出所有钱包——返回 [walletId, config, isActive] 元组
+  for (const [id, config, isActive] of provider.listWallets()) {
+    console.log(`${id} (${config.type})${isActive ? " ← active" : ""}`);
   }
 
-  // 切换活跃钱包
+  // 切换激活钱包（写入 wallets_config.json）
   provider.setActive("my-evm-wallet");
+
+  // 或者不切换，直接在指定网络上使用某个钱包
+  const bsc = await provider.getWallet("my-evm-wallet", "eip155:56");
 }
 
-// 获取并使用
+// 未设置激活钱包时，会回退到第一个已配置的钱包
 const wallet = await provider.getActiveWallet();
-const sig = await wallet.signMessage(new TextEncoder().encode("Hello"));
 ```
-
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-from agent_wallet import resolve_wallet_provider, ConfigWalletProvider
-
-# 需要设置 AGENT_WALLET_PASSWORD
-provider = resolve_wallet_provider(network="tron:nile")
-
-async def main():
-    if isinstance(provider, ConfigWalletProvider):
-        # 列出所有钱包 — 返回 [(wallet_id, config, is_active)] 元组列表
-        wallets = provider.list_wallets()
-        for wallet_id, config, is_active in wallets:
-            print(f"{wallet_id} ({config.type}){'  ← 活跃' if is_active else ''}")
-
-        # 切换活跃钱包
-        provider.set_active("my-evm-wallet")
-
-    # 获取并使用
-    wallet = await provider.get_active_wallet()
-    sig = await wallet.sign_message(b"Hello")
-    print("Signature:", sig)
-
-asyncio.run(main())
-```
-
-</TabItem>
-</Tabs>
 
 ---
 
 ### 错误处理
 
-签名操作失败时，SDK 会抛出特定的错误类型，建议在代码中显式捕获，避免运行时崩溃。
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+SDK 的类型化错误继承自 `WalletError`。少数配置和输入错误会直接抛出普通 `Error`：找不到钱包来源（既没有已配置的钱包，也没有 `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC`）、这两个环境变量同时设置、私钥格式错误，或 `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` 无效。捕获你能处理的具体类型：
 
 ```typescript
 import {
   WalletNotFoundError,
+  NetworkError,
   SigningError,
-  DecryptionError,
+  WalletCliNotFoundError,
+  WalletCliExecutionError,
 } from "@bankofai/agent-wallet";
 
 try {
   const wallet = await provider.getActiveWallet();
-  const sig = await wallet.signMessage(new TextEncoder().encode("Hello"));
-  console.log("Signature:", sig);
+  const signed = await wallet.signTransaction(unsignedTx);
 } catch (e) {
   if (e instanceof WalletNotFoundError) {
-    console.error("钱包不存在——检查是否设置了活跃钱包");
-  } else if (e instanceof DecryptionError) {
-    console.error("解密失败——检查主密码是否正确");
-  } else if (e instanceof SigningError) {
+    console.error("找不到钱包——请检查钱包 ID");
+  } else if (e instanceof NetworkError) {
+    console.error("网络无效或不匹配——请使用规范 CAIP-2，例如 tron:3448148188");
+  } else if (e instanceof WalletCliNotFoundError) {
+    console.error("未安装 wallet-cli，或不在 PATH 中");
+  } else if (e instanceof WalletCliExecutionError || e instanceof SigningError) {
     console.error("签名失败：", e.message);
   } else {
     throw e;
@@ -558,66 +287,52 @@ try {
 }
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-from agent_wallet import WalletNotFoundError, SigningError, DecryptionError
-
-try:
-    wallet = await provider.get_active_wallet()
-    sig = await wallet.sign_message(b"Hello")
-    print("Signature:", sig)
-except WalletNotFoundError:
-    print("钱包不存在——检查是否设置了活跃钱包")
-except DecryptionError:
-    print("解密失败——检查主密码是否正确")
-except SigningError as e:
-    print(f"签名失败：{e}")
-```
-
-</TabItem>
-</Tabs>
-
-错误类型层级：
+错误类型层级（均从包根导出）：
 
 ```
 WalletError
-├── WalletNotFoundError        # 指定钱包不存在
-├── DecryptionError            # 密码错误或密钥文件损坏
-├── SigningError               # 签名操作失败
-├── NetworkError               # 网络标识符不匹配
-├── InsufficientBalanceError   # 余额不足
-├── UnsupportedOperationError  # 该钱包类型不支持此操作
-├── PrivyConfigError           # Privy 钱包配置错误
-├── PrivyRequestError          # Privy API 请求失败
-├── PrivyRateLimitError        # Privy API 速率限制
-└── PrivyAuthError             # Privy 认证失败
+├── WalletNotFoundError              # 找不到指定的钱包 ID（或没有任何已配置钱包）
+├── DecryptionError                  # 为兼容保留；3.x 钱包类型不会抛出
+├── InsufficientBalanceError         # SDK 不会抛出；供你自己的代码使用
+├── SigningError                     # 签名失败或 payload 被拒绝
+├── NetworkError                     # 网络标识不规范或不匹配
+├── UnsupportedOperationError        # 该钱包不支持此操作
+└── ExternalSignerError
+    ├── ExternalSignerConfigError
+    │   ├── PrivyConfigError
+    │   └── WalletCliConfigError
+    ├── ExternalSignerExecutionError
+    │   ├── PrivyRequestError
+    │   ├── PrivyRateLimitError
+    │   ├── PrivyAuthError
+    │   └── WalletCliExecutionError
+    │       └── WalletCliSubmittedTransactionError
+    ├── ExternalSignerUsageError
+    │   └── WalletCliUsageError
+    └── ExternalSignerNotFoundError
+        └── WalletCliNotFoundError
 ```
 
-:::note Python 导入方式
-TypeScript 会从包根导出以上全部错误类型。而 Python 的顶层 `agent_wallet` 只导出 `WalletError`、`WalletNotFoundError`、`DecryptionError`、`SigningError`、`NetworkError` 和 `UnsupportedOperationError`。其余五个需要从 `agent_wallet.core.errors` 导入：
+`WalletCliExecutionError` 与 `WalletCliUsageError` 都带有 `code`。agent-wallet 自身产生的 code 有：`capability_missing`（该 wallet-cli 可执行文件不能签这一类交易；账户没有该链族地址时报的是 `contract_mismatch`）、`network_mismatch`（wallet-cli 不认识该网络；在能力检查之后才检查）、`contract_mismatch`、`unsupported_version`、`unsupported_runtime`、`migration_required` / `migration_completed` / `migration_cancelled`、`timeout`、`aborted`、`spawn_error`、`stdin_write`、`output_limit`、`status_query_failed`，以及 wallet-cli 失败信封里 `code` 为空字符串时补上的 `internal_error`（信封里完全没有 `code` 时报 `contract_mismatch`）。wallet-cli 返回失败信封时，它自己的 code 会原样透传（例如 `account_not_found`、`auth_failed`）：退出码 `2` 对应 `WalletCliUsageError`，退出码 `1` 对应 `WalletCliExecutionError`。`wallet_cli` 交易的 `chainId` 与 `-n` 不一致时抛出的是 `SigningError`，不是 `NetworkError`。
 
-```python
-from agent_wallet.core.errors import (
-    InsufficientBalanceError,
-    PrivyConfigError,
-    PrivyRequestError,
-    PrivyRateLimitError,
-    PrivyAuthError,
-)
-```
+:::tip 不要自动重试 wallet-cli 超时
+`@bankofai/agent-wallet/integrations/wallet-cli` 的 `signAndBroadcast()` 超时后，不要自动重发——先核实结果。有两种超时不是异常：广播超时但已知 `txId`，或 `wait: true` 的轮询期限到了，调用都会返回 `{ txId, stage: 'timeout' }`。构建或签名阶段超时，或广播在拿到 `txId` 之前就超时，会抛 code 为 `timeout` 的 `WalletCliExecutionError`。`WalletCliSubmittedTransactionError` 只在 `wait: true` 且交易已广播、之后查询状态失败时抛出（包括状态查询本身超时，此时其 `code` 为 `timeout`），并带上该 `txId`。普通的 `signTransaction()` 不广播，也不会抛这个错误。
 :::
 
-:::tip 关于 InsufficientBalanceError
-`InsufficientBalanceError` **不会**由 SDK 自动抛出——Agent-wallet 是纯签名工具，不会检查余额。这个错误类型是为你的应用代码准备的便捷类型，当你在发起交易前检测到余额不足时，可以抛出此异常。
-:::
+### 进阶入口
+
+| 导入路径 | 内容 |
+| :--- | :--- |
+| `@bankofai/agent-wallet` | `resolveWallet`、`resolveWalletProvider`、`ConfigWalletProvider`、`EnvWalletProvider`、`Network`、`WalletType`、`loadConfig` / `saveConfig`、类型与错误 |
+| `@bankofai/agent-wallet/advanced` | 底层适配器和客户端（`EvmSigner`、`TronSigner`、`RawSecretSigner`、`PrivyAdapter`、`WalletCliAdapter`、`PrivyClient`、`WalletCliClient`）、凭据提供器（`ExecSecretProvider`、`StaticSecretProvider`） |
+| `@bankofai/agent-wallet/advanced`（续） | 另有 `LocalSigner`、配置解析器（`ExternalSignerConfigResolver`、`PrivyConfigResolver`、`WalletCliConfigResolver`）、`resolveSecret` / `isSecretRef` / `DEFAULT_EXEC_TIMEOUT_MS` / `DEFAULT_SECRET_STDOUT_LIMIT` / `DEFAULT_SECRET_STDERR_LIMIT`、`defaultSecretProviderFactory`，以及 `parseWalletCliNetwork` / `assertTronWalletCliNetwork` |
+| `@bankofai/agent-wallet/integrations/wallet-cli` | 借助 wallet-cli 完成构建 / 广播 / 查询的 TRON 专用工具：`signAndBroadcast`、`buildTransfer`、`broadcast`、`getTxStatus`、`getBalance`、`getTxInfo` |
 
 ---
 
 ## 下一步
 
-- 喜欢敲命令？ → [CLI 命令行手册](./CLI-Reference.md)
-- 找现成代码？ → [完整代码示例](./SDK-Cookbook.md)
-- 了解 Agent-wallet 的设计思路 → [简介](../Intro.md)
-- 查看常见问题 → [FAQ](../FAQ.md)
+- 更喜欢命令行？ → [CLI 命令行手册](./CLI-Reference.md)
+- 想找现成代码？ → [完整代码示例](./SDK-Cookbook.md)
+- 了解 Agent-wallet 的设计 → [简介](../Intro.md)
+- 常见问题 → [常见问题](../FAQ.md)

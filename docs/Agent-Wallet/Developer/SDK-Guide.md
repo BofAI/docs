@@ -1,34 +1,28 @@
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # SDK Guide
 
 You've tried the CLI and can sign from the command line. Now you want signing inside your own code — an MCP Server, an automation script, an AI agent workflow.
 
-This page shows you how. By the end, you'll be able to initialize a wallet provider, retrieve the active wallet, and sign messages, transactions, and EIP-712 typed data — all in a few lines of TypeScript or Python.
+This page shows you how. By the end, you'll be able to resolve a wallet, read its address, and sign transactions and EIP-712 / TIP-712 typed data with the `@bankofai/agent-wallet` 3.x TypeScript SDK.
 
 :::tip New here?
-If you haven't created a wallet yet, start with the [Quick Start](../QuickStart.md) first (takes under a minute). The SDK reads from the same wallet the CLI creates — no need to set up anything twice.
+If you haven't created a wallet yet, start with the [Quick Start](../QuickStart.md). The SDK reads the same `wallets_config.json` the CLI writes — no need to set up anything twice.
 :::
 
-Both installation instructions and code examples are provided for TypeScript and Python — use the tabs to switch.
+:::note Python SDK
+Agent-wallet 3.x is TypeScript only. The Python package `bankofai-agent-wallet` on PyPI stopped at 2.4.0 and follows the 2.x model (`local_secure`, master password, `sign_message`); it does not support the `wallet_cli` type or the 3.x signing results described here.
+:::
 
 ---
 
 ## Step 1: Install
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
-
 **Check Your Node.js Version**
 
-Requires Node.js ≥ 18 — that is the package's own `engines` floor. Installing the current LTS is recommended: Node 18 reached end-of-life in April 2025 and Node 20 in April 2026. Check your current version:
+Use Node.js `^22.23.4 || ^24.22.1 || >=26.12.1` — the October 2026 security releases. This is the `engines` range on the source `main` branch; the published npm `3.0.0` still declares `>=18.0.0`, but wallet-cli `4.15.1` itself declares the same range. On `main`, when the `wallet_cli` wallet type launches wallet-cli through a JavaScript entrypoint with the current Node (a locally installed package, or an `AGENT_WALLET_WALLET_CLI_PATH` pointing at a `.js` file), it checks the same range first; a `wallet-cli` executable found on `PATH` is not checked. (In the published `3.0.0`, that entrypoint check only requires Node.js 20+.) Check your current version:
 
 ```bash
 node -v
 ```
-
-If the output is `v18.0.0` or higher, you can proceed directly to installation. Otherwise, follow the instructions below.
 
 :::tip Install / Upgrade Node.js
 
@@ -56,115 +50,26 @@ You can also download the **LTS** installer directly from [nodejs.org](https://n
 npm install @bankofai/agent-wallet
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-**Check Your Python Version**
-
-Requires Python ≥ 3.11 (the SDK uses 3.11+ features):
+The package ships both ESM and CommonJS builds. Only if you use `wallet_cli` wallets, also install the optional peer dependency:
 
 ```bash
-python3 --version
+npm install '@tron-walletcli/wallet-cli@^4.13.0'
 ```
-
-If the output is `3.11.x` or higher, you can proceed directly to installation. Otherwise, follow the instructions below.
-
-:::tip Install / Upgrade Python
-
-We recommend using [pyenv](https://github.com/pyenv/pyenv) to manage Python versions:
-
-```bash
-# Step 1: Install pyenv
-curl https://pyenv.run | bash
-```
-
-After installation, you need to add pyenv to your shell config manually — otherwise the terminal won't find the `pyenv` command:
-
-```bash
-# Append these three lines to ~/.bashrc (or ~/.zshrc for zsh users)
-echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-echo 'eval "$(pyenv init -)"' >> ~/.bashrc
-
-# Reload config to apply changes in the current terminal
-source ~/.bashrc
-```
-
-Once pyenv is available, install the required system dependencies first. **Skipping this step will cause modules like `_ctypes` and `ssl` to be missing, which can break standard library imports including `asyncio`.**
-
-```bash
-# CentOS / RHEL / Amazon Linux / Fedora
-sudo yum install -y libffi-devel bzip2-devel openssl-devel readline-devel sqlite-devel xz-devel
-
-# Ubuntu / Debian
-sudo apt-get install -y libffi-dev libbz2-dev libssl-dev libreadline-dev libsqlite3-dev liblzma-dev
-```
-
-Then build Python:
-
-```bash
-pyenv install 3.11
-pyenv global 3.11
-```
-
-You can also download an installer from [python.org](https://www.python.org/downloads/), selecting **3.11 or higher**.
-
-:::
-
-**Install the SDK**
-
-```bash
-pip install bankofai-agent-wallet
-```
-
-Both chain stacks (`eth-account` for EVM and `tronpy` for TRON) are installed unconditionally — there are no per-chain extras.
-
-Verify the installation:
-
-```bash
-python3 -c "import agent_wallet; print('Installation successful')"
-```
-
-</TabItem>
-</Tabs>
 
 ---
 
-## Step 2: Configure a Mode
+## Step 2: Choose Where the Key Comes From
 
-Before calling the SDK, you need to tell Agent-wallet where to find your keys via environment variables.
+`resolveWalletProvider()` / `resolveWallet()` decide the source for you — no `if/else` in your code:
 
-Don't be intimidated by the concepts — `resolveWalletProvider()` is extremely smart. It detects what is available — environment variables, a saved runtime-secrets password, or an existing local wallet config — and decides the mode for you. No `if/else` logic needed in your code.
+1. **Wallet config (recommended).** If `wallets_config.json` in the wallet directory (`dir` option → `AGENT_WALLET_DIR` → `~/.agent-wallet`) contains at least one wallet, a `ConfigWalletProvider` is used. It handles every wallet type the CLI can create: `wallet_cli`, `privy`, and `raw_secret`.
+2. **Environment variable fallback.** Otherwise an `EnvWalletProvider` reads a key from the environment.
 
-It supports two modes:
+There is no password to export: `wallet_cli` credentials come from the exec script or value saved in the wallet config, and `privy` credentials are saved there too.
 
-### 🛡️ Core Usage: Local Agent-wallet Mode (Strongly Recommended)
+### Environment Variable Fallback {#environment-variable-fallback}
 
-If you've already followed the [Quick Start](../QuickStart.md), your private key is already safely locked inside a hidden file on your machine.
-
-**In this mode, you never need to (and shouldn't) touch your plaintext private key.** Just tell the SDK your "unlock password" and you're good to go.
-
-```bash
-export AGENT_WALLET_PASSWORD='Abc12345!'
-# Optional: if you changed the wallet storage directory, tell the SDK where to look
-export AGENT_WALLET_DIR="$HOME/.agent-wallet"
-```
-
-:::caution Always use single quotes when the password contains special characters
-Auto-generated strong passwords may contain `$`, `!`, or other shell-special characters. Always use single quotes to prevent the shell from expanding and corrupting the password:
-
-```bash
-# ✅ Correct: single quotes, password passed as-is
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
-
-# ❌ Wrong: double quotes, $ gets expanded by the shell
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"
-```
-:::
-
-### ⚠️ Fallback: Static Injection Mode (Test Environments Only)
-
-If you're working in a disposable environment (e.g., a GitHub Actions CI pipeline), or you only have someone else's temporary test key, you can skip the local Agent-wallet and feed the private key directly to the SDK.
+For disposable environments (e.g. a CI pipeline with a throwaway test key) you can skip the wallet config and feed the key directly:
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY='your-private-key-in-hex'
@@ -172,163 +77,88 @@ export AGENT_WALLET_PRIVATE_KEY='your-private-key-in-hex'
 export AGENT_WALLET_MNEMONIC='word1 word2 word3 ...'
 ```
 
-:::danger Extremely Dangerous: Violates Core Security Principles!
-Static mode reads your private key in plaintext, which means you forfeit Agent-wallet's encryption protection and fall back to the "single point of failure" approach described in the introduction. Only use this mode in fully isolated test environments or one-off CI/CD scripts! For mainnet operations with real funds, always use local Agent-wallet mode.
-:::
-
-:::tip What if environment variables conflict?
-If both a password and a private key exist in your environment variables, the SDK prioritizes security: it forces `AGENT_WALLET_PASSWORD` to enter local Agent-wallet mode and ignores the plaintext private key.
+:::danger Plaintext key
+This reads your private key in plaintext from the environment. Only use it in fully isolated test environments with throwaway keys. Setting both variables at once is an error.
 :::
 
 ### Environment Variable Reference
 
-| Variable | Purpose | Mode | Required |
-| :--- | :--- | :--- | :--- |
-| `AGENT_WALLET_PASSWORD` | Master password, unlocks the local hidden file | 🛡️ Local Agent-wallet | Core required |
-| `AGENT_WALLET_DIR` | Key directory (default `~/.agent-wallet`) | 🛡️ Local Agent-wallet | Optional |
-| `AGENT_WALLET_PRIVATE_KEY` | Plaintext private key (hex) | ⚠️ Static Injection | Choose one (with mnemonic) |
-| `AGENT_WALLET_MNEMONIC` | Plaintext mnemonic phrase | ⚠️ Static Injection | Choose one (with private key) |
-| `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | BIP-44 derivation index (default `0`) | ⚠️ Static Injection | Optional |
+| Variable | Purpose | Used by |
+| :--- | :--- | :--- |
+| `AGENT_WALLET_DIR` | Wallet directory (default `~/.agent-wallet`) | Wallet config |
+| `AGENT_WALLET_WALLET_CLI_PATH` | wallet-cli executable or JavaScript entrypoint, when not on `PATH` | `wallet_cli` wallets |
+| `AGENT_WALLET_PRIVATE_KEY` | Plaintext private key (hex) | Env fallback — choose one |
+| `AGENT_WALLET_MNEMONIC` | Plaintext mnemonic phrase | Env fallback — choose one |
+| `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX` | Mnemonic account index (default `0`) | Env fallback |
 
-:::note Legacy variable names
-The SDK still accepts the older `TRON_PRIVATE_KEY`, `TRON_MNEMONIC`, and `TRON_ACCOUNT_INDEX` variables, which map to `AGENT_WALLET_PRIVATE_KEY`, `AGENT_WALLET_MNEMONIC`, and `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX`. They work on EVM networks too, despite the name. Prefer the `AGENT_WALLET_*` names in new setups.
-:::
+The env fallback is only consulted when the wallet config has no wallets. The 2.x names `TRON_PRIVATE_KEY`, `TRON_MNEMONIC`, `TRON_ACCOUNT_INDEX` and `AGENT_WALLET_PASSWORD` are no longer read.
 
 ---
 
 ## Usage Examples
 
-### Initialize the Wallet Provider
+### Networks
 
-The starting point for all operations is `resolveWalletProvider()`. It selects the appropriate mode and returns a wallet provider; call `getActiveWallet()` to get the active wallet. Selection is not driven by environment variables alone: a password saved in the runtime-secrets file counts too, and if the wallet directory already holds any wallet, local mode wins even with no environment variable set at all.
+Every `network` option takes an exact canonical CAIP-2 string: `eip155:<chainId>` (e.g. `eip155:1`, `eip155:56`, `eip155:97`) or `tron:<chainId>` (`tron:728126428` mainnet, `tron:3448148188` Nile, `tron:2494104990` Shasta). Aliases such as `tron:nile`, `tron:mainnet`, bare `tron` / `eip155`, hex TRON ids, and case or whitespace variants throw a `NetworkError`.
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+`raw_secret`, env-fallback and `wallet_cli` wallets **require** a network — it selects the EVM or TRON signer (and, for a mnemonic, the derivation path `m/44'/60'/0'/0/{index}` or `m/44'/195'/0'/0/{index}`). `privy` wallets may omit it.
 
-```typescript
-import { resolveWalletProvider } from "@bankofai/agent-wallet";
+For `wallet_cli` wallets the network must also be one wallet-cli itself knows — its built-ins (`eip155:1`, `eip155:11155111`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532` (the two Base networks were added in wallet-cli 4.14.0) and the three TRON networks) or a network added to wallet-cli's own config — otherwise signing fails with `network_mismatch`. `raw_secret` and `privy` wallets have no such limit.
 
-const provider = resolveWalletProvider({ network: "tron:nile" });
-const wallet = await provider.getActiveWallet();
+### Resolve a Wallet
 
-// Check the current wallet address
-const address = await wallet.getAddress();
-console.log("Address:", address);
-```
-
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-from agent_wallet import resolve_wallet_provider
-
-provider = resolve_wallet_provider(network="tron:nile")
-
-async def main():
-    wallet = await provider.get_active_wallet()
-
-    # Check the current wallet address
-    address = await wallet.get_address()
-    print("Address:", address)
-
-asyncio.run(main())
-```
-
-</TabItem>
-</Tabs>
-
-Once you have `wallet`, you can call any of the three signing methods below. `signMessage` and `signTypedData` return a hex-encoded signature string (without the `0x` prefix); `signTransaction` returns the full serialized signed transaction — hex without `0x` on EVM, and a JSON string on TRON. `signTypedData` is declared on a separate `Eip712Capable` interface rather than on `Wallet`, in both languages. TypeScript enforces this, so cast the wallet before calling it; Python only enforces it at type-check time — the call works at runtime, and the repo's own idiom for keeping type checkers happy is an `isinstance(wallet, Eip712Capable)` guard.
-
-#### Shortcut: `resolveWallet()`
-
-When you only need the wallet and never touch the provider itself, `resolveWallet()` collapses both steps into one call. It takes the same `network` and `dir` options, plus an optional `walletId` to pick a specific wallet instead of the active one. `walletId` applies to local wallet-config mode only — in static-injection mode it is ignored and the environment wallet is returned.
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+The shortest path is `resolveWallet()`. It takes `network`, `dir`, and an optional `walletId` to pick a specific configured wallet instead of the active one (ignored in env-fallback mode):
 
 ```typescript
 import { resolveWallet } from "@bankofai/agent-wallet";
 
-const wallet = await resolveWallet({ network: "tron:nile" });
+const wallet = await resolveWallet({ network: "tron:3448148188" });
+console.log("Address:", await wallet.getAddress());
 
 // Or target a specific wallet instead of the active one
-const other = await resolveWallet({ network: "tron:nile", walletId: "trading" });
+const other = await resolveWallet({ network: "eip155:56", walletId: "trading" });
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-from agent_wallet import resolve_wallet
-
-async def main():
-    wallet = await resolve_wallet(network="tron:nile")
-
-    # Or target a specific wallet instead of the active one
-    other = await resolve_wallet(network="tron:nile", wallet_id="trading")
-
-asyncio.run(main())
-```
-
-</TabItem>
-</Tabs>
-
-Both functions also accept `dir` to point at a wallet directory other than `~/.agent-wallet`, which is the programmatic equivalent of the `AGENT_WALLET_DIR` environment variable.
-
-:::note Privy authorization keys
-Every signing method takes an optional second argument, `SignOptions`. Its only field is forwarded as the `privy-authorization-signature` header — required when a Privy wallet is governed by an authorization-key policy. Local wallets ignore it. The field is `authorizationSignature` in TypeScript and `authorization_signature` in Python:
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+When you need the provider itself, use `resolveWalletProvider()`:
 
 ```typescript
-await wallet.signMessage(message, { authorizationSignature });
+import { resolveWalletProvider } from "@bankofai/agent-wallet";
+
+const provider = resolveWalletProvider({ network: "tron:3448148188" });
+const wallet = await provider.getActiveWallet();     // or getActiveWallet("eip155:56")
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
+Both functions accept `dir`, the programmatic equivalent of `AGENT_WALLET_DIR`.
 
-```python
-from agent_wallet import SignOptions
-
-await wallet.sign_message(message, SignOptions(authorization_signature=signature))
-```
-
-</TabItem>
-</Tabs>
-:::
-
-### Sign a Message
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+### The `Wallet` Interface
 
 ```typescript
-const sig = await wallet.signMessage(new TextEncoder().encode("Hello"));
-console.log("Signature:", sig);
+interface Wallet {
+  getAddress(): Promise<string>;
+  signTransaction(payload: TransactionPayload, options?: SignOptions): Promise<SignedTransactionArtifact>;
+}
+
+interface Eip712Capable {
+  signTypedData(data: Record<string, unknown>, options?: SignOptions): Promise<string>;
+}
+
+type SignOptions = {
+  authorizationSignature?: string; // forwarded to Privy as privy-authorization-signature
+  signal?: AbortSignal;            // cancels a wallet-cli signing subprocess
+};
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-sig = await wallet.sign_message(b"Hello")
-print("Signature:", sig)
-```
-
-</TabItem>
-</Tabs>
+- `signTransaction` returns a typed artifact: `{ family: "evm", rawTransaction }` (hex **without** `0x`) or `{ family: "tron", transaction }` (the transaction object with `txID` and `signature` attached). Branch on `family` — don't parse strings.
+- `signTypedData` returns a hex signature **without** the `0x` prefix. It lives on the separate `Eip712Capable` interface; check for it before calling (all three built-in wallet types implement it).
+- There is no `signMessage` or `signRaw` in 3.x.
 
 ### Sign a Transaction
 
-Agent-wallet only handles signing — not building or broadcasting. You need to construct the unsigned transaction via RPC (e.g. TronGrid, Infura) first, then pass it to the SDK for signing.
+Agent-wallet only handles signing — not building or broadcasting. You need to construct the unsigned transaction via RPC (e.g. TronGrid, an EVM node) first, then pass it to the SDK.
 
 #### TRON Transaction
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+The payload must contain `raw_data_hex` (as returned by TronGrid). For `raw_secret`, `privy` and environment-variable wallets a missing `txID` is computed from `raw_data_hex`. A `wallet_cli` wallet needs the complete transaction — `raw_data`, `raw_data_hex` and a `txID` equal to the SHA-256 of `raw_data_hex` — or wallet-cli refuses to sign.
 
 ```typescript
 // 1. Caller builds the unsigned transaction via TronGrid
@@ -338,41 +168,18 @@ const unsignedTx = {
   raw_data: { /* raw data returned by TronGrid */ },
 };
 
-// 2. SDK signs locally (no network call)
-const signedTxJson = await wallet.signTransaction(unsignedTx);
-console.log("Signed transaction:", signedTxJson);
+// 2. SDK signs (raw_secret signs in-process; wallet_cli delegates to wallet-cli)
+const signed = await wallet.signTransaction(unsignedTx);
+if (signed.family !== "tron") throw new Error("expected a TRON wallet");
+console.log("Signed transaction:", signed.transaction);
 
-// 3. Caller is responsible for broadcasting
+// 3. Caller broadcasts signed.transaction
 ```
-
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-# 1. Caller builds the unsigned transaction via TronGrid
-unsigned_tx = {
-    "txID": "abc123...",
-    "raw_data_hex": "0a02...",
-    "raw_data": {},  # raw data returned by TronGrid
-}
-
-# 2. SDK signs locally (no network call)
-signed_tx_json = await wallet.sign_transaction(unsigned_tx)
-print("Signed transaction:", signed_tx_json)
-
-# 3. Caller is responsible for broadcasting
-```
-
-</TabItem>
-</Tabs>
 
 #### EVM Transaction (BSC, Ethereum, etc.)
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
-
 ```typescript
-const signedTxHex = await wallet.signTransaction({
+const signed = await wallet.signTransaction({
   type: "eip1559",
   to: "0xRecipient...",
   value: 0n,
@@ -382,45 +189,26 @@ const signedTxHex = await wallet.signTransaction({
   nonce: 0,
   chainId: 56,
 });
-console.log("Signed tx:", signedTxHex);
+if (signed.family !== "evm") throw new Error("expected an EVM wallet");
+console.log("Signed tx:", "0x" + signed.rawTransaction);
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-from eth_utils import to_checksum_address
-
-signed_tx_hex = await wallet.sign_transaction({
-    "type": 2,  # optional here — what eth-account requires is BOTH fee fields, or gasPrice for a legacy tx
-    "to": to_checksum_address("0xRecipient..."),
-    "value": 0,
-    "gas": 21000,
-    "maxFeePerGas": 20000000000,
-    "maxPriorityFeePerGas": 1000000000,
-    "nonce": 0,
-    "chainId": 56,
-})
-print("Signed tx:", signed_tx_hex)
-```
-
-</TabItem>
-</Tabs>
+`wallet_cli` wallets additionally reject a `chainId` that doesn't match the wallet's network, already-signed payloads, and EIP-4844 / EIP-7702 transactions.
 
 ### Sign EIP-712 Typed Data
 
-Used for x402 protocol PaymentPermit signatures, Permit2, and similar scenarios:
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+Used for x402 payment authorizations, Permit2, and similar scenarios:
 
 ```typescript
-import type { Eip712Capable } from "@bankofai/agent-wallet";
+import type { Eip712Capable, Wallet } from "@bankofai/agent-wallet";
 
-// signTypedData lives on Eip712Capable, not on the base Wallet interface
-const signer = wallet as unknown as Eip712Capable;
+function supportsTypedData(wallet: Wallet): wallet is Wallet & Eip712Capable {
+  return "signTypedData" in wallet && typeof wallet.signTypedData === "function";
+}
 
-const sig = await signer.signTypedData({
+if (!supportsTypedData(wallet)) throw new Error("wallet cannot sign typed data");
+
+const sig = await wallet.signTypedData({
   types: {
     EIP712Domain: [
       { name: "name", type: "string" },
@@ -438,119 +226,60 @@ const sig = await signer.signTypedData({
 console.log("Signature:", sig);
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-sig = await wallet.sign_typed_data({
-    "types": {
-        "EIP712Domain": [
-            {"name": "name", "type": "string"},
-            {"name": "chainId", "type": "uint256"},
-        ],
-        "Transfer": [
-            {"name": "to", "type": "address"},
-            {"name": "amount", "type": "uint256"},
-        ],
-    },
-    "primaryType": "Transfer",
-    "domain": {"name": "MyDApp", "chainId": 1},
-    "message": {"to": "0x...", "amount": 1000000},
-})
-print("Signature:", sig)
-```
-
-</TabItem>
-</Tabs>
-
 ---
 
 ### Manage Multiple Wallets
 
-If you need to manage multiple wallets in code, use `resolveWalletProvider()` in local mode. The provider reads the wallet configuration and lets you switch the active wallet:
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+`ConfigWalletProvider` reads and edits the wallet configuration. You get one from `resolveWalletProvider()` (when wallets are configured) or by constructing it directly with `new ConfigWalletProvider(dir, { network })`:
 
 ```typescript
 import { resolveWalletProvider, ConfigWalletProvider } from "@bankofai/agent-wallet";
 
-// Local mode: AGENT_WALLET_PASSWORD must be set
-const provider = resolveWalletProvider({ network: "tron:nile" });
+const provider = resolveWalletProvider({ network: "tron:3448148188" });
 
 if (provider instanceof ConfigWalletProvider) {
   // List all wallets — returns [walletId, config, isActive] tuples
-  const wallets = provider.listWallets();
-  for (const [id, config, isActive] of wallets) {
+  for (const [id, config, isActive] of provider.listWallets()) {
     console.log(`${id} (${config.type})${isActive ? " ← active" : ""}`);
   }
 
-  // Switch the active wallet
+  // Switch the active wallet (persisted to wallets_config.json)
   provider.setActive("my-evm-wallet");
+
+  // Or use a specific wallet on a specific network without switching
+  const bsc = await provider.getWallet("my-evm-wallet", "eip155:56");
 }
 
-// Get and use
+// With no active wallet set, this falls back to the first configured wallet
 const wallet = await provider.getActiveWallet();
-const sig = await wallet.signMessage(new TextEncoder().encode("Hello"));
 ```
-
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-from agent_wallet import resolve_wallet_provider, ConfigWalletProvider
-
-# AGENT_WALLET_PASSWORD must be set
-provider = resolve_wallet_provider(network="tron:nile")
-
-async def main():
-    if isinstance(provider, ConfigWalletProvider):
-        # List all wallets — returns [(wallet_id, config, is_active)] tuples
-        wallets = provider.list_wallets()
-        for wallet_id, config, is_active in wallets:
-            print(f"{wallet_id} ({config.type}){'  ← active' if is_active else ''}")
-
-        # Switch the active wallet
-        provider.set_active("my-evm-wallet")
-
-    # Get and use
-    wallet = await provider.get_active_wallet()
-    sig = await wallet.sign_message(b"Hello")
-    print("Signature:", sig)
-
-asyncio.run(main())
-```
-
-</TabItem>
-</Tabs>
 
 ---
 
 ### Error Handling
 
-When a signing operation fails, the SDK throws specific error types. It's recommended to catch and handle them explicitly in your code to avoid runtime crashes.
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+The SDK's typed errors extend `WalletError`. A few setup and input failures are thrown as plain `Error` instead: no wallet source found (no configured wallets and no `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC`), both of those env vars set at once, a malformed private key, or an invalid `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX`. Catch the specific types you can handle:
 
 ```typescript
 import {
   WalletNotFoundError,
+  NetworkError,
   SigningError,
-  DecryptionError,
+  WalletCliNotFoundError,
+  WalletCliExecutionError,
 } from "@bankofai/agent-wallet";
 
 try {
   const wallet = await provider.getActiveWallet();
-  const sig = await wallet.signMessage(new TextEncoder().encode("Hello"));
-  console.log("Signature:", sig);
+  const signed = await wallet.signTransaction(unsignedTx);
 } catch (e) {
   if (e instanceof WalletNotFoundError) {
-    console.error("Wallet not found — check that an active wallet is set");
-  } else if (e instanceof DecryptionError) {
-    console.error("Decryption failed — check that the master password is correct");
-  } else if (e instanceof SigningError) {
+    console.error("Wallet not found — check the wallet id");
+  } else if (e instanceof NetworkError) {
+    console.error("Invalid or mismatched network — use canonical CAIP-2, e.g. tron:3448148188");
+  } else if (e instanceof WalletCliNotFoundError) {
+    console.error("wallet-cli is not installed or not on PATH");
+  } else if (e instanceof WalletCliExecutionError || e instanceof SigningError) {
     console.error("Signing failed:", e.message);
   } else {
     throw e;
@@ -558,60 +287,46 @@ try {
 }
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-from agent_wallet import WalletNotFoundError, SigningError, DecryptionError
-
-try:
-    wallet = await provider.get_active_wallet()
-    sig = await wallet.sign_message(b"Hello")
-    print("Signature:", sig)
-except WalletNotFoundError:
-    print("Wallet not found — check that an active wallet is set")
-except DecryptionError:
-    print("Decryption failed — check that the master password is correct")
-except SigningError as e:
-    print(f"Signing failed: {e}")
-```
-
-</TabItem>
-</Tabs>
-
-Error type hierarchy:
+Error type hierarchy (all exported from the package root):
 
 ```
 WalletError
-├── WalletNotFoundError        # Specified wallet not found
-├── DecryptionError            # Wrong password or corrupted key file
-├── SigningError               # Signing operation failed
-├── NetworkError               # Network identifier mismatch
-├── InsufficientBalanceError   # Insufficient balance
-├── UnsupportedOperationError  # Operation not supported by this wallet type
-├── PrivyConfigError           # Privy wallet configuration error
-├── PrivyRequestError          # Privy API request failed
-├── PrivyRateLimitError        # Privy API rate limit exceeded
-└── PrivyAuthError             # Privy authentication failed
+├── WalletNotFoundError              # Specified wallet id not found (or no wallets configured)
+├── DecryptionError                  # Kept for compatibility; not thrown by 3.x wallet types
+├── InsufficientBalanceError         # Not thrown by the SDK; for your own code
+├── SigningError                     # Signing operation failed or payload rejected
+├── NetworkError                     # Non-canonical or mismatched network
+├── UnsupportedOperationError        # Operation not supported by this wallet
+└── ExternalSignerError
+    ├── ExternalSignerConfigError
+    │   ├── PrivyConfigError
+    │   └── WalletCliConfigError
+    ├── ExternalSignerExecutionError
+    │   ├── PrivyRequestError
+    │   ├── PrivyRateLimitError
+    │   ├── PrivyAuthError
+    │   └── WalletCliExecutionError
+    │       └── WalletCliSubmittedTransactionError
+    ├── ExternalSignerUsageError
+    │   └── WalletCliUsageError
+    └── ExternalSignerNotFoundError
+        └── WalletCliNotFoundError
 ```
 
-:::note Python imports
-TypeScript exports all of the above from the package root. Python's top-level `agent_wallet` exports only `WalletError`, `WalletNotFoundError`, `DecryptionError`, `SigningError`, `NetworkError`, and `UnsupportedOperationError`. Import the remaining five from `agent_wallet.core.errors`:
+`WalletCliExecutionError` and `WalletCliUsageError` carry a `code`. Codes raised by agent-wallet itself: `capability_missing` (the wallet-cli executable cannot sign this family; an account without an address for the family raises `contract_mismatch`), `network_mismatch` (network unknown to wallet-cli; checked after the capability), `contract_mismatch`, `unsupported_version`, `unsupported_runtime`, `migration_required` / `migration_completed` / `migration_cancelled`, `timeout`, `aborted`, `spawn_error`, `stdin_write`, `output_limit`, `status_query_failed`, and `internal_error` when wallet-cli's failure envelope has an empty `code` (an envelope with no `code` at all raises `contract_mismatch`). When wallet-cli returns a failure envelope, its own code is passed through unchanged (for example `account_not_found`, `auth_failed`): exit `2` becomes `WalletCliUsageError`, exit `1` becomes `WalletCliExecutionError`. A `wallet_cli` transaction whose `chainId` does not match `-n` is rejected with `SigningError`, not `NetworkError`.
 
-```python
-from agent_wallet.core.errors import (
-    InsufficientBalanceError,
-    PrivyConfigError,
-    PrivyRequestError,
-    PrivyRateLimitError,
-    PrivyAuthError,
-)
-```
+:::tip Don't auto-retry wallet-cli timeouts
+If `signAndBroadcast()` from `@bankofai/agent-wallet/integrations/wallet-cli` times out, don't resend automatically — check the result first. Two timeouts are not exceptions: when the broadcast times out with a known `txId`, or when the `wait: true` polling deadline passes, the call returns `{ txId, stage: 'timeout' }`. A timeout while building or signing, or a broadcast timeout before any `txId` is known, throws `WalletCliExecutionError` with code `timeout`. `WalletCliSubmittedTransactionError` is thrown only when, with `wait: true`, a status query fails after the transaction was broadcast (including a status query that itself times out, in which case its `code` is `timeout`); it carries that `txId`. Plain `signTransaction()` never broadcasts, so it never throws this error.
 :::
 
-:::tip About InsufficientBalanceError
-`InsufficientBalanceError` is **not** thrown by the SDK itself — Agent-wallet is a sign-only tool and does not check balances. This error type is provided as a convenience for your application code to throw when you detect insufficient funds before initiating a transaction.
-:::
+### Advanced Entry Points
+
+| Import path | Contents |
+| :--- | :--- |
+| `@bankofai/agent-wallet` | `resolveWallet`, `resolveWalletProvider`, `ConfigWalletProvider`, `EnvWalletProvider`, `Network`, `WalletType`, `loadConfig` / `saveConfig`, types and errors |
+| `@bankofai/agent-wallet/advanced` | Low-level adapters and clients (`EvmSigner`, `TronSigner`, `RawSecretSigner`, `PrivyAdapter`, `WalletCliAdapter`, `PrivyClient`, `WalletCliClient`), secret providers (`ExecSecretProvider`, `StaticSecretProvider`) |
+| `@bankofai/agent-wallet/advanced` (continued) | Also `LocalSigner`, the config resolvers (`ExternalSignerConfigResolver`, `PrivyConfigResolver`, `WalletCliConfigResolver`), `resolveSecret` / `isSecretRef` / `DEFAULT_EXEC_TIMEOUT_MS` / `DEFAULT_SECRET_STDOUT_LIMIT` / `DEFAULT_SECRET_STDERR_LIMIT`, `defaultSecretProviderFactory`, and `parseWalletCliNetwork` / `assertTronWalletCliNetwork` |
+| `@bankofai/agent-wallet/integrations/wallet-cli` | TRON-only helpers that use wallet-cli for build / broadcast / status: `signAndBroadcast`, `buildTransfer`, `broadcast`, `getTxStatus`, `getBalance`, `getTxInfo` |
 
 ---
 

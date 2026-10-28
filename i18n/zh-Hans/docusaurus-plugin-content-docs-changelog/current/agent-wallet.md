@@ -8,6 +8,61 @@ description: 'Agent Wallet 的版本发布记录。'
 Agent Wallet 的版本发布记录。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-10-27</div>
+<div className="changelog-body">
+
+### 错误码、Privy 自动化与配置结构
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span></div>
+
+- **SDK 指南**——列出 `WalletCliExecutionError` / `WalletCliUsageError` 的 `code`（`capability_missing`、`network_mismatch`、`timeout` 等）以及 wallet-cli 自身错误码会原样透传；`wallet_cli` 的 chainId 不一致抛 `SigningError`；`signAndBroadcast()` 在广播超时或 `wait` 期限到时返回 `{ txId, stage: 'timeout' }`，只在广播后查询状态失败时抛 `WalletCliSubmittedTransactionError`；`/advanced` 的导出列表补全。
+- **CLI 参考**——`privy` 自动化需同时传 `--app-id` 和 `--app-secret-exec`，否则复用或 secret 提示会以退出码 1 结束；`-g/--generate` 会被解析但被忽略；说明了 `wallets_config.json` 的结构。
+
+👉 [SDK 接入指南](/zh-Hans/Agent-Wallet/Developer/SDK-Guide/) · [CLI 命令行手册](/zh-Hans/Agent-Wallet/Developer/CLI-Reference/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-21</div>
+<div className="changelog-body">
+
+### 按 Agent Wallet 3.0 重写文档
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">破坏性变更</span></div>
+
+- **按 3.0.0 重写**——所有页面改为对应 `@bankofai/agent-wallet` 3.0.0。钱包类型为 `wallet_cli`（推荐）、`privy` 和 `raw_secret`。`local_secure`、主密码、`AGENT_WALLET_PASSWORD`、`runtime_secrets.json`，以及 `init`、`change-password`、`sign msg` 命令都已不存在。参见[从 2.x 升级](/zh-Hans/Agent-Wallet/FAQ/#upgrade-from-2x)。
+- **凭据**——wallet-cli 与 Privy 的密钥建议由 exec 脚本提供（`--cli-password-exec`、`--app-secret-exec`；也接受直接传入 `--app-secret`，但会以明文保存），3.x 没有密码环境变量。环境变量兜底只读取 `AGENT_WALLET_PRIVATE_KEY` / `AGENT_WALLET_MNEMONIC`，2.x 的 `TRON_PRIVATE_KEY` 等别名不再读取。
+- **网络标识必须精确**——`-n` / `network` 只接受规范的 CAIP-2 字符串，如 `tron:728126428`、`tron:3448148188`、`eip155:56`；`tron:nile` 这类别名和十六进制 TRON ID 会被拒绝。
+- **签名结果**——`signTransaction()` 返回带 `family` 字段的 `SignedTransactionArtifact`，不再是字符串，Cookbook 示例按它分支处理。`signMessage` 已移除。
+- **只提供 TypeScript**——删除了 Python 标签页。PyPI 上的 `bankofai-agent-wallet` 停在 2.4.0，沿用 2.x 模型。
+- **参考手册修正**——`reset` 只删除 `wallets_config.json`；错误类列表补上 `ExternalSigner*` 和 `WalletCli*` 两组；补充 `/advanced`、`/integrations/wallet-cli` 两个导出入口和 `AGENT_WALLET_WALLET_CLI_PATH`。
+
+👉 [快速开始](/zh-Hans/Agent-Wallet/QuickStart/) · [CLI 命令行手册](/zh-Hans/Agent-Wallet/Developer/CLI-Reference/) · [SDK 接入指南](/zh-Hans/Agent-Wallet/Developer/SDK-Guide/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-09-10</div>
+<div className="changelog-body">
+
+### Agent Wallet v3.0.0
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">破坏性变更</span></div>
+
+- **钱包类型**——新增 `wallet_cli` 类型，把 TRON 与 EVM 的交易和结构化数据签名委托给本机 wallet-cli 账户（兼容范围 `>=4.13.0 <5.0.0`）。移除 `local_secure`、主密码、`AGENT_WALLET_PASSWORD` 与 `runtime_secrets.json`；已有的 `local_secure` 钱包不会被转换。
+- **签名 API**——`signTransaction()` 不再返回字符串，改为带 `family` 字段的 `SignedTransactionArtifact`（EVM 为 `rawTransaction`，TRON 为 `transaction`）。移除 `signRaw()`、`signMessage()` 和 CLI 的 `sign msg`，只保留交易与结构化数据签名。
+- **包结构**——adapter、client 和配置解析等低阶 API 移到 `@bankofai/agent-wallet/advanced`；wallet-cli 相关辅助在 `@bankofai/agent-wallet/integrations/wallet-cli`。`ConfigWalletProvider` 改为 `new ConfigWalletProvider(dir, options)`。
+- **凭据与环境变量**——Privy 和 wallet-cli 的密钥支持 `{ "exec": "/absolute/script" }` 引用（`--app-secret-exec`、`--cli-password-exec`）。2.x 的 `TRON_PRIVATE_KEY`、`TRON_MNEMONIC`、`TRON_ACCOUNT_INDEX` 不再读取，请改用 `AGENT_WALLET_PRIVATE_KEY`、`AGENT_WALLET_MNEMONIC`、`AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX`。
+- 2026 年 9 月 10 日发布到 npm。Python 包在 PyPI 上停留在 2.4.0。升级步骤见[从 2.x 升级](/zh-Hans/Agent-Wallet/FAQ/#upgrade-from-2x)。
+
+👉 [简介](/zh-Hans/Agent-Wallet/Intro/) · [CLI 命令行手册](/zh-Hans/Agent-Wallet/Developer/CLI-Reference/) · [SDK 接入指南](/zh-Hans/Agent-Wallet/Developer/SDK-Guide/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-09-09</div>
 <div className="changelog-body">
 
@@ -21,7 +76,7 @@ Agent Wallet 的版本发布记录。
 - **CLI 快速上手**——自定义密码示例改为显式指定钱包类型（`start local_secure -p …`），因为在交互式类型选择里选了 `raw_secret` 或 `privy` 时 `-p` 会被拒绝。
 - **Cookbook**——x402 签名章节更名为 EIP-3009，并说明它与仓库示例中同名但域名和字段都不同的 `PaymentPermit` 结构的区别。
 
-👉 [SDK 指南](/zh-Hans/Agent-Wallet/Developer/SDK-Guide/) · [CLI 参考](/zh-Hans/Agent-Wallet/Developer/CLI-Reference/)
+👉 [SDK 接入指南](/zh-Hans/Agent-Wallet/Developer/SDK-Guide/) · [CLI 命令行手册](/zh-Hans/Agent-Wallet/Developer/CLI-Reference/)
 
 </div>
 </div>

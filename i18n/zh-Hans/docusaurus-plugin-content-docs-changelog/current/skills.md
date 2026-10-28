@@ -8,6 +8,54 @@ description: 'SKILLS 的版本发布记录。'
 SKILLS 的版本发布记录。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-10-27</div>
+<div className="changelog-body">
+
+### 各 Skill 的安装步骤与凭据
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span></div>
+
+- **快速入门**——补上 `npx skills add` 不会做的两步：SunSwap / SunPump 需要 `npm install -g @sun-protocol/sun-cli@1.2.2`，SunPerp、TronScan、USDD 需要在 Skill 目录里 `npm install`。`x402`、`bai`、`8004` 是 wallet-cli 的命令组，不在 wallet-cli Skill 范围内。
+- **技能大全**——凭据一列写明各 Skill 读取的环境变量（`TRON_PRIVATE_KEY`、`SUNPERP_ACCESS_KEY` / `SUNPERP_SECRET_KEY`、`TRONSCAN_API_KEY` 等）；SunPump Skill 发币前会要求提供 logo；SunPerp 的示例不再暗示可以修改已有仓位的止损。
+
+👉 [快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/) · [技能大全](/zh-Hans/McpServer-Skills/SKILLS/BANKOFAISkill/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-22</div>
+<div className="changelog-body">
+
+### Skills 3.0.1——Node.js 安全基线
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span></div>
+
+- **Node.js**——内置的 Node.js Skills 与 wallet-cli 安装器要求 Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`，即 2026 年 10 月的安全更新版本。安装器会校验完整版本号，即使已安装锁定版本的 CLI 也会检查。
+- **wallet-cli 锁定版本不变**——`wallet-cli` Skill 仍锁定 `@tron-walletcli/wallet-cli@4.14.0`。
+- **文档**——Skills 与 BANK OF AI 快速入门已写明新的 Node.js 要求。
+
+👉 [快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-21</div>
+<div className="changelog-body">
+
+### 从稳定的 main 分支安装 Skills
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span></div>
+
+- **安装命令**——改为 `npx skills add https://github.com/BofAI/skills/tree/main -g`。不加 `/tree/main` 时安装器会用仓库的默认分支 `develop`，那里尚未发布的 `wallet-cli` Skill 锁定的 CLI 版本与文档安装的 `@tron-walletcli/wallet-cli@4.14.0` 不同。FAQ 中的更新步骤同样遵循这一规则，并去掉了 `-y`——它会让 skills CLI 装进本机检测到的所有 Agent（一个都没检测到时装进全部 79 个已知 Agent）并覆盖已有副本。
+
+👉 [快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/) · [常见问题](/zh-Hans/McpServer-Skills/SKILLS/Faq/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-09-28</div>
 <div className="changelog-body">
 

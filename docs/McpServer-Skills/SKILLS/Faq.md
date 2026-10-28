@@ -33,7 +33,7 @@ Skills require a program called "Node.js" on your computer (similar to how some 
 **Simplest fix:** Go to [nodejs.org](https://nodejs.org/), download the latest LTS version (install it like any normal app — just click "Next" through the wizard), then try again.
 
 :::tip Already have Node.js but still getting errors?
-Run `node --version` in your terminal. Skills require **v20 or higher**. If your version is too old, download the latest from the official site and install over the old one.
+Run `node --version` in your terminal. Skills require **22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+**. If your version is too old, download the latest from the official site and install over the old one.
 :::
 
 ### How do I know the skills installed successfully?
@@ -116,7 +116,7 @@ Use the [wallet-cli setup flow](/wallet-cli/quickstart/) for the official wallet
 
 ### Which AI tools support Skills?
 
-The installer targets a broad set of coding agents and assistants — Claude Code, Cursor, Codex, Cline, Gemini CLI, Amp, Zed and many more — either by symlinking into the tool's own skill directory or by copying the files where the tool has no such directory. **OpenClaw** remains the most seamless. Any AI assistant that can read local skill files works too: point it at `~/.agents/skills/<skill>/SKILL.md`.
+The installer targets a broad set of coding agents and assistants — Claude Code, Cursor, Codex, Cline, Gemini CLI, Amp, Zed and many more — either by symlinking into the tool's own skill directory or by copying the files where the tool has no such directory. The OpenClaw one-click installer is paused and is not the recommended entry point for new users. Any AI assistant that can read local skill files works too: point it at `~/.agents/skills/<skill>/SKILL.md`.
 
 ---
 
@@ -136,11 +136,13 @@ For example, if you think 20x leverage is still too risky for perpetual trading,
 rm -rf ~/.agents/skills/sunswap-dex-trading
 ```
 
-**Update:** Re-run the install command (keep `-g` so it refreshes the global copy). It will update all skills to the latest version.
+**Update:** Re-run the install command (keep `-g` so it refreshes the global copy) and select the skills to update in the list it shows; they are reinstalled from the latest stable release on `main`. A reinstall replaces each selected Skill folder, so run `npm install` again in the SunPerp, TronScan and USDD folders afterwards.
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y -g
+npx skills add https://github.com/BofAI/skills/tree/main -g
 ```
+
+Do not add `-y`: it also skips the agent selection, so the skills CLI installs into every agent it detects on your machine (plus the universal directories) and overwrites their existing copies — and into all 79 agents it knows (skills 1.7.4) when it detects none. To target one agent and skip the agent prompt, pass `-a <agent>`, for example `-a claude-code`; the skill selection and `Proceed with installation?` still ask. Lines such as `✗ … does not support global skill installation` refer to agents that have no global skill directory; the other agents are installed normally.
 
 ---
 

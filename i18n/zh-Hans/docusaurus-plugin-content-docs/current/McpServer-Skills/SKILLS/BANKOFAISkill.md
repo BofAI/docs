@@ -17,11 +17,11 @@ BANK OF AI SKILLS 可以操作**真实的链上资产**。区块链交易一旦�
 | 技能 | 能干什么 | 需要什么钥匙/密码？ |
 | :--- | :--- | :--- |
 | **wallet-cli** | 通过锁定版 `@tron-walletcli/wallet-cli@4.14.0` 直接完成 TRON 钱包操作——转账、质押、投票、合约、签名、链上查询（机器可读 JSON） | wallet-cli 本地管理的钱包；Agent 执行时密码仅经 stdin 传入 |
-| **sunswap**<br/>安装后目录名 `sunswap-dex-trading` | 查价、报价、换币，管理 V2/V3/V4 流动性池 | 查询不需要；交易需要钱包凭证 |
-| **sunpump-agent-skill**<br/>安装后目录名 `sunpump-meme-token-toolkit` | SunPump meme 币：一句话发币（服务端创建，无需钱包），查行情/排行/持有人/钱包持仓，买卖 meme 币（根据代币是否已发射自动选择兑换路线，仅 TRON 主网） | 只读查询与发币免配置；链上买卖需钱包凭证 |
-| **sunperp-skill**<br/>安装后目录名 `sunperp-perpetual-futures-trading` | 看行情、开仓、平仓、提现 | 看行情不需要；交易需要 SunPerp 密钥；提现还需要 `TRON_PRIVATE_KEY` 用于签署确认 |
-| **tronscan-skill**<br/>安装后目录名 `tronscan-data-lookup` | 查账户、交易、代币、区块、全网数据 | 可选 TronScan API 密钥——不配时请求走无密钥的 BofAI 代理，可能被限流 |
-| **usdd-skill**<br/>安装后目录名 `usdd-just-protocol` | USDD 稳定币——PSM 1:1 USDT ↔ USDD 兑换、金库查询、余额查看 | 查询不需要；PSM 兑换需要钱包凭证 |
+| **sunswap**<br/>安装后目录名 `sunswap-dex-trading` | 查价、报价、换币，管理 V2/V3/V4 流动性池 | 查询不需要；交易需要 `TRON_PRIVATE_KEY`（或 `TRON_MNEMONIC` / `AGENT_WALLET_PASSWORD`）；可选 `TRON_NETWORK`、`TRONGRID_API_KEY` |
+| **sunpump-agent-skill**<br/>安装后目录名 `sunpump-meme-token-toolkit` | SunPump meme 币：一句话发币（服务端创建，无需钱包），查行情/排行/持有人/钱包持仓，买卖 meme 币（根据代币是否已发射自动选择兑换路线，仅 TRON 主网） | 只读查询与发币免配置；链上买卖需 `TRON_PRIVATE_KEY`（或 `TRON_MNEMONIC` / `AGENT_WALLET_PASSWORD`）；可选 `TRONGRID_API_KEY`、`SUNPUMP_API_BASE_URL`，以及 `TRON_NETWORK`（如设置必须为 `mainnet`） |
+| **sunperp-skill**<br/>安装后目录名 `sunperp-perpetual-futures-trading` | 看行情、开仓、平仓、提现 | 看行情不需要；交易需要 `SUNPERP_ACCESS_KEY` 和 `SUNPERP_SECRET_KEY`；提现还需要 `TRON_PRIVATE_KEY` 用于签署确认（设置 `TRONGRID_API_KEY` 只会切换 RPC 节点） |
+| **tronscan-skill**<br/>安装后目录名 `tronscan-data-lookup` | 查账户、交易、代币、区块、全网数据 | 可选 `TRONSCAN_API_KEY`——不配时请求走无密钥的 BofAI 代理，可能被限流 |
+| **usdd-skill**<br/>安装后目录名 `usdd-just-protocol` | USDD 稳定币——PSM 1:1 USDT ↔ USDD 兑换、金库查询、余额查看 | PSM / 金库信息不需要；余额查看（未传 `--address` 时）和 PSM 兑换（含 `--dry-run`）需要 `TRON_PRIVATE_KEY`；可选 `TRON_NETWORK`、`TRONGRID_API_KEY` |
 
 其中 5 个技能安装后的目录名与仓库目录名不同——**安装后的那个名字**才是你在 `~/.agents/skills` 里看到的名字，也是让助手读取技能文件时要引用的名字。
 
@@ -60,7 +60,7 @@ wallet-cli 是官方钱包与 CLI 接入入口；其他 Skill 和服务端可能
 :::
 
 :::caution 密码与钱包管理的硬性边界
-Agent 执行时，钱包密码只能通过 `--password-stdin` 从受信来源传入——AI 不会把密码放进命令行参数、环境变量或对话里，也永远不会让你在聊天中粘贴密码、助记词或私钥。`import` / `backup` / `delete` / `change-password` 这几类根钱包管理命令**按技能策略仅限你本人执行**：即使你给出确认，AI 也不会代跑。这是技能层面的拒绝，而非 CLI 的强制锁——CLI 自身只对 `import` 与 `change-password` 强制要求 TTY，`backup` 甚至公开提供了 `--password-stdin` 的用法。主网上任何动钱的操作都会先预览、再等你明确确认。
+Agent 执行时，钱包密码只能通过 `--password-stdin` 从受信来源传入——AI 不会把密码放进命令行参数、环境变量或对话里，也永远不会让你在聊天中粘贴密码、助记词或私钥。`import` / `backup` / `delete` / `change-password` 这几类根钱包管理命令**按技能策略仅限你本人执行**：即使你给出确认，AI 也不会代跑。这是技能层面的拒绝，而非 CLI 的强制锁——CLI 自身只对 `import mnemonic` / `import private-key` / `import keystore`（`import watch` 和 `import ledger` 不需要）、`change-password`，以及不带 `--yes` 的 `delete` 强制要求 TTY，`backup` 甚至公开提供了 `--password-stdin` 的用法。主网上任何动钱的操作都会先预览、再等你明确确认。
 :::
 
 注意：wallet-cli 的规范网络标识是十进制 CAIP-2 ID——`tron:728126428`（主网）、`tron:3448148188`（Nile）、`tron:2494104990`（Shasta）；`tron:mainnet` / `tron:nile` / `tron:shasta` 仅作为输入别名被接受。这与 x402 协议元数据中的十六进制标识符（`tron:0x…`）不同；`wallet-cli x402` 仍使用 wallet-cli 的网络标识。
@@ -71,7 +71,7 @@ Agent 执行时，钱包密码只能通过 `--password-stdin` 从受信来源传
 
 ## sunswap {#sunswap}
 
-想在 SunSwap 上换币、查行情、管理流动性？对 AI 说下面的话就行。本技能基于 `@sun-protocol/sun-cli`（固定 1.2.2 版），同时支持换币、V2 AMM、V3 集中流动性以及带 hooks 的 V4 池子。
+想在 SunSwap 上换币、查行情、管理流动性？对 AI 说下面的话就行。本技能基于 `@sun-protocol/sun-cli`（固定 1.2.2 版，需自行安装：`npm install -g @sun-protocol/sun-cli@1.2.2`），同时支持换币、V2 AMM、V3 集中流动性以及带 hooks 的 V4 池子。
 
 **绝对安全，只看不花钱：**
 
@@ -111,7 +111,7 @@ V3 仅支持 `100`、`500`、`3000`、`10000` 四档费率（对应 0.01% / 0.05
 
 ## sunpump-agent-skill {#sunpump-agent-skill}
 
-想玩 SunPump 上的 meme 币？这个技能基于 `@sun-protocol/sun-cli`（固定 1.2.2 版），帮你发币、查行情、做研究、买卖 meme 币。发币（`sun sunpump launch`）在**服务端完成、无需钱包**：给出名称、符号、描述和 logo，由平台签名并广播创建交易。交易时它会**自动判断交易路径**：还没在 SunSwap V2 上创建交易对的「发射前」代币走 `sun sunpump buy/sell`，已在 SunSwap V2 建好交易对的「发射后」代币走普通 `sun swap`——下单前 AI 会先用 `sunpump state` 帮你确认走哪条路。**sunpump-agent-skill 的所有功能（查询和交易）都只支持 TRON 主网，不支持测试网。**
+想玩 SunPump 上的 meme 币？这个技能基于 `@sun-protocol/sun-cli`（固定 1.2.2 版，需自行安装：`npm install -g @sun-protocol/sun-cli@1.2.2`），帮你发币、查行情、做研究、买卖 meme 币。发币（`sun sunpump launch`）在**服务端完成、无需钱包**：给出名称、符号、描述和 logo，由平台签名并广播创建交易。交易时它会**自动判断交易路径**：还没在 SunSwap V2 上创建交易对的「发射前」代币走 `sun sunpump buy/sell`，已在 SunSwap V2 建好交易对的「发射后」代币走普通 `sun swap`——下单前 AI 会先用 `sunpump state` 帮你确认走哪条路。**sunpump-agent-skill 的所有功能（查询和交易）都只支持 TRON 主网，不支持测试网。**
 
 **绝对安全，只看不花钱：**
 
@@ -150,7 +150,7 @@ meme 币波动剧烈、容易被庄家控盘。AI 在给你看代币信息时会
 :::
 
 :::tip 关于发币（launch）
-发币走 SunPump agent 端点，由平台签名并广播创建交易，**无需钱包**。名称、符号、描述必填；强烈建议提供 logo（不带 logo 的发币请求可能被 API 拒绝）。成功后 AI 会报告新代币的合约地址和创建交易哈希。与其它 SunPump 操作一样，发币**仅支持主网**——传入任何非主网 `--network` 都会在执行前被直接拒绝，连 `--dry-run` 也不例外。
+发币走 SunPump agent 端点，由平台签名并广播创建交易，**无需钱包**。名称、符号、描述必填；Skill 会在发币前要求提供 logo 图片，因为不带 logo 的发币请求经常以服务端错误 `Invoke third part error` 失败。成功后 AI 会报告新代币的合约地址和创建交易哈希。与其它 SunPump 操作一样，发币**仅支持主网**——传入任何非主网 `--network` 都会在执行前被直接拒绝，连 `--dry-run` 也不例外。
 :::
 
 ---
@@ -179,7 +179,7 @@ meme 币波动剧烈、容易被庄家控盘。AI 在给你看代币信息时会
 
 > 被套牢了？ "帮我看看 BTC 现在的资金费率，建议做多还是做空？"
 
-> 想控制风险？ "帮我把 BTC-USDT 的杠杆降到 5 倍，止损调到 3%。"
+> 想控制风险？ "帮我把 BTC-USDT 的杠杆降到 5 倍，然后小仓开一个 BTC-USDT 多单，止损 3%。"（止损在开仓时设置；Skill 没有修改已有仓位止损的命令）
 
 > 想了解全局？ "帮我列出所有可交易的永续合约，按 24h 成交量排序。"
 

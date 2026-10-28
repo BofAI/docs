@@ -1,45 +1,54 @@
 # FAQ
 
-Let's answer the three things you're probably most worried about, then cover the day-to-day details.
+Let's answer the things you're probably most worried about, then cover the day-to-day details.
 
 ---
 
 ## 💰 Will AI drain my entire wallet?
 
-This is the most common question, and the answer is: **even if your AI agent gets compromised, your core assets stay safe.**
-
-We strongly recommend creating a dedicated wallet just for your AI agent, topped up with only the small amount it actually needs (e.g., enough to cover gas fees). Your main wallet and large holdings never get touched. Worst case, the loss is limited to whatever was in that small agent wallet.
+The best protection is to limit what's at stake: **create a dedicated wallet just for your AI agent**, topped up with only the small amount it actually needs (e.g., enough to cover gas fees). Your main wallet and large holdings never get touched. Worst case, the loss is limited to whatever was in that small agent wallet.
 
 ```bash
-# Create a dedicated small wallet for your AI agent
-agent-wallet add
+# Create a dedicated wallet-cli account for your agent, then link it
+wallet-cli create --label agent-small -o json
+agent-wallet add wallet_cli --wallet-id agent_small --account agent-small \
+  --cli-password-exec /absolute/path/to/fetch-password.sh
 ```
 
-And your wallet file is protected by strong encryption. Even if someone gets hold of the file, without the master password it's just garbage — brute-forcing it is economically worthless.
+With a `wallet_cli` wallet, the key itself sits in wallet-cli's encrypted keystore — Agent-wallet's config only holds the wallet-cli account ID and a password source.
 
 ---
 
 ## 🔌 Can my AI still sign if I go offline?
 
-Yes, for `local_secure` and `raw_secret` wallets: **signing completes 100% on your local machine** — no RPC calls, no cloud services, no remote API requests, and your private key never touches the network.
+`raw_secret` wallets sign in-process with no network calls, and `wallet_cli` wallets sign in a local wallet-cli subprocess. The `privy` wallet type is different: the key is custodied by Privy and signing requests go to Privy's API, so it needs network by design.
 
-The one exception is the `privy` wallet type, which custodies the key with Privy and sends signing requests to Privy's API — it requires network by design.
-
-Going offline only affects transaction building and broadcasting (that's the MCP Server's job). Signing itself is fully offline.
+Going offline mainly affects building and broadcasting transactions (the MCP server's or your own code's job).
 
 ---
 
-## 🔑 What if I forget my password?
+## 🔑 Is there still a master password? What if I forget it?
 
-**It's gone.**
+### I used `local_secure` and `AGENT_WALLET_PASSWORD` in 2.x — what now? {#upgrade-from-2x}
 
-The master password is the only credential for decrypting all private keys. There's no "forgot password" flow, no backdoor.
+Agent-wallet 3.0 removed the `local_secure` wallet type, the agent-wallet master password, `AGENT_WALLET_PASSWORD`, `runtime_secrets.json`, and the `init`, `change-password` and `sign msg` commands. 3.x does not read or convert `local_secure` wallets.
 
-If you forget your password:
-- Have another backup of your private key or mnemonic? Run `agent-wallet reset`, reinitialize, and reimport.
-- No backup at all? Access to that wallet is lost.
+Before upgrading:
 
-**So do this right now**: open your password manager and store the master password. Seriously.
+1. Back up `~/.agent-wallet`.
+2. With 2.x still installed, make sure you can access the original private key or mnemonic.
+3. Move the 2.x directory out of the way, for example `mv ~/.agent-wallet ~/.agent-wallet-2x`. 3.x rejects a `wallets_config.json` that still lists `local_secure` wallets (`Invalid wallet config`), so every command that loads the config — including `start` — fails until the old file is gone (`reset` still works). Alternatively, point 3.x at a new directory with `--dir` or `AGENT_WALLET_DIR`.
+4. After upgrading, re-create the wallet with one of the 3.x types:
+   - **Local production signing:** import the key into wallet-cli (`wallet-cli import private-key` or `wallet-cli import mnemonic`), then `agent-wallet start wallet_cli`.
+   - **Hosted signing:** `agent-wallet start privy`.
+   - **Development only:** `agent-wallet start raw_secret`.
+5. Confirm the new wallet resolves the expected address (`agent-wallet resolve-address`) and can sign, then delete the old 2.x directory yourself.
+
+Also update environment variables: `TRON_PRIVATE_KEY`, `TRON_MNEMONIC` and `TRON_ACCOUNT_INDEX` are no longer read — use `AGENT_WALLET_PRIVATE_KEY`, `AGENT_WALLET_MNEMONIC` and `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX`. Network values must be canonical (`tron:728126428`, `tron:3448148188`, `eip155:1` …).
+
+### What if I forget the wallet-cli password?
+
+The password that protects a `wallet_cli` wallet belongs to wallet-cli's keystore, not to Agent-wallet. Agent-wallet cannot recover it. Restore the account in wallet-cli from your mnemonic or private-key backup (`wallet-cli import mnemonic` / `wallet-cli import private-key`), then link it to Agent-wallet again.
 
 ---
 
@@ -47,95 +56,86 @@ If you forget your password:
 
 ### What exactly is Agent-wallet?
 
-A purely local encrypted signing tool. It does two things: 1) encrypts and stores your private keys; 2) signs locally. No internet, no cloud. It has no standalone UI of its own — instead, it operates as an invisible security hub that integrates seamlessly into AI frontends like OpenClaw.
+A signing layer for AI agents. It gives your code one interface — `getAddress`, `signTransaction`, `signTypedData` — and routes each request to the key backend you configured (`wallet_cli`, `privy`, or `raw_secret`). It doesn't build or broadcast transactions, and it has no UI of its own.
+
+### Agent-wallet or wallet-cli — which do I need?
+
+- **wallet-cli** holds keys (encrypted keystore) and is the official setup entry for new users and BANK OF AI tools. See [wallet-cli](../wallet-cli/quickstart.md).
+- **Agent-wallet** is for code that is built on the `@bankofai/agent-wallet` SDK. With the `wallet_cli` type it signs through your wallet-cli account, so both can share one key.
 
 ### CLI vs SDK — which do I need?
 
-- **CLI** — command-line tool for creating wallets, managing keys, and manually testing signatures
-- **SDK** — TypeScript / Python library for calling signing directly from your own code
+- **CLI** — command-line tool for configuring wallets and manually testing signatures
+- **SDK** — TypeScript library for calling signing directly from your own code
 
-Most users don't need the SDK. If you're using OpenClaw and MCP Server, creating a wallet with the CLI and setting the environment variable is all you need. The SDK is for developers building their own agents.
+The SDK reads the configuration the CLI creates.
 
-### What's the difference between Agent-wallet and MetaMask?
+### Can I sign a plain message?
 
-MetaMask is a browser wallet designed for humans, with a graphical interface that requires you to manually click "Confirm" for every signature. Agent-wallet is a command-line wallet designed for AI agents, purpose-built for non-interactive use — AI can silently invoke signing in the background without anyone watching the screen. Both use similar encryption under the hood (Keystore V3), but they serve completely different use cases.
+No. 3.x signs transactions and EIP-712 / TIP-712 typed data only; `sign msg`, `signMessage()` and `signRaw()` were removed.
 
 ### How many wallets can I create on one machine?
 
-No limit. You can create separate wallets for different AI agents, different chains, or different purposes. Use `agent-wallet add` to create and `agent-wallet use` to switch between them.
+No limit. You can configure separate wallets for different AI agents, different chains, or different purposes. Use `agent-wallet add` to add and `agent-wallet use` to switch between them.
 
 ---
 
 ## Wallet Types
 
-### What's the difference between `local_secure`, `raw_secret`, and `privy`?
+### What's the difference between `wallet_cli`, `privy`, and `raw_secret`?
 
-| | `local_secure` | `raw_secret` | `privy` |
+| | `wallet_cli` | `privy` | `raw_secret` |
 | :--- | :---: | :---: | :---: |
-| **Key storage** | ✅ Encrypted locally | ❌ Plaintext locally | ☁️ Privy cloud custody |
-| **If an agent reads the file** | ✅ Key is inaccessible | ❌ Stolen instantly | ✅ No local key file |
-| **Requires master password** | ✅ Yes | ❌ No | ❌ No (uses API credentials) |
-| **Use case** | ✅ All scenarios | ⚠️ Fully isolated dev only | ✅ Server-side agents with Privy |
+| **Key storage** | ✅ wallet-cli encrypted keystore | ☁️ Privy cloud custody | ❌ Plaintext in `wallets_config.json` |
+| **If an agent reads Agent-wallet's config** | ✅ No key inside (only a wallet-cli account ID and password source) | ✅ No key inside (API credentials; the app secret can be an exec script) | ❌ Key stolen instantly |
+| **Network needed to sign** | No | Yes (Privy API) | No |
+| **Use case** | ✅ Local production signing | ✅ Server-side agents with Privy | ⚠️ Fully isolated dev only |
 
 :::danger `raw_secret` exposes your private key as plaintext
-`raw_secret` stores your key unencrypted — the exact exposure `local_secure` mode is designed to prevent. If any other process on your machine can read files, your key can be stolen instantly. **Always use `local_secure`** unless you're 100% certain no other agent is running on that machine and it's a fully isolated, offline test environment.
+Any process that can read files in your home directory can read the key. Use `raw_secret` only with throwaway keys in a fully isolated test environment.
 :::
 
-:::tip Privy wallets
-The `privy` type delegates key custody to [Privy](https://privy.io)'s server-side wallet infrastructure. No private key is stored on your local disk — signing requests are sent to Privy's API. This is ideal for server-side AI agents that already use Privy for wallet management. You'll need a Privy App ID, App Secret, and Wallet ID to set it up.
+:::tip Store wallet-cli and Privy secrets as exec scripts
+Use `--cli-password-exec` / `--app-secret-exec` so the secret is fetched (for example from 1Password) when needed instead of being written into `wallets_config.json`. A password typed at the `direct` prompt is stored there in plaintext (file mode `0600`).
 :::
 
 ### What values does the `network` parameter accept?
 
+Exact canonical CAIP-2 identifiers only:
+
 | Value | Description |
 | :--- | :--- |
-| `tron:mainnet` | TRON Mainnet |
-| `tron:nile` | TRON Nile Testnet |
-| `tron:shasta` | TRON Shasta Testnet |
+| `tron:728126428` | TRON Mainnet |
+| `tron:3448148188` | TRON Nile Testnet |
+| `tron:2494104990` | TRON Shasta Testnet |
 | `eip155:1` | Ethereum Mainnet |
 | `eip155:56` | BSC Mainnet |
+| `eip155:97` | BSC Testnet |
 | `eip155:137` | Polygon Mainnet |
 | `eip155:8453` | Base Mainnet |
 | `eip155:42161` | Arbitrum Mainnet |
 
-> These are common examples, not an exhaustive whitelist: agent-wallet validates only the family prefix, so any `eip155:<chainId>` or `tron:<network>` value is accepted (including the canonical CAIP-2 TRON ids like `tron:0x2b6653dc` that the x402 tooling requires).
+> These are common examples, not a whitelist: any `eip155:<positive chainId>` or `tron:<positive chainId>` is accepted. Aliases (`tron:nile`, `tron:mainnet`, `evm:1`), bare `tron` / `eip155`, hex TRON ids such as `tron:0x2b6653dc`, and case or whitespace variants are rejected.
+>
+> For `wallet_cli` wallets the network must also be one wallet-cli itself knows — its built-ins (`eip155:1`, `eip155:11155111`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532` (the two Base networks were added in wallet-cli 4.14.0) and the three TRON networks in the table) or a network added to wallet-cli's own config — otherwise signing fails with `network_mismatch`. `raw_secret` and `privy` wallets have no such limit.
 
 ---
 
 ## Security
 
-### The password is also stored in an environment variable — how is that different from a plaintext private key?
-
-The difference is enormous! It's the difference between leaving cash on the table and locking it in a double-layered safe.
-
-When you use a Web3 wallet like MetaMask, you never copy-paste your raw private key every time — you unlock it with a short password. Agent-wallet is essentially a command-line MetaMask built for AI agents.
-
-* Traditional approach (plaintext private key): It's like leaving cash right on the table. Any malicious browser extension, one careless code commit, or a background log scan — one glance at your environment variables and the money is gone instantly. A classic single point of failure.
-* Agent-wallet approach: It splits the risk into two locks.
-   1. Physical safe: Your private key is encrypted with industry-grade algorithms and locked in a hidden folder deep in your system (`~/.agent-wallet`).
-   2. Unlock password: What you put in your environment variable is merely the password to open this safe.
-
-This means if a leak occurs:
-
-* If a hacker only steals your password (e.g., by scanning environment variables), they don't have your encrypted wallet file — the password is just a useless string.
-* If a hacker only steals your encrypted wallet file, they don't have your master password — the file is uncrackable gibberish that would take millennia to brute-force.
-
-A hacker would need to simultaneously break into your computer, locate and steal the hidden wallet file, AND steal the password from your environment variables to touch your funds. The difficulty of this attack is orders of magnitude higher than simply scanning environment variables!
-
 ### Does the private key ever leave my machine?
 
-For `local_secure` and `raw_secret` wallets — never: zero network requests, zero RPC calls, zero cloud services; the key never leaves your machine. `privy` wallets are the exception: the key is custodied by Privy (it never sits on your disk), and signing requests go to Privy's API.
+For `raw_secret` and `wallet_cli` wallets, signing happens locally — Agent-wallet makes no network request to sign. `privy` wallets are the exception: the key is custodied by Privy (it never sits on your disk), and signing requests go to Privy's API.
 
-### How should I store the master password securely?
+### How does a `wallet_cli` wallet handle the password?
 
-- ✅ Use a password manager (1Password, Bitwarden)
-- ✅ Pass it via the `AGENT_WALLET_PASSWORD` environment variable
-- ❌ Don't hardcode it in source code
-- ❌ Don't commit environment variable files containing the password to git
+Agent-wallet never reads or decrypts the wallet-cli keystore. For each signature it pins the configured account and network, obtains the password (running the exec script again each time, 10-second default timeout), writes it only to that one wallet-cli subprocess's stdin, and checks that the returned signer matches the account. The password is never passed on the command line.
 
-### Is the encryption algorithm secure? Can it be brute-forced?
+### How should I store secrets securely?
 
-Agent-wallet uses the Keystore V3 standard encryption (scrypt + AES-128-CTR), the exact same encryption scheme used by official Ethereum wallets. The scrypt algorithm is specifically designed to make brute-force attacks extremely expensive in both computation and memory — even with dedicated hardware, cracking a strong password would take tens of thousands of years.
+- ✅ Use a password manager (1Password, Bitwarden) and reference it with an exec script
+- ❌ Don't hardcode secrets in source code or pass them as command-line arguments
+- ❌ Don't commit `~/.agent-wallet/wallets_config.json` or `.env` files to git
 
 ---
 
@@ -143,7 +143,7 @@ Agent-wallet uses the Keystore V3 standard encryption (scrypt + AES-128-CTR), th
 
 ### What operating systems are supported?
 
-macOS, Linux, and Windows. As long as you can run Node.js >= 18 or Python >= 3.11, you're good to go. Windows support was added in v2.3.x — file permission features (like `chmod 600`) are gracefully skipped on Windows since it doesn't support Unix-style permissions.
+macOS, Linux, and Windows, with Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+ (the same range applies when you use wallet-cli). File permission hardening (`chmod 600` on `wallets_config.json`, `700` on the directory) is skipped on platforms that don't support Unix-style permissions. On Windows, point `AGENT_WALLET_WALLET_CLI_PATH` at wallet-cli's JavaScript entrypoint rather than a `.cmd` / `.bat` shim.
 
 ### `npm install -g` gives a permission error?
 
@@ -159,13 +159,17 @@ echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-### I configured the password but AI says "wallet not found" or "wrong password"?
+### My agent says "wallet not found" or "network is required"?
 
-The three most common causes:
+The most common causes:
 
-1. **Password didn't take effect**: You ran `export` in Terminal A, but the AI runs in Terminal B. Solution: restart the AI backend service (see [Quick Start](./QuickStart.md) Step 2).
-2. **Shell ate the password**: A password wrapped in double quotes contains `$` or `!`, which the shell expanded. Solution: switch to single quotes.
-3. **Wrong storage directory**: You previously used `--dir` to specify a custom path, but the AI is looking at the default path. Solution: `export AGENT_WALLET_DIR="/your/custom/path"`.
+1. **Wrong storage directory**: you used `--dir` when creating the wallet, but the agent looks at the default path. Set `AGENT_WALLET_DIR="/your/custom/path"` in the agent's environment and restart it.
+2. **No active wallet (CLI)**: `agent-wallet sign` without `-w` fails when no wallet is active. Run `agent-wallet list`; if nothing is marked `*`, run `agent-wallet use <id>`. (The SDK's `resolveWallet()` / `getActiveWallet()` don't fail here — they fall back to the first configured wallet.)
+3. **Missing or non-canonical network**: `raw_secret` and `wallet_cli` wallets need a network such as `tron:3448148188` or `eip155:56`.
+
+### `wallet-cli not found` when adding a `wallet_cli` wallet?
+
+Install a compatible version (`npm install -g '@tron-walletcli/wallet-cli@^4.13.0'`) and make sure `wallet-cli --version` works in the same shell, or set `AGENT_WALLET_WALLET_CLI_PATH`. wallet-cli 4.12.x and 5.x are not supported by Agent-wallet 3.x.
 
 ### `agent-wallet` command not found?
 
@@ -183,36 +187,24 @@ source ~/.zshrc
 
 ---
 
-## Cross-language
-
-### Are key files compatible between Python and TypeScript?
-
-Yes. Both implementations use exactly the same encryption format. A wallet created with the CLI works directly with the Python SDK, and vice versa.
-
-### Do both languages produce the same signature?
-
-Identical. Same private key + same data = same signature.
-
----
-
 ## OpenClaw Integration
 
 ### Is OpenClaw required?
 
-No. Agent-wallet is a standalone signing tool that can be used independently via CLI or SDK. OpenClaw is simply the most convenient frontend — it lets you invoke signing using natural language, without writing any code.
+No. Agent-wallet is a standalone signing tool that can be used independently via CLI or SDK.
 
 ### OpenClaw says "signing failed" or "wallet not connected"?
 
 Troubleshoot in this order:
 
-1. Confirm the `AGENT_WALLET_PASSWORD` environment variable is set (run `[[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "Password is set" || echo "Password NOT set"` in the terminal where OpenClaw is running)
-2. Confirm the MCP Server was started **after** the environment variable was set
-3. Confirm a wallet has been initialized: `agent-wallet list` should show at least one wallet
-4. If everything above checks out, try signing manually via CLI: `agent-wallet sign msg "test" -n tron`
+1. Confirm the tool you use actually signs through Agent-wallet 3.x — new BANK OF AI setups use [wallet-cli](../wallet-cli/quickstart.md) directly.
+2. Confirm a wallet has been configured: `agent-wallet list` should show at least one wallet, with `*` on the active one.
+3. Confirm the agent's environment uses the same wallet directory (`AGENT_WALLET_DIR`), and restart the agent after changing it.
+4. Try signing manually: `agent-wallet sign typed-data '<json>' -n eip155:56`.
 
-### Does signing in OpenClaw cost gas fees?
+### Does signing cost gas fees?
 
-Signing itself costs zero gas. Signing is purely a local cryptographic operation using your private key — it's completed entirely on your machine. Gas fees are only incurred when a signed transaction is broadcast to the blockchain. Operations like checking addresses or signing messages are always free.
+Signing itself costs zero gas. Gas fees are only incurred when a signed transaction is broadcast to the blockchain.
 
 ---
 

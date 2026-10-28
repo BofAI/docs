@@ -33,7 +33,7 @@
 **最简单的解决办法：** 去 [Node.js 官网](https://nodejs.org/) 下载最新的 LTS 版本（就像安装普通软件一样，一路点"下一步"），装完后重新试一次。
 
 :::tip 已经装了 Node.js 但还是报错？
-在终端运行 `node --version` 查看版本号。技能需要 **v20 或更高版本**。如果版本太低，去官网重新下载最新版覆盖安装即可。
+在终端运行 `node --version` 查看版本号。技能需要 **22.23.4+（22.x）、24.22.1+（24.x）或 26.12.1+**。如果版本太低，去官网重新下载最新版覆盖安装即可。
 :::
 
 ### 怎么确认技能安装成功了？
@@ -116,7 +116,7 @@ AI 的应对策略是：先给你看报价，你确认后在实际提交前会�
 
 ### 哪些 AI 工具能用这些技能？
 
-安装器覆盖了相当广的一批编程助手与 AI 客户端——Claude Code、Cursor、Codex、Cline、Gemini CLI、Amp、Zed 等等——对有独立技能目录的工具建立软链接，没有的则直接复制文件。其中 **OpenClaw** 依然最省心。任何能读取本地技能文件的 AI 助手也都能用：让它读 `~/.agents/skills/<技能名>/SKILL.md` 即可。
+安装器覆盖了相当广的一批编程助手与 AI 客户端——Claude Code、Cursor、Codex、Cline、Gemini CLI、Amp、Zed 等等——对有独立技能目录的工具建立软链接，没有的则直接复制文件。OpenClaw 一键安装器处于暂停维护状态，不作为新用户推荐入口。任何能读取本地技能文件的 AI 助手也都能用：让它读 `~/.agents/skills/<技能名>/SKILL.md` 即可。
 
 ---
 
@@ -136,11 +136,13 @@ AI 的应对策略是：先给你看报价，你确认后在实际提交前会�
 rm -rf ~/.agents/skills/sunswap-dex-trading
 ```
 
-**更新：** 重新运行安装命令（保留 `-g`，更新的才是全局那份），会自动更新所有技能到最新版本。
+**更新：** 重新运行安装命令（保留 `-g`，更新的才是全局那份），并在弹出的列表里选中要更新的技能，它们会按 `main` 分支上的最新稳定版重新安装。重装会替换所选技能的整个目录，之后请在 SunPerp、TronScan、USDD 的目录里重新运行 `npm install`。
 
 ```bash
-npx skills add https://github.com/BofAI/skills -y -g
+npx skills add https://github.com/BofAI/skills/tree/main -g
 ```
+
+不要加 `-y`：它会连"安装到哪些 Agent"这一步也跳过，skills CLI 会把 Skill 装进本机检测到的所有 Agent（加上通用目录）并覆盖已有副本；一个 Agent 都没检测到时则装进它认识的全部 79 个 Agent（skills 1.7.4）。只装到某个 Agent、跳过选择 Agent 这一步，用 `-a <agent>`，例如 `-a claude-code`；选择技能和 `Proceed with installation?` 仍会询问。输出里的 `✗ … does not support global skill installation` 指的是没有全局 Skill 目录的 Agent，其余 Agent 均正常安装。
 
 ---
 
