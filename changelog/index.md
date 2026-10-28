@@ -8,6 +8,110 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
+<div className="changelog-date">Oct 27, 2026</div>
+<div className="changelog-body">
+
+### Reverse audit: code features the docs had not covered
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- Facilitator error codes, 8004 subgraph defaults and contract revert reasons, Agent Wallet error codes and config schema, wallet-cli error codes and recharge rules, per-Skill setup steps and credentials, OpenClaw installer details, TRON MCP package and HTTP details. [x402](./x402/) · [8004](./8004/) · [Agent Wallet](./agent-wallet/) · [SKILLS](./skills/) · [OpenClaw](./openclaw-extension/) · [MCP](./mcp-server/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 25, 2026</div>
+<div className="changelog-body">
+
+### x402 docs aligned with SDK 2.1.0 and facilitator v2.2.2
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Fix</span></div>
+
+- The 2.1.0 package set on official `@x402/core` 2.28.0 (with `@bankofai/x402-tron-extensions` for TRON resource sponsoring), decimal TRON IDs, the official facilitator's 10-per-minute anonymous limit on both `/verify` and `/settle`, Nile resource sponsoring, and the remaining API Catalog CI rules. [Details](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 23, 2026</div>
+<div className="changelog-body">
+
+### Node.js requirements updated across products
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- Install pages now state the October 2026 security releases required by each project's source (published packages that still declare an older floor — agent-wallet `3.0.0` with `>=18`, TRON MCP Server `1.1.7` with `>=20` — are noted on their pages): Agent Wallet, wallet-cli, SKILLS, and OpenClaw Extension need Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+; the 8004 TypeScript SDK the same but only up to 26.x; TRON MCP Server needs 22.23.4+ or 24.22.1+ (source, `v1.1.8`; Node.js 26 is not supported; npm `1.1.7` declares `>=20`); the x402 SDK needs 24.22.1+. Both OpenClaw installers now check the full version before installing anything.
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 23, 2026</div>
+<div className="changelog-body">
+
+### 8004 docs aligned with SDK 1.2.1
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">8004</span><span className="changelog-tag">Fix</span></div>
+
+- Base Mainnet and Base Sepolia, canonical registration-v1 keys from `registerIPFS()`, the new TypeScript registry read APIs, and the 1.2.1 Node.js requirement. [Details](./8004/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 23, 2026</div>
+<div className="changelog-body">
+
+### OpenClaw Extension and TRON MCP Server docs matched to the code
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- OpenClaw: the installer still pins Skills `v1.5.15`, agent-wallet 2.3.1 and `chat.ainft.com` — the Sep 9 installer changes never shipped, and the docs now describe the real installer. [Details](./openclaw-extension/) TRON MCP Server: mainnet RPC fallback without an API key, tool and prompt details, and real wallet error texts. [Details](./mcp-server/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 22, 2026</div>
+<div className="changelog-body">
+
+### SKILLS 3.0.1 — Node.js security baseline
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">SKILLS</span></div>
+
+- The bundled Node.js Skills and the wallet-cli installer require Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`. The `wallet-cli` Skill still pins `@tron-walletcli/wallet-cli@4.14.0`. [Details](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 21, 2026</div>
+<div className="changelog-body">
+
+### Agent Wallet docs rewritten for 3.0
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">Breaking</span></div>
+
+- The Agent Wallet pages now follow 3.0.0: `wallet_cli`, `privy` and `raw_secret` wallets, exec-script credentials and exact CAIP-2 network IDs. `local_secure`, `AGENT_WALLET_PASSWORD` and the Python SDK are no longer covered. [Details](./agent-wallet/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 21, 2026</div>
+<div className="changelog-body">
+
+### SKILLS install command pinned to main
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">Fix</span></div>
+
+- Install with `npx skills add https://github.com/BofAI/skills/tree/main -g` so the Skills match the documented wallet-cli version. [Details](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Sep 28, 2026</div>
 <div className="changelog-body">
 
@@ -34,6 +138,19 @@ Product updates and announcements for BANK OF AI.
 </div>
 
 <div className="changelog-entry">
+<div className="changelog-date">Sep 10, 2026</div>
+<div className="changelog-body">
+
+### Agent Wallet v3.0.0
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">Breaking</span></div>
+
+- New `wallet_cli` wallet type; `local_secure`, the master password and `AGENT_WALLET_PASSWORD` removed; `signTransaction()` returns a typed artifact; `signRaw` / `signMessage` removed; low-level APIs move to `/advanced`. [Details](./agent-wallet/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Sep 9, 2026</div>
 <div className="changelog-body">
 
@@ -41,7 +158,7 @@ Product updates and announcements for BANK OF AI.
 
 <div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span><span className="changelog-tag">8004</span><span className="changelog-tag">Openclaw</span></div>
 
-- The 8004 guides are now internally consistent: one consistent `setWallet` call shape per SDK instead of four different ones, with the rules for how the new wallet's signature is supplied, no legacy TRON `chainId`, the network names the SDK actually accepts, and private keys read from environment variables. The Openclaw installer no longer pins a superseded skills tag and writes the correct BANK OF AI host. [8004 details](./8004/) · [Openclaw details](./openclaw-extension/)
+- The 8004 guides are now internally consistent: one consistent `setWallet` call shape per SDK instead of four different ones, with the rules for how the new wallet's signature is supplied, no legacy TRON `chainId`, the network names the SDK actually accepts, and private keys read from environment variables. The Openclaw installer no longer pins a superseded skills tag and writes the correct BANK OF AI host. *(Corrected on Oct 23: these installer changes never shipped.)* [8004 details](./8004/) · [Openclaw details](./openclaw-extension/)
 
 </div>
 </div>
