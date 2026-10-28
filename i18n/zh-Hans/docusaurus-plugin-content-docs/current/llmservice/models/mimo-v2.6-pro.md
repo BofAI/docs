@@ -1,23 +1,8 @@
-import ActivityCard from '@site/src/components/ActivityCard';
-
 # MiMo-V2.6-Pro
 
 ## 概述
 
 MiMo-V2.6-Pro 是小米 MiMo 于 2026 年 9 月 22 日发布的 V2.6 系列旗舰开放权重原生多模态推理模型。其 API 模型 ID 为 `mimo-v2.6-pro`，采用稀疏 Mixture-of-Experts 架构和 1M Token 上下文窗口，面向复杂软件工程、长周期 Agent 工作流，以及涉及多种工具和模态的研究任务。
-
-<ActivityCard
-  variant="discount"
-  title="MiMo-V2.6-Pro"
-  status="限时折扣"
-  detail="9 月 25 日 15:00 起 5 折"
->
-活动于 2026 年 9 月 25 日 15:00（北京时间，UTC+8）开启。
-
-自生效时间起，符合条件的 MiMo-V2.6-Pro 使用按标准参考价的 50% 结算。
-
-下方价格表继续展示标准参考价。
-</ActivityCard>
 
 ## 核心特性
 
@@ -64,5 +49,5 @@ MiMo-V2.6-Pro 是小米 MiMo 于 2026 年 9 月 22 日发布的 V2.6 系列旗�
 **Credits 结算：** B.AI 按照 `1 USD = 1,000,000 Credits` 换算，并从账户余额中扣除 Credits。
 
 :::info 价格说明
-文档价格为 B.AI 平台模型标准参考价，仅供基础计费说明使用。B.AI 可能会通过充值赠送及账户权益等方式，为用户提供更低的实际使用成本。具体价格、赠送积分及账户权益请以平台页面展示及最终账单为准。
+文档价格为 B.AI 平台模型标准参考价，仅供基础计费说明使用。B.AI 可能会通过账户权益等方式，为用户提供更低的实际使用成本。具体价格及账户权益请以平台页面展示及最终账单为准。
 :::

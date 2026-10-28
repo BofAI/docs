@@ -1,23 +1,8 @@
-import ActivityCard from '@site/src/components/ActivityCard';
-
 # MiMo-V2.6-Pro
 
 ## Overview
 
 MiMo-V2.6-Pro is Xiaomi MiMo's flagship open-weight, native multimodal reasoning model in the V2.6 series, released on September 22, 2026. Available through the API as `mimo-v2.6-pro`, its sparse Mixture-of-Experts architecture and 1M-token context window target complex software engineering, extended agent workflows, and research involving multiple tools and modalities.
-
-<ActivityCard
-  variant="discount"
-  title="MiMo-V2.6-Pro"
-  status="Limited-Time Discount"
-  detail="50% from Sep 25, 15:00 UTC+8"
->
-The offer begins at 15:00 on September 25, 2026 (Beijing Time, UTC+8).
-
-From that time, eligible MiMo-V2.6-Pro usage is billed at 50% of the standard reference price.
-
-The pricing table below continues to show standard reference prices.
-</ActivityCard>
 
 ## Key Features
 
@@ -64,5 +49,5 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
 :::

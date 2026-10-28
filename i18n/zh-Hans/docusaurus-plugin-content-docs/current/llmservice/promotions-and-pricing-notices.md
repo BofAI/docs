@@ -12,41 +12,15 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 <ActivityCard
   variant="discount"
-  title="MiMo-V2.6-Flash"
+  title="MiniMax-M3.1-Flash"
   status="限时折扣"
-  detail="9 月 25 日 15:00 起 1 折"
+  detail="10 月 26 日 17:00 SGT 起 5 折"
 >
-活动于 2026 年 9 月 25 日 15:00（北京时间，UTC+8）开启。
+活动于 2026 年 10 月 26 日 17:00（SGT，新加坡时间，UTC+8）起生效。
 
-自生效时间起，符合条件的 MiMo-V2.6-Flash 使用按标准参考价的 10% 结算。
+自生效时间起，MiniMax-M3.1-Flash 享 5 折优惠，按标准参考价的 50% 结算。
 
-[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/mimo-v2.6-flash.md)继续展示标准参考价。
-</ActivityCard>
-
-<ActivityCard
-  variant="discount"
-  title="Qwen3.8-Flash"
-  status="限时折扣"
-  detail="9 月 25 日 15:00 起 3 折"
->
-活动折扣于 2026 年 9 月 25 日 15:00（北京时间，UTC+8）由标准参考价的 1 折调整为 3 折。
-
-自生效时间起，Qwen3.8-Flash 在 B.AI API 和 Chat 中的使用按标准参考价的 30% 结算。
-
-[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/qwen3-8-flash.md)继续展示标准参考价。
-</ActivityCard>
-
-<ActivityCard
-  variant="discount"
-  title="MiMo-V2.6-Pro"
-  status="限时折扣"
-  detail="9 月 25 日 15:00 起 5 折"
->
-活动于 2026 年 9 月 25 日 15:00（北京时间，UTC+8）开启。
-
-自生效时间起，符合条件的 MiMo-V2.6-Pro 使用按标准参考价的 50% 结算。
-
-[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/mimo-v2.6-pro.md)继续展示标准参考价。
+[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/minimax-m3.1-flash.md)继续展示标准参考价，活动适用规则、实际结算价格及最终账单以平台页面展示为准。
 </ActivityCard>
 
 <ActivityCard
@@ -73,4 +47,17 @@ import ActivityCard from '@site/src/components/ActivityCard';
 自生效时间起，符合条件的 GLM-5.3-Flash API 和 Chat 使用按标准参考价的 70% 结算。
 
 标准价格详见[模型详情](./models/glm-5-3-flash.md)。
+</ActivityCard>
+
+<ActivityCard
+  variant="discount"
+  title="Qwen3.8-Flash"
+  status="限时折扣"
+  detail="10 月 22 日 17:00 起 8 折"
+>
+活动于 2026 年 10 月 22 日 17:00（北京时间，UTC+8）起生效。
+
+自生效时间起，Qwen3.8-Flash 在 B.AI API 和 Chat 中的使用按标准参考价的 80% 结算；生效前仍按现行活动规则结算。
+
+[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/qwen3-8-flash.md)继续展示标准参考价。
 </ActivityCard>

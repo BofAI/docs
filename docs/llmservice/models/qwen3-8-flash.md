@@ -10,11 +10,11 @@ Qwen3.8-Flash is a hosted multimodal model from Alibaba's Qwen team, announced o
   variant="discount"
   title="Qwen3.8-Flash"
   status="Limited-Time Discount"
-  detail="30% from Sep 25, 15:00 UTC+8"
+  detail="80% of standard price from Oct 22, 17:00 UTC+8"
 >
-At 15:00 on September 25, 2026 (Beijing Time, UTC+8), the promotional rate changes from 10% to 30% of the standard reference price.
+The offer takes effect at 17:00 on October 22, 2026 (Beijing Time, UTC+8).
 
-From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 30% of the standard reference price.
+From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 80% of the standard reference price. Until then, current promotion rules continue to apply.
 
 The pricing table below continues to show standard reference prices.
 </ActivityCard>
@@ -69,5 +69,5 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 Explicit cache creation costs `$0.20 per 1M tokens`. Both explicit and implicit cache hits cost `$0.016 per 1M tokens`.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through limited-time offers, top-up bonuses, and account benefits. Specific prices, bonus Credits, account benefits, and final billing are subject to the platform display and billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through limited-time offers and account benefits. Specific prices, account benefits, and final billing are subject to the platform display and billing records.
 :::

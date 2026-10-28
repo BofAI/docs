@@ -31,6 +31,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | MiniMax-M3.1-Flash | `$0.15` | `$0.15` | `$0.015` | `$0.60` | - |
 | MiniMax M3 | `$0.30` | `$0.30` | `$0.06` | `$1.20` | - |
 | MiniMax M2.7 | `$0.30` | `$0.375` | `$0.06` | `$1.20` | - |
+| Kimi K3.1 Pro | `$2.00` | `$2.00` | `$0.20` | `$10.00` | - |
+| Kimi K3.1 Pro Highspeed | `$4.00` | `$4.00` | `$0.20` | `$20.00` | - |
 | Kimi K3 | `$3.00` | `$3.00` | `$0.30` | `$15.00` | - |
 | Kimi K2.8 Preview | `$1.00` | `$1.00` | `$0.25` | `$4.00` | - |
 | Kimi K2.6 | `$0.95` | `$0.95` | `$0.1615` | `$4.00` | - |
@@ -58,13 +60,14 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | DeepSeek V4 Pro | Off-Peak `$0.66`<br/>Peak `$1.32` | Off-Peak `$0.66`<br/>Peak `$1.32` | Off-Peak `$0.022`<br/>Peak `$0.044` | Off-Peak `$1.98`<br/>Peak `$3.96` | - |
 | Grok 4.6 | `$2.00` | `$2.00` | `$0.50` | `$6.00` | - |
 | Grok 4.5 | `$2.00` | `$2.00` | `$0.30` | `$6.00` | - |
-| GPT-6.1 Sol | `$2.00` | `$2.50` | `$0.10` | `$10.00` | `$0.01` |
-| GPT-6 Astra | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
-| GPT-6 Sol | `$2.00` | `$2.50` | `$0.20` | `$10.00` | `$0.01` |
-| GPT-6 Luna | `$0.10` | `$0.125` | `$0.01` | `$0.50` | `$0.01` |
-| GPT-5.6 Sol | `$4.00` | `$5.00` | `$0.40` | `$20.00` | `$0.01` |
-| GPT-5.6 Terra | `$2.00` | `$2.50` | `$0.20` | `$12.00` | `$0.01` |
-| GPT-5.6 Luna | `$0.20` | `$0.25` | `$0.02` | `$1.20` | `$0.01` |
+| GPT-6.1 Terra | `$1.00` | 30m: `$1.25`<br/>12h: `$2.50` | `$0.05` | `$5.00` | `$0.01` |
+| GPT-6.1 Sol | `$2.00` | 30m: `$2.50`<br/>12h: `$5.00` | `$0.10` | `$10.00` | `$0.01` |
+| GPT-6 Astra | `$10.00` | 30m: `$12.50`<br/>12h: `$25.00` | `$1.00` | `$50.00` | `$0.01` |
+| GPT-6 Sol | `$2.00` | 30m: `$2.50`<br/>12h: `$5.00` | `$0.20` | `$10.00` | `$0.01` |
+| GPT-6 Luna | `$0.10` | 30m: `$0.125`<br/>12h: `$0.25` | `$0.01` | `$0.50` | `$0.01` |
+| GPT-5.6 Sol | `$4.00` | 30m: `$5.00`<br/>12h: `$10.00` | `$0.40` | `$20.00` | `$0.01` |
+| GPT-5.6 Terra | `$2.00` | 30m: `$2.50`<br/>12h: `$5.00` | `$0.20` | `$12.00` | `$0.01` |
+| GPT-5.6 Luna | `$0.20` | 30m: `$0.25`<br/>12h: `$0.50` | `$0.02` | `$1.20` | `$0.01` |
 | GPT-5.4 | `$2.50` | `$2.50` | `$0.25` | `$15.00` | `$0.01` |
 | GPT-5.5 | `$5.00` | `$5.00` | `$0.50` | `$30.00` | `$0.01` |
 | GPT-5.5 Instant | `$5.00` | `$5.00` | `$0.50` | `$30.00` | `$0.01` |
@@ -106,11 +109,17 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 **Cache pricing:** `Cache Write` indicates the price charged when cache writing occurs; it does not mean that all models use the same cache retention period. Cache policies, retention periods, long-context pricing, and extended caching capabilities may vary by model. If a model uses special caching rules, 1-hour cache write pricing, or time-based pricing, refer to its model detail page.
 
+**GPT cache-write lifetimes:** GPT-5.6 Sol, Terra, and Luna; GPT-6 Astra, Sol, and Luna; and GPT-6.1 Sol and Terra distinguish 30-minute and 12-hour cache writes, priced at 1.25x and 2.5x the applicable input rate, respectively. These write rates replace the ordinary input charge for those tokens, rather than adding to it. Cache-read rates are the same for both lifetimes.
+
+**Long-context pricing:** Some models use tiered long-context pricing. The table shows their base-tier rates; see the corresponding model detail pages for thresholds, full prices, and billing rules.
+
+**Kimi K3.1 Pro / Highspeed:** The table shows the default 5-minute cache write rates. See the [model detail page](./models/kimi-k3.1-pro.md) for 1-hour cache write prices and cache renewal rules.
+
 **Claude Haiku 5.5:** The table shows 5-minute cache write rates. Prompts over 100,000 tokens use the higher token rates for the entire request, including output and cached tokens. See the [model detail page](./models/claude-haiku-5-5.md) for 1-hour cache write prices and tier rules.
 :::
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
 :::
 
 :::info Auto Mode billing
@@ -119,7 +128,7 @@ Auto Mode is not a separately billable model. Each request is billed based on th
 
 ### Cache Pricing Notes
 
-- **Cache Write:** The cost when tokens are first written into the prompt cache. Most providers charge no premium and use the same rate as standard input pricing. Claude models and GPT-5.6 models apply a 25% premium on cache writes.
+- **Cache Write:** The charge for tokens written into the prompt cache; rates depend on the model and cache lifetime. For the GPT-5.6, GPT-6, and GPT-6.1 models listed above, 30-minute writes cost 1.25x the applicable input rate and 12-hour writes cost 2.5x, replacing the ordinary input charge for those tokens. See each model detail page for other models' write rates and lifetime rules.
 - **Cache Read:** The discounted cost when cached tokens are reused in subsequent requests.
 - **Example with Caching:** If you use Claude Sonnet 4.6 with 1000 tokens cached:
   - First request (cache write): `1000 × 3.75 = 3,750 credits`
@@ -132,8 +141,8 @@ The platform supports two usage models: topping up Credits and subscription plan
 
 Top-up Credits are suitable for flexible, on-demand usage. Subscription plans are better suited for frequent users and include a fixed allowance within each billing period. When your subscription allowance is exhausted, the system will continue consuming Credits from your account balance.
 
-:::caution Free bonus Credits validity
-Free bonus Credits are valid for 30 days from the date they are issued, including Credits granted for new-user registration and Credits granted through top-up promotions. Any unused portion automatically expires after the validity period.
+:::info Registration and top-up Credits rules
+Registration through any channel does not grant bonus Credits. Inviting someone to register does not grant bonus Credits either. No payment method provides additional bonus Credits on top-ups.
 :::
 
 :::info Invitation rewards

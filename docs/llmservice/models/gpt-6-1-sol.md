@@ -45,17 +45,17 @@ GPT-6.1 Sol is an OpenAI reasoning model released on September 29, 2026, in the 
 
 The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
 
-| Context | Input<br/>(USD / 1M Tokens) | Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
-| :--- | --------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
-| Up to 272K input tokens | `$2.00` | `$2.50` | `$0.10` | `$10.00` | `$0.01` |
-| More than 272K input tokens | `$4.00` | `$5.00` | `$0.20` | `$15.00` | `$0.01` |
+| Context | Input<br/>(USD / 1M Tokens) | 30m Cache Write<br/>(USD / 1M Tokens) | 12h Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
+| :--- | --------------------: | --------------------------: | --------------------------: | -------------------------: | ---------------------: | ---: |
+| Up to 272K input tokens | `$2.00` | `$2.50` | `$5.00` | `$0.10` | `$10.00` | `$0.01` |
+| More than 272K input tokens | `$4.00` | `$5.00` | `$10.00` | `$0.20` | `$15.00` | `$0.01` |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 * For requests with more than 272K input tokens, the long-context rates apply to the full request. Output billing includes reasoning tokens.
-* Cache Write is billed at 1.25x the input rate and replaces the ordinary input charge for those tokens. It is not an additional charge. Cache reads are billed at 0.05x input. The minimum cacheable prefix is 1,024 visible input tokens. The supported cache lifetime is 30 minutes and refreshes on reuse without another write charge.
+* Cache-write rates replace the ordinary input charge for those tokens, rather than adding to it. A 30-minute cache write costs 1.25x the applicable input rate; a 12-hour write costs 2.5x. The default minimum lifetime is 30 minutes. Both lifetimes have the same cache-read rate, 0.05x the applicable input rate. The minimum cacheable prefix is 1,024 visible input tokens.
 * Web search costs `10,000 Credits` (`$0.01`) per use and is not affected by the context tier.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
 :::

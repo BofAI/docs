@@ -6,6 +6,8 @@ B.AI invitation rewards let you invite friends to register and earn Coin when el
 
 When a friend registers through your dedicated invitation link or invitation code, a two-year invitation relationship is established between you and the invited friend.
 
+Inviting someone to register does not grant bonus Credits. Eligible top-ups or subscriptions continue to earn Coin rebates under the rules below.
+
 * Each user can be linked to only one inviter.
 * Users cannot invite themselves.
 

@@ -1,23 +1,8 @@
-import ActivityCard from '@site/src/components/ActivityCard';
-
 # MiMo-V2.6-Flash
 
 ## Overview
 
 MiMo-V2.6-Flash is an open-weight, native multimodal reasoning model released by Xiaomi MiMo on September 22, 2026. Available through the API as `mimo-v2.6-flash`, it combines a sparse Mixture-of-Experts architecture with a 1M-token context window, targeting frequent calls, large-scale office workloads, and cost-sensitive coding and agent applications.
-
-<ActivityCard
-  variant="discount"
-  title="MiMo-V2.6-Flash"
-  status="Limited-Time Discount"
-  detail="10% from Sep 25, 15:00 UTC+8"
->
-The offer begins at 15:00 on September 25, 2026 (Beijing Time, UTC+8).
-
-From that time, eligible MiMo-V2.6-Flash usage is billed at 10% of the standard reference price.
-
-The pricing table below continues to show standard reference prices.
-</ActivityCard>
 
 ## Key Features
 
@@ -64,5 +49,5 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through top-up bonuses and account benefits. Specific prices, bonus Credits, and account benefits are subject to the platform display and final billing records.
+Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
 :::
