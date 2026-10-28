@@ -2,6 +2,10 @@
 
 我们的目标是：**花几分钟跟着向导点几下，让你的 AI 成功查到第一笔链上数据。**
 
+:::note 安装器锁定的版本
+一键安装器目前安装的是 **agent-wallet 2.3.1** 和 **Skills v1.5.15**。因此本页的钱包步骤遵循 agent-wallet 2.x（主密码、`local_secure` 钱包），而不是 [Agent-Wallet 文档](../Agent-Wallet/Intro.md)中介绍的 3.x 行为。
+:::
+
 ---
 
 ## 🕹️ 准备工作
@@ -9,7 +13,7 @@
 在开始之前，请确保你的电脑上已经装好了以下几种基础软件（如果没有，请像装普通软件一样去官网下载安装）：
 
 1. **OpenClaw**：你的 AI 助手软件。
-2. **Node.js**（v20 或以上）：安装向导会装 `@bankofai/mcp-server-tron`，它声明了 `node >= 20`。*（极其重要——两个安装器都不强制 20：macOS/Linux 脚本只检查 `node` 是否存在，Windows 脚本也只强制 18。版本过低会通过预检但在后面报错。）*
+2. **Node.js**（22.x 需 22.23.4+，24.x 需 24.22.1+，或 26.12.1+）：两个安装器都会按 `^22.23.4 || ^24.22.1 || >=26.12.1` 检查完整版本号，未安装或版本过低会在安装任何内容之前直接报错退出。*（推荐 Node.js 24：它能满足安装向导所装的全部组件。）*
 3. **Git**：用来下载技能包的小工具。
 
 **Windows 用户额外注意：**
@@ -68,7 +72,7 @@ install.bat
 </TabItem>
 </Tabs>
 
-🚑 **急救包：敲完回车就报错了？** 如果屏幕提示 `command not found: node`（Mac/Linux）或 `node is not recognized`（Windows），说明你的电脑缺少上面说的基础环境。👉 [点这里看怎么解决](./FAQ.md#报错里写着-command-not-found-node-或-npm-install-失败)
+🚑 **急救包：敲完回车就报错了？** 如果屏幕提示 `Error: Node.js ^22.23.4 || ^24.22.1 || >=26.12.1 is required`（后面可能跟着 `found vX.Y.Z`；Windows 上会在 `Installation failed with error:` 下方显示类似的提示，前面没有 `Error: `），说明你的电脑缺少上面说的基础环境。👉 [点这里看怎么解决](./FAQ.md#报错里写着-command-not-found-node-或-npm-install-失败)
 
 如果没有报错，屏幕上会跳出安装向导。请把它当成一个文字小游戏，整个流程分 4 关：
 
@@ -102,7 +106,7 @@ Installation Mode
 The following data will be permanently deleted:
   • ALL MCP entries in: ~/.mcporter/mcporter.json
   • ALL installed skills (global and workspace)
-  • x402 config file: ~/.x402-config.json
+  • legacy x402 config file: ~/.x402-config.json
   • BANK OF AI local config: ~/.mcporter/bankofai-config.json
   • AgentWallet config will be overwritten by: agent-wallet start --override --save-runtime-secrets
 
@@ -115,9 +119,9 @@ The following data will be permanently deleted:
 ```
 Running cleanup...
 
-◇  Found 10 unique installed skill(s)
+◇  Found 14 unique installed skill(s)
 ◇  Removal process complete
-◆  Successfully removed 10 skill(s)
+◆  Successfully removed 14 skill(s)
 
 ✓ Clean install cleanup completed.
 
@@ -130,7 +134,8 @@ Clean complete — proceeding with fresh setup...
 Step 0: AgentWallet Setup
 
 Launching: agent-wallet reset
-This will delete ALL wallet data in: ~/.agent-wallet
+This will delete ALL wallet data in: /home/<you>/.agent-wallet
+   4 file(s): master.json, wallets_config.json, runtime_secrets.json, secret_<id>.json
 
 ✔ Are you sure you want to reset? This cannot be undone. Yes
 ✔ Really delete everything? Last chance! Yes
@@ -209,8 +214,12 @@ Active wallet: my_wallet_1
 主密码是打开你 AI 钱包的唯一钥匙。**丢了密码 = 丢了钱包的访问权限。** 拿笔写下来、存到密码管理器里——随便什么方式，千万别忘了。
 :::
 
-:::tip 升级安装时看到 "Wallet already initialized."？
-如果你之前已经装过 AgentWallet，选普通安装后向导会跳过密码设置，直接让你输入 Wallet ID 并生成钱包。之前的主密码和已有钱包都会保留。
+:::tip 已经有钱包了？（普通安装升级）
+如果 AgentWallet 里已经有钱包，而你选了普通安装，向导会先显示 `Already initialized with N wallet(s), active: <id>`，并询问 **What would you like to do?**
+- **exit**——什么都不改，安装器直接进入下一关。
+- **add**——先选钱包类型，再用你**原来的**主密码解锁（`Master Password (enter your existing password to unlock)`；如果之前的安装已把密码保存到 `runtime_secrets.json`，这一步会自动跳过）。看到 `Wallet already initialized.` 后，按第 ③–④ 步输入新的 Wallet ID 并生成钱包；新钱包会成为当前活跃钱包。不会设置新密码。
+
+无论选哪个，之前的主密码和已有钱包都会保留。
 :::
 
 （🚑 报错卡住了？👉 [点这里看 AgentWallet 安装失败怎么解决](./FAQ.md#agentwallet-安装失败了)）
@@ -272,11 +281,15 @@ This server still uses PRIVATE_KEY configuration.
 
 #### bankofai-recharge（充值助手）
 
-这个全自动，不用输入任何东西！它会自动连接 BANK OF AI 的远程充值服务。
+这个全自动，不用输入任何东西！它注册的是远程服务 `https://recharge.bankofai.io/mcp`（add-mcp 汇总里显示为 `remote` 类型）。
 
 ```
 ✓ Configuration saved for bankofai-recharge.
 ```
+
+:::caution 充值 MCP 服务已下线
+`https://recharge.bankofai.io/mcp` 已经下线。安装器仍会默认勾选并注册 `bankofai-recharge`，但它的工具已不再响应，你可以在上面的 MCP 选择环节取消勾选。给 BANK OF AI 账户充值，请改用 wallet-cli 的 [`bai recharge`](../wallet-cli/command-reference.md#bai-充值)。
+:::
 
 ### 🟢 第 4 关：挑选技能包（给 AI 装"脑子"）
 
@@ -294,15 +307,20 @@ Select skills installation scope:
 
 直接按回车（或输入 `1`）选全局安装——这样你所有 OpenClaw 工作区都能用这些技能。
 
+:::note 如果你选了 `2`（工作区级别）
+在下面的技能选择之后，技能工具会再问一次 **Installation scope**（`Project` / `Global`）。选 `Project` 会装到你运行安装器时所在目录下的 `skills/` 文件夹（`<当前目录>/skills/<技能>`）；选 `Global` 则仍然装到 `~/.openclaw/skills/`，但安装器之后只比较工作区的技能列表，于是会打印 `No new skills were installed.`、跳过 API Key 提示和 `Next steps`，也不会安装 x402 CLI。想装成全局技能，请在上一步选 `1`。
+:::
+
 然后技能选择器启动：
 
 ```
-◇  Found 10 skills
+◇  Found 14 skills
 │
 ◇  Select skills to install (space to toggle)
-│  agent-wallet, bankofai-guide, recharge-skill, SunPerp Perpetual Futures Trading,
-│  SunPump Meme Token Toolkit, SunSwap DEX Trading, TronScan Data Lookup,
-│  USDD / JUST Protocol, wallet-cli, x402-payment
+│  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions, recharge-skill,
+│  SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit, SunSwap DEX Trading,
+│  TRC20 Token Toolkit, TronScan Data Lookup, TRX Staking & SR Voting, twitter-digest,
+│  twitter-mcp, USDD / JUST Protocol, x402-payment
 ```
 
 每个技能是干啥的：
@@ -311,50 +329,87 @@ Select skills installation scope:
 | :--- | :--- |
 | **agent-wallet** | AgentWallet 钱包管理操作（查看钱包、签署交易） |
 | **bankofai-guide** | 安装完成后引导 AI 帮你完成后续操作的入门助手 |
-| **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
-| **SunPerp Perpetual Futures** | 在 SunPerp 上做永续合约交易 |
-| **SunPump Meme Token Toolkit** | 在 SunPump 上创建与交易 meme 代币，查询代币信息、排行、持有者与交易历史 |
-| **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
-| **USDD / JUST Protocol** | 管理 USDD 稳定币与 JUST 协议仓位 |
-| **wallet-cli** | 通过锁定版 `wallet-cli` npm 包直接完成 TRON 钱包操作（转账、质押、投票、签名） |
-| **x402-payment** | x402 协议支付（Agent 间付款） |
+| **Multi-Sig & Account Permissions** | 管理 TRON 多签权限——密钥、阈值与联署提案 |
 | **recharge-skill** | 查询和充值 BANK OF AI 余额 |
+| **SunPerp Perpetual Futures Trading** | 在 SunPerp 上做永续合约交易 |
+| **SunPump Meme Token Toolkit** | 在 SunPump 上创建与交易 meme 代币，查询代币信息、排行、持有者与交易历史 |
+| **SunSwap DEX Trading** | 在 SunSwap（波场最大的去中心化交易所）上换币 |
+| **TRC20 Token Toolkit** | TRC20 转账、授权、余额查询与代币元数据 |
+| **TronScan Data Lookup** | 通过 TronScan 查链上数据 |
+| **TRX Staking & SR Voting** | 质押 TRX、给超级代表投票并领取投票奖励 |
+| **twitter-digest** | 生成 X/Twitter 日报（提及、首页时间线、可回复机会） |
+| **twitter-mcp** | 安装并授权 X/Twitter 的 `xurl` 命令行工具，或注册托管的 X MCP 桥接 |
+| **USDD / JUST Protocol** | 管理 USDD 稳定币与 JUST 协议仓位 |
+| **x402-payment** | 通过 `x402-cli` 命令在 TRON 或 BSC 上为 x402 保护的 HTTP API 付款 |
 
 选完后，安装器会显示安全风险评估：
 
 ```
 ◇  Security Risk Assessments
 │                                     Gen               Socket            Snyk
+│  agent-wallet                       Safe              1 alert           High Risk
 │  bankofai-guide                     Safe              0 alerts          High Risk
+│  Multi-Sig & Account Permissions    --                --                --
 │  recharge-skill                     Safe              1 alert           Med Risk
 │  SunPerp Perpetual Futures Trading  --                --                --
-│  SunPump Meme Token Toolkit         --                --                --
-│  SunSwap DEX Trading                --                --                --
-│  TronScan Data Lookup               --                --                --
-│  USDD / JUST Protocol               --                --                --
-│  wallet-cli                         --                --                --
+│  ...
 │  x402-payment                       Safe              1 alert           Med Risk
-│  agent-wallet                       Safe              1 alert           High Risk
 ```
 
-查看报告后确认继续。安装完成时：
+查看报告后，在 `Proceed with installation?` 提示处选 `Yes`。安装完成时：
 
 ```
-◇  Installed 10 skills
+◇  Proceed with installation?
+│  Yes
 │
-│  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
-│  ✓ bankofai-guide → ~/.openclaw/skills/bankofai-guide
-│  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
-│  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
-│  ✓ SunPump Meme Token Toolkit → ~/.openclaw/skills/sunpump-meme-token-toolkit
-│  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
-│  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
-│  ✓ USDD / JUST Protocol → ~/.openclaw/skills/usdd-just-protocol
-│  ✓ wallet-cli → ~/.openclaw/skills/wallet-cli
-│  ✓ x402-payment → ~/.openclaw/skills/x402-payment
+◇  Installed 14 skills
+│
+│  ✓ agent-wallet (copied)
+│    → ~/.openclaw/skills/agent-wallet
+│  ✓ bankofai-guide (copied)
+│    → ~/.openclaw/skills/bankofai-guide
+│  ✓ Multi-Sig & Account Permissions (copied)
+│    → ~/.openclaw/skills/multi-sig-account-permissions
+│  ✓ recharge-skill (copied)
+│    → ~/.openclaw/skills/recharge-skill
+│  ✓ SunPerp Perpetual Futures Trading (copied)
+│    → ~/.openclaw/skills/sunperp-perpetual-futures-trading
+│  ✓ SunPump Meme Token Toolkit (copied)
+│    → ~/.openclaw/skills/sunpump-meme-token-toolkit
+│  ✓ SunSwap DEX Trading (copied)
+│    → ~/.openclaw/skills/sunswap-dex-trading
+│  ✓ TRC20 Token Toolkit (copied)
+│    → ~/.openclaw/skills/trc20-token-toolkit
+│  ✓ TronScan Data Lookup (copied)
+│    → ~/.openclaw/skills/tronscan-data-lookup
+│  ✓ TRX Staking & SR Voting (copied)
+│    → ~/.openclaw/skills/trx-staking-sr-voting
+│  ✓ twitter-digest (copied)
+│    → ~/.openclaw/skills/twitter-digest
+│  ✓ twitter-mcp (copied)
+│    → ~/.openclaw/skills/twitter-mcp
+│  ✓ USDD / JUST Protocol (copied)
+│    → ~/.openclaw/skills/usdd-just-protocol
+│  ✓ x402-payment (copied)
+│    → ~/.openclaw/skills/x402-payment
 ```
 
-技能装完后，安装器会自动进入配置环节：
+#### x402 CLI（仅在装了 x402-payment 时）
+
+如果已安装的技能里有 `x402-payment`，安装器接着会全局安装锁定版本的支付命令行工具（如果已装好 `x402-cli` 1.0.1 则跳过）：
+
+```
+Installing @bankofai/x402-cli@1.0.1...
+✓ Installed x402 CLI 1.0.1
+```
+
+这一步执行的是 `npm install --global @bankofai/x402-cli@1.0.1`，所以它和 AgentWallet 命令行工具一样，会装进全局 npm 目录，而不是 OpenClaw 的文件夹。
+
+技能装完后，安装器会比较安装前后的技能列表，对它认为新装的技能逐个进入配置环节：
+
+:::caution 只在首次安装时出现
+「新装」指本次运行前技能列表里没有的技能。这个列表会扫描 `~/.openclaw/skills/`、共享目录 `~/.agents/skills/`，以及本机其他 Agent 的技能目录，所以只要这些技能已经在其中某个目录里（例如以前装过），安装器就会在 x402 CLI 步骤之后打印 `No new skills were installed.`（CLI 已装过时显示的是 `✓ x402 CLI 1.0.1 is already installed`），跳过下面的提示，最后的汇总也只显示 MCP 配置文件。这种情况下，请按[怎么补填 API Key](#️-事后怎么补填-api-keyvip-通行证)手动创建 API Key 文件，需要的话再自行设置 `TRONSCAN_API_KEY`。
+:::
 
 #### recharge-skill API Key 配置
 
@@ -366,9 +421,13 @@ Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
 
+:::caution 通过 recharge-skill 充值已不可用
+recharge-skill 充值时调用的远程充值 MCP 服务已经下线，因此通过这个技能发起的充值会失败。需要充值时，请使用 [`wallet-cli bai recharge`](../wallet-cli/command-reference.md#bai-充值)。
+:::
+
 **现在没有？直接按回车跳过。** 以后拿到了 Key 可以手动创建配置文件，详见下方「[事后怎么补填 API Key](#️-事后怎么补填-api-keyvip-通行证)」。
 
-当屏幕底部亮起 `Installation Complete!` 时——恭喜，通关成功！
+当屏幕底部亮起 `Installation Complete!` 时——恭喜，通关成功！下面的 `Installed skills` 列表和 `Next steps` 只有在安装器检测到新技能时才会出现，否则汇总在配置文件那几行之后，直接接上结尾的 `Repository:` / `Skills:` 链接。
 
 ```
 ═══════════════════════════════════════
@@ -382,13 +441,17 @@ Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 ✓ Installed skills:
   • agent-wallet
   • bankofai-guide
+  • Multi-Sig & Account Permissions
   • recharge-skill
   • SunPerp Perpetual Futures Trading
   • SunPump Meme Token Toolkit
   • SunSwap DEX Trading
+  • TRC20 Token Toolkit
   • TronScan Data Lookup
+  • TRX Staking & SR Voting
+  • twitter-digest
+  • twitter-mcp
   • USDD / JUST Protocol
-  • wallet-cli
   • x402-payment
   Verify with: npx skills list -g
 
@@ -439,7 +502,7 @@ Skills: https://github.com/BofAI/skills
 | Key 名称 | 它是干嘛的？ | 去哪免费领？ |
 | :--- | :--- | :--- |
 | `TRONGRID_API_KEY` | 波场工具箱的高速通道，不填会被限速 | [trongrid.io](https://www.trongrid.io/) 免费注册获取 |
-| `TRONSCAN_API_KEY` | TronScan 查数据技能必须用到 | [tronscan.org](https://tronscan.org/#/myaccount/apiKeys) 免费申请 |
+| `TRONSCAN_API_KEY` | TronScan Data Lookup 技能可选——不填时技能会走 BofAI 代理 `ts.bankofai.io`；填自己的 Key 可获得更高的频率限制 | [tronscan.org](https://tronscan.org/#/myaccount/apiKeys) 免费申请 |
 | `BANKOFAI_API_KEY` | 给 BANK OF AI 充值或查余额用 | [chat.bankofai.io/key](https://chat.bankofai.io/key) 登录后获取 |
 
 
@@ -490,7 +553,8 @@ Skills: https://github.com/BofAI/skills
 <TabItem value="mac" label="Linux / macOS" default>
 
 ```bash
-mkdir -p ~/.mcporter && echo '{"api_key": "你的BANKOFAI_API_KEY填在这里", "base_url": "https://chat.bankofai.io/"}' > ~/.mcporter/bankofai-config.json
+mkdir -p ~/.mcporter && echo '{"api_key": "你的BANKOFAI_API_KEY填在这里", "base_url": "https://chat.ainft.com"}' > ~/.mcporter/bankofai-config.json
+chmod 600 ~/.mcporter/bankofai-config.json   # 安装器也会这么做；这个文件里有你的 API Key
 ```
 
 </TabItem>
@@ -498,7 +562,7 @@ mkdir -p ~/.mcporter && echo '{"api_key": "你的BANKOFAI_API_KEY填在这里", 
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.mcporter" | Out-Null
-'{"api_key": "你的BANKOFAI_API_KEY填在这里", "base_url": "https://chat.bankofai.io/"}' | Out-File -Encoding utf8 "$env:USERPROFILE\.mcporter\bankofai-config.json"
+'{"api_key": "你的BANKOFAI_API_KEY填在这里", "base_url": "https://chat.ainft.com"}' | Out-File -Encoding utf8 "$env:USERPROFILE\.mcporter\bankofai-config.json"
 ```
 
 </TabItem>
@@ -518,7 +582,7 @@ New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.mcporter" | Out-Nul
 | `~/.mcporter/mcporter.json` | MCP 服务器配置（包括 BNB Chain 私钥，如果你填了的话） |
 | `~/.mcporter/bankofai-config.json` | BANK OF AI 的 API Key |
 | `~/.openclaw/skills/` | 全局安装的技能包 |
-| `.openclaw/skills/` | 工作区级别的技能包（选了选项 2 才有） |
+| `skills/`（位于你运行安装器时所在的目录） | 工作区级别的技能包（选了选项 2 并选 `Project` 才有） |
 | `~/.agent-wallet/` | AgentWallet 加密钱包数据 |
 
 </TabItem>
@@ -529,7 +593,7 @@ New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.mcporter" | Out-Nul
 | `%USERPROFILE%\.mcporter\mcporter.json` | MCP 服务器配置（包括 BNB Chain 私钥，如果你填了的话） |
 | `%USERPROFILE%\.mcporter\bankofai-config.json` | BANK OF AI 的 API Key |
 | `%USERPROFILE%\.openclaw\skills\` | 全局安装的技能包 |
-| `.openclaw\skills\` | 工作区级别的技能包（选了选项 2 才有） |
+| `skills\`（位于你运行安装器时所在的目录） | 工作区级别的技能包（选了选项 2 并选 `Project` 才有） |
 | `%USERPROFILE%\.agent-wallet\` | AgentWallet 加密钱包数据 |
 
 </TabItem>

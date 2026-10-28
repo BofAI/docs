@@ -8,6 +8,40 @@ description: 'MCP Server 的版本发布记录。'
 MCP Server 的版本发布记录。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-10-27</div>
+<div className="changelog-body">
+
+### 包内容、Docker 模式与 HTTP 细节
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span></div>
+
+- npm 包包含 `build/`、`bin/`、`package.json`、`README.md` 与 `LICENSE`；Docker 镜像始终以只读模式运行（`--readonly` 写死）；`/mcp` 的 `GET` / `DELETE` 返回 405、不支持 SSE；`GET /` 返回服务信息；`tron` / `trx` / `testnet` 是可用的网络别名。
+
+👉 [本地部署](/zh-Hans/McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment/) · [工具列表](/zh-Hans/McpServer-Skills/MCP/TRONMCPServer/ToolList/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-23</div>
+<div className="changelog-body">
+
+### TRON MCP Server 文档按代码更正
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span></div>
+
+- **未配置 API Key 时的 RPC**——`main`（tag `v1.1.8`）中，未设置 `TRONGRID_API_KEY` 时主网请求走 `https://hptg.bankofai.io`，设置后走 `api.trongrid.io`。Nile 与 Shasta 始终使用 TronGrid 测试网节点。npm 上的 `1.1.7` 在未配置 Key 时仍使用 `api.trongrid.io`。
+- **工具与提示词**——`write_contract` 没有 `feeLimit` 参数（只有 `deploy_contract` 有）；`tron://networks` 返回 `{"supportedNetworks":[...]}`；只读模式下注册 4 个提示词，而非 6 个。
+- **钱包报错**——常见问题改为引用 agent-wallet 2.x 的真实报错文本（`resolve_wallet could not find a wallet source in config or env`、`Password required for local_secure wallets`、`No active wallet set.`、`MAC mismatch — wrong password or corrupted file`）。agent-wallet 2.3.x 和 2.4.0 都接受别名 `TRON_PRIVATE_KEY` 和 `TRON_MNEMONIC`，但只有在解析不到密码且钱包目录里没有钱包时才会读取这些环境变量，否则会静默忽略。在这条路径上同时设置了私钥和助记词时，agent-wallet 2.3.x 报 `Wallet not configured.`，2.4.0 报 `Provide only one of AGENT_WALLET_PRIVATE_KEY or AGENT_WALLET_MNEMONIC`。
+- **Node.js**——源码检出的 `v1.1.8` 要求 22.23.4+（22.x）或 24.22.1+（24.x）；`npx` 运行的 npm `1.1.7` 声明的是 `>=20`。无论哪种方式，页面都推荐 2026 年 10 月的安全更新版本。云服务快速开始页把硬性要求「Node.js v20.0.0 或更高版本」改为「需要 Node.js 以执行 `npx`」，并推荐 22.23.4+ 或 24.22.1+。
+- **Agent Wallet 安装固定到 2.x**——服务端依赖 `@bankofai/agent-wallet ^2.3.0`，但不带版本号的 `npm install -g @bankofai/agent-wallet` 现在会装上 3.0.0，它没有 `local_secure` 钱包、主密码和 `--save-runtime-secrets`。页面现改用 `npm install -g @bankofai/agent-wallet@2`，并注明 Agent-Wallet 文档描述的是 3.x。
+
+👉 [快速开始](/zh-Hans/McpServer-Skills/MCP/TRONMCPServer/QuickStart/) · [常见问题与排查](/zh-Hans/McpServer-Skills/MCP/TRONMCPServer/FAQ/) · [本地私有化部署](/zh-Hans/McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-09-09</div>
 <div className="changelog-body">
 

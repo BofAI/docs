@@ -12,11 +12,11 @@ Each tool is labeled with a **mode** — "read" or "write":
 - **Read tools**: Only query on-chain data and do not affect any state. They can be used in both cloud services and local deployments.
 - **Write tools**: Modify blockchain state (e.g., transfers, staking, contract interactions). These require a configured wallet (via [Agent Wallet](../../../Agent-Wallet/Intro.md)) to execute.
 
-Write tools are always visible in the AI’s tool list, but wallet availability is checked at execution time. If no wallet is configured, calling a write tool will return an error prompting you to set up a wallet. In **read-only mode** (cloud service or `--readonly` flag), write tools are not registered.
+Write tools are always visible in the AI’s tool list, but wallet availability is checked at execution time. If no wallet is configured, calling a write tool returns a wallet error (see [FAQ](./FAQ.md#wallet-error-messages)). In **read-only mode** (cloud service or `--readonly` flag), the 29 write tools and the 2 write prompts (`prepare_transfer`, `interact_with_contract`) are not registered, leaving 68 read tools and 4 prompts.
 :::
 
 :::tip `network` parameter
-Most tools include an optional `network` parameter used to specify the target network (`mainnet`, `nile`, or `shasta`). If not specified, the default is `mainnet`.
+Most tools include an optional `network` parameter used to specify the target network (`mainnet`, `nile`, or `shasta`; `tron` / `trx` are aliases for `mainnet` and `testnet` for `nile`). If not specified, the default is `mainnet`.
 
 During testing, it is recommended to explicitly set `nile` each time to avoid unintended operations on the mainnet.
 :::
@@ -353,6 +353,8 @@ These tools provide direct access to TRON full-node RPC methods for advanced que
 
 Prompts are pre-defined workflow templates that guide the AI through complex multi-step operations. They help ensure safety (e.g., confirming before transfers) and thoroughness (e.g., checking balance before sending).
 
+The two prompts with "Requires Wallet: Yes" are not registered in read-only mode (cloud service or `--readonly`), so read-only connections see only the other 4.
+
 | Prompt Name | Description | Key Parameters | Requires Wallet |
 | :--- | :--- | :--- | :--- |
 | `prepare_transfer` | Safely prepare and execute a token transfer with balance checks, cost estimation, and user confirmation. | `tokenType`, `recipient`, `amount`, `network`, `tokenAddress` | Yes |
@@ -376,4 +378,4 @@ Resources provide static reference data that the AI can query for context.
 
 | Resource Name | URI | Description |
 | :--- | :--- | :--- |
-| `supported_networks` | `tron://networks` | Returns the list of all supported TRON networks and their configuration (RPC URLs, explorer links, etc.). |
+| `supported_networks` | `tron://networks` | Returns the identifiers of the supported TRON networks as JSON: `{"supportedNetworks": ["mainnet", "nile", "shasta"]}`. RPC URLs and explorer links are not included. |

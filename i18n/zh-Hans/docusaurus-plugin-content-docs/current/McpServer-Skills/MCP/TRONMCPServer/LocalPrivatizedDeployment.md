@@ -29,14 +29,16 @@
 
 | 要求 | 说明 |
 | :--- | :--- |
-| **Node.js** | v20.0.0 或更高版本（[下载](https://nodejs.org/)） |
+| **Node.js** | 推荐 22.23.4+（22.x）或 24.22.1+（24.x），即 2026 年 10 月的安全更新版本（[下载](https://nodejs.org/)）。源码检出的 `main`（tag `v1.1.8`，即下文方式 B）要求这一范围（其 `package.json` 里的版本号仍是 `1.1.7`，因此服务端上报的版本也是 `1.1.7`）；`npx` 运行的 npm 包 `1.1.7`（方式 A）声明的是 `>=20`。 |
 | **TronGrid API Key** | 可选但推荐（[申请地址](https://www.trongrid.io/)） |
 
 验证 Node.js 版本：
 
 ```bash
-node --version  # 应输出 v20.x.x 或更高
+node --version  # 推荐：v22.23.4+ 或 v24.22.1+
 ```
+
+这一要求写在 `package.json` 的 `engines` 字段里：在源码检出中用其他 Node.js 版本执行 `npm install`，会打印 `EBADENGINE` 警告但仍会完成安装；服务端运行时也不会检查 Node.js 版本。
 
 ### 安全原则
 
@@ -50,7 +52,7 @@ node --version  # 应输出 v20.x.x 或更高
 ## 安装步骤
 ### 第一步：配置钱包
 
-钱包决定了 AI 助手以哪个身份执行链上操作。TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行安全的钱包管理。如果没有配置钱包，写入工具会在执行时返回错误提示你设置钱包。
+钱包决定了 AI 助手以哪个身份执行链上操作。TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行安全的钱包管理。如果没有配置钱包，调用写入工具时会返回钱包错误（见[常见问题](./FAQ.md#write-tools-wallet-error)）。
 
 #### Agent Wallet
 
@@ -63,34 +65,38 @@ TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 管理钱�
 | 运行时切换钱包 | 是 |
 | 推荐场景 | 所有使用场景 |
 
-> Agent Wallet 的安装、初始化及详细用法请参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)。
+> TRON MCP Server 依赖 Agent Wallet **2.x**（`@bankofai/agent-wallet ^2.3.0`）。[Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)描述的是 3.x，本服务端尚未使用该版本——请按本页的 2.x 命令操作。
 
-首先，安装 Agent Wallet：
+首先，安装 Agent Wallet 2.x CLI：
 
 ```bash
-npm install -g @bankofai/agent-wallet
+npm install -g @bankofai/agent-wallet@2
 ```
+
+`@2` 会安装最新的 2.x 版本（撰写时为 2.4.0）。不加版本号时 npm 会安装 3.x，它没有 `local_secure` 钱包、主密码和 `--save-runtime-secrets`，下面的步骤将无法使用。
 
 然后，根据你的情况选择以下两种路径之一：
 
 #### 路径 1：生成新钱包（推荐新用户使用）
 
-如果你没有现成的私钥，使用 `agent-wallet start` 生成新钱包，包含加密密钥库和主密码：
+如果你没有现成的私钥，使用 `agent-wallet start local_secure` 生成新钱包，包含加密密钥库和主密码：
 
 ```bash
-agent-wallet start
+agent-wallet start local_secure --save-runtime-secrets
 ```
 
-按照交互式提示设置主密码并生成钱包。Agent Wallet 会自动管理加密密钥库，但服务端在签名时仍然需要这个密码——而直接跑 `agent-wallet start` 并不会持久化它。请二选一：
+按照交互式提示设置主密码并生成钱包。Agent Wallet 会自动管理加密密钥库，但服务端在签名时仍然需要这个密码。`--save-runtime-secrets` 会把它写入 `~/.agent-wallet/runtime_secrets.json`；不加这个参数时密码不会被持久化，你需要改为在 MCP 服务端运行的环境里 export `AGENT_WALLET_PASSWORD`。
 
-- 执行 `agent-wallet start --save-runtime-secrets`，把密码写入 `~/.agent-wallet/runtime_secrets.json`；或
-- 在 MCP 服务端运行的环境里 export `AGENT_WALLET_PASSWORD`。
+如果你已经不带这个参数执行过 `agent-wallet start`，不要为此重新执行它：已有钱包时它只提供 `add`（创建一个新钱包并把它设为当前钱包）和 `exit`（不保存任何内容）两个选项。请 export `AGENT_WALLET_PASSWORD`，或用下面任一命令保存密码：
 
-两者都没有时，调用写操作工具会因为无法解锁 `local_secure` 钱包而失败。密钥库不在 `~/.agent-wallet` 时请用 `AGENT_WALLET_DIR` 指定。
+- `agent-wallet sign msg hello -n tron --save-runtime-secrets`——询问密码并保存，然后用当前钱包签一条测试消息。它在校验密码之前就会保存，所以如果输出 `Wrong password`，请删除 `~/.agent-wallet/runtime_secrets.json` 后重试。
+- `agent-wallet add local_secure --save-runtime-secrets`——先校验密码再保存，但同时会多创建一个钱包（当前钱包不变）。
+
+既没有保存也没有导出密码时，调用写操作工具会因为无法解锁 `local_secure` 钱包而失败。密钥库不在 `~/.agent-wallet` 时请用 `AGENT_WALLET_DIR` 指定。
 
 #### 路径 2：导入已有私钥
 
-如果你已经有想使用的私钥，通过 `AGENT_WALLET_PRIVATE_KEY` 环境变量设置。注意优先级：只有在**解析不到任何密码**（既没有 `runtime_secrets.json`，也没有 `AGENT_WALLET_PASSWORD`）**且**钱包目录里一个钱包都没有时，才会走到这条环境变量路径。如果你已经执行过「路径 1」、保存过运行时密码，或跑过 Openclaw 安装器，密钥库路径会优先生效，该变量会被静默忽略。
+如果你已经有想使用的私钥，通过 `AGENT_WALLET_PRIVATE_KEY` 环境变量设置（Agent Wallet 也接受别名 `TRON_PRIVATE_KEY`，以及通过 `AGENT_WALLET_MNEMONIC` 或 `TRON_MNEMONIC` 设置助记词）。注意优先级：只有在**解析不到任何密码**（既没有 `runtime_secrets.json`，也没有 `AGENT_WALLET_PASSWORD`）**且**钱包目录里一个钱包都没有时，才会走到这条环境变量路径。如果你已经执行过「路径 1」、保存过运行时密码，或跑过 Openclaw 安装器，密钥库路径会优先生效，这些变量会被静默忽略。
 
 ```bash
 export AGENT_WALLET_PRIVATE_KEY=你的私钥
@@ -120,14 +126,22 @@ echo $AGENT_WALLET_PRIVATE_KEY
 
 #### TronGrid API Key
 
-TRON 主网公共 RPC 有严格的频率限制。对于频繁的链上查询，强烈建议配置一个免费的 TronGrid API Key：
+在 `v1.1.8` 起的源码检出中，API Key 还决定了服务端访问哪个主网节点。对于频繁的链上查询，建议配置一个免费的 TronGrid API Key：
 
 ```bash
 # 添加到 ~/.zshrc 或 ~/.bashrc
 export TRONGRID_API_KEY="<你的-TronGrid-API-Key>"
 ```
 
-在 [trongrid.io](https://www.trongrid.io/) 免费注册即可获取。不配置也能使用，但高频操作时可能会遇到限速错误。测试网（Nile、Shasta）受限速影响较小。
+在 [trongrid.io](https://www.trongrid.io/) 免费注册即可获取。该变量对各网络的影响（各版本唯一的差别在于未配置 Key 时的主网）：
+
+| 网络 | 已设置 `TRONGRID_API_KEY` | 未设置 `TRONGRID_API_KEY` |
+| :--- | :--- | :--- |
+| **Mainnet** | `https://api.trongrid.io`，并以 `TRON-PRO-API-KEY` 请求头携带你的 Key（使用你自己的配额） | `v1.1.8` 起的源码检出：回退到 BANK OF AI 节点 `https://hptg.bankofai.io`。npm `1.1.7`（`npx` 运行的版本）：不带 Key 访问 `https://api.trongrid.io` |
+| **Nile** | `https://nile.trongrid.io`（同样携带 Key 请求头） | `https://nile.trongrid.io` |
+| **Shasta** | `https://api.shasta.trongrid.io`（同样携带 Key 请求头） | `https://api.shasta.trongrid.io` |
+
+不配置 Key 也能正常使用，但不带 Key 发往 TronGrid 的请求（npm `1.1.7` 的主网，以及 Nile / Shasta）共用 TronGrid 的公共限流，高频使用时可能遇到限流错误。如果希望主网请求走 TronGrid 并使用你自己的配额，再配置即可。
 
 ---
 
@@ -137,7 +151,7 @@ export TRONGRID_API_KEY="<你的-TronGrid-API-Key>"
 
 #### 方式 A：npx 直接运行（推荐）
 
-无需克隆仓库，通过 `npx` 直接运行最新版本。这也是下方 MCP 客户端配置示例中默认采用的方式。
+无需克隆仓库，通过 `npx` 直接运行最新版本。这也是下文[配置说明](#配置说明)中使用的命令。
 
 ```bash
 npx -y @bankofai/mcp-server-tron
@@ -172,7 +186,7 @@ npx -y @bankofai/mcp-server-tron --http
 npm run start:http
 ```
 
-这会启动一个本地无状态 Streamable HTTP 服务器（默认：`http://localhost:3001/mcp`），每个请求独立处理，不维护会话状态。
+这会启动一个本地无状态 Streamable HTTP 服务器（默认：`http://localhost:3001/mcp`），对 `/mcp` 的 `GET` 和 `DELETE` 返回 `405`（不支持 SSE），`GET /` 返回服务信息。每个请求独立处理，不维护会话状态。
 
 你可以通过环境变量自定义端口和主机：
 
@@ -181,11 +195,11 @@ export MCP_PORT=3001      # 默认：3001
 export MCP_HOST=0.0.0.0   # 默认：0.0.0.0
 ```
 
-Docker 与源码检出的启动脚本还会读取 `MCP_LOG_DIR`（容器内默认 `/app/logs`，源码检出默认 `./logs`）。已发布的 npm 包只包含 `build/` 与 `bin/`，因此该变量不适用于上面的 `npx` 方式。
+Docker 与源码检出的启动脚本还会读取 `MCP_LOG_DIR`（容器内默认 `/app/logs`，源码检出默认 `./logs`）。已发布的 npm 包只包含 `build/`、`bin/`、`package.json`、`README.md` 与 `LICENSE`，因此该变量不适用于上面的 `npx` 方式。
 
 #### 方式 D：Docker 部署
 
-在 Docker 容器中运行 TRON MCP Server，适合隔离、可重现的环境。Docker 镜像默认以**只读 HTTP 模式**运行。
+在 Docker 容器中运行 TRON MCP Server，适合隔离、可重现的环境。Docker 镜像始终以**只读 HTTP 模式**运行：`docker-start.sh` 固定传入 `--readonly`，没有关闭它的开关。
 
 ```bash
 # 1. 创建 .env 文件存放敏感变量（切勿将此文件提交到版本控制）

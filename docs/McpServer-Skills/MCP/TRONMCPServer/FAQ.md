@@ -12,11 +12,15 @@ Connection issues usually occur during the initial configuration phase. If your 
 
 This is the most common issue. Troubleshoot in the following order:
 
-1. **Check Node.js version**. TRON MCP Server requires v20.0.0 or higher:
+1. **Check Node.js version**. What is declared depends on how you run the server:
+   - **`npx -y @bankofai/mcp-server-tron`** runs the npm package `1.1.7`, which declares Node.js `>=20`.
+   - **A source checkout** of `main` (tag `v1.1.8`) requires 22.23.4+ (22.x) or 24.22.1+ (24.x). Its `package.json` still says `1.1.7`, so the server reports version `1.1.7` there too.
+
+   Either way, we recommend the October 2026 security releases, 22.23.4+ or 24.22.1+:
    ```bash
-   node --version  # Should output v20.x.x or higher
+   node --version  # recommended: v22.23.4+ or v24.22.1+
    ```
-   If your version is too low, upgrade Node.js first.
+   If your version is below what your route declares, upgrade Node.js first.
 
 2. **Check that npx is available**. Run `npx --version` in your terminal. If the command is not found, your Node.js installation is incomplete — reinstall it.
 
@@ -47,14 +51,21 @@ When using HTTP mode (`npx -y @bankofai/mcp-server-tron --http`, or `npm run sta
 
 3. **Firewall blocking**. If you're accessing the local HTTP service from another machine, check whether the firewall allows inbound connections on that port.
 
-### Write tools appear but return "Wallet not configured" error
+### Write tools appear but return a wallet error {#write-tools-wallet-error}
 
-As of v1.1.7, write tools (transfers, staking, etc.) are always visible in the AI's tool list, but wallet availability is checked at execution time. If you call a write tool without a configured wallet, it will return an error prompting you to set up a wallet.
+As of v1.1.7, write tools (transfers, staking, etc.) are always visible in the AI's tool list, but wallet availability is checked at execution time. If you call a write tool without a usable wallet, the tool returns an error such as `Error transferring TRX: <reason>`, where `<reason>` comes from Agent Wallet — see [Wallet error messages](#wallet-error-messages) below for what each one means.
 
-To enable write operations, configure [Agent Wallet](../../../Agent-Wallet/Intro.md):
+To enable write operations, set up Agent Wallet **2.x**, the version this server depends on:
 
-- Set `AGENT_WALLET_PASSWORD` environment variable with your master password
+```bash
+npm install -g @bankofai/agent-wallet@2
+agent-wallet start local_secure --save-runtime-secrets
+```
+
+- `--save-runtime-secrets` writes your master password to `~/.agent-wallet/runtime_secrets.json`; alternatively, set the `AGENT_WALLET_PASSWORD` environment variable to it
 - Optionally set `AGENT_WALLET_DIR` if using a custom wallet directory
+
+The [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md) describes Agent Wallet 3.x, which this server does not use yet — use the 2.x commands above.
 
 After configuring, restart your AI client. For detailed instructions, see [Local Private Deployment](./LocalPrivatizedDeployment.md).
 
@@ -66,22 +77,36 @@ If you're connected via the official cloud service or using `--readonly` mode, w
 
 ## Authentication & Key Issues
 
-### "Wallet not configured" error
+### Wallet error messages {#wallet-error-messages}
 
-This means no wallet has been set up for signing transactions. TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for all wallet management. To resolve:
+TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for all wallet management. When a write tool (or `get_wallet_address` / `sign_message`) cannot get a wallet, the error text tells you which case you hit:
 
-1. **Install and initialize Agent Wallet** following the [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md).
-2. **Set the environment variable**:
+| Error text | Meaning |
+| :--- | :--- |
+| `resolve_wallet could not find a wallet source in config or env` | No wallet at all: no password resolves, the wallet directory holds no wallets, and none of `AGENT_WALLET_PRIVATE_KEY`, `TRON_PRIVATE_KEY`, `AGENT_WALLET_MNEMONIC` or `TRON_MNEMONIC` is set. |
+| `Password required for local_secure wallets` | Wallets exist in the wallet directory, but no password resolved — neither `runtime_secrets.json` nor `AGENT_WALLET_PASSWORD`. |
+| `No active wallet set.` | A password resolved, but the wallet directory holds no wallets. In this case the private-key and mnemonic variables are ignored — create or import a wallet with Agent Wallet, or remove the password so the env-var path is used. |
+| `MAC mismatch — wrong password or corrupted file` | A password was found but does not match the keystore (see the next section). |
+| `Wallet not configured.` | Agent Wallet could not even load its configuration — for example a malformed `runtime_secrets.json` or `wallets_config.json`. With agent-wallet 2.3.x (what a source checkout's `package-lock.json` installs), setting both a private key and a mnemonic also ends here, when the env-var path is reached (see below the table). |
+| `Provide only one of AGENT_WALLET_PRIVATE_KEY or AGENT_WALLET_MNEMONIC` | A private key (`AGENT_WALLET_PRIVATE_KEY` or `TRON_PRIVATE_KEY`) and a mnemonic (`AGENT_WALLET_MNEMONIC` or `TRON_MNEMONIC`) are both set and the env-var path is reached, with agent-wallet 2.4.0 — what `npx -y @bankofai/mcp-server-tron` (npm `1.1.7`, dependency `^2.3.0`) installs today. The server passes the text through, e.g. `Error transferring TRX: Provide only one of …`, or `Error: Provide only one of …` from `get_wallet_address`. Unset one of the two. |
+
+Both agent-wallet versions read the private key from `AGENT_WALLET_PRIVATE_KEY` or its alias `TRON_PRIVATE_KEY`, and the mnemonic from `AGENT_WALLET_MNEMONIC` or its alias `TRON_MNEMONIC`. They read these env vars only on the env-var path — when no password resolves **and** the wallet directory holds no wallets. Otherwise the variables are silently ignored, and neither of the both-set errors above can occur.
+
+To resolve the first two:
+
+1. **No wallet yet: install and initialize Agent Wallet 2.x** with `npm install -g @bankofai/agent-wallet@2`, then `agent-wallet start local_secure --save-runtime-secrets`, which also saves the master password to `runtime_secrets.json`. (The [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md) describes 3.x, which this server does not use yet.)
+2. **Wallets already exist: make the password available** — export it:
    ```bash
    export AGENT_WALLET_PASSWORD='<your-master-password>'
    ```
-3. **Restart your AI client** for the changes to take effect.
+   or save it to `runtime_secrets.json` as described in [Local Private Deployment](./LocalPrivatizedDeployment.md) (Path 1). Re-running `agent-wallet start` does not help: with wallets present it only offers `add`, which creates a new wallet and makes it the active one, or `exit`, which saves nothing.
+3. **Restart your AI client** for the changes to take effect. The server resolves the wallet source once and caches it, so a restart is required after changing wallet settings.
 
-### "Agent wallet password incorrect" error
+### "MAC mismatch — wrong password or corrupted file" error
 
-`AGENT_WALLET_PASSWORD` must exactly match the master password generated when you ran `agent-wallet start`. Verify that the wallet directory exists (`ls ~/.agent-wallet/`) and that `AGENT_WALLET_DIR` points to the correct path if you used a custom directory.
+The password the server resolved (from `runtime_secrets.json` or `AGENT_WALLET_PASSWORD`) must exactly match the master password you set when you ran `agent-wallet start`. Verify that the wallet directory exists (`ls ~/.agent-wallet/`) and that `AGENT_WALLET_DIR` points to the correct path if you used a custom directory.
 
-If the password is lost, you'll need to re-initialize. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over — see [CLI Reference → Reset](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset-reset-all-data) and [Agent-Wallet FAQ](../../../Agent-Wallet/FAQ.md) for details.
+If the password is lost, you'll need to re-initialize. **Warning: this wipes all wallets and keys — ensure funds are moved or mnemonics backed up before proceeding.** Run `agent-wallet reset` to wipe and start over. In agent-wallet 2.x (what this server uses), `reset` deletes every file in `~/.agent-wallet` — `master.json`, `wallets_config.json`, `runtime_secrets.json` and the `secret_*.json` keystores. The Agent-Wallet pages describe 3.x, whose `reset` removes only `wallets_config.json`.
 
 ### TronGrid API Key not working
 
@@ -115,7 +140,7 @@ Interacting with smart contracts (including TRC20 token transfers) requires Ener
 **How to resolve:**
 - Estimate cost first: "Estimate how much Energy is needed to call this contract's transfer function"
 - Stake TRX for Energy: "Stake 500 TRX for Energy"
-- If using `write_contract`, have the AI increase the `feeLimit` parameter
+- `write_contract` has no fee-limit parameter, so make sure the wallet holds enough TRX to burn for the Energy shortfall. Only `deploy_contract` accepts a `feeLimit` (in Sun, default 1,000,000,000 = 1000 TRX), which you can ask the AI to raise for a large deployment
 
 ### "Account not found" or "Account not activated"
 
@@ -158,7 +183,7 @@ If this keeps happening, remind the AI: "Please only use tools provided by TRON 
 
 Several common causes and solutions:
 
-- **No TronGrid API Key**: Public RPC has rate limits; adding a free API Key can significantly improve performance
+- **No TronGrid API Key**: Without `TRONGRID_API_KEY`, Mainnet requests go to the BANK OF AI fallback endpoint `https://hptg.bankofai.io` on a source checkout from `v1.1.8`, and to `https://api.trongrid.io` without a key on npm `1.1.7` (what `npx` runs). Setting a free API Key sends them to `https://api.trongrid.io` under your own quota in both versions
 - **Complex multi-tool workflows**: Some operations (like full wallet analysis) require multiple sequential calls — waiting is normal
 - **Use testnet for development**: Nile and Shasta testnets are usually faster
 - **Be more specific in prompts**: Reduce the AI's exploratory calls — tell it directly which tool to use and which network to query
@@ -183,7 +208,13 @@ Yes. Define multiple MCP Server entries in your MCP client configuration — for
 
 ### How do I update to the latest version?
 
-If you're using the `npx` method, you always get the latest published version. To force clearing the cache:
+If you're using the `npx` method, `npx -y @bankofai/mcp-server-tron` does not always fetch the latest release: it can run a copy that is already installed — globally, in the current project, or, on older npm versions, in the npx cache. To always get the latest published version, ask for it explicitly, for example in your MCP client configuration:
+
+```bash
+npx -y @bankofai/mcp-server-tron@latest
+```
+
+To clear the npx cache instead, delete `~/.npm/_npx` (and, if needed, run `npm cache clean --force`). The third-party `clear-npx-cache` package does the same:
 
 ```bash
 npx clear-npx-cache
@@ -200,5 +231,5 @@ npm run build
 
 ### What MCP protocol version is supported?
 
-TRON MCP Server supports MCP protocol version **2025-11-25**, using `@modelcontextprotocol/sdk` 1.22.0 or higher.
+The protocol version is negotiated by `@modelcontextprotocol/sdk`, which the server depends on as `^1.22.0`; a source checkout's `package-lock.json` pins 1.27.1. MCP protocol version **2025-11-25** requires SDK 1.24.1 or later — SDK 1.22.0–1.24.0 top out at 2025-06-18. Older protocol versions requested by the client are also accepted.
 

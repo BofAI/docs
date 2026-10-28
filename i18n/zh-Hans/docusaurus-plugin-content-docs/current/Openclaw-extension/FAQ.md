@@ -10,7 +10,7 @@
 
 **简单来说**：你的电脑上没装 Node.js，或者版本太老了。
 
-**怎么解决**：去 [Node.js 官网](https://nodejs.org/) 下载最新的稳定版（LTS，v20 或更高——向导安装的 `@bankofai/mcp-server-tron` 声明了 `node >= 20`），像装普通软件一样一路点"下一步"装好。然后关掉终端里的黑框框，重新运行一次安装口令。
+**怎么解决**：去 [Node.js 官网](https://nodejs.org/) 下载最新的稳定版（LTS——安装器要求 22.x 为 22.23.4+、24.x 为 24.22.1+，或 26.12.1+；推荐选 Node.js 24），像装普通软件一样一路点"下一步"装好。然后关掉终端里的黑框框，重新运行一次安装口令。
 
 ### 报错里写着 "command not found: git"
 
@@ -62,7 +62,7 @@
 
 ### 凭什么别人能转账，我的 AI 只能查数据？
 
-**原因**：你现在的 AI 是极度安全的"只读模式"。因为你在安装时跳过了 AgentWallet 配置，没有给它留钱包钥匙。
+**原因**：转账和交易都需要 AgentWallet 里的钱包来签名，而你的 AI 找不到可用的钱包。安装器并不允许跳过这一步——首次安装时如果 `agent-wallet start` 失败或被取消，整个安装器都会直接退出——所以这通常说明钱包配置没有走完，或者之后 `~/.agent-wallet` 里的钱包数据被重置或删除了。
 
 **怎么解决**：重新跑一次安装脚本，在 AgentWallet 设置那一关跟着提示认真把钱包配好。配好并重启后，转账和交易功能就会被激活。
 
@@ -83,7 +83,7 @@
 **怎么解决**：
 
 1. **治标**：歇几分钟再问。
-2. **治本**：去 [TronGrid](https://www.trongrid.io/) 免费申请一个专属的 API Key。安装时把这个 Key 填进去，AI 就能跑 VIP 高速通道了。
+2. **治本**：去 [TronGrid](https://www.trongrid.io/) 免费申请一个专属的 API Key。安装器不会询问这个 Key——请自己把它设为环境变量 `TRONGRID_API_KEY`（见「[事后怎么补填 API Key](./QuickStart.md#️-事后怎么补填-api-keyvip-通行证)」），重启 OpenClaw 后，AI 就能跑 VIP 高速通道了。
 
 ---
 
@@ -95,7 +95,7 @@
 
 ### 玩腻了，怎么卸载它们？
 
-最简单粗暴的方法：打开电脑的文件夹，找到 `~/.openclaw/skills/`（Mac/Linux）或 `%USERPROFILE%\.openclaw\skills\`（Windows）目录，把你不想用的技能文件夹直接删掉，然后重启 AI 软件，它就彻底消失了。
+最简单粗暴的方法：打开电脑的文件夹，找到 `~/.openclaw/skills/`（Mac/Linux）或 `%USERPROFILE%\.openclaw\skills\`（Windows）目录，把你不想用的技能文件夹直接删掉，然后重启 AI 软件，技能就没了。MCP 服务条目、`~/.mcporter/bankofai-config.json`、全局 npm 包和 `~/.agent-wallet` 仍会保留。安装器的 Clean 模式会清掉 MCP 条目、已装技能、`~/.x402-config.json` 和 `bankofai-config.json`，并重新初始化 agent-wallet（先 `agent-wallet reset`，再 `start --override`）；它不会卸载全局 npm 包。
 
 ### 我瞎填了一通装坏了，能重新装吗？
 
@@ -110,11 +110,11 @@
 
 ### 安装需要管理员权限吗？
 
-配置文件不需要——它们都写在当前用户目录下，安装器也不会碰注册表或 Program Files。唯一会写到用户目录之外的是带版本号的全局安装 `npm install -g @bankofai/agent-wallet@<版本>`。在 Windows 上它会装到 `%APPDATA%\npm`，无需提权；在 macOS 或 Linux 上若 Node 是系统级安装，则会写入全局 `node_modules` 目录（例如 `/usr/local/lib/node_modules`），可能要求输入密码。
+配置文件不需要——它们都写在当前用户目录下，安装器也不会碰注册表或 Program Files。会写到用户目录之外的是带版本号的全局 npm 安装：`npm install -g @bankofai/agent-wallet@<版本>`（已装有 2.3.1 时跳过），以及 `npm install --global @bankofai/x402-cli@<版本>`（仅在装了 x402-payment 技能时执行）。在 Windows 上它们会装到 `%APPDATA%\npm`，无需提权；在 macOS 或 Linux 上若 Node 是系统级安装，则会写入全局 `node_modules` 目录（例如 `/usr/local/lib/node_modules`），可能要求输入密码。
 
 ### Windows 和 Mac/Linux 的安装体验一样吗？
 
-一模一样。Windows 安装器 (`install.ps1`) 是 Linux/macOS 版本 (`install.sh`) 的完整移植——相同的安装流程、相同的多选菜单、相同的配置文件结构。唯一的区别是文件路径从 `~/` 变成了 `%USERPROFILE%\`，文件权限从 `chmod 600` 变成了 `icacls` ACL。
+基本一样。Windows 安装器 (`install.ps1`) 是 Linux/macOS 版本 (`install.sh`) 的移植——相同的安装流程、相同的多选菜单、相同的配置文件结构。区别在于：文件路径从 `~/` 变成了 `%USERPROFILE%\`，文件权限从 `chmod 600` 变成了 `icacls` ACL；另外是 OpenClaw 检查——如果你的用户目录下没有 `.openclaw` 文件夹，`install.sh` 会给出警告并询问 `Continue anyway? (y/N)`，而 `install.ps1` 会直接报错退出，需要先装好 OpenClaw 再重新运行。
 
 ### 可以用 WSL (Windows Subsystem for Linux) 安装吗？
 

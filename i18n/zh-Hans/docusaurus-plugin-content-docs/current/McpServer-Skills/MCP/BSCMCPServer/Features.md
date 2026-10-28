@@ -18,3 +18,5 @@
 **公共组件**：共享工具程序和类型
 
 **Greenfield**：支持 Greenfield 网络上的文件管理操作，包括文件的上传、下载，以及文件和存储桶 (buckets) 的管理
+
+**Agents（ERC-8004）**：在 ERC-8004 身份注册表上注册和查询链上 AI Agent 身份（`register_erc8004_agent`、`set_erc8004_agent_uri`、`get_erc8004_agent`、`get_erc8004_agent_wallet`）

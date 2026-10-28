@@ -17,7 +17,7 @@ This means different things to different people:
 
 ## What Can It Do?
 
-TRON MCP Server covers almost all common TRON blockchain operations, from read-only queries to asset management, providing **97 tools**, **6 prompt templates**, and **1 resource definition**.
+TRON MCP Server covers almost all common TRON blockchain operations, from read-only queries to asset management, providing **97 tools**, **6 prompt templates**, and **1 resource definition**. In read-only mode (the official cloud service or `--readonly`), write tools and the 2 write prompts are not registered, leaving 68 read tools and 4 prompt templates.
 
 Here is an overview of core capabilities — each one can be triggered via natural language:
 

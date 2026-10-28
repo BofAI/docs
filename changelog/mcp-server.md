@@ -8,6 +8,40 @@ description: 'Release notes for MCP Server.'
 Release notes for MCP Server.
 
 <div className="changelog-entry">
+<div className="changelog-date">Oct 27, 2026</div>
+<div className="changelog-body">
+
+### Package contents, Docker mode and HTTP details
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- The npm package ships `build/`, `bin/`, `package.json`, `README.md` and `LICENSE`; the Docker image always runs read-only (`--readonly` is hard-coded); `GET` / `DELETE /mcp` return 405 and SSE is not supported; `GET /` returns server information; `tron` / `trx` / `testnet` are accepted network aliases.
+
+👉 [Local Deployment](/McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment/) · [Tool List](/McpServer-Skills/MCP/TRONMCPServer/ToolList/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 23, 2026</div>
+<div className="changelog-body">
+
+### TRON MCP Server docs matched to the code
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- **RPC without an API key** — on `main` (tag `v1.1.8`), Mainnet requests without `TRONGRID_API_KEY` go to `https://hptg.bankofai.io`; with a key they go to `api.trongrid.io`. Nile and Shasta always use the TronGrid testnet nodes. npm `1.1.7` still uses `api.trongrid.io` without a key.
+- **Tools and prompts** — `write_contract` takes no `feeLimit` (only `deploy_contract` does); `tron://networks` returns `{"supportedNetworks":[...]}`; read-only mode registers 4 prompts, not 6.
+- **Wallet errors** — the FAQ now quotes the real agent-wallet 2.x error texts (`resolve_wallet could not find a wallet source in config or env`, `Password required for local_secure wallets`, `No active wallet set.`, `MAC mismatch — wrong password or corrupted file`). agent-wallet 2.3.x and 2.4.0 also accept the aliases `TRON_PRIVATE_KEY` and `TRON_MNEMONIC`, but read these env vars only when no password resolves and the wallet directory holds no wallets; otherwise they are silently ignored. On that path, with both a private key and a mnemonic set, agent-wallet 2.3.x gives `Wallet not configured.` and 2.4.0 gives `Provide only one of AGENT_WALLET_PRIVATE_KEY or AGENT_WALLET_MNEMONIC`.
+- **Node.js** — a source checkout of `v1.1.8` requires 22.23.4+ (22.x) or 24.22.1+ (24.x); npm `1.1.7`, which `npx` runs, declares `>=20`. The pages recommend the October 2026 security releases either way. The cloud-service Quick Start replaced its hard requirement "Node.js v20.0.0 or higher" with "Node.js, needed to run `npx`", recommending 22.23.4+ or 24.22.1+.
+- **Agent Wallet install pinned to 2.x** — the server depends on `@bankofai/agent-wallet ^2.3.0`, but an unpinned `npm install -g @bankofai/agent-wallet` now installs 3.0.0, which has no `local_secure` wallets, master password, or `--save-runtime-secrets`. The pages now use `npm install -g @bankofai/agent-wallet@2` and note that the Agent-Wallet docs describe 3.x.
+
+👉 [Quick Start](/McpServer-Skills/MCP/TRONMCPServer/QuickStart/) · [FAQ](/McpServer-Skills/MCP/TRONMCPServer/FAQ/) · [Local Private Deployment](/McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Sep 9, 2026</div>
 <div className="changelog-body">
 

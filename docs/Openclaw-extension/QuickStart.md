@@ -2,6 +2,10 @@
 
 Our goal: **Spend a few minutes following the wizard, clicking a few buttons, and get your AI to successfully fetch its first piece of on-chain data.**
 
+:::note Versions pinned by the installer
+The one-click installer currently installs **agent-wallet 2.3.1** and **Skills v1.5.15**. The wallet steps on this page therefore follow agent-wallet 2.x (master password, `local_secure` wallets), not the 3.x behavior described in the [Agent-Wallet docs](../Agent-Wallet/Intro.md).
+:::
+
 ---
 
 ## 🕹️ Prerequisites
@@ -9,7 +13,7 @@ Our goal: **Spend a few minutes following the wizard, clicking a few buttons, an
 Before you begin, make sure the following basic software is installed on your computer (if not, download and install them from their official websites just like any regular software):
 
 1. **OpenClaw**: Your AI assistant software.
-2. **Node.js** (v20 or above): the wizard installs `@bankofai/mcp-server-tron`, which declares `node >= 20`. *(Extremely important — neither installer enforces 20: the macOS/Linux script only checks that `node` exists, and the Windows script enforces only 18. An older runtime passes pre-flight and fails later.)*
+2. **Node.js** (22.23.4+ on 22.x, 24.22.1+ on 24.x, or 26.12.1+): both installers check the full version against `^22.23.4 || ^24.22.1 || >=26.12.1` and stop before installing anything if Node.js is missing or too old. *(Node.js 24 is the safest choice: it satisfies every component the wizard installs.)*
 3. **Git**: A small tool used to download skill packs.
 
 **Windows users, additional requirements:**
@@ -68,7 +72,7 @@ install.bat
 </TabItem>
 </Tabs>
 
-🚑 **First Aid: Got an error right after pressing Enter?** If the screen says `command not found: node` (Mac/Linux) or `node is not recognized` (Windows), it means your computer is missing the prerequisites mentioned above. 👉 [Click here to see how to fix it](./FAQ.md#error-says-command-not-found-node-or-npm-install-failed)
+🚑 **First Aid: Got an error right after pressing Enter?** If the screen says `Error: Node.js ^22.23.4 || ^24.22.1 || >=26.12.1 is required` (possibly followed by `found vX.Y.Z`; on Windows a similar message without `Error: ` appears under `Installation failed with error:`), it means your computer is missing the prerequisites mentioned above. 👉 [Click here to see how to fix it](./FAQ.md#error-says-command-not-found-node-or-npm-install-failed)
 
 If there are no errors, an English wizard will appear on screen. Think of it as a text-based mini-game with 4 levels:
 
@@ -102,7 +106,7 @@ If you chose `2` (Clean install), the installer lists everything that will be de
 The following data will be permanently deleted:
   • ALL MCP entries in: ~/.mcporter/mcporter.json
   • ALL installed skills (global and workspace)
-  • x402 config file: ~/.x402-config.json
+  • legacy x402 config file: ~/.x402-config.json
   • BANK OF AI local config: ~/.mcporter/bankofai-config.json
   • AgentWallet config will be overwritten by: agent-wallet start --override --save-runtime-secrets
 
@@ -115,9 +119,9 @@ After confirming, the installer automatically removes old skills:
 ```
 Running cleanup...
 
-◇  Found 10 unique installed skill(s)
+◇  Found 14 unique installed skill(s)
 ◇  Removal process complete
-◆  Successfully removed 10 skill(s)
+◆  Successfully removed 14 skill(s)
 
 ✓ Clean install cleanup completed.
 
@@ -130,7 +134,8 @@ Then runs `agent-wallet reset` to completely wipe old wallet data:
 Step 0: AgentWallet Setup
 
 Launching: agent-wallet reset
-This will delete ALL wallet data in: ~/.agent-wallet
+This will delete ALL wallet data in: /home/<you>/.agent-wallet
+   4 file(s): master.json, wallets_config.json, runtime_secrets.json, secret_<id>.json
 
 ✔ Are you sure you want to reset? This cannot be undone. Yes
 ✔ Really delete everything? Last chance! Yes
@@ -209,8 +214,12 @@ If you chose auto-generate in step ②, the master password generated for you wi
 This master password is the key to your AI's wallet. **Lose it and you lose access to the wallet.** Write it down on paper, save it in a password manager — anything but forgetting it.
 :::
 
-:::tip See "Wallet already initialized." during a Normal install upgrade?
-If you've previously installed AgentWallet and chose Normal install, the wizard skips the password setup and lets you enter a Wallet ID and generate a wallet directly. Your previous master password and existing wallets are preserved.
+:::tip Already have wallets? (Normal install upgrade)
+If AgentWallet already has wallets and you chose Normal install, the wizard first shows `Already initialized with N wallet(s), active: <id>` and asks **What would you like to do?**
+- **exit** — keep everything as is; the installer continues to the next level.
+- **add** — choose the wallet type, then unlock with your **existing** master password (`Master Password (enter your existing password to unlock)`; this prompt is skipped if the password was saved to `runtime_secrets.json` by an earlier install). After `Wallet already initialized.`, enter a new Wallet ID and generate a wallet as in steps ③–④; the new wallet becomes the active one. No new password is set.
+
+Your previous master password and existing wallets are preserved either way.
 :::
 
 (🚑 Got stuck with an error? 👉 [Click here to see how to fix AgentWallet installation failures](./FAQ.md#agentwallet-installation-failed))
@@ -272,11 +281,15 @@ Unlike TRON (which uses the encrypted AgentWallet), BNB Chain currently stores y
 
 #### bankofai-recharge (Recharge Assistant)
 
-This one is fully automatic — no input needed! It connects to BANK OF AI's remote recharge service.
+This one is fully automatic — no input needed! It registers the remote server `https://recharge.bankofai.io/mcp` (type `remote` in the add-mcp summary).
 
 ```
 ✓ Configuration saved for bankofai-recharge.
 ```
+
+:::caution The recharge MCP service is offline
+`https://recharge.bankofai.io/mcp` has been taken offline. The installer still selects and registers `bankofai-recharge` by default, but its tools no longer respond, so you can uncheck it in the MCP selection above. To top up your BANK OF AI account, use wallet-cli's [`bai recharge`](../wallet-cli/command-reference.md#bai-recharge) instead.
+:::
 
 ### 🟢 Level 4: Pick Your Skill Packs (Give AI a "Brain")
 
@@ -294,15 +307,20 @@ Select skills installation scope:
 
 Press Enter (or type `1`) to install globally — this way all your OpenClaw workspaces can use these skills.
 
+:::note If you choose `2` (Workspace-level)
+After you pick skills in the picker below, the skills tool asks **Installation scope** (`Project` / `Global`) once more. Choose `Project` to install into a `skills/` folder inside the directory you ran the installer from (`<current directory>/skills/<skill>`); choosing `Global` installs to `~/.openclaw/skills/` anyway, but the installer then compares only the workspace list, so it prints `No new skills were installed.`, skips the API key prompt and `Next steps`, and does not install the x402 CLI. Choose `1` above if you want global skills.
+:::
+
 Then the skill picker launches:
 
 ```
-◇  Found 10 skills
+◇  Found 14 skills
 │
 ◇  Select skills to install (space to toggle)
-│  agent-wallet, bankofai-guide, recharge-skill, SunPerp Perpetual Futures Trading,
-│  SunPump Meme Token Toolkit, SunSwap DEX Trading, TronScan Data Lookup,
-│  USDD / JUST Protocol, wallet-cli, x402-payment
+│  agent-wallet, bankofai-guide, Multi-Sig & Account Permissions, recharge-skill,
+│  SunPerp Perpetual Futures Trading, SunPump Meme Token Toolkit, SunSwap DEX Trading,
+│  TRC20 Token Toolkit, TronScan Data Lookup, TRX Staking & SR Voting, twitter-digest,
+│  twitter-mcp, USDD / JUST Protocol, x402-payment
 ```
 
 Here's what each skill does:
@@ -311,50 +329,87 @@ Here's what each skill does:
 | :--- | :--- |
 | **agent-wallet** | AgentWallet management operations (view wallets, sign transactions) |
 | **bankofai-guide** | Onboarding helper that walks the AI through next steps after installation |
-| **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
-| **SunPerp Perpetual Futures** | Trade perpetual futures on SunPerp |
-| **SunPump Meme Token Toolkit** | Create and trade meme tokens on SunPump; query token info, rankings, holders, and trade history |
-| **TronScan Data Lookup** | Query blockchain data via TronScan |
-| **USDD / JUST Protocol** | Manage USDD stablecoin and JUST Protocol positions |
-| **wallet-cli** | Standalone TRON wallet operations (transfers, staking, voting, signing) via the pinned `wallet-cli` npm package |
-| **x402-payment** | x402 protocol payments (agent-to-agent) |
+| **Multi-Sig & Account Permissions** | Manage TRON multi-sig permissions — keys, thresholds, and co-signed proposals |
 | **recharge-skill** | Check and top up your BANK OF AI balance |
+| **SunPerp Perpetual Futures Trading** | Trade perpetual futures on SunPerp |
+| **SunPump Meme Token Toolkit** | Create and trade meme tokens on SunPump; query token info, rankings, holders, and trade history |
+| **SunSwap DEX Trading** | Swap tokens on SunSwap (TRON's biggest DEX) |
+| **TRC20 Token Toolkit** | TRC20 transfers, approvals, balance queries, and token metadata |
+| **TronScan Data Lookup** | Query blockchain data via TronScan |
+| **TRX Staking & SR Voting** | Stake TRX, vote for Super Representatives, and claim voting rewards |
+| **twitter-digest** | Generate an X/Twitter daily digest (mentions, home timeline, reply opportunities) |
+| **twitter-mcp** | Install and authorize the `xurl` CLI for X/Twitter, or register the hosted X MCP bridge |
+| **USDD / JUST Protocol** | Manage USDD stablecoin and JUST Protocol positions |
+| **x402-payment** | Pay x402-protected HTTP APIs on TRON or BSC through the `x402-cli` command |
 
 After selecting, the installer shows a security risk assessment:
 
 ```
 ◇  Security Risk Assessments
 │                                     Gen               Socket            Snyk
+│  agent-wallet                       Safe              1 alert           High Risk
 │  bankofai-guide                     Safe              0 alerts          High Risk
+│  Multi-Sig & Account Permissions    --                --                --
 │  recharge-skill                     Safe              1 alert           Med Risk
 │  SunPerp Perpetual Futures Trading  --                --                --
-│  SunPump Meme Token Toolkit         --                --                --
-│  SunSwap DEX Trading                --                --                --
-│  TronScan Data Lookup               --                --                --
-│  USDD / JUST Protocol               --                --                --
-│  wallet-cli                         --                --                --
+│  ...
 │  x402-payment                       Safe              1 alert           Med Risk
-│  agent-wallet                       Safe              1 alert           High Risk
 ```
 
-Review the report, then confirm to proceed. When installation completes:
+Review the report, then answer the `Proceed with installation?` prompt with `Yes`. When installation completes:
 
 ```
-◇  Installed 10 skills
+◇  Proceed with installation?
+│  Yes
 │
-│  ✓ agent-wallet → ~/.openclaw/skills/agent-wallet
-│  ✓ bankofai-guide → ~/.openclaw/skills/bankofai-guide
-│  ✓ recharge-skill → ~/.openclaw/skills/recharge-skill
-│  ✓ SunPerp Perpetual Futures Trading → ~/.openclaw/skills/sunperp-perpetual-futures-trading
-│  ✓ SunPump Meme Token Toolkit → ~/.openclaw/skills/sunpump-meme-token-toolkit
-│  ✓ SunSwap DEX Trading → ~/.openclaw/skills/sunswap-dex-trading
-│  ✓ TronScan Data Lookup → ~/.openclaw/skills/tronscan-data-lookup
-│  ✓ USDD / JUST Protocol → ~/.openclaw/skills/usdd-just-protocol
-│  ✓ wallet-cli → ~/.openclaw/skills/wallet-cli
-│  ✓ x402-payment → ~/.openclaw/skills/x402-payment
+◇  Installed 14 skills
+│
+│  ✓ agent-wallet (copied)
+│    → ~/.openclaw/skills/agent-wallet
+│  ✓ bankofai-guide (copied)
+│    → ~/.openclaw/skills/bankofai-guide
+│  ✓ Multi-Sig & Account Permissions (copied)
+│    → ~/.openclaw/skills/multi-sig-account-permissions
+│  ✓ recharge-skill (copied)
+│    → ~/.openclaw/skills/recharge-skill
+│  ✓ SunPerp Perpetual Futures Trading (copied)
+│    → ~/.openclaw/skills/sunperp-perpetual-futures-trading
+│  ✓ SunPump Meme Token Toolkit (copied)
+│    → ~/.openclaw/skills/sunpump-meme-token-toolkit
+│  ✓ SunSwap DEX Trading (copied)
+│    → ~/.openclaw/skills/sunswap-dex-trading
+│  ✓ TRC20 Token Toolkit (copied)
+│    → ~/.openclaw/skills/trc20-token-toolkit
+│  ✓ TronScan Data Lookup (copied)
+│    → ~/.openclaw/skills/tronscan-data-lookup
+│  ✓ TRX Staking & SR Voting (copied)
+│    → ~/.openclaw/skills/trx-staking-sr-voting
+│  ✓ twitter-digest (copied)
+│    → ~/.openclaw/skills/twitter-digest
+│  ✓ twitter-mcp (copied)
+│    → ~/.openclaw/skills/twitter-mcp
+│  ✓ USDD / JUST Protocol (copied)
+│    → ~/.openclaw/skills/usdd-just-protocol
+│  ✓ x402-payment (copied)
+│    → ~/.openclaw/skills/x402-payment
 ```
 
-After skills are installed, the installer enters a configuration phase:
+#### x402 CLI (only if x402-payment is installed)
+
+If `x402-payment` is among your installed skills, the installer then installs the pinned payment CLI globally (it skips this when `x402-cli` 1.0.1 is already present):
+
+```
+Installing @bankofai/x402-cli@1.0.1...
+✓ Installed x402 CLI 1.0.1
+```
+
+This runs `npm install --global @bankofai/x402-cli@1.0.1`, so — like the AgentWallet CLI — it lands in your global npm directory rather than in an OpenClaw folder.
+
+After skills are installed, the installer compares the skill list before and after and runs a configuration phase for each skill it considers new:
+
+:::caution Only on a first install
+"New" means not present in the skill list before this run. That list covers `~/.openclaw/skills/`, the shared `~/.agents/skills/` folder and the skill folders of any other agent on the machine, so where these skills are already in one of them (for example from an earlier install) the installer prints `No new skills were installed.` after the x402 CLI step (an already-installed CLI shows `✓ x402 CLI 1.0.1 is already installed`), skips the prompts below, and the final summary shows only the MCP config file. In that case create the API key file by hand — see [How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation) — and set `TRONSCAN_API_KEY` yourself if you want it.
+:::
 
 #### recharge-skill API Key Configuration
 
@@ -366,9 +421,13 @@ Recharge requests use the remote BANK OF AI recharge MCP endpoint.
 ? Enter BANKOFAI_API_KEY (optional, hidden):
 ```
 
+:::caution Recharging through recharge-skill no longer works
+The remote recharge MCP endpoint that recharge-skill uses for recharges has been taken offline, so recharge requests through this skill fail. To top up, use [`wallet-cli bai recharge`](../wallet-cli/command-reference.md#bai-recharge).
+:::
+
 **Don't have one? Just press Enter to skip.** You can always create the config file later — see "[How to Add API Keys](#️-how-to-add-api-keys-vip-pass-after-installation)" below.
 
-When `Installation Complete!` lights up at the bottom of the screen — congratulations, you've passed all levels!
+When `Installation Complete!` lights up at the bottom of the screen — congratulations, you've passed all levels! The `Installed skills` list and `Next steps` below appear only when the installer detected new skills; otherwise the summary goes straight from the config-file lines to the closing `Repository:` / `Skills:` links.
 
 ```
 ═══════════════════════════════════════
@@ -382,13 +441,17 @@ When `Installation Complete!` lights up at the bottom of the screen — congratu
 ✓ Installed skills:
   • agent-wallet
   • bankofai-guide
+  • Multi-Sig & Account Permissions
   • recharge-skill
   • SunPerp Perpetual Futures Trading
   • SunPump Meme Token Toolkit
   • SunSwap DEX Trading
+  • TRC20 Token Toolkit
   • TronScan Data Lookup
+  • TRX Staking & SR Voting
+  • twitter-digest
+  • twitter-mcp
   • USDD / JUST Protocol
-  • wallet-cli
   • x402-payment
   Verify with: npx skills list -g
 
@@ -439,7 +502,7 @@ Totally get it! You were just browsing during installation and pressed Enter to 
 | Key Name | What's It For? | Where to Get It for Free? |
 | :--- | :--- | :--- |
 | `TRONGRID_API_KEY` | Express lane for the TRON toolbox — without it you'll be throttled | Register for free at [trongrid.io](https://www.trongrid.io/) |
-| `TRONSCAN_API_KEY` | Required for the TronScan data lookup skill | Apply for free at [tronscan.org](https://tronscan.org/#/myaccount/apiKeys) |
+| `TRONSCAN_API_KEY` | Optional for the TronScan Data Lookup skill — without it the skill goes through the BofAI proxy `ts.bankofai.io`; your own key gives higher rate limits | Apply for free at [tronscan.org](https://tronscan.org/#/myaccount/apiKeys) |
 | `BANKOFAI_API_KEY` | Used for topping up or checking balance on BANK OF AI | Get it after logging in at [chat.bankofai.io/key](https://chat.bankofai.io/key) |
 
 
@@ -490,7 +553,8 @@ If you have this key, simply copy and run the following command in the terminal 
 <TabItem value="mac" label="Linux / macOS" default>
 
 ```bash
-mkdir -p ~/.mcporter && echo '{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://chat.bankofai.io/"}' > ~/.mcporter/bankofai-config.json
+mkdir -p ~/.mcporter && echo '{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://chat.ainft.com"}' > ~/.mcporter/bankofai-config.json
+chmod 600 ~/.mcporter/bankofai-config.json   # the installer does this too; the file holds your API key
 ```
 
 </TabItem>
@@ -498,7 +562,7 @@ mkdir -p ~/.mcporter && echo '{"api_key": "paste_your_BANKOFAI_API_KEY_here", "b
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.mcporter" | Out-Null
-'{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://chat.bankofai.io/"}' | Out-File -Encoding utf8 "$env:USERPROFILE\.mcporter\bankofai-config.json"
+'{"api_key": "paste_your_BANKOFAI_API_KEY_here", "base_url": "https://chat.ainft.com"}' | Out-File -Encoding utf8 "$env:USERPROFILE\.mcporter\bankofai-config.json"
 ```
 
 </TabItem>
@@ -518,7 +582,7 @@ After installation, the following files are created on your machine. All sensiti
 | `~/.mcporter/mcporter.json` | MCP server configurations (including BNB Chain private key if provided) |
 | `~/.mcporter/bankofai-config.json` | BANK OF AI API key |
 | `~/.openclaw/skills/` | Globally installed skill packs |
-| `.openclaw/skills/` | Workspace-level skill packs (if you chose option 2) |
+| `skills/` (in the directory you ran the installer from) | Workspace-level skill packs (if you chose option 2, then `Project`) |
 | `~/.agent-wallet/` | AgentWallet encrypted wallet data |
 
 </TabItem>
@@ -529,7 +593,7 @@ After installation, the following files are created on your machine. All sensiti
 | `%USERPROFILE%\.mcporter\mcporter.json` | MCP server configurations (including BNB Chain private key if provided) |
 | `%USERPROFILE%\.mcporter\bankofai-config.json` | BANK OF AI API key |
 | `%USERPROFILE%\.openclaw\skills\` | Globally installed skill packs |
-| `.openclaw\skills\` | Workspace-level skill packs (if you chose option 2) |
+| `skills\` (in the directory you ran the installer from) | Workspace-level skill packs (if you chose option 2, then `Project`) |
 | `%USERPROFILE%\.agent-wallet\` | AgentWallet encrypted wallet data |
 
 </TabItem>

@@ -2,7 +2,7 @@
 
 The goal of this page is simple: **get you connected in 1 minute and make your first blockchain query.**
 
-We'll use the [official cloud service](./OfficialServerAccess.md) for this quick start. The cloud service is read-only — no dependencies to install, no wallet to configure, no API Key required. Just copy a config snippet into your AI client and start asking questions.
+We'll use the [official cloud service](./OfficialServerAccess.md) for this quick start. The cloud service is read-only — no dependencies to install, no wallet to configure, no API Key required. Just paste one install prompt into your AI Agent and start asking questions.
 
 ---
 
@@ -11,12 +11,12 @@ We'll use the [official cloud service](./OfficialServerAccess.md) for this quick
 Before you begin, make sure you have the following installed:
 
 - Any AI client that supports MCP
-- **Node.js v20.0.0 or higher** (needed for `npx` command execution) ([Node.js Download](https://nodejs.org/))
+- **Node.js** — needed to run `npx` ([Node.js Download](https://nodejs.org/)). We recommend the October 2026 security releases: 22.23.4+ (22.x) or 24.22.1+ (24.x)
 
 Verify your Node.js version:
 
 ```bash
-node --version  # should output v20.x.x or higher
+node --version  # recommended: v22.23.4+ or v24.22.1+
 ```
 
 ---
@@ -60,7 +60,7 @@ Check the TRX balance of TRON address TXyz...
 If everything is working, the AI will automatically call the `get_balance` tool and return the TRX balance of that address. Seeing a result means you've successfully connected.
 
 :::info About the Cloud Service's Capabilities
-The configuration above connects to the **official cloud read-only service**, which supports all query operations (checking balances, looking up transactions, reading contract state, etc.) but does not support write operations (transfers, contract calls, etc.). For full read/write capabilities, please refer to [Local Private Deployment](./LocalPrivatizedDeployment.md).
+The install above connects to the **official cloud read-only service**, which supports all query operations (checking balances, looking up transactions, reading contract state, etc.) but does not support write operations (transfers, contract calls, etc.). For full read/write capabilities, please refer to [Local Private Deployment](./LocalPrivatizedDeployment.md).
 :::
 
 ---
@@ -80,7 +80,7 @@ Once connected, try a few more prompts to get a feel for what TRON MCP Server ca
 | "Get the ABI of contract TXyz..." | Read a smart contract interface definition |
 | "Query the latest events triggered by contract TXyz..." | Get contract event logs |
 
-These are just the tip of the iceberg. For the full list of 97 tools and 6 prompt templates, see [Full Capability List](./ToolList.md).
+These are just the tip of the iceberg. For the full list of 97 tools and 6 prompt templates (the read-only cloud service exposes the 68 read tools and 4 of the prompts), see [Full Capability List](./ToolList.md).
 
 ---
 
