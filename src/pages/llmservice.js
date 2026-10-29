@@ -8,7 +8,7 @@ export default function LlmServiceRedirect() {
   useEffect(() => {
     const isZh = pathname.startsWith('/zh-Hans')
     history.replace(isZh ? '/zh-Hans/llmservice/introduction' : '/llmservice/introduction')
-  }, [])
+  }, [history, pathname])
 
   return null
 }
