@@ -115,13 +115,18 @@ module.exports = {
   ],
   plugins: [
     require.resolve('./docusaurus-plugin-global-style'),
-    // 兼容旧链接：/McpServer-Skills/Intro/ 重定向到 Skills 简介（自动覆盖各 locale）
+    // 兼容旧链接：/McpServer-Skills/Intro/ 重定向到 Skills 简介、/x402/cli/ 重定向到 wallet-cli（自动覆盖各 locale）
     [
       '@docusaurus/plugin-client-redirects',
       {
         createRedirects(existingPath) {
           if (existingPath.endsWith('/McpServer-Skills/SKILLS/Intro/') || existingPath.endsWith('/McpServer-Skills/SKILLS/Intro')) {
             return [existingPath.replace('/McpServer-Skills/SKILLS/Intro', '/McpServer-Skills/Intro')]
+          }
+          // 旧 x402 CLI 页面（docs/x402/cli/）已迁到 wallet-cli，保留旧地址
+          const walletCli = existingPath.match(/^(\/zh-Hans)?\/wallet-cli\/((?:quickstart|command-reference|faq)\/)?$/)
+          if (walletCli) {
+            return [`${walletCli[1] || ''}/x402/cli/${walletCli[2] || ''}`]
           }
           if (existingPath === '/llmservice/image-models/pricing/') {
             return ['/llmservice/image-models/grok-imagine-image-2-0/']
