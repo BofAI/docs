@@ -30,11 +30,13 @@ Built on the Model Context Protocol (MCP) architecture, providing full on-chain 
 - **Infrastructure Layer (MCP Server)**: The agent’s **“hands and eyes.”** Provides a unified interface to read blocks, manage wallets, execute transfers, and interact with any contract.
 - **Application Logic Layer (Skills)**: The agent’s **“brain.”** Uses structured instructions (`SKILL.md`) to guide AI in orchestrating underlying tools.
   - **sunswap**: Enables automated DEX swaps.
-  - **x402-payment**: Allows agents to detect payment requirements and execute payments automatically.
+  - **wallet-cli**: Guides agents through wallet-cli for TRON accounts, transfers, signing, and on-chain operations.
 
 ---
 
 ### 3. 🧩 OpenClaw Extension: Financial Assistant for AI Agents
+
+> For new setups, start with Skills and wallet-cli (see [Quick Start](#-quick-start)). OpenClaw remains documented for existing integrations.
 
 OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, aiming to become the “central bank” of the agent economy.
 
@@ -68,9 +70,11 @@ OpenClaw is a financial extension plugin developed by BANK OF AI for AI agents, 
 ### 🤖 For Agents/Buyers
 *Want your agent to have autonomous payment and on-chain interaction capabilities?*
 
-1. **Install OpenClaw**: Configure your environment and connect to the [mcp-server-tron](https://github.com/BofAI/mcp-server-tron).
-2. **Sync Skills**: Load `sunswap` or `x402-payment` from the [skills](https://github.com/BofAI/skills) repository.
-3. **Start Transacting**: Your agent can now automatically process payment requests from sellers and execute settlements.
+1. **Install Skills**: Add the Skills your agent needs, such as `wallet-cli` or `sunswap`, from the [skills](https://github.com/BofAI/skills) repository. See the [Skills quick start](https://docs.bankofai.io/McpServer-Skills/SKILLS/QuickStart/).
+2. **Set up wallet-cli**: Install wallet-cli and configure an account on your own machine. See the [wallet-cli quick start](https://docs.bankofai.io/wallet-cli/quickstart/). Never send a private key, mnemonic, or password to an AI.
+3. **Start Transacting**: Your agent can now pay x402 endpoints with `wallet-cli x402 pay` and run on-chain workflows through Skills.
+
+Already using OpenClaw or the TRON MCP Server? Their docs remain available: [OpenClaw](https://docs.bankofai.io/Openclaw-extension/Intro/) and [TRON MCP Server](https://docs.bankofai.io/McpServer-Skills/MCP/TRONMCPServer/Intro/).
 
 ---
 
