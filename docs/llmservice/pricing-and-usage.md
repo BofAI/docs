@@ -41,6 +41,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Qwen3.8-27B | `$0.22` | `$0.22` | `$0.022` | `$1.60` | - |
 | Qwen3.8-Max | `$2.00` | `$2.00` | `$0.25` | `$6.00` | - |
 | Qwen3.7-Max | `$1.65` | `$1.65` | `$0.33` | `$4.951` | - |
+| Qwen3.7-Flash | `$0.03` | `$0.03` | `$0.006` | `$0.13` | - |
 | Qwen3.6-27B | `$0.19` | `$0.19` | `$0.019` | `$2.99` | - |
 | Hy4 Preview | `$0.834` | `$0.834` | `$0.042` | `$2.501` | - |
 | Hy3 | `$0.132` | `$0.132` | `$0.033` | `$0.528` | - |
@@ -112,6 +113,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **GPT cache-write lifetimes:** GPT-5.6 Sol, Terra, and Luna; GPT-6 Astra, Sol, and Luna; and GPT-6.1 Sol and Terra distinguish 30-minute and 12-hour cache writes, priced at 1.25x and 2.5x the applicable input rate, respectively. These write rates replace the ordinary input charge for those tokens, rather than adding to it. Cache-read rates are the same for both lifetimes.
 
 **Long-context pricing:** Some models use tiered long-context pricing. The table shows their base-tier rates; see the corresponding model detail pages for thresholds, full prices, and billing rules.
+
+**Qwen3.7-Flash:** The table shows implicit-cache prices for inputs up to 32,000 tokens. See the [model detail page](./models/qwen3.7-flash.md) for all three input-length tiers and explicit-cache prices.
 
 **Kimi K3.1 Pro / Highspeed:** The table shows the default 5-minute cache write rates. See the [model detail page](./models/kimi-k3.1-pro.md) for 1-hour cache write prices and cache renewal rules.
 
