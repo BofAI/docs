@@ -55,7 +55,7 @@ Skip the form and follow the steps below to prepare the files and open the PR.
 
 ## Step 1: Prepare the two public files
 
-**Self-hosted gateway**: run and validate your Gateway, then prepare `catalog.json` and `pay.md` using the formats below. Include public endpoints, prices, and payment details only.
+**Self-hosted gateway**: prepare `catalog.json` and `pay.md` using the formats below. Include public endpoints, prices, and payment details only. Before you do, [run and validate your Gateway](/x402/core-concepts/gateway/#run-your-own-gateway).
 
 **Official gateway**: once onboarding is confirmed, fill in the two files using the official addresses assigned to you, following the examples below. The gateway uses one provider ID per payment chain, which differs from your catalog `fqn` — for example `https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron`, `…-bsc`, and `…-base`.
 

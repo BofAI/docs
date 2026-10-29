@@ -55,7 +55,7 @@ description: 把你的 API 上架到 API 目录 —— 填表申请或直接提�
 
 ## 第 1 步：准备两份公开文件
 
-**自建网关**：先运行并验证自己的 Gateway，再按下文格式编写 `catalog.json` 和 `pay.md`，只包含公开接口、价格和收款信息。
+**自建网关**：按下文格式编写 `catalog.json` 和 `pay.md`，只包含公开接口、价格和收款信息。编写前，先[运行并验证自己的 Gateway](/zh-Hans/x402/core-concepts/gateway/#run-your-own-gateway)。
 
 **官方网关**：接入沟通确认后，按分配给你的官方地址填写两份文件即可，格式参考下面的示例。网关按支付链各分配一个 provider ID，与目录里的 `fqn` 不同，例如 `https://x402-gateway.bankofai.io/providers/sunpump-token-launch-tron`、`…-bsc` 和 `…-base`。
 
