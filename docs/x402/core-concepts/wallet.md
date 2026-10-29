@@ -76,7 +76,7 @@ x402 uses typed data signing for secure payment authorization.
 
 ## Token Approval
 
-For the `exact` payment scheme, plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path. The client must authorize the Permit2 contract to transfer tokens — a one-time `approve(Permit2, max)`. On TRON the client SDK auto-broadcasts this approve on the first payment; on EVM it never broadcasts — it attaches a signed, unbroadcast approve for the facilitator to relay when the server advertises a gas-sponsoring extension, and otherwise the allowance must be granted once out of band or verification fails with `permit2_allowance_required`. On TRON, when the resource server advertises `trc20ApprovalResourceSponsoring` (SDK 1.2.0+), the client signs the `approve(Permit2, MaxUint256)` transaction but does not broadcast it — the facilitator temporarily delegates the Energy — and, when needed, Bandwidth — that the payer lacks and broadcasts it, so the payer needs no TRX for that first approve. This requires an activated, single-signature TRON EOA. ERC-3009 tokens (e.g. BSC testnet DHLU) need no approve — they settle gaslessly via `transferWithAuthorization`.
+For the `exact` payment scheme, plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path. The client must authorize the Permit2 contract to transfer tokens — a one-time `approve(Permit2, max)`. On TRON the client SDK auto-broadcasts this approve on the first payment; on EVM it never broadcasts — it attaches a signed EIP-2612 permit or a signed, unbroadcast approve for the facilitator to relay when the server advertises a gas-sponsoring extension, and otherwise the allowance must be granted once out of band or verification fails with `permit2_allowance_required`. On TRON, when the resource server advertises `trc20ApprovalResourceSponsoring` (SDK 1.2.0+), the client signs the `approve(Permit2, MaxUint256)` transaction but does not broadcast it — the facilitator temporarily delegates the Energy — and, when needed, Bandwidth — that the payer lacks and broadcasts it, so the payer needs no TRX for that first approve. This requires an activated, single-signature TRON EOA. Since 2.1.0 the client must register `createTrc20ApprovalResourceSponsoringClientExtension(signer)` from `@bankofai/x402-tron-extensions`; otherwise the payment fails with `trc20_approval_client_extension_not_registered`. ERC-3009 tokens (e.g. official Base USDC) need no approve — they settle gaslessly via `transferWithAuthorization`.
 
 ---
 
@@ -97,7 +97,7 @@ For the `exact` payment scheme, plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, 
 | Network | RPC Endpoint |
 | :------- | :------------ |
 | **Mainnet** | `https://bsc-dataseed.binance.org` |
-| **Testnet** | `https://data-seed-prebsc-1-s1.binance.org:8545` |
+| **Testnet** | `https://bsc-testnet-rpc.publicnode.com` |
 
 ---
 

@@ -19,3 +19,5 @@ The project is divided into the following core functional modules:
 **Common Components**: Shared utilities and types  
 
 **Greenfield**: Support for file management operations on the Greenfield network, including file uploads, downloads, and the management of files and storage buckets  
+
+**Agents (ERC-8004)**: Register and resolve on-chain AI agent identities on the ERC-8004 Identity Registry (`register_erc8004_agent`, `set_erc8004_agent_uri`, `get_erc8004_agent`, `get_erc8004_agent_wallet`)

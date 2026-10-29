@@ -1,19 +1,16 @@
 import ThemedImage from '@theme/ThemedImage';
 
-import Tabs from '@theme/Tabs';
-import TabItem from '@theme/TabItem';
-
 # 完整代码示例
 
 :::tip 为什么要看这个页面？
-在 [SDK 快速开始](./SDK-Guide.md) 中，你已经学会了如何让 Agent-wallet 完成"离线签名"。但在真实的业务中，AI 代理不能只会签名。它需要：**1. 去节点查数据构建交易 → 2. Agent-wallet 签名 → 3. 广播上链。**
+在 [SDK 接入指南](./SDK-Guide.md) 中，你已经学会了如何让 Agent-wallet 完成"离线签名"。但在真实的业务中，AI 代理不能只会签名。它需要：**1. 去节点查数据构建交易 → 2. Agent-wallet 签名 → 3. 广播上链。**
 
-Agent-wallet 专注做好最核心的安全签名步骤（第 2 步）。本页为你提供了一套**"开箱即用"**的完整脚本，结合了 TronGrid 和 Ethers.js / Web3.py，带你跑通真正的全链路闭环。你可以直接复制这些代码用于你的生产环境！
+Agent-wallet 专注做好最核心的安全签名步骤（第 2 步）。本页为你提供了一套**"开箱即用"**的完整脚本，结合了 TronGrid、Ethers.js 与 `@bankofai/agent-wallet` 3.x SDK，带你跑通真正的全链路闭环。你可以直接复制这些代码用于你的生产环境！
 :::
 
 本页走完三个真实场景的完整流程：在 TRON 发送 TRX、在 BSC 发送 BNB、签名 x402 支付许可。每个示例都可以直接运行——复制代码、填入你的地址，就能跑。
 
-文档提供 TypeScript 和 Python 两个版本，点击标签页切换。
+所有示例均为 TypeScript——Agent-wallet 3.x 没有 Python SDK（PyPI 上的 `bankofai-agent-wallet` 停留在 2.4.0）。
 
 ---
 
@@ -22,11 +19,11 @@ Agent-wallet 专注做好最核心的安全签名步骤（第 2 步）。本页�
 运行以下任何示例之前，确保已经完成：
 
 1. 安装 Agent-wallet SDK（详见 [SDK 接入指南](./SDK-Guide.md)）
-2. 通过 CLI 初始化本地钱包，或配置静态模式的环境变量
-3. 设置 `AGENT_WALLET_PASSWORD`（本地 `local_secure` 模式——强烈推荐）
+2. 已用 CLI 配置好钱包——推荐 `wallet_cli` 钱包（参见 [快速开始](../QuickStart.md)）——或设置了环境变量回退
+3. 已在所用测试网上为钱包充值（TRON 地址至少收到过一次 TRX 才会被激活）
 
-:::danger 真金白银操作请勿使用静态模式（`AGENT_WALLET_PRIVATE_KEY`）
-静态模式将你的私钥以明文存储在环境变量中——这恰恰是 Agent-wallet `local_secure` 模式旨在防范的风险。请仅在完全隔离的离线测试环境中使用一次性测试私钥。主网操作请永远使用 `AGENT_WALLET_PASSWORD` 配合本地 Agent-wallet。
+:::danger 真金白银操作请勿使用环境变量回退（`AGENT_WALLET_PRIVATE_KEY`）或 `raw_secret`
+这两种方式都以明文保存私钥。请仅在完全隔离的测试环境中配合一次性私钥使用。主网操作请使用 `wallet_cli`（或 `privy`）钱包。
 :::
 
 ---
@@ -37,7 +34,7 @@ Agent-wallet 专注做好最核心的安全签名步骤（第 2 步）。本页�
 
 **工作原理**：
 
-TRON 交易不能由客户端直接从零构建。流程必须从调用 TronGrid 的 `createtransaction` 接口开始——该接口返回一个包含 `txID` 和 `raw_data` 的未签名交易对象，由网络节点生成。然后把这个对象传给 Agent-wallet 进行本地签名——签名过程完全离线，私钥不会离开本机。最后，把签名后的交易提交给 TronGrid 的 `broadcasttransaction` 接口，发布到链上。
+TRON 交易不能由客户端直接从零构建。流程必须从调用 TronGrid 的 `createtransaction` 接口开始——该接口返回一个包含 `txID` 和 `raw_data` 的未签名交易对象，由网络节点生成。然后把这个对象传给 Agent-wallet 签名——`raw_secret` 在进程内签名，`wallet_cli` 委托给本机的 wallet-cli 子进程，私钥都不会离开本机。最后，把签名后的交易提交给 TronGrid 的 `broadcasttransaction` 接口，发布到链上。
 
 <ThemedImage
   alt="TRON 转账：TronGrid 构建 → Agent-wallet 签名 → TronGrid 广播"
@@ -51,43 +48,11 @@ Agent-wallet 只参与中间的签名步骤，不需要 RPC 连接，也不感�
 
 ### 安装依赖
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
-
 ```bash
 npm install @bankofai/agent-wallet axios
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-本示例使用 `aiohttp`（第三方 HTTP 库）和 `asyncio`（Python 标准库，无需安装）：
-
-```bash
-pip install aiohttp
-```
-
-:::caution 如果出现标准库模块缺失的报错
-如果 `asyncio` 等标准库模块导入失败，通常是因为 pyenv 从源码编译 Python 时缺少系统依赖。先安装以下包，再重新运行 `pyenv install 3.11`：
-
-```bash
-# CentOS / RHEL / Amazon Linux
-sudo yum install -y libffi-devel bzip2-devel openssl-devel readline-devel sqlite-devel xz-devel
-
-# Ubuntu / Debian
-sudo apt-get install -y libffi-dev libbz2-dev libssl-dev libreadline-dev libsqlite3-dev liblzma-dev
-```
-:::
-
-</TabItem>
-</Tabs>
-
-
-
 ### 完整代码
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
 
 ```typescript
 import { resolveWalletProvider } from "@bankofai/agent-wallet";
@@ -101,7 +66,7 @@ async function transferTRX(
   amountSun: number // 1 TRX = 1_000_000 SUN
 ) {
   // 第一步：初始化 Agent-wallet
-  const provider = resolveWalletProvider({ network: "tron:nile" });
+  const provider = resolveWalletProvider({ network: "tron:3448148188" }); // Nile
   const wallet = await provider.getActiveWallet();
 
   // 确保 fromAddress 与钱包地址一致——不匹配会导致 TronGrid 报错
@@ -127,13 +92,12 @@ async function transferTRX(
 
   console.log("未签名 txID：", unsignedTx.txID);
 
-  // 第三步：用 Agent-wallet 本地签名
-  let signedTx: Record<string, unknown>;
-  try {
-    signedTx = JSON.parse(await wallet.signTransaction(unsignedTx));
-  } catch (e) {
-    throw new Error(`signTransaction 返回了无效的 JSON: ${e}`);
+  // 第三步：用 Agent-wallet 签名——返回带类型的结果
+  const signed = await wallet.signTransaction(unsignedTx);
+  if (signed.family !== "tron") {
+    throw new Error("签名结果不是 TRON 交易——请检查钱包网络");
   }
+  const signedTx = signed.transaction;
   if (!signedTx.signature) {
     throw new Error("签名后的交易缺少 signature 字段");
   }
@@ -165,84 +129,10 @@ transferTRX(
 ).catch(console.error);
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-import json
-import aiohttp
-from agent_wallet import resolve_wallet_provider
-
-TRONGRID_API = "https://nile.trongrid.io"  # Nile 测试网；主网改为 https://api.trongrid.io
-
-async def transfer_trx(
-    from_address: str,
-    to_address: str,
-    amount_sun: int,  # 1 TRX = 1_000_000 SUN
-):
-    # 第一步：初始化 Agent-wallet
-    provider = resolve_wallet_provider(network="tron:nile")
-    wallet = await provider.get_active_wallet()
-
-    async with aiohttp.ClientSession() as session:
-        # 第二步：通过 TronGrid 构建未签名交易
-        async with session.post(
-            f"{TRONGRID_API}/wallet/createtransaction",
-            json={
-                "owner_address": from_address,
-                "to_address": to_address,
-                "amount": amount_sun,
-                "visible": True,
-            },
-        ) as resp:
-            unsigned_tx = await resp.json()
-
-        if "txID" not in unsigned_tx:
-            raise ValueError(f"构建交易失败：{unsigned_tx}")
-
-        print("未签名 txID：", unsigned_tx["txID"])
-
-        # 第三步：用 Agent-wallet 本地签名
-        raw_signed = await wallet.sign_transaction(unsigned_tx)
-        try:
-            signed_tx = json.loads(raw_signed)
-        except json.JSONDecodeError as e:
-            raise ValueError(f"signTransaction 返回了无效的 JSON: {e}") from e
-        if "signature" not in signed_tx:
-            raise ValueError("签名后的交易缺少 signature 字段")
-        print("已签名，signature：", signed_tx["signature"])
-
-        # 第四步：通过 TronGrid 广播
-        async with session.post(
-            f"{TRONGRID_API}/wallet/broadcasttransaction",
-            json=signed_tx,
-        ) as resp:
-            broadcast_result = await resp.json()
-
-        if broadcast_result.get("result"):
-            print("广播成功！txID：", signed_tx["txID"])
-        else:
-            print("广播失败：", broadcast_result)
-
-    return signed_tx["txID"]
-
-# 示例调用
-asyncio.run(
-    transfer_trx(
-        from_address="YOUR_TRON_ADDRESS",      # 替换成你的钱包地址
-        to_address="RECIPIENT_TRON_ADDRESS",       # 替换成收款方地址
-        amount_sun=1_000_000,                # 1 TRX
-    )
-)
-```
-
-</TabItem>
-</Tabs>
 
 :::caution 注意事项
 - 测试请使用 Nile 测试网，测试代币从 [Nile Faucet](https://nileex.io/join/getJoinPage) 领取。
-- 切换主网：把 `TRONGRID_API` 改为 `https://api.trongrid.io`，`network` 改为 `tron:mainnet`。
+- 切换主网：把 `TRONGRID_API` 改为 `https://api.trongrid.io`，`network` 改为 `tron:728126428`。3.x 会拒绝 `tron:nile` / `tron:mainnet` 这类别名。
 :::
 
 :::tip `visible: true` 与地址格式
@@ -262,7 +152,7 @@ asyncio.run(
 
 **工作原理**：
 
-EVM 交易需要调用方自己构建交易对象。与 TRON 不同，EVM 交易的字段（`nonce`、`gas`、`chainId` 等）需要通过 RPC 查询当前链状态后手动填入，没有集中式 API 帮你生成。未签名交易构建完成后，传给 Agent-wallet 进行本地签名，返回十六进制编码的已签名交易，最后通过 `sendRawTransaction` 广播。
+EVM 交易需要调用方自己构建交易对象。与 TRON 不同，EVM 交易的字段（`nonce`、`gas`、`chainId` 等）需要通过 RPC 查询当前链状态后手动填入，没有集中式 API 帮你生成。未签名交易构建完成后，传给 Agent-wallet 签名，返回 `{ family: "evm", rawTransaction }`，其中是十六进制编码的已签名交易，最后通过 `sendRawTransaction` 广播。
 
 <ThemedImage
   alt="EVM 转账：RPC 构建 → Agent-wallet 签名 → RPC 广播"
@@ -276,34 +166,18 @@ EVM 交易需要调用方自己构建交易对象。与 TRON 不同，EVM 交易
 
 ### 安装依赖
 
-<Tabs>
-<TabItem value="ts" label="TypeScript">
-
 ```bash
 npm install @bankofai/agent-wallet ethers
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```bash
-pip install web3
-```
-
-</TabItem>
-</Tabs>
-
 ### 完整代码
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
 
 ```typescript
 import { resolveWalletProvider } from "@bankofai/agent-wallet";
 import { ethers } from "ethers";
 
 // BSC 测试网
-const RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545";
+const RPC_URL = "https://bsc-testnet-rpc.publicnode.com";
 const CHAIN_ID = 97; // BSC 测试网；主网用 56
 
 async function transferBNB(
@@ -338,13 +212,16 @@ async function transferBNB(
 
   console.log("交易已构建，nonce：", nonce);
 
-  // 第四步：用 Agent-wallet 本地签名
-  const signedTxHex = await wallet.signTransaction(unsignedTx);
+  // 第四步：用 Agent-wallet 签名——返回带类型的结果
+  const signed = await wallet.signTransaction(unsignedTx);
+  if (signed.family !== "evm") {
+    throw new Error("签名结果不是 EVM 交易——请检查钱包网络");
+  }
   console.log("已签名");
 
   // 第五步：广播
-  // signTransaction 返回的十六进制不带 '0x' 前缀；ethers 需要加上
-  const txResponse = await rpcProvider.broadcastTransaction("0x" + signedTxHex);
+  // rawTransaction 是不带 '0x' 前缀的十六进制；ethers 需要加上
+  const txResponse = await rpcProvider.broadcastTransaction("0x" + signed.rawTransaction);
   console.log("广播成功！txHash：", txResponse.hash);
 
   // 等待确认（可选 — 添加超时以防止无限阻塞）
@@ -365,82 +242,6 @@ transferBNB(
 ).catch(console.error);
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-import asyncio
-from agent_wallet import resolve_wallet_provider
-from eth_utils import to_checksum_address
-from web3 import AsyncWeb3
-
-# BSC 测试网
-RPC_URL = "https://data-seed-prebsc-1-s1.binance.org:8545"
-CHAIN_ID = 97  # BSC 测试网；主网用 56
-
-async def transfer_bnb(to_address: str, amount_ether: str):
-    # 第一步：初始化 Agent-wallet
-    provider = resolve_wallet_provider(network=f"eip155:{CHAIN_ID}")
-    wallet = await provider.get_active_wallet()
-    from_address = await wallet.get_address()
-
-    # 第二步：通过 RPC 查询 nonce 和 gas 信息
-    w3 = AsyncWeb3(AsyncWeb3.AsyncHTTPProvider(RPC_URL))
-    nonce = await w3.eth.get_transaction_count(from_address, "latest")
-    fee_data = await w3.eth.fee_history(1, "latest", [50])
-    base_fee = fee_data["baseFeePerGas"][-1]
-    priority_fee = await w3.eth.max_priority_fee
-
-    # 第三步：构建未签名交易
-    unsigned_tx = {
-        # eth-account 不接受非 checksum 格式的地址
-        "to": to_checksum_address(to_address),
-        "value": w3.to_wei(amount_ether, "ether"),
-        "gas": 21000,
-        "maxFeePerGas": base_fee + priority_fee,
-        "maxPriorityFeePerGas": priority_fee,
-        "nonce": nonce,
-        "chainId": CHAIN_ID,
-        "type": 2,  # EIP-1559
-    }
-
-    print("交易已构建，nonce：", nonce)
-
-    # 第四步：用 Agent-wallet 本地签名
-    signed_tx_hex = await wallet.sign_transaction(unsigned_tx)
-    print("已签名")
-
-    # 第五步：广播
-    raw = signed_tx_hex[2:] if signed_tx_hex.startswith("0x") else signed_tx_hex
-    tx_hash = await w3.eth.send_raw_transaction(bytes.fromhex(raw))
-    print("广播成功！txHash：", tx_hash.hex())
-
-    # 可选：等待确认
-    # 注意：此调用会阻塞事件循环最多 `timeout` 秒。
-    # 生产环境的 AI Agent 建议在后台任务中执行，
-    # 或使用 asyncio.wait_for() 配合更短的超时和重试逻辑。
-    try:
-        receipt = await asyncio.wait_for(
-            w3.eth.wait_for_transaction_receipt(tx_hash),
-            timeout=120
-        )
-        print("已在区块中确认：", receipt["blockNumber"])
-    except asyncio.TimeoutError:
-        print("等待确认超时——交易可能仍会被确认。txHash：", tx_hash.hex())
-
-    return tx_hash.hex()
-
-# 示例调用
-asyncio.run(
-    transfer_bnb(
-        to_address="0xYOUR_RECIPIENT_ADDRESS",  # 替换成收款方地址
-        amount_ether="0.001",
-    )
-)
-```
-
-</TabItem>
-</Tabs>
 
 :::caution 注意事项
 - 测试请使用 BSC 测试网（chainId=97），测试代币从 [BSC Faucet](https://testnet.binance.org/faucet-smart) 领取。
@@ -455,30 +256,27 @@ asyncio.run(
 
 **工作原理**：
 
-x402 支付不是直接发一笔转账，而是"先签名、验证后放行"的模型。代理对一个 `TransferWithAuthorization` 结构（EIP-712 格式）进行签名，把得到的签名随请求一起发给服务器作为支付凭证。服务器验证签名有效后才返回内容。代理不需要等待链上确认——延迟极低。
+x402 支付不是直接发一笔转账，而是"先签名、验证后放行"的模型。代理对一个 `TransferWithAuthorization` 结构（EIP-712 格式）进行签名，把得到的签名随请求一起发给服务器作为支付凭证。服务器验证签名后，通过 facilitator 完成结算，结算成功才返回内容；结算失败则返回 `402`。Agent-wallet 只负责本地签名，自己不会广播任何交易。
 
 :::note 该签哪个结构
 本节签的是 EIP-3009 的 `TransferWithAuthorization`——Base USDC 在 x402 `exact` 方案下使用的授权结构。它和仓库自带 x402 示例（`bsc-x402-sign-typed-data.ts`、`tron-x402-sign-typed-data.ts`）里的 `PaymentPermit` 结构并不相同：后者的域名是 `x402PaymentPermit`，主类型为 `PaymentPermitDetails`，字段是 `{ buyer, amount, nonce }`。以服务端在 `402` 响应里声明的结构为准。采用哪种授权方式取决于代币而非链：TRON 的 USDT/USDD 与 BSC 的 USDT/USDC 走 Permit2，而 Base 官方 USDC 这类 EIP-3009 代币走 `transferWithAuthorization`——详见[网络与代币支持](../../x402/core-concepts/network-and-token-support.md)。
 :::
 
 <ThemedImage
-  alt="x402 PaymentPermit：先签名，验证通过再放行"
+  alt="x402 支付授权：先签名，验证通过再放行"
   sources={{
     light: '/img/diagrams/agent-wallet-x402-permit-flow.zh.light.svg',
     dark: '/img/diagrams/agent-wallet-x402-permit-flow.zh.svg',
   }}
 />
 
-PaymentPermit 数据由 x402 SDK 根据服务器返回的支付参数自动构建，Agent-wallet 只负责最后的签名步骤。下面的示例展示了底层签名逻辑，适用于需要自定义集成或绕过 x402 SDK 的场景。
-
-<Tabs>
-<TabItem value="ts" label="TypeScript">
+授权数据由 x402 SDK 根据服务器返回的支付参数自动构建，Agent-wallet 只负责最后的签名步骤。下面的示例展示了底层签名逻辑，适用于需要自定义集成或绕过 x402 SDK 的场景。
 
 ```typescript
 import { resolveWalletProvider } from "@bankofai/agent-wallet";
-import type { Eip712Capable } from "@bankofai/agent-wallet";
+import type { Eip712Capable, Wallet } from "@bankofai/agent-wallet";
 
-async function signPaymentPermit(authorization: {
+async function signTransferWithAuthorization(authorization: {
   from: string;
   to: string;
   value: string;
@@ -487,6 +285,7 @@ async function signPaymentPermit(authorization: {
   nonce: string;
 }) {
   // 初始化 Agent-wallet（EVM 钱包，network 必须与 x402 支付网络匹配）
+  // 使用 wallet_cli 钱包时，Base 需要 wallet-cli 4.14.0 及以上（更早的版本会报 network_mismatch）
   const provider = resolveWalletProvider({ network: "eip155:8453" }); // Base 主网
   const wallet = await provider.getActiveWallet();
 
@@ -519,67 +318,22 @@ async function signPaymentPermit(authorization: {
   };
 
   // signTypedData 定义在 Eip712Capable 上，而不在基础的 Wallet 接口上
-  const signer = wallet as unknown as Eip712Capable;
+  if (!("signTypedData" in wallet)) {
+    throw new Error("该钱包不支持结构化数据签名");
+  }
+  const signer = wallet as Wallet & Eip712Capable;
 
-  // 用 Agent-wallet 本地签名
+  // 用 Agent-wallet 签名（返回不带 0x 前缀的 hex 签名）
   const signature = await signer.signTypedData(typedData);
-  console.log("PaymentPermit 签名：", signature);
+  console.log("TransferWithAuthorization 签名：", signature);
 
   return signature;
 }
 ```
 
-</TabItem>
-<TabItem value="python" label="Python">
-
-```python
-from agent_wallet import resolve_wallet_provider
-
-async def sign_payment_permit(authorization: dict) -> str:
-    # 初始化 Agent-wallet（EVM 钱包，network 必须与 x402 支付网络匹配）
-    provider = resolve_wallet_provider(network="eip155:8453")  # Base 主网
-    wallet = await provider.get_active_wallet()
-
-    # 构建 EIP-712 结构化数据（与 x402 协议规范对齐）
-    typed_data = {
-        "types": {
-            "EIP712Domain": [
-                {"name": "name", "type": "string"},
-                {"name": "version", "type": "string"},
-                {"name": "chainId", "type": "uint256"},
-                {"name": "verifyingContract", "type": "address"},
-            ],
-            "TransferWithAuthorization": [
-                {"name": "from", "type": "address"},
-                {"name": "to", "type": "address"},
-                {"name": "value", "type": "uint256"},
-                {"name": "validAfter", "type": "uint256"},
-                {"name": "validBefore", "type": "uint256"},
-                {"name": "nonce", "type": "bytes32"},
-            ],
-        },
-        "primaryType": "TransferWithAuthorization",
-        "domain": {
-            "name": "USD Coin",
-            "version": "2",
-            "chainId": 8453,
-            "verifyingContract": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",  # Base USDC
-        },
-        "message": authorization,
-    }
-
-    # 用 Agent-wallet 本地签名
-    signature = await wallet.sign_typed_data(typed_data)
-    print("PaymentPermit 签名：", signature)
-
-    return signature
-```
-
-</TabItem>
-</Tabs>
 
 :::tip
-x402 SDK 会自动构建 PaymentPermit 数据并调用签名接口，通常不需要手写这段代码。上面的示例展示了底层签名逻辑，适用于需要自定义集成的场景。详见 [x402 协议文档](../../x402/index.md)。
+x402 SDK 会自动构建授权数据并调用签名接口，通常不需要手写这段代码。上面的示例展示了底层签名逻辑，适用于需要自定义集成的场景。详见 [x402 协议文档](../../x402/index.md)。
 :::
 
 ---
@@ -590,15 +344,22 @@ Agent-wallet 仓库中还包含更多可直接运行的进阶示例：
 
 | 示例 | 说明 |
 | :--- | :--- |
+| `tron-sign-and-broadcast` | 通过 TronGrid 构建 TRX 转账、签名并广播 |
+| `bsc-sign-and-broadcast` | 构建、签名并广播 BSC 交易 |
+| `wallet-cli-sign` | 通过已配置的 `wallet_cli` 钱包签名 |
 | `dual-sign-typed-data-from-private-key` | 用同一个私钥在 TRON 和 EVM 上签名 EIP-712 数据 |
 | `switch-active-wallet` | 在代码中切换多个钱包 |
-| `create-wallet-provider` | 不使用自动解析，直接实例化 Provider（仅 TypeScript） |
+| `create-wallet-provider` | 用 `resolveWalletProvider` 解析钱包 Provider |
 | `tron-x402-sign-typed-data` | 在 TRON 上签名 x402 PaymentPermit |
 | `bsc-x402-sign-typed-data` | 在 BSC 上签名 x402 PaymentPermit |
 | `verify-tron-privy-typed-data` | 验证 Privy TRON EIP-712 签名 |
 | `compare-sign-consistency` | 跨钱包签名一致性测试 |
 
-仓库当前提供 [TypeScript 示例](https://github.com/BofAI/agent-wallet/tree/main/packages/typescript/examples)。
+参见 [TypeScript 示例](https://github.com/BofAI/agent-wallet/tree/main/packages/typescript/examples)。
+
+:::tip 通过 wallet-cli 完成 TRON 转账
+使用 `wallet_cli` 钱包时，也可以让 wallet-cli 负责构建和广播 TRON 转账：`@bankofai/agent-wallet/integrations/wallet-cli` 中的 `signAndBroadcast` 会依次完成构建 → 签名 → 广播，并返回 `stage: "submitted"`；传入 `wait: true` 时还会轮询交易状态，直到确认、失败或超时。这些工具仅支持 TRON，主网（`tron:728126428`）需要显式传入 `confirmMainnet: true`。
+:::
 
 ---
 

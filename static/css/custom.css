@@ -605,17 +605,6 @@ html[data-theme='light'] .table-of-contents__link {
 }
 
 /**
-* Hide On this page
-*/
-.tocCollapsibleButton_TO0P {
-  display: none !important;
-}
-
-button[class*='tocCollapsibleButton'] {
-  display: none !important;
-}
-
-/**
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
  * This source code is licensed under the MIT license found in the

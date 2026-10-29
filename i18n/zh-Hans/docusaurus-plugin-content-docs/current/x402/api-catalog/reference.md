@@ -59,7 +59,7 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| `network` | string | 该路由结算所在的标准 CAIP-2 链 ID（如 `tron:0x2b6653dc`、`eip155:56`、`eip155:8453`）。旧的 TRON 别名如 `tron:nile` 会被 schema 校验拒绝。 |
+| `network` | string | 该路由结算所在的 CAIP-2 链 ID（如 `tron:0x2b6653dc`、`eip155:56`、`eip155:8453`）。TRON 只接受[链 ID](#链-id) 中列出的十六进制形式；`tron:nile` 之类的别名和十进制形式 `tron:728126428` 都会被目录的校验拒绝。 |
 | `provider` | string | 处理该网络的 gateway provider `fqn` |
 | `scheme` | string | 该路由的 x402 支付方案：`exact`，或在 TRON 上 `exact_gasfree` —— 由每条路由各自声明 |
 | `assetTransferMethod` | string | 每条 `exact` 路由都**必须填写**：TRON/BSC 路由使用 `permit2`，Base USDC 路由使用 `eip3009`。只有 `exact_gasfree` 路由应省略该字段。 |
@@ -68,7 +68,7 @@ description: catalog.json / pay.md 的字段定义、合法类目与链 ID，以
 构建时该字段以 `x402_routes` 透传到产物。存在时，调用方/Agent 按目标支付链选择对应路由；顶层 `url` 仍是默认路由。
 
 :::note GasFree 路由
-在 TRON 上，可以为同一端点在 `exact` 路由之外再加一条 `exact_gasfree` 路由：由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需 TRX。GasFree 路由仅限 TRON，且不能带 `assetTransferMethod`。自 x402 SDK 1.0.1 起（当前版本 1.2.0），relayer 费用由客户端估算，因此目录路由**不得**再发布旧的 `fee` 或 `feeConfig` 字段。
+在 TRON 上，可以为同一端点在 `exact` 路由之外再加一条 `exact_gasfree` 路由：由 relayer 代付网络能量、并从支付代币里扣除手续费，付款方无需 TRX。GasFree 路由仅限 TRON，且不能带 `assetTransferMethod`。自 x402 SDK 1.0.1 起，relayer 费用由客户端估算，因此目录路由**不得**再发布旧的 `fee` 或 `feeConfig` 字段。
 :::
 
 例如一个端点可以为每条支持的链各提供一条路由 —— TRON 主网、BSC 主网和 Base 主网，各有自己的 `provider` 和 `scheme`。调用时把 `wallet-cli x402 pay` 指向所选路由的 `url`，并传入匹配的 `--network` / `--scheme`：
@@ -88,7 +88,7 @@ wallet-cli x402 pay --dry-run -o json 'https://x402-gateway.bankofai.io/provider
 
 ### status 块
 
-`status` 为选填，描述服务各环节的状态，包含 `catalog` / `gateway` / `payment` / `upstream` 四个键。未提供时，构建产物（服务详情）会自动填充默认值：
+`status` 为选填，描述服务各环节的状态，包含 `catalog` / `gateway` / `payment` / `upstream` 四个键；填写时四个键都必须给出。未提供时，构建产物（服务详情）会自动填充默认值：
 
 ```json
 { "catalog": "listed", "gateway": "unknown", "payment": "unknown", "upstream": "unknown" }
@@ -105,7 +105,7 @@ wallet-cli x402 pay --dry-run -o json 'https://x402-gateway.bankofai.io/provider
 
 ## pay.md
 
-与 `catalog.json` 同目录提交、面向人和 Agent 的可读调用说明，为**必交**文件。建议包含：服务基本信息（FQN、入口地址、类目、结算链）、各端点的地址与价格，以及可直接复制的调用示例。目录仓库的 CI 测试要求包含带 `--network tron:728126428` 和 `--scheme exact` 的 `wallet-cli x402 pay` 示例、提到 `exact_gasfree`，并覆盖 Base 主网（`eip155:8453`）。该文件与 `catalog.json` 一样会经过敏感信息扫描（见下）。
+与 `catalog.json` 同目录提交、面向人和 Agent 的可读调用说明，为**必交**文件。建议包含：服务基本信息（FQN、入口地址、类目、结算链）、各端点的地址与价格，以及可直接复制的调用示例。目录仓库的 CI 测试要求包含带 `--network tron:728126428` 和 `--scheme exact` 的 `wallet-cli x402 pay` 示例、提到 `exact_gasfree`，并覆盖 Base 主网（须出现 `Base Mainnet`、`eip155:8453`、`-base`、`USDC` 和 `EIP-3009`，不得出现 `Sepolia` 或 `eip155:84532`）。该文件与 `catalog.json` 一样会经过敏感信息扫描（见下）。
 
 ## 合法类目
 
@@ -121,6 +121,10 @@ security   shopping    storage     translation
 ## 链 ID
 
 `chains` 采用 CAIP-2 风格的链标识，主网与测试网均可识别：
+
+:::note TRON ID 格式
+目录 schema 只接受下表中十六进制形式的 TRON 链 ID。x402 SDK（2.0.0 起）和 Wallet CLI 使用十进制 CAIP-2 ID —— `tron:728126428`（主网）、`tron:3448148188`（Nile）、`tron:2494104990`（Shasta）。SDK 仍把十六进制值作为同一条链的已弃用别名接受；Wallet CLI 的全局 `--network`（`x402 pay` 和账户类命令使用）不接受——请用十进制 ID 或 `tron`、`nile`、`shasta` 等别名；只有目录筛选 `x402 provider-list --network` 也接受十六进制写法。因此 CLI 示例传 `--network tron:728126428`，而 `catalog.json` 写 `tron:0x2b6653dc`。
+:::
 
 | 链 | ID |
 |---|---|
@@ -213,6 +217,8 @@ CI 构建后生成静态快照 `dist/`，由 Catalog Server 通过 `/api/` 路�
 - **`/api/status.json`**：`{ version, generated_at, provider_count, status }`，`status` 为 `ok` 时表示构建正常。
 
 ## 本地构建与运行
+
+需要 Python 3.11 或更高版本。
 
 ```bash
 # 安装校验依赖（jsonschema）

@@ -11,7 +11,7 @@ x402 revives the long-unused HTTP `402 Payment Required` status code and transfo
 
 #### Is x402 a commercial product?
 
-**No.** x402 is an open-source blockchain implementation of the x402 protocol, released under the MIT license. You are free to use it without purchasing any commercial product.
+**No.** x402 is an open-source blockchain implementation of the x402 protocol. The [repository](https://github.com/BofAI/x402) is MIT-licensed, while the published npm packages `@bankofai/x402-tron` and `@bankofai/x402-tron-extensions` declare `Apache-2.0` in their `package.json` (as do the official `@x402/*` packages). You are free to use it without purchasing any commercial product.
 
 #### Why replace traditional payment channels or API keys?
 
@@ -27,13 +27,13 @@ Not at all. Any Web API or content provider—whether Web3-native or traditional
 
 #### What languages and frameworks are supported?
 
-x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages:
+x402 is a **TypeScript-only** SDK: the TRON packages are published as `@bankofai/x402-tron` and `@bankofai/x402-tron-extensions`, and Core, EVM and the framework integrations are the official `@x402/*` packages:
 
 - **Server middleware**: Express, Fastify, Hono, Next.js
-- **Client**: wrapped `fetch` (`@bankofai/x402-fetch`), Axios, MCP transport
+- **Client**: wrapped `fetch` (`@x402/fetch`), Axios, MCP transport
 - **Facilitator**: chain-agnostic engine with per-scheme verify + settle
 
-The previous Python SDK lives under `legacy/` for reference.
+The retired Python SDK and the old root `legacy/` archive were removed in x402 v2.0.0, and the compatibility npm packages under `typescript/packages/legacy/` in v2.1.0.
 
 ---
 
@@ -70,7 +70,7 @@ Common pricing models include:
 
 x402 defines five named payment schemes. Four are available end to end; `auth-capture` currently ships client-side support only:
 
-- **`exact`**: Pay the exact advertised amount. EIP-3009 tokens (e.g. official Base USDC and BSC testnet DHLU) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
+- **`exact`**: Pay the exact advertised amount. EIP-3009 tokens (e.g. official Base USDC) settle gaslessly via `transferWithAuthorization`; plain ERC-20/TRC-20 tokens (e.g. BSC USDC/USDT, TRON USDT/USDD) settle via the Permit2 path with a one-time `approve(Permit2)`. The `exact` wire payload conforms to the **x402 Foundation** v2 spec.
 - **`upto`**: Usage-based billing — the client signs a Permit2 authorization for up to a **maximum**; the server settles only the **real usage** (≤ max). Ideal for **metered billing**, **LLM token usage**.
 - **`batch-settlement`**: Payment-channel for high-frequency micro-payments — deposit once, pay many requests with off-chain vouchers, settle in one batch tx. Includes a refund path.
 - **`exact_gasfree`** (TRON only): Allows buyers to pay with USDT/USDD without holding TRX for gas. A relayer pays the on-chain energy via the GasFree API — no API keys required on the client side. The relayer deducts its own fee from the payment token, on top of the payment amount.
@@ -82,10 +82,10 @@ x402 defines five named payment schemes. Four are available end to end; `auth-ca
 
 - A stock v2 client can directly access this SDK's `exact` protected endpoints with no project-specific adapter layer.
 - This SDK's client can pay v2-compatible servers directly.
-- In the V2 structure, transfer authorization data is carried in the `payload.authorization` field (a structured object).
-- BSC USDT/USDC are plain ERC-20s (no ERC-3009). They settle via the Permit2 path under the `exact` scheme — the client auto-broadcasts a one-time `approve(Permit2)` on first payment. ERC-3009 tokens like BSC testnet **DHLU** settle gaslessly with no approve.
+- In the V2 structure, transfer authorization data is a structured object: `payload.authorization` on the EIP-3009 path, `payload.permit2Authorization` on the Permit2 path.
+- BSC USDT/USDC are plain ERC-20s (no ERC-3009). They settle via the Permit2 path under the `exact` scheme and need a one-time `approve(Permit2)`. On EVM the client never broadcasts it: it must already be in place, or be relayed by the facilitator through a gas-sponsoring extension the server advertises — otherwise the request fails with `permit2_allowance_required`.
 - Base Mainnet official USDC uses EIP-3009 under `exact`: the payer signs `transferWithAuthorization`, so no Permit2 approval is required.
-- The `legacy/examples/bsc-testnet-smoke/` directory (part of the `legacy/` tree, kept for reference) contains smoke tests for bidirectional interoperability (Coinbase official client → BANK OF AI server, BANK OF AI client → Coinbase official server) that you can use as a debugging and integration reference.
+- The former `legacy/examples/bsc-testnet-smoke/` interoperability smoke tests were removed together with the root `legacy/` archive in x402 v2.0.0. Use the runnable [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) workspace as the current client → server → facilitator reference; since v2.1.0 it covers TRON only, so for EVM use the [upstream examples](https://github.com/x402-foundation/x402/tree/main/examples/typescript).
 
 ---
 
@@ -95,22 +95,23 @@ x402 defines five named payment schemes. Four are available end to end; `auth-ca
 
 | Network                     | Token         | Status      |
 | --------------------------- | ------------- | ----------- |
-| TRON Mainnet (`tron:0x2b6653dc`) | USDT (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:0xcd8690dc`)       | USDT (TRC-20) | **Testnet** |
-| TRON Shasta (`tron:0x94a9059e`)   | USDT (TRC-20) | **Testnet** (SDK/CLI only — the official facilitator does not settle Shasta; use Nile or self-host) |
-| TRON Mainnet (`tron:0x2b6653dc`) | USDD (TRC-20) | **Mainnet** |
-| TRON Nile (`tron:0xcd8690dc`)       | USDD (TRC-20) | **Testnet** |
+| TRON Mainnet (`tron:728126428`) | USDT (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:3448148188`)       | USDT (TRC-20) | **Testnet** |
+| TRON Shasta (`tron:2494104990`)   | USDT (TRC-20) | **Testnet** (SDK/CLI only — the official facilitator does not settle Shasta; use Nile or self-host) |
+| TRON Mainnet (`tron:728126428`) | USDD (TRC-20) | **Mainnet** |
+| TRON Nile (`tron:3448148188`)       | USDD (TRC-20) | **Testnet** |
 | BSC Mainnet (`eip155:56`)     | USDT (BEP-20) | **Mainnet** |
-| BSC Mainnet (`eip155:56`)     | USDC (BEP-20) | **Mainnet** |
+| BSC Mainnet (`eip155:56`)     | USDC (BEP-20; `0x8AC76a…`, not in any shipped token registry — explicit asset only) | **Mainnet** |
 | BSC Testnet (`eip155:97`)     | USDT (BEP-20) | **Testnet** |
 | BSC Testnet (`eip155:97`)     | USDC (BEP-20) | **Testnet** |
-| BSC Testnet (`eip155:97`)     | DHLU (BEP-20, for `exact` interop tests) | **Testnet** |
 | Base Mainnet (`eip155:8453`) | Official USDC (ERC-20, EIP-3009) | **Mainnet** |
 | Base Sepolia (`eip155:84532`) | USDC (ERC-20, EIP-3009) | **Testnet** |
 
-Only some of these are **default assets** (USDT on TRON and BSC Mainnet, USDC on BSC Testnet and Base). Since SDK 1.1.0 a client's spend controls reject any other asset — including TRON USDD, BSC Mainnet USDC and BSC Testnet USDT — unless it is allowlisted via `spendControls.allowedAssets`.
+TRON identifiers use decimal chain IDs since x402 v2.0.0 (`@bankofai/x402-tron` 2.0.0); the older hex forms (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) are still accepted as input aliases.
 
-Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` from `@bankofai/x402-tron`); custom BEP-20 tokens are advertised by adding an entry to the server's `EVM_TOKENS` config table.
+Only some of these are **default assets** (USDT on the three TRON networks, USDC on Base and Base Sepolia). Since SDK 1.1.0 a client's spend controls reject any other asset — including TRON USDD and every BSC asset — unless it is allowlisted via `spendControls.allowedAssets`.
+
+Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` from `@bankofai/x402-tron`); custom BEP-20 tokens are advertised with an explicit `{ asset, amount, extra }` price on the server route.
 
 #### What fees are involved?
 
@@ -130,7 +131,7 @@ Custom TRC-20 tokens can be added via the TRON token registry (`registerToken` f
 
 1. **Buyer (client/agent)** signs locally (browser, serverless function, or agent VM).
 2. **Seller** verifies signatures without accessing private keys.
-3. **Facilitator** submits transactions with its own settlement wallet, resolved through `@bankofai/agent-wallet` — the raw key never enters the facilitator process.
+3. **Facilitator** submits transactions with its own settlement wallet, resolved through `@bankofai/agent-wallet` — with the `privy` or `wallet_cli` provider the key stays outside the facilitator process (`raw_secret` keeps a plaintext key in config and is for development only).
 
 #### How does refunds work?
 
@@ -167,11 +168,11 @@ The flow mirrors a human user:
 Install the published packages in your TypeScript app and build against npm, for example:
 
 ```bash
-pnpm add @bankofai/x402-fetch @bankofai/x402-tron @bankofai/x402-evm @bankofai/agent-wallet
-pnpm add @bankofai/x402-core @bankofai/x402-express
+pnpm add @x402/core@2.28.0 @x402/fetch@2.28.0 @bankofai/x402-tron@2.1.0 @x402/evm@2.28.0 @bankofai/agent-wallet
+pnpm add @x402/express@2.28.0
 ```
 
-Use the framework package that matches your server (`express`, `hono`, `fastify`, or `next`). The [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) workspace is a runnable reference for client → server → facilitator flows, not a prerequisite for application development.
+Use the framework package that matches your server (`@x402/express`, `@x402/hono`, `@x402/fastify`, or `@x402/next`), at the same `2.28.0` as `@x402/core` — `@bankofai/x402-tron` 2.1.0 requires exactly `@x402/core@2.28.0`. Add `@bankofai/x402-tron-extensions@2.1.0` only if you use TRON resource sponsoring. The [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) workspace is a runnable reference for client → server → facilitator flows, not a prerequisite for application development.
 
 #### Which testnet is recommended?
 
@@ -195,10 +196,11 @@ Common causes:
 
 1. Invalid signature (incorrect domain or payload).
 2. Insufficient payment amount.
-3. Insufficient token allowance granted to Facilitator.
-4. Insufficient wallet balance.
+3. Insufficient wallet balance.
 
-Check the `error` field in the server’s JSON response for detailed diagnostics.
+The response body is `{}` by default. The reason is the `error` field of the payment requirements carried, Base64-encoded, in the `PAYMENT-REQUIRED` response header — decode it (for example with `decodePaymentRequiredHeader` from `@x402/core/http`) for diagnostics.
+
+An insufficient Permit2 allowance on the `exact` / `upto` Permit2 path does not return 402: the server answers HTTP `412 Precondition Failed` with `error: "permit2_allowance_required"` in the same header. (The `batch-settlement` deposit path reports it as a 402 with its own scheme-specific code.)
 
 #### It works on Nile but fails on Mainnet — why?
 

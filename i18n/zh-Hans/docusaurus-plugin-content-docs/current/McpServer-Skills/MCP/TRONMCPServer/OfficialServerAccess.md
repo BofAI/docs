@@ -85,7 +85,7 @@ AI 给出 ✅ 确认后，TRON MCP Server 就已就位，可以直接开始提�
 npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
 ```
 
-`-y` 参数会跳过所有交互选择，自动安装到你电脑上检测到的所有 AI 工具中。安装完成后会显示 ✅ 安装完成！以及安装到了哪些 Agent。
+`-y` 参数会跳过所有交互选择。add-mcp 随后在当前目录写入项目级配置：写给它在当前目录检测到的 AI 工具（依据 `.claude`、`.cursor`、`.vscode`、`.mcp.json` 等标志性文件夹和文件）；一个都没检测到时，则写给所有支持项目配置的工具。完成后会打印 `Installation complete` 以及安装到了哪些 Agent。
 
 安装完成后，即可使用 TRON MCP Server 开始与 TRON 区块链交互。
 
@@ -117,7 +117,7 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 
 **2️⃣ 选择要安装到哪些 AI 工具**
 
-安装器会自动检测你电脑上装了哪些 AI 工具（如 Claude Code、Cursor、Cline 等），用空格键勾选你要用的：
+安装器会根据当前目录里的标志性文件夹和文件（如 `.claude`、`.cursor`、`.vscode`、`.mcp.json`）检测 AI 工具，例如 Claude Code、Cursor。用空格键勾选你要用的：
 
 ```
 ◇  Detected 1 agent
@@ -128,7 +128,7 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 
 **3️⃣ 确认安装信息**
 
-安装器会展示安装摘要，确认无误后选择 `Yes` 开始安装：
+如果勾选的工具都同时支持项目级和全局配置，安装器会先问 **Installation scope**（`Project` / `Global`），下面的摘要对应 `Project`。随后安装器会展示安装摘要，确认无误后选择 `Yes` 开始安装：
 
 ```
 ◇  Installation Summary ────╮
@@ -151,11 +151,11 @@ npx add-mcp https://tron-mcp-server.bankofai.io/mcp
 ```
 ◇  Installation complete
 │
-◇  Installed to 1 agent ───────╮
-│                              │
-│  ✓ Claude Code: ~/.mcp.json  │
-│                              │
-├──────────────────────────────╯
+◇  Installed to 1 agent ──────────────────╮
+│                                         │
+│  ✓ Claude Code: ~/my-project/.mcp.json  │
+│                                         │
+├─────────────────────────────────────────╯
 │
 └  Done!
 ```

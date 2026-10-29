@@ -35,7 +35,7 @@ import ThemedImage from '@theme/ThemedImage';
 
 - **[前端目录站](https://bankofai.io/catalog)**：给人浏览、比较服务。
 - **wallet-cli**：在命令行里搜索、查看、直接付费调用。
-- **MCP**：`@bankofai/x402-mcp` 让 Agent 能通过 MCP 为 x402 端点付款。支持目录发现的 MCP（在 MCP 客户端里按名称浏览目录）尚未发布，当前请用 `wallet-cli x402 provider-list` 做发现。
+- **MCP**：`@x402/mcp`（SDK 2.1.0 起使用的官方 MCP 集成）让 Agent 能通过 MCP 为 x402 端点付款。支持目录发现的 MCP（在 MCP 客户端里按名称浏览目录）尚未发布，当前请用 `wallet-cli x402 provider-list` 做发现。
 
 ## 目录里有什么
 

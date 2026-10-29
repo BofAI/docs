@@ -16,7 +16,7 @@ import TabItem from '@theme/TabItem';
 整个流程共 **4 步**，预计耗时 **15–20 分钟**。
 
 :::info SDK（仅 TypeScript）
-x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发布。本指南展示如何基于已发布的 npm 包开发。
+x402 是**仅 TypeScript** 的 SDK：TRON 机制以 `@bankofai/x402-tron` 发布，运行在官方 `@x402/*` Core、EVM 与框架包之上。本指南展示如何基于已发布的 npm 包开发。
 :::
 
 ---
@@ -28,7 +28,7 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 在终端（macOS/Linux 的 Terminal，或 Windows 的 PowerShell/命令提示符）中运行以下命令，确认所需工具已安装：
 
 ```bash
-node --version    # 需要 Node.js 22 或更高版本
+node --version    # 需要 Node.js 24.22.1 或更高版本
 pnpm --version    # 需要 pnpm 11.1 或更高版本
 git --version     # 版本控制工具
 ```
@@ -132,14 +132,14 @@ git --version     # 版本控制工具
 
 ## 第一步：安装 SDK 包
 
-在您的 TypeScript API 项目中安装 Express 适配器以及 TRON/EVM 支付 scheme：
+在您的 TypeScript API 项目中安装官方 Core、Express 适配器以及 TRON/EVM 支付 scheme：
 
 ```bash
-pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm
+pnpm add express @x402/core@2.28.0 @x402/express@2.28.0 @bankofai/x402-tron@2.1.0 @x402/evm@2.28.0
 pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 ```
 
-请根据服务框架选择对应包（`@bankofai/x402-express`、`@bankofai/x402-hono`、`@bankofai/x402-fastify` 或 `@bankofai/x402-next`）。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
+请根据服务框架选择对应包（`@x402/express`、`@x402/hono`、`@x402/fastify` 或 `@x402/next`），版本与 `@x402/core` 一致为 `2.28.0`——`@bankofai/x402-tron` 2.1.0 将 `@x402/core@2.28.0` 声明为精确版本的 peer 依赖。`@x402/evm` 仅在使用 BSC/Base 路由时需要。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
 
 如果开发者想要一个更完整的 client → server → facilitator 例子，可以参考仓库中的 [examples](https://github.com/BofAI/x402/tree/main/examples/typescript)；应用开发仍应依赖已发布的 npm 包，而不是链接 monorepo 源码。
 
@@ -169,16 +169,13 @@ pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 
 ```typescript
 import express from "express";
-import { createResourceServer } from "@bankofai/x402-core";
-import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
-import {
-  x402HTTPResourceServer,
-  paymentMiddlewareFromHTTPServer,
-} from "@bankofai/x402-express";
+import { HTTPFacilitatorClient, x402ResourceServer } from "@x402/core/server";
+import { x402HTTPResourceServer } from "@x402/core/http";
+import { paymentMiddlewareFromHTTPServer } from "@x402/express";
 import { TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
 
-const server = createResourceServer(
+const server = new x402ResourceServer(
   new HTTPFacilitatorClient({
     // 运行前请替换——服务端启动时会与 facilitator 同步，
     // 占位地址会让第一个受保护请求失败（主机不可达或返回 HTTP 错误状态时是 500；
@@ -221,15 +218,12 @@ express()
 
 ```typescript
 import express from "express";
-import { createResourceServer } from "@bankofai/x402-core";
-import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
-import {
-  x402HTTPResourceServer,
-  paymentMiddlewareFromHTTPServer,
-} from "@bankofai/x402-express";
-import { ExactEvmScheme } from "@bankofai/x402-evm/exact/server";
+import { HTTPFacilitatorClient, x402ResourceServer } from "@x402/core/server";
+import { x402HTTPResourceServer } from "@x402/core/http";
+import { paymentMiddlewareFromHTTPServer } from "@x402/express";
+import { ExactEvmScheme } from "@x402/evm/exact/server";
 
-const server = createResourceServer(
+const server = new x402ResourceServer(
   new HTTPFacilitatorClient({
     // 运行前请替换——服务端启动时会与 facilitator 同步，
     // 占位地址会让第一个受保护请求失败（主机不可达或返回 HTTP 错误状态时是 500；
@@ -311,7 +305,7 @@ Facilitator 是一个**自动结算服务**：当有人为您的 API 付款时�
 在 `HTTPFacilitatorClient` 中将 `url` 设为官方端点：
 
 ```typescript
-const server = createResourceServer(
+const server = new x402ResourceServer(
   new HTTPFacilitatorClient({
     url: "https://facilitator.bankofai.io",
   })
@@ -320,7 +314,7 @@ const server = createResourceServer(
 
 这是您的 x402 server 用于验证和结算付款的地址——**仅供 API 调用**，无需在浏览器中打开。
 
-> ⚠️ **未配置 API Key 时，该端点受速率限制**（每个 IP 每分钟一次 `/settle`）。仅适合测试。
+> ⚠️ **未配置 API Key 时，该端点受速率限制**（每个 IP 每分钟 10 次，`/verify` 与 `/settle` 分别计数）。仅适合测试。
 
 #### 4.2 申请 API Key
 
@@ -328,14 +322,14 @@ const server = createResourceServer(
 2. 在 Dashboard 上点击 **"Create API Key"**
 3. 确认后，在 Dashboard 点击 **View** 查看并复制您的 API Key
 
-配置 API Key 后，官方服务允许**每个 API Key 每分钟调用 `/settle` 1,000 次**，足以满足生产需求。
+配置 API Key 后，官方服务允许**每个 API Key 每分钟 `/verify` 与 `/settle` 各 1,000 次**，足以满足生产需求。
 
 #### 4.3 将 API Key 接入您的 server
 
 官方 key 以 `X-API-KEY` 头的形式随每次 facilitator 调用发送。生产环境中，请将它保存在环境变量或密钥管理系统中，并随 facilitator 请求发送。
 
 ```bash
-FACILITATOR_API_KEY=paste_your_api_key_here
+export FACILITATOR_API_KEY=paste_your_api_key_here
 ```
 
 只有传入 `createAuthHeaders`，`HTTPFacilitatorClient` 才会发送该请求头——否则服务端会静默停留在匿名档位：
@@ -362,7 +356,7 @@ new HTTPFacilitatorClient({
 
 自托管方式让您完全掌控结算钱包、RPC 节点以及注册哪些网络与方案——SDK 与 facilitator 本身都不收取任何费用。它运行示例 facilitator（`examples/typescript/facilitator/basic`），通过 HTTP 暴露 `/verify`、`/settle`、`/supported`，并按付款的 `network` 字段分发。
 
-> **Base 卖家注意：** 仓库自带的示例 facilitator 只注册了 `eip155:97` 与 `eip155:56`（见 `facilitator/basic/src/chains/evm.ts` 的 `EVM_NETWORKS`）。要在 Base 上结算，请使用已启用 `eip155:8453` 与 `eip155:84532` 的官方 facilitator，或自行把这两个网络加进 `EVM_NETWORKS`。
+> **BSC 与 Base 卖家注意：** 自 x402 v2.1.0 起，仓库自带的示例 facilitator 只注册 TRON 网络（见 `facilitator/basic/src/chains/tron.ts` 的 `TRON_NETWORKS`）。要在 BSC 或 Base 上结算，请使用已启用 `eip155:56`、`eip155:97`、`eip155:8453` 与 `eip155:84532` 的官方 facilitator，或参考[上游示例](https://github.com/x402-foundation/x402/tree/main/examples/typescript)用官方 `@x402/evm` 自建 EVM facilitator。
 
 > ⚠️ **安全提醒——请先阅读：**
 > - 自托管 Facilitator 使用您的钱包提交链上结算交易——**此钱包应与您的收款钱包分开**
@@ -375,27 +369,25 @@ facilitator 验证签名并在链上结算。它按链注册 `exact` scheme 并�
 
 ```typescript
 // examples/typescript/facilitator/basic/src/index.ts（节选）
-import { x402Facilitator } from "@bankofai/x402-core/facilitator";
+import { x402Facilitator } from "@x402/core/facilitator";
 
 const facilitator = new x402Facilitator()
   .onBeforeSettle(async ctx => console.log("[settle] before", ctx.requirements.network))
   .onAfterSettle(async ctx => console.log("[settle] after", ctx.requirements.network))
   .onSettleFailure(async ctx => console.log("[settle] failure", ctx));
 
-// 仅当钱包解析成功时才注册该链（可仅 EVM、仅 TRON，或两者）。
-const evm = await registerEvm(facilitator);
+// 仅当钱包解析成功时才注册该链。只注册 TRON 网络。
 const tron = await registerTron(facilitator);
 
 // 在 FACILITATOR_PORT 上暴露 POST /verify、POST /settle、GET /supported。
 app.listen(PORT, () => console.log(`🚀 Facilitator on http://localhost:${PORT}`));
 ```
 
-每个链模块将 agent-wallet 适配为 facilitator signer：
+TRON 链模块将 agent-wallet 适配为 facilitator signer：
 
-- **EVM** —— `createFacilitatorEvmSigner(wallet, { network, rpcUrl })`，然后 `facilitator.register(network, new ExactEvmScheme(signer))`
 - **TRON** —— `createFacilitatorTronSigner(wallet, { network, apiKey })`，然后 `facilitator.register(network, new ExactTronScheme(signer))`
 
-signer 工厂内部构建 viem client / TronWeb；示例**从不读取原始私钥**——`AGENT_WALLET_PRIVATE_KEY` 由 `@bankofai/agent-wallet` 消费。
+signer 工厂内部构建 TronWeb；示例**从不读取原始私钥**——`AGENT_WALLET_PRIVATE_KEY` 由 `@bankofai/agent-wallet` 消费。
 
 #### 4.2 启动 Facilitator
 
@@ -408,9 +400,10 @@ pnpm dev:facilitator
 **启动成功后，应看到类似输出：**
 
 ```
-[evm] facilitator registered eip155:97 (0x…)
 [tron] facilitator registered tron:3448148188 (T…)
-🚀 Facilitator on http://localhost:4022  (evm=true, tron=true)
+[tron] facilitator registered tron:2494104990 (T…)
+[tron] facilitator registered tron:728126428 (T…)
+🚀 Facilitator on http://localhost:4022  (tron=true)
 ```
 
 > ✅ **成功：** Facilitator 在 4022 端口运行——**保持此终端窗口打开，不要关闭**
@@ -470,10 +463,10 @@ curl -si http://localhost:4021/credit | grep -i '^payment-required:' | cut -d' '
 |---------|-------|----------|
 | `Failed to fetch` / connection refused | facilitator 或 server 未运行 | 先启动 facilitator，再运行您的 API server 入口文件 |
 | 客户端选不出付款选项 | 客户端选择的网络或代币与 server 公布的选项不匹配 | 检查 server 的 `accepts`（网络 + 代币），例如 `TRON_NILE` + `USDT` |
-| `npx tsx` 下出现 `ERR_PACKAGE_PATH_NOT_EXPORTED` | 项目未声明为 ESM | 在 `package.json` 中添加 `"type": "module"` |
+| `npx tsx` 下出现 `Top-level await is currently not supported with the "cjs" output format` | 项目未声明为 ESM，含顶层 `await` 的入口文件被按 CommonJS 编译 | 在 `package.json` 中添加 `"type": "module"` |
 | `No network/scheme registered for x402 version: 2 …` | 客户端选择的网络没有注册的 scheme | 确保 client 注册了目标网络，例如 `TRON_NILE` |
-| `Insufficient balance` / allowance 错误 | 测试钱包缺少测试代币，或 Permit2 授权额度过低 | 从水龙头领取测试代币；client 在首次付款时会自动批准 Permit2 |
-| `Connection timeout` | 网络或请求超时 | 检查连接。注意 SDK 不读取任何环境变量——`EVM_RPC_URL` 由 参考示例程序识别；在自己的服务端里请把 RPC 地址直接传给 signer 工厂函数 |
+| `Insufficient balance` / allowance 错误 | 测试钱包缺少测试代币，或 Permit2 授权额度过低 | 从水龙头领取测试代币。在 TRON 上 client 首次付款时会自动批准 Permit2；在 EVM 上需要自己先批准一次 Permit2 |
+| `Connection timeout` | 网络或请求超时 | 检查连接。注意 SDK 不读取任何环境变量——`TRON_GRID_API_KEY` 由参考示例程序读取；在自己的代码里请把 `apiKey` / `rpcUrl` 直接传给 signer 工厂函数 |
 
 ---
 
@@ -498,15 +491,11 @@ price: "1 USDT",
 
 ### 2. 设置可靠的 EVM RPC
 
-BSC 主网需要稳定端点。为 client 和 facilitator 都设置：
-
-```bash
-EVM_RPC_URL=https://bsc-rpc.publicnode.com
-```
+BSC 主网需要稳定端点，例如 `https://bsc-rpc.publicnode.com`。SDK 不读取环境变量，且自 v2.1.0 起仓库示例只覆盖 TRON——请在用官方 `@x402/evm` 构建的 EVM signer 上配置该端点，client 与自托管 facilitator 都需要。
 
 ### 3.（自托管）将 Facilitator 切换到主网
 
-示例 facilitator 的 `TRON_NETWORKS` 已包含 `TRON_MAINNET`（`tron:728126428`），`EVM_NETWORKS` 已包含 `eip155:97` 与 `eip155:56`——但不含 Base（`eip155:8453` / `eip155:84532`），若在 Base 结算需自行添加。向 Facilitator 钱包充入足够的真实 TRX/BNB 以支付结算 gas，然后重启：
+示例 facilitator 的 `TRON_NETWORKS` 已包含 `TRON_MAINNET`（`tron:728126428`）；它不注册任何 EVM 网络，BSC 或 Base 请通过官方 facilitator 或您自建的 `@x402/evm` facilitator 结算。向 Facilitator 钱包充入足够的真实 TRX 以支付结算能量，然后重启：
 
 ```bash
 pnpm dev:facilitator

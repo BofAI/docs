@@ -10,7 +10,7 @@ import TabItem from '@theme/TabItem';
 > **测试网优先：** 本指南默认使用测试网，您可以安全地完成每一步而不花费真实资金。
 
 :::info SDK（仅 TypeScript）
-x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发布。本指南展示如何直接集成已发布的 npm 包。
+x402 是**仅 TypeScript** 的 SDK：TRON 机制以 `@bankofai/x402-tron` 发布，运行在官方 `@x402/*` Core 与 HTTP 包之上。本指南展示如何直接集成已发布的 npm 包。
 :::
 
 ---
@@ -31,7 +31,7 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 
 ### 开始前清单
 
-- [ ] 已安装 **Node.js 22+** 和 **pnpm 11.1+**
+- [ ] 已安装 **Node.js 24.22.1+** 和 **pnpm 11.1+**
 - [ ] 已创建专用**测试钱包**（见下文）
 - [ ] 已领取测试代币（免费）
 - [ ] 有一个目标 x402 保护的 API URL（例如按[卖家快速入门](./quickstart-for-sellers.md)启动的 `/credit` 接口）
@@ -94,16 +94,16 @@ x402 是**仅 TypeScript** 的 SDK，以颗粒化的 `@bankofai/x402-*` 包发�
 在您的 TypeScript 应用中安装已发布的 npm 包：
 
 ```bash
-pnpm add @bankofai/agent-wallet @bankofai/x402-fetch @bankofai/x402-tron
+pnpm add @bankofai/agent-wallet @x402/core@2.28.0 @x402/fetch@2.28.0 @bankofai/x402-tron@2.1.0
 pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 ```
 
-如果您的项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
+如果您的项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。`@x402/core` 与 `@x402/fetch` 请保持精确的 `2.28.0`——`@bankofai/x402-tron` 2.1.0 将 `@x402/core@2.28.0` 声明为精确版本的 peer 依赖。
 
 :::info 钱包管理
-x402 使用 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 解析和管理钱包凭据。Agent Wallet 会随上面的包一起安装。私钥解析优先级：
-1. 加密钱包文件（通过 Agent Wallet CLI 导入）
-2. 环境变量 `AGENT_WALLET_PRIVATE_KEY`
+x402 使用 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 解析和管理钱包凭据。Agent Wallet（3.0+）会随上面的包一起安装。钱包解析优先级：
+1. Agent Wallet CLI 配置（`~/.agent-wallet`），且其中至少有一个钱包——通过 `agent-wallet start raw_secret`、`wallet_cli` 或 `privy` 配置
+2. 环境变量 `AGENT_WALLET_PRIVATE_KEY`（或 `AGENT_WALLET_MNEMONIC`）
 
 本指南使用环境变量方式。
 :::
@@ -145,7 +145,8 @@ const signer = await createClientTronSigner(wallet, {
 
 ```typescript
 import { resolveWallet, type Wallet, type Eip712Capable } from "@bankofai/agent-wallet";
-import { x402Client, wrapFetchWithPayment } from "@bankofai/x402-fetch";
+import { x402Client } from "@x402/core/client";
+import { wrapFetchWithPayment } from "@x402/fetch";
 import { createClientTronSigner, TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/client";
 
@@ -209,15 +210,14 @@ client.setSpendControls({ maxAmountPerPayment: "$5" });
 
 | 问题 | 原因 | 解决方案 |
 |---------|-------|----------|
-| `WalletNotFoundError` / 解析不到钱包 | agent-wallet 里没有钱包，或当前 shell 未设置 `AGENT_WALLET_PRIVATE_KEY` | 执行 `agent-wallet start`，或确保在**运行脚本的同一终端窗口**中执行 `export` |
-| `WalletNotFoundError: No active wallet set` | agent-wallet 未配置钱包 | 运行 `agent-wallet start` 并按提示导入私钥 |
+| `resolve_wallet could not find a wallet source in config or env` | agent-wallet 里没有钱包，或当前 shell 未设置 `AGENT_WALLET_PRIVATE_KEY` | 执行 `agent-wallet start`，或确保在**运行脚本的同一终端窗口**中执行 `export` |
 | `Insufficient balance` / 余额错误 | 测试钱包 USDT/USDD 不足 | 返回前置准备，从水龙头领取测试代币 |
 | `No network/scheme registered for x402 version: 2 …` | server 公布的网络里没有任何一个注册了 scheme——该错误在 selector 运行之前就会抛出 | 检查 server 的 `accepts` 是否包含 `network: TRON_NILE`，以及是否调用了 `client.register(TRON_NILE, …)` |
 | `permit2_allowance_required` | Permit2 授权额度缺失或过低 | 在 TRON 上 SDK 会在首次付款时自动广播一次性 `approve`；若仍存在，检查钱包是否有足够 TRX 支付这笔授权 |
 | `approval_reset_required`（TRON） | 该代币的 Permit2 授权额度非零但不足，默认的 `zero-first` 策略不会直接覆写 | 先把该代币的 Permit2 授权额度重置为 `0` 再重试——SDK 不会自动插入 `approve(0)` |
 | `approval_asset_unsupported`（TRON） | 该代币不属于已知 Permit2 资产，也没有为它配置授权策略 | 用 `createTrc20ApprovalPolicy` 为其配置策略，或改用受支持的代币付款 |
 | `Connection timeout` | 网络或请求超时 | 检查 API 服务、facilitator 和 TRON RPC 连接 |
-| `ERR_PACKAGE_PATH_NOT_EXPORTED` | 项目未声明为 ESM | 在 `package.json` 中添加 `"type": "module"` |
+| （`tsx` 下）`Top-level await is currently not supported with the "cjs" output format` | 项目未声明为 ESM，脚本中的顶层 `await` 被按 CommonJS 编译 | 在 `package.json` 中添加 `"type": "module"` |
 
 如需更细粒度的错误处理：
 
@@ -231,7 +231,7 @@ try {
     console.error(await res.text());
   }
 } catch (error) {
-  if (error instanceof Error && error.message.includes("no payment option")) {
+  if (error instanceof Error && error.message.includes("No network/scheme registered")) {
     console.error("No matching payment option — check TRON_NILE vs the server's accepts");
   } else if (error instanceof Error && error.message.includes("allowance")) {
     console.error("Insufficient token allowance — check wallet balance");

@@ -172,9 +172,9 @@ agent.setMCP("https://mcp.example.com/");
 
 
 
-当你设置 MCP 端点时，SDK 会自动：
-*   从端点获取工具、提示词（prompts）和资源。
-*   填充代理的能力集（capabilities）。
+除记录端点外，`setMCP()` 的行为因语言而异：
+*   **Python**：默认（`auto_fetch=True`）会从端点获取工具、提示词（prompts）和资源，并以 `mcpTools`、`mcpPrompts`、`mcpResources` 存入该 MCP 端点条目。获取失败会被跳过：网络和解析错误只在 debug 级别记录，非 HTTP(S) 端点会记录一条 warning。传 `auto_fetch=False` 可关闭。
+*   **TypeScript**：只记录端点 URL 和版本（默认 `2025-06-18`），不会访问该端点。
 
 ### A2A (Agent-to-Agent) 端点
 
@@ -200,9 +200,9 @@ agent.setA2A("https://a2a.example.com/agent-card.json");
 
 
 
-SDK 会自动：
-*   从 A2A 代理卡片（agent card）中获取技能。
-*   为搜索索引这些能力。
+除记录端点外，`setA2A()` 的行为因语言而异：
+*   **Python**：默认（`auto_fetch=True`）会从 A2A 代理卡片（agent card）中获取技能标签（`skills[].tags`），并以 `a2aSkills` 存入该 A2A 端点条目。获取失败会被跳过：网络和解析错误只在 debug 级别记录，非 HTTP(S) 端点会记录一条 warning。传 `auto_fetch=False` 可关闭。
+*   **TypeScript**：只记录代理卡片 URL 和版本（默认 `0.3.0`），不会获取该卡片。
 
 ### ENS
 
@@ -227,9 +227,9 @@ agent.setENS("myagent.eth");
 
 
 
-这会将 ENS 名称存储在：
-*   注册文件中。
-*   作为链上元数据。
+两个 SDK 都会把 ENS 名称作为 `ENS` 端点存入注册文件。以 `agentName` 元数据键写上链则有区别：
+*   **Python**：首次 `register()`（铸造）时会自动把 `agentName` 写上链；对已注册的 Agent，`register(uri)` 只更新 URI，需改用 `registerIPFS()`，它会把包括 `agentName` 在内的改动元数据写上链。
+*   **TypeScript**：`setENS()` 只修改本地注册文件，`register()` / `registerIPFS()` 也不会发送 `agentName`。需在已注册的 Agent 上调用 `await agent.updateOnChainMetadata()` 才会写上链。
 
 ### 移除端点 
 
@@ -367,7 +367,7 @@ SDK 会替你构造类型化数据，但它无法凭空造出新钱包的签名�
 | :--- | :--- |
 | `signature`（Python / TS 同名） | 直接使用你给的字节。这是智能合约钱包以及任何外部/离线签名场景的路径。 |
 | `new_wallet_signer`（Python）/ `newWalletSigner`（TS） | 用该私钥签名。SDK 会先校验该私钥对应的地址是否等于 `newWallet`，不一致则直接报错。 |
-| 两者都不传 | 回退到 SDK signer——**且仅当 SDK signer 的地址就是新钱包时才会成功**。否则抛出 `New wallet must sign. Provide new_wallet_signer (EOA) or signature (ERC-1271/external).` |
+| 两者都不传 | 回退到 SDK signer——**且仅当 SDK signer 的地址就是新钱包时才会成功**。否则 Python 抛出 `New wallet must sign. Provide new_wallet_signer (EOA) or signature (ERC-1271/external).`，TypeScript 抛出 `newWalletSigner address (…) does not match newWallet (…).`。若 TypeScript SDK 根本没有 signer，则抛出 `New wallet signature is required. Provide options.newWalletSigner or options.signature.` |
 
 :::caution 只传一个地址并不是通用写法
 不带任何签名参数的 `setWallet(address)`，**仅**在 SDK signer 本身就是该地址时才可用。又因为交易发送方还必须是所有者或获授权的操作员，所以这种写法实际上只适用于「把 Agent 指向我当前正在用来签名的这个钱包」。若要绑定一个与 SDK signer *不同*的钱包，就必须提供 `new_wallet_signer` / `newWalletSigner`，或一个已经准备好的 `signature`。
@@ -398,10 +398,9 @@ agent.addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=T
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 添加技能而不进行验证
+// TypeScript SDK 不做 OASF 分类法校验：
+// addSkill() 接受任意字符串
 agent.addSkill("custom_skill/my_skill");
-
-// 添加带有验证的技能
 agent.addSkill("advanced_reasoning_planning/strategic_planning");
 ```
 
@@ -428,10 +427,9 @@ agent.addDomain("finance_and_business/investment_services", validate_oasf=True)
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 添加领域而不进行验证
+// TypeScript SDK 不做 OASF 分类法校验：
+// addDomain() 接受任意字符串
 agent.addDomain("custom_domain/my_domain");
-
-// 添加带有验证的领域
 agent.addDomain("finance_and_business/investment_services");
 ```
 
@@ -566,21 +564,25 @@ agent.setTrust({ reputation: true, cryptoEconomic: true, teeAttestation: true })
 <TabItem value="python" label="python">
 
 ```python
-# 更新链上元数据
+# 更新链上元数据（Agent 须已注册）
 agent.setMetadata({"version": "1.1.0", "tier": "pro"})
-# 若已注册并要更新 URI，可调用：
-# tx = agent.updateRegistration(agentURI="https://example.com/agent-card-updated.json")
-# tx.wait_confirmed(timeout=180)
+# setMetadata() 只暂存这些键。对已注册的 Agent，下一次 registerIPFS()（需配置 IPFS 客户端）
+# 会上传文件、把 URI 替换为 ipfs://...，然后在 wait_confirmed() 中逐个把改动过的键
+# 写上链（尽力而为）。对已注册的 Agent，register(uri) 与 updateRegistration() 只更新 URI。
+tx = agent.registerIPFS()
+tx.wait_confirmed(timeout=180)
 ```
 
 </TabItem>
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 更新链上元数据
+// 更新链上元数据（Agent 须已注册）
 agent.setMetadata({ version: "1.1.0", tier: "pro" });
-const tx = await agent.register("https://example.com/agent-card-updated.json");
-await tx.waitConfirmed();
+// 本地元数据中的每个键各发送一笔 setMetadata 交易（设置了 ENS 名称时另加一笔 agentName），
+// 返回交易哈希列表。
+// 不要在这里调用 register()：它总是会铸造一个新 Agent。
+const txHashes = await agent.updateOnChainMetadata();
 ```
 
 </TabItem>
@@ -606,8 +608,8 @@ agent = sdk.loadAgent("97:123")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// 通过 ID 查询代理摘要
-const agentSummary = await sdk.getAgent("97:123");
+// 通过 ID 加载代理
+const agent = await sdk.loadAgent("97:123");
 ```
 
 </TabItem>
@@ -632,9 +634,11 @@ print(agent.active)
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-console.log(agentSummary?.name);
-console.log(agentSummary?.description);
-console.log(agentSummary?.active);
+// TypeScript 的 Agent 没有 name/description/active 访问器，需从 toJSON() 读取
+const file = agent.toJSON();
+console.log(file.name);
+console.log(file.description);
+console.log(file.active);
 ```
 
 </TabItem>
@@ -678,7 +682,7 @@ const agent = sdk.createAgent({
 });
 
 agent.setMCP("https://mcp.example.com/")
-     .setMetadata({ ens: "advanced-agent.eth" })
+     .setENS("advanced-agent.eth")
      .addSkill("advanced_reasoning_planning/strategic_planning")
      .addDomain("technology/data_science/data_science")
      .setActive(true)
@@ -692,3 +696,22 @@ await tx.waitConfirmed();
 
 </TabItem>
 </Tabs>
+
+## 常见合约错误
+
+以下回退原因来自 TRC-8004 / ERC-8004 注册表合约；"位置"一列写的是合约函数，以及会发送它的 SDK 调用。在 EVM 网络上，`Not authorized` 这类字符串原因会出现在 SDK 的交易错误里（通常来自 gas 估算）。在信誉或验证合约调用里触发的 ERC-721 自定义错误（例如对未注册 Agent 调用 `giveFeedback()`）可能只显示选择器（`0x7e273289` 即 `ERC721NonexistentToken`）。在 TRON 上两种 SDK 都只报 `TRON transaction reverted: <hash> (REVERT)`，需要到 TronScan 查看交易才能看到原因。
+
+| 回退原因 | 位置 | 原因与处理 |
+| --- | --- | --- |
+| `Not authorized` | 身份注册表的 `setMetadata` / `setAgentURI` / `setAgentWallet`，由 `updateOnChainMetadata()`、`updateRegistration(<uri>)`、`registerIPFS()` 和 `setWallet()` 发送；验证注册表的 `validationRequest` | 发送方不是该 Agent 的所有者、被批准地址或操作员。改用所有者签名，或先 `addOperator()`（TypeScript 还可用 `agent.approve()`） |
+| `ERC721InsufficientApproval` | `transferFrom`，由 TypeScript 的 `transfer()` 发送 | 发送方不是所有者、被批准地址或操作员。Python 的 `transfer()` 会在发送前检查所有者，直接抛出 `ValueError: Only the current owner (…) can transfer the agent` |
+| `reserved key` | `register()` 的元数据、`setMetadata` | `agentWallet` 是保留键，请用 `setWallet()` |
+| `bad wallet` / `expired` / `deadline too far` | `setWallet` | 零地址；`deadline` 已过期；`deadline` 超过当前时间 5 分钟 |
+| `invalid wallet sig` | `setWallet` | 签名不是由新钱包产生（ECDSA，合约钱包则为 ERC-1271） |
+| `Self-feedback not allowed` | `giveFeedback` | Agent 的所有者、操作员或被批准地址给自己的 Agent 评分 |
+| `index must be > 0` / `index out of bounds` | `revokeFeedback`、`appendResponse`、`readFeedback`（SDK 的 `getFeedback()`） | `feedbackIndex` 为 0，或大于该客户端给这个 Agent 的最后一条反馈序号（包括从未给过反馈） |
+| `Already revoked` | `revokeFeedback` | 该反馈已被撤回 |
+| `Empty URI` | `appendResponse` | `responseURI` 为空。Python 的 `appendResponse()` 只有在配置了 IPFS 客户端、且回复带有 `text` 或 `attachments` 时才会生成 URI，否则（或 IPFS 上传失败时）发送空 URI 并触发此错误 |
+| `clientAddresses required` | `getSummary`，没有 subgraph 时由 Python 的 `getReputationSummary()` 调用 | 该 Agent 还没有任何反馈，从链上读到的客户端列表为空。`sdk.getReputationSummary()` 不接受客户端列表参数，按「尚无信誉」处理即可（TypeScript 则返回 0） |
+| `exists` / `not validator` / `resp>100` / `unknown` | 验证请求 / 响应 | 请求哈希重复；响应者不是指定的验证者；分数超过 100；请求哈希不存在 |
+| `ERC721NonexistentToken` | 身份注册表的写操作和 `ownerOf` / `tokenURI` 读取、`giveFeedback`、`validationRequest` | 该 Agent ID 未在所配置网络上注册。Python 的 `loadAgent()` 会抛出 `Failed to load agent …`；TypeScript 的 `loadAgent()` 不报错，返回一个 URI 为空的 Agent |

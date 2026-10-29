@@ -49,13 +49,13 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   "error": "Payment required",
   "resource": {
     "url": "http://example.com/protected",
-    "description": null,
-    "mimeType": null
+    "description": "",
+    "mimeType": ""
   },
   "accepts": [
     {
       "scheme": "exact",
-      "network": "tron:0xcd8690dc",
+      "network": "tron:3448148188",
       "amount": "100",
       "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
       "payTo": "<SELLER_TRON_ADDRESS>",
@@ -79,8 +79,8 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   "error": "Payment required",
   "resource": {
     "url": "http://example.com/protected",
-    "description": null,
-    "mimeType": null
+    "description": "",
+    "mimeType": ""
   },
   "accepts": [
     {
@@ -123,12 +123,12 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 | `resource`          | 关于请求资源的信息                                |
 | `accepts`           | 接受的支付选项数组                                |
 | `scheme`            | 支付方案（`exact`、`upto`、`batch-settlement`、`exact_gasfree`）  |
-| `network`           | 网络标识符——三个 TRON 标识（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）或任意 `eip155:<chainId>`：资源服务端默认注册 `eip155:*`，因此该字段并不限于 `eip155:56` / `97` / `8453` / `84532`。能否结算则另由 facilitator 已配置的网络决定 |
+| `network`           | 网络标识符——三个 TRON 标识（`tron:728126428`、`tron:3448148188`、`tron:2494104990`）或任意 `eip155:<chainId>`：资源服务端默认注册 `eip155:*`，因此该字段并不限于 `eip155:56` / `97` / `8453` / `84532`。能否结算则另由 facilitator 已配置的网络决定 |
 | `amount`            | 支付金额，以最小单位计（例如：100 = 0.0001 USDT） |
 | `asset`             | TRC-20/BEP-20 代币合约地址                               |
 | `payTo`             | 卖家的钱包地址                              |
 | `maxTimeoutSeconds` | 支付有效期的最大时长                              |
-| `extra`             | 方案相关数据——`assetTransferMethod`（`eip3009` / `permit2`）、EIP-3009 资产、以及同时支持 EIP-2612 的 permit2 资产的 `name`/`version`，以及声明了非默认付款流程时的 `paymentFlow`（`upfront` 或 `escrow`）——内置方案全部使用默认的 `authorization` 流程，该字段不会写入 `extra`。其中不含费用对象：各方案不收取 facilitator 费用。 |
+| `extra`             | 方案相关数据——`assetTransferMethod`（`eip3009` / `permit2`）、EIP-3009 资产、以及同时支持 EIP-2612 的 permit2 资产的 `name`/`version`，以及路由选择了非默认付款流程时的 `paymentFlow`（`upfront` 或 `escrow`）——默认的 `authorization` 流程不会写入 `extra`。TRON 方案与 EVM `upto` / `batch-settlement` 只支持 `authorization`；EVM `exact` 还支持 `upfront`。其中不含费用对象：各方案不收取 facilitator 费用。 |
 | `extensions`        | 支付方案的附加上下文（如 EVM gas 赞助、TRON 的 `trc20ApprovalResourceSponsoring`、payment-identifier） |
 
 ## 支付签名结构
@@ -143,7 +143,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
   "x402Version": 2,
   "accepted": {
     "scheme": "exact",
-    "network": "tron:0xcd8690dc",
+    "network": "tron:3448148188",
     "asset": "TXYZopYRdj2D9XRtbG411XZZ3kM5VkAeBf",
     "amount": "100",
     "payTo": "<SELLER_TRON_ADDRESS>",

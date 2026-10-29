@@ -17,3 +17,11 @@
 | BSC Testnet           | IdentityRegistry     | 0x8004A818BFB912233c491871b3d84c89A494BD9e      |
 | BSC Testnet           | ReputationRegistry   | 0x8004B663056A597Dffe9eCcC1965A193B7388713      |
 | BSC Testnet           | ValidationRegistry   | 0x8004Cb1BF31DAf7788923b405b754f57acEB4272      |
+| Base Mainnet          | IdentityRegistry     | 0x8004A169FB4a3325136EB29fA0ceB6D2e539a432      |
+| Base Mainnet          | ReputationRegistry   | 0x8004BAa17C55a88189AE136b182e5fdA19dE9b63      |
+| Base Mainnet          | ValidationRegistry   | 0x8004Cc8439f36fd5F9F049D9fF86523Df6dAAB58      |
+| Base Sepolia          | IdentityRegistry     | 0x8004A818BFB912233c491871b3d84c89A494BD9e      |
+| Base Sepolia          | ReputationRegistry   | 0x8004B663056A597Dffe9eCcC1965A193B7388713      |
+| Base Sepolia          | ValidationRegistry   | 0x8004Cb1BF31DAf7788923b405b754f57acEB4272      |
+
+The Base addresses are the official ERC-8004 Registry deployments that the TypeScript SDK (1.2.0 and later) is configured with. The Python SDK ships only the Identity and Reputation Registry addresses for Base.

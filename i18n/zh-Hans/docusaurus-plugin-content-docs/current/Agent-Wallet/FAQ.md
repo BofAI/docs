@@ -1,45 +1,54 @@
 # 常见问题
 
-先回答你最关心的三件事，然后是日常使用中会碰到的细节。
+先回答你最担心的几件事，再聊日常使用的细节。
 
 ---
 
-## 💰 AI 代理会不会把我的钱全转走？
+## 💰 AI 会不会把我的钱包掏空？
 
-这是最常被问到的问题，答案是：**就算 AI 代理被入侵了，你的核心资产也是安全的。**
-
-我们强烈建议你给 AI 代理单独创建一个钱包，只充入它实际需要的小额资金（比如当 Gas 费的额度）。你的主钱包、大额资产永远不碰。这样就算最坏情况发生，损失也只是那个小额钱包里的余额。
+最好的保护是限制风险敞口：**专门给 AI 代理建一个钱包**，只充进它实际需要的少量资金（比如够付 Gas 就行）。你的主钱包和大额资产完全不碰。最坏情况下，损失也仅限于这个小额代理钱包里的钱。
 
 ```bash
-# 给 AI 代理单独建一个小额钱包
-agent-wallet add
+# 为代理创建专用的 wallet-cli 账户，然后连结它
+wallet-cli create --label agent-small -o json
+agent-wallet add wallet_cli --wallet-id agent_small --account agent-small \
+  --cli-password-exec /absolute/path/to/fetch-password.sh
 ```
 
-而且你的钱包文件是高强度加密的。就算黑客拿到了文件，没有主密码就是一堆乱码——暴力破解在经济上毫无意义。
+使用 `wallet_cli` 钱包时，私钥本身保存在 wallet-cli 的加密 keystore 中——Agent-wallet 的配置里只有 wallet-cli 账户 ID 和密码来源。
 
 ---
 
-## 🔌 断网了，AI 代理还能签名吗？
+## 🔌 断网了，AI 还能签名吗？
 
-对 `local_secure` 和 `raw_secret` 钱包——能：**签名 100% 在你本地机器上完成**，不调 RPC、不连云服务、不请求任何远端 API，私钥从始至终不碰网络。
+`raw_secret` 钱包在进程内签名，不发起任何网络请求；`wallet_cli` 钱包在本机的 wallet-cli 子进程中签名。`privy` 钱包类型不同：私钥由 Privy 托管，签名请求发往 Privy API，因此天然需要联网。
 
-唯一的例外是 `privy` 类型：密钥托管在 Privy，签名请求会发往 Privy 的 API——它天然依赖网络。
-
-断网只会影响交易的构建和广播（那是 MCP Server 的事），签名本身完全离线。
+断网主要影响的是交易的构建和广播（这是 MCP Server 或你自己代码的工作）。
 
 ---
 
-## 🔑 密码忘了怎么办？
+## 🔑 还有主密码吗？忘了怎么办？
 
-**找不回来。**
+### 我在 2.x 用的是 `local_secure` 和 `AGENT_WALLET_PASSWORD`，现在怎么办？ {#upgrade-from-2x}
 
-主密码是解密所有私钥的唯一凭证。没有"忘记密码"功能，没有后门。
+Agent-wallet 3.0 移除了 `local_secure` 钱包类型、agent-wallet 主密码、`AGENT_WALLET_PASSWORD`、`runtime_secrets.json`，以及 `init`、`change-password` 和 `sign msg` 命令。3.x 不会读取或转换 `local_secure` 钱包。
 
-如果你忘了密码：
-- 有私钥或助记词的其他备份？运行 `agent-wallet reset`，重新初始化，重新导入
-- 什么备份都没有？那个钱包的访问权限就丢失了
+升级前：
 
-**所以请现在就做这件事**：打开密码管理器，把主密码存进去。认真的。
+1. 备份 `~/.agent-wallet`。
+2. 在仍安装着 2.x 时，确认你能拿到原始私钥或助记词。
+3. 把 2.x 的目录挪开，例如 `mv ~/.agent-wallet ~/.agent-wallet-2x`。`wallets_config.json` 里只要还有 `local_secure` 钱包，3.x 就会拒绝它（`Invalid wallet config`），包括 `start` 在内、所有需要读取配置的命令都会失败，直到旧文件被移走（`reset` 仍可运行）。也可以用 `--dir` 或 `AGENT_WALLET_DIR` 让 3.x 使用一个新目录。
+4. 升级后，用 3.x 的某种类型重建钱包：
+   - **本机生产签名：** 把私钥导入 wallet-cli（`wallet-cli import private-key` 或 `wallet-cli import mnemonic`），然后执行 `agent-wallet start wallet_cli`。
+   - **托管签名：** `agent-wallet start privy`。
+   - **仅限开发：** `agent-wallet start raw_secret`。
+5. 确认新钱包解析出预期的地址（`agent-wallet resolve-address`）并能正常签名后，再自行删除旧的 2.x 目录。
+
+同时更新环境变量：`TRON_PRIVATE_KEY`、`TRON_MNEMONIC` 和 `TRON_ACCOUNT_INDEX` 已不再读取——请改用 `AGENT_WALLET_PRIVATE_KEY`、`AGENT_WALLET_MNEMONIC` 和 `AGENT_WALLET_MNEMONIC_ACCOUNT_INDEX`。网络值必须是规范格式（`tron:728126428`、`tron:3448148188`、`eip155:1` 等）。
+
+### 忘了 wallet-cli 密码怎么办？
+
+保护 `wallet_cli` 钱包的密码属于 wallet-cli 的 keystore，而不是 Agent-wallet。Agent-wallet 无法找回它。请用你备份的助记词或私钥在 wallet-cli 中恢复账户（`wallet-cli import mnemonic` / `wallet-cli import private-key`），然后重新把它连结到 Agent-wallet。
 
 ---
 
@@ -47,95 +56,86 @@ agent-wallet add
 
 ### Agent-wallet 到底是什么？
 
-一个纯本地的加密签名工具。它做两件事：1）把你的私钥加密存储；2）在本地完成签名。不联网、不用云，本身没有独立界面——而是作为隐形的安全中枢，完美接入 OpenClaw 等 AI 前端工具中。
+一个面向 AI 代理的签名层。它为你的代码提供统一的接口——`getAddress`、`signTransaction`、`signTypedData`——并把每个请求交给你配置的密钥后端（`wallet_cli`、`privy` 或 `raw_secret`）。它不构建、不广播交易，也没有自己的界面。
 
-### CLI 和 SDK 什么区别？用哪个？
+### Agent-wallet 和 wallet-cli，我该用哪个？
 
-- **CLI** — 命令行工具，用来建钱包、管密钥、手动测试签名
-- **SDK** — TypeScript / Python 库，用来在自己的代码里调用签名
+- **wallet-cli** 负责保管私钥（加密 keystore），是新用户和 BANK OF AI 工具的官方配置入口。参见 [wallet-cli](../wallet-cli/quickstart.md)。
+- **Agent-wallet** 面向基于 `@bankofai/agent-wallet` SDK 构建的代码。使用 `wallet_cli` 类型时，它通过你的 wallet-cli 账户签名，两者可以共用同一把私钥。
 
-大多数人不需要 SDK。如果你是用 OpenClaw 和 MCP Server 的普通用户，CLI 建完钱包、配好环境变量就够了。SDK 是给自己写代理的开发者用的。
+### CLI 和 SDK，我该用哪个？
 
-### Agent-wallet 和 MetaMask 有什么区别？
+- **CLI** — 命令行工具，用于配置钱包和手动测试签名
+- **SDK** — TypeScript 库，用于在你自己的代码里直接调用签名
 
-MetaMask 是给人用的浏览器钱包，有图形界面，每次签名需要你手动点"确认"。Agent-wallet 是给 AI 代理用的命令行钱包，专门设计为非交互式——AI 代理可以在后台静默调用签名，不需要人盯着屏幕点按钮。两者的加密原理类似（都是 Keystore V3），但使用场景完全不同。
+SDK 读取的就是 CLI 创建的配置。
 
-### 一台电脑上可以创建多少个钱包？
+### 能签名一段普通消息吗？
 
-没有限制。你可以为不同的 AI 代理、不同的链、不同的用途分别创建独立钱包。用 `agent-wallet add` 添加，用 `agent-wallet use` 切换。
+不能。3.x 只签名交易和 EIP-712 / TIP-712 结构化数据；`sign msg`、`signMessage()` 和 `signRaw()` 都已移除。
+
+### 一台电脑能建几个钱包？
+
+不限。你可以为不同的 AI 代理、不同的链、不同的用途分别配置钱包。用 `agent-wallet add` 添加，用 `agent-wallet use` 切换。
 
 ---
 
 ## 钱包类型
 
-### `local_secure`、`raw_secret` 和 `privy` 有什么区别？
+### `wallet_cli`、`privy` 和 `raw_secret` 有什么区别？
 
-| | `local_secure` | `raw_secret` | `privy` |
+| | `wallet_cli` | `privy` | `raw_secret` |
 | :--- | :---: | :---: | :---: |
-| **密钥存储** | ✅ 本地加密 | ❌ 本地明文 | ☁️ Privy 云端托管 |
-| **代理读了文件** | ✅ 拿不到密钥 | ❌ 直接被盗 | ✅ 本地无密钥文件 |
-| **需要主密码** | ✅ 需要 | ❌ 不需要 | ❌ 不需要（使用 API 凭证） |
-| **适合场景** | ✅ 所有场景 | ⚠️ 完全隔离的开发环境 | ✅ 使用 Privy 的服务端代理 |
+| **私钥存储** | ✅ wallet-cli 加密 keystore | ☁️ Privy 云端托管 | ❌ 明文保存在 `wallets_config.json` |
+| **代理读到 Agent-wallet 的配置** | ✅ 里面没有私钥（只有 wallet-cli 账户 ID 和密码来源） | ✅ 里面没有私钥（API 凭据，其中 app secret 可用 exec 脚本） | ❌ 私钥瞬间被盗 |
+| **签名是否需要联网** | 否 | 是（Privy API） | 否 |
+| **适用场景** | ✅ 本机生产签名 | ✅ 使用 Privy 的服务端代理 | ⚠️ 仅限完全隔离的开发环境 |
 
-:::danger `raw_secret` 会以明文存储你的私钥
-`raw_secret` 不加密私钥——这恰恰是 `local_secure` 模式旨在防范的风险。如果你的机器上有任何其他进程能读取文件，你的私钥就会被直接盗走。**永远用 `local_secure`**，除非你 100% 确定那台机器上没有任何其他代理，且处于完全隔离的离线测试环境中。
+:::danger `raw_secret` 会以明文暴露你的私钥
+任何能读取你主目录文件的进程都能读到私钥。只在完全隔离的测试环境中配合一次性私钥使用 `raw_secret`。
 :::
 
-:::tip Privy 钱包
-`privy` 类型将密钥托管交给 [Privy](https://privy.io) 的服务器端钱包基础设施。本地磁盘上不存储任何私钥——签名请求会发送到 Privy 的 API。这非常适合已经使用 Privy 进行钱包管理的服务端 AI 代理。配置时需要 Privy App ID、App Secret 和 Wallet ID。
+:::tip 用 exec 脚本保存 wallet-cli 和 Privy 的凭据
+使用 `--cli-password-exec` / `--app-secret-exec`，让凭据在需要时（例如从 1Password）读取，而不是写进 `wallets_config.json`。在 `direct` 提示中输入的密码会以明文保存在那里（文件权限 `0600`）。
 :::
 
-### `network` 参数怎么填？
+### `network` 参数可以填哪些值？
+
+只接受精确的规范 CAIP-2 标识：
 
 | 值 | 说明 |
 | :--- | :--- |
-| `tron:mainnet` | TRON 主网 |
-| `tron:nile` | TRON Nile 测试网 |
-| `tron:shasta` | TRON Shasta 测试网 |
+| `tron:728126428` | TRON 主网 |
+| `tron:3448148188` | TRON Nile 测试网 |
+| `tron:2494104990` | TRON Shasta 测试网 |
 | `eip155:1` | Ethereum 主网 |
 | `eip155:56` | BSC 主网 |
+| `eip155:97` | BSC 测试网 |
 | `eip155:137` | Polygon 主网 |
 | `eip155:8453` | Base 主网 |
 | `eip155:42161` | Arbitrum 主网 |
 
-> 以上是常见示例，并非穷举白名单：agent-wallet 只校验前缀，任何 `eip155:<chainId>` 或 `tron:<network>` 取值都会被接受（包括 x402 系列工具要求的规范 CAIP-2 TRON ID，如 `tron:0x2b6653dc`）。
+> 以上是常用示例，并非白名单：任何 `eip155:<正整数 chainId>` 或 `tron:<正整数 chainId>` 都可以。别名（`tron:nile`、`tron:mainnet`、`evm:1`）、裸 `tron` / `eip155`、`tron:0x2b6653dc` 这类十六进制 TRON id，以及大小写或空白变体都会被拒绝。
+>
+> `wallet_cli` 钱包还要求该网络是 wallet-cli 自身认识的网络——即它的内置网络（`eip155:1`、`eip155:11155111`、`eip155:56`、`eip155:97`、`eip155:8453`、`eip155:84532`（Base 自 wallet-cli 4.14.0 起才内置）及表中三个 TRON 网络），或在 wallet-cli 自己的配置中添加的网络——否则签名会以 `network_mismatch` 失败。`raw_secret` 和 `privy` 钱包没有这一限制。
 
 ---
 
-## 安全性
+## 安全
 
-### 既然密码也要配在环境变量里，那和直接放明文私钥有什么区别？
+### 私钥会离开我的电脑吗？
 
-区别极大！这是"把现金摆在桌上"和"把钱锁进双重保险箱"的区别。
+`raw_secret` 和 `wallet_cli` 钱包都在本机签名——Agent-wallet 签名时不发起网络请求。`privy` 钱包是例外：私钥由 Privy 托管（从不出现在你的磁盘上），签名请求发往 Privy API。
 
-你平时用 Web3 钱包（比如 MetaMask）时，肯定不会每次都复制粘贴明文私钥，而是用一个短密码去解锁它。Agent-wallet 就是专为 AI 打造的命令行版 MetaMask。
+### `wallet_cli` 钱包是如何处理密码的？
 
-* 传统方式（明文私钥）： 就像把现金直接放在桌子上。任何一个恶意的浏览器插件、一次不小心的代码提交、或者后台日志扫描，只要看一眼你的环境变量文件，钱瞬间就被转走了。这是典型的单点白给。
-* Agent-wallet 模式： 它把风险拆分成了两把锁。
-   1. 物理保险箱： 你的私钥被行业顶级的算法加密，锁死在你电脑深处的隐藏文件夹里（`~/.agent-wallet`）。
-   2. 开箱密码： 你放在环境变量里的，仅仅是解锁这个保险箱的密码。
+Agent-wallet 从不读取或解密 wallet-cli 的 keystore。每次签名时，它会固定所配置的账户和网络，获取密码（每次都重新执行 exec 脚本，默认 10 秒超时），只把密码写入这一次 wallet-cli 子进程的 stdin，并核对返回的签名者与账户一致。密码从不出现在命令行参数中。
 
-这就意味着，如果发生了泄露：
+### 怎样安全地保存凭据？
 
-* 黑客如果只偷到了你的密码（比如通过扫描环境变量），他没有你的加密钱包文件，密码就只是一串没用的字符。
-* 黑客如果只偷走了你的加密钱包文件，他没有你的主密码，文件就是一堆几万年都破解不开的乱码。
-
-黑客必须同时黑进你的电脑、精准定位并偷走隐藏的钱包文件，并且同时窃取到环境变量里的密码，才能动你的钱。这种攻击难度比仅仅扫描一下环境变量要高出无数倍！
-
-### 密钥会通过网络发出去吗？
-
-对 `local_secure` 和 `raw_secret` 钱包——永远不会：零网络请求、零 RPC 调用、零云服务，私钥不离开你的机器。`privy` 类型是例外：密钥托管在 Privy（从不落在你的磁盘上），签名请求会发往 Privy 的 API。
-
-### 主密码怎么保管才安全？
-
-- ✅ 用密码管理器（1Password、Bitwarden）
-- ✅ 通过环境变量 `AGENT_WALLET_PASSWORD` 传入
-- ❌ 不要写在代码里
-- ❌ 不要提交含密码的环境变量文件到 git
-
-### 加密算法安全吗？会不会被暴力破解？
-
-Agent-wallet 使用 Keystore V3 标准加密（scrypt + AES-128-CTR），这和 Ethereum 官方钱包使用的加密方案完全一致。scrypt 算法的设计目标就是让暴力破解在计算和内存上都极其昂贵——即使使用专用硬件，破解一个强密码也需要数万年。
+- ✅ 使用密码管理器（1Password、Bitwarden），并通过 exec 脚本引用
+- ❌ 不要把凭据硬编码在源码里，也不要作为命令行参数传入
+- ❌ 不要把 `~/.agent-wallet/wallets_config.json` 或 `.env` 文件提交到 git
 
 ---
 
@@ -143,15 +143,15 @@ Agent-wallet 使用 Keystore V3 标准加密（scrypt + AES-128-CTR），这和 
 
 ### 支持哪些操作系统？
 
-macOS、Linux 和 Windows。只要能跑 Node.js >= 18 或 Python >= 3.11，就能用。Windows 支持在 v2.3.x 中添加——文件权限功能（如 `chmod 600`）在 Windows 上会被优雅地跳过，因为 Windows 不支持 Unix 风格的权限控制。
+macOS、Linux 和 Windows，需要 Node.js 22.23.4+（22.x）、24.22.1+（24.x）或 26.12.1+（使用 wallet-cli 时也是同一范围）。在不支持 Unix 权限的平台上，会跳过文件权限加固（`wallets_config.json` 设为 `chmod 600`、目录设为 `700`）。在 Windows 上，请把 `AGENT_WALLET_WALLET_CLI_PATH` 指向 wallet-cli 的 JavaScript 入口，而不是 `.cmd` / `.bat` 包装脚本。
 
-### `npm install -g` 报权限错误怎么办？
+### `npm install -g` 报权限错误？
 
-常见于 macOS / Linux。两种解法：
+在 macOS / Linux 上很常见。两种解决方法：
 
-**方法 1（推荐）：用 nvm 管理 Node.js**，它会把全局包装在用户目录下，不需要 `sudo`。
+**方法一（推荐）：用 nvm 管理 Node.js**——它把全局包装在你的用户目录下，不需要 `sudo`。
 
-**方法 2：修复 npm 全局目录权限**：
+**方法二：修改 npm 全局目录权限：**
 ```bash
 mkdir -p ~/.npm-global
 npm config set prefix '~/.npm-global'
@@ -159,23 +159,27 @@ echo 'export PATH=~/.npm-global/bin:$PATH' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-### 配了密码但 AI 代理说"找不到钱包"或"密码错误"？
+### 代理提示"wallet not found"或"network is required"？
 
-最常见的三个原因：
+最常见的原因：
 
-1. **密码没生效**：你在终端 A 配了 `export`，但 AI 代理在终端 B 运行。解决：重启 AI 代理后台服务（参考 [快速开始](./QuickStart.md) 第二步）。
-2. **密码被 shell 吃了**：双引号包裹的密码里有 `$` 或 `!`，被 shell 展开了。解决：改用单引号。
-3. **存储目录不对**：你之前用 `--dir` 指定了自定义路径，但 AI 代理在默认路径找。解决：`export AGENT_WALLET_DIR="/你的自定义路径"`。
+1. **存储目录不对**：创建钱包时用了 `--dir`，但代理查找的是默认路径。在代理的运行环境中设置 `AGENT_WALLET_DIR="/your/custom/path"` 并重启代理。
+2. **没有激活钱包（CLI）**：未设置激活钱包时，不带 `-w` 的 `agent-wallet sign` 会失败。运行 `agent-wallet list`；如果没有任何钱包标着 `*`，执行 `agent-wallet use <id>`。（SDK 的 `resolveWallet()` / `getActiveWallet()` 不会因此报错——它们会回退到第一个已配置的钱包。）
+3. **缺少网络或网络不规范**：`raw_secret` 和 `wallet_cli` 钱包需要 `tron:3448148188`、`eip155:56` 这样的网络。
 
-### `agent-wallet` 命令找不到（command not found）？
+### 添加 `wallet_cli` 钱包时提示 `wallet-cli not found`？
 
-说明全局安装没有生效。检查：
+安装兼容版本（`npm install -g '@tron-walletcli/wallet-cli@^4.13.0'`），并确认在同一个 shell 中 `wallet-cli --version` 能正常运行；或者设置 `AGENT_WALLET_WALLET_CLI_PATH`。Agent-wallet 3.x 不支持 wallet-cli 4.12.x 和 5.x。
+
+### 找不到 `agent-wallet` 命令？
+
+全局安装没有生效。检查一下：
 ```bash
-# 确认 npm 全局 bin 目录在 PATH 里
+# 确认 npm 全局 bin 目录在 PATH 中
 npm prefix -g
 # 全局 bin 目录为：$(npm prefix -g)/bin
 ```
-如果输出的路径不在你的 `$PATH` 中，手动添加：
+如果输出的路径不在你的 `$PATH` 里，手动加上：
 ```bash
 echo "export PATH=$(npm prefix -g)/bin:$PATH" >> ~/.zshrc
 source ~/.zshrc
@@ -183,36 +187,24 @@ source ~/.zshrc
 
 ---
 
-## 跨语言
+## OpenClaw 集成
 
-### Python 和 TypeScript 的密钥文件通用吗？
+### 必须用 OpenClaw 吗？
 
-通用。两个实现使用完全相同的加密格式。CLI 建的钱包，Python SDK 直接能用，反过来也一样。
+不是。Agent-wallet 是独立的签名工具，可以单独通过 CLI 或 SDK 使用。
 
-### 两种语言的签名结果一样吗？
-
-完全一样。同一个私钥 + 同一份数据 = 同一个签名。
-
----
-
-## 与 OpenClaw 集成
-
-### OpenClaw 是必须的吗？
-
-不是。Agent-wallet 是一个独立的签名工具，可以通过 CLI 或 SDK 独立使用。OpenClaw 只是最方便的前端——它让你用自然语言就能调用签名，不用写代码。
-
-### OpenClaw 里说"签名失败"或"钱包未连接"？
+### OpenClaw 提示"签名失败"或"钱包未连接"？
 
 按以下顺序排查：
 
-1. 确认 `AGENT_WALLET_PASSWORD` 环境变量已设置（在运行 OpenClaw 的那个终端里执行 `[[ -n "$AGENT_WALLET_PASSWORD" ]] && echo "已设置" || echo "未设置"` 验证，不会泄露密码明文）
-2. 确认 MCP Server 是在设置了环境变量**之后**启动的
-3. 确认钱包已初始化：`agent-wallet list` 应该能看到至少一个钱包
-4. 如果以上都正确，尝试用 CLI 手动签名测试：`agent-wallet sign msg "test" -n tron`
+1. 确认你使用的工具确实是通过 Agent-wallet 3.x 签名的——新的 BANK OF AI 配置直接使用 [wallet-cli](../wallet-cli/quickstart.md)。
+2. 确认已配置钱包：`agent-wallet list` 应至少显示一个钱包，并用 `*` 标出激活钱包。
+3. 确认代理的运行环境使用同一个钱包目录（`AGENT_WALLET_DIR`），修改后重启代理。
+4. 手动签名试试：`agent-wallet sign typed-data '<json>' -n eip155:56`。
 
-### 在 OpenClaw 里签名需要花 Gas 费吗？
+### 签名需要付 Gas 吗？
 
-签名本身不花 Gas。签名只是用你的私钥对一段数据做密码学运算，完全在本地完成。只有当签名后的交易被广播到链上时，才需要 Gas 费。查地址、签名消息这类操作永远免费。
+签名本身不花 Gas。只有把签好的交易广播到区块链时才会产生 Gas 费。
 
 ---
 
@@ -220,6 +212,6 @@ source ~/.zshrc
 
 - 没写过代码？ → [快速开始](./QuickStart.md)
 - 喜欢敲命令？ → [CLI 命令行手册](./Developer/CLI-Reference.md)
-- 要开发应用？ → [SDK 接入指南](./Developer/SDK-Guide.md)
+- 要自己写代理？ → [SDK 接入指南](./Developer/SDK-Guide.md)
 - 找现成代码？ → [完整代码示例](./Developer/SDK-Cookbook.md)
 - 了解 OpenClaw Extension → [OpenClaw Extension 简介](../Openclaw-extension/Intro.md)

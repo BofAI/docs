@@ -172,9 +172,9 @@ agent.setMCP("https://mcp.example.com/");
 
 
 
-When you set the MCP endpoint, the SDK will automatically:
-*   Fetch tools, prompts, and resources from the endpoint.
-*   Populate the agent's capabilities.
+What `setMCP()` does beyond recording the endpoint differs by language:
+*   **Python**: by default (`auto_fetch=True`) it fetches tools, prompts, and resources from the endpoint and stores them on the MCP endpoint entry as `mcpTools`, `mcpPrompts`, and `mcpResources`. A failed fetch is skipped: network and parse errors are logged only at debug level, and a non-HTTP(S) endpoint logs a warning. Pass `auto_fetch=False` to turn this off.
+*   **TypeScript**: it only records the endpoint URL and version (default `2025-06-18`). It does not contact the endpoint.
 
 ### A2A (Agent-to-Agent) Endpoint
 
@@ -200,9 +200,9 @@ agent.setA2A("https://a2a.example.com/agent-card.json");
 
 
 
-The SDK will automatically:
-*   Fetch skills from the A2A agent card.
-*   Index these capabilities for search.
+What `setA2A()` does beyond recording the endpoint differs by language:
+*   **Python**: by default (`auto_fetch=True`) it fetches the skill tags (`skills[].tags`) from the A2A agent card and stores them on the A2A endpoint entry as `a2aSkills`. A failed fetch is skipped: network and parse errors are logged only at debug level, and a non-HTTP(S) endpoint logs a warning. Pass `auto_fetch=False` to turn this off.
+*   **TypeScript**: it only records the agent card URL and version (default `0.3.0`). It does not fetch the card.
 
 ### ENS
 
@@ -227,9 +227,9 @@ agent.setENS("myagent.eth");
 
 
 
-This stores the ENS name in:
-*   The registration file.
-*   As on-chain metadata.
+Both SDKs store the ENS name as an `ENS` endpoint in the registration file. Writing it on-chain as the `agentName` metadata key differs:
+*   **Python**: the first `register()` (minting) writes `agentName` on-chain for you; on an already registered agent, `register(uri)` only updates the URI, so use `registerIPFS()`, which writes changed metadata including `agentName`.
+*   **TypeScript**: `setENS()` only changes the local registration file, and `register()` / `registerIPFS()` do not send `agentName`. Call `await agent.updateOnChainMetadata()` on a registered agent to write it.
 
 ### Remove Endpoints
 
@@ -369,7 +369,7 @@ The SDK builds the typed data for you, but it cannot invent the new wallet's sig
 | :--- | :--- |
 | `signature` (Python) / `signature` (TS) | Uses your bytes as-is. This is the path for smart contract wallets and any external/offline signer. |
 | `new_wallet_signer` (Python) / `newWalletSigner` (TS) | Signs with that key. The SDK checks the key's address against `newWallet` first and raises if they differ. |
-| neither | Falls back to the SDK signer — **and this only succeeds if the SDK signer's address is the new wallet**. Otherwise it raises `New wallet must sign. Provide new_wallet_signer (EOA) or signature (ERC-1271/external).` |
+| neither | Falls back to the SDK signer — **and this only succeeds if the SDK signer's address is the new wallet**. Otherwise Python raises `New wallet must sign. Provide new_wallet_signer (EOA) or signature (ERC-1271/external).` and TypeScript throws `newWalletSigner address (…) does not match newWallet (…).` If the TypeScript SDK has no signer at all, it throws `New wallet signature is required. Provide options.newWalletSigner or options.signature.` |
 
 :::caution The bare one-argument call is not the general case
 `setWallet(address)` with no signing option works **only** when the SDK signer already is that address. Since the transaction sender must also be the owner or an approved operator, the bare call is effectively for "point the agent at the wallet I am already signing with". To attach a wallet that is *different* from the SDK signer, you must supply `new_wallet_signer` / `newWalletSigner` or a ready-made `signature`.
@@ -400,10 +400,9 @@ agent.addSkill("advanced_reasoning_planning/strategic_planning", validate_oasf=T
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Add a skill without validation
+// The TypeScript SDK does not validate against the OASF taxonomy:
+// addSkill() accepts any string
 agent.addSkill("custom_skill/my_skill");
-
-// Add a skill with validation
 agent.addSkill("advanced_reasoning_planning/strategic_planning");
 ```
 
@@ -430,10 +429,9 @@ agent.addDomain("finance_and_business/investment_services", validate_oasf=True)
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Add a domain without validation
+// The TypeScript SDK does not validate against the OASF taxonomy:
+// addDomain() accepts any string
 agent.addDomain("custom_domain/my_domain");
-
-// Add a domain with validation
 agent.addDomain("finance_and_business/investment_services");
 ```
 
@@ -568,21 +566,26 @@ Certain properties can be managed directly as on-chain metadata.
 <TabItem value="python" label="python">
 
 ```python
-# Update on-chain metadata
+# Update on-chain metadata (the agent must already be registered)
 agent.setMetadata({"version": "1.1.0", "tier": "pro"})
-# If already registered and updating URI, you can call:
-# tx = agent.updateRegistration(agentURI="https://example.com/agent-card-updated.json")
-# tx.wait_confirmed(timeout=180)
+# setMetadata() only stages the keys. On a registered agent, the next registerIPFS()
+# (requires an IPFS client) uploads the file, replaces the URI with ipfs://..., and then
+# writes each changed key on chain (best-effort) inside wait_confirmed().
+# register(uri) and updateRegistration() update only the URI of a registered agent.
+tx = agent.registerIPFS()
+tx.wait_confirmed(timeout=180)
 ```
 
 </TabItem>
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Update on-chain metadata
+// Update on-chain metadata (the agent must already be registered)
 agent.setMetadata({ version: "1.1.0", tier: "pro" });
-const tx = await agent.register("https://example.com/agent-card-updated.json");
-await tx.waitConfirmed();
+// Sends one setMetadata transaction per key in the local metadata (plus agentName
+// when an ENS name is set) and returns their hashes.
+// Do not call register() here: it always mints a new agent.
+const txHashes = await agent.updateOnChainMetadata();
 ```
 
 </TabItem>
@@ -608,8 +611,8 @@ agent = sdk.loadAgent("97:123")
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-// Query agent summary by ID
-const agentSummary = await sdk.getAgent("97:123");
+// Load agent by ID
+const agent = await sdk.loadAgent("97:123");
 ```
 
 </TabItem>
@@ -634,9 +637,11 @@ print(agent.active)
 <TabItem value="TypeScript" label="TypeScript">
 
 ```typescript
-console.log(agentSummary?.name);
-console.log(agentSummary?.description);
-console.log(agentSummary?.active);
+// The TypeScript Agent has no name/description/active getters; read them from toJSON()
+const file = agent.toJSON();
+console.log(file.name);
+console.log(file.description);
+console.log(file.active);
 ```
 
 </TabItem>
@@ -680,7 +685,7 @@ const agent = sdk.createAgent({
 });
 
 agent.setMCP("https://mcp.example.com/")
-     .setMetadata({ ens: "advanced-agent.eth" })
+     .setENS("advanced-agent.eth")
      .addSkill("advanced_reasoning_planning/strategic_planning")
      .addDomain("technology/data_science/data_science")
      .setActive(true)
@@ -694,3 +699,22 @@ await tx.waitConfirmed();
 
 </TabItem>
 </Tabs>
+
+## Common Contract Errors
+
+These revert reasons come from the TRC-8004 / ERC-8004 registry contracts; the "Where" column names the contract function and the SDK calls that send it. On EVM networks a string reason such as `Not authorized` appears in the SDK's transaction error (usually from gas estimation). A custom ERC-721 error raised inside a Reputation or Validation call, such as `giveFeedback()` on an unregistered agent, may show only as its selector (`0x7e273289` is `ERC721NonexistentToken`). On TRON both SDKs report only `TRON transaction reverted: <hash> (REVERT)`, so look the transaction up on TronScan to see the reason.
+
+| Revert reason | Where | Cause and fix |
+| --- | --- | --- |
+| `Not authorized` | Identity Registry `setMetadata` / `setAgentURI` / `setAgentWallet`, sent by `updateOnChainMetadata()`, `updateRegistration(<uri>)`, `registerIPFS()` and `setWallet()`; Validation Registry `validationRequest` | The sender is not the agent's owner, approved address or operator. Sign with the owner, or `addOperator()` (TypeScript also `agent.approve()`) first |
+| `ERC721InsufficientApproval` | `transferFrom`, sent by TypeScript `transfer()` | The sender is not the owner, approved address or operator. Python `transfer()` checks the owner before sending and raises `ValueError: Only the current owner (…) can transfer the agent` instead |
+| `reserved key` | `register()` metadata, `setMetadata` | `agentWallet` is reserved; use `setWallet()` |
+| `bad wallet` / `expired` / `deadline too far` | `setWallet` | Zero address; `deadline` already passed; `deadline` more than 5 minutes ahead |
+| `invalid wallet sig` | `setWallet` | The signature was not produced by the new wallet (ECDSA, or ERC-1271 for contract wallets) |
+| `Self-feedback not allowed` | `giveFeedback` | The agent's owner, an operator or the approved address rated the agent |
+| `index must be > 0` / `index out of bounds` | `revokeFeedback`, `appendResponse`, `readFeedback` (SDK `getFeedback()`) | `feedbackIndex` is 0, or higher than the last feedback that client gave the agent (including when it gave none) |
+| `Already revoked` | `revokeFeedback` | The feedback was already revoked |
+| `Empty URI` | `appendResponse` | `responseURI` is empty. Python `appendResponse()` builds the URI only when an IPFS client is configured and the response has `text` or `attachments`; otherwise, or when the IPFS upload fails, it sends an empty URI and hits this error |
+| `clientAddresses required` | `getSummary`, called by Python `getReputationSummary()` without a subgraph | The agent has no feedback yet, so the client list read from the chain is empty. `sdk.getReputationSummary()` takes no client list, so treat this as "no reputation yet" (TypeScript returns zeros instead) |
+| `exists` / `not validator` / `resp>100` / `unknown` | Validation request / response | Duplicate request hash; responder is not the named validator; score above 100; unknown request hash |
+| `ERC721NonexistentToken` | Identity Registry writes and `ownerOf` / `tokenURI` reads, `giveFeedback`, `validationRequest` | The agent ID is not registered on the configured network. Python `loadAgent()` raises `Failed to load agent …`; TypeScript `loadAgent()` does not throw and returns an agent with an empty URI |

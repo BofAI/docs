@@ -60,11 +60,11 @@
   <line x1="439.5" y1="240" x2="439.5" y2="280" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah-slate)"/>
   <rect x="327" y="284" width="225" height="58" rx="8" fill="#ffffff"/>
   <rect x="327" y="284" width="225" height="58" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
-  <text x="439.5" y="309" fill="#0f172a" font-size="13" font-weight="600" text-anchor="middle">x402-cli</text>
+  <text x="439.5" y="309" fill="#0f172a" font-size="13" font-weight="600" text-anchor="middle">wallet-cli</text>
   <text x="439.5" y="328" fill="#64748b" font-size="10" text-anchor="middle">搜索、查看、付费调用</text>
   <line x1="726.5" y1="240" x2="726.5" y2="280" stroke="#94a3b8" stroke-width="1.5" marker-end="url(#ah-slate)"/>
   <rect x="614" y="284" width="225" height="58" rx="8" fill="#ffffff"/>
   <rect x="614" y="284" width="225" height="58" rx="8" fill="#f8fafc" stroke="#64748b" stroke-width="1.5"/>
   <text x="726.5" y="309" fill="#0f172a" font-size="13" font-weight="600" text-anchor="middle">MCP</text>
-  <text x="726.5" y="328" fill="#64748b" font-size="10" text-anchor="middle">Agent 按名字直接调用</text>
+  <text x="726.5" y="328" fill="#64748b" font-size="10" text-anchor="middle">仅付费调用 · 暂不支持按目录查找</text>
 </svg>

@@ -16,7 +16,7 @@ After completing this guide, you'll have a **service that charges for API calls*
 The entire flow takes **4 steps**, estimated time: **15–20 minutes**.
 
 :::info (TypeScript-only)
-x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packages. This guide shows how to build with the published npm packages.
+x402 is a **TypeScript-only** SDK: the TRON mechanism ships as `@bankofai/x402-tron` and runs on the official `@x402/*` Core, EVM and framework packages. This guide shows how to build with the published npm packages.
 :::
 
 ---
@@ -28,7 +28,7 @@ x402 is a **TypeScript-only** SDK published as granular `@bankofai/x402-*` packa
 In your terminal (Terminal on macOS/Linux, or PowerShell/Command Prompt on Windows), run the following commands to confirm the required tools are installed:
 
 ```bash
-node --version    # Requires Node.js 22 or higher
+node --version    # Requires Node.js 24.22.1 or higher
 pnpm --version    # Requires pnpm 11.1 or higher
 git --version     # Version control tool
 ```
@@ -132,14 +132,14 @@ Deposit a small amount of official USDC on Base Mainnet. The resource server onl
 
 ## Step 1: Install the SDK Packages
 
-Install the Express adapter and the TRON/EVM payment schemes in your TypeScript API project:
+Install official Core, the Express adapter and the TRON/EVM payment schemes in your TypeScript API project:
 
 ```bash
-pnpm add express @bankofai/x402-core @bankofai/x402-express @bankofai/x402-tron @bankofai/x402-evm
+pnpm add express @x402/core@2.28.0 @x402/express@2.28.0 @bankofai/x402-tron@2.1.0 @x402/evm@2.28.0
 pnpm add -D tsx   # to run the TypeScript entry point below
 ```
 
-Use the framework package that matches your server (`@bankofai/x402-express`, `@bankofai/x402-hono`, `@bankofai/x402-fastify`, or `@bankofai/x402-next`). Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
+Use the framework package that matches your server (`@x402/express`, `@x402/hono`, `@x402/fastify`, or `@x402/next`), at the same `2.28.0` as `@x402/core` — `@bankofai/x402-tron` 2.1.0 declares `@x402/core@2.28.0` as an exact peer dependency. Install `@x402/evm` only for BSC/Base routes. Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
 
 If you want a more complete client → server → facilitator example, refer to the repository [examples](https://github.com/BofAI/x402/tree/main/examples/typescript). Application development should still depend on the published packages instead of linking the monorepo source.
 
@@ -169,16 +169,13 @@ Here are minimal Express resource servers for TRON and Base. `GET /credit` requi
 
 ```typescript
 import express from "express";
-import { createResourceServer } from "@bankofai/x402-core";
-import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
-import {
-  x402HTTPResourceServer,
-  paymentMiddlewareFromHTTPServer,
-} from "@bankofai/x402-express";
+import { HTTPFacilitatorClient, x402ResourceServer } from "@x402/core/server";
+import { x402HTTPResourceServer } from "@x402/core/http";
+import { paymentMiddlewareFromHTTPServer } from "@x402/express";
 import { TRON_NILE } from "@bankofai/x402-tron";
 import { ExactTronScheme } from "@bankofai/x402-tron/exact/server";
 
-const server = createResourceServer(
+const server = new x402ResourceServer(
   new HTTPFacilitatorClient({
     // Replace this before running — the server syncs with the facilitator on
     // startup, so a placeholder URL makes the first protected request fail
@@ -222,15 +219,12 @@ express()
 
 ```typescript
 import express from "express";
-import { createResourceServer } from "@bankofai/x402-core";
-import { HTTPFacilitatorClient } from "@bankofai/x402-core/server";
-import {
-  x402HTTPResourceServer,
-  paymentMiddlewareFromHTTPServer,
-} from "@bankofai/x402-express";
-import { ExactEvmScheme } from "@bankofai/x402-evm/exact/server";
+import { HTTPFacilitatorClient, x402ResourceServer } from "@x402/core/server";
+import { x402HTTPResourceServer } from "@x402/core/http";
+import { paymentMiddlewareFromHTTPServer } from "@x402/express";
+import { ExactEvmScheme } from "@x402/evm/exact/server";
 
-const server = createResourceServer(
+const server = new x402ResourceServer(
   new HTTPFacilitatorClient({
     // Replace this before running — the server syncs with the facilitator on
     // startup, so a placeholder URL makes the first protected request fail
@@ -313,7 +307,7 @@ The officially hosted Facilitator service requires **no infrastructure to mainta
 Set the `url` in `HTTPFacilitatorClient` to the official endpoint:
 
 ```typescript
-const server = createResourceServer(
+const server = new x402ResourceServer(
   new HTTPFacilitatorClient({
     url: "https://facilitator.bankofai.io",
   })
@@ -322,7 +316,7 @@ const server = createResourceServer(
 
 This is the address your x402 server uses to verify and settle payments — **for API calls only**, no need to open it in a browser.
 
-> ⚠️ **Without an API Key, this endpoint is rate-limited** (one `/settle` call per IP per minute). Suitable for testing only.
+> ⚠️ **Without an API Key, this endpoint is rate-limited** (10 requests per IP per minute, counted separately for `/verify` and `/settle`). Suitable for testing only.
 
 #### 4.2 Apply for an API Key
 
@@ -330,14 +324,14 @@ This is the address your x402 server uses to verify and settle payments — **fo
 2. On the Dashboard, click **"Create API Key"**
 3. Confirm, then click **View** in the Dashboard to see and copy your API Key
 
-With an API Key, the official service allows **1,000 `/settle` requests per API Key per minute**, sufficient for production use.
+With an API Key, the official service allows **1,000 requests per API Key per minute for each of `/verify` and `/settle`**, sufficient for production use.
 
 #### 4.3 Wire the API Key into Your Server
 
 The official key is sent as the `X-API-KEY` header on every facilitator call. Keep it in an environment variable or secret manager, and pass it with facilitator requests in production.
 
 ```bash
-FACILITATOR_API_KEY=paste_your_api_key_here
+export FACILITATOR_API_KEY=paste_your_api_key_here
 ```
 
 `HTTPFacilitatorClient` sends the header only if you give it `createAuthHeaders` — without this the server silently stays on the anonymous tier:
@@ -364,7 +358,7 @@ new HTTPFacilitatorClient({
 
 The self-hosted option gives you full control over the settlement wallet, RPC endpoints, and which networks and schemes you register — neither the SDK nor the facilitator charges a fee of its own. It runs the example facilitator (`examples/typescript/facilitator/basic`), which exposes `/verify`, `/settle`, `/supported` over HTTP and dispatches by the payment's `network` field.
 
-> **Base sellers:** the bundled example facilitator registers only `eip155:97` and `eip155:56` (`EVM_NETWORKS` in `facilitator/basic/src/chains/evm.ts`). To settle on Base, either use the official facilitator — which enables `eip155:8453` and `eip155:84532` — or add those ids to `EVM_NETWORKS` yourself.
+> **BSC and Base sellers:** since x402 v2.1.0 the bundled example facilitator registers TRON networks only (`TRON_NETWORKS` in `facilitator/basic/src/chains/tron.ts`). To settle on BSC or Base, either use the official facilitator — which enables `eip155:56`, `eip155:97`, `eip155:8453` and `eip155:84532` — or build an EVM facilitator with official `@x402/evm` following the [upstream examples](https://github.com/x402-foundation/x402/tree/main/examples/typescript).
 
 > ⚠️ **Security reminder — please read first:**
 > - A self-hosted Facilitator uses your wallet to submit on-chain settlement transactions — **this wallet should be separate from your receiving wallet**
@@ -377,27 +371,25 @@ The facilitator verifies signatures and settles on-chain. It registers the `exac
 
 ```typescript
 // examples/typescript/facilitator/basic/src/index.ts (abridged)
-import { x402Facilitator } from "@bankofai/x402-core/facilitator";
+import { x402Facilitator } from "@x402/core/facilitator";
 
 const facilitator = new x402Facilitator()
   .onBeforeSettle(async ctx => console.log("[settle] before", ctx.requirements.network))
   .onAfterSettle(async ctx => console.log("[settle] after", ctx.requirements.network))
   .onSettleFailure(async ctx => console.log("[settle] failure", ctx));
 
-// Register each chain only if its wallet resolves (EVM-only, TRON-only, or both).
-const evm = await registerEvm(facilitator);
+// Register each chain only if its wallet resolves. Only TRON networks are registered.
 const tron = await registerTron(facilitator);
 
 // Exposes POST /verify, POST /settle, GET /supported on FACILITATOR_PORT.
 app.listen(PORT, () => console.log(`🚀 Facilitator on http://localhost:${PORT}`));
 ```
 
-Each chain module adapts the agent-wallet to a facilitator signer:
+The TRON chain module adapts the agent-wallet to a facilitator signer:
 
-- **EVM** — `createFacilitatorEvmSigner(wallet, { network, rpcUrl })`, then `facilitator.register(network, new ExactEvmScheme(signer))`
 - **TRON** — `createFacilitatorTronSigner(wallet, { network, apiKey })`, then `facilitator.register(network, new ExactTronScheme(signer))`
 
-The signer factories build the viem client / TronWeb internally; the example **never reads a raw private key** — `AGENT_WALLET_PRIVATE_KEY` is consumed by `@bankofai/agent-wallet`.
+The signer factory builds TronWeb internally; the example **never reads a raw private key** — `AGENT_WALLET_PRIVATE_KEY` is consumed by `@bankofai/agent-wallet`.
 
 #### 4.2 Start the Facilitator
 
@@ -410,9 +402,10 @@ pnpm dev:facilitator
 **After a successful start, you should see output like:**
 
 ```
-[evm] facilitator registered eip155:97 (0x…)
 [tron] facilitator registered tron:3448148188 (T…)
-🚀 Facilitator on http://localhost:4022  (evm=true, tron=true)
+[tron] facilitator registered tron:2494104990 (T…)
+[tron] facilitator registered tron:728126428 (T…)
+🚀 Facilitator on http://localhost:4022  (tron=true)
 ```
 
 > ✅ **Success:** Facilitator is running on port 4022 — **keep this terminal window open, do not close it**
@@ -472,10 +465,10 @@ To test the complete pay → receive content flow, use the minimal client in [Qu
 |---------|-------|----------|
 | `Failed to fetch` / connection refused | Facilitator or server not running | Start the facilitator first, then run your API server entry point |
 | Client selects nothing / no matching requirement | The client selected a network or token that the server does not advertise | Check the server's `accepts` (network + token), e.g. `TRON_NILE` + `USDT` |
-| `ERR_PACKAGE_PATH_NOT_EXPORTED` under `npx tsx` | Project is not declared as ESM | Add `"type": "module"` to your `package.json` |
+| `Top-level await is currently not supported with the "cjs" output format` under `npx tsx` | Project is not declared as ESM, so an entry file with top-level `await` is compiled as CommonJS | Add `"type": "module"` to your `package.json` |
 | `No network/scheme registered for x402 version: 2 …` | The selected client network has no registered scheme | Ensure the client registers your target network, such as `TRON_NILE` |
-| `Insufficient balance` / allowance error | Test wallet lacks test tokens, or Permit2 allowance too low | Claim test tokens from the faucet; the client auto-approves Permit2 on first payment |
-| `Connection timeout` | Network or request timeout | Check your connection. Note the SDK reads no environment variables — `EVM_RPC_URL` is honoured by the reference example apps; in your own server pass the RPC URL to the signer factory |
+| `Insufficient balance` / allowance error | Test wallet lacks test tokens, or Permit2 allowance too low | Claim test tokens from the faucet. On TRON the client auto-approves Permit2 on first payment; on EVM, approve Permit2 once yourself |
+| `Connection timeout` | Network or request timeout | Check your connection. Note the SDK reads no environment variables — `TRON_GRID_API_KEY` is read by the reference example apps; in your own code pass `apiKey` / `rpcUrl` to the signer factory |
 
 ---
 
@@ -500,15 +493,11 @@ price: "1 USDT",
 
 ### 2. Set a Reliable EVM RPC
 
-BSC mainnet needs a stable endpoint. Set this for both the client and facilitator:
-
-```bash
-EVM_RPC_URL=https://bsc-rpc.publicnode.com
-```
+BSC mainnet needs a stable endpoint, such as `https://bsc-rpc.publicnode.com`. The SDK reads no environment variables, and since v2.1.0 the repository examples are TRON-only — configure the endpoint on the EVM signers you build with official `@x402/evm`, for both the client and a self-hosted facilitator.
 
 ### 3. (Self-Hosted) Switch the Facilitator to Mainnet
 
-The example facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:728126428`), and `EVM_NETWORKS` includes `eip155:97` and `eip155:56` — Base (`eip155:8453` / `eip155:84532`) is not registered there, so add it if you settle on Base. Fund the Facilitator wallet with real TRX/BNB to cover settlement gas, then restart:
+The example facilitator's `TRON_NETWORKS` already includes `TRON_MAINNET` (`tron:728126428`); it registers no EVM networks, so settle BSC or Base through the official facilitator or your own `@x402/evm` facilitator. Fund the Facilitator wallet with real TRX to cover settlement energy, then restart:
 
 ```bash
 pnpm dev:facilitator

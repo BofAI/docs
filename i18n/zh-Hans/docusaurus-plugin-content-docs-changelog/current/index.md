@@ -8,6 +8,110 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-10-27</div>
+<div className="changelog-body">
+
+### 反向审计：代码中有、文档未覆盖的内容
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span></div>
+
+- Facilitator 错误码、8004 的 subgraph 默认值与合约回退原因、Agent Wallet 错误码与配置结构、wallet-cli 错误码与充值规则、各 Skill 的安装步骤与凭据、OpenClaw 安装器细节、TRON MCP 的包内容与 HTTP 细节。[x402](./x402/) · [8004](./8004/) · [Agent Wallet](./agent-wallet/) · [SKILLS](./skills/) · [OpenClaw](./openclaw-extension/) · [MCP](./mcp-server/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-25</div>
+<div className="changelog-body">
+
+### x402 文档对齐 SDK 2.1.0 与 Facilitator v2.2.2
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">x402</span><span className="changelog-tag">修复</span></div>
+
+- 基于官方 `@x402/core` 2.28.0 的 2.1.0 版本组合（TRON 资源赞助使用 `@bankofai/x402-tron-extensions`）、十进制 TRON ID、官方 Facilitator 匿名调用 `/verify` 与 `/settle` 各每分钟 10 次的限流、Nile 资源赞助，以及 API Catalog 其余的 CI 规则。[详情](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-23</div>
+<div className="changelog-body">
+
+### 各产品的 Node.js 版本要求更新
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span></div>
+
+- 安装相关页面改为各项目源码要求的 2026 年 10 月安全更新版本（仍声明旧下限的已发布包——agent-wallet `3.0.0` 为 `>=18`、TRON MCP Server `1.1.7` 为 `>=20`——已在对应页面注明）：Agent Wallet、wallet-cli、SKILLS 和 OpenClaw Extension 需要 Node.js 22.23.4+（22.x）、24.22.1+（24.x）或 26.12.1+；8004 TypeScript SDK 相同，但最高只到 26.x；TRON MCP Server 需要 22.23.4+ 或 24.22.1+（源码 `v1.1.8`；不支持 Node.js 26；npm `1.1.7` 声明的是 `>=20`）；x402 SDK 需要 24.22.1+。OpenClaw 的两个安装器现在会在安装任何内容之前检查完整版本号。
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-23</div>
+<div className="changelog-body">
+
+### 8004 文档对齐 SDK 1.2.1
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">8004</span><span className="changelog-tag">修复</span></div>
+
+- Base 主网与 Base Sepolia、`registerIPFS()` 输出的规范 registration-v1 键名、新的 TypeScript 注册表读取 API，以及 1.2.1 的 Node.js 要求。[详情](./8004/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-23</div>
+<div className="changelog-body">
+
+### OpenClaw Extension 与 TRON MCP Server 文档按代码更正
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span></div>
+
+- OpenClaw：安装器仍锁定 Skills `v1.5.15`、agent-wallet 2.3.1 与 `chat.ainft.com`——9 月 9 日所述的安装器改动并未发布，文档现按实际安装器描述。[详情](./openclaw-extension/) TRON MCP Server：未配置 API Key 时的主网 RPC 回落、工具与提示词细节，以及真实的钱包报错文本。[详情](./mcp-server/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-22</div>
+<div className="changelog-body">
+
+### SKILLS 3.0.1——Node.js 安全基线
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">SKILLS</span></div>
+
+- 内置的 Node.js Skills 与 wallet-cli 安装器要求 Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`。`wallet-cli` Skill 仍锁定 `@tron-walletcli/wallet-cli@4.14.0`。[详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-21</div>
+<div className="changelog-body">
+
+### Agent Wallet 文档按 3.0 重写
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">破坏性变更</span></div>
+
+- Agent Wallet 各页改为对应 3.0.0：`wallet_cli`、`privy`、`raw_secret` 三种钱包，exec 脚本提供凭据，网络标识须为精确的 CAIP-2。`local_secure`、`AGENT_WALLET_PASSWORD` 和 Python SDK 不再介绍。[详情](./agent-wallet/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-10-21</div>
+<div className="changelog-body">
+
+### SKILLS 安装命令固定到 main 分支
+
+<div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">SKILLS</span><span className="changelog-tag">修复</span></div>
+
+- 使用 `npx skills add https://github.com/BofAI/skills/tree/main -g` 安装，使 Skills 与文档中的 wallet-cli 版本一致。[详情](./skills/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-09-28</div>
 <div className="changelog-body">
 
@@ -34,6 +138,19 @@ BANK OF AI 各产品的更新与公告。
 </div>
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-09-10</div>
+<div className="changelog-body">
+
+### Agent Wallet v3.0.0
+
+<div className="changelog-tags"><span className="changelog-tag">新版本</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">破坏性变更</span></div>
+
+- 新增 `wallet_cli` 钱包类型；移除 `local_secure`、主密码与 `AGENT_WALLET_PASSWORD`；`signTransaction()` 返回带类型的结果；移除 `signRaw` / `signMessage`；低阶 API 移到 `/advanced`。[详情](./agent-wallet/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-09-09</div>
 <div className="changelog-body">
 
@@ -41,7 +158,7 @@ BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-tags"><span className="changelog-tag">文档</span><span className="changelog-tag">修复</span><span className="changelog-tag">8004</span><span className="changelog-tag">Openclaw</span></div>
 
-- 8004 文档内部已一致：`setWallet` 由四种互不一致的调用形态统一为每种 SDK 一种，并说明新钱包签名的三种提供方式、移除旧版 TRON `chainId`、改用 SDK 实际接受的网络标识、私钥改从环境变量读取。Openclaw 安装器不再固定在已被取代的技能标签上，并写入正确的 BANK OF AI 域名。[8004 详情](./8004/) · [Openclaw 详情](./openclaw-extension/)
+- 8004 文档内部已一致：`setWallet` 由四种互不一致的调用形态统一为每种 SDK 一种，并说明新钱包签名的三种提供方式、移除旧版 TRON `chainId`、改用 SDK 实际接受的网络标识、私钥改从环境变量读取。Openclaw 安装器不再固定在已被取代的技能标签上，并写入正确的 BANK OF AI 域名。*（10 月 23 日更正：这些安装器改动并未发布。）*[8004 详情](./8004/) · [Openclaw 详情](./openclaw-extension/)
 
 </div>
 </div>

@@ -7,8 +7,8 @@ import TabItem from '@theme/TabItem';
 
 ## TRON 网络标识符
 
-x402 采用 CAIP-2 网络标识符格式：`tron:<hex_chain_id>`。
-应用代码中优先使用 `@bankofai/x402-tron` 导出的常量（`TRON_MAINNET`、`TRON_NILE`、`TRON_SHASTA`），不要手动复制不透明的 hex 字符串。
+x402 采用 CAIP-2 网络标识符格式：`tron:<decimal_chain_id>`（十进制链 ID）。
+应用代码中优先使用 `@bankofai/x402-tron` 导出的常量（`TRON_MAINNET`、`TRON_NILE`、`TRON_SHASTA`），不要手动复制标识符字符串。
 
 ### 标识符参考表
 
@@ -18,7 +18,7 @@ x402 采用 CAIP-2 网络标识符格式：`tron:<hex_chain_id>`。
 | **TRON Shasta**         | `tron:2494104990`  | `TRON_SHASTA`  | TRON Shasta 测试网 |
 | **TRON Nile**           | `tron:3448148188`  | `TRON_NILE`    | TRON Nile 测试网 |
 
-> **TRON 标识格式**：自 `@bankofai/x402-tron` 2.0.0 起，SDK 常量使用十进制 CAIP-2 引用。旧的十六进制形式（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）仍可作为输入别名使用，官方 facilitator 与 API Catalog 目前返回的也是十六进制形式。
+> **TRON 标识格式**：自 `@bankofai/x402-tron` 2.0.0 起，SDK 常量使用十进制 CAIP-2 引用。旧的十六进制形式（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）仍可作为输入别名使用，并会被规范化为十进制形式。官方 facilitator 的 `/supported` 返回十进制标识；API Catalog 目前仍列出十六进制形式。
 
 
 ## BSC 网络标识符
@@ -30,7 +30,7 @@ x402 采用 CAIP-2 网络标识符格式：`tron:<hex_chain_id>`。
 | **BSC Mainnet**        | `eip155:56` | BSC 主网 (生产环境) |
 | **BSC Testnet**         | `eip155:97`  | BSC 测试网   |
 
-> **注意**：自托管 Facilitator 的 YAML 配置**只接受规范的 CAIP-2 标识符**——`eip155:56`、`eip155:97`、`eip155:8453`、`eip155:84532`、`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`。`bsc:mainnet`、`tron:nile` 这类易读别名不会被解析，启动时会直接报错。
+> **注意**：自托管 Facilitator 的 YAML 配置**只接受规范的 CAIP-2 标识符**——`eip155:56`、`eip155:97`、`eip155:8453`、`eip155:84532`、`tron:728126428`、`tron:3448148188`、`tron:2494104990`。已弃用的十六进制 TRON 标识（`tron:0x…`）仍被接受，并会规范化为十进制。`bsc:mainnet`、`tron:nile` 这类易读别名不会被解析，启动时会直接报错。
 
 
 ## Base 网络标识符
@@ -75,18 +75,17 @@ x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自�
 | **USDD** | `tron:728126428` | `TXDk8mbtRbXeYuMNS83CfKPaYYT8XWv9Hz` |
 | **USDD** | `tron:3448148188`    | `TGjgvdTWWrybVLaVeFqSyVqJQWjxqRYbaK` |
 | **USDT** | `eip155:56` | `0x55d398326f99059fF775485246999027B3197955` |
-| **USDC** | `eip155:56` | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d` |
+| **USDC** | `eip155:56` | `0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d`（不在任何内置代币注册表中——仅能作为显式资产） |
 | **USDT** | `eip155:97`    | `0x337610d27c682E347C9cD60BD4b3b107C9d34dDd` |
 | **USDC** | `eip155:97`    | `0x64544969ed7EBf5f083679233325356EbE738930` |
-| **DHLU** | `eip155:97`    | `0x375cADdd2cB68cE82e3D9B075D551067a7b4B816` |
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:728126428`、`tron:3448148188`、`tron:2494104990`）与 BSC 主网（`eip155:56`）上解析 **USDT**，在 BSC 测试网（`eip155:97`）与 Base（`eip155:8453`、`eip155:84532`）上解析 **USDC**。注册表还为本页未列表的二十条 EVM 网络（MegaETH、Monad、Polygon、Arbitrum、Mezo、Radius、XDC、Celo、Flare 等）内置了默认资产。上表中的其余代币——TRON USDD、BSC 主网 USDC、BSC 测试网 USDT、DHLU 以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付。CLI 资产选择请参见 [wallet-cli 命令参考](/zh-Hans/wallet-cli/command-reference/)。
+> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:728126428`、`tron:3448148188`、`tron:2494104990`，来自 `@bankofai/x402-tron`）上解析 **USDT**，在 Base（`eip155:8453`、`eip155:84532`，来自官方 `@x402/evm` 2.28.0）上解析 **USDC**。`@x402/evm` 还为本页未列表的其他 EVM 网络（Ethereum、Polygon、Arbitrum、Avalanche、Celo、Sei、MegaETH、Monad、XDC、Flare 等）内置了默认资产，但**不包括 BSC**：BSC 路由必须用显式的 `{ asset, amount, extra }` 对象定价。上表中的其余代币——TRON USDD、所有 BSC 资产以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付。CLI 资产选择请参见 [wallet-cli 命令参考](/zh-Hans/wallet-cli/command-reference/)。
 
-> **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或 server 的 `EVM_TOKENS` 配置表，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
+> **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或在 server 路由上使用显式的 `{ asset, amount, extra }` 价格，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
 
-> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC、BSC 测试网 DHLU）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算——客户端首次付款时自动广播一次性 `approve(Permit2)`；在 TRON 上，若 server 声明了 `trc20ApprovalResourceSponsoring`（SDK 1.2.0+），则改为客户端签名、由 facilitator 赞助并广播。每种代币的结算方式由你在 server 端 `accepts[].price.extra` 里配置，SDK 会在协议数据中以 `accepts[].extra` 下发：EIP-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。若某个 permit2 资产同时实现了 EIP-2612，`extra` 会在 `assetTransferMethod` 之外一并带上 `{ name, version }`；反过来，省略这对字段正是服务端告诉客户端「跳过 EIP-2612」的方式。两条代付路径都位于 permit2 分支内，因此对 EIP-3009 资产一概不适用。在 permit2 资产上，客户端签名无 gas 的 EIP-2612 permit 需要同时满足：具备 `readContract` 能力（由签名方或已配置的 RPC 提供）、服务端声明了 `eip2612GasSponsoring` 扩展、`extra` 里 `name` 与 `version` 都在、且当前 Permit2 额度尚不足以覆盖本次支付。注意这里的不对称：**缺少**读取能力会直接跳过 permit，而读取**抛错**则会被捕获、签名照常进行。否则客户端会*尝试* ERC-20 授权 gas 代付，这条路径要求 `readContract` 能力、服务端声明另一个独立的 `erc20ApprovalGasSponsoring` 扩展、签名方既能签原始交易又能报告交易计数，同样也要求现有额度不足；此时由客户端签名一笔 `MaxUint256` 的 `approve`——始终是最大值，与支付金额无关——由 facilitator 负责广播。两条路径都不满足时，载荷里不会带任何代付扩展。内置默认资产中带该标记的是 MegaETH MegaUSD（主网）以及 Mezo mUSD 与 Radius SBC（主网与测试网均有）。
+> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，需要一次性 `approve(Permit2)`——在 TRON 上客户端首次付款时自动广播（EVM 上从不广播，见下文的代付路径）；在 TRON 上，若 server 声明了 `trc20ApprovalResourceSponsoring`（SDK 1.2.0+），则改为客户端签名、由 facilitator 赞助并广播（从 2.1.0 起须注册 `@bankofai/x402-tron-extensions` 中的客户端扩展）。每种代币的结算方式由你在 server 端 `accepts[].price.extra` 里配置，SDK 会在协议数据中以 `accepts[].extra` 下发：EIP-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。若某个 permit2 资产同时实现了 EIP-2612，`extra` 会在 `assetTransferMethod` 之外一并带上 `{ name, version }`；反过来，省略这对字段正是服务端告诉客户端「跳过 EIP-2612」的方式。两条代付路径都位于 permit2 分支内，因此对 EIP-3009 资产一概不适用。在 permit2 资产上，客户端签名无 gas 的 EIP-2612 permit 需要同时满足：具备 `readContract` 能力（由签名方或已配置的 RPC 提供）、服务端声明了 `eip2612GasSponsoring` 扩展、`extra` 里 `name` 与 `version` 都在、且当前 Permit2 额度尚不足以覆盖本次支付。注意这里的不对称：**缺少**读取能力会直接跳过 permit，而读取**抛错**则会被捕获、签名照常进行。否则客户端会*尝试* ERC-20 授权 gas 代付，这条路径要求 `readContract` 能力、服务端声明另一个独立的 `erc20ApprovalGasSponsoring` 扩展、签名方能签原始交易，并能获取交易计数（由签名方或已配置的 RPC 提供），同样也要求现有额度不足；此时由客户端签名一笔 `MaxUint256` 的 `approve`——始终是最大值，与支付金额无关——由 facilitator 负责广播。两条路径都不满足时，载荷里不会带任何代付扩展。内置默认资产中带 `supportsEip2612` 标记的是 MegaETH MegaUSD（主网）以及 Mezo mUSD 与 Radius SBC（主网与测试网均有）。
 
 ## 安全签名
 
@@ -118,8 +117,8 @@ x402 定义了五种命名支付方案。其中四种按链族提供完整的 cl
 
 `exact` 方案支付公布的准确金额，覆盖两种代币转账路径：
 
-- **EIP-3009 `transferWithAuthorization`**：适用于原生支持该标准的代币（如 Base 官方 USDC、BSC 测试网 DHLU）。无 gas：无需 `approve`；客户端签署类型化数据授权，facilitator 在链上调用 `transferWithAuthorization`。
-- **Permit2**：适用于不实现 ERC-3009 的普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）。客户端签署 Permit2 witness，facilitator 通过 `x402ExactPermit2Proxy` 合约结算。需要一次性 `approve(Permit2)`；客户端首次付款时自动广播。在 TRON 上，SDK 1.2.0 新增了 `trc20ApprovalResourceSponsoring` 扩展——若 server 声明了它，client 只签名而不广播该授权，由 facilitator 委托能量/带宽并广播，因此付款方授权时无需 TRX。
+- **EIP-3009 `transferWithAuthorization`**：适用于原生支持该标准的代币（如 Base 官方 USDC）。无 gas：无需 `approve`；客户端签署类型化数据授权，facilitator 在链上调用 `transferWithAuthorization`。
+- **Permit2**：适用于不实现 ERC-3009 的普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）。客户端签署 Permit2 witness，facilitator 通过 `x402ExactPermit2Proxy` 合约结算。需要一次性 `approve(Permit2)`；在 TRON 上客户端首次付款时自动广播，在 EVM 上则须事先授权或通过 gas 代付扩展转发。在 TRON 上，SDK 1.2.0 新增了 `trc20ApprovalResourceSponsoring` 扩展——若 server 声明了它，client 只签名而不广播该授权，由 facilitator 委托能量/带宽并广播，因此付款方授权时无需 TRX。从 2.1.0 起，客户端必须注册 `@bankofai/x402-tron-extensions` 中的 `createTrc20ApprovalResourceSponsoringClientExtension(signer)`，否则付款会以 `trc20_approval_client_extension_not_registered` 失败。
 
 `exact` 方案遵循 **x402 Foundation** 发布的 **v2 链路格式**：标准 v2 客户端可直接向本 SDK 的服务端发起付款请求，本 SDK 客户端也可直接访问任何 v2 兼容的服务端——无需项目特定的转换。转账授权数据在 EIP-3009 路径下位于 `payload.authorization`，在 Permit2 路径下位于 `payload.permit2Authorization`。
 
@@ -133,7 +132,7 @@ x402 定义了五种命名支付方案。其中四种按链族提供完整的 cl
 
 ### `auth-capture` 方案
 
-面向可退款 Base Commerce Payments 的 EVM client 实现：先授权资金，之后再执行 capture、void 或 refund。当前发布的 SDK 仅提供 `@bankofai/x402-evm/auth-capture/client`；server 与 facilitator 实现尚未发布，因此暂时无法只依靠发布包完成端到端部署。
+面向可退款 Base Commerce Payments 的 EVM client 实现：先授权资金，之后再执行 capture、void 或 refund。官方 `@x402/evm` 包（SDK 自 2.1.0 起用它处理 EVM）目前仅提供 `@x402/evm/auth-capture/client`；server 与 facilitator 实现尚未发布，因此暂时无法只依靠发布包完成端到端部署。
 
 ### `exact_gasfree` 方案
 
@@ -193,7 +192,7 @@ CLI 取的是服务端 `accepts` 列表中第一条匹配你过滤条件的支�
 
 | 核心组件     | TRON/BSC/Base 实现详情                              |
 | :----------- | :----------------------------------------- |
-| **网络环境** | 三个 TRON 标识（`tron:728126428`、`tron:2494104990`、`tron:3448148188`）以及任意 `eip155:<chainId>`——客户端与资源服务端默认注册的都是 `eip155:*`，SDK 为 `eip155:56` / `97` / `8453` / `84532` 之外的二十条 EVM 网络也内置了默认资产。但真正能结算的范围由 facilitator 显式配置的网络决定 |
+| **网络环境** | 三个 TRON 标识（`tron:728126428`、`tron:2494104990`、`tron:3448148188`）以及任意 `eip155:<chainId>`——客户端与资源服务端默认注册的都是 `eip155:*`，官方 `@x402/evm` 为 Base、Base Sepolia 及许多其他 EVM 网络内置了默认资产，但不包括 BSC（`eip155:56` / `97` 需显式指定资产）。但真正能结算的范围由 facilitator 显式配置的网络决定 |
 | **代币标准** | TRC-20 代币（默认内置 USDT 和 USDD 支持）、BEP-20 代币、ERC-20 代币（Base 官方 USDC） |
 | **签名机制** | TIP-712 / EIP-712 类型化数据签名                     |
 | **支付方案** | `exact`、`upto`、`batch-settlement`、`exact_gasfree`（TRON） |
@@ -213,7 +212,7 @@ registerToken(TRON_NILE, {
 });
 ```
 
-在**资源服务器**侧，自定义 EVM 代币通过在 server 的 `src/chains/evm.ts` 中的 `EVM_TOKENS` 表添加一条目来公布——一个显式的 `{ asset, amount, extra }` 对象。添加一条链仅需一条表项；无需改动 SDK。
+在**资源服务器**侧，自定义 EVM 代币通过在路由的 `accepts` 中使用显式的 `{ asset, amount, extra }` 价格对象来公布；无需改动 SDK。（旧示例 server 的 `EVM_TOKENS` 表已随 EVM 示例在 x402 v2.1.0 中移除，请参考[上游 EVM 示例](https://github.com/x402-foundation/x402/tree/main/examples/typescript)。）
 
 注册完成后，即可在 TRON 价格中使用自定义代币符号（例如 `"0.001 MYT"`）。
 
@@ -226,4 +225,4 @@ x402 专为区块链架构深度定制，提供了原生的 TRC-20/BEP-20/ERC-20
 - **开发环境**：推荐优先使用 **测试网** 进行开发与调试。
 - **默认结算资产**：TRON/BSC 路由使用各自配置的稳定币；Base 使用官方 **USDC**。
 - **安全机制**：TIP-712 / EIP-712 类型化数据签名机制确保了安全且最小化信任 (Trust-minimized) 的支付授权流程。
-- **扩展能力**：可通过 TRON 代币注册表（`registerToken`）或 server 的 `EVM_TOKENS` 配置表灵活扩展支持任意自定义的 **TRC-20/BEP-20 代币**。
+- **扩展能力**：可通过 TRON 代币注册表（`registerToken`）或显式的 `{ asset, amount, extra }` 路由价格灵活扩展支持任意自定义的 **TRC-20/BEP-20 代币**。

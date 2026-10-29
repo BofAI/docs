@@ -7,7 +7,7 @@
 *   **Python**: 3.11 or higher
 *   **pip**: Package manager
 *   **Private Key**: For signing transactions (not required for read-only mode)
-*   **RPC Node**: An RPC endpoint for a [supported network](/8004/SupportedNetworks/) — an EVM endpoint for BSC, or a TRON node endpoint
+*   **RPC Node**: An RPC endpoint for a [supported network](/8004/SupportedNetworks/) — an EVM endpoint for BSC or Base, or a TRON node endpoint
 *   **IPFS Provider (Optional)**: Pinata, Filecoin account, or local IPFS node
 *   **Subgraph (Optional)**: Use this when your deployment provides a subgraph endpoint
 
@@ -42,11 +42,11 @@ pip install -e .
 
 ## Install with TypeScript
 ### Prerequisites
-*   **Node.js**: 20 or higher
+*   **Node.js**: 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+ (26.x)
 *   **npm or yarn**: Package manager
 *   **Write Operation Configuration**: Write operations require configuring a `signer` (private key string)
-*   **RPC Node**: An RPC endpoint for a [supported network](/8004/SupportedNetworks/) — an EVM endpoint for BSC, or a TRON node endpoint
-*   **IPFS Provider (Optional)**: Pinata, Filecoin account, or local IPFS node
+*   **RPC Node**: An RPC endpoint for a [supported network](/8004/SupportedNetworks/) — an EVM endpoint for BSC or Base, or a TRON node endpoint
+*   **IPFS (Optional)**: the TypeScript SDK has no built-in provider; pass an `ipfsUploader` callback for `registerIPFS()`
 *   **Subgraph (Optional)**: You may provide `subgraphUrl` or `subgraphOverrides` as needed.
 
 

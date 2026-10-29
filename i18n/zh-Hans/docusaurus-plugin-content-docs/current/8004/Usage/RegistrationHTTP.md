@@ -346,7 +346,7 @@ const jsonContent = JSON.stringify(registrationData, null, 2);
 
 // 5. 在链上更新 URI（仅当 URI 发生更改时）
 const tx = await agent.updateRegistration("https://yourdomain.com/agents/my-agent-updated.json");
-await tx.waitConfirmed();
+if ("waitConfirmed" in tx) await tx.waitConfirmed(); // 未传 URI 时直接返回 Agent 本身
 ```
 
 </TabItem>
@@ -395,7 +395,8 @@ SDK 会生成符合 8004 标准的注册文件：
 }
 ```
 
-说明：发布这个文件时有两点需要注意。
+说明：发布这个文件时有三点需要注意。
 
-* **TypeScript 不会输出这两个键。** Python 的 `registrationFile().to_dict()`（以及 `str(...)`）产出的正是上面这种形态。而在 `@bankofai/8004-sdk` **1.1.2** 中，`agent.toJSON()` 返回的是 SDK 内部结构——`endpoints` 与 `x402support`——且 `uploadRegistrationFile()` 会把该对象原样序列化，因此 `registerIPFS()` 发布出去的同样是内部键名。在 TypeScript 中自行托管文件时，请自己把 `endpoints` → `services`、`x402support` → `x402Support` 转换好。
+* **TypeScript 的 `toJSON()` 不是这种形态。** Python 的 `registrationFile().to_dict()`（以及 `str(...)`）产出的键与上面一致，但对 `createAgent()` 创建的 Agent，二者都不带链与注册表信息，因此 `registrations` 为 `[]`，且即使在 TRON 上 `type` 也是 EIP-8004 的 URL；`agent.toJson()` 会传入这些信息，补全 `registrations`（Agent 已有 ID 时）以及 TRON 的 `type`。而在 `@bankofai/8004-sdk` **1.2.1** 中，`agent.toJSON()` 返回的仍是 SDK 内部结构——`endpoints` 与 `x402support`——因此在 TypeScript 中自行托管文件时，请自己把 `endpoints` → `services`、`x402support` → `x402Support` 转换好。`registerIPFS()` 则无需这一步：自 1.2.0 起，它发布的是规范键名（`type`、`services`、带有铸造出的 Agent ID 的 `registrations`、`x402Support`），外加 TypeScript 自有的 `tags` 与 `metadata`；`loadAgent()` 也能同时读取规范键名与内部键名。
+* **TRON 使用不同的 `type`。** 在 TRON 上，两个 SDK 通过 `registerIPFS()` 发布的文件——以及 Python 的 `agent.toJson()`——会把 `type` 设为 `https://github.com/tronprotocol/tips/blob/master/tip-8004.md#registration-v1`，而不是 EIP-8004 的 URL。
 * `setA2A()` 的端点版本默认值，Python 为 `0.30`，TypeScript 为 `0.3.0`。若需要两个语言一致，请显式传入版本号。

@@ -56,9 +56,7 @@ x402 协议采用类型化数据签名来执行安全的支付授权。
 
 ## 代币授权
 
-对于 `exact` 支付方案，普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算。客户端需授权 Permit2 合约划转代币——一次性 `approve(Permit2, max)`。在 TRON 上，客户端 SDK 会在首次付款时自动广播此授权；在 EVM 上则从不广播——当 server 声明了 gas 代付扩展时，客户端附上一笔已签名但未广播的授权交由 facilitator 转发，否则授权必须另行完成，不然验款会以 `permit2_allowance_required` 失败。在 TRON 上，当 resource server 声明了 `trc20ApprovalResourceSponsoring`（SDK 1.2.0+）时，client 只签名 `approve(Permit2, MaxUint256)` 而不广播——由 facilitator 临时委托付款方所缺的能量（必要时还有带宽）并广播，因此付款方首笔授权无需 TRX。该路径要求付款方是已激活的单签名 TRON EOA。ERC-3009 代币（如 BSC 测试网 DHLU）无需授权——通过 `transferWithAuthorization` 无 gas 结算。
-
-x402 客户端 SDK 会自动处理此操作。
+对于 `exact` 支付方案，普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算。客户端需授权 Permit2 合约划转代币——一次性 `approve(Permit2, max)`。在 TRON 上，客户端 SDK 会在首次付款时自动广播此授权；在 EVM 上则从不广播——当 server 声明了 gas 代付扩展时，客户端附上 EIP-2612 permit 签名或一笔已签名但未广播的授权交由 facilitator 转发，否则授权必须另行完成，不然验款会以 `permit2_allowance_required` 失败。在 TRON 上，当 resource server 声明了 `trc20ApprovalResourceSponsoring`（SDK 1.2.0+）时，client 只签名 `approve(Permit2, MaxUint256)` 而不广播——由 facilitator 临时委托付款方所缺的能量（必要时还有带宽）并广播，因此付款方首笔授权无需 TRX。该路径要求付款方是已激活的单签名 TRON EOA。从 2.1.0 起，客户端必须注册 `@bankofai/x402-tron-extensions` 中的 `createTrc20ApprovalResourceSponsoringClientExtension(signer)`，否则付款会以 `trc20_approval_client_extension_not_registered` 失败。ERC-3009 代币（如 Base 官方 USDC）无需授权——通过 `transferWithAuthorization` 无 gas 结算。
 
 ## 网络节点端点
 
@@ -80,7 +78,7 @@ x402 客户端 SDK 会自动处理此操作。
 | 网络环境 (Network)  | RPC 端点 (Endpoint)              |
 | :------------------ | :------------------------------- |
 | **Mainnet** (主网)  | `https://bsc-dataseed.binance.org`        |
-| **Testnet** (测试网)   | `https://data-seed-prebsc-1-s1.binance.org:8545`       |
+| **Testnet** (测试网)   | `https://bsc-testnet-rpc.publicnode.com`       |
 
 ---
 

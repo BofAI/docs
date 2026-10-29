@@ -26,8 +26,8 @@
   <rect width="880" height="635" rx="14" fill="url(#grid)"/>
   <rect x="0.5" y="0.5" width="879" height="634" rx="14" fill="none" stroke="#1e293b"/>
   <circle cx="28" cy="33" r="6" fill="#a78bfa"/>
-  <text x="46" y="39" fill="#f8fafc" font-size="17" font-weight="700">x402 PaymentPermit signing</text>
-  <text x="46" y="60" fill="#94a3b8" font-size="11">Sign first, verify to proceed — the agent never waits for on-chain confirmation.</text>
+  <text x="46" y="39" fill="#f8fafc" font-size="17" font-weight="700">x402 authorization signing</text>
+  <text x="46" y="60" fill="#94a3b8" font-size="11">Sign first; content is returned after verification and settlement.</text>
   <rect x="170" y="88" width="540" height="55" rx="8" fill="#0f172a"/>
   <rect x="170" y="88" width="540" height="55" rx="8" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
   <text x="440.0" y="113" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">Server returns 402</text>
@@ -38,7 +38,7 @@
   <line x1="440.0" y1="143" x2="440.0" y2="179" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#ah-violet)"/>
   <rect x="170" y="183" width="540" height="55" rx="8" fill="#0f172a"/>
   <rect x="170" y="183" width="540" height="55" rx="8" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
-  <text x="440.0" y="208" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">Agent builds PaymentPermit</text>
+  <text x="440.0" y="208" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">Agent builds the authorization</text>
   <text x="440.0" y="227" fill="#94a3b8" font-size="10" text-anchor="middle">TransferWithAuthorization struct, EIP-712 format</text>
   <circle cx="150" cy="203" r="13" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
   <text x="150" y="207" fill="#f8fafc" font-size="11" font-weight="700" text-anchor="middle">2</text>
@@ -62,8 +62,8 @@
   <line x1="440.0" y1="428" x2="440.0" y2="464" stroke="#34d399" stroke-width="1.5" marker-end="url(#ah-emerald)"/>
   <rect x="170" y="468" width="540" height="55" rx="8" fill="#0f172a"/>
   <rect x="170" y="468" width="540" height="55" rx="8" fill="rgba(76, 29, 149, 0.4)" stroke="#a78bfa" stroke-width="1.5"/>
-  <text x="440.0" y="493" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">Server verifies and responds</text>
-  <text x="440.0" y="512" fill="#94a3b8" font-size="10" text-anchor="middle">Content returned only if the signature checks out</text>
+  <text x="440.0" y="493" fill="#f8fafc" font-size="13" font-weight="600" text-anchor="middle">Server verifies, settles, responds</text>
+  <text x="440.0" y="512" fill="#94a3b8" font-size="10" text-anchor="middle">Content returned only after verification and settlement succeed</text>
   <circle cx="150" cy="488" r="13" fill="#1e293b" stroke="#a78bfa" stroke-width="1.5"/>
   <text x="150" y="492" fill="#f8fafc" font-size="11" font-weight="700" text-anchor="middle">5</text>
   <text x="724" y="492" fill="#a78bfa" font-size="10" font-weight="600">SERVER</text>

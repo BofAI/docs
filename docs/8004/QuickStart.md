@@ -117,6 +117,8 @@ agent.setActive(True)
 agent.setX402Support(False)
 
 # Register on-chain
+# Replace with the URL where you host this agent's registration JSON;
+# loadAgent() below fetches it, and a URL that does not serve it raises an HTTP error.
 reg_tx = agent.register("https://example.com/agent-card.json")
 reg = reg_tx.wait_confirmed(timeout=180).result
 
@@ -185,6 +187,7 @@ async function main() {
   agent.setX402Support(false);
 
   // Register on-chain
+  // Replace with the URL where you host this agent's registration JSON.
   const tx = await agent.register("https://example.com/agent-card.json");
   const { result: registrationFile } = await tx.waitConfirmed();
 

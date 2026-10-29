@@ -15,7 +15,7 @@ description: "选择 BANK OF AI Skills，使用 wallet-cli 配置钱包与支付
 | 充值 B.AI | [wallet-cli 充值说明](/zh-Hans/wallet-cli/command-reference/) |
 | DeFi 业务与数据查询 | [Skill 列表](/zh-Hans/McpServer-Skills/SKILLS/BANKOFAISkill/) |
 
-安装需要 Node.js 20 或更新版本，以及支持本地 Skills 的 Agent。按需选择 Skill；Skill 安装不会自动安装外部 CLI，也不会自动配置钱包。检查 Skill 依赖版本与实际 CLI 一致。
+安装需要 Node.js 22.23.4+（22.x）、24.22.1+（24.x）或 26.12.1+，以及支持本地 Skills 的 Agent。按需选择 Skill；Skill 安装不会自动安装外部 CLI，也不会自动配置钱包。检查 Skill 依赖版本与实际 CLI 一致。
 
 首次配置钱包在本地完成。不要把私钥、助记词或主密码发给 AI；支付前核对网络、地址、币种、金额与手续费。
 

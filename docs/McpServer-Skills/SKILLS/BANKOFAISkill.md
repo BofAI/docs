@@ -17,11 +17,11 @@ BANK OF AI SKILLS can operate on **real on-chain assets**. Blockchain transactio
 | Skill | What It Does | What Key/Credential Do I Need? |
 | :--- | :--- | :--- |
 | **wallet-cli** | Standalone TRON wallet operations via the pinned `@tron-walletcli/wallet-cli@4.14.0` — transfers, staking, voting, contracts, signing, chain queries (machine-readable JSON) | A local wallet managed by wallet-cli; agent runs pass passwords via stdin only |
-| **sunswap**<br/>installs as `sunswap-dex-trading` | Check prices, get quotes, swap tokens, manage V2/V3/V4 liquidity pools | Read-only: none. Trading: wallet credentials |
-| **sunpump-agent-skill**<br/>installs as `sunpump-meme-token-toolkit` | SunPump meme coins: create tokens with one command (server-side, no wallet), market data/rankings/holders/portfolios, plus buy/sell meme coins (automatically picks the swap route based on whether the token has launched, TRON mainnet only) | Read-only & token creation: none. On-chain buy/sell: wallet credentials |
-| **sunperp-skill**<br/>installs as `sunperp-perpetual-futures-trading` | Market data, open/close positions, withdrawals | Market data: none. Trading: SunPerp API keys. Withdrawals additionally need `TRON_PRIVATE_KEY` to sign the confirmation |
-| **tronscan-skill**<br/>installs as `tronscan-data-lookup` | Look up accounts, transactions, tokens, blocks, network stats | Optional: TronScan API key — without one, requests go through the keyless BofAI proxy and may be rate-limited |
-| **usdd-skill**<br/>installs as `usdd-just-protocol` | USDD stablecoin — PSM swaps (1:1 USDT ↔ USDD), vault queries, balance checks | Read-only: none. PSM swaps: wallet credentials |
+| **sunswap**<br/>installs as `sunswap-dex-trading` | Check prices, get quotes, swap tokens, manage V2/V3/V4 liquidity pools | Read-only: none. Trading: `TRON_PRIVATE_KEY` (or `TRON_MNEMONIC` / `AGENT_WALLET_PASSWORD`); optional `TRON_NETWORK`, `TRONGRID_API_KEY` |
+| **sunpump-agent-skill**<br/>installs as `sunpump-meme-token-toolkit` | SunPump meme coins: create tokens with one command (server-side, no wallet), market data/rankings/holders/portfolios, plus buy/sell meme coins (automatically picks the swap route based on whether the token has launched, TRON mainnet only) | Read-only & token creation: none. On-chain buy/sell: `TRON_PRIVATE_KEY` (or `TRON_MNEMONIC` / `AGENT_WALLET_PASSWORD`); optional `TRONGRID_API_KEY`, `SUNPUMP_API_BASE_URL`, and `TRON_NETWORK`, which must be `mainnet` if set |
+| **sunperp-skill**<br/>installs as `sunperp-perpetual-futures-trading` | Market data, open/close positions, withdrawals | Market data: none. Trading: `SUNPERP_ACCESS_KEY` and `SUNPERP_SECRET_KEY`. Withdrawals additionally need `TRON_PRIVATE_KEY` to sign the confirmation (`TRONGRID_API_KEY`, if set, only switches the RPC host) |
+| **tronscan-skill**<br/>installs as `tronscan-data-lookup` | Look up accounts, transactions, tokens, blocks, network stats | Optional: `TRONSCAN_API_KEY` — without one, requests go through the keyless BofAI proxy and may be rate-limited |
+| **usdd-skill**<br/>installs as `usdd-just-protocol` | USDD stablecoin — PSM swaps (1:1 USDT ↔ USDD), vault queries, balance checks | PSM / vault info: none. Balance checks (unless `--address` is given) and PSM swaps, including `--dry-run`: `TRON_PRIVATE_KEY`; optional `TRON_NETWORK`, `TRONGRID_API_KEY` |
 
 Five skills install under a different directory name than their repository folder — that second name is what appears in `~/.agents/skills` and what you reference when asking an assistant to read a skill file.
 
@@ -60,7 +60,7 @@ wallet-cli is the official wallet and CLI entry point. Other Skills and server i
 :::
 
 :::caution Hard boundaries: passwords and wallet administration
-In agent-driven runs, wallet passwords are only accepted via `--password-stdin` from an approved source — the AI never puts a password in command arguments, environment variables, or the chat, and never asks you to paste a password, mnemonic, or private key into the conversation. The root wallet-administration commands `import` / `backup` / `delete` / `change-password` are **human-only by skill policy**: the AI will not run them even if you confirm. This is the skill refusing, not a lock in the CLI — the CLI itself only forces a TTY for `import` and `change-password`, and `backup` even documents a `--password-stdin` form. Any funds-moving operation on mainnet is previewed first and waits for your explicit confirmation.
+In agent-driven runs, wallet passwords are only accepted via `--password-stdin` from an approved source — the AI never puts a password in command arguments, environment variables, or the chat, and never asks you to paste a password, mnemonic, or private key into the conversation. The root wallet-administration commands `import` / `backup` / `delete` / `change-password` are **human-only by skill policy**: the AI will not run them even if you confirm. This is the skill refusing, not a lock in the CLI — the CLI itself only forces a TTY for `import mnemonic` / `import private-key` / `import keystore` (not `import watch` or `import ledger`), `change-password`, and `delete` without `--yes`, and `backup` even documents a `--password-stdin` form. Any funds-moving operation on mainnet is previewed first and waits for your explicit confirmation.
 :::
 
 Note: wallet-cli canonically uses decimal CAIP-2 network ids — `tron:728126428` (Mainnet), `tron:3448148188` (Nile), `tron:2494104990` (Shasta); `tron:mainnet` / `tron:nile` / `tron:shasta` are accepted as input aliases only. This is distinct from the hex identifiers (`tron:0x…`) used in x402 protocol metadata; `wallet-cli x402` still uses wallet-cli network identifiers.
@@ -71,7 +71,7 @@ This skill also covers TRC20/TRC10 transfers and token queries, staking and SR v
 
 ## sunswap {#sunswap}
 
-Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the AI. This skill is powered by `@sun-protocol/sun-cli` (pinned to 1.2.2) and supports swaps plus V2 AMM, V3 concentrated liquidity, and V4 hooks-enabled pools.
+Want to swap tokens, check rates, or manage liquidity on SunSwap? Just tell the AI. This skill is powered by `@sun-protocol/sun-cli` (pinned to 1.2.2; install it yourself with `npm install -g @sun-protocol/sun-cli@1.2.2`) and supports swaps plus V2 AMM, V3 concentrated liquidity, and V4 hooks-enabled pools.
 
 **Completely safe — looking only, no spending:**
 
@@ -111,7 +111,7 @@ V3 only accepts fee tiers `100`, `500`, `3000`, or `10000` (0.01% / 0.05% / 0.3%
 
 ## sunpump-agent-skill {#sunpump-agent-skill}
 
-Want to play with meme coins on SunPump? This skill is built on `@sun-protocol/sun-cli` (pinned to 1.2.2) and helps you create meme tokens, check market data, do research, and buy/sell meme coins. Token creation (`sun sunpump launch`) is **server-side — no wallet needed**: provide a name, symbol, description, and logo, and the platform signs and broadcasts the creation transaction for you. For trading, it **picks the trade path automatically**: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") go through `sun sunpump buy/sell`, while tokens that already have a SunSwap V2 pair ("post-launch") use a regular `sun swap` — before placing an order the AI runs `sunpump state` to confirm which path applies. **Every sunpump-agent-skill capability — queries and trading alike — is TRON mainnet only; testnets are not supported.**
+Want to play with meme coins on SunPump? This skill is built on `@sun-protocol/sun-cli` (pinned to 1.2.2; install it yourself with `npm install -g @sun-protocol/sun-cli@1.2.2`) and helps you create meme tokens, check market data, do research, and buy/sell meme coins. Token creation (`sun sunpump launch`) is **server-side — no wallet needed**: provide a name, symbol, description, and logo, and the platform signs and broadcasts the creation transaction for you. For trading, it **picks the trade path automatically**: tokens that haven't created a SunSwap V2 pair yet ("pre-launch") go through `sun sunpump buy/sell`, while tokens that already have a SunSwap V2 pair ("post-launch") use a regular `sun swap` — before placing an order the AI runs `sunpump state` to confirm which path applies. **Every sunpump-agent-skill capability — queries and trading alike — is TRON mainnet only; testnets are not supported.**
 
 **Absolutely safe, read-only:**
 
@@ -150,7 +150,7 @@ Meme coins are highly volatile and easily manipulated. When the AI shows you tok
 :::
 
 :::tip About token creation (launch)
-Creation goes through the SunPump agent endpoint — the platform signs and broadcasts the transaction, so **no wallet is needed**. Name, symbol, and description are required; a logo is strongly recommended (launches without one may be rejected by the API). On success the AI reports the new token's contract address and creation tx hash. Like every other SunPump operation, launch is **mainnet only** — the CLI rejects any non-mainnet `--network` before doing anything, even under `--dry-run`.
+Creation goes through the SunPump agent endpoint — the platform signs and broadcasts the transaction, so **no wallet is needed**. Name, symbol, and description are required; the Skill asks for a logo image before it launches, because launches without one often fail with the server error `Invoke third part error`. On success the AI reports the new token's contract address and creation tx hash. Like every other SunPump operation, launch is **mainnet only** — the CLI rejects any non-mainnet `--network` before doing anything, even under `--dry-run`.
 :::
 
 **sunpump-agent-skill's full functionality (queries and trading) only works on TRON mainnet, not testnets.**
@@ -181,7 +181,7 @@ Want to trade contracts? This skill handles market data, opening positions, clos
 
 > Stuck in a bad position? Try: "What's BTC's funding rate right now — should I go long or short?"
 
-> Want to manage risk? Try: "Lower my BTC-USDT leverage to 5x and set stop-loss to 3%."
+> Want to manage risk? Try: "Lower my BTC-USDT leverage to 5x, then open a small BTC-USDT long with a 3% stop-loss." (a stop-loss is set when the position is opened; the Skill has no command to change the stop-loss of an existing position)
 
 > Want the big picture? Try: "List all available perpetual contracts, sorted by 24h volume."
 

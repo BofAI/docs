@@ -118,13 +118,15 @@ agent.setActive(True)
 agent.setX402Support(False)
 
 # Register on-chain
+# Replace with the URL where you host this agent's registration JSON;
+# loadAgent() below fetches it, and a URL that does not serve it raises an HTTP error.
 reg_tx = agent.register("https://example.com/agent-card.json")
 reg = reg_tx.wait_confirmed(timeout=180).result
 
 # Optional: point the agent at a dedicated wallet (requires signature verification).
 # By default the agent wallet is the owner's wallet. The one-argument form below only
 # works when the SDK signer IS that wallet; otherwise pass new_wallet_signer.
-# See Configure Agents -> "How the signature is supplied".
+# 参见「配置代理」->「签名从何而来」。
 # agent.setWallet("TYourTronWalletAddress")
 
 print(f"✅ Agent registered!")
@@ -186,13 +188,14 @@ async function main() {
   agent.setX402Support(false);
 
   // Register on-chain
+  // Replace with the URL where you host this agent's registration JSON.
   const tx = await agent.register("https://example.com/agent-card.json");
   const { result: registrationFile } = await tx.waitConfirmed();
 
   // Optional: point the agent at a dedicated wallet (requires signature verification).
   // By default the agent wallet is the owner's wallet. The one-argument form below only
   // works when the SDK signer IS that wallet; otherwise pass newWalletSigner.
-  // See Configure Agents -> "How the signature is supplied".
+  // 参见「配置代理」->「签名从何而来」。
   // await agent.setWallet('TYourTronWalletAddress');
 
   console.log('✅ Agent registered!');

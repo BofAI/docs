@@ -10,7 +10,7 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 **In short**: Your computer doesn't have Node.js installed, or the version is too old.
 
-**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS, v20 or higher — `@bankofai/mcp-server-tron`, which the wizard installs, declares `node >= 20`). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
+**How to fix**: Go to the [Node.js official website](https://nodejs.org/) and download the latest stable version (LTS — the installer requires 22.23.4+ on 22.x, 24.22.1+ on 24.x, or 26.12.1+; Node.js 24 is the safest choice). Install it like any regular software by clicking "Next" all the way through. Then close the terminal window and run the installation command again.
 
 ### Error Says "command not found: git"
 
@@ -62,7 +62,7 @@ Don't panic when you see an error — it's usually just a small setting that's n
 
 ### Why Can Others Send Transfers While My AI Can Only Read Data?
 
-**Reason**: Your AI is currently in ultra-safe "read-only mode." This is because you skipped the AgentWallet configuration during installation and didn't provide it with wallet keys.
+**Reason**: Transfers and trades must be signed by a wallet in AgentWallet, and your AI can't find a usable one. The installer doesn't let you skip this step — on a first install, if `agent-wallet start` fails or is cancelled, the whole installer stops — so this usually means the wallet setup never finished, or the wallet data in `~/.agent-wallet` was reset or deleted afterwards.
 
 **How to fix**: Run the installation script again. At the AgentWallet setup level, follow the prompts carefully to properly configure your wallet. After configuring and restarting, transfer and trading functions will be activated.
 
@@ -83,7 +83,7 @@ Don't panic when you see an error — it's usually just a small setting that's n
 **How to fix**:
 
 1. **Quick fix**: Wait a few minutes before asking again.
-2. **Permanent fix**: Go to [TronGrid](https://www.trongrid.io/) and apply for a free dedicated API Key. Enter this key during installation, and AI will be able to use the VIP express lane.
+2. **Permanent fix**: Go to [TronGrid](https://www.trongrid.io/) and apply for a free dedicated API Key. The installer doesn't ask for this key — set it yourself as the `TRONGRID_API_KEY` environment variable (see [How to Add API Keys](./QuickStart.md#️-how-to-add-api-keys-vip-pass-after-installation)), restart OpenClaw, and AI will be able to use the VIP express lane.
 
 ---
 
@@ -95,7 +95,7 @@ Absolutely! When the installation wizard reaches Level 4, it will list all skill
 
 ### I'm Done With It — How Do I Uninstall?
 
-The simplest brute-force method: Open your file manager, find the `~/.openclaw/skills/` (Mac/Linux) or `%USERPROFILE%\.openclaw\skills\` (Windows) directory, delete the skill folder(s) you no longer want, then restart the AI software — they'll be completely gone.
+The simplest brute-force method: Open your file manager, find the `~/.openclaw/skills/` (Mac/Linux) or `%USERPROFILE%\.openclaw\skills\` (Windows) directory, delete the skill folder(s) you no longer want, then restart the AI software — the skills are gone. The MCP server entries, `~/.mcporter/bankofai-config.json`, the global npm packages and `~/.agent-wallet` stay. The installer's Clean mode removes the MCP entries, the installed skills, `~/.x402-config.json` and `bankofai-config.json`, then re-initialises agent-wallet (`agent-wallet reset`, then `start --override`); it does not uninstall the global npm packages.
 
 ### I Messed Everything Up — Can I Reinstall?
 
@@ -110,11 +110,11 @@ Reinstall anytime! Don't worry about breaking your computer.
 
 ### Does the Installer Need Admin Privileges?
 
-Not for the config files — those all land under your user directory, and the installer touches neither the registry nor Program Files. The one thing that reaches outside it is the pinned global install `npm install -g @bankofai/agent-wallet@<version>`. On Windows that goes to `%APPDATA%\npm` and needs no elevation; on macOS or Linux with a system-wide Node it writes to the global `node_modules` directory (for example `/usr/local/lib/node_modules`) and may ask for your password.
+Not for the config files — those all land under your user directory, and the installer touches neither the registry nor Program Files. The things that reach outside it are the pinned global npm installs: `npm install -g @bankofai/agent-wallet@<version>` (unless 2.3.1 is already installed), and `npm install --global @bankofai/x402-cli@<version>` (only when the x402-payment skill is installed). On Windows these go to `%APPDATA%\npm` and need no elevation; on macOS or Linux with a system-wide Node it writes to the global `node_modules` directory (for example `/usr/local/lib/node_modules`) and may ask for your password.
 
 ### Is the Windows Experience the Same as Mac/Linux?
 
-Identical. The Windows installer (`install.ps1`) is a full port of the Linux/macOS version (`install.sh`) — same installation flow, same multi-select menus, same config file structure. The only differences are file paths (`~/` becomes `%USERPROFILE%\`) and file permissions (`chmod 600` becomes `icacls` ACL).
+Almost. The Windows installer (`install.ps1`) is a port of the Linux/macOS version (`install.sh`) — same installation flow, same multi-select menus, same config file structure. The differences are file paths (`~/` becomes `%USERPROFILE%\`), file permissions (`chmod 600` becomes `icacls` ACL), and the OpenClaw check: if the `.openclaw` folder doesn't exist in your home directory, `install.sh` warns and asks `Continue anyway? (y/N)`, while `install.ps1` stops with an error — install OpenClaw first, then re-run it.
 
 ### Can I Use WSL (Windows Subsystem for Linux)?
 

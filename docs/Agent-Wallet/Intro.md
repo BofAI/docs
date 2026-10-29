@@ -1,7 +1,7 @@
 # Introduction
 
 :::note
-Agent Wallet documentation remains for existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](/wallet-cli/quickstart/); the stores are not automatically interchangeable.
+Agent Wallet documentation covers the `@bankofai/agent-wallet` 3.x SDK and CLI used by existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](../wallet-cli/quickstart.md). Since 3.0, Agent-wallet can **link** an existing wallet-cli account through the `wallet_cli` wallet type, but it never imports, copies, or decrypts wallet-cli keys.
 :::
 
 ## Enjoy the Convenience of AI Agents Without the Private Key Risk
@@ -30,63 +30,62 @@ The common thread: **your private key is always exposed somewhere** — on disk,
 
 ---
 
-## The Breakthrough: Agent-wallet — The Web3 Wallet Designed Exclusively for AI
+## The Approach: One Signing Interface, Keys Kept Elsewhere
 
-When you use a Web3 wallet like TronLink/MetaMask, do you paste your raw private key in every time? Of course not. You unlock it with a password, and let it sign on your behalf.
+When you use a Web3 wallet like TronLink/MetaMask, do you paste your raw private key into every app? Of course not. The wallet holds the key and signs on your behalf.
 
-**Agent-wallet is a local TronLink/MetaMask purpose-built for AI agents.**
+**Agent-wallet gives your AI agent the same thing: a single signing interface (`getAddress`, `signTransaction`, `signTypedData`) in front of a key backend you choose.** Your agent code — or the MCP server / skill it uses — asks Agent-wallet to sign; it never needs to handle the key itself.
 
-It minimizes your risk through a **"physical + password separation"** dual-lock mechanism:
+Agent-wallet 3.x supports three wallet types:
 
-1. **Lock #1 (Physical file):** Your private key is encrypted with industry-grade algorithms and stored in a hidden folder deep in your system (`~/.agent-wallet`).
-2. **Lock #2 (Authorization password):** Your AI agent only needs the "unlock password" (which you can set in an environment variable) to operate.
+| Wallet type | Where the key lives | Recommended for |
+| :--- | :--- | :--- |
+| `wallet_cli` | In the encrypted keystore of [wallet-cli](../wallet-cli/quickstart.md). Agent-wallet never reads or decrypts that keystore; each signature runs in a restricted wallet-cli subprocess, and the keystore password is handed to that subprocess only for that one signature. | Local production signing |
+| `privy` | Custodied by [Privy](https://privy.io) — no private key on your disk. Signing requests go to Privy's API. | Server-side agents that already use Privy |
+| `raw_secret` | Stored **in plaintext** in `~/.agent-wallet/wallets_config.json`. | Development and throwaway test keys only |
 
-**🤔 You might ask: "What if the AI leaks my unlock password?"**
+For CI and other disposable environments, the SDK can also read a key straight from environment variables (`AGENT_WALLET_PRIVATE_KEY` or `AGENT_WALLET_MNEMONIC`). That is plaintext too — see the [SDK Guide](./Developer/SDK-Guide.md).
 
-This is the most elegant part of Agent-wallet: **a leaked password ≠ stolen assets.**
-
-If a hacker steals only your password through a malicious plugin, they can't do anything — because they don't have your encrypted wallet file. If they steal only the wallet file without the password, it's just uncrackable gibberish.
-
-**A hacker would need to simultaneously break into your system, locate the hidden wallet file, AND steal the password from your environment variables to touch your funds.** The difficulty and cost of this kind of attack is orders of magnitude higher than simply scanning a plaintext private key in environment variables!
-
-**Bottom line: steal the file — it's useless without the password. Leak the password — it's useless without the file.**
+:::caution Upgrading from 2.x
+3.0 removed the `local_secure` encrypted wallet type, the agent-wallet master password, `AGENT_WALLET_PASSWORD`, and `runtime_secrets.json`. Existing 2.x `local_secure` wallets are **not** converted automatically. Back up `~/.agent-wallet`, confirm you can still access the original key material with 2.x, then re-create the wallet as `wallet_cli` (recommended), `privy`, or `raw_secret`. See the [FAQ](./FAQ.md#upgrade-from-2x).
+:::
 
 ---
 
 ## How It Compares
 
-| | :x: Traditional (plaintext key in configuration files) | :white_check_mark: Agent-wallet |
+| | :x: Traditional (plaintext key in configuration files) | :white_check_mark: Agent-wallet with `wallet_cli` |
 | :--- | :--- | :--- |
-| **How it works** | :x: Hand your card and PIN directly to the AI | :white_check_mark: **Give AI the password, file stays locked locally** |
-| **Log / env variable leak** | :rotating_light: **Total loss** | :shield: **Only the password leaks — no file, hacker gets nothing** |
-| **Encrypted file stolen** | :x: Plaintext key, stolen instantly | :shield: **No password, hacker can't open the file** |
-| **Works offline?** | :warning: Depends | :white_check_mark: **100% offline signing** (`local_secure` / `raw_secret`; the `privy` type signs via Privy's API and needs network) |
+| **What the agent's config holds** | :x: The private key itself | :white_check_mark: A wallet-cli account ID and a password source (ideally an `exec` script) |
+| **Key file read by another program** | :rotating_light: **Total loss** | :shield: The keystore is encrypted by wallet-cli |
+| **One signing API for TRON and EVM** | :warning: Depends on your code | :white_check_mark: Same `Wallet` interface for every backend |
+| **Works offline?** | :warning: Depends | :white_check_mark: `wallet_cli` and `raw_secret` sign on your machine; `privy` signs via Privy's API and needs network |
 
 ---
 
-## Three Commands, Under a Minute
+## Three Steps to a First Signature
 
-No need to understand everything first — get it running, then explore:
+No need to understand everything first — get it running, then explore. This path uses the quickest wallet type, `raw_secret`, with a **throwaway test key** (never real funds):
 
 **Step 1 — Install Agent-wallet:**
 ```bash
 npm install -g @bankofai/agent-wallet
 ```
 
-**Step 2 — Create your Agent-wallet wallet:**
+**Step 2 — Import a test key:**
 ```bash
-agent-wallet start
+agent-wallet start raw_secret
 ```
-The wizard asks you to set a **master password** — press Enter and it auto-generates a strong one, displayed exactly once. This password is your only "unlock key": every time your AI agent needs to sign, it uses this password to unlock the wallet. **Save it immediately in a password manager (e.g. 1Password, Bitwarden)** — if lost, there's no way to recover it or access your assets.
+Choose `private_key` and paste a test key when prompted. The CLI warns that raw secret material is stored in plaintext in `wallets_config.json`.
 
 **Step 3 — Your first signature:**
 ```bash
-agent-wallet sign msg "Hello from my AI agent" -n tron
+agent-wallet sign typed-data '{"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],"Message":[{"name":"contents","type":"string"}]},"primaryType":"Message","domain":{"name":"AgentWallet","chainId":1},"message":{"contents":"Hello from my AI agent"}}' -n eip155:1
 ```
 
-The CLI asks for your master password first — plain `agent-wallet start` does not persist it, so signing has to unlock the keystore. (Add `--save-runtime-secrets` at step 2, as the BANK OF AI onboarding skill does, to skip that prompt.) When a hash string appears on screen — congratulations, your Agent-wallet is live.
+When a line starting with `Signature:` appears — congratulations, your Agent-wallet is live.
 
-> Want the full step-by-step walkthrough? Head to **[Quick Start](./QuickStart.md)**.
+> For real funds, link a wallet-cli account instead. The full walkthrough is in **[Quick Start](./QuickStart.md)**.
 
 ---
 
@@ -98,59 +97,45 @@ Pick the path that fits you:
 
 ### 🎮 I'm a casual user — using existing tools
 
-You don't need to know any code! You can directly use our ready-made "all-in-one" suite: **[OpenClaw Extension](../Openclaw-extension/Intro.md) + [MCP Server](../McpServer-Skills/MCP/Intro.md) + [Skills](../McpServer-Skills/SKILLS/Intro.md)**.
+You don't need to know any code! You can use the ready-made suite: **[OpenClaw Extension](../Openclaw-extension/Intro.md) + [MCP Server](../McpServer-Skills/MCP/Intro.md) + [Skills](../McpServer-Skills/SKILLS/Intro.md)**. Check each tool's own setup page for the wallet it expects — new setups use [wallet-cli](../wallet-cli/quickstart.md) directly.
 
 #### 🤝 How do they work together?
 
 To give you total peace of mind, we designed your AI assistant as a well-organized little "company" with clear division of labor:
 
 - 🧠 **The Business Team (OpenClaw + Skills + MCP):** They do the legwork out in the field — quick-thinking and well-equipped, they know how to check prices, calculate slippage, and find the best quotes. But most importantly: they have zero authority to touch your funds.
-- 🏦 **The CFO (Agent Wallet):** The one guarding the vault. Your private key (think: bank card PIN) is locked tight inside their local safe, completely invisible to the Business Team outside.
+- 🏦 **The CFO (Agent Wallet):** The one in front of the vault. With the `wallet_cli` type, the vault itself is wallet-cli's encrypted keystore; with `privy`, it's Privy's infrastructure.
 
-Here's how a perfect secure pipeline works:
+Here's how a secure pipeline works:
 
 1. You sit back in the boss's chair and say: "Buy 100 USDT worth of TRX."
 2. The Business Team rushes off to check prices, calculate fees, and dutifully drafts a "transaction request form."
-3. They hand the form to the **CFO (Agent Wallet)**, who sits right next to the safe.
-4. The CFO verifies everything and never takes the private key out of the safe — instead, they stamp the form right there with an "approved" seal (technically called "signing"), then pass only the stamped form back out.
+3. They hand the form to the **CFO (Agent Wallet)**.
+4. The CFO has the vault stamp the form with an "approved" seal (technically called "signing") without ever taking the private key out, then passes only the stamped form back.
 5. The Business Team takes the stamped form and gets it done on the blockchain.
 
-✨ **The key takeaway:** Throughout the entire process, the AI tools doing the legwork only ever receive the "stamped paper" — they never even catch a glimpse of the private key! This ensures AI agent can handle extremely complex tasks for you while keeping your assets absolutely secure.
-
-#### ⚙️ Sounds great — how do I connect them?
-
-Dead simple! No complex programming needed — just one thing: give the Business Team an internal passphrase to wake up the CFO.
-
-Just tell the tools the "master password" you generated when creating your Agent Wallet, like this:
-
-```bash
-export AGENT_WALLET_PASSWORD='your-master-password'
-```
-
-That's it — one line of config! Once the passphrase is set, the entire system works seamlessly and automatically. Your AI agent will transform into a top-tier Web3 personal assistant that's both brilliantly capable and absolutely secure!
+✨ **The key takeaway:** the AI tools doing the legwork only ever receive the "stamped paper" — the signed transaction or signature.
 
 > Can't wait to try it? Head to 👉 **[Quick Start](./QuickStart.md)** and follow along.
 
 ### ⌨️ I'm an advanced user — managing wallets via CLI
 
-Need password-free signing, managing multiple wallets, or custom storage directories? Head to **[CLI Reference](./Developer/CLI-Reference.md)**.
+Managing multiple wallets, exec-script credentials, or custom storage directories? Head to **[CLI Reference](./Developer/CLI-Reference.md)**.
 
 ### 👨‍💻 I'm a developer — building my own agent
 
 <details>
-<summary>Expand developer path — TypeScript / Python SDK</summary>
+<summary>Expand developer path — TypeScript SDK</summary>
 
-Agent-wallet ships a complete SDK with TypeScript and Python support — both sharing the same interface:
+Agent-wallet 3.x ships a TypeScript SDK; the same configuration the CLI writes is what the SDK reads:
 
 ```typescript
-import { resolveWalletProvider } from "@bankofai/agent-wallet";
+import { resolveWallet } from "@bankofai/agent-wallet";
 
-const provider = resolveWalletProvider({ network: "tron:nile" });
-const wallet   = await provider.getActiveWallet();
-const sig      = await wallet.signMessage(new TextEncoder().encode("Hello!"));
+const wallet = await resolveWallet({ network: "tron:3448148188" }); // TRON Nile
+const address = await wallet.getAddress();
+const signed = await wallet.signTransaction(unsignedTx); // { family: "tron", transaction }
 ```
-
-Same key file, same data, same signature — across both languages.
 
 > **[SDK Guide](./Developer/SDK-Guide.md)** — step-by-step integration guide.
 > **[SDK Cookbook](./Developer/SDK-Cookbook.md)** — end-to-end real transactions: TRON transfers, BSC transfers, x402 payment signing.
@@ -161,10 +146,14 @@ Same key file, same data, same signature — across both languages.
 
 ## Supported Chains
 
+Every network is given as a canonical CAIP-2 identifier:
+
 | Chain Type | Networks |
 | :--- | :--- |
-| **EVM** | Ethereum, BSC, Polygon, Base, Arbitrum, and any EVM-compatible chain (mainnet & testnet supported) |
-| **TRON** | TRON Mainnet, Nile Testnet, Shasta Testnet |
+| **EVM** | `eip155:<chainId>` — Ethereum (`eip155:1`), BSC (`eip155:56`), Base (`eip155:8453`), and any other EVM-compatible chain, mainnet or testnet |
+| **TRON** | `tron:<chainId>` — Mainnet (`tron:728126428`), Nile Testnet (`tron:3448148188`), Shasta Testnet (`tron:2494104990`) |
+
+For `wallet_cli` wallets the network must also be one wallet-cli itself knows — its built-ins (`eip155:1`, `eip155:11155111`, `eip155:56`, `eip155:97`, `eip155:8453`, `eip155:84532` (the two Base networks were added in wallet-cli 4.14.0) and the three TRON networks) or a network added to wallet-cli's own config — otherwise signing fails with `network_mismatch`. `raw_secret` and `privy` wallets have no such limit.
 
 Both chain types share the same interface — learn it once, use it everywhere.
 
@@ -174,7 +163,7 @@ Both chain types share the same interface — learn it once, use it everywhere.
 
 | I'm wondering… | Go here |
 | :--- | :--- |
-| Will AI drain my wallet? | [FAQ](./FAQ.md) — we have a dedicated risk isolation solution |
+| Will AI drain my wallet? | [FAQ](./FAQ.md) — keep a dedicated, small agent wallet |
 | Never written code? | [Quick Start](./QuickStart.md) |
 | Prefer the command line? | [CLI Reference](./Developer/CLI-Reference.md) |
 | Building your own agent? | [SDK Guide](./Developer/SDK-Guide.md) |

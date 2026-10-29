@@ -8,6 +8,54 @@ description: 'Release notes for SKILLS.'
 Release notes for SKILLS.
 
 <div className="changelog-entry">
+<div className="changelog-date">Oct 27, 2026</div>
+<div className="changelog-body">
+
+### Setup steps and credentials per Skill
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- **Quick Start** — the two steps `npx skills add` does not do: `npm install -g @sun-protocol/sun-cli@1.2.2` for SunSwap / SunPump, and `npm install` inside the SunPerp, TronScan and USDD Skill folders. `x402`, `bai` and `8004` are wallet-cli command families outside the wallet-cli Skill's scope.
+- **Skill catalog** — the credentials column names the environment variables each Skill reads (`TRON_PRIVATE_KEY`, `SUNPERP_ACCESS_KEY` / `SUNPERP_SECRET_KEY`, `TRONSCAN_API_KEY`, …); the SunPump Skill asks for a logo image before a launch; the SunPerp example no longer suggests changing an existing position's stop-loss.
+
+👉 [Quick Start](/McpServer-Skills/SKILLS/QuickStart/) · [Skill Catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 22, 2026</div>
+<div className="changelog-body">
+
+### Skills 3.0.1 — Node.js security baseline
+
+<div className="changelog-tags"><span className="changelog-tag">New Release</span></div>
+
+- **Node.js** — the bundled Node.js Skills and the wallet-cli installer require Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`, the October 2026 security releases. The installer validates the full version, including when the pinned CLI is already installed.
+- **wallet-cli pin unchanged** — the `wallet-cli` Skill still pins `@tron-walletcli/wallet-cli@4.14.0`.
+- **Docs** — the Skills and BANK OF AI quick starts state the new Node.js requirement.
+
+👉 [Quick Start](/McpServer-Skills/SKILLS/QuickStart/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Oct 21, 2026</div>
+<div className="changelog-body">
+
+### Install Skills from the stable main branch
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- **Install command** — now `npx skills add https://github.com/BofAI/skills/tree/main -g`. Without `/tree/main` the installer uses the repository's default branch, `develop`, whose unreleased `wallet-cli` Skill pins a different CLI version from the `@tron-walletcli/wallet-cli@4.14.0` the docs install. The FAQ's update instructions follow the same rule, and no longer pass `-y`, which made the skills CLI install into every agent detected on the machine (all 79 known agents when none is detected) and overwrite their copies.
+
+👉 [Quick Start](/McpServer-Skills/SKILLS/QuickStart/) · [FAQ](/McpServer-Skills/SKILLS/Faq/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Sep 28, 2026</div>
 <div className="changelog-body">
 

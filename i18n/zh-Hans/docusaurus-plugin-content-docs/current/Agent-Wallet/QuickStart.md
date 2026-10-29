@@ -4,67 +4,32 @@ import TabItem from '@theme/TabItem';
 # 快速开始
 
 :::note
-Agent Wallet 文档保留给现有 SDK、服务端和社区集成。官方新用户的钱包配置入口是 [wallet-cli](/zh-Hans/wallet-cli/quickstart/)，两套配置不会自动互通。
+Agent Wallet 文档介绍现有 SDK、服务端和社区集成所使用的 `@bankofai/agent-wallet` 3.x SDK 与 CLI。官方新用户的钱包配置入口是 [wallet-cli](../wallet-cli/quickstart.md)。Agent-wallet 可以连结 wallet-cli 账户（下文路径 A），但绝不会导入或解密 wallet-cli 的密钥。
 :::
 
-从零到在 AI 代理对话框里唤醒你的 Agent-wallet。创建钱包有两种方式：**命令行创建**适用于所有环境；**对话式创建**只适用于仍装有旧版 agent-wallet 和 bankofai-guide Skill 的环境。
+从零开始，配好一个能让 AI 代理或你自己的代码签名的 Agent-wallet。二选一：
 
-:::tip 前置依赖 & CLI 命令细节
-- 你的 AI Agent 支持 shell 命令执行（OpenClaw、Telegram Bot、Web 聊天页面、Claude Code、Cursor 等）
-- 本页只带你跑通最短路径。免密配置、管理多个钱包、签名类型等进阶内容，请看 [CLI 命令行手册](./Developer/CLI-Reference.md)。
+- **路径 A —— 连结 wallet-cli 账户（真实资金推荐）。** 私钥留在 wallet-cli 的加密 keystore 中。
+- **路径 B —— 导入原始私钥（仅限开发）。** 私钥或助记词会**以明文**保存在 `~/.agent-wallet/wallets_config.json` 中。
+
+Privy 用户：参见 [CLI 命令行手册 → Privy](./Developer/CLI-Reference.md#privy-wallets)。
+
+:::tip 前置条件 & CLI 命令详解
+- 你的 AI 代理支持执行 Shell 命令（OpenClaw、Telegram 机器人、网页聊天、Claude Code、Cursor 等），或者你要在自己的代码里集成 SDK。
+- 本页只带你走最短路径。所有命令与参数请查阅 [CLI 命令行手册](./Developer/CLI-Reference.md)。
 :::
 
----
-
-## 方式一：对话式创建（旧版 Skill）
-
-:::note 历史配置流程
-以下对话式流程仅适用于已安装旧版 agent-wallet 和 bankofai-guide Skill 的环境，这两个 Skill 已在 Skills 3.0.0 中删除。
-:::
-
-如果你之前安装过包含 `agent-wallet` 和 `bankofai-guide` 的旧版 [BANK OF AI 技能](../McpServer-Skills/SKILLS/QuickStart.md)，那么创建钱包只需要在 AI 对话框里发一句话就行——AI 会自动帮你生成密码、创建钱包、保存配置，全程无需手动改文件。
-
-**操作步骤：**
-
-1. 打开你的 AI Agent 对话框
-2. 复制下面这段 prompt 发送给 AI：
-
-   ```
-   创建 AgentWallet 钱包
-   ```
-
-3. AI 会自动完成以下流程：
-   - **检查当前钱包状态**——告诉你是否已有配置
-   - **询问创建方式**——给出两个选项：
-     - **A. 快速设置（强烈推荐）**：全自动，约 10 秒完成；自动生成安全密码；钱包加密存储在本地
-     - **B. 详细设置**：手动选择钱包类型；自定义密码；更多配置选项
-4. 回复 `A` 即可，AI 会自动跑完三个步骤：
-   - **步骤 1**：生成安全密码
-   - **步骤 2**：创建钱包
-   - **步骤 3**：获取钱包地址
-
-
-:::caution 主密码非常重要，请立即备份
-主密码仅展示一次。引导安装执行的是带 `--save-runtime-secrets` 的 `agent-wallet start`，会把它保存到本地的 `~/.agent-wallet/runtime_secrets.json`，但强烈建议你同时手动保存到密码管理器（1Password / Bitwarden 等）——一旦本地文件丢失或损坏，且没有外部备份，你的钱包将永久无法解锁（没有备份找回机制，没有客服，没有后门）。
-
-⚠️ 切勿把这个密码发到聊天工具、邮件、截图或公开仓库中。
-:::
-
-:::tip 完成即可用，无需配置环境变量
-对话式创建会传入 `--save-runtime-secrets`，把密码保存到 `~/.agent-wallet/runtime_secrets.json`，AI Agent 后续调用钱包时会自动读取，**无需手动配置 `AGENT_WALLET_PASSWORD` 环境变量**。如果你想了解环境变量配置方式，请看下面的"方式二"。
+:::caution 从 2.x 升级？
+3.0 移除了 `local_secure`、主密码、`AGENT_WALLET_PASSWORD` 和 `runtime_secrets.json`；配套的 `agent-wallet` / `bankofai-guide` 对话式 Skill 也已在 Skills 3.0.0 中移除。已有的 `local_secure` 钱包不会被转换。升级前请先阅读 [常见问题](./FAQ.md#upgrade-from-2x)。
 :::
 
 ---
 
-## 方式二：命令行手动创建（最精细控制）
+## 第一步：安装
 
-如果你想自己掌控每个步骤，或者你的环境不支持对话式安装，可以按下面的命令行流程手动完成。
+### 1.1 准备环境：安装 Node.js
 
-### 第一步：安装并初始化钱包
-
-#### 1.1 准备环境：安装 Node.js
-
-Agent-wallet 需要你的电脑里有 Node.js（这是一个运行环境，版本需 >= 18；建议安装当前的 LTS 版本）。
+Agent-wallet 和 wallet-cli（路径 A）都要求 **Node.js 22.23.4+（22.x）、24.22.1+（24.x）或 26.12.1+**，即 2026 年 10 月的安全更新版本（已发布的 agent-wallet `3.0.0` 仍声明 `>=18`；wallet-cli `4.15.1` 及下一版 agent-wallet 声明了此范围）。安装最新的 LTS 即可满足。
 
 打开终端（Mac 用户按 `Command + 空格` 搜索"终端"），输入：
 
@@ -72,18 +37,18 @@ Agent-wallet 需要你的电脑里有 Node.js（这是一个运行环境，版�
 node -v
 ```
 
-- **如果输出 `v18.x.x` 或更高数字：** 太棒了，直接跳到 1.2！
-- **如果没有输出或报错：** 别慌，去 **[Node.js 官方网站](https://nodejs.org)** 下载最新的 **LTS** 安装包，像装普通软件一样双击安装，一路"下一步"即可。装完后关掉终端重新打开，再输入 `node -v` 确认。
+- **如果显示 `v22.23.4`+（22.x）、`v24.22.1`+（24.x）或 `v26.12.1`+：** 很好，直接跳到 1.2！
+- **如果没有输出、报错或版本较旧：** 前往 **[Node.js 官网](https://nodejs.org)** 下载最新的 **LTS** 安装包。装完后关闭并重新打开终端，再执行一次 `node -v` 确认。
 
 <details>
-<summary>开发者首选：使用 nvm 安装（小白请跳过）</summary>
+<summary>开发者推荐：通过 nvm 安装（新手可跳过）</summary>
 
 ```bash
 # 1. 安装 nvm（已有可跳过）
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 
 # 2. 重新加载终端配置
-source ~/.bashrc   # zsh 用户改成 source ~/.zshrc
+source ~/.bashrc   # zsh 用户：source ~/.zshrc
 
 # 3. 安装并切换到当前的 Node.js LTS
 nvm install --lts && nvm use --lts
@@ -91,141 +56,141 @@ nvm install --lts && nvm use --lts
 
 </details>
 
-#### 1.2 安装 Agent-wallet
+### 1.2 安装 Agent-wallet
 
 ```bash
 npm install -g @bankofai/agent-wallet
 ```
 
-验证安装成功：
+验证安装：
 ```bash
 agent-wallet --help
 ```
 
-看到帮助信息就说明安装好了。
-
-#### 1.3 创建你的 Agent-wallet 钱包
-
-运行：
-```bash
-agent-wallet start
-```
-
-系统会引导你初始化 **Agent-wallet 钱包**。整个过程是交互式的——跟着提示走就行：
-
-```
-? Quick start type: local_secure  — Encrypted key stored locally (recommended)
-Password requirements: at least 8 characters, with uppercase, lowercase, digit, and special character. e.g. Abc12345!@
-New Master Password (press Enter to auto-generate a strong password):
-
-Wallet initialized!
-Wallet ID (e.g. my_wallet_1) (default_secure):
-? Import source: generate  — Generate a new random private key
-
-Wallets:
-┌────────────────┬──────────────┐
-│ Wallet ID      │ Type         │
-├────────────────┼──────────────┤
-│ default_secure │ local_secure │
-└────────────────┴──────────────┘
-
-🔑 Your master password: <此处会显示你的专属密码>
-⚠️ Keep this password safe. You'll need it for signing and other operations.
-   （只有在你直接回车、由向导自动生成密码时才会出现这一行。）
-
-Active wallet: default_secure
-```
-
-:::caution 主密码 = 你所有资产的唯一钥匙
-这个密码是解开所有私钥的唯一凭证。**忘了就找不回来——我们也没有备份，没有后门，神仙难救。**
-
-请现在就做这件事：
-1. 打开你的密码管理器（1Password、Bitwarden 等）
-2. 新建一条记录，把主密码存进去
-3. 不要截图，不要记在桌面便签上，不要发给自己的微信
-:::
+看到 `Usage: agent-wallet <command> [options]` 以及后面的命令列表，就说明装好了。
 
 ---
 
-### 第二步：把密码"喂"给 AI 代理（极其重要！）
-
-为了让你的 AI 代理能自动使用你的钱包，你必须把密码配置到它的运行环境中。请根据你的电脑系统，选择对应的标签页，**无脑复制执行**即可。
-
-#### 2.1 保存并使密码生效
+## 第二步：创建钱包
 
 <Tabs>
-<TabItem value="mac" label="Mac 用户 (Zsh)" default>
+<TabItem value="wallet-cli" label="路径 A：wallet-cli（推荐）" default>
 
-**第 1 步：** 用编辑器打开 `~/.zshrc` 文件，在末尾添加以下内容（把单引号里的内容换成你的真实密码）：
-
-```bash
-open -e ~/.zshrc
-```
-
-在文件末尾添加这一行，保存并关闭：
+**2.1 安装兼容版本的 wallet-cli**（Agent-wallet 3.x 支持 `>=4.13.0 <5.0.0`）：
 
 ```bash
-export AGENT_WALLET_PASSWORD='你的主密码'
+npm install -g '@tron-walletcli/wallet-cli@^4.13.0'
+wallet-cli --version
 ```
 
-**第 2 步：** 回到终端，复制这条命令，粘贴回车，让配置立即生效：
+**2.2 创建（或导入）wallet-cli 账户。** 首次使用时 wallet-cli 会初始化 `~/.wallet-cli`，并在终端中让你设置它的主密码：
 
 ```bash
-source ~/.zshrc
+wallet-cli create --label main-1 -o json
 ```
 
-:::tip 为什么不用 echo 命令？
-`echo "export ..." >> ~/.zshrc` 虽然更快捷，但你的真实密码会被逐字记录在 Shell 的历史文件（`.zsh_history` / `.bash_history`）中。这些历史文件常常会被安全扫描器、备份工具、AI 编程助手抓取——恰恰是 Agent-wallet 要防范的风险。用编辑器直接编辑配置文件，密码不会出现在任何命令历史中。
+如果要恢复已有钱包，改为执行 `wallet-cli import mnemonic --label main-1 -o json` 或 `wallet-cli import private-key --label main-1 -o json`。助记词、私钥和密码都通过隐藏提示输入——绝不要放进命令参数、环境变量、日志或聊天里。备份方法见 [wallet-cli 快速开始](../wallet-cli/quickstart.md)。
+
+**2.3 写一个密码脚本**，这样 wallet-cli 密码不会落到 Agent-wallet 的配置里。脚本只负责把密码打印到 stdout——例如使用 1Password CLI：
+
+```bash
+#!/bin/sh
+op read 'op://Private/wallet-cli-password/password'
+```
+
+保存（例如保存为 `~/bin/fetch-wallet-cli-password.sh`），并用 `chmod +x` 赋予可执行权限。
+
+**2.4 把账户连结到 Agent-wallet：**
+
+```bash
+agent-wallet start wallet_cli \
+  --wallet-id my_cli_wallet \
+  --account main-1 \
+  --cli-password-exec /absolute/path/to/fetch-wallet-cli-password.sh
+```
+
+Agent-wallet 会先确认 wallet-cli 版本兼容、账户存在（这一步不索要密码），然后保存规范的账户 ID。输出结尾应为：
+
+```
+Wallet 'my_cli_wallet' created:
+...
+Active wallet: my_cli_wallet
+
+Quick guide:
+...
+```
+
+:::tip 不用脚本、直接输入密码
+运行 `agent-wallet start wallet_cli` 时不带 `--cli-password-exec`，在密码来源提示中选择 `direct`。密码会以明文字符串保存在 `wallets_config.json`（文件权限 `0600`）中。`inspect` 始终显示为 `[redacted]`，但任何能读取该文件的程序都能读到密码。在命令行中传 `--cli-password <密码>` 会被拒绝。
 :::
 
 </TabItem>
-<TabItem value="linux" label="Linux 用户 ">
+<TabItem value="raw-secret" label="路径 B：raw_secret（仅限开发）">
 
-**第 1 步：** 用编辑器打开 `~/.bashrc` 文件，在末尾添加以下内容（把单引号里的内容换成你的真实密码）：
+:::danger 明文存储
+`raw_secret` 会把你的私钥或助记词**不加密**地写入 `~/.agent-wallet/wallets_config.json`。任何能读取你主目录文件的程序都能读到它。只能使用一次性测试私钥。
+:::
 
-```bash
-nano ~/.bashrc
-```
-
-在文件末尾添加这一行，保存并关闭（nano 中按 `Ctrl + O` 保存，`Ctrl + X` 退出）：
+Agent-wallet 3.x 不生成私钥——请导入一把已有的测试私钥：
 
 ```bash
-export AGENT_WALLET_PASSWORD='你的主密码'
+agent-wallet start raw_secret --wallet-id dev_wallet
 ```
 
-**第 2 步：** 回到终端，复制这条命令，粘贴回车，让配置立即生效：
+按提示选择 `private_key`（或 `mnemonic`）并粘贴。预期输出：
 
-```bash
-source ~/.bashrc
 ```
+Warning: Raw secret material will be stored in plaintext in wallets_config.json.
+...
+Wallet 'dev_wallet' created:
+...
+Active wallet: dev_wallet
 
+Quick guide:
+...
+```
 
 </TabItem>
 </Tabs>
 
+---
 
+## 第三步：检查钱包
 
-
-
-:::caution 密码有特殊字符？千万不要动单引号！
-自动生成的密码经常含有 `$`、`!` 等特殊字符。上面的命令已经用了单引号包裹密码，**直接替换引号内的文字就好，千万不要改成双引号**，否则 shell 会把密码"消化"掉：
+**查看地址**（不签名，也不需要密码）：
 
 ```bash
-# ✅ 正确 — 单引号，密码原样保存
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
-
-# ❌ 错误 — 双引号，$w0rd 被 shell 展开为空字符串，密码静默出错
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"  # 实际值变为 "P@ss!"
+agent-wallet resolve-address
 ```
-:::
 
-#### 2.2 重启你的 AI 代理后台服务
+从列表中选择你的钱包。`raw_secret` 钱包，或同时拥有两条链地址的 wallet-cli 账户，会打印 EVM 和 TRON 两个地址：
 
-:::danger 这一步很多人忘了，结果 AI 代理死活读不到密码！
-因为你刚才新存了密码，而正在后台运行的 AI 助手还没刷新——它还是个"瞎子"！只有关掉它重新启动，它才能"看"到你的新密码。
-:::
+```
+Wallet  my_cli_wallet
+Type    wallet_cli
 
-不管你现在是否正开着 AI 代理的后台服务，请务必将它**关闭**，然后在刚才执行过命令的终端窗口里，**重新启动**它。
+Addresses
+EVM   0x...
+TRON  T...
+```
+
+**在测试网上签一次名。** 每条签名命令都需要用 `-n` 指定规范网络：
+
+```bash
+agent-wallet sign typed-data '{"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],"Message":[{"name":"contents","type":"string"}]},"primaryType":"Message","domain":{"name":"AgentWallet","chainId":97},"message":{"contents":"hello"}}' -n eip155:97
+```
+
+成功时会打印 `Signature: <hex>`。
+
+---
+
+## 第四步：让代理用上这个钱包
+
+3.x **没有需要设置的密码环境变量**。任何使用 Agent-wallet SDK 的工具或代码，都会自动从 `~/.agent-wallet/wallets_config.json` 解析当前激活的钱包。
+
+- 如果你用 `--dir` 把钱包放在了别处，请在代理运行的环境中把 `AGENT_WALLET_DIR` 设为该目录。
+- 如果你使用了 `--cli-password-exec`，请确保脚本在那个环境里同样能运行（例如代理运行所用的用户也已登录 1Password CLI）。
+- 修改环境变量后，重启你的 AI 代理后台服务使其生效。
 
 ---
 
@@ -233,8 +198,8 @@ export AGENT_WALLET_PASSWORD="P@ss$w0rd!"  # 实际值变为 "P@ss!"
 
 | 我想… | 去这里 |
 | :--- | :--- |
-| 喜欢敲命令？ | [CLI 命令行手册](./Developer/CLI-Reference.md) |
-| 要开发应用？ | [SDK 接入指南](./Developer/SDK-Guide.md) |
-| 找现成代码？ | [完整代码示例](./Developer/SDK-Cookbook.md) |
-| 了解安全设计原理 | [简介](./Intro.md) |
-| 查看常见问题 | [FAQ](./FAQ.md) |
+| 更喜欢命令行？ | [CLI 命令行手册](./Developer/CLI-Reference.md) |
+| 要自己写代理？ | [SDK 接入指南](./Developer/SDK-Guide.md) |
+| 想找现成的代码？ | [完整代码示例](./Developer/SDK-Cookbook.md) |
+| 了解安全设计 | [简介](./Intro.md) |
+| 查看常见问题 | [常见问题](./FAQ.md) |

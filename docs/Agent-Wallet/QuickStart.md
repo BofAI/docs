@@ -4,67 +4,32 @@ import TabItem from '@theme/TabItem';
 # Quick Start
 
 :::note
-Agent Wallet documentation remains for existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](/wallet-cli/quickstart/); the stores are not automatically interchangeable.
+Agent Wallet documentation covers the `@bankofai/agent-wallet` 3.x SDK and CLI used by existing SDK, server, and community integrations. The official setup entry for new users is [wallet-cli](../wallet-cli/quickstart.md). Agent-wallet can link a wallet-cli account (Path A below), but never imports or decrypts wallet-cli keys.
 :::
 
-From zero to invoking your Agent-wallet in your AI agent chat. There are two ways to create your wallet: **command-line setup** works for every installation; **conversational setup** only works where the legacy agent-wallet and bankofai-guide Skills are still installed.
+From zero to a working Agent-wallet that your AI agent or your own code can sign with. Pick one path:
+
+- **Path A — Link a wallet-cli account (recommended for real funds).** Keys stay in wallet-cli's encrypted keystore.
+- **Path B — Import a raw secret (development only).** The private key or mnemonic is stored **in plaintext** in `~/.agent-wallet/wallets_config.json`.
+
+Privy users: see [CLI Reference → Privy](./Developer/CLI-Reference.md#privy-wallets).
 
 :::tip Prerequisites & CLI command details
-- Your AI Agent supports shell command execution (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.)
-- This page only walks you through the shortest path. For password-free configuration, managing multiple wallets, signature types, and other advanced topics, see the [CLI Reference](./Developer/CLI-Reference.md).
+- Your AI Agent supports shell command execution (OpenClaw, a Telegram bot, web chat, Claude Code, Cursor, etc.), or you are integrating the SDK into your own code.
+- This page only walks you through the shortest path. For every command and flag, see the [CLI Reference](./Developer/CLI-Reference.md).
+:::
+
+:::caution Upgrading from 2.x?
+3.0 removed `local_secure`, the master password, `AGENT_WALLET_PASSWORD`, and `runtime_secrets.json`, and the bundled `agent-wallet` / `bankofai-guide` conversational Skills were removed in Skills 3.0.0. Existing `local_secure` wallets are not converted. See the [FAQ](./FAQ.md#upgrade-from-2x) before upgrading.
 :::
 
 ---
 
-## Method 1: Conversational Setup (Legacy Skills)
+## Step 1: Install
 
-:::note Historical setup
-The following conversational flow applies only to existing installations of the legacy agent-wallet and bankofai-guide Skills. Both were removed in Skills 3.0.0.
-:::
+### 1.1 Prepare Your Environment: Install Node.js
 
-If you've already installed [the BANK OF AI skill suite](../McpServer-Skills/SKILLS/QuickStart.md) from an older release that included `agent-wallet` and `bankofai-guide`, creating a wallet takes just one prompt in your AI chat — the AI generates the password, creates the wallet, and saves the config for you, with no manual file editing.
-
-**How it works:**
-
-1. Open your AI Agent chat
-2. Copy and paste the following prompt:
-
-   ```
-   Create an AgentWallet
-   ```
-
-3. The AI handles the entire flow automatically:
-   - **Checks current wallet status** — tells you whether one is already configured
-   - **Asks how to create it** — offers two options:
-     - **A. Quick setup (highly recommended)**: fully automated, ~10 seconds; auto-generates a secure password; encrypted wallet stored locally
-     - **B. Detailed setup**: manually pick wallet type; custom password; more configuration options
-4. Reply `A` and the AI runs the three setup steps automatically:
-   - **Step 1**: Generate a secure password
-   - **Step 2**: Create the wallet
-   - **Step 3**: Retrieve the wallet addresses
-
-
-:::caution Your master password is critical — back it up immediately
-The master password is only shown once. The guided setup runs `agent-wallet start` with `--save-runtime-secrets`, which saves it to `~/.agent-wallet/runtime_secrets.json` — but you should also save it manually to a password manager (1Password, Bitwarden, etc.). If the local file is lost or corrupted and you have no external backup, your wallet will be permanently locked — there is no recovery mechanism, no support team, and no backdoor.
-
-⚠️ Never share this password via chat, email, screenshots, or public repositories.
-:::
-
-:::tip Done — no env-var configuration needed
-Conversational setup passes `--save-runtime-secrets`, so the password is saved to `~/.agent-wallet/runtime_secrets.json` and your AI Agent reads it automatically when calling wallet functions. **You don't need to manually export `AGENT_WALLET_PASSWORD`.** If you'd rather use the env-var approach, see Method 2 below.
-:::
-
----
-
-## Method 2: Command-Line Setup (Most Control)
-
-If you want to control every step yourself, or your environment doesn't support conversational install, follow the command-line flow below.
-
-### Step 1: Install and Initialize Your Wallet
-
-#### 1.1 Prepare Your Environment: Install Node.js
-
-Agent-wallet requires Node.js (a runtime environment, version >= 18; installing the current LTS is recommended) on your computer.
+Agent-wallet and wallet-cli (Path A) both require **Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+** — the October 2026 security releases (the published agent-wallet `3.0.0` still declares `>=18`; wallet-cli `4.15.1` and the next agent-wallet release declare this range). An up-to-date LTS install satisfies this.
 
 Open a terminal (Mac users press `Command + Space` and search for "Terminal"), then type:
 
@@ -72,8 +37,8 @@ Open a terminal (Mac users press `Command + Space` and search for "Terminal"), t
 node -v
 ```
 
-- **If the output shows `v18.x.x` or higher:** Great, skip straight to 1.2!
-- **If there's no output or an error:** Don't panic — go to the **[Node.js official website](https://nodejs.org)** and download the latest **LTS** installer. Install it like any regular software — double-click and follow the prompts. After installation, close and reopen your terminal, then run `node -v` again to confirm.
+- **If the output is `v22.23.4`+ (22.x), `v24.22.1`+ (24.x), or `v26.12.1`+:** Great, skip straight to 1.2!
+- **If there's no output, an error, or an older version:** go to the **[Node.js official website](https://nodejs.org)** and download the latest **LTS** installer. After installation, close and reopen your terminal, then run `node -v` again to confirm.
 
 <details>
 <summary>Developer preferred: Install via nvm (beginners can skip this)</summary>
@@ -91,7 +56,7 @@ nvm install --lts && nvm use --lts
 
 </details>
 
-#### 1.2 Install Agent-wallet
+### 1.2 Install Agent-wallet
 
 ```bash
 npm install -g @bankofai/agent-wallet
@@ -102,130 +67,130 @@ Verify the installation:
 agent-wallet --help
 ```
 
-If you see the help output, you're good to go.
-
-#### 1.3 Create Your Agent-wallet Wallet
-
-Run:
-```bash
-agent-wallet start
-```
-
-The system will guide you through initializing your **Agent-wallet wallet**. The process is interactive — just follow the prompts:
-
-```
-? Quick start type: local_secure  — Encrypted key stored locally (recommended)
-Password requirements: at least 8 characters, with uppercase, lowercase, digit, and special character. e.g. Abc12345!@
-New Master Password (press Enter to auto-generate a strong password):
-
-Wallet initialized!
-Wallet ID (e.g. my_wallet_1) (default_secure):
-? Import source: generate  — Generate a new random private key
-
-Wallets:
-┌────────────────┬──────────────┐
-│ Wallet ID      │ Type         │
-├────────────────┼──────────────┤
-│ default_secure │ local_secure │
-└────────────────┴──────────────┘
-
-🔑 Your master password: <your-unique-password-will-appear-here>
-⚠️ Keep this password safe. You'll need it for signing and other operations.
-   (This line appears only when you pressed Enter to let the wizard auto-generate the password.)
-
-Active wallet: default_secure
-```
-
-:::caution Master password = the only key to all your assets
-This password is the sole credential for decrypting all your private keys. **Lose it and it's gone forever — no backup, no backdoor, no recovery.**
-
-Do this right now:
-1. Open your password manager (1Password, Bitwarden, etc.)
-2. Create a new entry and paste in the master password
-3. Don't screenshot it, don't put it in a desktop sticky note, don't text it to yourself
-:::
+If you see `Usage: agent-wallet <command> [options]` followed by the command list, you're good to go.
 
 ---
 
-### Step 2: Feed the Password to Your AI (Critical!)
-
-For your AI agent to automatically use your wallet, you must configure the password in its runtime environment. Select the tab matching your operating system and **just copy-paste**:
-
-#### 2.1 Save and Activate the Password
+## Step 2: Create Your Wallet
 
 <Tabs>
-<TabItem value="mac" label="Mac Users (Zsh)" default>
+<TabItem value="wallet-cli" label="Path A: wallet-cli (recommended)" default>
 
-**Step 1:** Open `~/.zshrc` in an editor. Add the following line at the end of the file (replace the content inside the single quotes with your actual password):
-
-```bash
-open -e ~/.zshrc
-```
-
-Add this line at the very end, then save and close:
+**2.1 Install a compatible wallet-cli** (Agent-wallet 3.x supports `>=4.13.0 <5.0.0`):
 
 ```bash
-export AGENT_WALLET_PASSWORD='your-master-password'
+npm install -g '@tron-walletcli/wallet-cli@^4.13.0'
+wallet-cli --version
 ```
 
-**Step 2:** Back in the terminal, copy this command, paste and press Enter to apply the config immediately:
+**2.2 Create (or import) a wallet-cli account.** On first use wallet-cli sets up `~/.wallet-cli` and asks you to set its master password in the terminal:
 
 ```bash
-source ~/.zshrc
+wallet-cli create --label main-1 -o json
 ```
 
-:::tip Why not use the echo command?
-While `echo "export ..." >> ~/.zshrc` is quicker, your actual password gets recorded verbatim in the shell's history file (`.zsh_history` / `.bash_history`). These history files are commonly scanned by security tools, backup utilities, and AI coding assistants — exactly the kind of exposure Agent-wallet is designed to prevent. Editing the config file directly in an editor keeps the password out of any command history.
+To restore an existing wallet instead, run `wallet-cli import mnemonic --label main-1 -o json` or `wallet-cli import private-key --label main-1 -o json`. Mnemonics, private keys and the password are entered at hidden prompts — never put them in command arguments, environment variables, logs, or chats. See the [wallet-cli Quick Start](../wallet-cli/quickstart.md) for backup.
+
+**2.3 Create a password script** so the wallet-cli password is never stored in Agent-wallet's config. The script just prints the password to stdout — for example with the 1Password CLI:
+
+```bash
+#!/bin/sh
+op read 'op://Private/wallet-cli-password/password'
+```
+
+Save it (for example as `~/bin/fetch-wallet-cli-password.sh`) and make it executable with `chmod +x`.
+
+**2.4 Link the account to Agent-wallet:**
+
+```bash
+agent-wallet start wallet_cli \
+  --wallet-id my_cli_wallet \
+  --account main-1 \
+  --cli-password-exec /absolute/path/to/fetch-wallet-cli-password.sh
+```
+
+Agent-wallet first checks that wallet-cli is compatible and that the account exists (without asking for the password), then saves the canonical account ID. Expected output ends with:
+
+```
+Wallet 'my_cli_wallet' created:
+...
+Active wallet: my_cli_wallet
+
+Quick guide:
+...
+```
+
+:::tip Typing the password instead of using a script
+Run `agent-wallet start wallet_cli` without `--cli-password-exec` and pick `direct` at the password-source prompt. The password is then stored as a plaintext string in `wallets_config.json` (file mode `0600`). `inspect` always shows it as `[redacted]`, but any program that can read the file can read the password. Passing `--cli-password <password>` on the command line is rejected.
 :::
 
 </TabItem>
-<TabItem value="linux" label="Linux Users">
+<TabItem value="raw-secret" label="Path B: raw_secret (dev only)">
 
-**Step 1:** Open `~/.bashrc` in an editor. Add the following line at the end of the file (replace the content inside the single quotes with your actual password):
+:::danger Plaintext storage
+`raw_secret` writes your private key or mnemonic **unencrypted** to `~/.agent-wallet/wallets_config.json`. Any program that can read files in your home directory can read it. Use only throwaway test keys.
+:::
 
-```bash
-nano ~/.bashrc
-```
-
-Add this line at the very end, then save and close (in nano, press `Ctrl + O` to save, `Ctrl + X` to exit):
+Agent-wallet 3.x does not generate keys — import an existing test key:
 
 ```bash
-export AGENT_WALLET_PASSWORD='your-master-password'
+agent-wallet start raw_secret --wallet-id dev_wallet
 ```
 
-**Step 2:** Back in the terminal, copy this command, paste and press Enter to apply the config immediately:
+At the prompts, choose `private_key` (or `mnemonic`) and paste the value. Expected output:
 
-```bash
-source ~/.bashrc
 ```
+Warning: Raw secret material will be stored in plaintext in wallets_config.json.
+...
+Wallet 'dev_wallet' created:
+...
+Active wallet: dev_wallet
 
+Quick guide:
+...
+```
 
 </TabItem>
 </Tabs>
 
+---
 
+## Step 3: Check the Wallet
 
-
-
-:::caution Password has special characters? Don't touch the single quotes!
-Auto-generated passwords often contain `$`, `!`, and other special characters. The commands above already use single quotes to wrap the password — **just replace the text inside the quotes, never switch to double quotes**, or the shell will silently mangle the value:
+**Show the addresses** (no signing, no password needed):
 
 ```bash
-# ✅ Correct — single quotes, password saved as-is
-export AGENT_WALLET_PASSWORD='P@ss$w0rd!'
-
-# ❌ Wrong — double quotes, $w0rd gets shell-expanded to empty string, password silently breaks
-export AGENT_WALLET_PASSWORD="P@ss$w0rd!"  # actual value becomes "P@ss!"
+agent-wallet resolve-address
 ```
-:::
 
-#### 2.2 Restart Your AI Backend Service
+Pick your wallet from the list. A `raw_secret` wallet, or a wallet-cli account that has both chain families, prints an EVM and a TRON address:
 
-:::danger Many people forget this step, then wonder why AI can't find the password!
-You just saved a new password, but the AI assistant running in the background hasn't refreshed yet — it's still blind to the change! You need to shut it down and restart it for the new password to take effect.
-:::
+```
+Wallet  my_cli_wallet
+Type    wallet_cli
 
-Whether or not you currently have your AI agent backend service running, make sure to **shut it down**, then **restart it** from the same terminal window where you ran the commands above.
+Addresses
+EVM   0x...
+TRON  T...
+```
+
+**Make a test signature** on a testnet. Every signing command needs a canonical network with `-n`:
+
+```bash
+agent-wallet sign typed-data '{"types":{"EIP712Domain":[{"name":"name","type":"string"},{"name":"chainId","type":"uint256"}],"Message":[{"name":"contents","type":"string"}]},"primaryType":"Message","domain":{"name":"AgentWallet","chainId":97},"message":{"contents":"hello"}}' -n eip155:97
+```
+
+Success prints `Signature: <hex>`.
+
+---
+
+## Step 4: Point Your Agent at the Wallet
+
+There is **no password environment variable** to set in 3.x. Any tool or code that uses the Agent-wallet SDK resolves the active wallet from `~/.agent-wallet/wallets_config.json` automatically.
+
+- If you stored the wallet somewhere else with `--dir`, set `AGENT_WALLET_DIR` to that directory in the environment your agent runs in.
+- If you used `--cli-password-exec`, make sure the script works in that environment too (for example, the 1Password CLI must be signed in for the user the agent runs as).
+- After changing environment variables, restart your AI agent backend so it picks them up.
 
 ---
 

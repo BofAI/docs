@@ -26,7 +26,7 @@ The 8004 Protocol leverages the blockchain as a shared public registry that anyo
 
   This file defines the Agent’s basic information, payment wallet, and multiple communication endpoints (such as Web, MCP, DID, etc.), and supports automatic domain matching or `.well-known` path verification to confirm endpoint ownership.  
 
-  As an NFT asset, the Agent identity is transferable. Upon ownership transfer, the payment address is automatically reset to ensure secure control of service revenue by the new owner.
+  As an NFT asset, the Agent identity is transferable. Upon ownership transfer, the payment address (`agentWallet`) is cleared, so the previous owner's wallet stops receiving service revenue; the new owner sets a new one with `setWallet`.
 
 - **Reputation System**
   

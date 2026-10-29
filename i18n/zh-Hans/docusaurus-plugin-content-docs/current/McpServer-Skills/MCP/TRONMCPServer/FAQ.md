@@ -12,11 +12,15 @@
 
 这是最常见的问题。按以下顺序逐一排查：
 
-1. **检查 Node.js 版本**。TRON MCP Server 需要 v20.0.0 或更高版本：
+1. **检查 Node.js 版本**。声明的版本要求取决于你运行服务端的方式：
+   - **`npx -y @bankofai/mcp-server-tron`** 运行的是 npm 包 `1.1.7`，它声明的是 Node.js `>=20`。
+   - **源码检出**的 `main`（tag `v1.1.8`）要求 22.23.4+（22.x）或 24.22.1+（24.x）。其 `package.json` 里的版本号仍是 `1.1.7`，因此服务端上报的版本也是 `1.1.7`。
+
+   无论哪种方式，都推荐使用 2026 年 10 月的安全更新版本 22.23.4+ 或 24.22.1+：
    ```bash
-   node --version  # 应输出 v20.x.x 或更高
+   node --version  # 推荐：v22.23.4+ 或 v24.22.1+
    ```
-   如果版本太低，请先升级 Node.js。
+   如果版本低于你所用方式声明的要求，请先升级 Node.js。
 
 2. **检查 npx 是否可用**。在终端运行 `npx --version`。如果找不到命令，说明 Node.js 安装不完整，需要重新安装。
 
@@ -47,14 +51,21 @@
 
 3. **防火墙拦截**。如果你从另一台机器访问本地 HTTP 服务，检查防火墙是否允许该端口的入站连接。
 
-### 写入工具出现但返回"钱包未配置"错误
+### 写入工具出现但返回钱包错误 {#write-tools-wallet-error}
 
-从 v1.1.7 起，写入工具（转账、质押等）始终出现在 AI 的工具列表中，但会在执行时检查钱包是否已配置。如果没有配置钱包就调用写入工具，会返回错误提示你设置钱包。
+从 v1.1.7 起，写入工具（转账、质押等）始终出现在 AI 的工具列表中，但会在执行时检查钱包是否已配置。如果没有可用钱包就调用写入工具，会返回类似 `Error transferring TRX: <原因>` 的错误，其中 `<原因>` 来自 Agent Wallet——各条错误的含义见下方[钱包错误信息](#wallet-error-messages)。
 
-要启用写入操作，请配置 [Agent Wallet](../../../Agent-Wallet/Intro.md)：
+要启用写入操作，请配置本服务端所依赖的 Agent Wallet **2.x**：
 
-- 设置 `AGENT_WALLET_PASSWORD` 环境变量为你的主密码
+```bash
+npm install -g @bankofai/agent-wallet@2
+agent-wallet start local_secure --save-runtime-secrets
+```
+
+- `--save-runtime-secrets` 会把主密码写入 `~/.agent-wallet/runtime_secrets.json`；也可以改为把 `AGENT_WALLET_PASSWORD` 环境变量设为主密码
 - 可选设置 `AGENT_WALLET_DIR`（如使用自定义钱包目录）
+
+[Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)描述的是 Agent Wallet 3.x，本服务端尚未使用该版本——请使用上面的 2.x 命令。
 
 配置完成后重启 AI 客户端即可。详细说明请参阅[本地私有化部署](./LocalPrivatizedDeployment.md)。
 
@@ -66,22 +77,36 @@
 
 ## 认证与密钥问题
 
-### "钱包未配置"错误
+### 钱包错误信息 {#wallet-error-messages}
 
-这表示尚未设置用于签名交易的钱包。TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行所有钱包管理。解决方法：
+TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行所有钱包管理。当写入工具（或 `get_wallet_address` / `sign_message`）拿不到钱包时，错误文本会告诉你属于哪种情况：
 
-1. **安装并初始化 Agent Wallet**，参阅 [Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)。
-2. **设置环境变量**：
+| 错误文本 | 含义 |
+| :--- | :--- |
+| `resolve_wallet could not find a wallet source in config or env` | 完全没有钱包：解析不到密码，钱包目录中没有任何钱包，且 `AGENT_WALLET_PRIVATE_KEY`、`TRON_PRIVATE_KEY`、`AGENT_WALLET_MNEMONIC`、`TRON_MNEMONIC` 都未设置。 |
+| `Password required for local_secure wallets` | 钱包目录中有钱包，但没有解析到密码——既没有 `runtime_secrets.json`，也没有 `AGENT_WALLET_PASSWORD`。 |
+| `No active wallet set.` | 解析到了密码，但钱包目录中没有任何钱包。此时私钥和助记词环境变量都会被忽略——请用 Agent Wallet 创建或导入钱包，或去掉密码以走环境变量私钥路径。 |
+| `MAC mismatch — wrong password or corrupted file` | 找到了密码，但与 keystore 不匹配（见下一节）。 |
+| `Wallet not configured.` | Agent Wallet 连配置都无法加载——例如 `runtime_secrets.json` 或 `wallets_config.json` 格式错误。使用 agent-wallet 2.3.x（源码检出按 `package-lock.json` 安装的版本）时，在走到环境变量路径时（见表格下方说明）同时设置了私钥和助记词，也会得到这条错误。 |
+| `Provide only one of AGENT_WALLET_PRIVATE_KEY or AGENT_WALLET_MNEMONIC` | 使用 agent-wallet 2.4.0（`npx -y @bankofai/mcp-server-tron`，即 npm `1.1.7`、依赖 `^2.3.0`，当前安装的版本）时，走到了环境变量路径，且同时设置了私钥（`AGENT_WALLET_PRIVATE_KEY` 或 `TRON_PRIVATE_KEY`）和助记词（`AGENT_WALLET_MNEMONIC` 或 `TRON_MNEMONIC`）。服务端会原样透传这段文本，例如 `Error transferring TRX: Provide only one of …`，或 `get_wallet_address` 返回的 `Error: Provide only one of …`。去掉其中一个即可。 |
+
+两个 agent-wallet 版本都从 `AGENT_WALLET_PRIVATE_KEY` 或其别名 `TRON_PRIVATE_KEY` 读取私钥，从 `AGENT_WALLET_MNEMONIC` 或其别名 `TRON_MNEMONIC` 读取助记词。只有走到环境变量路径——解析不到任何密码**且**钱包目录里一个钱包都没有——时才会读取这些变量；否则它们会被静默忽略，上面两种「同时设置」引起的错误也都不会出现。
+
+前两种情况的解决方法：
+
+1. **还没有钱包：安装并初始化 Agent Wallet 2.x**：执行 `npm install -g @bankofai/agent-wallet@2`，再执行 `agent-wallet start local_secure --save-runtime-secrets`，同时把主密码保存到 `runtime_secrets.json`。（[Agent-Wallet 文档](../../../Agent-Wallet/Intro.md)描述的是 3.x，本服务端尚未使用该版本。）
+2. **已经有钱包：让服务端能拿到密码**——导出环境变量：
    ```bash
    export AGENT_WALLET_PASSWORD='<你的主密码>'
    ```
-3. **重启 AI 客户端**使配置生效。
+   或按[本地私有化部署](./LocalPrivatizedDeployment.md)（路径 1）的方法保存到 `runtime_secrets.json`。重新执行 `agent-wallet start` 没有用：已有钱包时它只提供 `add`（创建一个新钱包并把它设为当前钱包）和 `exit`（不保存任何内容）两个选项。
+3. **重启 AI 客户端**使配置生效。服务端只解析一次钱包来源并缓存，修改钱包设置后必须重启。
 
-### "Agent Wallet 密码错误"
+### "MAC mismatch — wrong password or corrupted file" 错误
 
-`AGENT_WALLET_PASSWORD` 必须与运行 `agent-wallet start` 时生成的主密码完全一致。请确认钱包目录存在（`ls ~/.agent-wallet/`），如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
+服务端解析到的密码（来自 `runtime_secrets.json` 或 `AGENT_WALLET_PASSWORD`）必须与运行 `agent-wallet start` 时设置的主密码完全一致。请确认钱包目录存在（`ls ~/.agent-wallet/`），如果使用了自定义目录，确保 `AGENT_WALLET_DIR` 指向正确路径。
 
-如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始——详见 [CLI 命令行手册 → 重置](../../../Agent-Wallet/Developer/CLI-Reference.md#agent-wallet-reset重置所有数据)和 [Agent-Wallet 常见问题](../../../Agent-Wallet/FAQ.md)。
+如果密码丢失，需要重新初始化钱包。**警告：此操作会清除所有钱包和密钥——请务必提前转移资金或备份助记词。** 运行 `agent-wallet reset` 清除并重新开始。在 agent-wallet 2.x（本服务使用的版本）中，`reset` 会删除 `~/.agent-wallet` 里的所有文件——`master.json`、`wallets_config.json`、`runtime_secrets.json` 以及 `secret_*.json` 密钥库。Agent-Wallet 文档描述的是 3.x，其 `reset` 只删除 `wallets_config.json`。
 
 ### TronGrid API Key 不生效
 
@@ -115,7 +140,7 @@
 **怎么解决：**
 - 先预估费用："预估调用这个合约的 transfer 函数需要多少能量"
 - 质押 TRX 换取能量："质押 500 TRX 获取能量"
-- 如果使用 `write_contract`，可以让 AI 提高 `feeLimit` 参数
+- `write_contract` 没有手续费上限参数，请确保钱包有足够 TRX 燃烧以补足能量缺口。只有 `deploy_contract` 接受 `feeLimit`（单位 Sun，默认 1,000,000,000 = 1000 TRX），部署大合约时可以让 AI 调高它
 
 ### "账户不存在"或"账户未激活"
 
@@ -158,7 +183,7 @@ AI 可能将 TRON MCP Server 的能力与其他区块链工具混淆。如果它
 
 几种常见原因和对策：
 
-- **没有 TronGrid API Key**：公共 RPC 有频率限制，添加免费的 API Key 可以显著改善
+- **没有 TronGrid API Key**：未设置 `TRONGRID_API_KEY` 时，`v1.1.8` 起的源码检出中主网请求走 BANK OF AI 回退节点 `https://hptg.bankofai.io`，npm `1.1.7`（`npx` 运行的版本）则不带 Key 访问 `https://api.trongrid.io`。配置免费的 API Key 后，两个版本都会以你自己的配额访问 `https://api.trongrid.io`
 - **复杂的多工具工作流**：某些操作（如钱包全貌分析）需要多个串行调用，等待是正常的
 - **使用测试网开发**：Nile 和 Shasta 测试网通常响应更快
 - **提示词更明确**：减少 AI 的探索性调用——直接告诉它用哪个工具、查哪个网络
@@ -183,7 +208,13 @@ AI 可能将 TRON MCP Server 的能力与其他区块链工具混淆。如果它
 
 ### 如何更新到最新版本？
 
-如果你使用的是 `npx` 方式运行，每次都会自动获取最新发布版本。若要强制刷新缓存：
+如果你使用的是 `npx` 方式运行，`npx -y @bankofai/mcp-server-tron` 并不一定会拉取最新版本：它可能直接运行已安装的副本——全局安装的、当前项目里的，或者在较旧的 npm 版本上 npx 缓存里的。要始终获取最新发布版本，请显式指定，例如在 MCP 客户端配置中使用：
+
+```bash
+npx -y @bankofai/mcp-server-tron@latest
+```
+
+也可以清除 npx 缓存：删除 `~/.npm/_npx`（必要时再执行 `npm cache clean --force`）。第三方包 `clear-npx-cache` 的作用相同：
 
 ```bash
 npx clear-npx-cache
@@ -200,6 +231,6 @@ npm run build
 
 ### 支持哪个 MCP 协议版本？
 
-TRON MCP Server 支持 MCP 协议版本 **2025-11-25**，使用 `@modelcontextprotocol/sdk` 1.22.0 或更高版本。
+协议版本由 `@modelcontextprotocol/sdk` 协商决定，服务端对它的依赖是 `^1.22.0`；源码检出的 `package-lock.json` 锁定为 1.27.1。MCP 协议版本 **2025-11-25** 需要 SDK 1.24.1 或更高版本——SDK 1.22.0–1.24.0 最高只支持 2025-06-18。客户端请求的更早协议版本同样可以使用。
 
 

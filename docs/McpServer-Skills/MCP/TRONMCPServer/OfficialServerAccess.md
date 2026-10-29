@@ -85,7 +85,7 @@ If you have Node.js installed and prefer the command line, run the following dir
 npx add-mcp https://tron-mcp-server.bankofai.io/mcp -y
 ```
 
-The `-y` flag skips all interactive prompts and automatically installs to every AI tool detected on your computer. Once complete, it will show ✅ Installation complete! along with the list of agents it was installed to.
+The `-y` flag skips all interactive prompts. add-mcp then writes project-level config in the current directory: for the AI tools it detects there (from marker folders and files such as `.claude`, `.cursor`, `.vscode` or `.mcp.json`), or, if it detects none, for every tool that supports a project config. When it finishes it prints `Installation complete` and the agents it installed to.
 
 Once installation is complete, you can start interacting with the TRON blockchain via TRON MCP Server.
 
@@ -117,7 +117,7 @@ The installer automatically detects the remote MCP service URL and generates a s
 
 **2️⃣ Choose which AI tools to install to**
 
-The installer auto-detects AI tools on your computer (e.g., Claude Code, Cursor, Cline, etc.). Use Space to select the ones you want:
+The installer detects AI tools from marker folders and files in the current directory (such as `.claude`, `.cursor`, `.vscode` or `.mcp.json`), for example Claude Code or Cursor. Use Space to select the ones you want:
 
 ```
 ◇  Detected 1 agent
@@ -128,7 +128,7 @@ The installer auto-detects AI tools on your computer (e.g., Claude Code, Cursor,
 
 **3️⃣ Confirm installation details**
 
-The installer displays an installation summary. Review it and select `Yes` to proceed:
+If every tool you selected supports both project and global config, the installer first asks **Installation scope** (`Project` / `Global`); the summary below is for `Project`. It then displays an installation summary. Review it and select `Yes` to proceed:
 
 ```
 ◇  Installation Summary ────╮
@@ -151,11 +151,11 @@ When you see output like this, TRON MCP Server has been successfully installed t
 ```
 ◇  Installation complete
 │
-◇  Installed to 1 agent ───────╮
-│                              │
-│  ✓ Claude Code: ~/.mcp.json  │
-│                              │
-├──────────────────────────────╯
+◇  Installed to 1 agent ──────────────────╮
+│                                         │
+│  ✓ Claude Code: ~/my-project/.mcp.json  │
+│                                         │
+├─────────────────────────────────────────╯
 │
 └  Done!
 ```

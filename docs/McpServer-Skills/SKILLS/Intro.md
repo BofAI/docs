@@ -45,7 +45,7 @@ After receiving your command, it doesn't just execute — it automatically runs 
 2. **Preemptive troubleshooting:** "Your USDT allowance for Permit2 doesn't cover this amount — the swap will send that approval automatically before it trades."
 3. **Precise quote:** "At the latest price, 50 USDT gets you roughly 350 TRX. I've set 1% slippage protection. Ready to buy?"
 
-In this scenario, you said one sentence, and the Skill quietly handled the steps behind the scenes: check the balance covers it → validate the pair and slippage → fetch a fresh quote → show you the bill and wait for your confirmation, with the one-time TRC-20 approval handled automatically by the underlying CLI. That's the difference between a **"regular chatbot AI"** and a **"professional Web3 butler."**
+In this scenario, you said one sentence, and the Skill quietly handled the steps behind the scenes: check the balance covers it → validate the pair and slippage → fetch a fresh quote → show you the bill and wait for your confirmation, with the TRC-20 approval to Permit2 (for the swap amount, whenever the current allowance is too low) handled automatically by the underlying CLI. That's the difference between a **"regular chatbot AI"** and a **"professional Web3 butler."**
 
 ---
 
@@ -78,7 +78,7 @@ Skills covering the most common TRON scenarios — the table below shows everyth
 
 - **👶 I'm a total beginner:** Perfect! No more wrestling with candlestick charts, slippage settings, or gas fee calculations. Just tell the AI what you want in plain language — it does the hard work and feeds you the results.
 - **🕴️ I'm an experienced trader:** Tired of staring at screens all day? Let the AI batch-monitor data and calculate yields, freeing up your time and energy. You focus on strategy — let the AI handle the tedious execution.
-- **🍉 I just want to explore:** Absolutely fine! Read-only skills like "On-Chain Data Detective" are 100% free — no wallet needed, zero risk, full access to the Web3 magic.
+- **🍉 I just want to explore:** Absolutely fine! Read-only skills like [tronscan-skill](./BANKOFAISkill.md#tronscan-skill) are 100% free — no wallet needed, zero risk, full access to the Web3 magic.
 
 ---
 
