@@ -1,3 +1,8 @@
+---
+title: 'Facilitator'
+description: 'Payment verification, settlement APIs, self-hosting requirements, and nonce recovery for the x402 Facilitator.'
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -73,6 +78,10 @@ Quick usage examples can be found in [OfficialFacilitator](./OfficialFacilitator
 
 If you need full control over the settlement wallet, RPC endpoints, energy management, or which networks and schemes are registered — or you have specific privacy or compliance requirements — you can deploy your own Facilitator service.
 
+The current source release is **v2.3.0** (2026-11-03): official `@x402/core`, `@x402/evm`, and `@x402/extensions` **2.29.0**, TRON mechanism and independent resource extension **2.1.1**, and an explicit `@bankofai/agent-wallet` **3.1.0-beta.1** pin. Source installations require Node.js **24.22.1+ (24.x) or 26.12.1+**; Docker and CI pin 24.22.1, and Node.js 22 is no longer supported. Installation overrides pin Zod to **4.6.6**; preserve that override when refreshing dependencies. See the [Facilitator v2.3.0 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.0/README.md) for deployment details.
+
+The v2.3.0 EVM wallet bridge shares an in-process nonce queue per network and wallet, retaining each unmined transaction's hash and signed bytes. If a transaction is dropped from the pool or its broadcast response is lost, the next send first rebroadcasts the originals in nonce order. Only an explicit insufficient-funds, fee-cap, or `transaction underpriced` node rejection of a fresh transaction releases that reservation. Failed recovery blocks new signing until the original is accepted or the confirmed account nonce advances. This state is in memory; it provides neither restart recovery nor cross-process nonce coordination.
+
 > ⚠️ **Self-hosting security notes:**
 > - A self-hosted Facilitator needs a **dedicated funded wallet** to pay blockchain transaction fees. It is resolved through `@bankofai/agent-wallet` v3: with the `privy` or `wallet_cli` provider the key stays outside the service process; the `raw_secret` provider keeps a plaintext key in its config and is for development only
 > - **This Facilitator wallet should be separate from your payment recipient wallet** — create a new wallet specifically for this purpose
@@ -105,6 +114,8 @@ Record-query failures use these codes: `404 not_found` when no record matches, `
 `/verify` and `/settle` keep the x402 response shape (`invalidReason` / `errorReason`). Besides the SDK's own reasons, the service returns: `400 invalid_json` or `missing_parameters` for a malformed body; `413` `{"code":"body_too_large","message":…}` (default limit 1 MiB); `429` `{"error":"rate_limit_exceeded"}`; `403 sponsor_auth_required`, `sponsor_network_disabled` or `sponsor_pay_to_invalid` when a request carries `trc20ApprovalResourceSponsoring` that the deployment will not sponsor; and `503` with `Retry-After` for transient conditions (`sponsor_owner_busy`, `sponsor_recovery_in_progress`, `sponsor_storage_unavailable`, and on `/settle` only `permit2_authorization_busy`, `permit2_storage_unavailable`, `permit2_nonce_check_unavailable`). On `/settle`, a Permit2 authorization whose nonce is already consumed fails with `permit2_nonce_consumed` (HTTP 200) without broadcasting a new transaction; a malformed one fails `/settle` with `400 permit2_invalid_authorization`. Sponsored approvals can also fail at the protocol level (HTTP 200, in `invalidReason` / `errorReason`): `approval_transaction_reused` (the signed approve was already used for a different payment request), `sponsor_approval_lifetime_exceeded` (the signed approve is valid for longer than 630 seconds) and, on `/settle` only, `sponsor_existing_delegation`. An unexpected failure returns `500 internal_error`. The GasFree proxy is served only under `/mainnet` and `/nile` (any other path gets a plain `404`), and answers `502 bad_gateway` when the upstream fails or its response is too large.
 
 > There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee at all. Payment records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`), not a client-supplied payment ID.
+
+v2.3.0 also turns missing or non-object TRON `exact` authorizations into protocol verification rejections: `isValid: false` with `invalidReason: "invalid_exact_tron_payload_authorization"`, instead of HTTP 500. This compatibility handling does not suppress genuine RPC failures.
 
 ---
 

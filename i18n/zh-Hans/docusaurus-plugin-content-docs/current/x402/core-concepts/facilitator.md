@@ -1,3 +1,8 @@
+---
+title: 'Facilitator'
+description: 'x402 Facilitator 的付款验证、结算 API、自托管要求与 nonce 恢复机制。'
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -73,6 +78,10 @@ Facilitator 是一种中间件服务，主要负责：
 
 如果您希望完全掌控结算钱包、RPC 节点、能量管理，或注册哪些网络与方案，又或有特定的隐私/合规要求，可以选择自己部署 Facilitator 服务。
 
+当前源码版本为 **v2.3.0**（2026-11-03）：使用官方 `@x402/core`、`@x402/evm`、`@x402/extensions` **2.29.0**，TRON 机制与独立资源扩展 **2.1.1**，并将 `@bankofai/agent-wallet` 精确锁定到 **3.1.0-beta.1**。源码安装要求 Node.js **24.22.1+（24.x）或 26.12.1+**；Docker 与 CI 固定为 24.22.1，不再支持 Node.js 22。安装配置将 Zod 固定到 **4.6.6**，升级依赖时应保留此覆盖。部署说明见 [Facilitator v2.3.0 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.0/README.md)。
+
+v2.3.0 的 EVM 钱包桥按网络与钱包共享进程内 nonce 队列，保存未上链交易的哈希和原始签名字节。若交易被交易池丢弃或广播响应丢失，下一次发送会先按 nonce 顺序重播原交易；只有新交易被节点明确以余额不足、费用上限过低或 `transaction underpriced` 拒绝时，才释放该次预留。恢复失败会阻止新交易签名，直到原交易被接收或确认账户 nonce 已前进。此状态仅保存在内存中，不提供重启恢复或跨进程 nonce 协调。
+
 > ⚠️ **自托管安全提示：**
 > - 自托管 Facilitator 需要一个**有余额的专用钱包**来支付区块链手续费。该钱包通过 `@bankofai/agent-wallet` v3 解析：使用 `privy` 或 `wallet_cli` provider 时私钥留在服务进程之外；`raw_secret` provider 会把明文私钥存在配置中，仅适用于开发环境
 > - **这个 Facilitator 钱包应与您的收款钱包分开**，请专门创建一个新钱包
@@ -105,6 +114,8 @@ Facilitator 是一种中间件服务，主要负责：
 `/verify` 与 `/settle` 保持 x402 的响应结构（`invalidReason` / `errorReason`）。除 SDK 自身的原因外，服务还会返回：请求体格式错误时 `400 invalid_json` 或 `missing_parameters`；`413` `{"code":"body_too_large","message":…}`（默认上限 1 MiB）；`429` `{"error":"rate_limit_exceeded"}`；请求携带 `trc20ApprovalResourceSponsoring` 但部署不予赞助时 `403 sponsor_auth_required`、`sponsor_network_disabled` 或 `sponsor_pay_to_invalid`；暂时性状况返回 `503` 并带 `Retry-After`（`sponsor_owner_busy`、`sponsor_recovery_in_progress`、`sponsor_storage_unavailable`，以及仅 `/settle` 会返回的 `permit2_authorization_busy`、`permit2_storage_unavailable`、`permit2_nonce_check_unavailable`）。`/settle` 时 nonce 已被消耗的 Permit2 授权会以 `permit2_nonce_consumed`（HTTP 200）失败，不会广播新交易；授权格式错误时 `/settle` 返回 `400 permit2_invalid_authorization`。受赞助的授权还可能在协议层失败（HTTP 200，放在 `invalidReason` / `errorReason` 里）：`approval_transaction_reused`（已签名的 approve 已被用于另一笔不同的支付请求）、`sponsor_approval_lifetime_exceeded`（已签名 approve 的有效期超过 630 秒），以及仅 `/settle` 会返回的 `sponsor_existing_delegation`。未预期的异常返回 `500 internal_error`。GasFree 代理只挂在 `/mainnet` 和 `/nile` 下（其他路径直接返回普通的 `404`），上游失败或响应过大时返回 `502 bad_gateway`。
 
 > **不存在** `/fee/quote` 端点，各方案也完全不收取 facilitator 费用。支付记录以链上授权身份（`network` + `scheme` + `asset` + `payer` + `nonce`）为键，而非客户端提供的 payment ID。
+
+v2.3.0 还将缺失或非对象的 TRON `exact` 授权转换为协议级验证拒绝：`isValid: false`、`invalidReason: "invalid_exact_tron_payload_authorization"`，而非 HTTP 500。该兼容处理不吞掉实际 RPC 错误。
 
 ---
 

@@ -9,7 +9,9 @@ description: 'x402 TypeScript SDK 的功能支持矩阵：基于官方 @x402/* C
 
 > **SDK（仅 TypeScript）**：x402 是一个**仅 TypeScript** 的 SDK。TRON 机制与 TRON 资源赞助扩展以 `@bankofai/x402-tron` 与 `@bankofai/x402-tron-extensions` npm 包发布，Core、EVM、HTTP/MCP 集成和通用扩展则直接使用 x402 Foundation 官方的 `@x402/*` 包。源码由 pnpm/turbo monorepo 维护，但应用应依赖已发布的包。上一代 Python + TypeScript SDK 的 `legacy/` 归档已在 2.0.0 中从仓库移除，`typescript/packages/legacy/` 下的兼容包也已在 2.1.0 中移除。
 >
-> **当前版本：2.1.0**（2026-10-23）。付款调用链改为基于官方 `@x402/core` `2.28.0`，`@bankofai/x402-tron` `2.1.0` 将其声明为精确版本的 peer 依赖；请搭配对应的官方 HTTP/MCP 集成（`@x402/fetch`、`@x402/axios`、`@x402/express`、`@x402/fastify`、`@x402/hono`、`@x402/next` 或 `@x402/mcp`，均为 `2.28.0`）。TRON 资源赞助移入独立的 `@bankofai/x402-tron-extensions` `2.1.0`，它锁定机制包的精确版本——两个 TRON 包需一起升级。EVM 直接使用官方 `@x402/evm` `2.28.0`，通用扩展使用官方 `@x402/extensions` `2.28.0`；本地 EVM 包与 `@bankofai/x402-extensions` 已移除。`@bankofai/x402-core` 及基于它的 `@bankofai/x402-*` HTTP/MCP 适配器不能与 2.1 机制混用——新的 TRON 集成请使用官方 Core 与适配器。从 2.0 升级需要迁移源码，见 [TRON 2.1 迁移指南](https://github.com/BofAI/x402/blob/main/docs/migrations/tron-2.1.md)。SDK 要求 **Node.js 24.22.1+**；可运行示例使用 `@bankofai/agent-wallet` **3.0+**。
+> **当前版本：2.1.1**（2026-10-30）。付款调用链改为基于官方 `@x402/core` `2.29.0`，`@bankofai/x402-tron` `2.1.1` 将其声明为精确版本的 peer 依赖；请搭配对应的官方 HTTP/MCP 集成（`@x402/fetch`、`@x402/axios`、`@x402/express`、`@x402/fastify`、`@x402/hono`、`@x402/next` 或 `@x402/mcp`，均为 `2.29.0`）。TRON 资源赞助由独立的 `@bankofai/x402-tron-extensions` `2.1.1` 提供，它锁定机制包的精确版本——两个 TRON 包需一起升级。EVM 直接使用官方 `@x402/evm` `2.29.0`，通用扩展使用官方 `@x402/extensions` `2.29.0`；本地 EVM 包与 `@bankofai/x402-extensions` 已移除。`@bankofai/x402-core` 及基于它的 `@bankofai/x402-*` HTTP/MCP 适配器不能与 2.1 机制混用——新的 TRON 集成请使用官方 Core 与适配器。从 2.0 升级需要迁移源码，见 [TRON 2.1 迁移指南](https://github.com/BofAI/x402/blob/main/docs/migrations/tron-2.1.md)。SDK 要求 **Node.js 24.22.1+**；可运行示例使用 `@bankofai/agent-wallet` **3.0+**。
+
+> **2.1.1 Schema 迁移**：官方 Core 现使用原生 **Zod 4.6.6+**。应用若组合 `@x402/core/schemas` 中的 Schema，须使用 Zod 4，并通过 `error.issues` 读取校验详情；Zod 3 的 `error.errors` 别名已移除。付款选项数组（`accepts`）最多 **1,024 项**，超长集合会在逐项校验前被拒绝。升级两个 TRON 包时，同时升级精确版本的 Core peer 及对应传输包。
 
 ---
 
@@ -63,7 +65,7 @@ description: 'x402 TypeScript SDK 的功能支持矩阵：基于官方 @x402/* C
 
 > **TRON 标识格式**：自 `@bankofai/x402-tron` 2.0.0 起，SDK 常量使用十进制 CAIP-2 引用。旧的十六进制形式（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）仍可作为输入别名使用，并会被规范化为十进制形式。官方 facilitator 的 `/supported` 返回十进制标识；API Catalog 目前仍列出十六进制形式。
 
-> EVM 支持来自官方 `@x402/evm` 2.28.0。其默认资产注册表覆盖 Base、Base Sepolia、Ethereum、Polygon、Arbitrum One/Sepolia、Avalanche、Celo、Sei、MegaETH、Monad、Stable、XDC、Flare、Mezo、Radius、ADI、HPP、Igra 等链，但**不包括 BSC**。在 BSC 上，路由价格须写成显式的 `{ asset, amount, extra }` 对象（写 `$` 价格会报 `No default asset configured for network eip155:56`），client 也须把该资产加入 `spendControls.allowedAssets`。公开 API Catalog 只发布 Base 主网路由；Base Sepolia 保留用于 CLI/SDK 测试。
+> EVM 支持来自官方 `@x402/evm` 2.29.0。其默认资产注册表覆盖 Base、Base Sepolia、Ethereum、Polygon、Arbitrum One/Sepolia、Avalanche、Celo、Sei、MegaETH、Monad、Stable、XDC、Flare、Mezo、Radius、ADI、HPP、Igra 等链，但**不包括 BSC**。在 BSC 上，路由价格须写成显式的 `{ asset, amount, extra }` 对象（写 `$` 价格会报 `No default asset configured for network eip155:56`），client 也须把该资产加入 `spendControls.allowedAssets`。公开 API Catalog 只发布 Base 主网路由；Base Sepolia 保留用于 CLI/SDK 测试。
 
 ---
 
@@ -99,7 +101,7 @@ TRON 的 server 方案（`exact`、`upto`、`batch-settlement`、`exact_gasfree`
 
 ## 扩展（Extensions） {#extensions}
 
-通用协议扩展——`bazaar`、`sign-in-with-x`、`offer-receipt`、`payment-identifier`、`eip2612-gas-sponsoring`、`erc20-approval-gas-sponsoring` 与 `builder-code`——来自官方 `@x402/extensions` `2.28.0`：大多通过 `@x402/extensions/bazaar` 这类子路径导入，两个 EVM gas 赞助扩展从包根导入。TRON 的 `trc20-approval-resource-sponsoring` 单独发布在 `@bankofai/x402-tron-extensions` 中，从包根及 `/trc20-approval-resource-sponsoring`（其下另有 `/client`、`/facilitator`、`/resourceService`）导出。由 resource server 在 `PaymentRequired.extensions` 中声明某个扩展；赞助类扩展与 `payment-identifier` 只在 server 声明后才生效，而 `builder-code` 的归属码由注册了它的一方自行附加，不依赖 server 声明。
+通用协议扩展——`bazaar`、`sign-in-with-x`、`offer-receipt`、`payment-identifier`、`eip2612-gas-sponsoring`、`erc20-approval-gas-sponsoring` 与 `builder-code`——来自官方 `@x402/extensions` `2.29.0`：大多通过 `@x402/extensions/bazaar` 这类子路径导入，两个 EVM gas 赞助扩展从包根导入。TRON 的 `trc20-approval-resource-sponsoring` 单独发布在 `@bankofai/x402-tron-extensions` 中，从包根及 `/trc20-approval-resource-sponsoring`（其下另有 `/client`、`/facilitator`、`/resourceService`）导出。由 resource server 在 `PaymentRequired.extensions` 中声明某个扩展；赞助类扩展与 `payment-identifier` 只在 server 声明后才生效，而 `builder-code` 的归属码由注册了它的一方自行附加，不依赖 server 声明。
 
 ### TRON 授权资源赞助（1.2.0 新增，2.1.0 起为独立包）
 
@@ -215,7 +217,7 @@ EVM 签名使用官方 `@x402/evm` 的公开 signer 适配器（例如 `toClient
 
 > 自托管示例 facilitator（`facilitator/basic`）暴露 `/verify`、`/settle`、`/supported`。官方托管 facilitator 额外提供结算记录查询 `GET /payments/tx/{tx_hash}` 与 `GET /payments`，以及 `/health`——详见[官方 Facilitator](./core-concepts/OfficialFacilitator.md)。Prometheus 指标在独立的监控端口上（发布配置中为 `9001`），不在对外 API 端口。没有 `/fee/quote` 端点：SDK 的各方案不收取 facilitator 费用。
 >
-> 2.1.0 起，`HTTPFacilitatorClient` 来自官方 `@x402/core` `2.28.0`：使用带类型的超时错误，默认超时为 90 秒；仓库示例显式设置了 `timeoutMs: 120_000`。切换到官方 HTTP/MCP 包后，请重新核对请求超时设置。其限流重试（3 次）只作用于 `getSupported()`——`verify()` 与 `settle()` 遇到 429 会直接抛给调用方，不会重试。
+> 2.1.0 起，`HTTPFacilitatorClient` 来自官方 `@x402/core`（当前为 `2.29.0`）：使用带类型的超时错误，默认超时为 90 秒；仓库示例显式设置了 `timeoutMs: 120_000`。切换到官方 HTTP/MCP 包后，请重新核对请求超时设置。其限流重试（3 次）只作用于 `getSupported()`——`verify()` 与 `settle()` 遇到 429 会直接抛给调用方，不会重试。
 
 ---
 

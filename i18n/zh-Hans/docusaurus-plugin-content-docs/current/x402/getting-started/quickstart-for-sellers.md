@@ -1,3 +1,8 @@
+---
+title: '卖家快速入门'
+description: '使用官方 Core、Express 与 TRON 或 EVM 机制为 API 接入 x402 付款。'
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -135,11 +140,13 @@ git --version     # 版本控制工具
 在您的 TypeScript API 项目中安装官方 Core、Express 适配器以及 TRON/EVM 支付 scheme：
 
 ```bash
-pnpm add express @x402/core@2.28.0 @x402/express@2.28.0 @bankofai/x402-tron@2.1.0 @x402/evm@2.28.0
+pnpm add express @x402/core@2.29.0 @x402/express@2.29.0 @bankofai/x402-tron@2.1.1 @x402/evm@2.29.0
 pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 ```
 
-请根据服务框架选择对应包（`@x402/express`、`@x402/hono`、`@x402/fastify` 或 `@x402/next`），版本与 `@x402/core` 一致为 `2.28.0`——`@bankofai/x402-tron` 2.1.0 将 `@x402/core@2.28.0` 声明为精确版本的 peer 依赖。`@x402/evm` 仅在使用 BSC/Base 路由时需要。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
+请根据服务框架选择对应包（`@x402/express`、`@x402/hono`、`@x402/fastify` 或 `@x402/next`），版本与 `@x402/core` 一致为 `2.29.0`——`@bankofai/x402-tron` 2.1.1 将 `@x402/core@2.29.0` 声明为精确版本的 peer 依赖。`@x402/evm` 仅在使用 BSC/Base 路由时需要。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
+
+升级现有应用时，请同步升级所有官方 `@x402/*` 传输包；若使用 `@x402/core/schemas`，需迁移到 Zod 4，并将 `error.errors` 改为 `error.issues`。详见 [SDK 功能矩阵](/x402/sdk-features/)。
 
 如果开发者想要一个更完整的 client → server → facilitator 例子，可以参考仓库中的 [examples](https://github.com/BofAI/x402/tree/main/examples/typescript)；应用开发仍应依赖已发布的 npm 包，而不是链接 monorepo 源码。
 

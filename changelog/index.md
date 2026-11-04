@@ -8,6 +8,19 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
+<div className="changelog-date">Nov 4, 2026</div>
+<div className="changelog-body">
+
+### x402 docs aligned with the latest SDK, facilitator, and gateway
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Fix</span></div>
+
+- SDK 2.1.1 / official Core 2.29.0 and Zod 4 migration, facilitator 2.3.0 EVM nonce recovery and runtime requirements, and gateway 1.0.5 deployment and HTTP 400 responses for consumed Permit2 authorizations. [Details](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Oct 27, 2026</div>
 <div className="changelog-body">
 
