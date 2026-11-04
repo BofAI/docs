@@ -43,6 +43,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Qwen3.7-Max | `$1.65` | `$1.65` | `$0.33` | `$4.951` | - |
 | Qwen3.7-Flash | `$0.03` | `$0.03` | `$0.006` | `$0.13` | - |
 | Qwen3.6-27B | `$0.19` | `$0.19` | `$0.019` | `$2.99` | - |
+| Hy4 | `$0.834` | `$0.834` | `$0.042` | `$2.501` | - |
 | Hy4 Preview | `$0.834` | `$0.834` | `$0.042` | `$2.501` | - |
 | Hy3 | `$0.132` | `$0.132` | `$0.033` | `$0.528` | - |
 | MiMo-V2.6-Pro | `$0.435` | `$0.435` | `$0.0036` | `$0.87` | - |
@@ -199,6 +200,8 @@ You can use the **Usage** page in the left navigation to review detailed consump
 **Usage details:** Each record in the **Usage Detail** table corresponds to a specific AI interaction. The table includes creation time, type, model, token usage, Credits consumed, and response time for detailed cost visibility.
 
 ## Top Up
+
+For programmatic cryptocurrency recharge, see the [Recharge API](./api/recharges.md). For Agent-assisted recharge, see the [Recharge Skill Guide](./api/recharge-skill-guide.md).
 
 The platform uses a prepaid model, so you need to top up your account to obtain Credits. The platform offers a secure and convenient top-up experience across fiat payment channels and supported blockchain networks.
 

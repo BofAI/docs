@@ -187,6 +187,38 @@
     "message": "余额 API",
     "description": "The label for the doc item Balance API in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.doc.Hy4": {
+    "message": "Hy4",
+    "description": "The label for the Hy4 model document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Video Creation Tools Integration Guide": {
+    "message": "视频创作工具接入指南",
+    "description": "The label for the video creation tools integration guide in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.category.Codex": {
+    "message": "Codex",
+    "description": "The label for category Codex in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Connect Codex with B.AI API": {
+    "message": "使用 B.AI API 接入 Codex",
+    "description": "The label for the Codex integration guide in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.How to Connect B.AI to Codex with CC Switch: Step-by-Step Visual Guide": {
+    "message": "CC Switch 接入 Codex 图文教程",
+    "description": "The label for the CC Switch Codex visual guide in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Generate Seedance Videos with Codex": {
+    "message": "使用 Codex 生成 Seedance 视频",
+    "description": "The label for the Codex Seedance video guide in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Recharge API": {
+    "message": "充值 API",
+    "description": "The label for the recharge API in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Recharge Skill Guide": {
+    "message": "充值 Skill 使用指南",
+    "description": "The label for the recharge Skill guide in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.doc.Video Generation API": {
     "message": "视频生成 API",
     "description": "The label for the doc item Video Generation API in sidebar docsSidebar"

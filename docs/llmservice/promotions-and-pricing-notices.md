@@ -12,15 +12,20 @@ This section shows active and announced upcoming promotions: free offers appear 
 
 <ActivityCard
   variant="discount"
-  title="MiniMax-M3.1-Flash"
+  title="Hy4"
   status="Limited-Time Discount"
-  detail="50% off from Oct 26, 17:00 SGT"
+  detail="50% OFF"
 >
-The offer takes effect at 17:00 on October 26, 2026 (SGT, UTC+8).
+Hy4 token charges are billed at 50% of the standard reference price, including input, output, cache writes, and cache reads. This offer applies only to `hy4`, not `hy4-preview`.
 
-From that time, MiniMax-M3.1-Flash receives a 50% discount and is billed at 50% of the standard reference price.
+| Billing Item | Promotional Price (USD / 1M Tokens) |
+| :--- | ---: |
+| Input | `$0.417` |
+| Cache Write | `$0.417` |
+| Cache Read | `$0.021` |
+| Output | `$1.2505` |
 
-The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/minimax-m3.1-flash.md) continue to show standard reference prices. Eligibility, actual settlement prices, and final billing are subject to the platform display.
+The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/hy4.md) continue to show standard reference prices. The promotion period, actual settlement prices, and final billing are subject to the platform display.
 </ActivityCard>
 
 <ActivityCard
