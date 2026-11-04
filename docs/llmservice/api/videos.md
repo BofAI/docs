@@ -4,6 +4,8 @@ The video API supports generation from text, image references, and video referen
 
 **Create a task -> Query its status -> Download the video.**
 
+To use a video creation tool without writing API requests, see the [Video Creation Tools Integration Guide](../video-tools-guide.md), which uses Toonflow as an example.
+
 ## Preparation
 
 ### API Host

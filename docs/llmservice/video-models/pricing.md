@@ -2,6 +2,8 @@
 
 Seedance models generate video, including audio-video content, from text and supported image, video, or audio references. Video generation pricing is separate from the text-output and image generation pricing tables.
 
+To configure your B.AI API Key in a video creation tool, see the [Video Creation Tools Integration Guide](../video-tools-guide.md).
+
 ## Standard Pricing
 
 **Price unit: `USD / 1M Video Tokens` (USD per 1 million video tokens).** Prices are not per second or per generated video. Actual cost depends on billable video token usage.

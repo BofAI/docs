@@ -231,6 +231,7 @@ const sidebars = {
               label: 'Tencent Hunyuan (Hy)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/hy4', label: 'Hy4' },
                 { type: 'doc', id: 'llmservice/models/hy4-preview', label: 'Hy4 Preview' },
                 { type: 'doc', id: 'llmservice/models/hy3', label: 'Hy3' },
               ],
@@ -347,7 +348,18 @@ const sidebars = {
             },
           ],
         },
+        { type: 'doc', id: 'llmservice/video-tools-guide', label: 'Video Creation Tools Integration Guide' },
         { type: 'doc', id: 'llmservice/memory', label: 'Memory' },
+        {
+          type: 'category',
+          label: 'Codex',
+          collapsed: true,
+          items: [
+            { type: 'doc', id: 'llmservice/codex/integration-guide', label: 'Connect Codex with B.AI API' },
+            { type: 'doc', id: 'llmservice/codex/cc-switch-production-guide', label: 'How to Connect B.AI to Codex with CC Switch: Step-by-Step Visual Guide' },
+            { type: 'doc', id: 'llmservice/codex/seedance-video-guide', label: 'Generate Seedance Videos with Codex' },
+          ],
+        },
         {
           type: 'category',
           label: 'OpenClaw',
@@ -369,6 +381,8 @@ const sidebars = {
             { type: 'doc', id: 'llmservice/api/videos', label: 'Video Generation API' },
             { type: 'doc', id: 'llmservice/api/decisions-api', label: 'Decisions API' },
             { type: 'doc', id: 'llmservice/api/balance', label: 'Balance API' },
+            { type: 'doc', id: 'llmservice/api/recharges', label: 'Recharge API' },
+            { type: 'doc', id: 'llmservice/api/recharge-skill-guide', label: 'Recharge Skill Guide' },
           ],
         },
       ],

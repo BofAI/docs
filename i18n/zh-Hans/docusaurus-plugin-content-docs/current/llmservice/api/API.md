@@ -4,6 +4,8 @@ B.AI 提供统一的大语言模型 API，兼容 OpenAI Chat Completions、OpenA
 
 B.AI 还提供异步[视频生成 API](./videos.md)，支持创建任务、查询状态及下载已完成的视频。
 
+[充值 API](./recharges.md) 使用独立的服务地址 `https://chat.b.ai`，用于创建及查询加密货币充值订单。希望通过 Agent 使用，请查看[充值 Skill 使用指南](./recharge-skill-guide.md)。
+
 - **API 版本：** `v1`
 - **生产环境 Base URL：** `https://api.b.ai/v1`
 - **请求格式：** `application/json`
@@ -52,6 +54,8 @@ B.AI 支持以下两种认证请求头。两者使用平台签发的同一种 AP
 
 视频生成请使用[视频生成 API](./videos.md)示例中的 Bearer 认证；本页暂未说明该端点是否支持 `x-api-key`。
 
+充值端点同样使用 Bearer 认证，不要将模型服务的 `x-api-key` 替代方式直接套用于充值请求。
+
 ### Bearer Token
 
 ```http
@@ -95,6 +99,17 @@ x-api-key: <BAI_API_KEY>
 | `GET` | [`/videos/{task_id}/content`](./videos.md) | - | 通过鉴权下载已完成生成和结算的视频 |
 
 本页暂未标注视频端点的协议兼容性，请使用对应文档中的请求格式。
+
+### 充值服务端点
+
+以下路径使用 **`https://chat.b.ai`**，不是上方模型接口的 Base URL。参数、钱包签名和支付状态规则详见[充值 API](./recharges.md)。这些端点目前仅支持加密货币充值，不代表支持平台页面中的法币支付渠道。
+
+| 方法 | 路径 | 用途 |
+| --- | --- | --- |
+| `GET` | `/v1/recharges/options` | 查询实时链、币种和最低金额 |
+| `POST` | `/v1/recharges` | 创建充值订单 |
+| `GET` | `/v1/recharges/{out_trade_no}` | 查询原订单及支付状态 |
+| `POST` | `/v1/recharges/{out_trade_no}/payment-submit` | 直接转账后上报链上交易 |
 
 ---
 

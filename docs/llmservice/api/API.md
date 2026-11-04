@@ -4,6 +4,8 @@ B.AI provides a unified large language model API compatible with the OpenAI Chat
 
 B.AI also provides an asynchronous [Video Generation API](./videos.md) to create tasks, query their status, and download completed videos.
 
+The [Recharge API](./recharges.md) uses a separate service origin, `https://chat.b.ai`, for cryptocurrency recharge orders. To use it through an Agent, see the [Recharge Skill Guide](./recharge-skill-guide.md).
+
 - **API version:** `v1`
 - **Production Base URL:** `https://api.b.ai/v1`
 - **Request format:** `application/json`
@@ -52,6 +54,8 @@ B.AI supports the following authentication headers. Both use the same platform-i
 
 For video generation, use the Bearer authentication shown in the [Video Generation API](./videos.md) request example; `x-api-key` support for that endpoint is not documented here.
 
+Recharge endpoints also require Bearer authentication. Do not assume that the model service's `x-api-key` alternative applies to recharge requests.
+
 ### Bearer Token
 
 ```http
@@ -95,6 +99,17 @@ Example:
 | `GET` | [`/videos/{task_id}/content`](./videos.md) | - | Download a completed and settled video with authentication |
 
 The video endpoint's protocol compatibility is not specified in this reference; use its documented request format.
+
+### Recharge Service Endpoints
+
+The paths below use **`https://chat.b.ai`**, not the model API Base URL above. See the [Recharge API](./recharges.md) for parameters, wallet signing, and payment status rules. These endpoints currently support cryptocurrency payments only, not the platform's fiat payment channels.
+
+| Method | Path | Purpose |
+| --- | --- | --- |
+| `GET` | `/v1/recharges/options` | Discover current networks, tokens, and minimum amounts |
+| `POST` | `/v1/recharges` | Create a recharge order |
+| `GET` | `/v1/recharges/{out_trade_no}` | Query the existing order and payment status |
+| `POST` | `/v1/recharges/{out_trade_no}/payment-submit` | Report an on-chain transaction after direct transfer |
 
 ---
 
