@@ -185,6 +185,26 @@ curl -i http://127.0.0.1:4020/providers/example-provider/v1/ping
 
 `curl -i` 请求的是计费端点，应返回 `402 Payment Required`，并带有 `PAYMENT-REQUIRED` 响应头。路径中的 provider 段即 YAML 里的 `name`。两项检查都通过、公网地址可访问后，继续阅读[上架你的服务](../api-catalog/list-your-service.md)。
 
+### 可选：赞助首次 TRON 授权
+
+如果希望 Facilitator 为用户首次 `approve(Permit2)` 提供资源赞助，请在已有的 TRON `exact` Permit2 计费端点中添加 `payment` 配置。例如，将上述 `/v1/ping` 端点改为：
+
+```yaml
+endpoints:
+  - method: GET
+    path: /v1/ping
+    payment:
+      trc20_approval_resource_sponsoring: true
+    metering:
+      dimensions:
+        - tiers:
+            - price_usd: 0.002
+```
+
+这会在 402 挑战中声明 `trc20ApprovalResourceSponsoring`。客户端还须注册 `createTrc20ApprovalResourceSponsoringClientExtension(signer)`，Facilitator 也须启用对应资源赞助 runtime；仅设置网关标志不会完成这些配置。该标志要求端点包含 TRON `exact` Permit2 付款选项，不适用于纯 EVM 或纯 GasFree 端点。官方 Facilitator 的 Nile USDT 赞助要求 API Key；详见[官方 Facilitator](/x402/core-concepts/OfficialFacilitator/)。
+
+普通付款的 Facilitator 请求超时由 `X402_GATEWAY_FACILITATOR_TIMEOUT_MS` 控制，默认 10,000 毫秒。受赞助的 TRON Permit2 付款与 GasFree 付款分别使用 `X402_GATEWAY_RESOURCE_SPONSORING_TIMEOUT_MS` 和 `X402_GATEWAY_GASFREE_TIMEOUT_MS`，默认取 240,000 毫秒与普通超时中的较大值。这些设置覆盖单次 Facilitator 调用及完整响应体读取；不会延长客户端上传请求的超时。只有端点启用了资源赞助且付款携带对应扩展时，才使用资源赞助专用超时。
+
 ### 付款失败响应
 
 付款成功后，网关返回上游响应，并通过 `PAYMENT-RESPONSE` 响应头携带结算结果。v1.0.5 将已使用的 Permit2 授权明确映射为客户端错误：当 Facilitator 返回 `success: false`、匹配的网络、`errorReason: "permit2_nonce_consumed"` 且 `transaction: ""` 时，网关返回 **HTTP 400**，不调用上游：
@@ -212,6 +232,16 @@ Facilitator 的 HTTP 错误与超时使用不同的响应。如果 Facilitator �
 ```
 
 这些发生在 Facilitator 验证或结算阶段的失败都不会将请求转发到上游 API，也不包含 `PAYMENT-RESPONSE`。不要重放已使用的授权。结算超时不代表未付款：Facilitator 仍可能完成交易。若发生超时或结算状态不明确，应先核对原交易和付款记录，再决定是否发起新付款。
+
+### 已结算，但上游 API 调用失败
+
+付款结算成功后，网关才调用上游 API。如果之后发生连接失败、超时或配置的业务响应校验失败，网关返回对应错误状态（通常为 **502**；上游超时为 **504**），响应体为：
+
+```json
+{"error":"upstream failed after payment settlement","settled":true}
+```
+
+此响应仍包含 `PAYMENT-RESPONSE` 结算凭证。应保存凭证和交易 ID，并据此处理交付失败；不要把它当成未付款而自动创建新付款。若上游仅返回 HTTP 错误，且未触发配置的业务响应校验失败，网关会透传上游状态与响应体，同时保留 `PAYMENT-RESPONSE`。因此，不能仅凭 HTTP 状态码判断是否已结算。
 
 ## 下一步
 

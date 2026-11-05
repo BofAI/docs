@@ -8,6 +8,19 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-11-05</div>
+<div className="changelog-body">
+
+### 文档 1.5.2：补充网关赞助配置与结算后失败处理
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- 更新 x402 网关的资源赞助配置、专用超时与已结算后的交付失败说明；文档版本升级为 1.5.2。[详情](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-11-04</div>
 <div className="changelog-body">
 

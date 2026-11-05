@@ -8,6 +8,19 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
+<div className="changelog-date">Nov 5, 2026</div>
+<div className="changelog-body">
+
+### Docs 1.5.2: gateway sponsorship and delivery failure handling
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- Documented x402 gateway sponsorship configuration, dedicated timeouts, and delivery failures after successful settlement; bumped the documentation version to 1.5.2. [Details](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Nov 4, 2026</div>
 <div className="changelog-body">
 

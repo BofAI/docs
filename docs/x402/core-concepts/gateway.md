@@ -185,6 +185,26 @@ curl -i http://127.0.0.1:4020/providers/example-provider/v1/ping
 
 The `curl -i` request to the metered endpoint should return `402 Payment Required` with a `PAYMENT-REQUIRED` header. The provider path segment is the `name` field from the YAML. Once both checks pass and the public URL is reachable, continue with [List Your Service](../api-catalog/list-your-service.md).
 
+### Optional: sponsor the first TRON approval
+
+To let the facilitator sponsor a payer's first `approve(Permit2)`, add the `payment` setting to a metered TRON `exact` Permit2 endpoint. For example, replace the `/v1/ping` endpoint above with:
+
+```yaml
+endpoints:
+  - method: GET
+    path: /v1/ping
+    payment:
+      trc20_approval_resource_sponsoring: true
+    metering:
+      dimensions:
+        - tiers:
+            - price_usd: 0.002
+```
+
+This advertises `trc20ApprovalResourceSponsoring` in the 402 challenge. The client must also register `createTrc20ApprovalResourceSponsoringClientExtension(signer)`, and the facilitator must enable its sponsoring runtime; the gateway flag alone does not configure them. The flag requires a TRON `exact` Permit2 payment option and does not apply to EVM-only or GasFree-only endpoints. The official facilitator requires an API Key for Nile USDT sponsorship; see [Official Facilitator](/x402/core-concepts/OfficialFacilitator/).
+
+Ordinary payments use `X402_GATEWAY_FACILITATOR_TIMEOUT_MS`, defaulting to 10,000 milliseconds. Sponsored TRON Permit2 payments and GasFree payments use `X402_GATEWAY_RESOURCE_SPONSORING_TIMEOUT_MS` and `X402_GATEWAY_GASFREE_TIMEOUT_MS`, respectively; each defaults to the greater of 240,000 milliseconds and the ordinary timeout. These settings cover a single facilitator call and its complete response body; they do not extend the client's request upload timeout. The resource-sponsoring timeout applies only when the endpoint enables sponsorship and the payment carries the extension.
+
 ### Payment failure responses
 
 After successful payment, the gateway returns the upstream response with the settlement result in `PAYMENT-RESPONSE`. In v1.0.5, a consumed Permit2 authorization is an explicit client rejection: when the facilitator returns `success: false`, the matching network, `errorReason: "permit2_nonce_consumed"`, and `transaction: ""`, the gateway returns **HTTP 400** without calling upstream:
@@ -212,6 +232,16 @@ If the facilitator request times out, including while reading its response body,
 ```
 
 These failures during facilitator verification or settlement do not forward the request upstream or include `PAYMENT-RESPONSE`. Do not replay a consumed authorization. A settlement timeout does not prove that no payment occurred: the facilitator may still complete the transaction. For a timeout or an ambiguous settlement result, reconcile the original transaction and payment record before deciding whether to create another payment.
+
+### Upstream API failure after settlement
+
+The gateway calls the upstream API after settlement succeeds. If that call then fails to connect, times out, or fails the configured business-response validation, the gateway returns the corresponding error status (typically **502**, or **504** for an upstream timeout) with:
+
+```json
+{"error":"upstream failed after payment settlement","settled":true}
+```
+
+This response still includes the settlement receipt in `PAYMENT-RESPONSE`. Retain the receipt and transaction ID to resolve the delivery failure; do not automatically create another payment as if settlement had failed. If upstream simply returns an HTTP error without failing a configured business-response check, the gateway forwards its status and body while retaining `PAYMENT-RESPONSE`. An HTTP error status alone therefore does not establish whether payment settled.
 
 ## Next steps
 
