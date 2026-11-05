@@ -12,15 +12,20 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 <ActivityCard
   variant="discount"
-  title="MiniMax-M3.1-Flash"
+  title="Hy4"
   status="限时折扣"
-  detail="10 月 26 日 17:00 SGT 起 5 折"
+  detail="5 折"
 >
-活动于 2026 年 10 月 26 日 17:00（SGT，新加坡时间，UTC+8）起生效。
+Hy4 的 Token 计费项按标准参考价的 50% 结算，包括输入、输出、缓存写入和缓存读取。本次活动仅适用于 `hy4`，不包含 `hy4-preview`。
 
-自生效时间起，MiniMax-M3.1-Flash 享 5 折优惠，按标准参考价的 50% 结算。
+| 计费项 | 活动价格（USD / 1M Tokens） |
+| :--- | ---: |
+| 输入 | `$0.417` |
+| 缓存写入 | `$0.417` |
+| 缓存读取 | `$0.021` |
+| 输出 | `$1.2505` |
 
-[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/minimax-m3.1-flash.md)继续展示标准参考价，活动适用规则、实际结算价格及最终账单以平台页面展示为准。
+[定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/hy4.md)中的标准价格表继续展示原价。活动周期、实际结算价格及最终账单以平台页面展示为准。
 </ActivityCard>
 
 <ActivityCard
