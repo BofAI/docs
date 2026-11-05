@@ -1,3 +1,8 @@
+---
+title: '网络与代币支持'
+description: 'x402 支持的网络、代币合约、默认资产与授权要求。'
+---
+
 import ThemedImage from '@theme/ThemedImage';
 
 # 网络与代币支持
@@ -81,7 +86,7 @@ x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自�
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:728126428`、`tron:3448148188`、`tron:2494104990`，来自 `@bankofai/x402-tron`）上解析 **USDT**，在 Base（`eip155:8453`、`eip155:84532`，来自官方 `@x402/evm` 2.28.0）上解析 **USDC**。`@x402/evm` 还为本页未列表的其他 EVM 网络（Ethereum、Polygon、Arbitrum、Avalanche、Celo、Sei、MegaETH、Monad、XDC、Flare 等）内置了默认资产，但**不包括 BSC**：BSC 路由必须用显式的 `{ asset, amount, extra }` 对象定价。上表中的其余代币——TRON USDD、所有 BSC 资产以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付。CLI 资产选择请参见 [wallet-cli 命令参考](/zh-Hans/wallet-cli/command-reference/)。
+> **默认资产与需显式放行的资产（SDK 1.1.0 起）**：默认资产注册表在 TRON（`tron:728126428`、`tron:3448148188`、`tron:2494104990`，来自 `@bankofai/x402-tron`）上解析 **USDT**，在 Base（`eip155:8453`、`eip155:84532`，来自官方 `@x402/evm` 2.29.0）上解析 **USDC**。`@x402/evm` 还为本页未列表的其他 EVM 网络（Ethereum、Polygon、Arbitrum、Avalanche、Celo、Sei、MegaETH、Monad、XDC、Flare 等）内置了默认资产，但**不包括 BSC**：BSC 路由必须用显式的 `{ asset, amount, extra }` 对象定价。上表中的其余代币——TRON USDD、所有 BSC 资产以及任何自定义代币——都属于「仅由服务端公布」：1.1.0 的客户端消费管控默认开启，除非你通过 `spendControls.allowedAssets` 放行，否则客户端会拒绝支付。CLI 资产选择请参见 [wallet-cli 命令参考](/zh-Hans/wallet-cli/command-reference/)。
 
 > **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或在 server 路由上使用显式的 `{ asset, amount, extra }` 价格，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
 

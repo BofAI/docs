@@ -1,3 +1,8 @@
+---
+title: 'Network & Token Support'
+description: 'Supported x402 networks, token contracts, default assets, and approval requirements.'
+---
+
 import ThemedImage from '@theme/ThemedImage';
 
 # Network & Token Support
@@ -87,7 +92,7 @@ x402 supports **TRC-20, BEP-20, and ERC-20** tokens. TRON/BSC routes use their c
 | **USDC** | `eip155:8453`  | `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913` |
 | **USDC** | `eip155:84532` | `0x036CbD53842c5426634e7929541eC2318f3dCF7e` |
 
-> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registries resolve **USDT** on TRON (`tron:728126428`, `tron:3448148188`, `tron:2494104990`, from `@bankofai/x402-tron`) and **USDC** on Base (`eip155:8453`, `eip155:84532`, from the official `@x402/evm` 2.28.0). `@x402/evm` also ships defaults for further EVM networks (Ethereum, Polygon, Arbitrum, Avalanche, Celo, Sei, MegaETH, Monad, XDC, Flare and others) that this page does not table, but **none for BSC**: a BSC route must be priced with an explicit `{ asset, amount, extra }` object. Everything else in the table above — TRON USDD, every BSC asset, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`. For CLI asset selection, follow the [wallet-cli command reference](/wallet-cli/command-reference/).
+> **Default assets vs. opt-in assets (SDK 1.1.0+)**: the default-asset registries resolve **USDT** on TRON (`tron:728126428`, `tron:3448148188`, `tron:2494104990`, from `@bankofai/x402-tron`) and **USDC** on Base (`eip155:8453`, `eip155:84532`, from the official `@x402/evm` 2.29.0). `@x402/evm` also ships defaults for further EVM networks (Ethereum, Polygon, Arbitrum, Avalanche, Celo, Sei, MegaETH, Monad, XDC, Flare and others) that this page does not table, but **none for BSC**: a BSC route must be priced with an explicit `{ asset, amount, extra }` object. Everything else in the table above — TRON USDD, every BSC asset, and any custom token — is server-advertised only: with the 1.1.0 client spend controls on by default, a client refuses to pay it unless you allowlist it via `spendControls.allowedAssets`. For CLI asset selection, follow the [wallet-cli command reference](/wallet-cli/command-reference/).
 
 > **Extensibility**: The protocol is highly extensible. By registering tokens through the TRON token registry (`registerToken` from `@bankofai/x402-tron`) or an explicit `{ asset, amount, extra }` price on the server route, you can support any custom TRC-20 or BEP-20 token.
 

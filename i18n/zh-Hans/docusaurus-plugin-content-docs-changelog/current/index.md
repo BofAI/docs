@@ -8,6 +8,32 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-11-05</div>
+<div className="changelog-body">
+
+### 文档 1.5.2：补充网关赞助配置与结算后失败处理
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+
+- 更新 x402 网关的资源赞助配置、专用超时与已结算后的交付失败说明；文档版本升级为 1.5.2。[详情](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-11-04</div>
+<div className="changelog-body">
+
+### x402 文档同步三个项目的新版本
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Fix</span></div>
+
+- SDK 2.1.1 / 官方 Core 2.29.0 与 Zod 4 迁移、Facilitator 2.3.0 的 EVM nonce 恢复和运行要求、Gateway 1.0.5 部署及已使用 Permit2 授权的 HTTP 400 响应。[详情](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-10-27</div>
 <div className="changelog-body">
 

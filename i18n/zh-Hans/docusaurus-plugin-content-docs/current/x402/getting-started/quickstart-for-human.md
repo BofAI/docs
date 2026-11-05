@@ -1,3 +1,8 @@
+---
+title: '用户快速入门'
+description: '使用官方 Core 与 TRON SDK 构建 x402 付款客户端。'
+---
+
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
@@ -94,11 +99,13 @@ x402 是**仅 TypeScript** 的 SDK：TRON 机制以 `@bankofai/x402-tron` 发布
 在您的 TypeScript 应用中安装已发布的 npm 包：
 
 ```bash
-pnpm add @bankofai/agent-wallet @x402/core@2.28.0 @x402/fetch@2.28.0 @bankofai/x402-tron@2.1.0
+pnpm add @bankofai/agent-wallet @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.1
 pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 ```
 
-如果您的项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。`@x402/core` 与 `@x402/fetch` 请保持精确的 `2.28.0`——`@bankofai/x402-tron` 2.1.0 将 `@x402/core@2.28.0` 声明为精确版本的 peer 依赖。
+如果您的项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。`@x402/core` 与 `@x402/fetch` 请保持精确的 `2.29.0`——`@bankofai/x402-tron` 2.1.1 将 `@x402/core@2.29.0` 声明为精确版本的 peer 依赖。
+
+升级现有应用时，请同步升级所有官方 `@x402/*` 传输包；若使用 `@x402/core/schemas`，需迁移到 Zod 4，并将 `error.errors` 改为 `error.issues`。详见 [SDK 功能矩阵](/x402/sdk-features/)。
 
 :::info 钱包管理
 x402 使用 [Agent Wallet](../../Agent-Wallet/QuickStart.md) 解析和管理钱包凭据。Agent Wallet（3.0+）会随上面的包一起安装。钱包解析优先级：

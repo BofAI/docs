@@ -104,7 +104,7 @@ The gateway and the catalog solve two different problems: **the gateway collects
 
 ## Run your own gateway
 
-These steps use gateway release **v1.0.4**, published as the Docker image `bankofai/x402-gateway:v1.0.4`. The npm package `@bankofai/x402-gateway` is still at 1.0.2, which predates the decimal TRON network IDs used in these docs, so run the image rather than the npm package. Full reference: [x402-gateway v1.0.4 README](https://github.com/BofAI/x402-gateway/blob/v1.0.4/README.md).
+These steps use gateway release **v1.0.5** and the Docker image `bankofai/x402-gateway:v1.0.5`. This release uses `@bankofai/x402-tron` / `@bankofai/x402-tron-extensions` **2.1.1** with official `@x402/core` **2.29.0**; repository and Docker installations pin Zod to **4.6.6**. Source installations require Node.js **24.22.1+ (24.x) or 26.12.1+**; Docker and CI pin 24.22.1. Full reference: [x402-gateway v1.0.5 README](https://github.com/BofAI/x402-gateway/blob/v1.0.5/README.md).
 
 ### 1. Write a provider file
 
@@ -159,7 +159,7 @@ X402_GATEWAY_PUBLIC_BASE_URL=https://gateway.example.com
 ```bash
 docker run --rm --env-file .env \
   -v "$PWD/providers:/app/providers:ro" \
-  bankofai/x402-gateway:v1.0.4 \
+  bankofai/x402-gateway:v1.0.5 \
   x402-gateway check --providers /app/providers
 ```
 
@@ -171,7 +171,7 @@ docker run --rm --env-file .env \
 docker run -d --name x402-gateway --env-file .env \
   -p 4020:8080 \
   -v "$PWD/providers:/app/providers:ro" \
-  bankofai/x402-gateway:v1.0.4
+  bankofai/x402-gateway:v1.0.5
 ```
 
 The image listens on `0.0.0.0:8080` inside the container. For production, pin the image by digest instead of tag, as the README recommends.
@@ -184,6 +184,64 @@ curl -i http://127.0.0.1:4020/providers/example-provider/v1/ping
 ```
 
 The `curl -i` request to the metered endpoint should return `402 Payment Required` with a `PAYMENT-REQUIRED` header. The provider path segment is the `name` field from the YAML. Once both checks pass and the public URL is reachable, continue with [List Your Service](../api-catalog/list-your-service.md).
+
+### Optional: sponsor the first TRON approval
+
+To let the facilitator sponsor a payer's first `approve(Permit2)`, add the `payment` setting to a metered TRON `exact` Permit2 endpoint. For example, replace the `/v1/ping` endpoint above with:
+
+```yaml
+endpoints:
+  - method: GET
+    path: /v1/ping
+    payment:
+      trc20_approval_resource_sponsoring: true
+    metering:
+      dimensions:
+        - tiers:
+            - price_usd: 0.002
+```
+
+This advertises `trc20ApprovalResourceSponsoring` in the 402 challenge. The client must also register `createTrc20ApprovalResourceSponsoringClientExtension(signer)`, and the facilitator must enable its sponsoring runtime; the gateway flag alone does not configure them. The flag requires a TRON `exact` Permit2 payment option and does not apply to EVM-only or GasFree-only endpoints. The official facilitator requires an API Key for Nile USDT sponsorship; see [Official Facilitator](/x402/core-concepts/OfficialFacilitator/).
+
+Ordinary payments use `X402_GATEWAY_FACILITATOR_TIMEOUT_MS`, defaulting to 10,000 milliseconds. Sponsored TRON Permit2 payments and GasFree payments use `X402_GATEWAY_RESOURCE_SPONSORING_TIMEOUT_MS` and `X402_GATEWAY_GASFREE_TIMEOUT_MS`, respectively; each defaults to the greater of 240,000 milliseconds and the ordinary timeout. These settings cover a single facilitator call and its complete response body; they do not extend the client's request upload timeout. The resource-sponsoring timeout applies only when the endpoint enables sponsorship and the payment carries the extension.
+
+### Payment failure responses
+
+After successful payment, the gateway returns the upstream response with the settlement result in `PAYMENT-RESPONSE`. In v1.0.5, a consumed Permit2 authorization is an explicit client rejection: when the facilitator returns `success: false`, the matching network, `errorReason: "permit2_nonce_consumed"`, and `transaction: ""`, the gateway returns **HTTP 400** without calling upstream:
+
+```json
+{"error":"payment authorization already used","code":"permit2_nonce_consumed"}
+```
+
+When the facilitator returns an HTTP success response but its settlement result is unsuccessful or its network does not match the selected requirement, the gateway returns **HTTP 502** unless it meets the consumed-authorization condition above:
+
+```json
+{"error":"settlement failed"}
+```
+
+Facilitator HTTP errors and timeouts use separate responses. If the facilitator returns HTTP 429 with a valid JSON response, the gateway returns **HTTP 429** and forwards `Retry-After` when present:
+
+```json
+{"error":"facilitator rate limited"}
+```
+
+If the facilitator request times out, including while reading its response body, the gateway returns **HTTP 504**:
+
+```json
+{"error":"facilitator request timed out"}
+```
+
+These failures during facilitator verification or settlement do not forward the request upstream or include `PAYMENT-RESPONSE`. Do not replay a consumed authorization. A settlement timeout does not prove that no payment occurred: the facilitator may still complete the transaction. For a timeout or an ambiguous settlement result, reconcile the original transaction and payment record before deciding whether to create another payment.
+
+### Upstream API failure after settlement
+
+The gateway calls the upstream API after settlement succeeds. If that call then fails to connect, times out, or fails the configured business-response validation, the gateway returns the corresponding error status (typically **502**, or **504** for an upstream timeout) with:
+
+```json
+{"error":"upstream failed after payment settlement","settled":true}
+```
+
+This response still includes the settlement receipt in `PAYMENT-RESPONSE`. Retain the receipt and transaction ID to resolve the delivery failure; do not automatically create another payment as if settlement had failed. If upstream simply returns an HTTP error without failing a configured business-response check, the gateway forwards its status and body while retaining `PAYMENT-RESPONSE`. An HTTP error status alone therefore does not establish whether payment settled.
 
 ## Next steps
 
