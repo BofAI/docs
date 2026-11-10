@@ -84,7 +84,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Claude Haiku 5.5<br/>Prompt up to 100,000 tokens | `$0.10` | `$0.125` | `$0.01` | `$0.50` | `$0.01` |
 | Claude Haiku 5.5<br/>Prompt over 100,000 tokens | `$0.50` | `$0.625` | `$0.05` | `$2.50` | `$0.01` |
 | Claude Opus 5 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
-| Claude Fable 5.1 | `$10.00` | `$12.50` | `$0.25` | `$50.00` | - |
+| Claude Fable 5.2 | `$8.00` | `$10.00` | `$0.20` | `$40.00` | `$0.01` |
+| Claude Fable 5.1 | `$10.00` | `$12.50` | `$0.25` | `$50.00` | `$0.01` |
 | Claude Fable 5 | `$10.00` | `$12.50` | `$1.00` | `$50.00` | `$0.01` |
 | Claude Opus 4.8 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
 | Claude Opus 4.7 | `$5.00` | `$6.25` | `$0.50` | `$25.00` | `$0.01` |
@@ -120,6 +121,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **Kimi K3.1 Pro / Highspeed:** The table shows the default 5-minute cache write rates. See the [model detail page](./models/kimi-k3.1-pro.md) for 1-hour cache write prices and cache renewal rules.
 
 **Claude Haiku 5.5:** The table shows 5-minute cache write rates. Prompts over 100,000 tokens use the higher token rates for the entire request, including output and cached tokens. See the [model detail page](./models/claude-haiku-5-5.md) for 1-hour cache write prices and tier rules.
+
+**Claude Fable 5.2:** The table shows the 5-minute cache write price of `$10.00 per 1M tokens`. The 1-hour cache write price is `$16.00 per 1M tokens`; see the [model detail page](./models/claude-fable-5-2.md) for full standard pricing and caching rules.
 :::
 
 :::info Pricing note
