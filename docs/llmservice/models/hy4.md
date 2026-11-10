@@ -16,10 +16,10 @@ Hy4 token charges are billed at 50% of the standard reference price, including i
 
 | Billing Item | Promotional Price (USD / 1M Tokens) |
 | :--- | ---: |
-| Input | `$0.417` |
-| Cache Write | `$0.417` |
-| Cache Read | `$0.021` |
-| Output | `$1.2505` |
+| Input | `$0.42` |
+| Cache Write | `$0.42` |
+| Cache Read | `$0.02` |
+| Output | `$1.25` |
 
 The standard pricing table below continues to show original prices. See [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) for the offer. The promotion period, actual settlement prices, and final billing are subject to the platform display.
 </ActivityCard>

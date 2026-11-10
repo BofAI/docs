@@ -47,7 +47,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 | Model | Input<br/>(USD / 1M Tokens) | 5m Cache Write<br/>(USD / 1M Tokens) | 1h Cache Write<br/>(USD / 1M Tokens) | Cache Read<br/>(USD / 1M Tokens) | Output<br/>(USD / 1M Tokens) | Web Search<br/>(USD / use) |
 | :--- | --------------------: | -----------------------------: | -----------------------------: | -------------------------: | ---------------------: | ---: |
-| **Claude Fable 5.1** | `$10.00` | `$12.50` | `$20.00` | `$0.25` | `$50.00` | - |
+| **Claude Fable 5.1** | `$10.00` | `$12.50` | `$20.00` | `$0.25` | `$50.00` | `$0.01` |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
