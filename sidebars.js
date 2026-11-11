@@ -31,6 +31,7 @@ const sidebars = {
           type: 'doc',
           id: 'x402/index',
           label: 'Introduction',
+          key: 'x402-introduction',
         },
         {
           type: 'category',
@@ -136,7 +137,7 @@ const sidebars = {
       className: 'sidebar-icon sidebar-icon-llm',
       collapsed: true,
       items: [
-        { type: 'doc', id: 'llmservice/introduction', label: 'Introduction' },
+        { type: 'doc', id: 'llmservice/introduction', label: 'Introduction', key: 'llmservice-introduction' },
         { type: 'doc', id: 'llmservice/quick-start', label: 'Quick Start' },
         { type: 'doc', id: 'llmservice/auto-mode', label: 'Auto Mode' },
         { type: 'doc', id: 'llmservice/pricing-and-usage', label: 'Pricing and Usage' },
@@ -443,6 +444,7 @@ const sidebars = {
           type: 'doc',
           id: '8004/general',
           label: 'Introduction',
+          key: '8004-introduction',
         },
         {
           type: 'doc',

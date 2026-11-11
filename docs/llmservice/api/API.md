@@ -862,7 +862,7 @@ An API Key is equivalent to an account credential and can make billable requests
 
 ## Related Resources
 
-- B.AI documentation: <https://docs.b.ai/llmservice/api/>
-- B.AI website: <https://b.ai/>
-- OpenAI API documentation: <https://developers.openai.com/>
-- Codex documentation: <https://developers.openai.com/codex/>
+- B.AI documentation: [https://docs.b.ai/llmservice/api/](https://docs.b.ai/llmservice/api/)
+- B.AI website: [https://b.ai/](https://b.ai/)
+- OpenAI API documentation: [https://developers.openai.com/](https://developers.openai.com/)
+- Codex documentation: [https://developers.openai.com/codex/](https://developers.openai.com/codex/)

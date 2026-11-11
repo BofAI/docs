@@ -1,8 +1,9 @@
-const math = require('remark-math')
-const katex = require('rehype-katex')
+import math from 'remark-math'
+import katex from 'rehype-katex'
+import { themes } from 'prism-react-renderer'
 require('dotenv').config()
 
-module.exports = {
+export default {
   title: 'BANK OF AI | Developer Guide',
   tagline: 'HTTP 402 Payment Protocol for TRON',
   url: 'https://docs.bankofai.io',
@@ -21,7 +22,11 @@ module.exports = {
     },
   },
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'throw',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'throw',
+    },
+  },
   favicon: 'img/favicon.ico',
   organizationName: 'open-aibank',
   projectName: 'x402-tron',
@@ -34,8 +39,8 @@ module.exports = {
     },
     image: 'img/logo.png',
     prism: {
-      theme: require('prism-react-renderer/themes/github'),
-      darkTheme: require('prism-react-renderer/themes/dracula'),
+      theme: themes.github,
+      darkTheme: themes.dracula,
       additionalLanguages: ['solidity', 'python', 'bash'],
     },
     navbar: {
@@ -86,34 +91,24 @@ module.exports = {
       respectPrefersColorScheme: true,
     },
   },
-  presets: [
+  // Load the official components explicitly: preset-classic also installs SVGR,
+  // whose unused deepmerge dependency is affected by GHSA-gcqx-w48m-w2h4.
+  plugins: [
     [
-      '@docusaurus/preset-classic',
+      '@docusaurus/plugin-content-docs',
       {
-        docs: {
-          routeBasePath: '/',
-          exclude: ['**/AGENTS.md', '**/_*.{js,jsx,ts,tsx,md,mdx}', '**/_*/**', '**/*.test.*', '**/__tests__/**'],
-          sidebarPath: require.resolve('./sidebars.js'),
-          remarkPlugins: [math],
-          rehypePlugins: [katex],
-          includeCurrentVersion: true,
-        },
-        theme: {
-          customCss: require.resolve('./src/css/sidebar.css'),
-        },
-        blog: false,
+        routeBasePath: '/',
+        exclude: ['**/AGENTS.md', '**/_*.{js,jsx,ts,tsx,md,mdx}', '**/_*/**', '**/*.test.*', '**/__tests__/**'],
+        sidebarPath: require.resolve('./sidebars.js'),
+        remarkPlugins: [math],
+        rehypePlugins: [katex],
+        includeCurrentVersion: true,
       },
     ],
-  ],
-  stylesheets: [
-    {
-      href: 'https://cdn.jsdelivr.net/npm/katex@0.13.24/dist/katex.min.css',
-      type: 'text/css',
-      integrity: 'sha384-odtC+0UGzzFL/6PNoE8rX/SPcQDXBJ+uRepguP4QkPCm2LBxH3FA3y+fKSiJ+AmM',
-      crossorigin: 'anonymous',
-    },
-  ],
-  plugins: [
+    '@docusaurus/plugin-content-pages',
+    ...(process.env.NODE_ENV === 'production'
+      ? ['@docusaurus/plugin-sitemap']
+      : ['@docusaurus/plugin-debug']),
     require.resolve('./docusaurus-plugin-global-style'),
     // 兼容旧链接：/McpServer-Skills/Intro/ 重定向到 Skills 简介、/x402/cli/ 重定向到 wallet-cli（自动覆盖各 locale）
     [
@@ -158,20 +153,6 @@ module.exports = {
         sidebarPath: require.resolve('./sidebarsDevnotes.js'),
       },
     ],
-    // Offline full-text search (no Algolia account needed). Indexes both locales.
-    [
-      require.resolve('@easyops-cn/docusaurus-search-local'),
-      {
-        hashed: true,
-        language: ['en', 'zh'],
-        indexBlog: false,
-        docsRouteBasePath: '/',
-        highlightSearchTermsOnTargetPage: true,
-        searchResultLimits: 10,
-        searchResultContextMaxLength: 80,
-        explicitSearchResultPath: true,
-      },
-    ],
     function webpackFallbackPlugin() {
       return {
         name: 'custom-webpack-fallback-plugin',
@@ -186,5 +167,30 @@ module.exports = {
         },
       }
     },
+  ],
+  themes: [
+    [
+      '@docusaurus/theme-classic',
+      {
+        customCss: [
+          require.resolve('./src/css/sidebar.css'),
+          require.resolve('katex/dist/katex.min.css'),
+        ],
+      },
+    ],
+    // Offline full-text search. Index all three docs instances in both locales.
+    [
+      require.resolve('@easyops-cn/docusaurus-search-local'),
+      {
+        hashed: true,
+        language: ['en', 'zh'],
+        indexBlog: false,
+        docsRouteBasePath: ['/', '/changelog', '/devnotes'],
+        highlightSearchTermsOnTargetPage: true,
+        searchResultLimits: 10,
+        searchResultContextMaxLength: 80,
+        explicitSearchResultPath: true,
+      },
+    ],
   ],
 }

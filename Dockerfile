@@ -11,9 +11,6 @@ COPY package*.json yarn.lock ./
 
 RUN echo "Build environment is ${APP_ENV}"
 
-# Set Node build options
-ENV NODE_OPTIONS=--openssl-legacy-provider
-
 RUN node -v
 
 # Install dependencies
@@ -37,7 +34,8 @@ FROM nginx:1.31-alpine3.24
 
 # CVE-2026-111497: brotli-libs must be 1.2.1-r0 or a later fix from the Alpine 3.24 repository.
 # apk fails, and so does the build, if the repository cannot satisfy the constraint.
-RUN apk add --no-cache --upgrade 'brotli-libs>=1.2.1-r0'
+RUN apk upgrade --no-cache \
+    && apk add --no-cache 'brotli-libs>=1.2.1-r0'
 
 # Create the log directory used in nginx.conf
 RUN mkdir -p /app/logs
@@ -49,6 +47,7 @@ RUN chown -R nginx:nginx /app/logs && \
 # Copy custom configuration files
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY default.conf /etc/nginx/conf.d/
+COPY --from=build /app/.site-security/nginx-headers.conf /etc/nginx/snippets/security-headers.conf
 
 # Set ownership and permissions for the application files
 RUN chown -R nginx:nginx /usr/share/nginx/html && \
@@ -56,6 +55,8 @@ RUN chown -R nginx:nginx /usr/share/nginx/html && \
 
 # Copy the built Docusaurus app from the build stage
 COPY --from=build /app/build /usr/share/nginx/html
+
+RUN nginx -t
 
 # Expose port 80
 EXPOSE 80

@@ -28,25 +28,9 @@ env:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/site-checks.yml
     permissions:
       contents: read
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22.23.4
-          cache: yarn
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile --non-interactive
-
-      - name: Lint
-        run: yarn lint
 
   build-and-push:
     needs: lint
@@ -56,22 +40,16 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
-      - name: Log in to Docker Hub
-        if: github.event_name != 'pull_request'
-        env:
-          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
-          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
-        run: |
-          echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
 
       - name: Extract Docker metadata
         id: meta
-        uses: docker/metadata-action@v5
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
@@ -79,24 +57,60 @@ jobs:
 
       - name: Determine APP_ENV
         id: app_env
+        env:
+          BUILD_REF: ${{ github.ref }}
         run: |
-          if [[ "${{ github.ref }}" == "refs/heads/main" || "${{ github.ref }}" == "refs/heads/master" ]]; then
+          if [[ "$BUILD_REF" == "refs/heads/main" || "$BUILD_REF" == "refs/heads/master" ]]; then
             echo "APP_ENV=production" >> $GITHUB_OUTPUT
-          elif [[ "${{ github.ref }}" == refs/tags/* ]]; then
+          elif [[ "$BUILD_REF" == refs/tags/* ]]; then
             echo "APP_ENV=production" >> $GITHUB_OUTPUT
           else
             echo "APP_ENV=development" >> $GITHUB_OUTPUT
           fi
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
+      - name: Build image for security checks
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
+          pull: true
           context: .
-          push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          push: false
+          load: true
+          tags: bankofai/docs:security-check
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
             APP_ENV=${{ steps.app_env.outputs.APP_ENV }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           platforms: linux/amd64
+
+      - name: Scan the exact runtime image
+        uses: anchore/scan-action@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
+        with:
+          image: bankofai/docs:security-check
+          grype-version: v0.121.3
+          fail-build: true
+          severity-cutoff: negligible
+          only-fixed: false
+          output-format: table
+
+      - name: Test production HTTP security headers
+        run: |
+          docker run --detach --name docs-security-smoke -p 127.0.0.1:8080:80 bankofai/docs:security-check
+          node scripts/check-http-security.mjs http://127.0.0.1:8080
+
+      - name: Remove test container
+        if: always()
+        run: docker rm --force docs-security-smoke || true
+
+      - name: Log in to Docker Hub
+        if: github.event_name != 'pull_request'
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+          DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+        run: echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+
+      - name: Push the scanned image
+        if: github.event_name != 'pull_request'
+        run: |
+          docker tag bankofai/docs:security-check "$IMAGE_NAME:test"
+          docker push "$IMAGE_NAME:test"

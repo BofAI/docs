@@ -345,7 +345,7 @@ These tools provide direct access to TRON full-node RPC methods for advanced que
 
 **Example prompts:**
 - "Create an unsigned transaction to transfer 10 TRX from my address to TXyz..."
-- "Broadcast this signed transaction: {...}"
+- "Broadcast this signed transaction: `{...}`"
 
 ---
 

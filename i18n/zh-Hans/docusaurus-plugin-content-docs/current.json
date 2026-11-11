@@ -35,9 +35,17 @@
     "message": "核心概念",
     "description": "The label for category Core Concepts in sidebar docsSidebar"
   },
-  "sidebar.docsSidebar.doc.Introduction": {
+  "sidebar.docsSidebar.doc.x402-introduction": {
     "message": "简介",
-    "description": "The label for the doc item Introduction in sidebar docsSidebar"
+    "description": "The label for the x402 Introduction document"
+  },
+  "sidebar.docsSidebar.doc.llmservice-introduction": {
+    "message": "简介",
+    "description": "The label for the LLM Service Introduction document"
+  },
+  "sidebar.docsSidebar.doc.8004-introduction": {
+    "message": "简介",
+    "description": "The label for the 8004 Introduction document"
   },
   "sidebar.docsSidebar.doc.SDK Features": {
     "message": "SDK 功能",

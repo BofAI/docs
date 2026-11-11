@@ -862,7 +862,7 @@ API Key 等同于账户凭证，可以直接发起计费请求。
 
 ## 相关资源
 
-- B.AI 文档：<https://docs.b.ai/zh-Hans/llmservice/api/>
-- B.AI 官网：<https://b.ai/>
-- OpenAI API 文档：<https://developers.openai.com/>
-- Codex 文档：<https://developers.openai.com/codex/>
+- B.AI 文档：[https://docs.b.ai/zh-Hans/llmservice/api/](https://docs.b.ai/zh-Hans/llmservice/api/)
+- B.AI 官网：[https://b.ai/](https://b.ai/)
+- OpenAI API 文档：[https://developers.openai.com/](https://developers.openai.com/)
+- Codex 文档：[https://developers.openai.com/codex/](https://developers.openai.com/codex/)

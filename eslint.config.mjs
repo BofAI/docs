@@ -1,4 +1,4 @@
-// ESLint 9 flat config for the site's React/TypeScript sources (`yarn lint`).
+// ESLint 9 flat config for site sources and Node.js build/security scripts.
 import js from '@eslint/js'
 import { defineConfig } from 'eslint/config'
 import react from 'eslint-plugin-react'
@@ -12,6 +12,12 @@ export default defineConfig(
   },
   js.configs.recommended,
   tseslint.configs.recommended,
+  {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: globals.node,
+    },
+  },
   {
     files: ['src/**/*.{js,jsx,ts,tsx}'],
     plugins: {
