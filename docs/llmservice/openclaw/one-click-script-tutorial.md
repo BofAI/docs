@@ -89,7 +89,7 @@ Or manually edit the `~/.openclaw/openclaw.json` configuration file.
 
 - Web UI - Dashboard
 
-Visit <http://127.0.0.1:18789/> (18789 is the default port for OpenClaw) in your browser to access the OpenClaw Dashboard. Click "Agent" in the left navigation menu, and select the desired model in the Primary model dropdown:
+Visit [http://127.0.0.1:18789/](http://127.0.0.1:18789/) (18789 is the default port for OpenClaw) in your browser to access the OpenClaw Dashboard. Click "Agent" in the left navigation menu, and select the desired model in the Primary model dropdown:
 
 > **Note:** Once you change the model via the Dashboard, command-line model switching will no longer work because the Dashboard automatically adds a `list` field to the config file.
 

@@ -1,10 +1,10 @@
 ## Overview
 
-GPT-5.4 Nano is the smallest and most cost-effective variant in the GPT-5.4 family, released on March 17, 2026, designed for speed-critical and cost-sensitive scenarios. At just $0.20/$1.25 per MTok, it delivers reasoning capabilities with an Intelligence Index of 44.4, far above the median of 20 among similarly-priced models — ideal for classification, data extraction, ranking, and sub-agent tasks at scale.
+GPT-5.4 Nano is the smallest and most cost-effective variant in the GPT-5.4 family, released on March 17, 2026, designed for speed-critical and cost-sensitive scenarios. At just `$0.20`/`$1.25` per MTok, it delivers reasoning capabilities with an Intelligence Index of 44.4, far above the median of 20 among similarly-priced models — ideal for classification, data extraction, ranking, and sub-agent tasks at scale.
 
 ## Key Features
 
-- **Extreme Cost Efficiency**: $0.20/1M input + $1.25/1M output, blended rate (3:1 input-to-output ratio) of just $0.46/1M tokens — the most affordable option in the GPT-5.4 family.
+- **Extreme Cost Efficiency**: `$0.20`/1M input + `$1.25`/1M output, blended rate (3:1 input-to-output ratio) of just `$0.46`/1M tokens — the most affordable option in the GPT-5.4 family.
 - **High-Speed Inference**: ~221.8 tokens/second generation speed with 3.72-second time to first token, suitable for real-time systems.
 - **Reasoning Model**: Despite being the smallest variant, GPT-5.4 Nano is still a reasoning model with extended thinking / chain-of-thought reasoning.
 - **Multimodal Input**: Supports text and image input, suitable for lightweight multimodal tasks like visual classification and image analysis.

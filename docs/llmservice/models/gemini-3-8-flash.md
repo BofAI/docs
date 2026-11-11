@@ -48,4 +48,4 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
-Explicit cache storage costs $0.50 per 1 million tokens per hour through December 31, 2026, and $1.00 per 1 million tokens per hour starting January 1, 2027.
+Explicit cache storage costs `$0.50` per 1 million tokens per hour through December 31, 2026, and `$1.00` per 1 million tokens per hour starting January 1, 2027.
