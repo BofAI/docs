@@ -195,6 +195,10 @@
     "message": "余额 API",
     "description": "The label for the doc item Balance API in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.doc.Claude Fable 5.2": {
+    "message": "Claude Fable 5.2",
+    "description": "The label for the Claude Fable 5.2 model document in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.doc.Hy4": {
     "message": "Hy4",
     "description": "The label for the Hy4 model document in sidebar docsSidebar"
