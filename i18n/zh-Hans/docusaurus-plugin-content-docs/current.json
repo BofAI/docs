@@ -11,9 +11,9 @@
     "message": "官网",
     "description": "The label for link Official Website in sidebar docsSidebar"
   },
-  "sidebar.docsSidebar.category.x402 Payment Protocol": {
+  "sidebar.docsSidebar.category.x402-protocol": {
     "message": "x402支付协议",
-    "description": "The label for category x402 Payment Protocol in sidebar docsSidebar"
+    "description": "The label for category X402 Protocol in sidebar docsSidebar"
   },
   "sidebar.docsSidebar.category.8004 Protocol": {
     "message": "8004协议",

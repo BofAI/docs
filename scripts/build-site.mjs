@@ -2,9 +2,18 @@ import {spawnSync} from 'node:child_process'
 import {createRequire} from 'node:module'
 import path from 'node:path'
 import {generateSecurityHeaders} from './security-policy.mjs'
+import {checkNativeSearch} from './check-native-search.mjs'
 
 const require = createRequire(import.meta.url)
 const args = process.argv.slice(2)
+if (!args.includes('--help') && !args.includes('-h')) {
+  try {
+    checkNativeSearch()
+  } catch (error) {
+    console.error(`[build] ${error.message}`)
+    process.exit(1)
+  }
+}
 const coreDir = path.dirname(require.resolve('@docusaurus/core/package.json'))
 const result = spawnSync(process.execPath, [path.join(coreDir, 'bin/docusaurus.mjs'), 'build', ...args], {
   stdio: 'inherit',

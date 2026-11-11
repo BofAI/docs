@@ -105,6 +105,8 @@ yarn serve
 
 Use `yarn start` for English development or `yarn start-zh` for Chinese. OpenSSL legacy mode is no longer required.
 
+If a build reports `Failed to load native binding` from `@node-rs/jieba`, check `node -p "process.version + ' ' + process.arch"`. An Intel (`x64`) Node cannot use an Apple Silicon (`arm64`) tokenizer package, or vice versa. Run `nvm install`, `nvm use`, then `yarn install --frozen-lockfile --force` in this directory before rebuilding. Install and build in the same terminal session, and keep optional dependencies enabled. The build now checks this binding before compiling either locale and prints these recovery steps if it cannot load.
+
 Keep all official `@docusaurus/*` packages on **3.10.2** together. The site uses React 18, MDX 3, TypeScript 5.9 and `@easyops-cn/docusaurus-search-local` 0.55.3. When changing the framework or search theme, check both locales, all three documentation sections, sidebar navigation, search results and legacy redirects. Markdown links remain strict build errors.
 
 KaTeX is pinned to **0.19.1**, including the transitive copy used by `rehype-katex`. The latter still declares KaTeX 0.16.x, which is affected by [GHSA-238p-pmpm-9mq7](https://github.com/KaTeX/KaTeX/security/advisories/GHSA-238p-pmpm-9mq7). Keep this override until the upstream plugin supports a patched release, and verify inline/display equations and untrusted commands when updating it. CSS and fonts are bundled from the same installed KaTeX package.

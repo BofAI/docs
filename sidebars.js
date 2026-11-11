@@ -23,7 +23,8 @@ const sidebars = {
     },
     {
       type: 'category',
-      label: 'x402 Payment Protocol',
+      label: 'X402 Protocol',
+      key: 'x402-protocol',
       className: 'sidebar-icon sidebar-icon-x402',
       collapsed: false,
       items: [
