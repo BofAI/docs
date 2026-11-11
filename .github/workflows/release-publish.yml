@@ -49,6 +49,7 @@ jobs:
             APP_ENV=production
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          no-cache-filters: runtime-files
           platforms: linux/amd64
 
       - name: Scan the exact runtime image

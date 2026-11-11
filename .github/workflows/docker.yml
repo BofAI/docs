@@ -81,6 +81,7 @@ jobs:
             APP_ENV=${{ steps.app_env.outputs.APP_ENV }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          no-cache-filters: runtime-files
           platforms: linux/amd64
 
       - name: Scan the exact runtime image

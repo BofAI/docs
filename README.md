@@ -117,6 +117,10 @@ The site explicitly loads the official docs, pages, debug and sitemap plugins an
 
 ### Production security checks
 
+The container assembles a minimal runtime from the official Alpine Nginx binary and its ELF library dependencies. BusyBox, its `wget`/`ssl_client` tooling, shells, package managers and unused dynamic Nginx modules stay outside the final image. The runtime keeps the original Nginx APK inventory and the installed libraries' package records so Grype still scans the software that ships. CI refreshes the `runtime-files` stage on every build; its Alpine packages are not reused from a cached security-update layer.
+
+The container still listens on port 80 and writes logs to `/app/logs`. Its entrypoint directly runs `/usr/sbin/nginx`, preserves graceful `SIGQUIT` shutdown, and validates configuration with an exec-form `nginx -t` during the build. There is no `docker exec ... sh`; inspect logs externally or run `docker run --rm IMAGE -t` to check configuration.
+
 `yarn build` also generates `.site-security/nginx-headers.conf` from the emitted HTML. Docker copies this policy outside the public document root and runs `nginx -t`. The CSP allows the exact inline script hashes needed for theme initialization and legacy redirects, while blocking other inline scripts, event handlers, external scripts, embedding and plugins. React/KaTeX inline styles remain allowed. Fonts and KaTeX assets are served locally; existing ReadMe-hosted screenshots are allowed only from `files.readme.io`.
 
 Nginx applies the security headers to all responses, including localized 404 pages, disables version disclosure and directory listings, and returns relative redirects. HTML responses use `Cache-Control: no-store`. When serving the build outside this Docker image, apply the generated policy and equivalent response headers at the actual host. Security settings in this repository take effect on the live site only after deployment.

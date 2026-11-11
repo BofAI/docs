@@ -28,38 +28,33 @@ COPY . .
 # Build the Docusaurus app
 RUN yarn build
 
-# Stage 2: Serve the application with Nginx
-# Pin the Alpine branch so security fixes come from the same branch's repository.
-FROM nginx:1.31-alpine3.24
+# Stage 2: Assemble the Nginx runtime without BusyBox (CVE-2025-60876).
+# Package installation and inspection tools stay in this intermediate stage.
+FROM nginx:1.31-alpine3.24 AS runtime-files
 
-# CVE-2026-111497: brotli-libs must be 1.2.1-r0 or a later fix from the Alpine 3.24 repository.
-# apk fails, and so does the build, if the repository cannot satisfy the constraint.
 RUN apk upgrade --no-cache \
-    && apk add --no-cache 'brotli-libs>=1.2.1-r0'
+    && apk add --no-cache 'brotli-libs>=1.2.1-r0' scanelf
 
-# Create the log directory used in nginx.conf
-RUN mkdir -p /app/logs
+COPY scripts/prepare-nginx-runtime.sh /usr/local/bin/prepare-nginx-runtime
+RUN sh /usr/local/bin/prepare-nginx-runtime
 
-# Set the correct ownership and permissions for the log directory
-RUN chown -R nginx:nginx /app/logs && \
-    chmod -R 755 /app/logs
+COPY nginx.conf /runtime/etc/nginx/nginx.conf
+COPY default.conf /runtime/etc/nginx/conf.d/default.conf
+COPY --from=build /app/.site-security/nginx-headers.conf /runtime/etc/nginx/snippets/security-headers.conf
+COPY --from=build /app/build /runtime/usr/share/nginx/html
 
-# Copy custom configuration files
-COPY nginx.conf /etc/nginx/nginx.conf
-COPY default.conf /etc/nginx/conf.d/
-COPY --from=build /app/.site-security/nginx-headers.conf /etc/nginx/snippets/security-headers.conf
+# Stage 3: Only the server, its shared libraries, package inventory and site ship.
+# The upstream shell entrypoint is unnecessary: all configuration is copied above.
+FROM scratch AS runtime
+COPY --from=runtime-files /runtime/ /
 
-# Set ownership and permissions for the application files
-RUN chown -R nginx:nginx /usr/share/nginx/html && \
-    chmod -R 755 /usr/share/nginx/html
-
-# Copy the built Docusaurus app from the build stage
-COPY --from=build /app/build /usr/share/nginx/html
-
-RUN nginx -t
+RUN ["/usr/sbin/nginx", "-t"]
 
 # Expose port 80
 EXPOSE 80
 
+STOPSIGNAL SIGQUIT
+
 # Command to run Nginx
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/usr/sbin/nginx"]
+CMD ["-g", "daemon off;"]
