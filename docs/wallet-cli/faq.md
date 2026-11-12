@@ -8,7 +8,7 @@ description: "Installation, wallet, and payment questions for wallet-cli."
 
 ## Does a preview need a wallet?
 
-`x402 pay --dry-run` requires a configured account but does not sign. Catalog queries need neither a wallet nor a password. Actual payments need the master password through a secure input source.
+`x402 pay --dry-run` requires a configured account but does not sign. Actual payments need the master password through a secure input source.
 
 ## Should I retry a failed payment?
 

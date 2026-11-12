@@ -29,7 +29,7 @@ Privy users: see [CLI Reference → Privy](./Developer/CLI-Reference.md#privy-wa
 
 ### 1.1 Prepare Your Environment: Install Node.js
 
-Agent-wallet and wallet-cli (Path A) both require **Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+** — the October 2026 security releases (the published agent-wallet `3.0.0` still declares `>=18`; wallet-cli `4.15.1` and the next agent-wallet release declare this range). An up-to-date LTS install satisfies this.
+Agent-wallet and wallet-cli (Path A) both require **Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+** — the October 2026 security releases (the published agent-wallet `3.0.0` still declares `>=18`; wallet-cli `4.16.0` and the next agent-wallet release declare this range). An up-to-date LTS install satisfies this.
 
 Open a terminal (Mac users press `Command + Space` and search for "Terminal"), then type:
 

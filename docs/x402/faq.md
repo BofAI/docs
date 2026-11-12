@@ -173,11 +173,13 @@ The flow mirrors a human user:
 Install the published packages in your TypeScript app and build against npm, for example:
 
 ```bash
-pnpm add @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.1 @x402/evm@2.29.0 @bankofai/agent-wallet
+pnpm add @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.2 @x402/evm@2.29.0 @bankofai/agent-wallet
 pnpm add @x402/express@2.29.0
 ```
 
-Use the framework package that matches your server (`@x402/express`, `@x402/hono`, `@x402/fastify`, or `@x402/next`), at the same `2.29.0` as `@x402/core` — `@bankofai/x402-tron` 2.1.1 requires exactly `@x402/core@2.29.0`. Add `@bankofai/x402-tron-extensions@2.1.1` only if you use TRON resource sponsoring. The [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) workspace is a runnable reference for client → server → facilitator flows, not a prerequisite for application development.
+Use the framework package that matches your server (`@x402/express`, `@x402/hono`, `@x402/fastify`, or `@x402/next`), at the same `2.29.0` as `@x402/core` — `@bankofai/x402-tron` 2.1.2 requires exactly `@x402/core@2.29.0`. Add `@bankofai/x402-tron-extensions@2.1.2` only if you use TRON resource sponsoring. The [`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) workspace is a runnable reference for client → server → facilitator flows, not a prerequisite for application development.
+
+For TronWeb HTTP dependency overrides in your own application, see [Dependency security](/x402/sdk-features/#dependency-security).
 
 When upgrading an existing application, align all official `@x402/*` transports too. If you use `@x402/core/schemas`, migrate to Zod 4 and replace `error.errors` with `error.issues`; see the [SDK Feature Matrix](/x402/sdk-features/).
 

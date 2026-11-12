@@ -9,15 +9,15 @@ description: "使用 wallet-cli 配置 Agent 的支付入口。"
 
 1. 按 [Wallet CLI 快速入门](/zh-Hans/wallet-cli/quickstart/)安装 CLI，在本地配置账户并核对地址。
 2. 如需 Skill，按 [Skills 快速入门](/zh-Hans/McpServer-Skills/SKILLS/QuickStart/)选择安装；核对 Skill 的依赖版本与 CLI 一致。
-3. 从 [API Catalog](/zh-Hans/x402/api-catalog/get-started/)查询接口，先运行 `wallet-cli x402 pay` 的 `--dry-run` 预览。
+3. 向服务提供方获取 x402 接口 URL，先运行 `wallet-cli x402 pay` 的 `--dry-run` 预览。
 4. 向用户展示网络、收款地址、币种、金额和费用；得到相应授权后，使用已批准的安全密码来源进行签名。
 5. 检查结构化结果，保留交易哈希；不要把“已提交”或“入账未确认”报告为全部完成。
 
 可以这样要求 Agent：
 
-> 使用 wallet-cli 查看 DIA 的 BTC 报价接口。先预览 TRON 主网 USDT 支付要求，上限 0.01，不要付款。
+> 使用 wallet-cli 查看本地测试接口 `http://localhost:4021/credit`。先用 `--dry-run` 预览 TRON Nile（`tron:3448148188`）的 USDT 支付要求，上限 1 USDT，不要签名或付款。
 
-不要把私钥或主密码输出到聊天、日志或命令参数中。无需为了验证配置而执行 `echo` 打印私钥。测试支付应使用你控制的测试网收费接口；目录中的生产服务可能只支持主网。
+不要把私钥或主密码输出到聊天、日志或命令参数中。无需为了验证配置而执行 `echo` 打印私钥。测试支付应使用你控制的测试网收费接口；生产服务可能只支持主网。
 
 出现 `paymentStatus: "unknown"` 或 `retryPayment: false` 时，先核对原交易；不要让 Agent 自动重新支付。
 

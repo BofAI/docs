@@ -18,7 +18,7 @@ Agent-wallet 3.x 只提供 TypeScript。PyPI 上的 Python 包 `bankofai-agent-w
 
 **检查 Node.js 版本**
 
-请使用 Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`，即 2026 年 10 月的安全更新版本。这是源码 `main` 分支声明的 `engines` 范围；npm 上已发布的 `3.0.0` 仍声明 `>=18.0.0`，但 wallet-cli `4.15.1` 本身就声明了同一范围。在 `main` 上，当 `wallet_cli` 钱包类型用当前 Node 通过 JavaScript 入口启动 wallet-cli 时（本地安装的包，或指向 `.js` 文件的 `AGENT_WALLET_WALLET_CLI_PATH`），会先检查同一范围；从 `PATH` 找到的 `wallet-cli` 可执行文件则不做此检查。（已发布的 `3.0.0` 中，该入口检查只要求 Node.js 20+。）检查当前版本：
+请使用 Node.js `^22.23.4 || ^24.22.1 || >=26.12.1`，即 2026 年 10 月的安全更新版本。这是源码 `main` 分支声明的 `engines` 范围；npm 上已发布的 `3.0.0` 仍声明 `>=18.0.0`，但 wallet-cli `4.16.0` 本身就声明了同一范围。在 `main` 上，当 `wallet_cli` 钱包类型用当前 Node 通过 JavaScript 入口启动 wallet-cli 时（本地安装的包，或指向 `.js` 文件的 `AGENT_WALLET_WALLET_CLI_PATH`），会先检查同一范围；从 `PATH` 找到的 `wallet-cli` 可执行文件则不做此检查。（已发布的 `3.0.0` 中，该入口检查只要求 Node.js 20+。）检查当前版本：
 
 ```bash
 node -v

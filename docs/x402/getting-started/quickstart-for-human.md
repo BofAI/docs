@@ -99,11 +99,13 @@ x402 is a **TypeScript-only** SDK: the TRON mechanism ships as `@bankofai/x402-t
 Install the published npm packages in your TypeScript application:
 
 ```bash
-pnpm add @bankofai/agent-wallet @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.1
+pnpm add @bankofai/agent-wallet @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.2
 pnpm add -D tsx   # to run the TypeScript entry point below
 ```
 
-Use `npm install` or `yarn add` with the same package names if your project does not use pnpm. Keep `@x402/core` and `@x402/fetch` at exactly `2.29.0` — `@bankofai/x402-tron` 2.1.1 declares `@x402/core@2.29.0` as an exact peer dependency.
+Use `npm install` or `yarn add` with the same package names if your project does not use pnpm. Keep `@x402/core` and `@x402/fetch` at exactly `2.29.0` — `@bankofai/x402-tron` 2.1.2 declares `@x402/core@2.29.0` as an exact peer dependency.
+
+For TronWeb HTTP dependency overrides in your own application, see [Dependency security](/x402/sdk-features/#dependency-security).
 
 When upgrading an existing application, align all official `@x402/*` transports too. If you use `@x402/core/schemas`, migrate to Zod 4 and replace `error.errors` with `error.issues`; see the [SDK Feature Matrix](/x402/sdk-features/).
 

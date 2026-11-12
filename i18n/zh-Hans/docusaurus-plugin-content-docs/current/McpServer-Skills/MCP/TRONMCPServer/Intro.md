@@ -1,5 +1,7 @@
 # 简介
 
+> **版本状态（2026-11-12）**：本次核对的源码 tag 为 **v1.1.11**，npm `latest` 仍为 **1.1.7**。v1.1.11 将 TronWeb 升级为 6.5.2，保留 v1.1.10 引入的按部署覆盖主网 RPC 配置与 TronGrid 凭据转发限制，以及 v1.1.9 的依赖修复、工具输入限制和 HTTP、Docker 边界。需要这些更新时，请按[本地部署文档](/zh-Hans/McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment/#方式-b从源码克隆)使用源码方式。
+
 ## TRON MCP Server 是什么？
 
 TRON MCP Server 是连接 AI 助手与 TRON 区块链的桥梁。它基于 [Model Context Protocol (MCP)](../Intro.md) 标准协议，让你可以用自然语言与区块链交互——查余额、发起转账、调用智能合约——而无需编写任何代码。

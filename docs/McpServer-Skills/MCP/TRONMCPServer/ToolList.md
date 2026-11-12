@@ -15,6 +15,10 @@ Each tool is labeled with a **mode** — "read" or "write":
 Write tools are always visible in the AI’s tool list, but wallet availability is checked at execution time. If no wallet is configured, calling a write tool returns a wallet error (see [FAQ](./FAQ.md#wallet-error-messages)). In **read-only mode** (cloud service or `--readonly` flag), the 29 write tools and the 2 write prompts (`prepare_transfer`, `interact_with_contract`) are not registered, leaving 68 read tools and 4 prompts.
 :::
 
+:::info Source v1.1.11 input limits
+Across all tool arguments, array elements and object keys have a combined limit of **10,000**, checked before schema validation. Large ABI and multicall inputs count toward this limit. The HTTP transport also accepts only uncompressed JSON bodies up to **1 MiB**. These limits describe source v1.1.11; npm `latest` is still 1.1.7 as of 2026-11-12.
+:::
+
 :::tip `network` parameter
 Most tools include an optional `network` parameter used to specify the target network (`mainnet`, `nile`, or `shasta`; `tron` / `trx` are aliases for `mainnet` and `testnet` for `nile`). If not specified, the default is `mainnet`.
 

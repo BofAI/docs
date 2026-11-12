@@ -78,7 +78,19 @@ Facilitator 是一种中间件服务，主要负责：
 
 如果您希望完全掌控结算钱包、RPC 节点、能量管理，或注册哪些网络与方案，又或有特定的隐私/合规要求，可以选择自己部署 Facilitator 服务。
 
-当前源码版本为 **v2.3.0**（2026-11-03）：使用官方 `@x402/core`、`@x402/evm`、`@x402/extensions` **2.29.0**，TRON 机制与独立资源扩展 **2.1.1**，并将 `@bankofai/agent-wallet` 精确锁定到 **3.1.0-beta.1**。源码安装要求 Node.js **24.22.1+（24.x）或 26.12.1+**；Docker 与 CI 固定为 24.22.1，不再支持 Node.js 22。安装配置将 Zod 固定到 **4.6.6**，升级依赖时应保留此覆盖。部署说明见 [Facilitator v2.3.0 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.0/README.md)。
+当前源码版本为 **v2.3.1**（2026-11-10）：使用官方 `@x402/core`、`@x402/evm`、`@x402/extensions` **2.29.0**，TRON 机制与独立资源扩展 **2.1.2**，并将 `@bankofai/agent-wallet` 精确锁定到 **3.1.0-beta.1**。源码安装要求 Node.js **24.22.1+（24.x）或 26.12.1+**；Docker 与 CI 固定为 24.22.2，不再支持 Node.js 22。安装配置将 Zod 固定到 **4.6.7**，升级依赖时应保留此覆盖。部署说明见 [Facilitator v2.3.1 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.1/README.md)。
+
+v2.3.1 使用单份 **TronWeb 6.5.1**。服务自身的安装覆盖将其 Axios 固定为 **1.21.1**，follow-redirects 的要求为 **^1.16.3**，发布版本的锁文件实际解析到 **1.16.3**；Hono Node Server 升级到 **2.1.6**。请使用发布版本的锁文件安装，更新依赖时保留这些覆盖。
+
+### 运行时密钥配置
+
+内置开发与生产配置现均使用 **1Password Connect**（`onepassword.mode: connect`）。运行时注入 `OP_CONNECT_HOST` 与 `OP_CONNECT_TOKEN`，令牌须有对应 vault 的读取权限，且容器须能访问 Connect 地址。使用 HTTPS；仅可信的私有连接可使用 HTTP。不要将凭据提交到配置文件。
+
+1Password 引用使用 `vault/item/field` 格式。TronGrid、GasFree 与 Agent Wallet 解锁凭据优先读取各自支持的环境变量；TronGrid 还会在查询 1Password 前检查 YAML 中的值。数据库配置使用独立规则：显式配置的 `onepassword.database_url` 优先于 `database.url`，解析失败会阻止启动，不会回退到 YAML URL。若通过独立的 1Password 字段提供数据库凭据，须同时配置 `onepassword.database_user` 与 `onepassword.database_password`，并保持 URL 不含凭据。
+
+自定义配置仍可选择 `onepassword.mode: service_account`，使用 `OP_SERVICE_ACCOUNT_TOKEN` 或 `onepassword.token`；省略 `mode` 时默认仍为 `service_account`，两种模式不会互相回退使用凭据。使用 `FACILITATOR_SERVICE_ENV=prod` 选择内置生产配置，或通过 `FACILITATOR_CONFIG_PATH` 指定自定义文件。
+
+### EVM nonce 恢复
 
 v2.3.0 的 EVM 钱包桥按网络与钱包共享进程内 nonce 队列，保存未上链交易的哈希和原始签名字节。若交易被交易池丢弃或广播响应丢失，下一次发送会先按 nonce 顺序重播原交易；只有新交易被节点明确以余额不足、费用上限过低或 `transaction underpriced` 拒绝时，才释放该次预留。恢复失败会阻止新交易签名，直到原交易被接收或确认账户 nonce 已前进。此状态仅保存在内存中，不提供重启恢复或跨进程 nonce 协调。
 
