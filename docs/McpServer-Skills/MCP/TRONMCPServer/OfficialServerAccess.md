@@ -23,7 +23,7 @@ Since the cloud service is read-only, you never need to provide a wallet private
 
 **2. Official maintenance and continuous updates**
 
-The cloud service is maintained by the official team and always runs the latest stable version of TRON MCP Server. This includes:
+The cloud service is maintained by the official team. Its deployed version is separate from both the source tag and npm `latest`; check the server information at `https://tron-mcp-server.bankofai.io/` for the advertised version. Maintenance includes:
 
 - Updates with new tools and features
 - Adaptations for underlying TRON network upgrades

@@ -171,12 +171,11 @@ SKILLS 的版本发布记录。
 <div className="changelog-date">2026-07-10</div>
 <div className="changelog-body">
 
-### GasFree 支付说明与新的目录地址
+### GasFree 支付说明
 
 <div className="changelog-tags"><span className="changelog-tag">更新</span><span className="changelog-tag">x402</span></div>
 
 - Skills 现已支持并说明 TRON 上的 **`exact_gasfree` 支付方案**——账户里不备 TRX 也能付款调用 x402 服务。
-- **API 目录接口更换了新地址**。Skills 与 facilitator 配置同步更新；如果你锁定了旧版本，需要重新安装。
 
 </div>
 </div>

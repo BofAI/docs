@@ -29,7 +29,7 @@ Privy 用户：参见 [CLI 命令行手册 → Privy](./Developer/CLI-Reference.
 
 ### 1.1 准备环境：安装 Node.js
 
-Agent-wallet 和 wallet-cli（路径 A）都要求 **Node.js 22.23.4+（22.x）、24.22.1+（24.x）或 26.12.1+**，即 2026 年 10 月的安全更新版本（已发布的 agent-wallet `3.0.0` 仍声明 `>=18`；wallet-cli `4.15.1` 及下一版 agent-wallet 声明了此范围）。安装最新的 LTS 即可满足。
+Agent-wallet 和 wallet-cli（路径 A）都要求 **Node.js 22.23.4+（22.x）、24.22.1+（24.x）或 26.12.1+**，即 2026 年 10 月的安全更新版本（已发布的 agent-wallet `3.0.0` 仍声明 `>=18`；wallet-cli `4.16.0` 及下一版 agent-wallet 声明了此范围）。安装最新的 LTS 即可满足。
 
 打开终端（Mac 用户按 `Command + 空格` 搜索"终端"），输入：
 

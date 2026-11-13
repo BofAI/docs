@@ -11,7 +11,6 @@ Choose an entry point for your task:
 | --- | --- |
 | Install capabilities for an agent | [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) |
 | Configure a wallet and pay with x402 | [wallet-cli quick start](/wallet-cli/quickstart/) |
-| Find paid APIs | [API Catalog](/x402/api-catalog/get-started/) |
 | Recharge B.AI | [wallet-cli recharge guidance](/wallet-cli/command-reference/) |
 | DeFi workflows and data queries | [Skill catalog](/McpServer-Skills/SKILLS/BANKOFAISkill/) |
 

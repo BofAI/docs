@@ -56,7 +56,7 @@ import ThemedImage from '@theme/ThemedImage';
 2.  **服务端要求付费**：响应 `402 Payment Required` 状态码，并在 `PAYMENT-REQUIRED` 标头中包含支付要求（Base64 编码）。
 3.  **客户端提交支付**：根据要求生成签名，并将签名载荷放入 `PAYMENT-SIGNATURE` 标头（Base64 编码）中重新发送请求。
 4.  **服务端验证支付**：调用 Facilitator 服务对接收到的支付载荷进行验证。
-5.  **服务端先交付资源、再结算**：在默认的 `authorization` 付款流程下——所有内置方案声明的都是这个流程——资源服务端会先执行业务处理函数，之后再通过 Facilitator 结算，并在返回资源时于 `PAYMENT-RESPONSE` 标头中带上结算确认信息（内含交易哈希）。若服务端选用了「先结算」的流程，以及 BANK OF AI 网关，则顺序相反：先结算再转发到上游。
+5.  **服务端先交付资源、再结算**：在默认的 `authorization` 付款流程下——所有内置方案声明的都是这个流程——资源服务端会先执行业务处理函数，之后再通过 Facilitator 结算，并在返回资源时于 `PAYMENT-RESPONSE` 标头中带上结算确认信息（内含交易哈希）。若服务端选用了「先结算」的流程，则顺序相反：先结算再交付资源。
 
 <ThemedImage
   alt="x402 中客户端、服务端与 Facilitator 的通信流程"

@@ -1,6 +1,7 @@
 import math from 'remark-math'
 import katex from 'rehype-katex'
 import { themes } from 'prism-react-renderer'
+import ssrTemplate from './scripts/ssr-template.mjs'
 require('dotenv').config()
 
 export default {
@@ -9,6 +10,7 @@ export default {
   url: 'https://docs.bankofai.io',
   baseUrl: '/',
   trailingSlash: true,
+  ssrTemplate,
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'zh-Hans'],

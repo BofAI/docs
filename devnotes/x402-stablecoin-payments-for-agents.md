@@ -40,7 +40,7 @@ Within the TRON ecosystem, [BANK OF AI](/BANK-OF-AI/Intro/) positions itself as 
 
 ![BANK OF AI product matrix](/img/devnotes/bankofai-product-matrix-en.svg)
 
-In this layering, x402 is the open payment protocol in the infrastructure and standards layer, sitting alongside 8004 which handles agent identity and reputation; MCP defines how agents and tools exchange context. The x402 Gateway, x402 Facilitator, x402 Recharge Server, Agent Wallet, Skills, and the various MCP Servers live in the middle layer, turning those protocols into directly callable capabilities. Each layer can be used on its own or combined as the scenario requires: x402 when you need to pay, 8004 when you need to verify identity or reputation, MCP when you need to connect to tools or on-chain services.
+In this layering, x402 is the open payment protocol in the infrastructure and standards layer, sitting alongside 8004 which handles agent identity and reputation; MCP defines how agents and tools exchange context. The x402 Facilitator, x402 Recharge Server, Agent Wallet, Skills, and the various MCP Servers live in the middle layer, turning those protocols into directly callable capabilities. Each layer can be used on its own or combined as the scenario requires: x402 when you need to pay, 8004 when you need to verify identity or reputation, MCP when you need to connect to tools or on-chain services.
 
 ## 3. Architecture and payment flow
 

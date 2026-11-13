@@ -80,7 +80,7 @@ import TabItem from '@theme/TabItem';
 - **Settlement Asset**: Use official Base USDC at `0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913`.
 - **Payment Scheme**: Use `exact` with EIP-3009 authorization; do not describe Base USDC as Permit2.
 - **Address Format**: Payout and token addresses use EVM hexadecimal (`0x`) format.
-- **Catalog Scope**: Public catalog examples use Base Mainnet only. Base Sepolia (`eip155:84532`) may appear only in explicit CLI/SDK testing documentation.
+- **Network Scope**: Production examples use Base Mainnet. Base Sepolia (`eip155:84532`) may appear only in explicit CLI/SDK testing documentation.
 
 </TabItem>
 </Tabs>

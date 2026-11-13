@@ -11,7 +11,7 @@ Requires Node.js 22.23.4+ (22.x), 24.22.1+ (24.x), or 26.12.1+.
 ## Install and inspect
 
 ```bash
-npm install -g @tron-walletcli/wallet-cli@4.15.1
+npm install -g @tron-walletcli/wallet-cli@4.16.0
 wallet-cli --version
 wallet-cli x402 pay --json-schema -o json
 ```
@@ -33,27 +33,17 @@ wallet-cli list -o json
 wallet-cli current -o json
 ```
 
-## Browse the catalog
-
-```bash
-wallet-cli x402 provider-list -o json
-wallet-cli x402 provider-show dia -o json
-wallet-cli x402 endpoint-list dia -o json
-```
-
-Choose the network-specific `x402Routes[].url` and fill in its path placeholders. Do not construct a Gateway URL from the catalog FQN.
-
 ## Preview a payment
 
-This reads DIA's payment requirements **without signing or paying**. A configured account is still required for payment previews.
+Start the TRON resource server from the [seller quickstart](/x402/getting-started/quickstart-for-sellers/) on port 4021, configured for Nile, or use a test endpoint you control. This reads its payment requirements **without signing or paying**. A configured account is still required for payment previews.
 
 ```bash
-wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1/quotation/BTC \
+wallet-cli x402 pay http://localhost:4021/credit \
   --method GET \
-  --network tron:728126428 \
+  --network tron:3448148188 \
   --token USDT \
   --scheme exact \
-  --max-amount 0.01 \
+  --max-amount 1 \
   --dry-run -o json
 ```
 

@@ -78,7 +78,19 @@ Quick usage examples can be found in [OfficialFacilitator](./OfficialFacilitator
 
 If you need full control over the settlement wallet, RPC endpoints, energy management, or which networks and schemes are registered — or you have specific privacy or compliance requirements — you can deploy your own Facilitator service.
 
-The current source release is **v2.3.0** (2026-11-03): official `@x402/core`, `@x402/evm`, and `@x402/extensions` **2.29.0**, TRON mechanism and independent resource extension **2.1.1**, and an explicit `@bankofai/agent-wallet` **3.1.0-beta.1** pin. Source installations require Node.js **24.22.1+ (24.x) or 26.12.1+**; Docker and CI pin 24.22.1, and Node.js 22 is no longer supported. Installation overrides pin Zod to **4.6.6**; preserve that override when refreshing dependencies. See the [Facilitator v2.3.0 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.0/README.md) for deployment details.
+The current source release is **v2.3.1** (2026-11-10): official `@x402/core`, `@x402/evm`, and `@x402/extensions` **2.29.0**, TRON mechanism and independent resource extension **2.1.2**, and an explicit `@bankofai/agent-wallet` **3.1.0-beta.1** pin. Source installations require Node.js **24.22.1+ (24.x) or 26.12.1+**; Docker and CI pin 24.22.2, and Node.js 22 is no longer supported. Installation overrides pin Zod to **4.6.7**; preserve that override when refreshing dependencies. See the [Facilitator v2.3.1 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.1/README.md) for deployment details.
+
+Version 2.3.1 uses a single **TronWeb 6.5.1** installation. The service's installation overrides pin its Axios to **1.21.1** and require follow-redirects **^1.16.3**; the release lockfile resolves follow-redirects to **1.16.3**. Hono Node Server is updated to **2.1.6**. Install from the release lockfile and preserve its overrides when updating dependencies.
+
+### Runtime secrets
+
+Both built-in development and production configurations now use **1Password Connect** (`onepassword.mode: connect`). Inject `OP_CONNECT_HOST` and `OP_CONNECT_TOKEN` at runtime; the token must have read access to the referenced vaults. The Connect endpoint must be reachable from the container. Use HTTPS, or HTTP only over a trusted private connection. Do not commit credentials to the configuration.
+
+1Password references use `vault/item/field` format. TronGrid, GasFree, and Agent Wallet unlock credentials prefer their supported environment variables; TronGrid also checks its YAML value before 1Password. Database configuration follows a separate rule: an explicit `onepassword.database_url` takes precedence over `database.url`, and resolution failures stop startup without falling back to the YAML URL. When supplying database credentials through separate 1Password fields, configure `onepassword.database_user` and `onepassword.database_password` together and keep credentials out of the URL.
+
+A custom configuration can select `onepassword.mode: service_account`, using `OP_SERVICE_ACCOUNT_TOKEN` or `onepassword.token`; omitting `mode` still defaults to `service_account`, and the two modes do not share credential fallbacks. Select the built-in production configuration with `FACILITATOR_SERVICE_ENV=prod`, or supply a custom file with `FACILITATOR_CONFIG_PATH`.
+
+### EVM nonce recovery
 
 The v2.3.0 EVM wallet bridge shares an in-process nonce queue per network and wallet, retaining each unmined transaction's hash and signed bytes. If a transaction is dropped from the pool or its broadcast response is lost, the next send first rebroadcasts the originals in nonce order. Only an explicit insufficient-funds, fee-cap, or `transaction underpriced` node rejection of a fresh transaction releases that reservation. Failed recovery blocks new signing until the original is accepted or the confirmed account nonce advances. This state is in memory; it provides neither restart recovery nor cross-process nonce coordination.
 

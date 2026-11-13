@@ -9,15 +9,15 @@ Use **wallet-cli** for new payment integrations; do not install the standalone x
 
 1. Follow the [Wallet CLI quick start](/wallet-cli/quickstart/), configure an account locally, and verify its address.
 2. If using a Skill, follow the [Skills quick start](/McpServer-Skills/SKILLS/QuickStart/) and match its dependency version to the CLI.
-3. Discover an endpoint through the [API Catalog](/x402/api-catalog/get-started/), then preview it with `wallet-cli x402 pay --dry-run`.
+3. Obtain the x402 endpoint URL from the service provider, then preview it with `wallet-cli x402 pay --dry-run`.
 4. Show the network, recipient, token, amount, and fees. Sign only within the user's authorization, using an approved secure password source.
 5. Inspect structured results and retain the transaction hash. Submission or unconfirmed credit does not mean the entire operation completed.
 
 Example agent request:
 
-> Use wallet-cli to inspect DIA's BTC quotation endpoint. Preview the TRON mainnet USDT payment with a 0.01 cap. Do not pay.
+> Use wallet-cli to inspect the local test endpoint `http://localhost:4021/credit`. Preview the TRON Nile (`tron:3448148188`) USDT payment using `--dry-run`, with a cap of 1 USDT. Do not sign or pay.
 
-Never print private keys or master passwords into chat, logs, or command arguments. Do not use `echo` to reveal a private key as a setup check. Use a testnet endpoint you control for test payments; production catalog services may support mainnet only.
+Never print private keys or master passwords into chat, logs, or command arguments. Do not use `echo` to reveal a private key as a setup check. Use a testnet endpoint you control for test payments; production services may support mainnet only.
 
 On `paymentStatus: "unknown"` or `retryPayment: false`, reconcile the original transaction rather than allowing an automatic repeat payment.
 

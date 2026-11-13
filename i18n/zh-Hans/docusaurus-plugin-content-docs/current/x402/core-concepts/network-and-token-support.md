@@ -23,7 +23,7 @@ x402 采用 CAIP-2 网络标识符格式：`tron:<decimal_chain_id>`（十进制
 | **TRON Shasta**         | `tron:2494104990`  | `TRON_SHASTA`  | TRON Shasta 测试网 |
 | **TRON Nile**           | `tron:3448148188`  | `TRON_NILE`    | TRON Nile 测试网 |
 
-> **TRON 标识格式**：自 `@bankofai/x402-tron` 2.0.0 起，SDK 常量使用十进制 CAIP-2 引用。旧的十六进制形式（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）仍可作为输入别名使用，并会被规范化为十进制形式。官方 facilitator 的 `/supported` 返回十进制标识；API Catalog 目前仍列出十六进制形式。
+> **TRON 标识格式**：自 `@bankofai/x402-tron` 2.0.0 起，SDK 常量使用十进制 CAIP-2 引用。旧的十六进制形式（`tron:0x2b6653dc`、`tron:0xcd8690dc`、`tron:0x94a9059e`）仍可作为输入别名使用，并会被规范化为十进制形式。官方 facilitator 的 `/supported` 返回十进制标识。
 
 
 ## BSC 网络标识符
@@ -44,7 +44,7 @@ Base 在 x402 链路中使用标准 EIP-155 标识符：
 
 | 网络名称 | 协议标识符 | 说明 |
 | :------- | :--------- | :--- |
-| **Base Mainnet** | `eip155:8453` | 生产网络；API Catalog 发布该网络路由 |
+| **Base Mainnet** | `eip155:8453` | 生产网络 |
 | **Base Sepolia** | `eip155:84532` | CLI/SDK 测试网络 |
 
 Base 主网使用官方 USDC，通过 `exact` 方案和 EIP-3009 授权完成支付。付款方在链下签署 `transferWithAuthorization`，无需 Permit2 approve。
@@ -64,7 +64,7 @@ x402 专为区块链生态设计，实现了原生的链上支付验证与结算
 | **BSC Mainnet**        | **Mainnet**   | **生产网络**：用于处理真实价值资产。   |
 | **BSC Testnet**         | **Testnet**   | **推荐测试网**：BSC 首选的开发与调试环境。 |
 | **Base Mainnet**       | **Mainnet**   | **生产网络**：使用官方 USDC。 |
-| **Base Sepolia**       | **Testnet**   | CLI/SDK 测试；不在 API Catalog 发布。 |
+| **Base Sepolia**       | **Testnet**   | CLI/SDK 测试 |
 
 ## 支持的代币 {#supported-tokens}
 

@@ -8,6 +8,38 @@ description: 'MCP Server 的版本发布记录。'
 MCP Server 的版本发布记录。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-11-12</div>
+<div className="changelog-body">
+
+### TRON MCP 源码 v1.1.10 与 v1.1.11：主网 RPC 配置与 TronWeb 6.5.2
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">MCP</span></div>
+
+- 源码部署与升级命令更新到 tag `v1.1.11`，固定使用 TronWeb 6.5.2。截至本次核对，npm `latest` 仍为 1.1.7，继续区分源码与发布包的使用说明。
+- 说明 v1.1.10 引入、仅供部署环境配置的 `MCP_MAINNET_RPC_URL`：同时覆盖所有主网 RPC 主机，优先于 API Key 的自动选择，校验 HTTP/HTTPS URL，修改后须重启。Nile 与 Shasta 不受影响。
+- v1.1.10 还将无 Key 时的主网默认节点恢复为 `https://hptg.bankofai.io`，并将 TronGrid 凭据转发限制为官方 HTTPS TronGrid 源。`https://tg.ops.sunpump.xyz` 作为显式部署覆盖的示例。
+
+👉 [本地部署](/zh-Hans/McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment/) · [常见问题](/zh-Hans/McpServer-Skills/MCP/TRONMCPServer/FAQ/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">2026-11-11</div>
+<div className="changelog-body">
+
+### TRON MCP 源码 v1.1.9：部署与输入限制
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">MCP</span></div>
+
+- 源码 v1.1.9 使用 TronWeb 6.5.1、MCP SDK 1.32.2 与修复后的 Zod 4.6.7，Agent Wallet 保持 2.4.0。npm `latest` 仍为 1.1.7；源码部署改为锁定已核对的 tag 并使用 `npm ci`。
+- 说明未配置 Key 时的主网回退节点 `https://tg.ops.sunpump.xyz`、HTTP 未压缩 JSON 的 1 MiB 上限（413 / 415），以及工具参数元素与对象键合计 10,000 个的限制。
+- 更新 Docker UID/GID 1000 日志目录权限、root 所有的应用文件、源码 stdio 客户端配置，以及源码钱包错误与协议版本说明。
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-10-27</div>
 <div className="changelog-body">
 
