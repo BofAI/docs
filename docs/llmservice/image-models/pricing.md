@@ -18,6 +18,19 @@ GPT-Image-2 is billed by actual text input, image input, and image output token 
 
 [View GPT-Image-2 model details](./gpt-image-2.md)
 
+## MiniMax-H3-Image / MiniMax-H3-Image-Highspeed
+
+**Billing method:** Token-based
+
+Both models are billed by actual text input, reference-image input, and image output token usage, rather than a fixed price per image. Prices below are in USD per 1 million tokens.
+
+| Model | Text Input | Image Input | Image Output |
+| :--- | ---: | ---: | ---: |
+| MiniMax-H3-Image | `$2.30` | `$1.50` | `$3.80` |
+| MiniMax-H3-Image-Highspeed | `$2.30` | `$3.00` | `$7.60` |
+
+[View MiniMax-H3-Image and Highspeed model details](./minimax-h3-image.md)
+
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices, account benefits, and final settlement are subject to the platform display and billing records.
+Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 :::

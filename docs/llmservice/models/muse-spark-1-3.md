@@ -44,3 +44,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
 
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
+
+:::info Pricing note
+Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
+:::
