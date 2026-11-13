@@ -63,5 +63,5 @@ All token prices below are in USD per 1 million tokens. Select the tier by the r
 - The [pricing overview](../pricing-and-usage.md) shows the base-tier implicit-cache prices. Refer to the table above for higher input tiers and explicit-cache prices.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
+Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 :::

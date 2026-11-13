@@ -195,6 +195,14 @@
     "message": "余额 API",
     "description": "The label for the doc item Balance API in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.category.MiniMax (H3 Image)": {
+    "message": "MiniMax（H3 图像）",
+    "description": "The label for the MiniMax image model category in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.MiniMax-H3-Image / Highspeed": {
+    "message": "MiniMax-H3-Image / 高速版",
+    "description": "The label for the MiniMax H3 Image document in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.doc.Claude Fable 5.2": {
     "message": "Claude Fable 5.2",
     "description": "The label for the Claude Fable 5.2 model document in sidebar docsSidebar"

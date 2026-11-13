@@ -21,7 +21,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 ### Text-Output Model Standard Pricing
 
 :::info Current promotions and pricing updates
-The pricing table below lists standard reference prices only. For current limited-time offers and pricing updates, see [Promotions and Pricing Updates](./promotions-and-pricing-notices.md). Eligibility, actual settlement prices, and final billing are subject to the platform display.
+The pricing table below shows B.AI standard reference prices based on the model providers' official list prices. For current discounts, limited-time promotions, and pricing updates, see [Promotions and Pricing Updates](./promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 :::
 
 The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
@@ -96,6 +96,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Claude Sonnet 4.5 | `$3.00` | `$3.75` | `$0.30` | `$15.00` | `$0.01` |
 | Claude Haiku 4.5 | `$1.00` | `$1.25` | `$0.10` | `$5.00` | `$0.01` |
 | Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
+| Gemini 4 Carbon | `$4.00` | `$4.00` | `$0.20` | `$20.00` | `$0.014` |
 | Gemini 4 Argon | `$2.00` | `$2.00` | `$0.10` | `$10.00` | `$0.014` |
 | Gemini 3.8 Flash | `$0.75` | `$0.75` | `$0.075` | `$3.75` | `$0.014` |
 | Gemini 3.6 Flash | `$1.50` | `$1.50` | `$0.15` | `$7.50` | `$0.014` |
@@ -126,7 +127,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 :::
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
+Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](./promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 :::
 
 :::info Auto Mode billing

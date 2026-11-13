@@ -200,6 +200,7 @@ const sidebars = {
               label: 'Google (Gemini)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gemini-4-carbon', label: 'Gemini 4 Carbon' },
                 { type: 'doc', id: 'llmservice/models/gemini-4-argon', label: 'Gemini 4 Argon' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-8-flash', label: 'Gemini 3.8 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-6-flash', label: 'Gemini 3.6 Flash' },
@@ -328,6 +329,14 @@ const sidebars = {
               collapsed: true,
               items: [
                 { type: 'doc', id: 'llmservice/image-models/gpt-image-2', label: 'GPT-Image-2' },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MiniMax (H3 Image)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/image-models/minimax-h3-image', label: 'MiniMax-H3-Image / Highspeed' },
               ],
             },
           ],
