@@ -64,3 +64,22 @@ From that time, Qwen3.8-Flash usage through B.AI API and Chat is billed at 80% o
 
 The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/qwen3-8-flash.md) continue to show standard reference prices.
 </ActivityCard>
+
+<ActivityCard
+  variant="discount"
+  title="Qwen4-Max"
+  status="Limited-Time Discount"
+  detail="10% OFF"
+>
+Qwen4-Max token charges are billed at 90% of the standard reference price, including input, output, explicit cache writes for both lifetimes, and cache reads.
+
+| Billing Item | Promotional Price (USD / 1M Tokens) |
+| :--- | ---: |
+| Ordinary Input | `$1.35` |
+| Output | `$4.05` |
+| Explicit Cache Write (5 min) | `$1.6875` |
+| Explicit Cache Write (1 hour) | `$2.70` |
+| Cache Read (Implicit or Explicit) | `$0.0675` |
+
+The [Pricing and Usage](./pricing-and-usage.md) table and the standard pricing table in [model details](./models/qwen4-max.md) continue to show original prices. The promotion period, applicable terms, and final billing are subject to the platform display.
+</ActivityCard>

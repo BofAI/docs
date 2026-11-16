@@ -37,6 +37,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Kimi K2.8 Preview | `$1.00` | `$1.00` | `$0.25` | `$4.00` | - |
 | Kimi K2.6 | `$0.95` | `$0.95` | `$0.1615` | `$4.00` | - |
 | Kimi K2.5 | `$0.59` | `$0.59` | `$0.10` | `$3.00` | - |
+| Qwen4-Max | `$1.50` | 5m: `$1.875`<br/>1h: `$3.00` | `$0.075` | `$4.50` | - |
 | Qwen3.8-Flash | `$0.16` | `$0.16` | `$0.016` | `$0.47` | - |
 | Qwen3.8-27B | `$0.22` | `$0.22` | `$0.022` | `$1.60` | - |
 | Qwen3.8-Max | `$2.00` | `$2.00` | `$0.25` | `$6.00` | - |
@@ -96,6 +97,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Claude Sonnet 4.5 | `$3.00` | `$3.75` | `$0.30` | `$15.00` | `$0.01` |
 | Claude Haiku 4.5 | `$1.00` | `$1.25` | `$0.10` | `$5.00` | `$0.01` |
 | Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
+| Gemini 4 Hydrogen | `$1.50` | `$1.50` | `$0.075` | `$7.50` | `$0.014` |
 | Gemini 4 Carbon | `$4.00` | `$4.00` | `$0.20` | `$20.00` | `$0.014` |
 | Gemini 4 Argon | `$2.00` | `$2.00` | `$0.10` | `$10.00` | `$0.014` |
 | Gemini 3.8 Flash | `$0.75` | `$0.75` | `$0.075` | `$3.75` | `$0.014` |
@@ -116,6 +118,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **GPT cache-write lifetimes:** GPT-5.6 Sol, Terra, and Luna; GPT-6 Astra, Sol, and Luna; and GPT-6.1 Sol and Terra distinguish 30-minute and 12-hour cache writes, priced at 1.25x and 2.5x the applicable input rate, respectively. These write rates replace the ordinary input charge for those tokens, rather than adding to it. Cache-read rates are the same for both lifetimes.
 
 **Long-context pricing:** Some models use tiered long-context pricing. The table shows their base-tier rates; see the corresponding model detail pages for thresholds, full prices, and billing rules.
+
+**Qwen4-Max:** Cache Write shows explicit-cache prices for 5-minute and 1-hour lifetimes. Implicit cache creation has no additional write fee and is billed at the ordinary input rate. See the [model detail page](./models/qwen4-max.md).
 
 **Qwen3.7-Flash:** The table shows implicit-cache prices for inputs up to 32,000 tokens. See the [model detail page](./models/qwen3.7-flash.md) for all three input-length tiers and explicit-cache prices.
 

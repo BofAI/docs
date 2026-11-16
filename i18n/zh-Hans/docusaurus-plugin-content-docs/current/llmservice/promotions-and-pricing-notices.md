@@ -64,3 +64,22 @@ Hy4 的 Token 计费项按标准参考价的 50% 结算，包括输入、输出�
 
 [定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/qwen3-8-flash.md)继续展示标准参考价。
 </ActivityCard>
+
+<ActivityCard
+  variant="discount"
+  title="Qwen4-Max"
+  status="限时折扣"
+  detail="9 折"
+>
+Qwen4-Max 的 Token 计费项按标准参考价的 90% 结算，包括输入、输出、两种时长的显式缓存写入和缓存读取。
+
+| 计费项 | 活动价格（USD / 1M Tokens） |
+| :--- | ---: |
+| 普通输入 | `$1.35` |
+| 输出 | `$4.05` |
+| 显式缓存写入（5 分钟） | `$1.6875` |
+| 显式缓存写入（1 小时） | `$2.70` |
+| 缓存读取（隐式或显式） | `$0.0675` |
+
+[定价与用量](./pricing-and-usage.md)价格总表及[模型详情](./models/qwen4-max.md)中的标准价格表继续展示原价。活动周期、具体适用规则及最终账单以平台页面展示为准。
+</ActivityCard>

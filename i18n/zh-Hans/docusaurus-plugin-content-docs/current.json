@@ -195,6 +195,10 @@
     "message": "余额 API",
     "description": "The label for the doc item Balance API in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.doc.Gemini 4 Hydrogen": {
+    "message": "Gemini 4 Hydrogen",
+    "description": "The label for the Gemini 4 Hydrogen model document in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.category.MiniMax (H3 Image)": {
     "message": "MiniMax（H3 图像）",
     "description": "The label for the MiniMax image model category in sidebar docsSidebar"
