@@ -36,5 +36,5 @@ B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from th
 The model provider's billing rules charge only successfully generated videos, not failed generation tasks. B.AI task status, billable usage, and final settlement are subject to the platform display and billing records.
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices, account benefits, and final settlement are subject to the platform display and billing records.
+Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 :::

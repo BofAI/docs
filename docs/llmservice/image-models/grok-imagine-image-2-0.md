@@ -53,4 +53,4 @@ Prices are shown in USD per image. B.AI converts charges to Credits at `1 USD = 
 
 Reference-image input is billed at `$0.01` per image. For batch generation, charges accumulate based on the actual number of generated images.
 
-**Pricing note:** Documented prices are B.AI standard reference prices for basic billing guidance. B.AI may provide a lower effective usage cost through account benefits. Prices, account benefits, and final settlement are subject to the platform display and billing records.
+**Pricing note:** Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.

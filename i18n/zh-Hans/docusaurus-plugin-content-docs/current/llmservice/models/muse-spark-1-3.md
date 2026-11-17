@@ -44,3 +44,7 @@ Muse Spark 1.3 是 Meta Superintelligence Labs 于 2026 年 9 月 2 日发布的
 | Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
 
 **Credits 结算：** B.AI 按照 `1 USD = 1,000,000 Credits` 换算，并从账户余额中扣除 Credits。
+
+:::info 价格说明
+文档中的模型价格以模型提供方官方原价为基准，作为 B.AI 平台的标准参考价。平台可能在此基础上提供折扣或限时活动，相关优惠将在[活动与调整公告](../promotions-and-pricing-notices.md)及网站的折扣分组中展示。具体适用价格、优惠规则及最终费用，以平台页面展示和实际账单为准。
+:::

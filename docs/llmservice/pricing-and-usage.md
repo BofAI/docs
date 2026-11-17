@@ -21,7 +21,7 @@ The platform uses a unified Credits system to measure and settle usage across al
 ### Text-Output Model Standard Pricing
 
 :::info Current promotions and pricing updates
-The pricing table below lists standard reference prices only. For current limited-time offers and pricing updates, see [Promotions and Pricing Updates](./promotions-and-pricing-notices.md). Eligibility, actual settlement prices, and final billing are subject to the platform display.
+The pricing table below shows B.AI standard reference prices based on the model providers' official list prices. For current discounts, limited-time promotions, and pricing updates, see [Promotions and Pricing Updates](./promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 :::
 
 The token prices below are shown in USD per 1 million tokens; web search is billed in USD per use.
@@ -37,6 +37,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Kimi K2.8 Preview | `$1.00` | `$1.00` | `$0.25` | `$4.00` | - |
 | Kimi K2.6 | `$0.95` | `$0.95` | `$0.1615` | `$4.00` | - |
 | Kimi K2.5 | `$0.59` | `$0.59` | `$0.10` | `$3.00` | - |
+| Qwen4-Max | `$1.50` | 5m: `$1.875`<br/>1h: `$3.00` | `$0.075` | `$4.50` | - |
 | Qwen3.8-Flash | `$0.16` | `$0.16` | `$0.016` | `$0.47` | - |
 | Qwen3.8-27B | `$0.22` | `$0.22` | `$0.022` | `$1.60` | - |
 | Qwen3.8-Max | `$2.00` | `$2.00` | `$0.25` | `$6.00` | - |
@@ -96,6 +97,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Claude Sonnet 4.5 | `$3.00` | `$3.75` | `$0.30` | `$15.00` | `$0.01` |
 | Claude Haiku 4.5 | `$1.00` | `$1.25` | `$0.10` | `$5.00` | `$0.01` |
 | Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
+| Gemini 4 Hydrogen | `$1.50` | `$1.50` | `$0.075` | `$7.50` | `$0.014` |
+| Gemini 4 Carbon | `$4.00` | `$4.00` | `$0.20` | `$20.00` | `$0.014` |
 | Gemini 4 Argon | `$2.00` | `$2.00` | `$0.10` | `$10.00` | `$0.014` |
 | Gemini 3.8 Flash | `$0.75` | `$0.75` | `$0.075` | `$3.75` | `$0.014` |
 | Gemini 3.6 Flash | `$1.50` | `$1.50` | `$0.15` | `$7.50` | `$0.014` |
@@ -116,6 +119,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 **Long-context pricing:** Some models use tiered long-context pricing. The table shows their base-tier rates; see the corresponding model detail pages for thresholds, full prices, and billing rules.
 
+**Qwen4-Max:** Cache Write shows explicit-cache prices for 5-minute and 1-hour lifetimes. Implicit cache creation has no additional write fee and is billed at the ordinary input rate. See the [model detail page](./models/qwen4-max.md).
+
 **Qwen3.7-Flash:** The table shows implicit-cache prices for inputs up to 32,000 tokens. See the [model detail page](./models/qwen3.7-flash.md) for all three input-length tiers and explicit-cache prices.
 
 **Kimi K3.1 Pro / Highspeed:** The table shows the default 5-minute cache write rates. See the [model detail page](./models/kimi-k3.1-pro.md) for 1-hour cache write prices and cache renewal rules.
@@ -126,7 +131,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 :::
 
 :::info Pricing note
-Prices shown in the documentation are B.AI standard reference prices for base billing purposes. B.AI may provide lower actual usage costs through account benefits. Specific prices and account benefits are subject to the platform display and final billing records.
+Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](./promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 :::
 
 :::info Auto Mode billing

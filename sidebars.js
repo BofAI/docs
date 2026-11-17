@@ -188,6 +188,8 @@ const sidebars = {
               label: 'Google (Gemini)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gemini-4-hydrogen', label: 'Gemini 4 Hydrogen' },
+                { type: 'doc', id: 'llmservice/models/gemini-4-carbon', label: 'Gemini 4 Carbon' },
                 { type: 'doc', id: 'llmservice/models/gemini-4-argon', label: 'Gemini 4 Argon' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-8-flash', label: 'Gemini 3.8 Flash' },
                 { type: 'doc', id: 'llmservice/models/gemini-3-6-flash', label: 'Gemini 3.6 Flash' },
@@ -276,6 +278,7 @@ const sidebars = {
               label: 'Qwen',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/qwen4-max', label: 'Qwen4-Max' },
                 { type: 'doc', id: 'llmservice/models/qwen3-8-flash', label: 'Qwen3.8-Flash' },
                 { type: 'doc', id: 'llmservice/models/qwen3.8-27b', label: 'Qwen3.8-27B' },
                 { type: 'doc', id: 'llmservice/models/qwen3.8-max', label: 'Qwen3.8-Max' },
@@ -316,6 +319,14 @@ const sidebars = {
               collapsed: true,
               items: [
                 { type: 'doc', id: 'llmservice/image-models/gpt-image-2', label: 'GPT-Image-2' },
+              ],
+            },
+            {
+              type: 'category',
+              label: 'MiniMax (H3 Image)',
+              collapsed: true,
+              items: [
+                { type: 'doc', id: 'llmservice/image-models/minimax-h3-image', label: 'MiniMax-H3-Image / Highspeed' },
               ],
             },
           ],

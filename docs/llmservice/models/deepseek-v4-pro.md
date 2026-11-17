@@ -48,5 +48,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 **Credits settlement:** B.AI converts charges at `1 USD = 1,000,000 Credits` and deducts Credits from the account balance.
 
 :::info Pricing note
-DeepSeek V4 Pro uses time-based standard reference pricing. Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods. DeepSeek V4 Pro usage in B.AI Chat is billed at Off-Peak rates. Final settlement prices and billing records are subject to the platform display. B.AI may provide lower actual usage costs through account benefits.
+DeepSeek V4 Pro uses time-based standard reference pricing. Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods. DeepSeek V4 Pro usage in B.AI Chat is billed at Off-Peak rates.
+
+Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 :::

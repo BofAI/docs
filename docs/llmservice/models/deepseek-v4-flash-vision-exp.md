@@ -75,3 +75,7 @@ The standard reference prices above take effect at 12:00 on September 10, 2026 (
 Off-Peak prices are half of Peak prices. In Beijing Time (UTC+8), 09:00-12:00 and 14:00-18:00, Monday through Friday (excluding Chinese public holidays), are Peak periods; all other times, including weekends and Chinese public holidays, are Off-Peak periods.
 
 Images are converted to input tokens according to their dimensions and billed together with text input; each image uses at most 384 tokens after resizing.
+
+:::info Pricing note
+Model prices in the documentation are based on the model providers' official list prices and serve as B.AI standard reference prices. B.AI may offer discounts or limited-time promotions on this basis; offer details are shown in [Promotions and Pricing Updates](../promotions-and-pricing-notices.md) and the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
+:::

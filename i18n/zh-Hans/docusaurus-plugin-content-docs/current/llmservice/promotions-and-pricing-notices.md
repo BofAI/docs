@@ -2,7 +2,7 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 # 活动与调整公告
 
-本页汇总当前生效及已公布的近期活动和定价调整公告。[定价与用量](./pricing-and-usage.md)页面的价格总表继续展示标准参考价。活动适用规则、活动周期、实际结算价格及最终账单以平台页面展示为准。
+本页汇总当前生效及已公布的近期活动和定价调整公告。[定价与用量](./pricing-and-usage.md)页面的价格总表以模型提供方官方原价为基准，展示 B.AI 标准参考价。相关折扣或限时活动将在本页及网站的折扣分组中展示。具体适用价格、优惠规则及最终费用，以平台页面展示和实际账单为准。
 
 ## 活动
 
@@ -45,11 +45,9 @@ Hy4 的 Token 计费项按标准参考价的 50% 结算，包括输入、输出�
   variant="discount"
   title="GLM-5.3-Flash"
   status="限时折扣"
-  detail="10 月 4 日 10:00 SGT 起 7 折"
+  detail="6 折"
 >
-活动于 2026 年 10 月 4 日 10:00（SGT，新加坡时间，UTC+8）起生效。
-
-自生效时间起，符合条件的 GLM-5.3-Flash API 和 Chat 使用按标准参考价的 70% 结算。
+符合条件的 GLM-5.3-Flash API 和 Chat 使用按标准参考价的 60% 结算。
 
 标准价格详见[模型详情](./models/glm-5-3-flash.md)。
 </ActivityCard>
@@ -65,4 +63,23 @@ Hy4 的 Token 计费项按标准参考价的 50% 结算，包括输入、输出�
 自生效时间起，Qwen3.8-Flash 在 B.AI API 和 Chat 中的使用按标准参考价的 80% 结算；生效前仍按现行活动规则结算。
 
 [定价与用量](./pricing-and-usage.md)价格总表和[模型详情](./models/qwen3-8-flash.md)继续展示标准参考价。
+</ActivityCard>
+
+<ActivityCard
+  variant="discount"
+  title="Qwen4-Max"
+  status="限时折扣"
+  detail="9 折"
+>
+Qwen4-Max 的 Token 计费项按标准参考价的 90% 结算，包括输入、输出、两种时长的显式缓存写入和缓存读取。
+
+| 计费项 | 活动价格（USD / 1M Tokens） |
+| :--- | ---: |
+| 普通输入 | `$1.35` |
+| 输出 | `$4.05` |
+| 显式缓存写入（5 分钟） | `$1.6875` |
+| 显式缓存写入（1 小时） | `$2.70` |
+| 缓存读取（隐式或显式） | `$0.0675` |
+
+[定价与用量](./pricing-and-usage.md)价格总表及[模型详情](./models/qwen4-max.md)中的标准价格表继续展示原价。活动周期、具体适用规则及最终账单以平台页面展示为准。
 </ActivityCard>
