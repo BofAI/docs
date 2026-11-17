@@ -1,3 +1,8 @@
+---
+title: 'Official Facilitator'
+description: 'Connect to the hosted x402 Facilitator, manage API keys, and handle cache refreshes and authentication outages.'
+---
+
 # Official Facilitator
 
 ## What is an Official Facilitator?
@@ -122,6 +127,18 @@ Therefore, it is **strongly recommended to apply for and configure an API Key** 
 
 ---
 
+### Key refreshes and temporary authentication failures
+
+Facilitator v2.3.2 reads active keys from DevCenter into a cache; the built-in production configuration refreshes it every **5 seconds**. Both key creation and deletion affect authentication after the next successful refresh, rather than immediately. Each process refreshes independently; replicas need not apply changes together, and database read time also affects the delay.
+
+While the cache is fresh, incorrect keys, keys not yet synced, and revoked keys after syncing are treated as anonymous rather than uniformly rejected with HTTP 401. A successful call does not prove that a key was recognized. In particular, transaction-hash and authorization-identity lookups apply seller filtering only for a **valid, recognized key**.
+
+If DevCenter becomes unavailable, the previous snapshot remains usable for up to three refresh intervals (**15 seconds** with the production configuration, measured from the last successful read). Once it expires, requests carrying `X-API-KEY` to `/verify`, `/settle`, `/payments`, and `/payments/tx/{tx_hash}` receive HTTP **503** with reason code `api_key_auth_unavailable` until refreshes recover. This error has no `Retry-After` header. Retain the key and retry with backoff; do not remove the authentication header to bypass the error. Anonymous requests continue under the existing policy.
+
+See [Facilitator API key cache](../facilitator#api-key-cache-and-authentication-availability) for each endpoint's error response.
+
+---
+
 ## Apply for an API Key
 
 To unlock production-level throughput, please apply for a free API Key in the admin backend: [https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io)
@@ -135,7 +152,7 @@ This is an admin panel accessible via a browser, where you can register an accou
 
 - **API Key leakage is equivalent to identity leakage**: Anyone holding your API Key can consume your rate limit quota in your name. Please protect it like a password.
 - **Do not commit to code repositories**: Ensure that the `.env` file has been added to `.gitignore` to avoid uploading keys to public platforms like GitHub.
-- **1 Key per account limit**: If you believe your Key has been leaked, please log in to the admin backend to delete the old Key and recreate a new one. The old Key will become invalid immediately.
+- **1 Key per account limit**: If you believe your Key has been leaked, please log in to the admin backend to delete the old Key and recreate a new one. The old Key becomes invalid after the next successful Facilitator key-cache refresh.
 - **Signature authorization does not equal transfer**: The wallet signature during login is only used for identity verification and will not trigger any asset transfers.
 :::
 
@@ -227,7 +244,7 @@ Click the **"Create API Key"** button on the page. The system will pop up a conf
 After clicking **"Confirm"**, you will return to the Dashboard page, and the API Key will be displayed in a hidden state by default. You can manage it in the following ways:
 
 - **View / Hide**: Click the **View** button to the right of the API Key to switch between plain text display and hidden state. You can copy the Key directly whether it is currently displayed or hidden.
-- **Delete**: Click the **Delete** button on the far right to delete the current API Key. After deletion, the old Key will become invalid immediately, and you can recreate a new Key.
+- **Delete**: Click the **Delete** button on the far right to delete the current API Key. After deletion, the old Key becomes invalid after the next successful Facilitator key-cache refresh, and you can recreate a new Key.
 
 <div style={{ textAlign: 'left' }}>
   <img
@@ -289,7 +306,7 @@ The `/payments/tx/{tx_hash}` and `/payments?network=&nonce=[&asset=&payer=]` int
 - `errorReason` — Failure reason (when applicable)
 - `createdAt` — Timestamp
 
-> When an API Key is provided, these interfaces only return payment records associated with your account; you will not see data from other sellers.
+> When a valid API Key recognized by Facilitator is provided, these interfaces only return payment records associated with your account; you will not see data from other sellers.
 
 :::danger Without an API Key
 The `tx_hash` and `network` + `nonce` lookups add **no seller filter** when the request is anonymous, so the response may include records bound to a seller — anyone holding an exact identifier can resolve the corresponding record. The `/payments` list endpoint still requires authentication, so there is no unauthenticated listing endpoint; but these lookups are not rate-limited either (the official service's 10-requests-per-IP-per-minute anonymous limit covers `/verify` and `/settle` only), and settlement tx hashes are public on-chain data. Treat settlement metadata as effectively public rather than seller-private.
@@ -307,7 +324,7 @@ Yes, it can run, but the official service limits `/verify` and `/settle` to 10 r
 
 **Q: Does the API Key expire?**
 
-Currently, API Keys do not actively expire, but if you actively delete and recreate one, the old Key will become invalid immediately.
+Currently, API Keys do not actively expire, but if you actively delete and recreate one, the old Key becomes invalid after the next successful Facilitator key-cache refresh.
 
 **Q: Can I use the same API Key for multiple projects?**
 
@@ -315,7 +332,7 @@ Yes, the same API Key can be reused across multiple service instances. On the of
 
 **Q: I want to change my API Key, how do I do it?**
 
-After logging in to the admin backend, click **Delete** on the Dashboard to delete the current Key, then click **"Create API Key"** again to generate a new Key. The old Key will become invalid immediately after deletion. Please ensure that you have updated the new Key in all active projects before deleting to avoid service interruption.
+After logging in to the admin backend, click **Delete** on the Dashboard to delete the current Key, then click **"Create API Key"** again to generate a new Key. The old Key becomes invalid after the next successful Facilitator key-cache refresh. Each account allows one key, so schedule a rotation window: delete the old key, create the replacement, update all active projects, and verify calls after the cache refreshes.
 
 **Q: Will Facilitator hold my funds?**
 

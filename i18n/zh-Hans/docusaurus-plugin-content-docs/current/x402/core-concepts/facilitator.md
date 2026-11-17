@@ -78,17 +78,43 @@ Facilitator 是一种中间件服务，主要负责：
 
 如果您希望完全掌控结算钱包、RPC 节点、能量管理，或注册哪些网络与方案，又或有特定的隐私/合规要求，可以选择自己部署 Facilitator 服务。
 
-当前源码版本为 **v2.3.1**（2026-11-10）：使用官方 `@x402/core`、`@x402/evm`、`@x402/extensions` **2.29.0**，TRON 机制与独立资源扩展 **2.1.2**，并将 `@bankofai/agent-wallet` 精确锁定到 **3.1.0-beta.1**。源码安装要求 Node.js **24.22.1+（24.x）或 26.12.1+**；Docker 与 CI 固定为 24.22.2，不再支持 Node.js 22。安装配置将 Zod 固定到 **4.6.7**，升级依赖时应保留此覆盖。部署说明见 [Facilitator v2.3.1 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.1/README.md)。
+当前源码版本为 **v2.3.2**（2026-11-13）：使用官方 `@x402/core`、`@x402/evm`、`@x402/extensions` **2.29.0**，TRON 机制与独立资源扩展 **2.1.2**，并将 `@bankofai/agent-wallet` 精确锁定到 **3.1.0-beta.1**。源码安装要求 Node.js **24.22.1+（24.x）或 26.12.1+**；Docker 与 CI 固定为 24.22.2，不再支持 Node.js 22。安装配置将 Zod 固定到 **4.6.7**，升级依赖时应保留此覆盖。部署说明见 [Facilitator v2.3.2 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.2/README.md)。
 
-v2.3.1 使用单份 **TronWeb 6.5.1**。服务自身的安装覆盖将其 Axios 固定为 **1.21.1**，follow-redirects 的要求为 **^1.16.3**，发布版本的锁文件实际解析到 **1.16.3**；Hono Node Server 升级到 **2.1.6**。请使用发布版本的锁文件安装，更新依赖时保留这些覆盖。
+v2.3.2 使用单份 **TronWeb 6.5.1**。服务自身的安装覆盖将其 Axios 固定为 **1.21.1**，follow-redirects 的要求为 **^1.16.3**，发布版本的锁文件实际解析到 **1.16.3**；Hono Node Server 升级到 **2.1.6**。请使用发布版本的锁文件安装，更新依赖时保留这些覆盖。
+
+本节部署说明针对完整的 `BofAI/x402-facilitator` 服务。SDK 的最小示例 `examples/typescript/facilitator/basic` 仅暴露 `/verify`、`/settle` 与 `/supported`，无需数据库；下述数据库与 DevCenter 要求适用于完整服务。
 
 ### 运行时密钥配置
 
 内置开发与生产配置现均使用 **1Password Connect**（`onepassword.mode: connect`）。运行时注入 `OP_CONNECT_HOST` 与 `OP_CONNECT_TOKEN`，令牌须有对应 vault 的读取权限，且容器须能访问 Connect 地址。使用 HTTPS；仅可信的私有连接可使用 HTTP。不要将凭据提交到配置文件。
 
-1Password 引用使用 `vault/item/field` 格式。TronGrid、GasFree 与 Agent Wallet 解锁凭据优先读取各自支持的环境变量；TronGrid 还会在查询 1Password 前检查 YAML 中的值。数据库配置使用独立规则：显式配置的 `onepassword.database_url` 优先于 `database.url`，解析失败会阻止启动，不会回退到 YAML URL。若通过独立的 1Password 字段提供数据库凭据，须同时配置 `onepassword.database_user` 与 `onepassword.database_password`，并保持 URL 不含凭据。
+1Password 引用使用 `vault/item/field` 格式。TronGrid 与 GasFree 凭据优先读取各自支持的环境变量；TronGrid 还会在查询 1Password 前检查 YAML 中的值。数据库配置使用独立规则：显式配置的 `onepassword.database_url` 优先于 `database.url`，解析失败会阻止启动，不会回退到 YAML URL。若通过独立的 1Password 字段提供数据库凭据，须同时配置 `onepassword.database_user` 与 `onepassword.database_password`，并保持 URL 不含凭据。
 
 自定义配置仍可选择 `onepassword.mode: service_account`，使用 `OP_SERVICE_ACCOUNT_TOKEN` 或 `onepassword.token`；省略 `mode` 时默认仍为 `service_account`，两种模式不会互相回退使用凭据。使用 `FACILITATOR_SERVICE_ENV=prod` 选择内置生产配置，或通过 `FACILITATOR_CONFIG_PATH` 指定自定义文件。
+
+### DevCenter API Key 数据库
+
+v2.3.2 要求单独配置用于读取 API Key 的 DevCenter PostgreSQL 连接：使用 `onepassword.api_key_database_url`，或在自定义配置中设置 `api_key_database.url`。前者优先，解析失败会阻止启动，不会回退到本地 URL。主数据库继续负责结算记录、PostgreSQL 赞助账本与 Permit2 advisory lock；Facilitator 不再创建 `sellers` / `api_keys_plus` 表，也不再从主数据库读取 Key。Key 的签发和撤销由 DevCenter 管理。
+
+内置配置使用以下引用；升级前须在对应 vault 中备齐字段：
+
+| 配置项 | 开发环境 | 生产环境 |
+|--------|----------|----------|
+| `onepassword.api_key_database_url` | `x402-facilitator-dev/psql/devcenter-url` | `x402-facilitator/psql/devcenter-url` |
+| `onepassword.sponsoring_owner` | `x402-facilitator-dev/sponsoring/owner` | `x402-facilitator/sponsoring/owner` |
+| `onepassword.agent_wallet_password` | `x402-facilitator-dev/wallet/agent_wallet_password` | `x402-facilitator/wallet/agent_wallet_password` |
+
+DevCenter DSN 必须指定数据库名和连接角色，支持 `postgresql://`、`postgres://` 和 `postgresql+asyncpg://`。完整 DSN 可自带凭据；不带凭据时复用成对配置的 `onepassword.database_user` 与 `onepassword.database_password`。为该角色授予数据库 `CONNECT`、schema `USAGE`，以及 `api_keys_plus` 的 `key`、`seller_id`、`is_active` 列的 `SELECT` 权限。保留每个 Key 原有的 `seller_id`，以便继续关联已有结算历史。
+
+每个进程为 Key 读取建立最多一条连接，并强制只读事务。TLS 默认使用 `api_key_database.ssl_mode: verify-full`；私有 CA 可通过 `NODE_EXTRA_CA_CERTS` 加入 Node 信任库。本地测试可显式设置 `ssl_mode: disable`。DSN 不得包含 TLS 参数（如 `sslmode`、`sslrootcert`），也不得包含 `options`、`statement_timeout` 或 `query_timeout`；TLS 应通过 `api_key_database.ssl_mode` 配置。
+
+### 赞助 Owner 与 wallet-cli 密码
+
+内置配置的 Nile 赞助 Owner 改为通过 `onepassword.sponsoring_owner` 加载，并在启动时校验 TRON 地址。自定义配置可直接设置 `resource_sponsoring.owner`，或将它设为独立的 `vault/item/field` 引用。多网络配置最多允许一项省略 `owner` 并使用全局引用，其余项必须各自指定。
+
+使用 `wallet_cli` provider 时，须提供兼容的 wallet-cli 可执行文件。在需要使用上述 1Password 密码的钱包条目中，将 `wallets_config.json` 的 `params.password` 设为字面值 `facilitator:1password`。所有使用该标记的条目共用 `onepassword.agent_wallet_password` 指定的密码缓存。
+
+配置该引用后，Facilitator 在接受请求前加载密码；读取失败或密码为空会阻止启动。密码在进程内存中缓存至退出，不自动刷新，**修改密码后须重启 Facilitator**。后续签名使用一次性副本，经 stdin 传给 wallet-cli，使用后清除；子进程不会继承 `OP_*` 或 `AGENT_WALLET_PASSWORD` 环境变量。正常关闭会清除缓存与尚未释放的副本。旧的 `AGENT_WALLET_PASSWORD` 环境变量不再用于此密码加载流程。
 
 ### EVM nonce 恢复
 
@@ -106,7 +132,7 @@ v2.3.0 的 EVM 钱包桥按网络与钱包共享进程内 nonce 队列，保存�
 
 ## Facilitator API 端点
 
-无论使用官方还是自托管，Facilitator 均提供以下标准 API 端点：
+完整的 `x402-facilitator` 服务无论由官方托管还是私有部署，均提供以下 API 端点：
 
 | 方法 | 路径 | 描述 |
 |------|------|------|
@@ -121,13 +147,31 @@ v2.3.0 的 EVM 钱包桥按网络与钱包共享进程内 nonce 队列，保存�
 | GET | `/metrics` | Prometheus 指标（运维用途；仅当监控与主端口共用时才在主端口暴露） |
 | ALL | `/mainnet/*` · `/nile/*` | GasFree Open API 透明代理（HMAC 签名）——由 TRON `exact_gasfree` 方案内部使用 |
 
-记录查询的失败会返回以下错误码：无匹配记录时 `404 not_found`；身份查询参数不完整（传了 `network`/`nonce`/`asset`/`payer` 中的部分，但缺少必需的 `network`+`nonce` 组合）时 `400 invalid_identity_query`；调用 `/payments` 但既未提供身份参数也未提供 API Key 时 `400 missing_identity_or_auth`。
+记录查询的失败会返回以下错误码：无匹配记录时 `404 not_found`；身份查询参数不完整（传了 `network`/`nonce`/`asset`/`payer` 中的部分，但缺少必需的 `network`+`nonce` 组合）时 `400 invalid_identity_query`；调用 `/payments` 但既未提供身份参数也未通过有效 API Key 认证时 `400 missing_identity_or_auth`。
 
 `/verify` 与 `/settle` 保持 x402 的响应结构（`invalidReason` / `errorReason`）。除 SDK 自身的原因外，服务还会返回：请求体格式错误时 `400 invalid_json` 或 `missing_parameters`；`413` `{"code":"body_too_large","message":…}`（默认上限 1 MiB）；`429` `{"error":"rate_limit_exceeded"}`；请求携带 `trc20ApprovalResourceSponsoring` 但部署不予赞助时 `403 sponsor_auth_required`、`sponsor_network_disabled` 或 `sponsor_pay_to_invalid`；暂时性状况返回 `503` 并带 `Retry-After`（`sponsor_owner_busy`、`sponsor_recovery_in_progress`、`sponsor_storage_unavailable`，以及仅 `/settle` 会返回的 `permit2_authorization_busy`、`permit2_storage_unavailable`、`permit2_nonce_check_unavailable`）。`/settle` 时 nonce 已被消耗的 Permit2 授权会以 `permit2_nonce_consumed`（HTTP 200）失败，不会广播新交易；授权格式错误时 `/settle` 返回 `400 permit2_invalid_authorization`。受赞助的授权还可能在协议层失败（HTTP 200，放在 `invalidReason` / `errorReason` 里）：`approval_transaction_reused`（已签名的 approve 已被用于另一笔不同的支付请求）、`sponsor_approval_lifetime_exceeded`（已签名 approve 的有效期超过 630 秒），以及仅 `/settle` 会返回的 `sponsor_existing_delegation`。未预期的异常返回 `500 internal_error`。GasFree 代理只挂在 `/mainnet` 和 `/nile` 下（其他路径直接返回普通的 `404`），上游失败或响应过大时返回 `502 bad_gateway`。
 
 > **不存在** `/fee/quote` 端点，各方案也完全不收取 facilitator 费用。支付记录以链上授权身份（`network` + `scheme` + `asset` + `payer` + `nonce`）为键，而非客户端提供的 payment ID。
 
 v2.3.0 还将缺失或非对象的 TRON `exact` 授权转换为协议级验证拒绝：`isValid: false`、`invalidReason: "invalid_exact_tron_payload_authorization"`，而非 HTTP 500。该兼容处理不吞掉实际 RPC 错误。
+
+---
+
+## API Key 缓存与认证不可用
+
+启动时必须成功从 DevCenter 读取一次活动 Key，否则服务不会开始监听。运行后按 `rate_limit.api_key_refresh_interval`（单位秒，默认 `60`；内置生产配置为 `5`）刷新内存快照。Key 的创建和撤销在下一次成功刷新后才会反映到认证结果，**并非即时生效**。每个进程独立维护缓存，多副本不保证同时生效；刷新间隔也不包含数据库读取耗时。
+
+缓存未过期时，未被快照识别的 Key（包括拼写错误、尚未同步的新 Key，以及已同步撤销的旧 Key）会按匿名请求处理，**不会统一返回 401**：验证与结算使用匿名限额，要求认证的赞助请求会被拒绝，按标识查询记录时不加卖家过滤，仅列出本人记录的 `/payments` 请求返回 `400 missing_identity_or_auth`。因此，请求成功不能单独证明 Key 已被识别。
+
+刷新失败时，最后一次成功快照最多保留三个刷新间隔（按内置生产配置为 `15` 秒，自上次成功读取起算）。达到期限后，携带非空 `X-API-KEY` 的以下请求返回 HTTP `503`，直到刷新成功；不会静默降为匿名请求：
+
+| 接口 | HTTP 503 响应体 |
+|------|----------------|
+| `POST /verify` | `{"isValid":false,"invalidReason":"api_key_auth_unavailable"}` |
+| `POST /settle` | `{"success":false,"errorReason":"api_key_auth_unavailable"}` |
+| `GET /payments`、`GET /payments/tx/{tx_hash}` | `{"code":"api_key_auth_unavailable","message":"API key authentication is temporarily unavailable"}` |
+
+这些认证错误不带 `Retry-After`，也不会触发结算或写入结算记录。客户端应保留 API Key 并退避重试；不要通过删除请求头绕过错误。不带 Key 的请求继续遵循原有匿名策略；`/health`、`/supported` 与 `/sponsoring/ready` 不受该认证闸门阻断，因此 `/health` 成功不代表 Key 认证可用。
 
 ---
 

@@ -356,6 +356,8 @@ new HTTPFacilitatorClient({
 });
 ```
 
+> **Key 刷新与重试：** 新建或删除 Key 在 Facilitator 下一次成功刷新缓存后才生效（内置生产配置每 5 秒刷新，各进程独立维护）。缓存仍有效时，未识别的 Key 按匿名请求处理，成功调用不代表认证成功。v2.3.2 在缓存过期且无法刷新时，对带 Key 的验证和结算请求返回 `503 api_key_auth_unavailable`。请保留认证头并退避重试，详见[认证可用性说明](../../core-concepts/facilitator#api-key-缓存与认证不可用)。
+
 > ⚠️ **安全提醒：** API Key 是服务凭据——**像密码一样保管，切勿提交到 Git**。
 
 > ✅ **完成！** 官方 Facilitator 已配置——**无需启动本地服务**。直接进入第五步测试。

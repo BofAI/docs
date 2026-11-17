@@ -358,6 +358,8 @@ new HTTPFacilitatorClient({
 });
 ```
 
+> **Key refreshes and retries:** Key creation and deletion take effect after the next successful Facilitator cache refresh (every 5 seconds in the built-in production configuration, independently per process). While the cache is fresh, unrecognized keys use anonymous access, so a successful call does not prove authentication. In v2.3.2, keyed verification and settlement requests receive `503 api_key_auth_unavailable` if the cache expires while refreshes are failing. Retain the authentication header and retry with backoff; see [authentication availability](../../core-concepts/facilitator#api-key-cache-and-authentication-availability).
+
 > ⚠️ **Security reminder:** Your API Key is a service credential — **treat it like a password and never commit it to Git**.
 
 > ✅ **Done!** The Official Facilitator is configured — **no local service to start**. Proceed directly to Step 5 to test.

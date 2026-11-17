@@ -1,3 +1,7 @@
+---
+title: '官方 Facilitator'
+description: '官方 x402 Facilitator 的接入、API Key 管理、缓存刷新与认证故障处理。'
+---
 
 # 官方 Facilitator
 
@@ -131,6 +135,18 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 ---
 
+### Key 刷新与暂时性认证故障
+
+Facilitator v2.3.2 从 DevCenter 读取活动 Key 并缓存；内置生产配置每 **5 秒**刷新一次。新建和删除 Key 都须等到下一次成功刷新后才会影响认证，不能视为即时生效。各进程独立刷新，多副本不保证同时生效，数据库读取耗时也会影响实际生效时间。
+
+缓存仍有效时，错误、尚未同步或已同步撤销的 Key 会按匿名请求处理，不会统一返回 401；成功调用不代表 Key 已被识别。尤其是按交易哈希或授权身份查询记录时，只有**有效且已识别的 Key**才会应用卖家过滤。
+
+如果 DevCenter 暂时不可用，已有快照最多继续使用三个刷新间隔（生产配置为 **15 秒**，从最后一次成功读取起算）。达到期限后，带 `X-API-KEY` 的 `/verify`、`/settle`、`/payments` 与 `/payments/tx/{tx_hash}` 返回 HTTP **503**，原因码为 `api_key_auth_unavailable`，直到刷新恢复。该错误不带 `Retry-After`；请保留 Key 并退避重试，不要删除认证头来绕过错误。匿名请求继续遵循原有策略。
+
+各接口的具体错误响应见 [Facilitator API Key 缓存说明](../facilitator#api-key-缓存与认证不可用)。
+
+---
+
 ## 申请 API Key
 
 要解锁生产级别的吞吐量，请在管理后台免费申请 API Key：[https://admin-facilitator.bankofai.io](https://admin-facilitator.bankofai.io)
@@ -145,7 +161,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 - **API Key 泄露等同于身份泄露**：任何持有你的 API Key 的人都可以以你的名义消耗你的限速配额，请像保护密码一样保护它。
 - **不要提交到代码仓库**：确保 `.env` 文件已添加到 `.gitignore`，避免将密钥上传到 GitHub 等公共平台。
-- **每个账户限 1 个 Key**：如果你认为 Key 已泄露，请登录管理后台删除旧 Key 并重新创建，旧 Key 将立即失效。
+- **每个账户限 1 个 Key**：如果你认为 Key 已泄露，请登录管理后台删除旧 Key 并重新创建，旧 Key 在 Facilitator 下一次成功刷新 Key 缓存后失效。
 - **签名授权不等于转账**：登录时的钱包签名仅用于身份验证，不会触发任何资产转移。
 :::
 
@@ -237,7 +253,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 点击 **"确认"** 后，你将回到 Dashboard 页面，API Key 默认以隐藏状态显示。你可以通过以下方式管理：
 
 - **查看 / 隐藏**：点击 API Key 右侧的 **View** 按钮，即可在明文显示与隐藏之间切换。无论当前是显示还是隐藏状态，都可以直接复制 Key。
-- **删除**：点击最右侧的 **Delete** 按钮，可以删除当前 API Key。删除后旧 Key 立即失效，你可以重新创建一个新的 Key。
+- **删除**：点击最右侧的 **Delete** 按钮，可以删除当前 API Key。删除后旧 Key 在 Facilitator 下一次成功刷新 Key 缓存后失效，你可以重新创建一个新的 Key。
 
 <div style={{ textAlign: 'left' }}>
   <img
@@ -299,7 +315,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 - `errorReason` — 失败原因（如有）
 - `createdAt` — 时间戳
 
-> 提供 API Key 时，这两个接口只返回与你的账户关联的支付记录，不会看到其他卖家的数据。
+> 提供有效且已被 Facilitator 识别的 API Key 时，这两个接口只返回与你的账户关联的支付记录，不会看到其他卖家的数据。
 
 :::danger 不带 API Key 时
 匿名请求下，`tx_hash` 与 `network` + `nonce` 查询**不添加卖家过滤**，返回结果可能包含已绑定卖家的记录——任何持有准确标识符的人都能查到对应记录。`/payments` 列表接口仍要求身份验证，因此不存在免认证的列表接口；但这两个查询接口也没有限流（官方服务按每个 IP 每分钟 10 次的匿名限流只覆盖 `/verify` 与 `/settle`），而结算 tx hash 又是链上公开数据。请把结算元数据视为事实上公开，而非按卖家隔离。
@@ -317,7 +333,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 **Q：API Key 会过期吗？**
 
-目前 API Key 不会主动过期，但如果你主动删除并重新创建，旧 Key 将立即失效。
+目前 API Key 不会主动过期，但如果你主动删除并重新创建，旧 Key 在 Facilitator 下一次成功刷新 Key 缓存后失效。
 
 **Q：我可以在多个项目中使用同一个 API Key 吗？**
 
@@ -325,7 +341,7 @@ curl -X POST https://facilitator.bankofai.io/settle \
 
 **Q：我想更换 API Key，怎么操作？**
 
-登录管理后台后，在 Dashboard 点击 **Delete** 删除当前 Key，然后重新点击 **"创建 API Key"** 即可生成新的 Key。删除后旧 Key 立即失效，请确保在删除前已将新 Key 更新到所有使用中的项目里，避免服务中断。
+登录管理后台后，在 Dashboard 点击 **Delete** 删除当前 Key，然后重新点击 **"创建 API Key"** 即可生成新的 Key。删除后旧 Key 在 Facilitator 下一次成功刷新 Key 缓存后失效。每个账户限一个 Key，请安排更换窗口：删除旧 Key、创建新 Key、更新所有使用中的项目，并等待缓存刷新后验证调用。
 
 **Q：Facilitator 会持有我的资金吗？**
 
