@@ -154,6 +154,8 @@ const sidebars = {
               label: 'OpenAI (GPT)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gpt-6-2-astra', label: 'GPT-6.2 Astra' },
+                { type: 'doc', id: 'llmservice/models/gpt-6-2-sol', label: 'GPT-6.2 Sol' },
                 { type: 'doc', id: 'llmservice/models/gpt-6-1-terra', label: 'GPT-6.1 Terra' },
                 { type: 'doc', id: 'llmservice/models/gpt-6-1-sol', label: 'GPT-6.1 Sol' },
                 { type: 'doc', id: 'llmservice/models/gpt-6-astra', label: 'GPT-6 Astra' },
@@ -236,6 +238,7 @@ const sidebars = {
               label: 'Tencent Hunyuan (Hy)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/hy4-flash', label: 'Hy4 Flash' },
                 { type: 'doc', id: 'llmservice/models/hy4', label: 'Hy4' },
                 { type: 'doc', id: 'llmservice/models/hy4-preview', label: 'Hy4 Preview' },
                 { type: 'doc', id: 'llmservice/models/hy3', label: 'Hy3' },
@@ -392,6 +395,7 @@ const sidebars = {
           collapsed: true,
           items: [
             { type: 'doc', id: 'llmservice/api/API', label: 'API Overview' },
+            { type: 'doc', id: 'llmservice/api/minimax-image-generation', label: 'MiniMax Image Generation API' },
             { type: 'doc', id: 'llmservice/api/videos', label: 'Video Generation API' },
             { type: 'doc', id: 'llmservice/api/decisions-api', label: 'Decisions API' },
             { type: 'doc', id: 'llmservice/api/balance', label: 'Balance API' },

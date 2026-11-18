@@ -1,6 +1,6 @@
 {
   "name": "@x402-tron/docs",
-  "version": "1.5.6",
+  "version": "1.5.7",
   "description": "x402-tron documentation",
   "license": "MIT",
   "resolutions": {
@@ -11,6 +11,7 @@
     "**/@typescript-eslint/typescript-estree/minimatch": "11.0.7"
   },
   "scripts": {
+    "postinstall": "node scripts/patch-picomatch.mjs",
     "docusaurus": "docusaurus",
     "start": "docusaurus start",
     "start-zh": "docusaurus start --locale zh-Hans",

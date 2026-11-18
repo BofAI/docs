@@ -44,6 +44,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Qwen3.7-Max | `$1.65` | `$1.65` | `$0.33` | `$4.951` | - |
 | Qwen3.7-Flash | `$0.03` | `$0.03` | `$0.006` | `$0.13` | - |
 | Qwen3.6-27B | `$0.19` | `$0.19` | `$0.019` | `$2.99` | - |
+| Hy4 Flash | `$0.07` | `$0.07` | `$0.003` | `$0.281` | - |
 | Hy4 | `$0.834` | `$0.834` | `$0.042` | `$2.501` | - |
 | Hy4 Preview | `$0.834` | `$0.834` | `$0.042` | `$2.501` | - |
 | Hy3 | `$0.132` | `$0.132` | `$0.033` | `$0.528` | - |
@@ -63,6 +64,8 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | DeepSeek V4 Pro | Off-Peak `$0.66`<br/>Peak `$1.32` | Off-Peak `$0.66`<br/>Peak `$1.32` | Off-Peak `$0.022`<br/>Peak `$0.044` | Off-Peak `$1.98`<br/>Peak `$3.96` | - |
 | Grok 4.6 | `$2.00` | `$2.00` | `$0.50` | `$6.00` | - |
 | Grok 4.5 | `$2.00` | `$2.00` | `$0.30` | `$6.00` | - |
+| GPT-6.2 Astra | `$8.00` | 30m: `$10.00`<br/>12h: `$20.00` | `$0.40` | `$40.00` | `$0.01` |
+| GPT-6.2 Sol | `$2.00` | 30m: `$2.50`<br/>12h: `$5.00` | `$0.10` | `$10.00` | `$0.01` |
 | GPT-6.1 Terra | `$1.00` | 30m: `$1.25`<br/>12h: `$2.50` | `$0.05` | `$5.00` | `$0.01` |
 | GPT-6.1 Sol | `$2.00` | 30m: `$2.50`<br/>12h: `$5.00` | `$0.10` | `$10.00` | `$0.01` |
 | GPT-6 Astra | `$10.00` | 30m: `$12.50`<br/>12h: `$25.00` | `$1.00` | `$50.00` | `$0.01` |
@@ -115,7 +118,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 
 **Cache pricing:** `Cache Write` indicates the price charged when cache writing occurs; it does not mean that all models use the same cache retention period. Cache policies, retention periods, long-context pricing, and extended caching capabilities may vary by model. If a model uses special caching rules, 1-hour cache write pricing, or time-based pricing, refer to its model detail page.
 
-**GPT cache-write lifetimes:** GPT-5.6 Sol, Terra, and Luna; GPT-6 Astra, Sol, and Luna; and GPT-6.1 Sol and Terra distinguish 30-minute and 12-hour cache writes, priced at 1.25x and 2.5x the applicable input rate, respectively. These write rates replace the ordinary input charge for those tokens, rather than adding to it. Cache-read rates are the same for both lifetimes.
+**GPT cache-write lifetimes:** GPT-5.6 Sol, Terra, and Luna; GPT-6 Astra, Sol, and Luna; GPT-6.1 Sol and Terra; and GPT-6.2 Astra and Sol distinguish 30-minute and 12-hour cache writes, priced at 1.25x and 2.5x the applicable input rate, respectively. These write rates replace the ordinary input charge for those tokens, rather than adding to it. Cache-read rates are the same for both lifetimes.
 
 **Long-context pricing:** Some models use tiered long-context pricing. The table shows their base-tier rates; see the corresponding model detail pages for thresholds, full prices, and billing rules.
 
@@ -140,7 +143,7 @@ Auto Mode is not a separately billable model. Each request is billed based on th
 
 ### Cache Pricing Notes
 
-- **Cache Write:** The charge for tokens written into the prompt cache; rates depend on the model and cache lifetime. For the GPT-5.6, GPT-6, and GPT-6.1 models listed above, 30-minute writes cost 1.25x the applicable input rate and 12-hour writes cost 2.5x, replacing the ordinary input charge for those tokens. See each model detail page for other models' write rates and lifetime rules.
+- **Cache Write:** The charge for tokens written into the prompt cache; rates depend on the model and cache lifetime. For the GPT-5.6, GPT-6, GPT-6.1, and GPT-6.2 models listed above, 30-minute writes cost 1.25x the applicable input rate and 12-hour writes cost 2.5x, replacing the ordinary input charge for those tokens. See each model detail page for other models' write rates and lifetime rules.
 - **Cache Read:** The discounted cost when cached tokens are reused in subsequent requests.
 - **Example with Caching:** If you use Claude Sonnet 4.6 with 1000 tokens cached:
   - First request (cache write): `1000 × 3.75 = 3,750 credits`

@@ -117,7 +117,7 @@ The site explicitly loads the official docs, pages, debug and sitemap plugins an
 
 ### Production security checks
 
-The container assembles a minimal runtime from the official Alpine Nginx binary and its ELF library dependencies. BusyBox, its `wget`/`ssl_client` tooling, shells, package managers and unused dynamic Nginx modules stay outside the final image. The runtime keeps the original Nginx APK inventory and the installed libraries' package records so Grype still scans the software that ships. CI refreshes the `runtime-files` stage on every build; its Alpine packages are not reused from a cached security-update layer.
+The container serves HTTP behind the TLS-terminating reverse proxy. Alpine's `abuild` verifies the pinned Nginx source archive, builds it without OpenSSL, and records the binary's ELF dependencies in a signed APK. CI refreshes the runtime libraries on every build and rejects OpenSSL shared libraries, BusyBox and shell tooling in the runtime. Grype scans the installed Alpine packages and checks the extracted Nginx binary against upstream advisories. Publishing requires the upstream scan to identify the version reported by the running server. To upgrade Nginx, verify the new upstream release signature and update the version and SHA-512 in `docker/nginx/APKBUILD`.
 
 The container still listens on port 80 and writes logs to `/app/logs`. Its entrypoint directly runs `/usr/sbin/nginx`, preserves graceful `SIGQUIT` shutdown, and validates configuration with an exec-form `nginx -t` during the build. There is no `docker exec ... sh`; inspect logs externally or run `docker run --rm IMAGE -t` to check configuration.
 

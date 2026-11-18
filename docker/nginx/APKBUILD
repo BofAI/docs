@@ -1,0 +1,39 @@
+pkgname=nginx
+pkgver=1.31.8
+pkgrel=0
+pkgdesc="NGINX HTTP server for BofAI docs"
+url="https://nginx.org/"
+arch="all"
+license="BSD-2-Clause"
+makedepends="pcre2-dev zlib-dev"
+source="https://nginx.org/download/nginx-$pkgver.tar.gz"
+
+build() {
+	# TLS terminates at the ingress. The default HTTP build includes gzip,
+	# PCRE and the modules used by nginx.conf, without linking OpenSSL.
+	./configure \
+		--prefix=/var/cache/nginx \
+		--conf-path=/etc/nginx/nginx.conf \
+		--pid-path=/run/nginx.pid \
+		--lock-path=/run/nginx.lock \
+		--error-log-path=/var/log/nginx/error.log \
+		--http-log-path=/var/log/nginx/access.log \
+		--user=nginx --group=nginx \
+		--with-cc-opt="$CFLAGS $CPPFLAGS" \
+		--with-ld-opt="$LDFLAGS -Wl,-z,relro,-z,now"
+	make
+}
+
+check() {
+	test "$(objs/nginx -v 2>&1)" = "nginx version: nginx/$pkgver"
+}
+
+package() {
+	install -Dm755 objs/nginx "$pkgdir/usr/sbin/nginx"
+	install -Dm644 conf/mime.types "$pkgdir/etc/nginx/mime.types"
+	install -Dm644 LICENSE "$pkgdir/usr/share/licenses/nginx/LICENSE"
+}
+
+sha512sums="
+b05679bd30746f41b17343be570ed62b2bb0bc64e15d24d8af307db03d5227ab6b1da57bb4b640ad4d4c854a0c0233285d5ba294caa4ad199c49522883700fce  nginx-1.31.8.tar.gz
+"

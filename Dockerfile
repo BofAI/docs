@@ -8,6 +8,7 @@ WORKDIR /app
 
 # Copy package.json and yarn.lock
 COPY package*.json yarn.lock ./
+COPY scripts/patch-picomatch.mjs ./scripts/
 
 RUN echo "Build environment is ${APP_ENV}"
 
@@ -28,13 +29,26 @@ COPY . .
 # Build the Docusaurus app
 RUN yarn build
 
-# Stage 2: Assemble the Nginx runtime without BusyBox (CVE-2025-60876).
-# Package installation and inspection tools stay in this intermediate stage.
-FROM nginx:1.31-alpine3.24 AS runtime-files
+# Build a signed HTTP-only package. abuild records the compiled ELF dependencies.
+FROM alpine:3.24 AS nginx-build
+RUN apk add --no-cache abuild build-base pcre2-dev zlib-dev \
+    && adduser -D -G abuild builder
+WORKDIR /home/builder/docs/nginx
+COPY docker/nginx/APKBUILD .
+RUN chown builder:abuild . \
+    && su builder -c 'abuild-keygen -an' \
+    && cp /home/builder/.abuild/*.rsa.pub /etc/apk/keys/ \
+    && su builder -c 'abuild' \
+    && mkdir /out \
+    && cp /home/builder/packages/docs/*/nginx-*.apk /home/builder/.abuild/*.rsa.pub /out/ \
+    && rm /home/builder/.abuild/*.rsa
 
-RUN apk upgrade --no-cache \
-    && apk add --no-cache 'brotli-libs>=1.2.1-r0' scanelf
+# Resolve current Alpine libraries for the actual binary on every CI build.
+FROM alpine:3.24 AS runtime-files
+RUN addgroup -S -g 101 nginx \
+    && adduser -S -D -H -u 101 -G nginx -s /sbin/nologin nginx
 
+COPY --from=nginx-build /out/ /tmp/nginx-package/
 COPY scripts/prepare-nginx-runtime.sh /usr/local/bin/prepare-nginx-runtime
 RUN sh /usr/local/bin/prepare-nginx-runtime
 
@@ -43,8 +57,7 @@ COPY default.conf /runtime/etc/nginx/conf.d/default.conf
 COPY --from=build /app/.site-security/nginx-headers.conf /runtime/etc/nginx/snippets/security-headers.conf
 COPY --from=build /app/build /runtime/usr/share/nginx/html
 
-# Stage 3: Only the server, its shared libraries, package inventory and site ship.
-# The upstream shell entrypoint is unnecessary: all configuration is copied above.
+# Only the server, its shared libraries, package inventory and site ship.
 FROM scratch AS runtime
 COPY --from=runtime-files /runtime/ /
 

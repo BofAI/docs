@@ -2,13 +2,13 @@
 
 B.AI 提供统一的大语言模型 API，兼容 OpenAI Chat Completions、OpenAI Responses 和 Anthropic Messages 协议，同时提供兼容 TypeSafe System One 协议的 Decisions API。开发者可以使用同一个 B.AI API Key 接入不同协议，并根据应用或客户端的要求选择对应端点。
 
-B.AI 还提供异步[视频生成 API](./videos.md)，支持创建任务、查询状态及下载已完成的视频。
+B.AI 还提供 [MiniMax 图像生成 API](./minimax-image-generation.md)，支持同步文生图、参考图编辑及可选的 SSE 流式输出；异步[视频生成 API](./videos.md)支持创建任务、查询状态及下载已完成的视频。
 
 [充值 API](./recharges.md) 使用独立的服务地址 `https://chat.b.ai`，用于创建及查询加密货币充值订单。希望通过 Agent 使用，请查看[充值 Skill 使用指南](./recharge-skill-guide.md)。
 
 - **API 版本：** `v1`
 - **生产环境 Base URL：** `https://api.b.ai/v1`
-- **请求格式：** `application/json`
+- **请求格式：** 默认使用 `application/json`；图像编辑还支持 `multipart/form-data`，参考图上传使用 `multipart/form-data`。
 - **字符编码：** UTF-8
 - **文本生成流式传输：** Server-Sent Events（SSE）
 
@@ -52,7 +52,7 @@ curl https://api.b.ai/v1/responses \
 
 B.AI 支持以下两种认证请求头。两者使用平台签发的同一种 API Key，选择其中一种即可。
 
-视频生成请使用[视频生成 API](./videos.md)示例中的 Bearer 认证；本页暂未说明该端点是否支持 `x-api-key`。
+图像生成、编辑、参考图上传及视频生成，请使用 [MiniMax 图像生成 API](./minimax-image-generation.md)和[视频生成 API](./videos.md)示例中的 Bearer 认证；本页暂未说明这些端点是否支持 `x-api-key`。
 
 充值端点同样使用 Bearer 认证，不要将模型服务的 `x-api-key` 替代方式直接套用于充值请求。
 
@@ -94,6 +94,9 @@ x-api-key: <BAI_API_KEY>
 | `POST` | `/responses` | OpenAI Responses | Agent、推理、工具调用及 Codex 等场景 |
 | `POST` | `/chat/completions` | OpenAI Chat Completions | 通用聊天补全及现有 OpenAI 兼容应用 |
 | `POST` | `/messages` | Anthropic Messages | Claude SDK、Claude Code 等 Anthropic 兼容应用 |
+| `POST` | [`/images/generations`](./minimax-image-generation.md) | OpenAI SDK 兼容，参数以模型专属文档为准 | 同步生成 MiniMax 图片，可选 SSE 流式输出 |
+| `POST` | [`/images/edits`](./minimax-image-generation.md) | OpenAI SDK 兼容，参数以模型专属文档为准 | 使用参考图编辑 MiniMax 图片，支持 JSON 或 multipart 表单 |
+| `POST` | [`/files/upload`](./minimax-image-generation.md#上传参考图) | - | 以 `purpose=image_generation_input` 上传参考图，用于 `mm_file://` 引用 |
 | `POST` | [`/videos`](./videos.md) | - | 创建异步视频生成任务 |
 | `GET` | [`/videos/{task_id}`](./videos.md) | - | 查询视频任务的生成及计费状态 |
 | `GET` | [`/videos/{task_id}/content`](./videos.md) | - | 通过鉴权下载已完成生成和结算的视频 |

@@ -14,11 +14,17 @@ B.AI will progressively route requests made using the `DeepSeek-V4-Flash` and `D
   variant="discount"
   title="DeepSeek-V4.1-Flash"
   status="Limited-Time Discount"
-  detail="60% from Oct 4, 10:00 SGT"
+  detail="50% OFF"
 >
-The offer takes effect at 10:00 on October 4, 2026 (SGT, UTC+8).
 
-From that time, the promotional price changes in step with DeepSeek's time-based pricing and is billed at 60% of the applicable Off-Peak or Peak standard price.
+During the promotion, input, output, cache writes, and cache reads are billed at 50% of the applicable Off-Peak or Peak standard reference price. Promotional prices change in step with DeepSeek's time-based pricing.
+
+The promotional prices below are in USD per 1 million tokens.
+
+| Billing Period | Input | Cache Write | Cache Read | Output |
+| :--- | ---: | ---: | ---: | ---: |
+| Off-Peak | `$0.075` | `$0.075` | `$0.0015` | `$0.30` |
+| Peak | `$0.15` | `$0.15` | `$0.003` | `$0.60` |
 
 The pricing table below continues to show standard reference prices. Actual settlement and final billing are subject to the platform display.
 </ActivityCard>

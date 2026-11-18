@@ -195,6 +195,22 @@
     "message": "余额 API",
     "description": "The label for the doc item Balance API in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.doc.GPT-6.2 Astra": {
+    "message": "GPT-6.2 Astra",
+    "description": "The label for the GPT-6.2 Astra model document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.GPT-6.2 Sol": {
+    "message": "GPT-6.2 Sol",
+    "description": "The label for the GPT-6.2 Sol model document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Hy4 Flash": {
+    "message": "Hy4 Flash",
+    "description": "The label for the Hy4 Flash model document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.MiniMax Image Generation API": {
+    "message": "MiniMax 图片生成 API",
+    "description": "The label for the MiniMax image generation API document in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.doc.Gemini 4 Hydrogen": {
     "message": "Gemini 4 Hydrogen",
     "description": "The label for the Gemini 4 Hydrogen model document in sidebar docsSidebar"
