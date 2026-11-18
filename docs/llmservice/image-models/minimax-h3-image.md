@@ -4,6 +4,8 @@
 
 [MiniMax-H3-Image](https://www.minimax.io/blog/minimax-h3-image) is MiniMax's open-weight H3-family model for image generation and editing, released on November 11, 2026. It combines detailed instruction following, multi-reference composition, and native 4K generation for creative and product design workflows.
 
+For generation and editing requests, reference-image uploads, streaming events, and error handling, see the [MiniMax Image Generation API](../api/minimax-image-generation.md).
+
 ## Model Variants
 
 | Model | Description |
