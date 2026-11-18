@@ -1,0 +1,31 @@
+name: Scan upstream Nginx
+description: Check the running binary against upstream advisories and verify that Grype identified it.
+inputs:
+  container:
+    description: Running container serving the site
+    required: true
+  grype-version:
+    description: Grype version used for the runtime image scan
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Locate Grype
+      id: grype
+      uses: anchore/scan-action/download-grype@27805bf3b4e84b4a5c980df22ed233c00390a439 # v7.4.2
+      with:
+        grype-version: ${{ inputs.grype-version }}
+    - name: Scan the running Nginx version
+      shell: bash
+      env:
+        CONTAINER: ${{ inputs.container }}
+        GRYPE: ${{ steps.grype.outputs.cmd }}
+        GRYPE_CHECK_FOR_APP_UPDATE: 'false'
+      run: |
+        scan_dir=$(mktemp -d "$RUNNER_TEMP/nginx-upstream.XXXXXXXX")
+        mkdir "$scan_dir/bin"
+        docker cp "$CONTAINER:/usr/sbin/nginx" "$scan_dir/bin/nginx"
+        version=$(docker exec "$CONTAINER" /usr/sbin/nginx -v 2>&1)
+        report="$scan_dir/report.cdx.json"
+        "$GRYPE" "dir:$scan_dir/bin" --fail-on negligible --only-fixed=false -o table -o "cyclonedx-json=$report"
+        node scripts/check-nginx-scan.mjs "$version" < "$report"
