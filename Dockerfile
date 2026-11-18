@@ -8,6 +8,7 @@ WORKDIR /app
 
 # Copy package.json and yarn.lock
 COPY package*.json yarn.lock ./
+COPY scripts/patch-picomatch.mjs ./scripts/
 
 RUN echo "Build environment is ${APP_ENV}"
 
