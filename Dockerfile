@@ -30,7 +30,7 @@ RUN yarn build
 
 # Stage 2: Assemble the Nginx runtime without BusyBox (CVE-2025-60876).
 # Package installation and inspection tools stay in this intermediate stage.
-FROM nginx:1.31-alpine3.24 AS runtime-files
+FROM nginx:1.31.9-alpine3.24 AS runtime-files
 
 RUN apk upgrade --no-cache \
     && apk add --no-cache 'brotli-libs>=1.2.1-r0' scanelf
