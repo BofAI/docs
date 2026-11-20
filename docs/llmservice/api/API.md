@@ -2,13 +2,13 @@
 
 B.AI provides a unified large language model API compatible with the OpenAI Chat Completions, OpenAI Responses, and Anthropic Messages protocols, as well as a Decisions API compatible with the TypeSafe System One protocol. Use the same B.AI API Key with different protocols and choose the endpoint that matches your application or client.
 
-B.AI also provides an asynchronous [Video Generation API](./videos.md) to create tasks, query their status, and download completed videos.
+B.AI also provides the [MiniMax Image Generation API](./minimax-image-generation.md) for synchronous text-to-image generation and reference-image editing, with optional SSE streaming. The asynchronous [Video Generation API](./videos.md) supports creating tasks, querying their status, and downloading completed videos.
 
 The [Recharge API](./recharges.md) uses a separate service origin, `https://chat.b.ai`, for cryptocurrency recharge orders. To use it through an Agent, see the [Recharge Skill Guide](./recharge-skill-guide.md).
 
 - **API version:** `v1`
 - **Production Base URL:** `https://api.b.ai/v1`
-- **Request format:** `application/json`
+- **Request format:** `application/json` by default; image editing also supports `multipart/form-data`, which is required for reference-image uploads.
 - **Character encoding:** UTF-8
 - **Text-generation streaming:** Server-Sent Events (SSE)
 
@@ -52,7 +52,7 @@ Replace `your-model-id` with a model ID enabled for the selected endpoint.
 
 B.AI supports the following authentication headers. Both use the same platform-issued API Key; choose either one.
 
-For video generation, use the Bearer authentication shown in the [Video Generation API](./videos.md) request example; `x-api-key` support for that endpoint is not documented here.
+For image generation, editing, reference-image uploads, and video generation, use the Bearer authentication shown in the [MiniMax Image Generation API](./minimax-image-generation.md) and [Video Generation API](./videos.md) examples. This reference does not establish `x-api-key` support for those endpoints.
 
 Recharge endpoints also require Bearer authentication. Do not assume that the model service's `x-api-key` alternative applies to recharge requests.
 
@@ -94,6 +94,9 @@ Example:
 | `POST` | `/responses` | OpenAI Responses | Agents, reasoning, tool use, and Codex |
 | `POST` | `/chat/completions` | OpenAI Chat Completions | General chat completions and existing OpenAI-compatible applications |
 | `POST` | `/messages` | Anthropic Messages | Claude SDK, Claude Code, and other Anthropic-compatible clients |
+| `POST` | [`/images/generations`](./minimax-image-generation.md) | OpenAI SDK-compatible; see model-specific parameters | Generate MiniMax images synchronously, with optional SSE streaming |
+| `POST` | [`/images/edits`](./minimax-image-generation.md) | OpenAI SDK-compatible; see model-specific parameters | Edit MiniMax images using references; accepts JSON or multipart form data |
+| `POST` | [`/files/upload`](./minimax-image-generation.md#upload-reference-images) | - | Upload reference images with `purpose=image_generation_input` for `mm_file://` references |
 | `POST` | [`/videos`](./videos.md) | - | Create an asynchronous video-generation task |
 | `GET` | [`/videos/{task_id}`](./videos.md) | - | Query a video task's generation and billing status |
 | `GET` | [`/videos/{task_id}/content`](./videos.md) | - | Download a completed and settled video with authentication |

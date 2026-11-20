@@ -8,6 +8,7 @@ WORKDIR /app
 
 # Copy package.json and yarn.lock
 COPY package*.json yarn.lock ./
+COPY scripts/patch-picomatch.mjs ./scripts/
 
 RUN echo "Build environment is ${APP_ENV}"
 
@@ -28,6 +29,7 @@ COPY . .
 # Build the Docusaurus app
 RUN yarn build
 
+
 # Stage 2: Assemble the Nginx runtime without BusyBox (CVE-2025-60876).
 # Package installation and inspection tools stay in this intermediate stage.
 FROM nginx:1.31.9-alpine3.24 AS runtime-files
@@ -43,8 +45,7 @@ COPY default.conf /runtime/etc/nginx/conf.d/default.conf
 COPY --from=build /app/.site-security/nginx-headers.conf /runtime/etc/nginx/snippets/security-headers.conf
 COPY --from=build /app/build /runtime/usr/share/nginx/html
 
-# Stage 3: Only the server, its shared libraries, package inventory and site ship.
-# The upstream shell entrypoint is unnecessary: all configuration is copied above.
+# Only the server, its shared libraries, package inventory and site ship.
 FROM scratch AS runtime
 COPY --from=runtime-files /runtime/ /
 

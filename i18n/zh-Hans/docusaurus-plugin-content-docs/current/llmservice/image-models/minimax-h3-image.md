@@ -4,6 +4,8 @@
 
 [MiniMax-H3-Image](https://www.minimax.io/blog/minimax-h3-image) 是 MiniMax 于 2026 年 11 月 11 日发布的 H3 系列开放权重图像生成与编辑模型，结合细致的指令遵循、多参考图组合与原生 4K 生成能力，适用于创意制作和产品设计工作流。
 
+文生图、参考图编辑、参考图上传、流式输出和错误处理的调用方式，详见 [MiniMax 图像生成 API](../api/minimax-image-generation.md)。
+
 ## 模型版本
 
 | 模型 | 说明 |

@@ -12,6 +12,27 @@ This section shows active and announced upcoming promotions: free offers appear 
 
 <ActivityCard
   variant="discount"
+  title="Hy4 Flash"
+  status="Limited-Time Discount"
+  detail="50% OFF"
+>
+
+**Offer ends at 12:00 noon on November 30, 2026 (Beijing Time, UTC+8).**
+
+During the promotion, Hy4 Flash token charges are billed at 50% of the standard reference price, including input, output, cache writes, and cache reads. This offer applies only to `hy4-flash`.
+
+| Billing Item | Promotional Price (USD / 1M Tokens) |
+| :--- | ---: |
+| Input | `$0.035` |
+| Cache Write | `$0.035` |
+| Cache Read | `$0.0015` |
+| Output | `$0.1405` |
+
+After the offer ends, usage is billed at the standard reference prices. The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/hy4-flash.md) continue to show original prices. Applicable terms and final charges are subject to the platform display and actual billing records.
+</ActivityCard>
+
+<ActivityCard
+  variant="discount"
   title="Hy4"
   status="Limited-Time Discount"
   detail="50% OFF"
@@ -20,10 +41,12 @@ Hy4 token charges are billed at 50% of the standard reference price, including i
 
 | Billing Item | Promotional Price (USD / 1M Tokens) |
 | :--- | ---: |
-| Input | `$0.42` |
-| Cache Write | `$0.42` |
-| Cache Read | `$0.02` |
-| Output | `$1.25` |
+| Input | `$0.4170` |
+| Cache Write | `$0.4170` |
+| Cache Read | `$0.0210` |
+| Output | `$1.2505` |
+
+Each promotional price is 50% of its official list price, shown to four decimal places.
 
 The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/hy4.md) continue to show standard reference prices. The promotion period, actual settlement prices, and final billing are subject to the platform display.
 </ActivityCard>
@@ -32,11 +55,17 @@ The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./mode
   variant="discount"
   title="DeepSeek-V4.1-Flash"
   status="Limited-Time Discount"
-  detail="60% from Oct 4, 10:00 SGT"
+  detail="50% OFF"
 >
-The offer takes effect at 10:00 on October 4, 2026 (SGT, UTC+8).
 
-From that time, the promotional price changes in step with DeepSeek's time-based pricing and is billed at 60% of the applicable Off-Peak or Peak standard price.
+During the promotion, input, output, cache writes, and cache reads are billed at 50% of the applicable Off-Peak or Peak standard reference price. Promotional prices change in step with DeepSeek's time-based pricing.
+
+The promotional prices below are in USD per 1 million tokens.
+
+| Billing Period | Input | Cache Write | Cache Read | Output |
+| :--- | ---: | ---: | ---: | ---: |
+| Off-Peak | `$0.075` | `$0.075` | `$0.0015` | `$0.30` |
+| Peak | `$0.15` | `$0.15` | `$0.003` | `$0.60` |
 
 The [Pricing and Usage](./pricing-and-usage.md) table and [model details](./models/deepseek-v4-1-flash.md) continue to show standard reference prices. Actual settlement and final billing are subject to the platform display.
 </ActivityCard>
