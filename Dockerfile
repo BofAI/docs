@@ -29,14 +29,26 @@ COPY . .
 # Build the Docusaurus app
 RUN yarn build
 
+# Build a signed HTTP-only package. abuild records the compiled ELF dependencies.
+FROM alpine:3.24 AS nginx-build
+RUN apk add --no-cache abuild build-base pcre2-dev zlib-dev \
+    && adduser -D -G abuild builder
+WORKDIR /home/builder/docs/nginx
+COPY docker/nginx/APKBUILD .
+RUN chown builder:abuild . \
+    && su builder -c 'abuild-keygen -an' \
+    && cp /home/builder/.abuild/*.rsa.pub /etc/apk/keys/ \
+    && su builder -c 'abuild' \
+    && mkdir /out \
+    && cp /home/builder/packages/docs/*/nginx-*.apk /home/builder/.abuild/*.rsa.pub /out/ \
+    && rm /home/builder/.abuild/*.rsa
 
-# Stage 2: Assemble the Nginx runtime without BusyBox (CVE-2025-60876).
-# Package installation and inspection tools stay in this intermediate stage.
-FROM nginx:1.31.9-alpine3.24 AS runtime-files
+# Resolve current Alpine libraries for the actual binary on every CI build.
+FROM alpine:3.24 AS runtime-files
+RUN addgroup -S -g 101 nginx \
+    && adduser -S -D -H -u 101 -G nginx -s /sbin/nologin nginx
 
-RUN apk upgrade --no-cache \
-    && apk add --no-cache 'brotli-libs>=1.2.1-r0' scanelf
-
+COPY --from=nginx-build /out/ /tmp/nginx-package/
 COPY scripts/prepare-nginx-runtime.sh /usr/local/bin/prepare-nginx-runtime
 RUN sh /usr/local/bin/prepare-nginx-runtime
 
