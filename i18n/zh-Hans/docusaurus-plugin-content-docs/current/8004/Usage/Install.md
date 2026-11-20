@@ -75,6 +75,8 @@ npm run build
 
 > **注意**：所有依赖项都会在使用 npm 或 yarn 安装时自动安装。
 
+截至 2026-11-12，TypeScript SDK **1.2.1** 声明 `tronweb: ^6.5.1`。源码锁文件解析为 **6.5.1**，但业务项目全新安装可能解析到 **6.5.2**，应检查应用自己的锁文件，而不是假定与 SDK 仓库一致。覆盖这两个版本的项目根级 HTTP 依赖配置，见 [TronWeb 依赖安全](/zh-Hans/x402/sdk-features/#dependency-security)。
+
 ## 可选依赖 
 
 为了实现更强大的功能：

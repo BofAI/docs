@@ -8,6 +8,38 @@ description: 'Release notes for MCP Server.'
 Release notes for MCP Server.
 
 <div className="changelog-entry">
+<div className="changelog-date">Nov 12, 2026</div>
+<div className="changelog-body">
+
+### TRON MCP source v1.1.10 and v1.1.11: Mainnet RPC configuration and TronWeb 6.5.2
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">MCP</span></div>
+
+- Updated source deployment and upgrade commands to tag `v1.1.11`, which pins TronWeb 6.5.2. npm `latest` remains 1.1.7 as of this review; the source and published-package instructions remain separate.
+- Documented `MCP_MAINNET_RPC_URL`, introduced in v1.1.10: a deployment-only override for all Mainnet RPC hosts, ahead of API-key selection, with HTTP/HTTPS URL validation and a restart required after changes. Nile and Shasta are unaffected.
+- v1.1.10 also restored the keyless Mainnet default to `https://hptg.bankofai.io` and restricted TronGrid credential forwarding to official HTTPS TronGrid origins. `https://tg.ops.sunpump.xyz` is an explicit deployment override example.
+
+👉 [Local Deployment](/McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment/) · [FAQ](/McpServer-Skills/MCP/TRONMCPServer/FAQ/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Nov 11, 2026</div>
+<div className="changelog-body">
+
+### TRON MCP source v1.1.9: deployment and input limits
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">MCP</span></div>
+
+- Source v1.1.9 uses TronWeb 6.5.1, MCP SDK 1.32.2, and patched Zod 4.6.7 while retaining Agent Wallet 2.4.0. npm `latest` remains 1.1.7; the source deployment now pins the reviewed tag and uses `npm ci`.
+- Documented the keyless Mainnet fallback `https://tg.ops.sunpump.xyz`, the 1 MiB uncompressed HTTP JSON limit (413 / 415), and the combined 10,000-element/key tool-input limit.
+- Updated Docker UID/GID 1000 log permissions and root-owned application files, source stdio client configuration, and source wallet-error / protocol-version guidance.
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Oct 27, 2026</div>
 <div className="changelog-body">
 

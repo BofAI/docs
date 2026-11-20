@@ -6,7 +6,7 @@ description: "wallet-cli 命令与支付参数。"
 
 # Wallet CLI 命令参考
 
-以 **4.15.1** 发布包为准。通过命令 schema 查询可用参数。
+以 **4.16.0** 发布包为准。通过命令 schema 查询可用参数。
 
 ```bash
 wallet-cli --json-schema -o json
@@ -19,9 +19,9 @@ wallet-cli bai recharge --json-schema -o json
 - `--network`：指定支付网络；TRON 主网使用 `tron:728126428`。
 - `--account`：选择 wallet-cli 账户。
 - `--token` 或 `--asset`、`--decimals`：按 schema 指定支付资产。
-- `--max-amount` / `--max-raw-amount`：二选一，限制支付数量。`--max-raw-amount` 以最小单位计，必须同时指定 `--token` 或 `--asset`，因为原始数量本身没有单位。`--max-amount` 和 `--max-raw-amount` 都不指定时，已知稳定币默认每笔上限 1 美元；超过该价格的路线会在签名前被排除；所有路线都超过时，命令以 `amount_exceeds_limit` 失败。`--dry-run` 预览不应用这个内置上限，所以预览能通过，实际付款仍可能以 `amount_exceeds_limit` 失败。
+- `--max-amount` / `--max-raw-amount`：二选一，限制支付数量。`--max-raw-amount` 以最小单位计，必须同时指定 `--token` 或 `--asset`，因为原始数量本身没有单位。命令会对首条匹配网络及资产/方案筛选条件的路线检查显式上限；超限时在签名前以 `amount_exceeds_limit` 失败，`--dry-run` 也一样，不会继续寻找后续更便宜的报价。两个显式上限都不指定时，实际付款采用 SDK 内置的已知稳定币允许列表及每笔 1 美元上限。预览不应用这个内置上限，所以可能预览通过，实际付款仍以 `amount_exceeds_limit` 失败。
 - `--dry-run`：读取支付要求，不签名。
-- `--method`、`--header`、`--body` / `--body-file`：HTTP 请求配置。
+- `--method`、`--header`、`--body` / `--body-file`：HTTP 请求配置。默认方法为 `GET`，带任一请求体参数时会在请求发出前以 `invalid_option` 拒绝；需要请求体时须显式指定 `POST` 等方法。`--body-file -` 从 stdin 读取，不能与 `--password-stdin` 或其他读取 stdin 的参数共用输入。
 - `--out <path>`：把响应体按原始字节写入新文件，而不是放在 `data.response`；文件已存在时在发出任何请求前即拒绝。二进制媒体类型（如 `application/octet-stream`、图片、音视频、PDF、压缩包）必须使用 `--out`。
 - `--password-stdin`：实际签名所需主密码的安全输入通道。
 - `-o json`：机器输出。
@@ -42,7 +42,7 @@ wallet-cli bai recharge --json-schema -o json
 | --- | --- | --- |
 | `missing_wallet_address` | 1 | 没有配置 wallet-cli 账户（`--dry-run` 也需要） |
 | `auth_required` | 1 | 实际付款时没有传 `--password-stdin` |
-| `invalid_option` | 2 | `--max-raw-amount` 没带 `--token` / `--asset`、二进制响应没带 `--out`，或同时传了互斥参数 |
+| `invalid_option` | 2 | `--max-raw-amount` 没带 `--token` / `--asset`、`GET` 带请求体、二进制响应没带 `--out`，或同时传了互斥参数 |
 | `output_exists` | 2 | `--out` 指定的文件已存在；未发出任何请求 |
 | `no_matching_requirement` | 1 | 没有路线匹配 `--network` / `--token` / `--asset` / `--scheme`，或在未传 `--max-amount` / `--max-raw-amount` 时，没有路线使用内置支出控制允许的资产；`paymentStatus: "not_sent"` |
 | `amount_exceeds_limit` | 1 | 路线价格高于 `--max-amount`、`--max-raw-amount` 或内置的 1 美元上限；`not_sent` |
@@ -51,7 +51,7 @@ wallet-cli bai recharge --json-schema -o json
 | `provider_error` / `provider_rate_limited` | 1 | 端点或 facilitator 出错或返回 429（有则带 `error.details.retryAfterSeconds`） |
 | `invalid_x402_response` | 1 | 付费响应无法解码；可能带 `paymentStatus: "settled"` |
 
-只有实际付款时 `error.details` 里才会带 `paymentStatus`；`--dry-run` 失败时没有 `error.details`。
+失败时可能在 `error.details` 中携带 `paymentStatus`，包括显式金额上限拒绝 `--dry-run` 预览时的 `not_sent`。部分更早的参数校验或请求失败可能没有这些详情。预览始终不签名、不付款；出现支付状态详情不代表已经发送付款。
 
 ## B.AI 充值
 

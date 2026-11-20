@@ -155,11 +155,13 @@ x402 定义了五种命名支付方案。其中四种可端到端使用；`auth-
 在您的 TypeScript 应用中安装已发布的 npm 包并基于这些包开发，例如：
 
 ```bash
-pnpm add @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.1 @x402/evm@2.29.0 @bankofai/agent-wallet
+pnpm add @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.2 @x402/evm@2.29.0 @bankofai/agent-wallet
 pnpm add @x402/express@2.29.0
 ```
 
-请根据服务框架选择对应包（`@x402/express`、`@x402/hono`、`@x402/fastify` 或 `@x402/next`），版本与 `@x402/core` 一致为 `2.29.0`——`@bankofai/x402-tron` 2.1.1 要求精确的 `@x402/core@2.29.0`。仅在使用 TRON 资源赞助时再安装 `@bankofai/x402-tron-extensions@2.1.1`。[`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) 工作区是 client → server → facilitator 流程的可运行参考，不是应用开发的前置条件。
+请根据服务框架选择对应包（`@x402/express`、`@x402/hono`、`@x402/fastify` 或 `@x402/next`），版本与 `@x402/core` 一致为 `2.29.0`——`@bankofai/x402-tron` 2.1.2 要求精确的 `@x402/core@2.29.0`。仅在使用 TRON 资源赞助时再安装 `@bankofai/x402-tron-extensions@2.1.2`。[`examples/typescript`](https://github.com/BofAI/x402/tree/main/examples/typescript) 工作区是 client → server → facilitator 流程的可运行参考，不是应用开发的前置条件。
+
+业务项目还需自行配置 TronWeb 的 HTTP 依赖覆盖，见[依赖安全](/zh-Hans/x402/sdk-features/#dependency-security)。
 
 升级现有应用时，请同步升级所有官方 `@x402/*` 传输包；若使用 `@x402/core/schemas`，需迁移到 Zod 4，并将 `error.errors` 改为 `error.issues`。详见 [SDK 功能矩阵](/x402/sdk-features/)。
 

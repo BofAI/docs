@@ -8,14 +8,54 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
-<div className="changelog-date">Nov 5, 2026</div>
+<div className="changelog-date">Nov 12, 2026</div>
 <div className="changelog-body">
 
-### Docs 1.5.2: gateway sponsorship and delivery failure handling
+### Wallet CLI 4.16.0 and TronWeb installation guidance
 
-<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">Fix</span></div>
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span></div>
 
-- Documented x402 gateway sponsorship configuration, dedicated timeouts, and delivery failures after successful settlement; bumped the documentation version to 1.5.2. [Details](./x402/)
+- Updated wallet-cli guides to the published 4.16.0 release with its exact TronWeb 6.5.1 dependency, GET body restrictions, and preview error details. The wallet-cli Skill keeps its separate CLI version pin. [Wallet CLI details](./x402/)
+- Clarified the 8004 TypeScript SDK 1.2.1 TronWeb range (`^6.5.1`), its source lockfile (6.5.1), and fresh-install behavior (6.5.2), with application HTTP dependency override guidance. [Installation guide](/8004/Usage/Install/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Nov 12, 2026</div>
+<div className="changelog-body">
+
+### TRON MCP source v1.1.10 and v1.1.11: Mainnet RPC configuration and TronWeb 6.5.2
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">MCP</span></div>
+
+- Updated TRON MCP docs through source v1.1.11: v1.1.10 introduced deployment-specific Mainnet RPC selection, restored the keyless default, and restricted TronGrid credential forwarding; v1.1.11 upgraded TronWeb to 6.5.2. npm `latest` remains 1.1.7. [Details](./mcp-server/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Nov 11, 2026</div>
+<div className="changelog-body">
+
+### TRON MCP source v1.1.9: deployment and input limits
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">MCP</span></div>
+
+- Updated TRON MCP docs for source v1.1.9: dependency fixes, Mainnet RPC fallback, HTTP/tool input limits, and Docker log permissions. npm `latest` remains 1.1.7, so the deployment guide distinguishes source and published behavior. [Details](./mcp-server/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
+<div className="changelog-date">Nov 11, 2026</div>
+<div className="changelog-body">
+
+### SDK 2.1.2 and Facilitator 2.3.1
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span></div>
+
+- Updated SDK installation and dependency guidance to 2.1.2, and Facilitator runtime and 1Password Connect deployment guidance to 2.3.1. [Details](./x402/)
 
 </div>
 </div>
@@ -24,11 +64,11 @@ Product updates and announcements for BANK OF AI.
 <div className="changelog-date">Nov 4, 2026</div>
 <div className="changelog-body">
 
-### x402 docs aligned with the latest SDK, facilitator, and gateway
+### x402 docs aligned with the latest SDK and facilitator
 
 <div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Fix</span></div>
 
-- SDK 2.1.1 / official Core 2.29.0 and Zod 4 migration, facilitator 2.3.0 EVM nonce recovery and runtime requirements, and gateway 1.0.5 deployment and HTTP 400 responses for consumed Permit2 authorizations. [Details](./x402/)
+- SDK 2.1.1 / official Core 2.29.0 and Zod 4 migration, facilitator 2.3.0 EVM nonce recovery and runtime requirements. [Details](./x402/)
 
 </div>
 </div>
@@ -54,7 +94,7 @@ Product updates and announcements for BANK OF AI.
 
 <div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Fix</span></div>
 
-- The 2.1.0 package set on official `@x402/core` 2.28.0 (with `@bankofai/x402-tron-extensions` for TRON resource sponsoring), decimal TRON IDs, the official facilitator's 10-per-minute anonymous limit on both `/verify` and `/settle`, Nile resource sponsoring, and the remaining API Catalog CI rules. [Details](./x402/)
+- The 2.1.0 package set on official `@x402/core` 2.28.0 (with `@bankofai/x402-tron-extensions` for TRON resource sponsoring), decimal TRON IDs, the official facilitator's 10-per-minute anonymous limit on both `/verify` and `/settle`, and Nile resource sponsoring. [Details](./x402/)
 
 </div>
 </div>
@@ -197,7 +237,7 @@ Product updates and announcements for BANK OF AI.
 
 <div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">SKILLS</span></div>
 
-- A follow-up audit across the x402 SDK, CLI, Catalog, Gateway, Facilitator, Agent Wallet, and Skills repositories. The API Catalog samples were rebuilt from the real provider files — the previous ones omitted the now-required `assetTransferMethod` and would have failed validation if copied — and the invalid `subTitle` field was removed. Payload, retry-scope, and TRON-only capability claims were corrected; EVM approval gas sponsoring is now documented with its actual preconditions; `resolveWallet()` and `SignOptions` were added to the Agent Wallet SDK guide. [x402 details](./x402/) · [Agent Wallet details](./agent-wallet/) · [SKILLS details](./skills/)
+- A follow-up audit across the x402 SDK, CLI, Facilitator, Agent Wallet, and Skills repositories. Payload, retry-scope, and TRON-only capability claims were corrected; EVM approval gas sponsoring is now documented with its actual preconditions; `resolveWallet()` and `SignOptions` were added to the Agent Wallet SDK guide. [x402 details](./x402/) · [Agent Wallet details](./agent-wallet/) · [SKILLS details](./skills/)
 
 </div>
 </div>
@@ -210,7 +250,7 @@ Product updates and announcements for BANK OF AI.
 
 <div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span><span className="changelog-tag">Agent Wallet</span><span className="changelog-tag">SKILLS</span></div>
 
-- Updated the English and Simplified Chinese docs against the current x402 SDK, API Catalog, Gateway, CLI, Facilitator, Agent Wallet, and Skills repositories. Corrections include the Catalog `assetTransferMethod` contract, the client-only status of `auth-capture`, the Gateway authorization/settlement flow, Privy's `--network` exception, and the `x402-payment` skill's exact `x402-cli@1.0.1` requirement. Repository links, MDX syntax, and broken internal links were also repaired. [x402 details](./x402/) · [Agent Wallet details](./agent-wallet/) · [SKILLS details](./skills/)
+- Updated the English and Simplified Chinese docs against the current x402 SDK, CLI, Facilitator, Agent Wallet, and Skills repositories. Corrections include the client-only status of `auth-capture`, Privy's `--network` exception, and the `x402-payment` skill's exact `x402-cli@1.0.1` requirement. Repository links, MDX syntax, and broken internal links were also repaired. [x402 details](./x402/) · [Agent Wallet details](./agent-wallet/) · [SKILLS details](./skills/)
 
 </div>
 </div>
@@ -276,7 +316,7 @@ Product updates and announcements for BANK OF AI.
 <div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">Docs</span></div>
 
 - **x402 SDK 1.1.0** — explicit payment flows (`upfront` / `escrow` on the wire as `extra.paymentFlow`, `authorization` by default), client spend controls on by default (`$1` per-payment cap, default-asset allowlist), payment-selection policies and lifecycle hooks, EVM smart-account support (ERC-7702, allowlisted ERC-6492), and a 90-second `HTTPFacilitatorClient` timeout. Upgrade all 11 packages together; Node.js 22+. [SDK Feature Matrix](../x402/sdk-features/)
-- **Docs corrections** — removed the obsolete facilitator-fee material (`base_fee`, `extra.fee`, `/fee/quote`); the official service limits anonymous `/settle` calls to 1 request per IP per minute; GasFree is no longer described as auto-preferred — the CLI takes the first advertised requirement matching your filters, so pass `--scheme exact_gasfree` to force it; TRON Shasta is now documented as signed by the SDK/CLI but **not** settled by the official facilitator (use Nile or self-host); the CLI page now states its **pinned** dependencies — CLI 1.0.2 still bundles the `@bankofai/x402-*` SDK packages at 1.0.1 (`@bankofai/x402-gateway` at 1.0.2), so it does not yet carry the 1.1.0 client spend controls; and the Skills pages now install with `npx skills add … -g`. [x402 docs](../)
+- **Docs corrections** — removed the obsolete facilitator-fee material (`base_fee`, `extra.fee`, `/fee/quote`); the official service limits anonymous `/settle` calls to 1 request per IP per minute; GasFree is no longer described as auto-preferred — the CLI takes the first advertised requirement matching your filters, so pass `--scheme exact_gasfree` to force it; TRON Shasta is now documented as signed by the SDK/CLI but **not** settled by the official facilitator (use Nile or self-host); the CLI page now states its **pinned** dependencies — CLI 1.0.2 still bundles the `@bankofai/x402-*` SDK packages at 1.0.1, so it does not yet carry the 1.1.0 client spend controls; and the Skills pages now install with `npx skills add … -g`. [x402 docs](../)
 
 </div>
 </div>
@@ -298,11 +338,11 @@ Product updates and announcements for BANK OF AI.
 <div className="changelog-date">Jul 30, 2026</div>
 <div className="changelog-body">
 
-### x402 CLI v1.0.2 · Catalog — Base support
+### x402 CLI v1.0.2 — Base support
 
 <div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">Base</span></div>
 
-- **Base is live in the CLI** — `eip155:8453` and `eip155:84532` both support USDC. The service catalog currently publishes Base Mainnet routes on `eip155:8453` only. Base settles under `exact` using EIP-3009 authorization instead of Permit2.
+- **Base is live in the CLI** — `eip155:8453` and `eip155:84532` both support USDC. Base settles under `exact` using EIP-3009 authorization instead of Permit2.
 - **Agent Wallet is now the CLI's default payer** — `pay` signs with your active wallet, so no private key in an environment variable. With wallets configured but none active, the CLI stops before signing rather than choosing for you. [Details](./x402/)
 - Paid requests no longer follow HTTP redirects, keeping `PAYMENT-SIGNATURE` from reaching another origin.
 
@@ -347,12 +387,11 @@ Product updates and announcements for BANK OF AI.
 <div className="changelog-date">Jul 20, 2026</div>
 <div className="changelog-body">
 
-### x402 CLI v1.0.1 · Catalog
+### x402 CLI v1.0.1
 
 <div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">TRON</span></div>
 
 - **x402 CLI v1.0.1** — TRON **GasFree** payments (`exact_gasfree`, no TRX needed), canonical CAIP-2 network IDs (legacy `tron:nile` rejected), and `settled` vs `delivered` reporting. Built on x402 SDK 1.0.1. [Details](./x402/)
-- **x402 Catalog** — routes now support `exact_gasfree` on TRON; canonical CAIP-2 required; legacy `fee` / `feeConfig` fields dropped. [Details](./x402/)
 
 </div>
 </div>
@@ -379,7 +418,7 @@ Product updates and announcements for BANK OF AI.
 
 <div className="changelog-tags"><span className="changelog-tag">New Release</span><span className="changelog-tag">x402</span><span className="changelog-tag">CLI</span></div>
 
-- **`v1.0.0` — first stable release** of `@bankofai/x402-cli`, a TypeScript command-line client for x402 payments: `pay` any x402-protected URL, `serve` a local paywall endpoint, `roundtrip` for end-to-end smoke tests, plus `gateway` and `catalog` for provider files and the service catalog.
+- **`v1.0.0` — first stable release** of `@bankofai/x402-cli`, a TypeScript command-line client for x402 payments: `pay` any x402-protected URL, `serve` a local paywall endpoint, `roundtrip` for end-to-end smoke tests.
 - Built on the published `@bankofai/x402-core` / `x402-evm` / `x402-tron` SDK 1.0 packages; `scheme=exact` with Permit2.
 - Networks: TRON (`tron:mainnet` / `tron:nile` / `tron:shasta`) and BSC (`eip155:56` / `eip155:97`). [Wallet CLI guide](/wallet-cli/quickstart/)
 
@@ -393,7 +432,7 @@ Product updates and announcements for BANK OF AI.
 
 <div className="changelog-tags"><span className="changelog-tag">Update</span><span className="changelog-tag">New Model</span><span className="changelog-tag">x402</span></div>
 
-- **SKILLS** — added guidance for the **`exact_gasfree` scheme** on TRON, and moved the API catalog to a new endpoint. Re-install if you pinned an older version. [Details](./skills/)
+- **SKILLS** — added guidance for the **`exact_gasfree` scheme** on TRON. Re-install if you pinned an older version. [Details](./skills/)
 - **LLM Service** — added the **GPT-5.6** family: `sol`, `terra`, and `luna`. [Details](./llm-service/)
 
 </div>

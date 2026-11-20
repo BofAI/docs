@@ -78,7 +78,45 @@ Quick usage examples can be found in [OfficialFacilitator](./OfficialFacilitator
 
 If you need full control over the settlement wallet, RPC endpoints, energy management, or which networks and schemes are registered — or you have specific privacy or compliance requirements — you can deploy your own Facilitator service.
 
-The current source release is **v2.3.0** (2026-11-03): official `@x402/core`, `@x402/evm`, and `@x402/extensions` **2.29.0**, TRON mechanism and independent resource extension **2.1.1**, and an explicit `@bankofai/agent-wallet` **3.1.0-beta.1** pin. Source installations require Node.js **24.22.1+ (24.x) or 26.12.1+**; Docker and CI pin 24.22.1, and Node.js 22 is no longer supported. Installation overrides pin Zod to **4.6.6**; preserve that override when refreshing dependencies. See the [Facilitator v2.3.0 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.0/README.md) for deployment details.
+The current source release is **v2.3.2** (2026-11-13): official `@x402/core`, `@x402/evm`, and `@x402/extensions` **2.29.0**, TRON mechanism and independent resource extension **2.1.2**, and an explicit `@bankofai/agent-wallet` **3.1.0-beta.1** pin. Source installations require Node.js **24.22.1+ (24.x) or 26.12.1+**; Docker and CI pin 24.22.2, and Node.js 22 is no longer supported. Installation overrides pin Zod to **4.6.7**; preserve that override when refreshing dependencies. See the [Facilitator v2.3.2 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.2/README.md) for deployment details.
+
+This release uses a single **TronWeb 6.5.1** installation. The service's installation overrides pin its Axios to **1.21.1** and require follow-redirects **^1.16.3**; the release lockfile resolves follow-redirects to **1.16.3**. Hono Node Server is updated to **2.1.6**. Install from the release lockfile and preserve its overrides when updating dependencies.
+
+This deployment section describes the complete `BofAI/x402-facilitator` service. The minimal SDK example at `examples/typescript/facilitator/basic` exposes only `/verify`, `/settle`, and `/supported` and does not require a database; the database and DevCenter requirements below apply to the complete service.
+
+### Runtime secrets
+
+Both built-in development and production configurations now use **1Password Connect** (`onepassword.mode: connect`). Inject `OP_CONNECT_HOST` and `OP_CONNECT_TOKEN` at runtime; the token must have read access to the referenced vaults. The Connect endpoint must be reachable from the container. Use HTTPS, or HTTP only over a trusted private connection. Do not commit credentials to the configuration.
+
+1Password references use `vault/item/field` format. TronGrid and GasFree credentials prefer their supported environment variables; TronGrid also checks its YAML value before 1Password. Database configuration follows a separate rule: an explicit `onepassword.database_url` takes precedence over `database.url`, and resolution failures stop startup without falling back to the YAML URL. When supplying database credentials through separate 1Password fields, configure `onepassword.database_user` and `onepassword.database_password` together and keep credentials out of the URL.
+
+A custom configuration can select `onepassword.mode: service_account`, using `OP_SERVICE_ACCOUNT_TOKEN` or `onepassword.token`; omitting `mode` still defaults to `service_account`, and the two modes do not share credential fallbacks. Select the built-in production configuration with `FACILITATOR_SERVICE_ENV=prod`, or supply a custom file with `FACILITATOR_CONFIG_PATH`.
+
+### DevCenter API key database
+
+v2.3.2 requires a separately configured DevCenter PostgreSQL connection for API key reads: use `onepassword.api_key_database_url`, or `api_key_database.url` in a custom configuration. The 1Password reference takes precedence, and resolution failure stops startup without falling back to the local URL. The main database continues to hold settlements, PostgreSQL sponsoring ledgers, and Permit2 advisory locks. Facilitator no longer creates `sellers` / `api_keys_plus` or reads keys from the main database. DevCenter owns key issuance and revocation.
+
+The built-in configurations use these references; provision the fields in each vault before upgrading:
+
+| Setting | Development | Production |
+|---------|-------------|------------|
+| `onepassword.api_key_database_url` | `x402-facilitator-dev/psql/devcenter-url` | `x402-facilitator/psql/devcenter-url` |
+| `onepassword.sponsoring_owner` | `x402-facilitator-dev/sponsoring/owner` | `x402-facilitator/sponsoring/owner` |
+| `onepassword.agent_wallet_password` | `x402-facilitator-dev/wallet/agent_wallet_password` | `x402-facilitator/wallet/agent_wallet_password` |
+
+The DevCenter DSN must specify a database name and connection role. Supported schemes are `postgresql://`, `postgres://`, and `postgresql+asyncpg://`. A complete DSN may supply its own credentials; a URL without credentials reuses the paired `onepassword.database_user` and `onepassword.database_password` references. Grant the role database `CONNECT`, schema `USAGE`, and `SELECT` on the `key`, `seller_id`, and `is_active` columns of `api_keys_plus`. Preserve each key's original `seller_id` so existing settlement history stays associated with the correct seller.
+
+Each process uses at most one dedicated connection for key reads and enforces read-only transactions. TLS defaults to `api_key_database.ssl_mode: verify-full`; add a private CA to Node's trust store with `NODE_EXTRA_CA_CERTS`. Local testing can explicitly set `ssl_mode: disable`. Do not include TLS parameters (such as `sslmode` or `sslrootcert`), `options`, `statement_timeout`, or `query_timeout` in the DSN; configure TLS through `api_key_database.ssl_mode`.
+
+### Sponsoring Owner and wallet-cli password
+
+The built-in configurations now load the Nile sponsoring Owner through `onepassword.sponsoring_owner` and validate its TRON address at startup. Custom configurations may set `resource_sponsoring.owner` to an address or an individual `vault/item/field` reference. With multiple networks, at most one entry may omit `owner` and use the global reference; the remaining entries must each specify their own value.
+
+The `wallet_cli` provider requires a compatible wallet-cli executable. In each wallet entry that should use the configured 1Password password, set `params.password` in `wallets_config.json` to the literal marker `facilitator:1password`. All entries using this marker share the password cache selected by `onepassword.agent_wallet_password`.
+
+When that reference is configured, Facilitator loads the password before accepting requests; a failed read or empty password stops startup. The password remains cached in process memory until exit, without automatic refresh: **restart Facilitator after changing it**. Signing uses a single-use copy passed to wallet-cli through stdin and cleared afterward. The subprocess does not inherit `OP_*` or `AGENT_WALLET_PASSWORD` environment variables. Normal shutdown clears the cache and outstanding copies. The legacy `AGENT_WALLET_PASSWORD` variable is no longer used for this password-loading flow.
+
+### EVM nonce recovery
 
 The v2.3.0 EVM wallet bridge shares an in-process nonce queue per network and wallet, retaining each unmined transaction's hash and signed bytes. If a transaction is dropped from the pool or its broadcast response is lost, the next send first rebroadcasts the originals in nonce order. Only an explicit insufficient-funds, fee-cap, or `transaction underpriced` node rejection of a fresh transaction releases that reservation. Failed recovery blocks new signing until the original is accepted or the confirmed account nonce advances. This state is in memory; it provides neither restart recovery nor cross-process nonce coordination.
 
@@ -94,7 +132,7 @@ Quick usage examples can be found in [Quickstart for Sellers](../getting-started
 
 ## Facilitator API Endpoints
 
-Whether using the official service or a self-hosted instance, the Facilitator provides the following standard API endpoints:
+The complete `x402-facilitator` service provides the following API endpoints, whether hosted officially or deployed privately:
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -109,13 +147,31 @@ Whether using the official service or a self-hosted instance, the Facilitator pr
 | GET | `/metrics` | Prometheus metrics (operational; exposed on the main port only when monitoring shares it) |
 | ALL | `/mainnet/*` · `/nile/*` | GasFree Open API transparent proxy (HMAC-signed) — used internally by the TRON `exact_gasfree` scheme |
 
-Record-query failures use these codes: `404 not_found` when no record matches, `400 invalid_identity_query` for a partial identity query (any of `network`/`nonce`/`asset`/`payer` without the required `network`+`nonce` pair), and `400 missing_identity_or_auth` when `/payments` is called with neither identity parameters nor an API Key.
+Record-query failures use these codes: `404 not_found` when no record matches, `400 invalid_identity_query` for a partial identity query (any of `network`/`nonce`/`asset`/`payer` without the required `network`+`nonce` pair), and `400 missing_identity_or_auth` when `/payments` has neither identity parameters nor valid API key authentication.
 
 `/verify` and `/settle` keep the x402 response shape (`invalidReason` / `errorReason`). Besides the SDK's own reasons, the service returns: `400 invalid_json` or `missing_parameters` for a malformed body; `413` `{"code":"body_too_large","message":…}` (default limit 1 MiB); `429` `{"error":"rate_limit_exceeded"}`; `403 sponsor_auth_required`, `sponsor_network_disabled` or `sponsor_pay_to_invalid` when a request carries `trc20ApprovalResourceSponsoring` that the deployment will not sponsor; and `503` with `Retry-After` for transient conditions (`sponsor_owner_busy`, `sponsor_recovery_in_progress`, `sponsor_storage_unavailable`, and on `/settle` only `permit2_authorization_busy`, `permit2_storage_unavailable`, `permit2_nonce_check_unavailable`). On `/settle`, a Permit2 authorization whose nonce is already consumed fails with `permit2_nonce_consumed` (HTTP 200) without broadcasting a new transaction; a malformed one fails `/settle` with `400 permit2_invalid_authorization`. Sponsored approvals can also fail at the protocol level (HTTP 200, in `invalidReason` / `errorReason`): `approval_transaction_reused` (the signed approve was already used for a different payment request), `sponsor_approval_lifetime_exceeded` (the signed approve is valid for longer than 630 seconds) and, on `/settle` only, `sponsor_existing_delegation`. An unexpected failure returns `500 internal_error`. The GasFree proxy is served only under `/mainnet` and `/nile` (any other path gets a plain `404`), and answers `502 bad_gateway` when the upstream fails or its response is too large.
 
 > There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee at all. Payment records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`), not a client-supplied payment ID.
 
 v2.3.0 also turns missing or non-object TRON `exact` authorizations into protocol verification rejections: `isValid: false` with `invalidReason: "invalid_exact_tron_payload_authorization"`, instead of HTTP 500. This compatibility handling does not suppress genuine RPC failures.
+
+---
+
+## API key cache and authentication availability
+
+Startup must complete an initial active-key read from DevCenter before the service starts listening. The in-memory snapshot then refreshes every `rate_limit.api_key_refresh_interval` seconds (default `60`; built-in production configuration `5`). Key creation and revocation affect authentication only after the next successful refresh; **they do not take effect immediately**. Each process maintains its own cache, so replicas need not apply changes at the same time; the refresh interval also excludes database read time.
+
+While the cache is fresh, an unrecognized key (a typo, a newly created key not yet synced, or a revoked key after syncing) is treated as anonymous, **not uniformly rejected with HTTP 401**. Verification and settlement use anonymous limits, sponsorship requiring authentication is rejected, identifier-based record lookups have no seller filter, and a seller-feed request to `/payments` returns `400 missing_identity_or_auth`. A successful request alone therefore does not prove that the key was recognized.
+
+If refreshes fail, the last successful snapshot remains usable for up to three refresh intervals (`15` seconds with the built-in production configuration, measured from the last successful read). Once that age is reached, the following requests carrying a nonempty `X-API-KEY` receive HTTP `503` until a refresh succeeds, rather than falling back to anonymous access:
+
+| Endpoint | HTTP 503 response body |
+|----------|------------------------|
+| `POST /verify` | `{"isValid":false,"invalidReason":"api_key_auth_unavailable"}` |
+| `POST /settle` | `{"success":false,"errorReason":"api_key_auth_unavailable"}` |
+| `GET /payments`, `GET /payments/tx/{tx_hash}` | `{"code":"api_key_auth_unavailable","message":"API key authentication is temporarily unavailable"}` |
+
+These authentication errors have no `Retry-After` header and are returned before settlement or record creation. Clients should retain the API key and retry with backoff; do not remove the header to bypass the error. Requests without a key continue under the existing anonymous policy. `/health`, `/supported`, and `/sponsoring/ready` are not blocked by this authentication gate, so a successful `/health` response does not establish that key authentication is available.
 
 ---
 

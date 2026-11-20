@@ -14,7 +14,7 @@
 
 1. **检查 Node.js 版本**。声明的版本要求取决于你运行服务端的方式：
    - **`npx -y @bankofai/mcp-server-tron`** 运行的是 npm 包 `1.1.7`，它声明的是 Node.js `>=20`。
-   - **源码检出**的 `main`（tag `v1.1.8`）要求 22.23.4+（22.x）或 24.22.1+（24.x）。其 `package.json` 里的版本号仍是 `1.1.7`，因此服务端上报的版本也是 `1.1.7`。
+   - **源码 v1.1.11** 要求 22.23.4+（22.x）或 24.22.1+（24.x），服务端上报 `1.1.11`。截至 2026-11-12，npm `latest` 仍为 `1.1.7`；TronWeb 6.5.2、主网 RPC 覆盖，以及依赖和输入限制修复请使用源码构建。
 
    无论哪种方式，都推荐使用 2026 年 10 月的安全更新版本 22.23.4+ 或 24.22.1+：
    ```bash
@@ -50,6 +50,10 @@
    ```
 
 3. **防火墙拦截**。如果你从另一台机器访问本地 HTTP 服务，检查防火墙是否允许该端口的入站连接。
+
+### HTTP 413 / 415 或工具参数过大
+
+源码 v1.1.11 中，**413** 表示 JSON 请求体超过 **1 MiB**，请拆分请求；**415** 表示请求体被压缩，请发送未压缩 JSON。工具参数中的**数组元素与对象键合计超过 10,000 个**时，MCP SDK 也会在工具处理函数运行前拒绝。较大的 ABI 或 multicall 批次可能触发此限制，请缩小批次；这些拒绝发生在工具执行之前。
 
 ### 写入工具出现但返回钱包错误 {#write-tools-wallet-error}
 
@@ -87,10 +91,10 @@ TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行所�
 | `Password required for local_secure wallets` | 钱包目录中有钱包，但没有解析到密码——既没有 `runtime_secrets.json`，也没有 `AGENT_WALLET_PASSWORD`。 |
 | `No active wallet set.` | 解析到了密码，但钱包目录中没有任何钱包。此时私钥和助记词环境变量都会被忽略——请用 Agent Wallet 创建或导入钱包，或去掉密码以走环境变量私钥路径。 |
 | `MAC mismatch — wrong password or corrupted file` | 找到了密码，但与 keystore 不匹配（见下一节）。 |
-| `Wallet not configured.` | Agent Wallet 连配置都无法加载——例如 `runtime_secrets.json` 或 `wallets_config.json` 格式错误。使用 agent-wallet 2.3.x（源码检出按 `package-lock.json` 安装的版本）时，在走到环境变量路径时（见表格下方说明）同时设置了私钥和助记词，也会得到这条错误。 |
-| `Provide only one of AGENT_WALLET_PRIVATE_KEY or AGENT_WALLET_MNEMONIC` | 使用 agent-wallet 2.4.0（`npx -y @bankofai/mcp-server-tron`，即 npm `1.1.7`、依赖 `^2.3.0`，当前安装的版本）时，走到了环境变量路径，且同时设置了私钥（`AGENT_WALLET_PRIVATE_KEY` 或 `TRON_PRIVATE_KEY`）和助记词（`AGENT_WALLET_MNEMONIC` 或 `TRON_MNEMONIC`）。服务端会原样透传这段文本，例如 `Error transferring TRX: Provide only one of …`，或 `get_wallet_address` 返回的 `Error: Provide only one of …`。去掉其中一个即可。 |
+| `Wallet not configured.` | Agent Wallet 连配置都无法加载——例如 `runtime_secrets.json` 或 `wallets_config.json` 格式错误。 |
+| `Provide only one of AGENT_WALLET_PRIVATE_KEY or AGENT_WALLET_MNEMONIC` | 使用 agent-wallet 2.4.0（源码 v1.1.11 锁定的版本，npm 1.1.7 的 `^2.3.0` 也解析到此版本）时，走到了环境变量路径，且同时设置了私钥（`AGENT_WALLET_PRIVATE_KEY` 或 `TRON_PRIVATE_KEY`）和助记词（`AGENT_WALLET_MNEMONIC` 或 `TRON_MNEMONIC`）。服务端会原样透传这段文本，例如 `Error transferring TRX: Provide only one of …`，或 `get_wallet_address` 返回的 `Error: Provide only one of …`。去掉其中一个即可。 |
 
-两个 agent-wallet 版本都从 `AGENT_WALLET_PRIVATE_KEY` 或其别名 `TRON_PRIVATE_KEY` 读取私钥，从 `AGENT_WALLET_MNEMONIC` 或其别名 `TRON_MNEMONIC` 读取助记词。只有走到环境变量路径——解析不到任何密码**且**钱包目录里一个钱包都没有——时才会读取这些变量；否则它们会被静默忽略，上面两种「同时设置」引起的错误也都不会出现。
+Agent Wallet 2.4.0 从 `AGENT_WALLET_PRIVATE_KEY` 或其别名 `TRON_PRIVATE_KEY` 读取私钥，从 `AGENT_WALLET_MNEMONIC` 或其别名 `TRON_MNEMONIC` 读取助记词。只有走到环境变量路径——解析不到任何密码**且**钱包目录里一个钱包都没有——时才会读取这些变量；否则它们会被静默忽略，上面的「同时设置」错误也不会出现。
 
 前两种情况的解决方法：
 
@@ -116,7 +120,9 @@ TRON MCP Server 使用 [Agent Wallet](../../../Agent-Wallet/Intro.md) 进行所�
 
 2. **Key 是否仍然有效**。登录 [trongrid.io](https://www.trongrid.io/) 确认 API Key 处于激活状态。
 
-3. **密钥从环境变量读取，不走请求头。** 服务端从自身进程环境读取 `TRONGRID_API_KEY`，再以 `TRON-PRO-API-KEY` 转发给上游；它完全不解析进入的请求头。因此无法按请求给托管的云服务传 API Key——需要自己的配额，请在本地或自建实例上设置 `TRONGRID_API_KEY`。
+3. **密钥从环境变量读取，不走请求头。** 服务端从自身进程环境读取 `TRONGRID_API_KEY`，完全不解析进入的请求头。源码 v1.1.11 仅在上游为官方 HTTPS TronGrid 源时附加 `TRON-PRO-API-KEY`。因此无法按请求给托管的云服务传 API Key——需要自己的配额，请在本地或自建实例上设置 `TRONGRID_API_KEY`。
+
+4. **检查主网 RPC 覆盖。** 源码 v1.1.11 中，`MCP_MAINNET_RPC_URL` 优先于 Key。覆盖为其他 RPC 源时不会发送 TronGrid 凭据。取消覆盖可恢复自动选择，或在部署环境中配置所需端点；修改后须重启服务。详见[网络配置](./LocalPrivatizedDeployment.md#覆盖主网-rpc源码-v1111)。
 
 ---
 
@@ -183,7 +189,7 @@ AI 可能将 TRON MCP Server 的能力与其他区块链工具混淆。如果它
 
 几种常见原因和对策：
 
-- **没有 TronGrid API Key**：未设置 `TRONGRID_API_KEY` 时，`v1.1.8` 起的源码检出中主网请求走 BANK OF AI 回退节点 `https://hptg.bankofai.io`，npm `1.1.7`（`npx` 运行的版本）则不带 Key 访问 `https://api.trongrid.io`。配置免费的 API Key 后，两个版本都会以你自己的配额访问 `https://api.trongrid.io`
+- **没有 TronGrid API Key**：未设置 `TRONGRID_API_KEY` 且未覆盖主网 RPC 时，源码 v1.1.11 中主网请求走 `https://hptg.bankofai.io`，npm `1.1.7`（`npx` 运行的版本）则不带 Key 访问 `https://api.trongrid.io`。配置免费的 API Key 后会使用你自己的 TronGrid 配额；源码 v1.1.11 需保持 `MCP_MAINNET_RPC_URL` 未设置，才会自动选择 TronGrid。
 - **复杂的多工具工作流**：某些操作（如钱包全貌分析）需要多个串行调用，等待是正常的
 - **使用测试网开发**：Nile 和 Shasta 测试网通常响应更快
 - **提示词更明确**：减少 AI 的探索性调用——直接告诉它用哪个工具、查哪个网络
@@ -220,17 +226,18 @@ npx -y @bankofai/mcp-server-tron@latest
 npx clear-npx-cache
 ```
 
-如果你是从源码克隆的：
+源码部署请拉取 tag，选择核对过的版本（目前为 `v1.1.11`），再使用其锁文件重新构建：
 
 ```bash
 cd mcp-server-tron
-git pull
-npm install
+git fetch --tags origin
+git checkout v1.1.11
+npm ci
 npm run build
 ```
 
 ### 支持哪个 MCP 协议版本？
 
-协议版本由 `@modelcontextprotocol/sdk` 协商决定，服务端对它的依赖是 `^1.22.0`；源码检出的 `package-lock.json` 锁定为 1.27.1。MCP 协议版本 **2025-11-25** 需要 SDK 1.24.1 或更高版本——SDK 1.22.0–1.24.0 最高只支持 2025-06-18。客户端请求的更早协议版本同样可以使用。
+协议版本由 `@modelcontextprotocol/sdk` 协商决定。源码 v1.1.11 依赖 `^1.32.2`，锁定为 **1.32.2**；npm 1.1.7 声明 `^1.22.0`，实际 SDK 版本取决于安装时的锁文件。MCP 协议版本 **2025-11-25** 需要 SDK 1.24.1 或更高版本——SDK 1.22.0–1.24.0 最高只支持 2025-06-18。客户端请求的更早协议版本同样可以使用。
 
 

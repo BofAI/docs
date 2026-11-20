@@ -171,12 +171,11 @@ Release notes for SKILLS.
 <div className="changelog-date">Jul 10, 2026</div>
 <div className="changelog-body">
 
-### GasFree guidance and a new catalog URL
+### GasFree guidance
 
 <div className="changelog-tags"><span className="changelog-tag">Update</span><span className="changelog-tag">x402</span></div>
 
 - Skills now document the **`exact_gasfree` payment scheme** on TRON — pay for an x402 service without keeping TRX around for energy.
-- The **API catalog endpoint moved to a new URL**. Skills and the facilitator config were updated together; re-install if you pinned an older version.
 
 </div>
 </div>

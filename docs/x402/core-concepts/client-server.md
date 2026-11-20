@@ -62,7 +62,7 @@ In the x402 protocol, a typical interaction between client and server proceeds a
 2. **Server Requires Payment**: Responds with `402 Payment Required`, including payment details in the `PAYMENT-REQUIRED` header (Base64-encoded).
 3. **Client Submits Payment**: Generates a signature and resends the request with the signed payload in the `PAYMENT-SIGNATURE` header (Base64-encoded).
 4. **Server Validates Payment**: Calls the Facilitator service to verify the received payment payload.
-5. **Server Delivers Resource, then Settles**: Under the default `authorization` payment flow — the flow every built-in scheme declares — the resource server runs its handler first and settles through the Facilitator afterwards, returning the resource with settlement confirmation (transaction hash) in the `PAYMENT-RESPONSE` header. A server that opts into a settle-first flow, and the BANK OF AI gateway, invert this step: they settle first and deliver afterwards.
+5. **Server Delivers Resource, then Settles**: Under the default `authorization` payment flow — the flow every built-in scheme declares — the resource server runs its handler first and settles through the Facilitator afterwards, returning the resource with settlement confirmation (transaction hash) in the `PAYMENT-RESPONSE` header. A server that opts into a settle-first flow reverses this order: it settles first and delivers afterwards.
 
 <ThemedImage
   alt="x402 communication flow between client, server and Facilitator"

@@ -1,5 +1,7 @@
 # Introduction
 
+> **Version status (2026-11-12):** the reviewed source tag is **v1.1.11**; npm `latest` remains **1.1.7**. v1.1.11 upgrades TronWeb to 6.5.2 and retains the deployment-specific Mainnet RPC override and TronGrid credential restrictions introduced in v1.1.10, plus the dependency fixes, bounded tool inputs, and HTTP and Docker limits from v1.1.9. Use the [source deployment instructions](/McpServer-Skills/MCP/TRONMCPServer/LocalPrivatizedDeployment/#option-b-clone-from-source) for these updates.
+
 ## What is TRON MCP Server?
 
 TRON MCP Server is a bridge that connects AI assistants with the TRON blockchain. Built on the [Model Context Protocol (MCP)](../Intro.md) standard, it lets you interact with the blockchain using natural language — checking balances, initiating transfers, calling smart contracts — without writing any code.

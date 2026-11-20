@@ -140,11 +140,13 @@ Deposit a small amount of official USDC on Base Mainnet. The resource server onl
 Install official Core, the Express adapter and the TRON/EVM payment schemes in your TypeScript API project:
 
 ```bash
-pnpm add express @x402/core@2.29.0 @x402/express@2.29.0 @bankofai/x402-tron@2.1.1 @x402/evm@2.29.0
+pnpm add express @x402/core@2.29.0 @x402/express@2.29.0 @bankofai/x402-tron@2.1.2 @x402/evm@2.29.0
 pnpm add -D tsx   # to run the TypeScript entry point below
 ```
 
-Use the framework package that matches your server (`@x402/express`, `@x402/hono`, `@x402/fastify`, or `@x402/next`), at the same `2.29.0` as `@x402/core` — `@bankofai/x402-tron` 2.1.1 declares `@x402/core@2.29.0` as an exact peer dependency. Install `@x402/evm` only for BSC/Base routes. Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
+Use the framework package that matches your server (`@x402/express`, `@x402/hono`, `@x402/fastify`, or `@x402/next`), at the same `2.29.0` as `@x402/core` — `@bankofai/x402-tron` 2.1.2 declares `@x402/core@2.29.0` as an exact peer dependency. Install `@x402/evm` only for BSC/Base routes. Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
+
+For TronWeb HTTP dependency overrides in your own application, see [Dependency security](/x402/sdk-features/#dependency-security).
 
 When upgrading an existing application, align all official `@x402/*` transports too. If you use `@x402/core/schemas`, migrate to Zod 4 and replace `error.errors` with `error.issues`; see the [SDK Feature Matrix](/x402/sdk-features/).
 
@@ -355,6 +357,8 @@ new HTTPFacilitatorClient({
   }),
 });
 ```
+
+> **Key refreshes and retries:** Key creation and deletion take effect after the next successful Facilitator cache refresh (every 5 seconds in the built-in production configuration, independently per process). While the cache is fresh, unrecognized keys use anonymous access, so a successful call does not prove authentication. In v2.3.2, keyed verification and settlement requests receive `503 api_key_auth_unavailable` if the cache expires while refreshes are failing. Retain the authentication header and retry with backoff; see [authentication availability](../../core-concepts/facilitator#api-key-cache-and-authentication-availability).
 
 > ⚠️ **Security reminder:** Your API Key is a service credential — **treat it like a password and never commit it to Git**.
 

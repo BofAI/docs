@@ -18,7 +18,7 @@ Agent-wallet 3.x is TypeScript only. The Python package `bankofai-agent-wallet` 
 
 **Check Your Node.js Version**
 
-Use Node.js `^22.23.4 || ^24.22.1 || >=26.12.1` — the October 2026 security releases. This is the `engines` range on the source `main` branch; the published npm `3.0.0` still declares `>=18.0.0`, but wallet-cli `4.15.1` itself declares the same range. On `main`, when the `wallet_cli` wallet type launches wallet-cli through a JavaScript entrypoint with the current Node (a locally installed package, or an `AGENT_WALLET_WALLET_CLI_PATH` pointing at a `.js` file), it checks the same range first; a `wallet-cli` executable found on `PATH` is not checked. (In the published `3.0.0`, that entrypoint check only requires Node.js 20+.) Check your current version:
+Use Node.js `^22.23.4 || ^24.22.1 || >=26.12.1` — the October 2026 security releases. This is the `engines` range on the source `main` branch; the published npm `3.0.0` still declares `>=18.0.0`, but wallet-cli `4.16.0` itself declares the same range. On `main`, when the `wallet_cli` wallet type launches wallet-cli through a JavaScript entrypoint with the current Node (a locally installed package, or an `AGENT_WALLET_WALLET_CLI_PATH` pointing at a `.js` file), it checks the same range first; a `wallet-cli` executable found on `PATH` is not checked. (In the published `3.0.0`, that entrypoint check only requires Node.js 20+.) Check your current version:
 
 ```bash
 node -v

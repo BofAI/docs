@@ -11,7 +11,7 @@ description: "安装 wallet-cli 并预览 x402 支付。"
 ## 安装和检查
 
 ```bash
-npm install -g @tron-walletcli/wallet-cli@4.15.1
+npm install -g @tron-walletcli/wallet-cli@4.16.0
 wallet-cli --version
 wallet-cli x402 pay --json-schema -o json
 ```
@@ -33,27 +33,17 @@ wallet-cli list -o json
 wallet-cli current -o json
 ```
 
-## 查询目录
-
-```bash
-wallet-cli x402 provider-list -o json
-wallet-cli x402 provider-show dia -o json
-wallet-cli x402 endpoint-list dia -o json
-```
-
-从结果中选择网络对应的 `x402Routes[].url`，替换路径占位符。不要根据目录 FQN 猜测 Gateway URL。
-
 ## 预览支付
 
-以下命令访问 DIA 的报价接口，**不签名、不付款**。支付预览仍需要已配置账户。
+先按[卖家快速入门](/zh-Hans/x402/getting-started/quickstart-for-sellers/)在 4021 端口启动配置为 Nile 的 TRON 资源服务端，或使用你控制的测试接口。以下命令读取支付要求，**不签名、不付款**。支付预览仍需要已配置账户。
 
 ```bash
-wallet-cli x402 pay https://x402-gateway.bankofai.io/providers/dia-price-tron/v1/quotation/BTC \
+wallet-cli x402 pay http://localhost:4021/credit \
   --method GET \
-  --network tron:728126428 \
+  --network tron:3448148188 \
   --token USDT \
   --scheme exact \
-  --max-amount 0.01 \
+  --max-amount 1 \
   --dry-run -o json
 ```
 

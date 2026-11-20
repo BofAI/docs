@@ -14,7 +14,7 @@ This is the most common issue. Troubleshoot in the following order:
 
 1. **Check Node.js version**. What is declared depends on how you run the server:
    - **`npx -y @bankofai/mcp-server-tron`** runs the npm package `1.1.7`, which declares Node.js `>=20`.
-   - **A source checkout** of `main` (tag `v1.1.8`) requires 22.23.4+ (22.x) or 24.22.1+ (24.x). Its `package.json` still says `1.1.7`, so the server reports version `1.1.7` there too.
+   - **Source v1.1.11** requires 22.23.4+ (22.x) or 24.22.1+ (24.x), and reports version `1.1.11`. The npm `latest` tag remains `1.1.7` as of 2026-11-12; use the source build for TronWeb 6.5.2, the Mainnet RPC override, and the dependency and input-limit fixes.
 
    Either way, we recommend the October 2026 security releases, 22.23.4+ or 24.22.1+:
    ```bash
@@ -50,6 +50,10 @@ When using HTTP mode (`npx -y @bankofai/mcp-server-tron --http`, or `npm run sta
    ```
 
 3. **Firewall blocking**. If you're accessing the local HTTP service from another machine, check whether the firewall allows inbound connections on that port.
+
+### HTTP 413 / 415 or oversized tool arguments
+
+On source v1.1.11, **413** means the JSON body exceeds **1 MiB**; split the request. **415** means the body is compressed; send uncompressed JSON. The MCP SDK also rejects tool arguments exceeding a combined **10,000 array elements and object keys** before the tool handler runs. A large ABI or multicall batch can hit that limit; reduce the batch. These rejections occur before tool execution.
 
 ### Write tools appear but return a wallet error {#write-tools-wallet-error}
 
@@ -87,10 +91,10 @@ TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for all wall
 | `Password required for local_secure wallets` | Wallets exist in the wallet directory, but no password resolved — neither `runtime_secrets.json` nor `AGENT_WALLET_PASSWORD`. |
 | `No active wallet set.` | A password resolved, but the wallet directory holds no wallets. In this case the private-key and mnemonic variables are ignored — create or import a wallet with Agent Wallet, or remove the password so the env-var path is used. |
 | `MAC mismatch — wrong password or corrupted file` | A password was found but does not match the keystore (see the next section). |
-| `Wallet not configured.` | Agent Wallet could not even load its configuration — for example a malformed `runtime_secrets.json` or `wallets_config.json`. With agent-wallet 2.3.x (what a source checkout's `package-lock.json` installs), setting both a private key and a mnemonic also ends here, when the env-var path is reached (see below the table). |
-| `Provide only one of AGENT_WALLET_PRIVATE_KEY or AGENT_WALLET_MNEMONIC` | A private key (`AGENT_WALLET_PRIVATE_KEY` or `TRON_PRIVATE_KEY`) and a mnemonic (`AGENT_WALLET_MNEMONIC` or `TRON_MNEMONIC`) are both set and the env-var path is reached, with agent-wallet 2.4.0 — what `npx -y @bankofai/mcp-server-tron` (npm `1.1.7`, dependency `^2.3.0`) installs today. The server passes the text through, e.g. `Error transferring TRX: Provide only one of …`, or `Error: Provide only one of …` from `get_wallet_address`. Unset one of the two. |
+| `Wallet not configured.` | Agent Wallet could not even load its configuration — for example a malformed `runtime_secrets.json` or `wallets_config.json`. |
+| `Provide only one of AGENT_WALLET_PRIVATE_KEY or AGENT_WALLET_MNEMONIC` | A private key (`AGENT_WALLET_PRIVATE_KEY` or `TRON_PRIVATE_KEY`) and a mnemonic (`AGENT_WALLET_MNEMONIC` or `TRON_MNEMONIC`) are both set and the env-var path is reached, with agent-wallet 2.4.0 — the version locked by source v1.1.11 and also resolved by npm 1.1.7 (`^2.3.0`). The server passes the text through, e.g. `Error transferring TRX: Provide only one of …`, or `Error: Provide only one of …` from `get_wallet_address`. Unset one of the two. |
 
-Both agent-wallet versions read the private key from `AGENT_WALLET_PRIVATE_KEY` or its alias `TRON_PRIVATE_KEY`, and the mnemonic from `AGENT_WALLET_MNEMONIC` or its alias `TRON_MNEMONIC`. They read these env vars only on the env-var path — when no password resolves **and** the wallet directory holds no wallets. Otherwise the variables are silently ignored, and neither of the both-set errors above can occur.
+Agent Wallet 2.4.0 reads the private key from `AGENT_WALLET_PRIVATE_KEY` or its alias `TRON_PRIVATE_KEY`, and the mnemonic from `AGENT_WALLET_MNEMONIC` or its alias `TRON_MNEMONIC`. It reads these env vars only on the env-var path — when no password resolves **and** the wallet directory holds no wallets. Otherwise the variables are silently ignored, and the both-set error above cannot occur.
 
 To resolve the first two:
 
@@ -116,7 +120,9 @@ The API Key is configured but requests are still rate-limited — check the foll
 
 2. **Is the Key still active?** Log into [trongrid.io](https://www.trongrid.io/) to confirm your API Key is active.
 
-3. **The key is read from the environment, not from a request header.** The server reads `TRONGRID_API_KEY` from its own process environment and forwards it upstream as `TRON-PRO-API-KEY`; it does not inspect incoming request headers at all. A per-request API key against the hosted cloud service is therefore not possible — run a local or self-hosted instance with `TRONGRID_API_KEY` set if you need your own quota.
+3. **The key is read from the environment, not from a request header.** The server reads `TRONGRID_API_KEY` from its own process environment; it does not inspect incoming request headers at all. Source v1.1.11 attaches the upstream `TRON-PRO-API-KEY` header only for official HTTPS TronGrid origins. A per-request API key against the hosted cloud service is therefore not possible — run a local or self-hosted instance with `TRONGRID_API_KEY` set if you need your own quota.
+
+4. **Check the Mainnet RPC override.** On source v1.1.11, `MCP_MAINNET_RPC_URL` takes precedence over the key. An override to another RPC origin receives no TronGrid credential. Unset the override to restore automatic selection, or configure the intended endpoint in the deployment environment; restart the server after changes. See [network configuration](./LocalPrivatizedDeployment.md#mainnet-rpc-override-source-v1111).
 
 ---
 
@@ -183,7 +189,7 @@ If this keeps happening, remind the AI: "Please only use tools provided by TRON 
 
 Several common causes and solutions:
 
-- **No TronGrid API Key**: Without `TRONGRID_API_KEY`, Mainnet requests go to the BANK OF AI fallback endpoint `https://hptg.bankofai.io` on a source checkout from `v1.1.8`, and to `https://api.trongrid.io` without a key on npm `1.1.7` (what `npx` runs). Setting a free API Key sends them to `https://api.trongrid.io` under your own quota in both versions
+- **No TronGrid API Key**: Without `TRONGRID_API_KEY` or a Mainnet RPC override, Mainnet requests go to `https://hptg.bankofai.io` on source v1.1.11, and to `https://api.trongrid.io` without a key on npm `1.1.7` (what `npx` runs). Setting a free API Key sends them to `https://api.trongrid.io` under your own quota; on source v1.1.11, `MCP_MAINNET_RPC_URL` must be unset for that automatic selection.
 - **Complex multi-tool workflows**: Some operations (like full wallet analysis) require multiple sequential calls — waiting is normal
 - **Use testnet for development**: Nile and Shasta testnets are usually faster
 - **Be more specific in prompts**: Reduce the AI's exploratory calls — tell it directly which tool to use and which network to query
@@ -220,16 +226,17 @@ To clear the npx cache instead, delete `~/.npm/_npx` (and, if needed, run `npm c
 npx clear-npx-cache
 ```
 
-If you cloned from source:
+For the source deployment, fetch tags and select the reviewed tag (currently `v1.1.11`), then rebuild with its lockfile:
 
 ```bash
 cd mcp-server-tron
-git pull
-npm install
+git fetch --tags origin
+git checkout v1.1.11
+npm ci
 npm run build
 ```
 
 ### What MCP protocol version is supported?
 
-The protocol version is negotiated by `@modelcontextprotocol/sdk`, which the server depends on as `^1.22.0`; a source checkout's `package-lock.json` pins 1.27.1. MCP protocol version **2025-11-25** requires SDK 1.24.1 or later — SDK 1.22.0–1.24.0 top out at 2025-06-18. Older protocol versions requested by the client are also accepted.
+The protocol version is negotiated by `@modelcontextprotocol/sdk`. Source v1.1.11 depends on `^1.32.2` and locks **1.32.2**; npm 1.1.7 declares `^1.22.0`, so its resolved SDK depends on the installation lockfile. MCP protocol version **2025-11-25** requires SDK 1.24.1 or later — SDK 1.22.0–1.24.0 top out at 2025-06-18. Older protocol versions requested by the client are also accepted.
 

@@ -1,5 +1,9 @@
 # Local Private Deployment
 
+:::info Source and npm versions
+As of **2026-11-12**, source tag **v1.1.11** and npm `latest` **1.1.7** differ. The Mainnet RPC override, dependency overrides, input limits, and Docker behavior described for v1.1.11 below apply to the source build. Use **Option B** for those updates; `npx ...@latest` still runs 1.1.7.
+:::
+
 ## What is Local Private Deployment?
 
 Local private deployment means running TRON MCP Server on your own machine, giving your AI assistant **full read and write access** to the TRON blockchain.
@@ -29,7 +33,7 @@ Of course, all read-only query capabilities are also fully retained.
 
 | Requirement | Description |
 | :--- | :--- |
-| **Node.js** | Recommended: 22.23.4+ (22.x) or 24.22.1+ (24.x), the October 2026 security releases ([download](https://nodejs.org/)). A source checkout of `main` (tag `v1.1.8`, Option B below) requires this range (its `package.json` still says `1.1.7`, so the server reports version `1.1.7`); the npm package `1.1.7` that `npx` runs (Option A) declares `>=20`. |
+| **Node.js** | Source v1.1.11 requires **22.23.4+ (22.x) or 24.22.1+ (24.x)** ([download](https://nodejs.org/)); 20.x, 23.x, 25.x, and 26.x are outside its declared range. npm 1.1.7 declares `>=20`, but use the supported 22.x/24.x security baseline for either route. |
 | **TronGrid API Key** | Optional but recommended ([apply here](https://www.trongrid.io/)) |
 
 Verify your Node.js version:
@@ -65,7 +69,7 @@ TRON MCP Server uses [Agent Wallet](../../../Agent-Wallet/Intro.md) for wallet m
 | Runtime Wallet Switching | Yes |
 | Recommended For | All use cases |
 
-> TRON MCP Server depends on Agent Wallet **2.x** (`@bankofai/agent-wallet ^2.3.0`). The [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md) describes 3.x, which this server does not use yet — follow the 2.x commands on this page.
+> TRON MCP Server depends on Agent Wallet **2.x** (source v1.1.11: `@bankofai/agent-wallet ^2.4.0`, locked to 2.4.0; npm 1.1.7: `^2.3.0`). The [Agent-Wallet documentation](../../../Agent-Wallet/Intro.md) describes 3.x, which this server does not use yet — follow the 2.x commands on this page.
 
 First, install the Agent Wallet 2.x CLI:
 
@@ -98,27 +102,22 @@ Without a saved or exported password, unlocking a `local_secure` wallet fails wh
 
 If you already have a private key you want to use, set it via the `AGENT_WALLET_PRIVATE_KEY` environment variable (Agent Wallet also accepts the alias `TRON_PRIVATE_KEY`, and a mnemonic via `AGENT_WALLET_MNEMONIC` or `TRON_MNEMONIC`). Note the precedence: the env-var path is only reached when no password resolves (neither `runtime_secrets.json` nor `AGENT_WALLET_PASSWORD`) **and** the wallet directory holds no wallets. If you already ran Path 1, saved a runtime password, or ran the Openclaw installer, the keystore path wins and these variables are silently ignored.
 
+Enter the key locally with hidden terminal input so its value is not written into shell history:
+
 ```bash
-export AGENT_WALLET_PRIVATE_KEY=your_private_key_here
+printf 'Private key (hidden input): '
+read -r -s AGENT_WALLET_PRIVATE_KEY
+printf '\n'
+export AGENT_WALLET_PRIVATE_KEY
 ```
 
 :::tip
-To make this persist across terminal sessions, add it to your shell configuration file:
+Verify only whether the variable is present; never print its value. For persistent storage, use the encrypted Agent Wallet setup in Path 1 instead of writing private keys into shell startup files.
 
 ```bash
-echo 'export AGENT_WALLET_PRIVATE_KEY=your_private_key' >> ~/.zshrc   # zsh (macOS default)
-echo 'export AGENT_WALLET_PRIVATE_KEY=your_private_key' >> ~/.bashrc  # bash (Linux default)
-source ~/.zshrc   # or source ~/.bashrc — takes effect immediately without restarting the terminal
-```
-
-Verify the environment variable is set:
-
-```bash
-echo $AGENT_WALLET_PRIVATE_KEY
+node -e 'console.log(Boolean(process.env.AGENT_WALLET_PRIVATE_KEY))'
 ```
 :::
-
-
 
 ---
 
@@ -126,33 +125,47 @@ echo $AGENT_WALLET_PRIVATE_KEY
 
 #### TronGrid API Key
 
-On a source checkout from `v1.1.8`, the API Key also decides which Mainnet endpoint the server talks to. For frequent on-chain queries, it is recommended to configure a free TronGrid API Key:
+On source v1.1.11, the API Key decides the default Mainnet endpoint when `MCP_MAINNET_RPC_URL` is unset. For frequent on-chain queries, it is recommended to configure a free TronGrid API Key:
 
 ```bash
 # Add to ~/.zshrc or ~/.bashrc
 export TRONGRID_API_KEY="<your-TronGrid-API-Key>"
 ```
 
-Register for free at [trongrid.io](https://www.trongrid.io/). How the variable affects each network (the only difference between versions is Mainnet without a key):
+Register for free at [trongrid.io](https://www.trongrid.io/). Without a Mainnet RPC override, the defaults are:
 
 | Network | `TRONGRID_API_KEY` set | `TRONGRID_API_KEY` not set |
 | :--- | :--- | :--- |
-| **Mainnet** | `https://api.trongrid.io`, with your key sent as `TRON-PRO-API-KEY` (your own quota) | Source checkout from `v1.1.8`: falls back to the BANK OF AI endpoint `https://hptg.bankofai.io`. npm `1.1.7` (what `npx` runs): `https://api.trongrid.io` without a key |
+| **Mainnet** | `https://api.trongrid.io`, with your key sent as `TRON-PRO-API-KEY` (your own quota) | Source v1.1.11: falls back to `https://hptg.bankofai.io`. npm `1.1.7` (what `npx` runs): `https://api.trongrid.io` without a key |
 | **Nile** | `https://nile.trongrid.io` (key header also sent) | `https://nile.trongrid.io` |
 | **Shasta** | `https://api.shasta.trongrid.io` (key header also sent) | `https://api.shasta.trongrid.io` |
 
 The server works without a key, but keyless requests to TronGrid (Mainnet on npm `1.1.7`, and Nile / Shasta) share TronGrid's public rate limits, so high-frequency use can hit rate-limit errors. Set one if you want Mainnet traffic to go to TronGrid under your own quota.
+
+#### Mainnet RPC Override (Source v1.1.11)
+
+Set `MCP_MAINNET_RPC_URL` in the server's deployment environment to override all three Mainnet RPC hosts: full node, solidity node, and event server. It takes precedence over `TRONGRID_API_KEY`, applies to `mainnet`, `tron`, and `trx`, and leaves Nile and Shasta unchanged. It cannot be set through MCP tool arguments.
+
+For example, a test deployment can explicitly use this Mainnet RPC:
+
+```bash
+export MCP_MAINNET_RPC_URL="https://tg.ops.sunpump.xyz"
+```
+
+This still connects to Mainnet. Leave the variable unset in production to retain the default selection above. Only absolute HTTP/HTTPS URLs without credentials, query strings, or fragments are accepted; a base path is allowed. Restart the server after changing the setting because RPC clients are cached. For Docker, set it in `.env.docker` or pass `-e MCP_MAINNET_RPC_URL=https://tg.ops.sunpump.xyz` to `docker run`.
+
+Source v1.1.11 attaches `TRON-PRO-API-KEY` only when the configured RPC URL has an official HTTPS TronGrid origin (`https://api.trongrid.io`, `https://nile.trongrid.io`, or `https://api.shasta.trongrid.io`). Other RPC origins receive no TronGrid key, even if `TRONGRID_API_KEY` is set.
 
 
 ---
 
 ### Step 3: Local Private Deployment
 
-Multiple deployment options are available. For most users, Option A is sufficient.
+Use Option B for the reviewed v1.1.11 source and its security updates. Option A runs the older published npm package.
 
-#### Option A: Run directly with npx (Recommended)
+#### Option A: Run the published package with npx
 
-No need to clone the repository — run the latest version directly via `npx`. This is also the command used in the [Configuration Notes](#configuration-notes) below.
+No clone is needed. This runs the published npm package (currently 1.1.7), rather than source v1.1.11. This is also the command used in the [Configuration Notes](#configuration-notes) below.
 
 ```bash
 npx -y @bankofai/mcp-server-tron
@@ -160,14 +173,16 @@ npx -y @bankofai/mcp-server-tron
 
 #### Option B: Clone from Source
 
-For developers who need to modify the source code or contribute:
+Build the reviewed source tag with its lockfile and security overrides:
 
 ```bash
-git clone https://github.com/BofAI/mcp-server-tron.git
+git clone --branch v1.1.11 --depth 1 https://github.com/BofAI/mcp-server-tron.git
 cd mcp-server-tron
-npm install
+npm ci
 npm run build
 ```
+
+Source v1.1.11 pins **TronWeb 6.5.2**, uses MCP SDK **^1.32.2** and Zod **^4.6.7**, and keeps Agent Wallet on **2.x**. Its root overrides patch TronWeb's Axios and force Agent Wallet's parser onto the server's Zod 4; preserve `package-lock.json` and the overrides. The npm 1.1.7 package does not include these source-project overrides.
 
 #### Option C: Run in HTTP Mode
 
@@ -188,6 +203,8 @@ npm run start:http
 ```
 
 This will start a local stateless Streamable HTTP server (default: `http://localhost:3001/mcp`) that your MCP client can connect to. `GET` and `DELETE` on `/mcp` return `405` (SSE is not supported), and `GET /` returns server information. Each request is handled independently — no session state is maintained between requests.
+
+In source v1.1.11, HTTP accepts **uncompressed JSON up to 1 MiB**. Compressed request bodies return **415**; oversized bodies return **413**. In both stdio and HTTP modes, tool arguments have a combined limit of **10,000 array elements and object keys**, checked before schema validation. These are source v1.1.11 limits, not guarantees for npm 1.1.7 or an unverified hosted deployment.
 
 You can customize the port and host via environment variables:
 
@@ -212,17 +229,22 @@ EOF
 #    the Dockerfile is not part of the published npm package)
 docker build -t mcp-server-tron .
 
+mkdir -p logs
+# Ensure the host logs directory is writable by UID/GID 1000:1000.
+
 # 3. Run the container with --env-file
 docker run -d \
   -p 3001:3001 \
-  -v $(pwd)/logs:/app/logs \
+  -v "$(pwd)/logs:/app/logs" \
   --env-file .env.docker \
   mcp-server-tron
 ```
 
 :::warning
-Never pass API keys with `-e KEY=value` on the command line — the value will appear in shell history and `docker inspect` output. Always use `--env-file` with a file excluded from version control (add `.env.docker` to your `.gitignore`).
+Use `--env-file` with a file excluded from version control (add `.env.docker` to `.gitignore`) to keep literal keys out of shell commands. Docker administrators can still inspect container environment variables; an env file does not hide them from `docker inspect`.
 :::
+
+The v1.1.11 image runs as **`node` (UID/GID 1000:1000)**. Application files are root-owned; within `/app`, only `/app/logs` is writable by the service. A bind mount replaces the image directory permissions, so prepare host log-directory ownership before starting. Do not mount host credential directories or the Docker socket; host log collectors must avoid following links into credential files.
 
 The container exposes port 3001 and writes date-stamped logs to the mounted `logs/` directory. A health check endpoint is available at `http://localhost:3001/health`.
 
@@ -234,7 +256,8 @@ The Docker image is designed for read-only cloud deployments. For local write op
 
 If you're configuring an MCP client to point to your local server:
 
-- **If running via npx or source**: Use the appropriate command in your MCP client's configuration (e.g., `command: npx` with `args: ["-y", "@bankofai/mcp-server-tron"]`)
+- **Published npm package (Option A)**: Use `command: "npx"` with `args: ["-y", "@bankofai/mcp-server-tron@latest"]` (currently 1.1.7).
+- **Source stdio build (Option B)**: Use `command: "node"` with `args: ["/absolute/path/to/mcp-server-tron/build/index.js"]`; replace the path with your checkout's absolute path after building. This runs the source build directly.
 - **If running in HTTP mode or Docker**: Point your client to `http://localhost:3001/mcp` via the HTTP URL configuration option
 
 If your MCP client does not inherit system environment variables, you'll need to configure them explicitly in the client settings. **Make sure any configuration file storing credentials is never shared or committed to version control**.

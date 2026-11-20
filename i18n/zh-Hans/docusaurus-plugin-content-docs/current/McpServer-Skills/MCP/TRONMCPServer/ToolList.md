@@ -15,6 +15,10 @@ TRON MCP Server 提供 **97 个工具**、**6 个提示词模板**和 **1 个资
 写入工具始终会出现在 AI 的可用工具列表中，但会在执行时检查钱包是否已配置。如果没有配置钱包，调用写入工具会返回钱包错误（见[常见问题](./FAQ.md#wallet-error-messages)）。在**只读模式**（云服务或 `--readonly` 标志）下，29 个写入工具和 2 个写入类提示词模板（`prepare_transfer`、`interact_with_contract`）不会被注册，只剩 68 个读取工具和 4 个提示词模板。
 :::
 
+:::info 源码 v1.1.11 输入限制
+全部工具参数中的数组元素与对象键**合计最多 10,000 个**，在 schema 校验前检查；较大的 ABI 与 multicall 参数也计入此限制。HTTP 入口另外只接受 **1 MiB** 以内的未压缩 JSON。这些限制针对源码 v1.1.11；截至 2026-11-12，npm `latest` 仍为 1.1.7。
+:::
+
 :::tip network 参数
 大多数工具都有一个可选的 `network` 参数，用于指定目标网络（`mainnet`、`nile` 或 `shasta`；`tron` / `trx` 等同于 `mainnet`，`testnet` 等同于 `nile`）。不指定时默认走主网。在测试阶段，建议每次都明确指定 `nile`，避免意外操作主网。
 :::

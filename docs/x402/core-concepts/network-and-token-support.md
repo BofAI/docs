@@ -23,7 +23,7 @@ Use the exported constants from `@bankofai/x402-tron` (`TRON_MAINNET`, `TRON_NIL
 | **TRON Shasta**  | `tron:2494104990`  | `TRON_SHASTA`  | TRON Shasta Testnet |
 | **TRON Nile**    | `tron:3448148188`  | `TRON_NILE`    | TRON Nile Testnet |
 
-> **TRON ID format**: since `@bankofai/x402-tron` 2.0.0 the SDK constants use decimal CAIP-2 references. The older hexadecimal forms (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) are still accepted as input aliases and are normalized to the decimal form. The official facilitator reports the decimal identifiers in `/supported`; the API Catalog still lists the hexadecimal forms.
+> **TRON ID format**: since `@bankofai/x402-tron` 2.0.0 the SDK constants use decimal CAIP-2 references. The older hexadecimal forms (`tron:0x2b6653dc`, `tron:0xcd8690dc`, `tron:0x94a9059e`) are still accepted as input aliases and are normalized to the decimal form. The official facilitator reports the decimal identifiers in `/supported`.
 
 ---
 
@@ -46,7 +46,7 @@ Base uses canonical EIP-155 identifiers on the x402 wire:
 
 | Network Name | Protocol ID | Description |
 | :----------- | :---------- | :---------- |
-| **Base Mainnet** | `eip155:8453` | Production network; published by the API Catalog |
+| **Base Mainnet** | `eip155:8453` | Production network |
 | **Base Sepolia** | `eip155:84532` | CLI/SDK test network |
 
 Base Mainnet uses official USDC and the `exact` scheme with EIP-3009 authorization. The payer signs a `transferWithAuthorization` message off-chain; no Permit2 approval is required.
@@ -68,7 +68,7 @@ The protocol uses secure signing mechanisms to ensure tamper-resistant message a
 | **BSC Mainnet**     | **Mainnet** | **Production network** for real-value assets |
 | **BSC Testnet**     | **Testnet** | **Recommended testnet** for BSC development |
 | **Base Mainnet**    | **Mainnet** | **Production network** using official USDC |
-| **Base Sepolia**    | **Testnet** | CLI/SDK testing; not published in the API Catalog |
+| **Base Sepolia**    | **Testnet** | CLI/SDK testing |
 
 ---
 

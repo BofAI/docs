@@ -40,7 +40,7 @@ BANK OF AI x402 完全兼容 Coinbase x402 的核心 HTTP 支付协议与交互�
 
 ![BANK OF AI 产品矩阵](/img/devnotes/bankofai-product-matrix.svg)
 
-在这套分层中，x402 是基础设施与标准层里的开放支付协议，与负责 Agent 身份和信誉的 8004 并列；MCP 则定义 Agent 与工具之间的上下文交互方式。x402 Gateway、x402 Facilitator、x402 Recharge Server、Agent Wallet、Skills 及各类 MCP Server 位于中间层，将这些协议转化为可直接调用的能力。各层可独立使用，也可按场景组合：需要支付时使用 x402，需要验证身份或信誉时使用 8004，需要连接工具或链上服务时通过 MCP。
+在这套分层中，x402 是基础设施与标准层里的开放支付协议，与负责 Agent 身份和信誉的 8004 并列；MCP 则定义 Agent 与工具之间的上下文交互方式。x402 Facilitator、x402 Recharge Server、Agent Wallet、Skills 及各类 MCP Server 位于中间层，将这些协议转化为可直接调用的能力。各层可独立使用，也可按场景组合：需要支付时使用 x402，需要验证身份或信誉时使用 8004，需要连接工具或链上服务时通过 MCP。
 
 ## 3. BANK OF AI x402 的架构与支付流程
 

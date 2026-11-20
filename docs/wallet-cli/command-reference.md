@@ -6,7 +6,7 @@ description: "Commands and payment options for wallet-cli."
 
 # Wallet CLI Command Reference
 
-This reference targets the published **4.15.1** package. Use schema discovery to inspect command parameters.
+This reference targets the published **4.16.0** package. Use schema discovery to inspect command parameters.
 
 ```bash
 wallet-cli --json-schema -o json
@@ -19,9 +19,9 @@ wallet-cli bai recharge --json-schema -o json
 - `--network`: explicit payment network; use `tron:728126428` for TRON mainnet.
 - `--account`: wallet-cli account selection.
 - `--token` or `--asset` and `--decimals`: select an asset according to the schema.
-- `--max-amount` / `--max-raw-amount`: mutually exclusive payment caps. `--max-raw-amount` is in smallest units and requires `--token` or `--asset`, because a raw amount has no unit. Without `--max-amount` or `--max-raw-amount`, a built-in ceiling of $1 per payment applies to known stablecoins; routes priced above it are dropped before signing, and the command fails with `amount_exceeds_limit` when every offered route is above it. A `--dry-run` preview does not apply this built-in cap, so a preview can pass while the real payment still fails with `amount_exceeds_limit`.
+- `--max-amount` / `--max-raw-amount`: mutually exclusive payment caps. `--max-raw-amount` is in smallest units and requires `--token` or `--asset`, because a raw amount has no unit. The first route matching the network and asset/scheme filters is checked against your explicit cap; if it exceeds that cap, the command fails with `amount_exceeds_limit` before signing, including under `--dry-run`. It does not search later offers for a cheaper route. Without either explicit cap, actual payments use the SDK's known-stablecoin allowlist and $1 per-payment ceiling. A preview does not apply that built-in ceiling, so it can pass while the real payment still fails with `amount_exceeds_limit`.
 - `--dry-run`: read payment requirements without signing.
-- `--method`, `--header`, `--body` / `--body-file`: HTTP request options.
+- `--method`, `--header`, `--body` / `--body-file`: HTTP request options. The default method is `GET`, which rejects both body options with `invalid_option` before any request. For a body, explicitly select a method such as `POST`; `--body-file -` reads stdin and cannot share stdin with `--password-stdin` or another stdin-consuming flag.
 - `--out <path>`: write the response body byte-for-byte to a new file instead of `data.response`; an existing file is refused before any request is sent. Binary media types (such as `application/octet-stream`, images, audio, video, PDF, and archives) require `--out`.
 - `--password-stdin`: secure master-password input for signing.
 - `-o json`: machine output.
@@ -42,7 +42,7 @@ The paid response is in `data.response`. On failure inspect `error.details.payme
 | --- | --- | --- |
 | `missing_wallet_address` | 1 | No wallet-cli account is configured (also for `--dry-run`) |
 | `auth_required` | 1 | A real payment was attempted without `--password-stdin` |
-| `invalid_option` | 2 | `--max-raw-amount` without `--token` / `--asset`, a binary response without `--out`, or mutually exclusive flags |
+| `invalid_option` | 2 | `--max-raw-amount` without `--token` / `--asset`, a body with `GET`, a binary response without `--out`, or mutually exclusive flags |
 | `output_exists` | 2 | The `--out` file already exists; nothing was sent |
 | `no_matching_requirement` | 1 | No route matched `--network` / `--token` / `--asset` / `--scheme`, or, without `--max-amount` / `--max-raw-amount`, no route uses an asset the built-in spend control allows; `paymentStatus: "not_sent"` |
 | `amount_exceeds_limit` | 1 | The route's price is above `--max-amount`, `--max-raw-amount` or the built-in $1 cap; `not_sent` |
@@ -51,7 +51,7 @@ The paid response is in `data.response`. On failure inspect `error.details.payme
 | `provider_error` / `provider_rate_limited` | 1 | The endpoint or facilitator failed or returned 429 (`error.details.retryAfterSeconds` when sent) |
 | `invalid_x402_response` | 1 | The paid response could not be decoded; may carry `paymentStatus: "settled"` |
 
-`paymentStatus` appears in `error.details` only for real payments; a `--dry-run` failure carries no `error.details`.
+Failures may include `paymentStatus` in `error.details`, including `not_sent` when an explicit amount limit rejects a `--dry-run` preview. Some earlier validation or request failures omit these details. A preview never signs or pays; the presence of payment-status details does not mean a payment was sent.
 
 ## B.AI recharge
 

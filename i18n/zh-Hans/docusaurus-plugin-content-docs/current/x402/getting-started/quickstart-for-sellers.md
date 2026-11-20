@@ -140,11 +140,13 @@ git --version     # 版本控制工具
 在您的 TypeScript API 项目中安装官方 Core、Express 适配器以及 TRON/EVM 支付 scheme：
 
 ```bash
-pnpm add express @x402/core@2.29.0 @x402/express@2.29.0 @bankofai/x402-tron@2.1.1 @x402/evm@2.29.0
+pnpm add express @x402/core@2.29.0 @x402/express@2.29.0 @bankofai/x402-tron@2.1.2 @x402/evm@2.29.0
 pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 ```
 
-请根据服务框架选择对应包（`@x402/express`、`@x402/hono`、`@x402/fastify` 或 `@x402/next`），版本与 `@x402/core` 一致为 `2.29.0`——`@bankofai/x402-tron` 2.1.1 将 `@x402/core@2.29.0` 声明为精确版本的 peer 依赖。`@x402/evm` 仅在使用 BSC/Base 路由时需要。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
+请根据服务框架选择对应包（`@x402/express`、`@x402/hono`、`@x402/fastify` 或 `@x402/next`），版本与 `@x402/core` 一致为 `2.29.0`——`@bankofai/x402-tron` 2.1.2 将 `@x402/core@2.29.0` 声明为精确版本的 peer 依赖。`@x402/evm` 仅在使用 BSC/Base 路由时需要。如果项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。
+
+业务项目还需自行配置 TronWeb 的 HTTP 依赖覆盖，见[依赖安全](/zh-Hans/x402/sdk-features/#dependency-security)。
 
 升级现有应用时，请同步升级所有官方 `@x402/*` 传输包；若使用 `@x402/core/schemas`，需迁移到 Zod 4，并将 `error.errors` 改为 `error.issues`。详见 [SDK 功能矩阵](/x402/sdk-features/)。
 
@@ -353,6 +355,8 @@ new HTTPFacilitatorClient({
   }),
 });
 ```
+
+> **Key 刷新与重试：** 新建或删除 Key 在 Facilitator 下一次成功刷新缓存后才生效（内置生产配置每 5 秒刷新，各进程独立维护）。缓存仍有效时，未识别的 Key 按匿名请求处理，成功调用不代表认证成功。v2.3.2 在缓存过期且无法刷新时，对带 Key 的验证和结算请求返回 `503 api_key_auth_unavailable`。请保留认证头并退避重试，详见[认证可用性说明](../../core-concepts/facilitator#api-key-缓存与认证不可用)。
 
 > ⚠️ **安全提醒：** API Key 是服务凭据——**像密码一样保管，切勿提交到 Git**。
 

@@ -1,5 +1,5 @@
 pkgname=nginx
-pkgver=1.31.8
+pkgver=1.31.9
 pkgrel=0
 pkgdesc="NGINX HTTP server for BofAI docs"
 url="https://nginx.org/"
@@ -35,5 +35,5 @@ package() {
 }
 
 sha512sums="
-b05679bd30746f41b17343be570ed62b2bb0bc64e15d24d8af307db03d5227ab6b1da57bb4b640ad4d4c854a0c0233285d5ba294caa4ad199c49522883700fce  nginx-1.31.8.tar.gz
+282f12d4106b49f2e715defdea6855ecf32fe5957a8c61c19ed0ca73bad5ea737c47f73dd8c5fa2cfe67f441d2912cedc3649b5d00fce895537f54eb9f765210  nginx-1.31.9.tar.gz
 "

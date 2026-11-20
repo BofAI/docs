@@ -78,6 +78,8 @@ npm run build
 
 > **Note**: All dependencies are automatically installed when installing via npm or yarn.
 
+As of 2026-11-12, TypeScript SDK **1.2.1** declares `tronweb: ^6.5.1`. Its source lockfile resolves **6.5.1**, while a fresh application install can resolve **6.5.2**. Inspect your application's lockfile rather than assuming it matches the SDK repository. For root-project HTTP dependency overrides covering both versions, see [TronWeb dependency security](/x402/sdk-features/#dependency-security).
+
 ## Optional Dependencies
 
 For enhanced functionality:
