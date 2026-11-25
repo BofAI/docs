@@ -129,7 +129,7 @@ Therefore, it is **strongly recommended to apply for and configure an API Key** 
 
 ### Key refreshes and temporary authentication failures
 
-Facilitator v2.3.2 reads active keys from DevCenter into a cache; the built-in production configuration refreshes it every **5 seconds**. Both key creation and deletion affect authentication after the next successful refresh, rather than immediately. Each process refreshes independently; replicas need not apply changes together, and database read time also affects the delay.
+The Facilitator reads active keys from DevCenter into a cache; the built-in production configuration refreshes it every **5 seconds**. Both key creation and deletion affect authentication after the next successful refresh, rather than immediately. Each process refreshes independently; replicas need not apply changes together, and database read time also affects the delay.
 
 While the cache is fresh, incorrect keys, keys not yet synced, and revoked keys after syncing are treated as anonymous rather than uniformly rejected with HTTP 401. A successful call does not prove that a key was recognized. In particular, transaction-hash and authorization-identity lookups apply seller filtering only for a **valid, recognized key**.
 

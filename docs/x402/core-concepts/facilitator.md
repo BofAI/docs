@@ -78,9 +78,9 @@ Quick usage examples can be found in [OfficialFacilitator](./OfficialFacilitator
 
 If you need full control over the settlement wallet, RPC endpoints, energy management, or which networks and schemes are registered — or you have specific privacy or compliance requirements — you can deploy your own Facilitator service.
 
-The current source release is **v2.3.2** (2026-11-13): official `@x402/core`, `@x402/evm`, and `@x402/extensions` **2.29.0**, TRON mechanism and independent resource extension **2.1.2**, and an explicit `@bankofai/agent-wallet` **3.1.0-beta.1** pin. Source installations require Node.js **24.22.1+ (24.x) or 26.12.1+**; Docker and CI pin 24.22.2, and Node.js 22 is no longer supported. Installation overrides pin Zod to **4.6.7**; preserve that override when refreshing dependencies. See the [Facilitator v2.3.2 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.2/README.md) for deployment details.
+The current source release is **v2.3.3** (2026-11-24): official `@x402/core`, `@x402/evm`, and `@x402/extensions` **2.29.0**, TRON mechanism and independent resource extension **2.1.4**, and an explicit `@bankofai/agent-wallet` **3.1.0-beta.1** pin. Source installations require Node.js **24.22.1+ (24.x) or 26.12.1+**; Docker and CI pin 24.22.2, and Node.js 22 is no longer supported. Installation overrides pin Zod to **4.6.7**; preserve that override when refreshing dependencies. See the [Facilitator v2.3.3 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.3/README.md) for deployment details.
 
-This release uses a single **TronWeb 6.5.1** installation. The service's installation overrides pin its Axios to **1.21.1** and require follow-redirects **^1.16.3**; the release lockfile resolves follow-redirects to **1.16.3**. Hono Node Server is updated to **2.1.6**. Install from the release lockfile and preserve its overrides when updating dependencies.
+This release uses a single **TronWeb 6.5.2** installation. The service's installation overrides pin its Axios to **1.21.1** and require follow-redirects **^1.16.3**; the release lockfile resolves follow-redirects to **1.16.3**. The lockfile resolves Hono Node Server to **2.1.6**. Install from the release lockfile and preserve its overrides when updating dependencies.
 
 This deployment section describes the complete `BofAI/x402-facilitator` service. The minimal SDK example at `examples/typescript/facilitator/basic` exposes only `/verify`, `/settle`, and `/supported` and does not require a database; the database and DevCenter requirements below apply to the complete service.
 
@@ -153,7 +153,19 @@ Record-query failures use these codes: `404 not_found` when no record matches, `
 
 > There is **no** `/fee/quote` endpoint, and the schemes carry no facilitator fee at all. Payment records are keyed on the on-chain authorization identity (`network` + `scheme` + `asset` + `payer` + `nonce`), not a client-supplied payment ID.
 
-v2.3.0 also turns missing or non-object TRON `exact` authorizations into protocol verification rejections: `isValid: false` with `invalidReason: "invalid_exact_tron_payload_authorization"`, instead of HTTP 500. This compatibility handling does not suppress genuine RPC failures.
+### TRON `exact` errors {#tron-exact-errors}
+
+Facilitator v2.3.3 uses SDK 2.1.4 to validate TRON `exact` payments. The SDK errors below use HTTP `200`. A `/verify` response includes `isValid: false` and `invalidReason`. A `/settle` response includes `success: false` and `errorReason`. If the payment is rejected before broadcast, `transaction` is an empty string.
+
+| Reason | Trigger |
+|--------|---------|
+| `invalid_exact_tron_asset` | The asset address is malformed or points to a known infrastructure contract. |
+| `invalid_exact_tron_amount` | The amount is outside the positive `uint256` range or is formatted differently from a decimal integer string. |
+| `invalid_exact_tron_asset_transfer_method` | The transfer method is unsupported for the asset or the authorization uses the other method. |
+| `invalid_exact_tron_payload_authorization` | The payload lacks a complete authorization or contains both authorization formats. |
+| `chain_read_failed` | A required balance or Permit2 allowance read failed. The SDK rejects the payment before broadcasting a new settlement transaction. |
+
+These codes describe the scheme result. The service's request and Permit2 replay checks can return their own errors before the SDK evaluates the payment. [TRON transfer methods](/x402/core-concepts/network-and-token-support/#tron-exact-transfer-method).
 
 ---
 

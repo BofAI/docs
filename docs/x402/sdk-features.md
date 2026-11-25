@@ -9,17 +9,15 @@ This page tracks the feature support of the x402 SDK.
 
 > **SDK (TypeScript-only)**: x402 is a **TypeScript-only** SDK. It publishes the TRON mechanism and the TRON resource-sponsoring extension as the `@bankofai/x402-tron` and `@bankofai/x402-tron-extensions` npm packages and builds on the official x402 Foundation `@x402/*` packages for Core, EVM, the HTTP/MCP integrations and the generic extensions. The source is maintained in a pnpm/turbo monorepo, but applications should depend on the published packages. The previous-generation Python + TypeScript SDK archive (`legacy/`) was removed from the repository in 2.0.0, and the `typescript/packages/legacy/` compatibility packages in 2.1.0.
 >
-> **Current release: 2.1.2** (2026-11-10). The payment call chain now runs on official `@x402/core` `2.29.0`, which `@bankofai/x402-tron` `2.1.2` declares as an exact peer dependency; use the matching official HTTP/MCP integration (`@x402/fetch`, `@x402/axios`, `@x402/express`, `@x402/fastify`, `@x402/hono`, `@x402/next` or `@x402/mcp`, all `2.29.0`). TRON resource sponsoring ships as the separate `@bankofai/x402-tron-extensions` `2.1.2`, which pins the exact mechanism version — upgrade the two TRON packages together. EVM uses official `@x402/evm` `2.29.0` and the generic extensions official `@x402/extensions` `2.29.0`; the local EVM package and `@bankofai/x402-extensions` were removed. `@bankofai/x402-core` and the `@bankofai/x402-*` HTTP/MCP adapters built on it are not interchangeable with the 2.1 mechanism — new TRON integrations use official Core and adapters. Upgrading from 2.0 is a source migration; see the [TRON 2.1 migration guide](https://github.com/BofAI/x402/blob/main/docs/migrations/tron-2.1.md). The SDK requires **Node.js 24.22.1+**; the runnable examples use `@bankofai/agent-wallet` **3.0+**.
+> **Current release: 2.1.4** (2026-11-23). The payment call chain now runs on official `@x402/core` `2.29.0`, which `@bankofai/x402-tron` `2.1.4` declares as an exact peer dependency; use the matching official HTTP/MCP integration (`@x402/fetch`, `@x402/axios`, `@x402/express`, `@x402/fastify`, `@x402/hono`, `@x402/next` or `@x402/mcp`, all `2.29.0`). TRON resource sponsoring ships as the separate `@bankofai/x402-tron-extensions` `2.1.4`, which pins the exact mechanism version — upgrade the two TRON packages together. EVM uses official `@x402/evm` `2.29.0` and the generic extensions official `@x402/extensions` `2.29.0`; the local EVM package and `@bankofai/x402-extensions` were removed. `@bankofai/x402-core` and the `@bankofai/x402-*` HTTP/MCP adapters built on it are not interchangeable with the 2.1 mechanism — new TRON integrations use official Core and adapters. Upgrading from 2.0 is a source migration; see the [TRON 2.1 migration guide](https://github.com/BofAI/x402/blob/v2.1.4/docs/migrations/tron-2.1.md). The SDK requires **Node.js 24.22.1+ (24.x) or 26.12.1+**; the runnable examples use `@bankofai/agent-wallet` **3.0+**.
 
 > **2.1.1 schema migration:** official Core now uses native **Zod 4.6.6+**. If your application composes schemas from `@x402/core/schemas`, use Zod 4 and read validation details from `error.issues`; the Zod 3 `error.errors` alias is removed. Payment-option arrays (`accepts`) are limited to **1,024 entries**, with oversized collections rejected before element validation. Upgrade the exact Core peer and matching transports together with both TRON packages.
 
 ## Dependency security {#dependency-security}
 
-The SDK **2.1.2** repository lockfiles use **TronWeb 6.5.1** for both TRON packages and all 11 TypeScript examples. TronWeb 6.5.1 uses the same input snapshot for validation and execution in signing and contract calls. The official Core peer remains **2.29.0**.
+The SDK **2.1.4** repository lockfiles resolve both TRON packages and the TypeScript examples to **TronWeb 6.5.2**, which applies stricter validation to node transaction responses and broadcast acknowledgments. The mechanism declares `tronweb: ^6.5.2`, and the resource extension pins `6.5.2`. Check your application lockfile for the resolved versions. [2.1.4 release notes](https://github.com/BofAI/x402/blob/v2.1.4/RELEASE_NOTES.md).
 
-The published mechanism declares `tronweb: ^6.5.1`, so a fresh application install can resolve **6.5.2**. The resource extension still pins **6.5.1**, so both versions may be installed together.
-
-The SDK repository resolves TronWeb's Axios to **1.21.0** and follow-redirects to **1.16.2** through pnpm workspace overrides. **These overrides do not propagate to applications installing the npm packages.** Apply overrides in your own project, refresh its lockfile, and inspect the resolved dependency tree. The application example below covers TronWeb's `^6.5.1` range, including both 6.5.1 and 6.5.2. For pnpm, merge these entries into your root `pnpm-workspace.yaml`:
+The SDK workspace pins TronWeb's Axios to **1.21.0** and follow-redirects to **1.16.2**. Apply the overrides in your application root, refresh its lockfile, and inspect the resolved dependency tree. The pnpm example below also covers dependencies that still resolve TronWeb 6.5.1. Merge the entries into your root `pnpm-workspace.yaml`.
 
 ```yaml
 overrides:
@@ -27,7 +25,7 @@ overrides:
   "axios@1.21.0>follow-redirects": "1.16.2"
 ```
 
-For other package managers, use their root-project override mechanism. An upstream TronWeb release that includes the patched dependencies is another option after verifying SDK compatibility. See the [2.1.2 release notes](https://github.com/BofAI/x402/blob/main/RELEASE_NOTES.md).
+For other package managers, use their root-project override mechanism.
 
 ---
 
@@ -96,6 +94,8 @@ x402 defines five named payment schemes. Four ship as a client + server + facili
 | `batch-settlement` | ✅ | ✅ | Payment-channel: deposit once on-chain, then pay many requests with off-chain vouchers; the facilitator claims a batch and settles in one tx. Includes a refund path. |
 | `exact_gasfree` | ❌ | ✅ | TRON-only. Pay with USDT/USDD **without holding TRX for gas** — a relayer pays the on-chain energy via the GasFree API. |
 | `auth-capture` | ⚠️ Client only | ❌ | Refundable Base Commerce Payments authorization/capture flow. The published package does not yet include its server or facilitator implementation. |
+
+TRON `exact` in SDK 2.1.4 validates the token address, positive atomic amount, and transfer method before the client signs. The facilitator also checks that the authorization matches the method and requires successful reads of the payer's balance and any required Permit2 allowance before settlement. [TRON transfer methods](/x402/core-concepts/network-and-token-support/#tron-exact-transfer-method) · [Facilitator errors](/x402/core-concepts/facilitator/#tron-exact-errors)
 
 ### Payment flows (new in 1.1.0)
 

@@ -41,7 +41,7 @@ x402 定义了一组标准化 HTTP 标头用于支付通信：
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
-> **注意：** 在 TRON 上，`accepted.asset` 和 `accepted.payTo` 使用 Base58 地址，但 `permit2Authorization` 内部的地址（`permitted.token`、`spender`、`witness.to`、`from`）会转换为 `0x` hex 格式以进行 EIP-712/TIP-712 签名。
+> 下面的 TRON 示例使用 Base58 表示资产和收款地址。`permit2Authorization` 内部的地址（`permitted.token`、`spender`、`witness.to`、`from`）使用 20 字节的 `0x` 十六进制格式进行 TIP-712 签名。SDK 2.1.4 的资源服务端会在每条 TRON `exact` 报价中带上选定的 `extra.assetTransferMethod`。参见 [TRON 转账方式](/zh-Hans/x402/core-concepts/network-and-token-support/#tron-exact-transfer-method)。
 
 ```json
 {

@@ -78,9 +78,9 @@ Facilitator 是一种中间件服务，主要负责：
 
 如果您希望完全掌控结算钱包、RPC 节点、能量管理，或注册哪些网络与方案，又或有特定的隐私/合规要求，可以选择自己部署 Facilitator 服务。
 
-当前源码版本为 **v2.3.2**（2026-11-13）：使用官方 `@x402/core`、`@x402/evm`、`@x402/extensions` **2.29.0**，TRON 机制与独立资源扩展 **2.1.2**，并将 `@bankofai/agent-wallet` 精确锁定到 **3.1.0-beta.1**。源码安装要求 Node.js **24.22.1+（24.x）或 26.12.1+**；Docker 与 CI 固定为 24.22.2，不再支持 Node.js 22。安装配置将 Zod 固定到 **4.6.7**，升级依赖时应保留此覆盖。部署说明见 [Facilitator v2.3.2 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.2/README.md)。
+当前源码版本为 **v2.3.3**（2026-11-24）：使用官方 `@x402/core`、`@x402/evm`、`@x402/extensions` **2.29.0**，TRON 机制与独立资源扩展 **2.1.4**，并将 `@bankofai/agent-wallet` 精确锁定到 **3.1.0-beta.1**。源码安装要求 Node.js **24.22.1+（24.x）或 26.12.1+**；Docker 与 CI 固定为 24.22.2，不再支持 Node.js 22。安装配置将 Zod 固定到 **4.6.7**，升级依赖时应保留此覆盖。部署说明见 [Facilitator v2.3.3 README](https://github.com/BofAI/x402-facilitator/blob/v2.3.3/README.md)。
 
-v2.3.2 使用单份 **TronWeb 6.5.1**。服务自身的安装覆盖将其 Axios 固定为 **1.21.1**，follow-redirects 的要求为 **^1.16.3**，发布版本的锁文件实际解析到 **1.16.3**；Hono Node Server 升级到 **2.1.6**。请使用发布版本的锁文件安装，更新依赖时保留这些覆盖。
+v2.3.3 使用单份 **TronWeb 6.5.2**。服务自身的安装覆盖将其 Axios 固定为 **1.21.1**，follow-redirects 的要求为 **^1.16.3**，发布版本的锁文件实际解析到 **1.16.3**；Hono Node Server 在锁文件中解析到 **2.1.6**。请使用发布版本的锁文件安装，更新依赖时保留这些覆盖。
 
 本节部署说明针对完整的 `BofAI/x402-facilitator` 服务。SDK 的最小示例 `examples/typescript/facilitator/basic` 仅暴露 `/verify`、`/settle` 与 `/supported`，无需数据库；下述数据库与 DevCenter 要求适用于完整服务。
 
@@ -153,7 +153,19 @@ v2.3.0 的 EVM 钱包桥按网络与钱包共享进程内 nonce 队列，保存�
 
 > **不存在** `/fee/quote` 端点，各方案也完全不收取 facilitator 费用。支付记录以链上授权身份（`network` + `scheme` + `asset` + `payer` + `nonce`）为键，而非客户端提供的 payment ID。
 
-v2.3.0 还将缺失或非对象的 TRON `exact` 授权转换为协议级验证拒绝：`isValid: false`、`invalidReason: "invalid_exact_tron_payload_authorization"`，而非 HTTP 500。该兼容处理不吞掉实际 RPC 错误。
+### TRON `exact` 错误 {#tron-exact-errors}
+
+Facilitator v2.3.3 使用 SDK 2.1.4 校验 TRON `exact` 付款。下表中的 SDK 错误通过 HTTP `200` 响应返回。`/verify` 响应包含 `isValid: false` 与 `invalidReason`。`/settle` 响应包含 `success: false` 与 `errorReason`，广播前拒绝时 `transaction` 为空字符串。
+
+| 错误码 | 触发条件 |
+|--------|----------|
+| `invalid_exact_tron_asset` | 资产地址格式无效，或指向已知的基础设施合约。 |
+| `invalid_exact_tron_amount` | 金额超出 `uint256` 的正数范围，或格式不是十进制整数字符串。 |
+| `invalid_exact_tron_asset_transfer_method` | 资产不支持指定的转账方式，或授权格式与所选方式不匹配。 |
+| `invalid_exact_tron_payload_authorization` | 载荷缺少完整的授权，或同时包含两种授权格式。 |
+| `chain_read_failed` | 必需的余额或 Permit2 额度读取失败。SDK 会在广播新的结算交易前拒绝该笔付款。 |
+
+这些错误码由支付方案返回。服务层的请求校验和 Permit2 防重放检查也可能先返回各自的错误。参见 [TRON 转账方式](/zh-Hans/x402/core-concepts/network-and-token-support/#tron-exact-transfer-method)。
 
 ---
 

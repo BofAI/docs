@@ -9,17 +9,15 @@ description: 'x402 TypeScript SDK 的功能支持矩阵：基于官方 @x402/* C
 
 > **SDK（仅 TypeScript）**：x402 是一个**仅 TypeScript** 的 SDK。TRON 机制与 TRON 资源赞助扩展以 `@bankofai/x402-tron` 与 `@bankofai/x402-tron-extensions` npm 包发布，Core、EVM、HTTP/MCP 集成和通用扩展则直接使用 x402 Foundation 官方的 `@x402/*` 包。源码由 pnpm/turbo monorepo 维护，但应用应依赖已发布的包。上一代 Python + TypeScript SDK 的 `legacy/` 归档已在 2.0.0 中从仓库移除，`typescript/packages/legacy/` 下的兼容包也已在 2.1.0 中移除。
 >
-> **当前版本：2.1.2**（2026-11-10）。付款调用链改为基于官方 `@x402/core` `2.29.0`，`@bankofai/x402-tron` `2.1.2` 将其声明为精确版本的 peer 依赖；请搭配对应的官方 HTTP/MCP 集成（`@x402/fetch`、`@x402/axios`、`@x402/express`、`@x402/fastify`、`@x402/hono`、`@x402/next` 或 `@x402/mcp`，均为 `2.29.0`）。TRON 资源赞助由独立的 `@bankofai/x402-tron-extensions` `2.1.2` 提供，它锁定机制包的精确版本——两个 TRON 包需一起升级。EVM 直接使用官方 `@x402/evm` `2.29.0`，通用扩展使用官方 `@x402/extensions` `2.29.0`；本地 EVM 包与 `@bankofai/x402-extensions` 已移除。`@bankofai/x402-core` 及基于它的 `@bankofai/x402-*` HTTP/MCP 适配器不能与 2.1 机制混用——新的 TRON 集成请使用官方 Core 与适配器。从 2.0 升级需要迁移源码，见 [TRON 2.1 迁移指南](https://github.com/BofAI/x402/blob/main/docs/migrations/tron-2.1.md)。SDK 要求 **Node.js 24.22.1+**；可运行示例使用 `@bankofai/agent-wallet` **3.0+**。
+> **当前版本：2.1.4**（2026-11-23）。付款调用链改为基于官方 `@x402/core` `2.29.0`，`@bankofai/x402-tron` `2.1.4` 将其声明为精确版本的 peer 依赖；请搭配对应的官方 HTTP/MCP 集成（`@x402/fetch`、`@x402/axios`、`@x402/express`、`@x402/fastify`、`@x402/hono`、`@x402/next` 或 `@x402/mcp`，均为 `2.29.0`）。TRON 资源赞助由独立的 `@bankofai/x402-tron-extensions` `2.1.4` 提供，它锁定机制包的精确版本——两个 TRON 包需一起升级。EVM 直接使用官方 `@x402/evm` `2.29.0`，通用扩展使用官方 `@x402/extensions` `2.29.0`；本地 EVM 包与 `@bankofai/x402-extensions` 已移除。`@bankofai/x402-core` 及基于它的 `@bankofai/x402-*` HTTP/MCP 适配器不能与 2.1 机制混用——新的 TRON 集成请使用官方 Core 与适配器。从 2.0 升级需要迁移源码，见 [TRON 2.1 迁移指南](https://github.com/BofAI/x402/blob/v2.1.4/docs/migrations/tron-2.1.md)。SDK 要求 **Node.js 24.22.1+（24.x）或 26.12.1+**；可运行示例使用 `@bankofai/agent-wallet` **3.0+**。
 
 > **2.1.1 Schema 迁移**：官方 Core 现使用原生 **Zod 4.6.6+**。应用若组合 `@x402/core/schemas` 中的 Schema，须使用 Zod 4，并通过 `error.issues` 读取校验详情；Zod 3 的 `error.errors` 别名已移除。付款选项数组（`accepts`）最多 **1,024 项**，超长集合会在逐项校验前被拒绝。升级两个 TRON 包时，同时升级精确版本的 Core peer 及对应传输包。
 
 ## 依赖安全 {#dependency-security}
 
-SDK **2.1.2** 仓库的锁文件中，两个 TRON 包及全部 11 个 TypeScript 示例使用 **TronWeb 6.5.1**。该版本在签名与合约调用中使用同一份输入快照进行校验和执行；官方 Core peer 仍为 **2.29.0**。
+SDK **2.1.4** 仓库的锁文件将两个 TRON 包及 TypeScript 示例解析到 **TronWeb 6.5.2**。该版本加强了对节点交易响应和广播确认的校验。机制包声明 `tronweb: ^6.5.2`，资源扩展固定使用 `6.5.2`。实际安装版本以应用的锁文件为准。参见 [2.1.4 发布说明](https://github.com/BofAI/x402/blob/v2.1.4/RELEASE_NOTES.md)。
 
-已发布的机制包声明 `tronweb: ^6.5.1`，因此业务项目全新安装时可能解析到 **6.5.2**。资源扩展仍固定为 **6.5.1**，两个版本可能同时存在。
-
-SDK 仓库通过 pnpm 工作区覆盖，将 TronWeb 的 Axios 解析为 **1.21.0**、follow-redirects 解析为 **1.16.2**。**这些覆盖不会传递给安装 npm 包的应用。** 业务项目须自行配置覆盖、刷新锁文件并检查实际依赖树。下方业务项目示例覆盖 TronWeb 的 `^6.5.1` 范围，包括 6.5.1 与 6.5.2。使用 pnpm 时，将以下条目合并到根目录的 `pnpm-workspace.yaml`：
+SDK 工作区将 TronWeb 使用的 Axios 固定为 **1.21.0**，follow-redirects 固定为 **1.16.2**。请在应用根目录配置覆盖，刷新锁文件并检查实际依赖树。下面的 pnpm 配置也涵盖仍使用 TronWeb 6.5.1 的依赖，可将其合并到项目根目录的 `pnpm-workspace.yaml`。
 
 ```yaml
 overrides:
@@ -27,7 +25,7 @@ overrides:
   "axios@1.21.0>follow-redirects": "1.16.2"
 ```
 
-其他包管理器请使用项目根级别的依赖覆盖机制。也可在验证 SDK 兼容性后，使用已包含修复依赖的上游 TronWeb 版本。详见 [2.1.2 发布说明](https://github.com/BofAI/x402/blob/main/RELEASE_NOTES.md)。
+其他包管理器请使用项目根目录的依赖覆盖机制。
 
 ---
 
@@ -96,6 +94,8 @@ x402 定义了五种命名付款方案。其中四种按链族提供 client + se
 | `batch-settlement` | ✅ | ✅ | 支付通道：链上一次性存入，然后用链下凭证支付多次请求；facilitator 批量 claim 并在一笔交易中结算。含退款路径。 |
 | `exact_gasfree` | ❌ | ✅ | 仅 TRON。用 USDT/USDD 付款**无需持有 TRX 支付 gas**——由 relayer 通过 GasFree API 支付链上 energy。 |
 | `auth-capture` | ⚠️ 仅 Client | ❌ | 可退款的 Base Commerce Payments 授权/扣款流程。当前发布包尚未提供对应的 server 或 facilitator 实现。 |
+
+SDK 2.1.4 会在客户端签名前校验 TRON `exact` 的资产地址、正整数最小单位金额与转账方式。Facilitator 还会核对授权格式是否匹配选定方式，并在结算前读取付款方余额及适用的 Permit2 额度。 [TRON 转账方式](/zh-Hans/x402/core-concepts/network-and-token-support/#tron-exact-transfer-method) · [Facilitator 错误](/zh-Hans/x402/core-concepts/facilitator/#tron-exact-errors)
 
 ### 付款流程（1.1.0 新增）
 

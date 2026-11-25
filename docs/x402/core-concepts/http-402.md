@@ -41,7 +41,7 @@ When the server returns a `402 Payment Required` response, the decoded `PAYMENT-
 <Tabs>
 <TabItem value="TRON" label="TRON">
 
-> **Note:** On TRON, `accepted.asset` and `accepted.payTo` use Base58 addresses, but the addresses inside `permit2Authorization` (`permitted.token`, `spender`, `witness.to`, `from`) are converted to `0x` hex form for EIP-712/TIP-712 signing.
+> The TRON example uses Base58 addresses for the asset and recipient. Addresses inside `permit2Authorization` (`permitted.token`, `spender`, `witness.to`, `from`) use 20-byte `0x` hex for TIP-712 signing. In SDK 2.1.4, the resource server includes the selected `extra.assetTransferMethod` in each TRON `exact` quote. [TRON transfer methods](/x402/core-concepts/network-and-token-support/#tron-exact-transfer-method).
 
 ```json
 {
