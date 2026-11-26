@@ -100,6 +100,7 @@ The token prices below are shown in USD per 1 million tokens; web search is bill
 | Claude Sonnet 4.5 | `$3.00` | `$3.75` | `$0.30` | `$15.00` | `$0.01` |
 | Claude Haiku 4.5 | `$1.00` | `$1.25` | `$0.10` | `$5.00` | `$0.01` |
 | Muse Spark 1.3 | `$1.25` | `$1.25` | `$0.15` | `$4.25` | - |
+| Gemini 4 Neon | `$3.00` | `$3.00` | `$0.15` | `$15.00` | `$0.014` |
 | Gemini 4 Hydrogen | `$1.50` | `$1.50` | `$0.075` | `$7.50` | `$0.014` |
 | Gemini 4 Carbon | `$4.00` | `$4.00` | `$0.20` | `$20.00` | `$0.014` |
 | Gemini 4 Argon | `$2.00` | `$2.00` | `$0.10` | `$10.00` | `$0.014` |

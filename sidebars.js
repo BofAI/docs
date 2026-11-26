@@ -128,6 +128,8 @@ const sidebars = {
       items: [
         { type: 'doc', id: 'llmservice/introduction', label: 'Introduction', key: 'llmservice-introduction' },
         { type: 'doc', id: 'llmservice/quick-start', label: 'Quick Start' },
+        { type: 'doc', id: 'llmservice/faq', label: 'FAQ', key: 'llmservice-faq' },
+        { type: 'doc', id: 'llmservice/app-and-service-availability', label: 'B.AI App and Service Availability' },
         { type: 'doc', id: 'llmservice/auto-mode', label: 'Auto Mode' },
         { type: 'doc', id: 'llmservice/pricing-and-usage', label: 'Pricing and Usage' },
         { type: 'doc', id: 'llmservice/promotions-and-pricing-notices', label: 'Promotions and Pricing Updates' },
@@ -190,6 +192,7 @@ const sidebars = {
               label: 'Google (Gemini)',
               collapsed: true,
               items: [
+                { type: 'doc', id: 'llmservice/models/gemini-4-neon', label: 'Gemini 4 Neon' },
                 { type: 'doc', id: 'llmservice/models/gemini-4-hydrogen', label: 'Gemini 4 Hydrogen' },
                 { type: 'doc', id: 'llmservice/models/gemini-4-carbon', label: 'Gemini 4 Carbon' },
                 { type: 'doc', id: 'llmservice/models/gemini-4-argon', label: 'Gemini 4 Argon' },
