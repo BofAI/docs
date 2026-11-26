@@ -4,6 +4,10 @@ import ActivityCard from '@site/src/components/ActivityCard';
 
 This page summarizes active and announced upcoming limited-time offers and pricing updates. The [Pricing and Usage](./pricing-and-usage.md) table shows B.AI standard reference prices based on the model providers' official list prices. Discounts and limited-time promotions are shown on this page and in the website's discount groups. Applicable prices, offer terms, and final charges are subject to the platform display and actual billing records.
 
+:::info Promotion validity
+Discounts may change or end without further notice. Before running large batch jobs, check the current prices and promotion validity periods displayed on B.AI. See [Model pricing on the B.AI website](https://chat.b.ai/key).
+:::
+
 ## Promotions
 
 :::info Promotion display order

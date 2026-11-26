@@ -211,6 +211,18 @@
     "message": "MiniMax 图片生成 API",
     "description": "The label for the MiniMax image generation API document in sidebar docsSidebar"
   },
+  "sidebar.docsSidebar.doc.llmservice-faq": {
+    "message": "常见问题（FAQ）",
+    "description": "The label for the LLM service FAQ document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.B.AI App and Service Availability": {
+    "message": "B.AI App 与服务可用性",
+    "description": "The label for the app availability document in sidebar docsSidebar"
+  },
+  "sidebar.docsSidebar.doc.Gemini 4 Neon": {
+    "message": "Gemini 4 Neon",
+    "description": "The label for the Gemini 4 Neon model document in sidebar docsSidebar"
+  },
   "sidebar.docsSidebar.doc.Gemini 4 Hydrogen": {
     "message": "Gemini 4 Hydrogen",
     "description": "The label for the Gemini 4 Hydrogen model document in sidebar docsSidebar"
