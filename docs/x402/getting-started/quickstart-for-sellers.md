@@ -33,7 +33,7 @@ x402 is a **TypeScript-only** SDK: the TRON mechanism ships as `@bankofai/x402-t
 In your terminal (Terminal on macOS/Linux, or PowerShell/Command Prompt on Windows), run the following commands to confirm the required tools are installed:
 
 ```bash
-node --version    # Requires Node.js 24.22.1 or higher
+node --version    # Requires Node.js 24.22.1+ (24.x) or 26.12.1+
 pnpm --version    # Requires pnpm 11.1 or higher
 git --version     # Version control tool
 ```
@@ -140,11 +140,11 @@ Deposit a small amount of official USDC on Base Mainnet. The resource server onl
 Install official Core, the Express adapter and the TRON/EVM payment schemes in your TypeScript API project:
 
 ```bash
-pnpm add express @x402/core@2.29.0 @x402/express@2.29.0 @bankofai/x402-tron@2.1.2 @x402/evm@2.29.0
+pnpm add express @x402/core@2.29.0 @x402/express@2.29.0 @bankofai/x402-tron@2.1.4 @x402/evm@2.29.0
 pnpm add -D tsx   # to run the TypeScript entry point below
 ```
 
-Use the framework package that matches your server (`@x402/express`, `@x402/hono`, `@x402/fastify`, or `@x402/next`), at the same `2.29.0` as `@x402/core` — `@bankofai/x402-tron` 2.1.2 declares `@x402/core@2.29.0` as an exact peer dependency. Install `@x402/evm` only for BSC/Base routes. Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
+Use the framework package that matches your server (`@x402/express`, `@x402/hono`, `@x402/fastify`, or `@x402/next`), at the same `2.29.0` as `@x402/core` — `@bankofai/x402-tron` 2.1.4 declares `@x402/core@2.29.0` as an exact peer dependency. Install `@x402/evm` only for BSC/Base routes. Use `npm install` or `yarn add` with the same package names if your project does not use pnpm.
 
 For TronWeb HTTP dependency overrides in your own application, see [Dependency security](/x402/sdk-features/#dependency-security).
 
@@ -285,6 +285,8 @@ express()
 | `accepts[].scheme` | Payment scheme | `"exact"` |
 | `routes` | Map of `"METHOD /path"` → `{ accepts }` | `"GET /credit"` |
 
+The TRON example uses Permit2 for `"1 USDT"`. When pricing a custom token with `{ asset, amount, extra }`, set `price.extra.assetTransferMethod` to match the token contract and use a positive integer amount in atomic units. See [TRON transfer methods](/x402/core-concepts/network-and-token-support/#tron-exact-transfer-method).
+
 **How it works:** When an unpaid request reaches your API, the middleware automatically returns an HTTP `402 Payment Required` response with payment instructions. The client SDK pays automatically and re-sends the request — the process is nearly invisible to the end user.
 
 ---
@@ -358,7 +360,7 @@ new HTTPFacilitatorClient({
 });
 ```
 
-> **Key refreshes and retries:** Key creation and deletion take effect after the next successful Facilitator cache refresh (every 5 seconds in the built-in production configuration, independently per process). While the cache is fresh, unrecognized keys use anonymous access, so a successful call does not prove authentication. In v2.3.2, keyed verification and settlement requests receive `503 api_key_auth_unavailable` if the cache expires while refreshes are failing. Retain the authentication header and retry with backoff; see [authentication availability](../../core-concepts/facilitator#api-key-cache-and-authentication-availability).
+> **Key refreshes and retries:** Key creation and deletion take effect after the next successful Facilitator cache refresh (every 5 seconds in the built-in production configuration, independently per process). While the cache is fresh, unrecognized keys use anonymous access, so a successful call does not prove authentication. Keyed verification and settlement requests receive `503 api_key_auth_unavailable` if the cache expires while refreshes are failing. Retain the authentication header and retry with backoff; see [authentication availability](../../core-concepts/facilitator#api-key-cache-and-authentication-availability).
 
 > ⚠️ **Security reminder:** Your API Key is a service credential — **treat it like a password and never commit it to Git**.
 

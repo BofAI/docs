@@ -8,6 +8,19 @@ description: 'Product updates and announcements for BANK OF AI — all products,
 Product updates and announcements for BANK OF AI.
 
 <div className="changelog-entry">
+<div className="changelog-date">Nov 24, 2026</div>
+<div className="changelog-body">
+
+### TRON SDK 2.1.4 and Facilitator 2.3.3
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span></div>
+
+- Updated TRON SDK installation and Facilitator deployment guidance, including TronWeb 6.5.2 and the new TRON `exact` validation rules. [Details](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">Nov 12, 2026</div>
 <div className="changelog-body">
 

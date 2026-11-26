@@ -36,7 +36,7 @@ x402 是**仅 TypeScript** 的 SDK：TRON 机制以 `@bankofai/x402-tron` 发布
 
 ### 开始前清单
 
-- [ ] 已安装 **Node.js 24.22.1+** 和 **pnpm 11.1+**
+- [ ] 已安装 **Node.js 24.22.1+（24.x）或 26.12.1+** 和 **pnpm 11.1+**
 - [ ] 已创建专用**测试钱包**（见下文）
 - [ ] 已领取测试代币（免费）
 - [ ] 有一个目标 x402 保护的 API URL（例如按[卖家快速入门](./quickstart-for-sellers.md)启动的 `/credit` 接口）
@@ -99,11 +99,11 @@ x402 是**仅 TypeScript** 的 SDK：TRON 机制以 `@bankofai/x402-tron` 发布
 在您的 TypeScript 应用中安装已发布的 npm 包：
 
 ```bash
-pnpm add @bankofai/agent-wallet @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.2
+pnpm add @bankofai/agent-wallet @x402/core@2.29.0 @x402/fetch@2.29.0 @bankofai/x402-tron@2.1.4
 pnpm add -D tsx   # 运行下面的 TypeScript 入口文件
 ```
 
-如果您的项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。`@x402/core` 与 `@x402/fetch` 请保持精确的 `2.29.0`——`@bankofai/x402-tron` 2.1.2 将 `@x402/core@2.29.0` 声明为精确版本的 peer 依赖。
+如果您的项目不使用 pnpm，也可以用 `npm install` 或 `yarn add` 安装同名包。`@x402/core` 与 `@x402/fetch` 请保持精确的 `2.29.0`——`@bankofai/x402-tron` 2.1.4 将 `@x402/core@2.29.0` 声明为精确版本的 peer 依赖。
 
 业务项目还需自行配置 TronWeb 的 HTTP 依赖覆盖，见[依赖安全](/zh-Hans/x402/sdk-features/#dependency-security)。
 

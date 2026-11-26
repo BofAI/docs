@@ -90,7 +90,7 @@ x402 支持 **TRC-20、BEP-20 和 ERC-20** 代币。TRON/BSC 路由使用各自�
 
 > **扩展支持**：协议具有高度的可扩展性。通过 TRON 代币注册表（`@bankofai/x402-tron` 的 `registerToken`）或在 server 路由上使用显式的 `{ asset, amount, extra }` 价格，您可以轻松配置并支持任意自定义的 TRC-20/BEP-20 代币。
 
-> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，需要一次性 `approve(Permit2)`——在 TRON 上客户端首次付款时自动广播（EVM 上从不广播，见下文的代付路径）；在 TRON 上，若 server 声明了 `trc20ApprovalResourceSponsoring`（SDK 1.2.0+），则改为客户端签名、由 facilitator 赞助并广播（从 2.1.0 起须注册 `@bankofai/x402-tron-extensions` 中的客户端扩展）。每种代币的结算方式由你在 server 端 `accepts[].price.extra` 里配置，SDK 会在协议数据中以 `accepts[].extra` 下发：EIP-3009 → `{ name, version }`；普通 ERC-20 → `{ assetTransferMethod: "permit2" }`。若某个 permit2 资产同时实现了 EIP-2612，`extra` 会在 `assetTransferMethod` 之外一并带上 `{ name, version }`；反过来，省略这对字段正是服务端告诉客户端「跳过 EIP-2612」的方式。两条代付路径都位于 permit2 分支内，因此对 EIP-3009 资产一概不适用。在 permit2 资产上，客户端签名无 gas 的 EIP-2612 permit 需要同时满足：具备 `readContract` 能力（由签名方或已配置的 RPC 提供）、服务端声明了 `eip2612GasSponsoring` 扩展、`extra` 里 `name` 与 `version` 都在、且当前 Permit2 额度尚不足以覆盖本次支付。注意这里的不对称：**缺少**读取能力会直接跳过 permit，而读取**抛错**则会被捕获、签名照常进行。否则客户端会*尝试* ERC-20 授权 gas 代付，这条路径要求 `readContract` 能力、服务端声明另一个独立的 `erc20ApprovalGasSponsoring` 扩展、签名方能签原始交易，并能获取交易计数（由签名方或已配置的 RPC 提供），同样也要求现有额度不足；此时由客户端签名一笔 `MaxUint256` 的 `approve`——始终是最大值，与支付金额无关——由 facilitator 负责广播。两条路径都不满足时，载荷里不会带任何代付扩展。内置默认资产中带 `supportsEip2612` 标记的是 MegaETH MegaUSD（主网）以及 Mezo mUSD 与 Radius SBC（主网与测试网均有）。
+> **关于 `exact` 方案的代币选择**：EIP-3009 代币（如 Base 官方 USDC）通过 `transferWithAuthorization` 无 gas 结算。普通 ERC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）通过 Permit2 路径结算，需要一次性 `approve(Permit2)`——在 TRON 上客户端首次付款时自动广播（EVM 上从不广播，见下文的代付路径）；在 TRON 上，若 server 声明了 `trc20ApprovalResourceSponsoring`（SDK 1.2.0+），则改为客户端签名、由 facilitator 赞助并广播（从 2.1.0 起须注册 `@bankofai/x402-tron-extensions` 中的客户端扩展）。TRON 的选择规则见 [TRON 转账方式](#tron-exact-transfer-method)。在 EVM 上，Permit2 资产的 `extra.assetTransferMethod` 为 `"permit2"`。若该资产同时实现了 EIP-2612，`extra` 会在 `assetTransferMethod` 之外一并带上 `{ name, version }`；反过来，省略这对字段正是服务端告诉客户端「跳过 EIP-2612」的方式。两条代付路径都位于 permit2 分支内，因此对 EIP-3009 资产一概不适用。在 permit2 资产上，客户端签名无 gas 的 EIP-2612 permit 需要同时满足：具备 `readContract` 能力（由签名方或已配置的 RPC 提供）、服务端声明了 `eip2612GasSponsoring` 扩展、`extra` 里 `name` 与 `version` 都在、且当前 Permit2 额度尚不足以覆盖本次支付。注意这里的不对称：**缺少**读取能力会直接跳过 permit，而读取**抛错**则会被捕获、签名照常进行。否则客户端会*尝试* ERC-20 授权 gas 代付，这条路径要求 `readContract` 能力、服务端声明另一个独立的 `erc20ApprovalGasSponsoring` 扩展、签名方能签原始交易，并能获取交易计数（由签名方或已配置的 RPC 提供），同样也要求现有额度不足；此时由客户端签名一笔 `MaxUint256` 的 `approve`——始终是最大值，与支付金额无关——由 facilitator 负责广播。两条路径都不满足时，载荷里不会带任何代付扩展。内置默认资产中带 `supportsEip2612` 标记的是 MegaETH MegaUSD（主网）以及 Mezo mUSD 与 Radius SBC（主网与测试网均有）。
 
 ## 安全签名
 
@@ -126,6 +126,18 @@ x402 定义了五种命名支付方案。其中四种按链族提供完整的 cl
 - **Permit2**：适用于不实现 ERC-3009 的普通 ERC-20/TRC-20 代币（如 BSC USDC/USDT、TRON USDT/USDD）。客户端签署 Permit2 witness，facilitator 通过 `x402ExactPermit2Proxy` 合约结算。需要一次性 `approve(Permit2)`；在 TRON 上客户端首次付款时自动广播，在 EVM 上则须事先授权或通过 gas 代付扩展转发。在 TRON 上，SDK 1.2.0 新增了 `trc20ApprovalResourceSponsoring` 扩展——若 server 声明了它，client 只签名而不广播该授权，由 facilitator 委托能量/带宽并广播，因此付款方授权时无需 TRX。从 2.1.0 起，客户端必须注册 `@bankofai/x402-tron-extensions` 中的 `createTrc20ApprovalResourceSponsoringClientExtension(signer)`，否则付款会以 `trc20_approval_client_extension_not_registered` 失败。
 
 `exact` 方案遵循 **x402 Foundation** 发布的 **v2 链路格式**：标准 v2 客户端可直接向本 SDK 的服务端发起付款请求，本 SDK 客户端也可直接访问任何 v2 兼容的服务端——无需项目特定的转换。转账授权数据在 EIP-3009 路径下位于 `payload.authorization`，在 Permit2 路径下位于 `payload.permit2Authorization`。
+
+#### TRON `exact` 转账方式 {#tron-exact-transfer-method}
+
+从 SDK 2.1.4 起，资源服务端按以下顺序确定 `extra.assetTransferMethod`。
+
+1. 优先使用 `accepts[].price.extra.assetTransferMethod` 中为代币显式指定的有效方式。使用 `eip3009` 时，代币合约须实现 `transferWithAuthorization`，配置中须提供代币 TIP-712 域的 `name` 和 `version`。
+2. 未显式指定时，采用代币注册表中配置的方式。上表中的 USDT 和 USDD 合约均使用 `permit2`，指定 `eip3009` 会校验失败。
+3. 如果两处均未指定，且 Facilitator 在 `/supported` 对应条目的 `extra.supportedAssetTransferMethods` 中只公布了 `permit2`，则使用 `permit2`。两种方式都已公布或没有公布列表时，使用 `eip3009`。若已公布列表，服务端会拒绝列表之外的转账方式。
+
+资源服务端将选定的方式写入报价的 `extra.assetTransferMethod`。如果客户端或 Facilitator 收到的报价仍缺少该字段，则使用注册表中的方式，无注册值时默认采用 `eip3009`。
+
+资产应为 TRC-20 代币合约地址，`amount` 应为按最小单位表示的十进制正整数字符串。SDK 会拒绝格式无效的地址，以及 Permit2、结算代理、批量结算合约和资金收集合约等基础设施地址。路由配置使用 Base58 地址。基于钱包的 Facilitator 在读取合约时也会规范化 20 字节的 `0x` 资产地址。参见 [TRON Exact 规范](https://github.com/BofAI/x402/blob/v2.1.4/specs/schemes/exact/scheme_exact_tron.md)。
 
 ### `upto` 方案
 

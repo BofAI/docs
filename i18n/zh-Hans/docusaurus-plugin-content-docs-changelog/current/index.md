@@ -8,6 +8,19 @@ description: 'BANK OF AI 各产品的更新与公告——全部产品，按时�
 BANK OF AI 各产品的更新与公告。
 
 <div className="changelog-entry">
+<div className="changelog-date">2026-11-24</div>
+<div className="changelog-body">
+
+### TRON SDK 2.1.4 与 Facilitator 2.3.3
+
+<div className="changelog-tags"><span className="changelog-tag">Docs</span><span className="changelog-tag">x402</span></div>
+
+- 同步 TRON SDK 安装与 Facilitator 部署说明，补充 TronWeb 6.5.2 依赖以及 TRON `exact` 的校验规则。[详情](./x402/)
+
+</div>
+</div>
+
+<div className="changelog-entry">
 <div className="changelog-date">2026-11-12</div>
 <div className="changelog-body">
 
